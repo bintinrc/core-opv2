@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -48,7 +48,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage  - Match Area and Match Keyword - Primary Driver on Leave
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -92,7 +92,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword - Primary Driver and Fallback Driver on Leave
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -136,7 +136,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Additional Tracking IDs Added to Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -201,7 +201,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Additional Tracking IDs Not Added to Shipment
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -290,7 +290,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -333,7 +333,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -376,7 +376,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Area and Duplicate keyword - Transfer keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -441,7 +441,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Area and Duplicate keyword - Not Transfer keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:

@@ -123,7 +123,7 @@ Feature: Route Inbound Screen 1
       | errorCode    | 103014           |
       | errorMessage | Order not found! |
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriverV2
   Scenario: Get Route Details by Driver Name - Number of Route_Id = 1
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
@@ -152,7 +152,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 0                                |
       | wpTotal     | 1                                |
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriverV2
   Scenario: Get Route Details by Driver Name - Number of Route_Id > 1
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:

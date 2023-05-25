@@ -5,7 +5,7 @@ Feature: Upload CSV on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - CSV file from Downloaded CSV
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -53,7 +53,7 @@ Feature: Upload CSV on Station Route
       | parcelSize | Small                                                                                                          |
       | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                               |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Valid Hub
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -90,7 +90,7 @@ Feature: Upload CSV on Station Route
       | parcelSize | Small                                                                                                          |
       | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[2].id} - {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}                               |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Invalid Hub
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -116,7 +116,7 @@ Feature: Upload CSV on Station Route
     When Operator click Cancel button in Invalid Input dialog on Station Route page
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Invalid TIDs, Invalid Driver with Invalid Hub
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -155,7 +155,7 @@ Feature: Upload CSV on Station Route
       | bottom | Invalid CSV data |
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Duplicate TIDs
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -190,7 +190,7 @@ Feature: Upload CSV on Station Route
     And Operator open Upload CSV tab on Station Route page
     And Operator cannot select "{KEY_LIST_OF_CREATED_HUBS[1].name}" hub on Station Route page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV After Update Selected Hub on Station Route
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |

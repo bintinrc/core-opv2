@@ -5,7 +5,7 @@ Feature: Add Keywords
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - No Duplicate Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -44,7 +44,7 @@ Feature: Add Keywords
       | {KEY_COVERAGE_ID} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | {KEY_COVERAGE_ID} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword - Not Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -94,7 +94,7 @@ Feature: Add Keywords
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword - Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -148,7 +148,7 @@ Feature: Add Keywords
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD  {gradle-current-date-yyyyMMddHHmmsss}  |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Empty Area Variation and Duplicate Keyword - Not Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -193,7 +193,7 @@ Feature: Add Keywords
       | coverageId                   | value                                         |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Empty Area Variation and Duplicate Keyword - Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -242,7 +242,7 @@ Feature: Add Keywords
       | coverageId                   | value                                         |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword from Empty Coverage Keyword - Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -292,7 +292,7 @@ Feature: Add Keywords
       | coverageId                   | value                                         |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriver @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword from Empty Coverage Keyword - Not Transfer Keyword
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |

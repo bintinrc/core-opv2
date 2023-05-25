@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Duplicate Orders
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -46,7 +46,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "998 Toa Payoh North" is displayed in row 1 on Station Route page
     And Operator verify keyword match "home {gradle-current-date-yyyyMMddHHmmsss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - No Duplicate Orders
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -98,7 +98,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "998 Toa Payoh North" is displayed in row 1 on Station Route page
     And Operator verify keyword match "home {gradle-current-date-yyyyMMddHHmmsss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Download Search Tracking IDs on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -135,7 +135,7 @@ Feature: Search Tracking IDs on Station Route
       | trackingId                                 | address                                                                                                        |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage - VN Special Characters - Area, Keyword, and Address in VN
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -178,7 +178,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "135 Đ Nam Kỳ Khởi Nghĩa Phường Bến Thành" is displayed in row 1 on Station Route page
     And Operator verify keyword match "Quận 1 Thành phố Hồ Chí Minh" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage - VN Special Characters - Area and Keyword in VN, Address in EN
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -221,7 +221,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "135 D Nam Ky Khoi Nghia Phuoang Ben Thanh" is displayed in row 1 on Station Route page
     And Operator verify keyword match "Quan 1 Thanh pho Ho Chi Minh" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address Does Match To Single Coverage - VN Special Characters - Area and Keyword in EN, Address in VN
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -264,7 +264,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "135 Đ Nam Kỳ Khởi Nghĩa Phường Bến Thành" is displayed in row 1 on Station Route page
     And Operator verify keyword match "Quận 1 Thành phố Hồ Chí Minh" is displayed in row 1 on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Allow RTS Orders
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -313,7 +313,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "998 Toa Payoh" is displayed in row 1 on Station Route page
     And Operator verify keyword match "North {gradle-current-date-yyyyMMddHHmmsss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Disallow RTS Orders
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -341,7 +341,7 @@ Feature: Search Tracking IDs on Station Route
     Then Operator verifies that error react notification displayed:
       | top | No orders found |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address [ A B C ]  Match To Overlapping Single Coverage - Area [ A B C ],  Empty Area Variation, Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -384,7 +384,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "North" is displayed on 2 position on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage -  Area [ A B C ] , Area Variation [ G H I ], Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
