@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - View Driver
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteMiddleMileDriver
   Scenario: View Driver (uid:23112b2d-8f62-4c9d-a354-ff51da408b8f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

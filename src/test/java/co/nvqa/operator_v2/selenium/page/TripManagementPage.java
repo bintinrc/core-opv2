@@ -745,7 +745,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     pause2s();
     verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
-    assignTripModal.waitUntilInvisible();
+    assignTripModal.saveButton.waitUntilInvisible();
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
@@ -836,35 +836,25 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void readTheToastMessage() {
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        waitUntilVisibilityOfElementLocated(
-            "//div[contains(@class,'notification-notice-message')]");
-        WebElement toast = findElementByXpath(
-            "//div[contains(@class,'notification-notice-message')]");
-        actualToastMessageContent = toast.getText();
-        waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
-        findElementByXpath("//a[@class='ant-notification-notice-close']").click();
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        throw ex;
-      }
-    }, getCurrentMethodName(), 1000, 5);
+    doWithRetry(() -> {
+      waitUntilVisibilityOfElementLocated(
+          "//div[contains(@class,'notification-notice-message')]");
+      WebElement toast = findElementByXpath(
+          "//div[contains(@class,'notification-notice-message')]");
+      actualToastMessageContent = toast.getText();
+      waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
+      findElementByXpath("//a[@class='ant-notification-notice-close']").click();
+    }, "Retrying until toast shown", 1000, 3);
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        if (actualToastMessageContent.equals("")) {
-          readTheToastMessage();
-        }
-        Assertions.assertThat(actualToastMessageContent)
-            .as("Trip Management toast message is shown").contains(expectedToastMessage);
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        throw ex;
+    doWithRetry(() -> {
+      if (actualToastMessageContent.equals("")) {
+        readTheToastMessage();
       }
-    }, getCurrentMethodName(), 1000, 15);
+      Assertions.assertThat(actualToastMessageContent)
+          .as("Trip Management toast message is shown").contains(expectedToastMessage);
+    }, "Retrying until toast shown", 1000, 3);
   }
 
   public void verifyToastContainingMessageIsShownWithoutClosing(String expectedToastMessage) {
