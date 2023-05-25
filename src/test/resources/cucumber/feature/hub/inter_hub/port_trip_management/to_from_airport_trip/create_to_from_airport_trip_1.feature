@@ -37,7 +37,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Single Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -71,7 +71,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Multiple Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -105,7 +105,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                                                               |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Four Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -139,7 +139,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                                                                                                                                                   |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign >4 Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -173,7 +173,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                                                                                                                                                                                             |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Expired License Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -208,7 +208,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Expired Employment Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -243,7 +243,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with Assign Active and Inactive Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

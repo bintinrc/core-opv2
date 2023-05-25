@@ -113,7 +113,7 @@ Feature: Middle Mile Driver Management - Search Driver 4
       | Ascending  | Ascending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
       | Descending | Descending | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Click back/forward button(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

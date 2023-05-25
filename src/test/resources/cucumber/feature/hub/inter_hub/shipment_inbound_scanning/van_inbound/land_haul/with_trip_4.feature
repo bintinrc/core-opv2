@@ -5,7 +5,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Shipment Already Scanned (Duplicate Scan on Van Inbound) (uid:462e4908-f065-4c86-84a7-56ccc1c5596a)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -56,7 +56,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_CREATED_SHIPMENT_ID}" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Check whether Old Scan Message is Cleared after New Scan (Van Inbound) (uid:85bd0840-8af2-4aba-b6ee-3da3f213082e)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -107,7 +107,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
     Then Operator verify small message "" appears in Shipment Inbound Box
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Scan Correct MAWB to Van Inbound (uid:494da16d-189b-4180-8e97-8f70b110358a)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -233,7 +233,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
 #    Then DB Operator verify path for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in trip_shipment_scans table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Check whether Driver&Trip  Values are cleared after changing Hub Inbound (uid:c37d486b-36b9-498f-9cf0-8923bb00699c)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -285,7 +285,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
     And Operator verify small message "Please select a trip before start inbound" "not appears" in Start Inbound Box
     And Operator verify start inbound button is "enabled"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at End Inbound) (uid:0c0bb89c-49a0-46ed-bb17-5417c9b936ce)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -379,7 +379,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
       | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
 #    Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Different Trips (Validation at Start Inbound) (uid:a4916525-06ff-4cd6-b416-ecb5679c48e5)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -463,7 +463,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
       | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
 #    Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View At Transit Hub Shipment To Go With Trip - Shipment in Transit Trip is not shown on Shipments to Go list (uid:bc9b23da-e4fe-4553-b0d6-3e94b03079ed)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -544,7 +544,7 @@ Feature: Shipment Van Inbound With Trip Scanning 4
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                             |
       | comments       | Stay in vehicle. Drop off: {KEY_LIST_OF_CREATED_HUBS[2].name}  |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Same Trip (Validation at End Inbound) (uid:0a874092-f3e3-4b07-a3cf-d8c8b1d1e97e)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

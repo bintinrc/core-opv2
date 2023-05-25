@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Employment Type : In-House - Full-Time
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -27,7 +27,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Employment Type : In-House - Part-Time
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -49,7 +49,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Employment Type : Outsourced - Subcon
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -71,7 +71,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Employment Type : Outsourced - Vendors
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -94,7 +94,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Employment Type : Outsourced - Manpower Agency
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -117,7 +117,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver with Display Name contains either Letters, Numbers, Hyphens, Underscores, and Parentheses
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

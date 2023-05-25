@@ -5,7 +5,7 @@ Feature: Movement Trip - Update Trip 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Departed Trip via Trip Details page - In Transit Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 4 new Hub using data below:
@@ -41,7 +41,7 @@ Feature: Movement Trip - Update Trip 2
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Arrived Trip via Trip Details page - Incomplete Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 4 new Hub using data below:
@@ -80,7 +80,7 @@ Feature: Movement Trip - Update Trip 2
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Departed Trip via Movement Trip Table page - In Transit Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 4 new Hub using data below:
@@ -114,7 +114,7 @@ Feature: Movement Trip - Update Trip 2
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Arrived Trip via Movement Trip Table page - Incomplete Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 4 new Hub using data below:

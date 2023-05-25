@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Search Driver 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Employment Type (uid:29cddc59-7ceb-4ccf-a850-581a6ed69ad3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -15,7 +15,7 @@ Feature: Middle Mile Driver Management - Search Driver 3
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "EMPLOYMENT_TYPE_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Employment Status (uid:edcf5cdb-1fd4-4b5f-9da4-2809758e28ca)
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
@@ -24,7 +24,7 @@ Feature: Middle Mile Driver Management - Search Driver 3
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "EMPLOYMENT_STATUS_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field License Type (uid:2d12f8e0-a6e2-4738-8c70-f9118823ee78)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -34,7 +34,7 @@ Feature: Middle Mile Driver Management - Search Driver 3
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "LICENSE_TYPE_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field License Status (uid:3b4d5a2a-2838-46d0-a522-678ab24917e6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -44,7 +44,7 @@ Feature: Middle Mile Driver Management - Search Driver 3
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "LICENSE_STATUS_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Comment (uid:813a82e7-0ce2-4206-b269-646dc2cc76bd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

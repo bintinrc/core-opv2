@@ -323,7 +323,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public void assignDriver(String driverId) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignDriverModal.addDriver.click();
+    pause3s();
     assignDriverModal.assignDriver(driverId);
+    pause2s();
     assignDriverModal.saveButton.click();
     assignDriverModal.waitUntilInvisible();
   }

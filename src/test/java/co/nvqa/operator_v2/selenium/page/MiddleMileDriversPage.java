@@ -695,6 +695,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesDataInViewModalIsTheSame(Driver middleMileDriver) {
+        pause2s();
         Assertions.assertThat(middleMileDriver.getDisplayName()).
             as("Name is as expected").isEqualTo(viewDriverDialog.name.getValue());
         Assertions.assertThat(middleMileDriver.getHub()).
