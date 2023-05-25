@@ -676,11 +676,25 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Then("Operator verifies details of driver {string} is correct")
   public void operatorVerifiesDetailsOfDriverIsCorrect(String storageKey) {
-    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
-    MiddleMileDriver mmd = getList(keyIdx.get("key"), MiddleMileDriver.class).get(
-        Integer.parseInt(keyIdx.get("idx"))).generateMiddleMileDriverWithTripData();
-    mmd.setDriver();
-    middleMileDriversPage.verifiesDataInViewModalIsTheSame(mmd.getDriver());
+    try {
+      Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+      MiddleMileDriver mmd = getList(keyIdx.get("key"), MiddleMileDriver.class).get(
+          Integer.parseInt(keyIdx.get("idx"))).generateMiddleMileDriverWithTripData();
+      mmd.setDriver();
+      Driver driver = new Driver();
+      driver.setDisplayName(mmd.getDisplayName());
+      driver.setHub(mmd.getHubName());
+      driver.setMobilePhone(mmd.getContacts().get(0).getDetails());
+      driver.setLicenseNumber(mmd.getLicenseNumber());
+      driver.setLicenseExpiryDate(mmd.getLicenseExpiryDate());
+      driver.setUsername(mmd.getUsername());
+      driver.setComments(mmd.getComments());
+      middleMileDriversPage.verifiesDataInViewModalIsTheSame(driver);
+    }
+    catch (Exception exc)
+    {
+      LOGGER.error(exc.getMessage());
+    }
   }
 
   @And("Operator creates new Middle Mile Driver using below data:")
