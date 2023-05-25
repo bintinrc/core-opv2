@@ -5,7 +5,7 @@ Feature: Assign Drivers List on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Order on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -53,7 +53,7 @@ Feature: Assign Drivers List on Station Route
       | driverId | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
     Then Operator verify parcels table contains "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" value in "driverId" column on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Search Order with Size on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -140,7 +140,7 @@ Feature: Assign Drivers List on Station Route
       | parcelSize | Bulky (XXL) |
     Then Operator verify parcels table contains "Bulky (XXL)" value in "parcelSize" column on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Filter With Show Only Matching Area But No Keyword on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -196,7 +196,7 @@ Feature: Assign Drivers List on Station Route
       | shownOnlyMatchingArea | true                                  |
     Then Operator verify parcels table is empty on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Assign Order to Manually Input Driver on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -243,7 +243,7 @@ Feature: Assign Drivers List on Station Route
       | parcelSize | Medium                                                                           |
       | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Assign Order to Bulk Manually Input Driver on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -311,7 +311,7 @@ Feature: Assign Drivers List on Station Route
       | parcelSize | Medium                                                                           |
       | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Show List of Removed Order on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -373,7 +373,7 @@ Feature: Assign Drivers List on Station Route
     Then Operator verify parcels table row 1 marked as removed on Station Route page
     Then Operator verify parcels table row 2 marked as removed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Show List of Kept Order on Station Route Phase
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -433,7 +433,7 @@ Feature: Assign Drivers List on Station Route
       | action | Kept |
     Then Operator verify parcels table row 1 not marked as removed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Check Assignment of Order Count to Assigned Driver on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -486,7 +486,7 @@ Feature: Assign Drivers List on Station Route
       | driverName                                 | parcelCount |
       | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Disallow Check Assignment of Order Count to Unassigned Driver on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -530,7 +530,7 @@ Feature: Assign Drivers List on Station Route
     And Operator verify keyword match is not displayed on Station Route page
     And Operator verify Check assignment button is disabled on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Filter Order with Order Tags on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:

@@ -5,7 +5,7 @@ Feature: Add To Existing Routes on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To Existing Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -89,7 +89,7 @@ Feature: Add To Existing Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Partial Success Assign Unrouted Order To Existing Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
