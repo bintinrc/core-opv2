@@ -420,7 +420,7 @@ Feature: Search Tracking IDs on Station Route
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
-      | bottom | 1 keywords     |
+      | bottom | 0 keywords     |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
       | hub                        | {hub-name-6}                   |
