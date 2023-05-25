@@ -34,7 +34,7 @@ Feature: Create New Coverage
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
-      | bottom | 1 keywords     |
+      | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
@@ -154,7 +154,7 @@ Feature: Create New Coverage
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
-      | bottom | 1 keywords     |
+      | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
@@ -227,7 +227,7 @@ Feature: Create New Coverage
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator create new coverage on Station Route Keyword page:
       | area           | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}  |
-      | areaVariation  | 135 Đ NAM KỲ KHỞI NGHĨA, PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss} |
+      | areaVariation  | 135 Đ NAM KỲ KHỞI NGHĨA 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | THÀNH PHỐ HỒ CHÍ MINH VN {gradle-current-date-yyyyMMddHHmmsss}                 |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                   |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                   |
@@ -252,7 +252,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                                           |
     And DB Route - verify that sr_area_variations record is created:
       | area          | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}  |
-      | areaVariation | 135 Đ NAM KỲ KHỞI NGHĨA, PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss} |
+      | areaVariation | 135 Đ NAM KỲ KHỞI NGHĨA 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                                              |

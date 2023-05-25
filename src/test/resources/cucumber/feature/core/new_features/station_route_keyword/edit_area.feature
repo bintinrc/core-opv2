@@ -64,7 +64,7 @@ Feature: Edit Area
       | areaVariations | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                              |
-      | bottom | ^.*Error Message: \[duplicatedNames: \[AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
+      | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
   @DeleteDriverV2 @DeleteCoverage
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area and Duplicate Area Variation

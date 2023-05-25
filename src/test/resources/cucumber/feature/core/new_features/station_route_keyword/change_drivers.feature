@@ -101,7 +101,7 @@ Feature: Change Drivers
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
     And Operator verifies that success react notification displayed:
       | top    | Drivers updated                                                                                                        |
-      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} , fallback driver {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
+      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}, fallback driver {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}    |
