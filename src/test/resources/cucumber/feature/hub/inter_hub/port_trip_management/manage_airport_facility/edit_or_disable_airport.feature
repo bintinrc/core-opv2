@@ -10,7 +10,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -33,7 +32,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -56,7 +54,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -79,7 +76,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -102,7 +98,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -125,7 +120,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -148,7 +142,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -170,7 +163,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -192,7 +184,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -214,7 +205,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -246,7 +236,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -279,7 +268,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -302,7 +290,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -324,7 +311,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -346,7 +332,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -369,7 +354,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -395,7 +379,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -417,7 +400,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -442,7 +424,6 @@ Feature: Port Trip Management - Edit/Disable Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API MM - Operator refreshes "Airport" cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
