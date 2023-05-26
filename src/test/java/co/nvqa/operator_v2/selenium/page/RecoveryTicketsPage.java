@@ -99,7 +99,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     String ticketType = recoveryTicket.getTicketType();
 
     createNewTicket.click();
-    pause2s();
+    createTicketDialog.waitUntilVisible();
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
