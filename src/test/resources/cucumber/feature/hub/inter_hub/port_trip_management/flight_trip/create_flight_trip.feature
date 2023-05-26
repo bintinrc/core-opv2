@@ -12,7 +12,6 @@ Feature: Airport Trip Management - Create Flight Trip
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -48,7 +47,6 @@ Feature: Airport Trip Management - Create Flight Trip
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API MM - Operator disables latest port from "KEY_MM_LIST_OF_CREATED_PORTS"
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -87,7 +85,6 @@ Feature: Airport Trip Management - Create Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -112,7 +109,6 @@ Feature: Airport Trip Management - Create Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -134,7 +130,6 @@ Feature: Airport Trip Management - Create Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -159,7 +154,6 @@ Feature: Airport Trip Management - Create Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management

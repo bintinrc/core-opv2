@@ -431,7 +431,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     loadTrips.click();
     waitUntilPageLoaded();
     pause2s();
-    backButton.waitUntilVisible();
+    backButton.waitUntilVisible(60);
   }
 
   public void verifyLoadedTripsPageInPortManagementDetails(Map<String, String> mapOfData) {
