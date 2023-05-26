@@ -5,7 +5,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Pending Air Haul Shipment in Shipment's Destination Hub - Hub Inbound with Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:
@@ -156,7 +156,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 1
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}   |
       | status       | Completed                            |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Closed Air Haul Shipment in Shipment's Origin Hub - Van Inbound with Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:
@@ -309,7 +309,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 1
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}   |
       | status       | Completed                            |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Transit Air Haul Shipment in Shipment's Destination Hub - Hub Inbound with Airport to Warehouse  Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:
@@ -459,7 +459,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 1
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status       | Completed                          |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Cancelled Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:
@@ -612,7 +612,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 1
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}   |
       | status       | Completed                            |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Completed Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehous Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:

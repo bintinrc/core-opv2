@@ -5,7 +5,7 @@ Feature: Driver Seeding
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedZone @DeleteDriver
+  @DeleteCreatedZone @DeleteDriverV2
   Scenario: Load Inactive Driver Involved by Selecting Zone (uid:xxx)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
@@ -29,7 +29,7 @@ Feature: Driver Seeding
       | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
       | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
 
-  @DeleteCreatedZone @DeleteDriver
+  @DeleteCreatedZone @DeleteDriverV2
   Scenario: Load All Preferred Zones Driver Involved by Selecting Zone (uid:xxx)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |
@@ -57,7 +57,7 @@ Feature: Driver Seeding
       | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
       | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
 
-  @DeleteCreatedZone @DeleteDriver
+  @DeleteCreatedZone @DeleteDriverV2
   Scenario: Changing Zone Preference of the Driver by Moving It to Another Zone (uid:216f28e3-ea31-47d3-9828-ede8a4621350)
     Given API Operator create zone using data below:
       | hubName | {hub-name} |

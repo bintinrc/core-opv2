@@ -5,7 +5,7 @@ Feature: E2E Airhaul Shipment With Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Hub Inbound Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Success Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -206,7 +206,7 @@ Feature: E2E Airhaul Shipment With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Hub Inbound Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Fail Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -407,7 +407,7 @@ Feature: E2E Airhaul Shipment With Trip
     And Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Hub Inbound Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Reversion Fail Delivery to Success - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -614,7 +614,7 @@ Feature: E2E Airhaul Shipment With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Hub Inbound Stayover Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Success Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -865,7 +865,7 @@ Feature: E2E Airhaul Shipment With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Hub Inbound Stayover Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Reversion Fail Delivery to Success - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1122,7 +1122,7 @@ Feature: E2E Airhaul Shipment With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Hub Inbound Stayover Air Haul Shipment at Shipment Destination Hub with Airport to Warehouse Trip - Fail Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

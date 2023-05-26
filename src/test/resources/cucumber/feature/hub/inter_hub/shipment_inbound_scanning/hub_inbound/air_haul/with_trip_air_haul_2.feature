@@ -5,7 +5,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Scan Transit Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -91,7 +91,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 2
       | destHubName  | {local-station-2-id}                 |
       | status       | Completed                            |
 
-  @DeleteShipment @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Scan Cancelled Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -179,7 +179,7 @@ Feature: Air Haul Shipment Hub Inbound With Trip Scanning 2
       | destHubName  | {local-station-2-id}                 |
       | status       | Completed                            |
 
-  @DeleteShipment @DeleteDriver @DeleteCreatedMAWBs @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteCreatedMAWBs @CancelTrip
   Scenario: Scan Completed Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehous Trip
       Given Operator go to menu Shipper Support -> Blocked Dates
       Given API Shipper create V4 order using data below:

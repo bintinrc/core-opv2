@@ -79,22 +79,22 @@ Feature: Route Logs
   Scenario: Operator Optimise Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator add multiple parcels to multiple routes using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+      | routeDateFrom | YESTERDAY    |
+      | routeDateTo   | TODAY        |
+      | hubName       | {hub-name-2} |
     And Operator optimise created routes
     Then Operator verifies created routes are optimised successfully
 

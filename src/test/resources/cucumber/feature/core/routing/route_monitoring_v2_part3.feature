@@ -124,15 +124,9 @@ Feature: Route Monitoring V2
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-    And Operator removes the route from the created reservation
+    And API Core - Operator remove reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}" from route
     And DB Operator verifies "{KEY_CREATED_RESERVATION.waypointId}" waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |

@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan to  Remove Shipment at Hub Inbound (uid:3423558a-2ed8-4a5a-8692-c2477a5ceeb5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -75,7 +75,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Check whether Old Scan Message is Cleared after New Scan (Hub Inbound) (uid:6f6e795c-c893-4b56-b2d0-d11569e8bd53)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -144,7 +144,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
     And Operator verify small message "" appears in Shipment Inbound Box
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Shipment to Hub Inbound with Different Driver for Next Trip (uid:5d4e9d41-ce9c-4fef-9176-2d54fa6eb62a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -226,7 +226,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Missing Scan Shipment From Shipment to Unload List (uid:e050e36c-938c-454e-a99d-d785a696d282)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -360,7 +360,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
       | type       | MISSING                               |
       | scanType   | SHIPMENT_HUB_INBOUND                  |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Shipment with No Path Found (uid:75cb600a-19e8-4262-b1ff-2f2b5ca6a114)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -453,7 +453,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[3].id} ({KEY_LIST_OF_CREATED_HUBS[3].name}) Hub Location Type ORIGIN |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Shipment to Hub Inbound with Incorrect Drop Off Trip (uid:0513a12e-b252-4dbb-a00f-e3961dac2298)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -556,7 +556,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 4
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[3].id} ({KEY_LIST_OF_CREATED_HUBS[3].name}) Hub Location Type ORIGIN |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound with Missing Scanned and Unregistered Shipments (uid:0baf34aa-c3eb-4ae0-a3a0-57916fc91697)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

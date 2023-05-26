@@ -36,7 +36,7 @@ Feature: Driver Strength
     Then Operator verify driver strength params of created driver on Driver Strength page
     When Operator delete created driver on Driver Strength page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Account (uid:6ddb814e-8b32-4097-9a5f-0900d0d8a3ca)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -70,7 +70,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     And Operator verify driver strength params of created driver on Driver Strength page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create New Driver Account and Verify Contact Detail is Correct (uid:fadb6a2a-6f2a-4c6f-94a9-e9f41c8795cc)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -89,7 +89,7 @@ Feature: Driver Strength
     When Operator delete created driver on Driver Strength page
     Then Operator verify new driver is deleted successfully on Driver Strength page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Should Be Able to Change The 'Coming' Value (uid:32abe41c-49be-4d54-8f11-3891bcd81afb)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -100,7 +100,7 @@ Feature: Driver Strength
     When Operator change Coming value for created driver on Driver Strength page
     Then Operator verify Coming value for created driver has been changed on Driver Strength page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Zones (uid:fa20ebea-5a9c-43bb-88ad-a93aa94ef18f)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -111,7 +111,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "{zone-name}" zone
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Driver Types (uid:74653b45-cba6-464b-a874-e9ddbc9759bb)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -122,7 +122,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Resigned - Yes (uid:aa65bb50-5bd7-44e7-87cd-8621953e95f6)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -133,7 +133,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "Yes" resigned
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Resigned - No (uid:d587886b-6721-4b48-9e5d-749a0d0eed22)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -144,7 +144,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "No" resigned
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Driver Zones, Driver Types, and Resigned - Yes (uid:dd1e88b6-ecd4-410c-a1f4-0d7cf468f3cd)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -159,7 +159,7 @@ Feature: Driver Strength
     And Operator verify driver strength is filtered by "{driver-type-name}" driver type
     And Operator verify driver strength is filtered by "Yes" resigned
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Driver Types, Zones, and Resigned - No (uid:3227cea9-887f-47df-b403-de16558eaf68)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -174,7 +174,7 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
     Then Operator verify driver strength is filtered by "No" resigned
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Edit Search Filter after Load Driver without using Search Filter first (uid:1083c42d-5fcb-4e08-a838-0072a7e1e36f)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -190,7 +190,7 @@ Feature: Driver Strength
     And Operator verify driver strength is filtered by "{driver-type-name}" driver type
     And Operator verify driver strength is filtered by "No" resigned
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Filter Driver Account by Edit Search Filter after Load Driver with using Search Filter first (uid:481ba3a2-07a5-4156-ae14-8bae483d0773)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -289,7 +289,7 @@ Feature: Driver Strength
     Then Operator click Submit button in Add Driver dialog
     And Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Can Not Update Driver Account Without Active Contact (uid:d2db97f9-190d-4b03-8bb5-249fd1bf60c5)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -301,7 +301,7 @@ Feature: Driver Strength
     And  Operator click Submit button in Update Driver dialog
     Then Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Can Not Update Driver Account Without Active Vehicle (uid:9d7f097d-2f46-4fda-b171-9c90723b8b57)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -313,7 +313,7 @@ Feature: Driver Strength
     And Operator click Submit button in Add Driver dialog
     Then Operator verifies hint "At least one vehicle required." is displayed in Add Driver dialog
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Can Not Update Driver Account Without Preferred Zone and Capacity (uid:113be9c8-1f19-4765-a94e-b98a2fb25c0f)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -436,7 +436,7 @@ Feature: Driver Strength
       | VehicleType | ContactNumber    | ErrorMessage                                              |
       | Car         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
-  @DeleteDriverType @DeleteDriver
+  @DeleteDriverType @DeleteDriverV2
   Scenario Outline: Can Not Update Driver Account with Invalid Phone Number (uid:1d5d6d06-3bc5-4a19-91f9-1a7e892f8bc6)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -469,7 +469,7 @@ Feature: Driver Strength
       | ContactNumber    | ErrorMessage                                              |
       | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
-  @DeleteDriverType @DeleteDriver
+  @DeleteDriverType @DeleteDriverV2
   Scenario Outline: Download All Shown CSV (uid:58a58dac-b1f6-49ab-8b69-f8db23934f4c)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -523,7 +523,7 @@ Feature: Driver Strength
       | FileName                                                                      | Resigned | DownloadOption         |
       | update_driver_details_{gradle-current-date-yyyy-MM-dd}_prefilled_template.csv | No       | Download all to update |
 
-  @DeleteDriverType @DeleteDriver @CleanDownloadFolder
+  @DeleteDriverType @DeleteDriverV2 @CleanDownloadFolder
   Scenario Outline: Download Selected to Update Prefilled Template (uid:13e78371-2b98-4f2c-8155-29f1dfd8d311)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -663,7 +663,7 @@ Feature: Driver Strength
       | Resigned | FileName                                           | ErrorFileName                                                        |
       | No       | {update_driver_details_prefilled_csv_data_invalid} | update_driver_details_{gradle-current-date-yyyy-MM-dd}_error_log.csv |
 
-  @DeleteDriverType @DeleteDriver @CleanDownloadFolder
+  @DeleteDriverType @DeleteDriverV2 @CleanDownloadFolder
   Scenario Outline: Filter by Hub and Download Selected to Update Prefilled Template (uid:c59656e9-b10c-4233-a9d9-dbf3867eb704)
     Given Operator loads Operator portal home page
     When Operator go to menu Fleet -> Driver Strength
@@ -696,7 +696,7 @@ Feature: Driver Strength
       | HubName    | HubId    | Resigned | DownloadOption              | FileName                                                                      |
       | {hub-name} | {hub-id} | No       | Download selected to update | update_driver_details_{gradle-current-date-yyyy-MM-dd}_prefilled_template.csv |
 
-  @DeleteDriverType @DeleteDriver @CleanDownloadFolder
+  @DeleteDriverType @DeleteDriverV2 @CleanDownloadFolder
   Scenario Outline: Filter by Type and Download Selected to Update Prefilled Template (uid:ea4229de-2a3a-49e0-94d8-94b2cb87ebad)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:

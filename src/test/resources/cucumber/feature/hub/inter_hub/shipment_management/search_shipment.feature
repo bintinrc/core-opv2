@@ -220,7 +220,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteCreatedShipments @DeleteDriver @DeleteCreatedPorts @CancelTrip
+  @DeleteCreatedShipments @DeleteDriverV2 @DeleteCreatedPorts @CancelTrip
   Scenario: Search Shipment by Filter - Shipment Status : Transit to Airport
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
