@@ -12,7 +12,7 @@ Feature: Resume Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Cancelled                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -63,16 +63,17 @@ Feature: Resume Order
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator create new recovery ticket on Edit Order V2 page:
-      | entrySource                   | CUSTOMER COMPLAINT |
-      | investigatingDepartment       | Recovery           |
-      | investigatingHub              | {hub-name}         |
-      | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | exceptionReason               | GENERATED          |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | PARCEL EXCEPTION                      |
+      | subTicketType      | INACCURATE ADDRESS                    |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
     And Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order V2 page
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
@@ -229,6 +230,10 @@ Feature: Resume Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -250,7 +255,7 @@ Feature: Resume Order
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - force cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
