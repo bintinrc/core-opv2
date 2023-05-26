@@ -253,7 +253,7 @@ Feature: Create New Coverage
     And DB Route - verify that sr_area_variations record is created:
       | area          | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}  |
       | areaVariation | 135 Đ NAM KỲ KHỞI NGHĨA 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
+    And DB Operator fetch coverage id for "135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                                              |
       | keyword    | THÀNH PHỐ HỒ CHÍ MINH VN {gradle-current-date-yyyyMMddHHmmsss} |
