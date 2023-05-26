@@ -8,6 +8,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Employment Type : In-House - Full-Time
     Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded

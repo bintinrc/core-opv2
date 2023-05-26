@@ -8,6 +8,7 @@ Feature: Middle Mile Driver Management - Update Driver
   @DeleteMiddleMileDriver
   Scenario: Update Driver Details - Name (uid:c6c8e619-1437-4a8d-ab3e-954e9e1ad863)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator change the country to "Singapore"
     Given Operator refresh page v1
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
