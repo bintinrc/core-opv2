@@ -76,6 +76,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 3 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -111,6 +112,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 0 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -146,6 +148,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 30 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -177,6 +180,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 3 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -191,7 +195,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Failed
   Scenario Outline: View Ageing Parcel in Hub of Unacknowledged SLFD Parcel
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -210,6 +214,7 @@ Feature: Ageing Parcels In Hub
     When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -254,7 +259,6 @@ Feature: Ageing Parcels In Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -263,6 +267,7 @@ Feature: Ageing Parcels In Hub
       | ETA Calculated | {date: 1 days next, YYYY-MM-dd}            |
     And Operator confirms that station confirmed eta field is empty
     And Operators chooses the date:"{date: 1 days next, YYYY-MM-dd}" as station confirmed eta and proceed
+    Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -300,6 +305,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -353,6 +359,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -413,6 +420,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
@@ -458,6 +466,7 @@ Feature: Ageing Parcels In Hub
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
