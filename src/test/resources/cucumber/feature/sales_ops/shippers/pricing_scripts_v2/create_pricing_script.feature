@@ -541,7 +541,6 @@ Feature: Pricing Scripts V2
       | 50     | 50    | 50     | 406.08     | 30.08 | 376         | Send LWH     |
       | 0      | 0     | 0      | 157.68     | 11.68 | 146         | No Send LWH  |
 
-
   Scenario: Check List Of Script Parameters on Write Script Page
     Given Operator go to menu Shipper -> Pricing Scripts V2
     And Operator go to Write Script Page
@@ -588,30 +587,30 @@ Feature: Pricing Scripts V2
       | PUDO_DROPOFF |
       | NONE         |
     Then Operator verifies presence of following parameters in Write Script page
-      | weight                           |
-      | from_zone                        |
-      | to_zone                          |
-      | cod_value                        |
-      | insured_value                    |
-      | bulky_category_name              |
-      | installation_required            |
-      | flight_of_stairs                 |
-      | shipper_provided_length (legacy) |
-      | shipper_provided_width (legacy)  |
-      | shipper_provided_height (legacy) |
-      | shipper_provided_weight (legacy) |
-      | length (legacy)                  |
-      | width (legacy)                   |
-      | height (legacy)                  |
-      | from_l1                          |
-      | from_l2                          |
-      | from_l3                          |
-      | to_l1                            |
-      | to_l2                            |
-      | to_l3                            |
-      | from_metadata.l2_tier            |
-      | to_metadata.l2_tier              |
-      | is_rts                           |
+      | weight                  |
+      | from_zone               |
+      | to_zone                 |
+      | cod_value               |
+      | insured_value           |
+      | bulky_category_name     |
+      | installation_required   |
+      | flight_of_stairs        |
+      | shipper_provided_length |
+      | shipper_provided_width  |
+      | shipper_provided_height |
+      | shipper_provided_weight |
+      | length                  |
+      | width                   |
+      | height                  |
+      | from_l1                 |
+      | from_l2                 |
+      | from_l3                 |
+      | to_l1                   |
+      | to_l2                   |
+      | to_l3                   |
+      | from_metadata.l2_tier   |
+      | to_metadata.l2_tier     |
+      | is_rts                  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -172,6 +172,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     if (verify.equalsIgnoreCase("just edit")) {
       pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
     }
+    pause3s();
     getWebDriver().switchTo().defaultContent();
   }
 

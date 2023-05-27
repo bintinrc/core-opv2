@@ -61,8 +61,6 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   @FindBy(xpath = "//button[@data-testid='linkShippers.saveBtn']/..")
   public NvApiTextButton saveBtn;
 
-  String WRITE_SCRIPT_PARAMETER = "//span[strong[text()='%s']]/parent::div/following-sibling::div//span[text()='%s']";
-
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);
     pricingScriptsV2CreateEditDraftPage = new PricingScriptsV2CreateEditDraftPage(webDriver);
@@ -229,7 +227,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableActiveScripts("updated_at", script.getUpdatedAt());
+          searchTableActiveScripts("updated_at_formatted", script.getUpdatedAt());
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "id":
@@ -259,7 +257,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableDraftScripts("updated_at", script.getUpdatedAt());
+          searchTableDraftScripts("updated_at_formatted", script.getUpdatedAt());
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "id":
@@ -527,12 +525,13 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   public void verifyPresence(String field, String value) {
     if (value == null) {
       Assertions.assertThat(
-              findElementByXpath(f("//span[strong[text()='%s']]", field)).isDisplayed())
+              findElementByXpath(f("//span[@data-testid='scriptParameters.%s']", field)).isDisplayed())
           .as(f("Parameter %s present", field))
           .isTrue();
     } else {
       Assertions.assertThat(
-              findElementByXpath(f(WRITE_SCRIPT_PARAMETER, field, value)).isDisplayed())
+              findElementByXpath(
+                  f("//span[@data-testid='scriptParameter.%s.%s']", field, value)).isDisplayed())
           .as(f("Parameter %s present under %s", value, field))
           .isTrue();
     }
