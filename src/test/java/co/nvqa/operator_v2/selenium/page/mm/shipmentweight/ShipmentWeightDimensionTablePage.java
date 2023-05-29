@@ -93,6 +93,38 @@ public class ShipmentWeightDimensionTablePage extends
     return pe;
   }
 
+  private String getFilterValueByColumn(Column col, co.nvqa.common.mm.model.Shipment shipmentData) {
+    String filterValue = "";
+    switch (col) {
+      case BILLING_NUMBER:
+        filterValue = shipmentData.getMawb();
+        break;
+      case STATUS:
+        filterValue = shipmentData.getStatus().toUpperCase(Locale.ROOT);
+        break;
+      case END_HUB:
+        filterValue = shipmentData.getDestHubName();
+        break;
+      case START_HUB:
+        filterValue = shipmentData.getOrigHubName();
+        break;
+      case SHIPMENT_ID:
+        filterValue = shipmentData.getId().toString();
+        break;
+      case COMMENTS:
+        filterValue = shipmentData.getComments();
+        break;
+      case SHIPMENT_TYPE:
+        filterValue = shipmentData.getShipmentType();
+        break;
+      case CREATION_DATE:
+        filterValue = DateUtil.displayOperatorTime(shipmentData.getCreatedAt(), true);
+        LOGGER.debug("Filter value is: " + filterValue);
+        break;
+    }
+    return filterValue;
+  }
+
   private String getFilterValueByColumn(Column col, Shipment shipmentData) {
     String filterValue = "";
     switch (col) {
@@ -126,6 +158,13 @@ public class ShipmentWeightDimensionTablePage extends
   }
 
   public void filterColumn(Column col, Shipment shipmentData) {
+    String filterValue = getFilterValueByColumn(col, shipmentData);
+    if (filterValue != null && !filterValue.isEmpty()) {
+      filterColumn(col, filterValue);
+    }
+  }
+
+  public void filterColumn(Column col, co.nvqa.common.mm.model.Shipment shipmentData) {
     String filterValue = getFilterValueByColumn(col, shipmentData);
     if (filterValue != null && !filterValue.isEmpty()) {
       filterColumn(col, filterValue);
