@@ -119,7 +119,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void inboundScanningShipment(long shipmentId, String label, String hub) {
-    pause2s();
+    hubSelect.waitUntilEnabled();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
     hubSelect.selectValue(hub);

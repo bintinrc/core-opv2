@@ -382,6 +382,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
+  @Deprecated
   @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
   public void operatorOpenShipmentDetailsPageForCreatedShipmentOnShipmentManagementPage() {
     ShipmentInfo shipmentInfo;
@@ -394,6 +395,12 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     }
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     page.inFrame(() -> page.openShipmentDetailsPage(shipmentInfo.getId()));
+  }
+
+  @And("Operator open the shipment detail for shipment id {string} on Shipment Management Page")
+  public void operatorOpenShipmentDetailsPageForCreatedShipmentOnShipmentManagementPage(String sidAsStr) {
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    page.inFrame(() -> page.openShipmentDetailsPage(Long.parseLong(resolveValue(sidAsStr))));
   }
 
   @And("Operator open the shipment detail for the shipment {string} on Shipment Management Page")
@@ -438,7 +445,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @Then("^Operator verify shipment event on Shipment Details page:$")
   public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> data) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> page.inFrame(() -> {
+    doWithRetry(() -> page.inFrame(() -> {
       try {
         ShipmentEvent expectedEvent = new ShipmentEvent(resolveKeyValues(data));
         page.shipmentEventsTable.readAllEntities().stream()
@@ -463,7 +470,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @Then("Operator verify movement event on Shipment Details page:")
   public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> page.inFrame(() -> {
+    doWithRetry(() -> page.inFrame(() -> {
       MovementEvent expectedEvent = new MovementEvent(resolveKeyValues(mapOfData));
       try {
         page.movementEventsTable.readAllEntities().stream()
