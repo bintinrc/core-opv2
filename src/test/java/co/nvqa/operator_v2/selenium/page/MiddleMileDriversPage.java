@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -781,14 +782,19 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         }
     }
 
+    private void scrollHorizontal(WebElement webElement, int amount) {
+        ((JavascriptExecutor) getWebDriver()).executeScript(f("arguments[0].scrollLeft = %d;", amount), webElement);
+    }
+
     public void sortColumn(String columnName, String sortingOrder) {
         waitWhilePageIsLoading();
         String sortColumnXpath = f(TABLE_FILTER_SORT_XPATH, columnName);
-        //scrollIntoView(sortColumnXpath);
+        String tableBodyXpath = "//div[@data-testid='middle-mile-driver-table']//div[contains(@class, 'ant-table-body')]";
+        scrollHorizontal(findElementByXpath(tableBodyXpath), 2000);
         String body_class_name = "name";
         switch (columnName){
             case "ID":
-                body_class_name ="id";
+                body_class_name ="driver-id";
                 break;
             case "Username":
                 body_class_name ="username";
@@ -800,13 +806,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 body_class_name ="employment-type";
                 break;
             case "Employment Status":
-                body_class_name = "is-employment-active";
+                body_class_name = "employment-status-string";
                 break;
             case "License Type":
                 body_class_name ="license-type";
                 break;
             case "License Status":
-                body_class_name = "is-license-active";
+                body_class_name = "license-status-string";
                 break;
             case "Comments":
                 body_class_name ="comments";
