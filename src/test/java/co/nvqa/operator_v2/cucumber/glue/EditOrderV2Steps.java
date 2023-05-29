@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.addressing.AddressingZone;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.OrderEvent;
@@ -60,7 +59,7 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @When("^Operator click ([^\"]*) -> ([^\"]*) on Edit Order V2 page$")
   public void operatorClickMenuOnEditOrderPage(String parentMenuName, String childMenuName) {
-    page.clickMenu(parentMenuName, childMenuName);
+    page.inFrame(() -> page.clickMenu(parentMenuName, childMenuName));
   }
 
   @When("Operator Edit Order Details on Edit Order V2 page:")
@@ -134,44 +133,38 @@ public class EditOrderV2Steps extends AbstractSteps {
       expected = finalData.get("deliveryVerificationType");
       if (StringUtils.isNotBlank(expected)) {
         softAssertions.assertThat(page.deliveryVerificationType.getText())
-            .as("Delivery verification required")
-            .isEqualTo(expected);
+            .as("Delivery verification required").isEqualTo(expected);
       }
       expected = finalData.get("insuredValue");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.insuredValue.getText())
-            .as("Insured value")
+        softAssertions.assertThat(page.insuredValue.getText()).as("Insured value")
             .isEqualTo(expected);
       }
       expected = finalData.get("deliveryType");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.deliveryType.getText())
-            .as("Delivery type")
+        softAssertions.assertThat(page.deliveryType.getText()).as("Delivery type")
             .isEqualTo(expected);
       }
       expected = finalData.get("cop");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.copValue.getText())
-            .as("COP")
-            .isEqualTo(expected);
+        softAssertions.assertThat(page.copValue.getText()).as("COP").isEqualTo(expected);
       }
       expected = finalData.get("cod");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.codValue.getText())
-            .as("COD")
-            .isEqualTo(expected);
+        softAssertions.assertThat(page.codValue.getText()).as("COD").isEqualTo(expected);
       }
       expected = finalData.get("status");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.status.getText())
-            .as("Status")
-            .isEqualTo(expected);
+        softAssertions.assertThat(page.status.getText()).as("Status").isEqualTo(expected);
       }
       expected = finalData.get("granularStatus");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.granular.getText())
-            .as("Granular status")
+        softAssertions.assertThat(page.granular.getText()).as("Granular status")
             .isEqualTo(expected);
+      }
+      expected = finalData.get("zone");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
       }
     });
     softAssertions.assertAll();
@@ -179,20 +172,14 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify COP icon is not displayed on Edit Order V2 page")
   public void operatorVerifyCopNotDisplayed() {
-    page.inFrame(() ->
-        Assertions.assertThat(page.copValue.isDisplayed())
-            .withFailMessage("Unexpected COP icon is displayed")
-            .isFalse()
-    );
+    page.inFrame(() -> Assertions.assertThat(page.copValue.isDisplayed())
+        .withFailMessage("Unexpected COP icon is displayed").isFalse());
   }
 
   @Then("Operator verify COD icon is not displayed on Edit Order V2 page")
   public void operatorVerifyCodNotDisplayed() {
-    page.inFrame(() ->
-        Assertions.assertThat(page.codValue.isDisplayed())
-            .withFailMessage("Unexpected COD icon is displayed")
-            .isFalse()
-    );
+    page.inFrame(() -> Assertions.assertThat(page.codValue.isDisplayed())
+        .withFailMessage("Unexpected COD icon is displayed").isFalse());
   }
 
   @Then("^Operator verifies pricing information on Edit Order V2 page:$")
@@ -519,9 +506,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify order status is {value} on Edit Order V2 page")
   public void operatorVerifyOrderStatusOnEditOrderPage(String expectedValue) {
-    page.inFrame(() -> Assertions.assertThat(page.status.getText())
-        .as("Status").isEqualToIgnoringCase(expectedValue)
-    );
+    page.inFrame(() -> Assertions.assertThat(page.status.getText()).as("Status")
+        .isEqualToIgnoringCase(expectedValue));
   }
 
   @Then("Operator verify Current priority is {value} on Edit Order V2 page")
@@ -542,9 +528,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify order granular status is {value} on Edit Order V2 page")
   public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue) {
-    page.inFrame(() -> Assertions.assertThat(page.granular.getText())
-        .as("Granular Status").isEqualToIgnoringCase(expectedValue)
-    );
+    page.inFrame(() -> Assertions.assertThat(page.granular.getText()).as("Granular Status")
+        .isEqualToIgnoringCase(expectedValue));
   }
 
   @Then("^Operator verify order delivery title is \"(.+)\" on Edit Order V2 page$")
@@ -801,13 +786,11 @@ public class EditOrderV2Steps extends AbstractSteps {
         pause5s();
         page.refreshPage();
         actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-            .findFirst()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
             .orElse(null);
       }
       Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page",
-              expectedEvent.getName())
+          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
           .isNotNull();
       expectedEvent.compareWithActual(actualEvent);
     }));
@@ -859,9 +842,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("startDate")) {
         String actual = page.deliveryDetailsBox.startDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
@@ -874,9 +856,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("startDateTime")) {
         String actual = page.deliveryDetailsBox.startDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
@@ -890,9 +871,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("endDate")) {
         String actual = page.deliveryDetailsBox.endDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
@@ -905,9 +885,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("endDateTime")) {
         String actual = page.deliveryDetailsBox.endDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
@@ -930,8 +909,8 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.inFrame(() -> {
       SoftAssertions assertions = new SoftAssertions();
       if (expectedData.containsKey("status")) {
-        assertions.assertThat(page.pickupDetailsBox.status.getText())
-            .as("Pickup Details - Status").isEqualTo(f("Status: %s", expectedData.get("status")));
+        assertions.assertThat(page.pickupDetailsBox.status.getText()).as("Pickup Details - Status")
+            .isEqualTo(f("Status: %s", expectedData.get("status")));
       }
       if (expectedData.containsKey("name")) {
         assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
@@ -956,9 +935,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("startDate")) {
         String actual = page.pickupDetailsBox.startDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
@@ -971,9 +949,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("startDateTime")) {
         String actual = page.pickupDetailsBox.startDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
@@ -987,9 +964,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("endDate")) {
         String actual = page.pickupDetailsBox.endDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
@@ -1002,9 +978,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (expectedData.containsKey("endDateTime")) {
         String actual = page.pickupDetailsBox.endDateTime.getText();
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
-                DateUtil.DATE_TIME_FORMATTER.withZone(
-                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-            .toInstant());
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
         Date expectedDateTime = null;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
@@ -1118,56 +1093,45 @@ public class EditOrderV2Steps extends AbstractSteps {
   }
 
   @Then("Operator update Pickup Details on Edit Order V2 page")
-  public void operatorUpdatePickupDetailsOnEditOrderPage(Map<String, String> mapOfData) {
+  public void operatorUpdatePickupDetailsOnEditOrderPage(Map<String, String> data) {
     Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
-    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
-    page.updatePickupDetails(mapOfData);
-    takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
-    String senderName = mapOfData.get("senderName");
-    String senderContact = mapOfData.get("senderContact");
-    String senderEmail = mapOfData.get("senderEmail");
-    String internalNotes = mapOfData.get("internalNotes");
-    String pickupDate = mapOfData.get("pickupDate");
-    String pickupTimeslot = mapOfData.get("pickupTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
+    Map<String, String> finalData = StandardTestUtils.replaceDataTableTokens(resolveKeyValues(data),
+        mapOfTokens);
+    page.inFrame(() -> {
+      String senderName = finalData.get("senderName");
+      String senderContact = finalData.get("senderContact");
+      String senderEmail = finalData.get("senderEmail");
+      String internalNotes = finalData.get("internalNotes");
+      String pickupDate = finalData.get("pickupDate");
+      String pickupTimeslot = finalData.get("pickupTimeslot");
+      String country = finalData.get("country");
+      String city = finalData.get("city");
+      String address1 = finalData.get("address1");
+      String address2 = finalData.get("address2");
+      String postalCode = finalData.get("postalCode");
 
-    if (Objects.nonNull(senderName)) {
-      order.setFromName(senderName);
-    }
-    if (Objects.nonNull(senderContact)) {
-      order.setFromContact(senderContact);
-    }
-    if (Objects.nonNull(senderEmail)) {
-      order.setFromEmail(senderEmail);
-    }
-//        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
-    if (Objects.nonNull(pickupDate)) {
-      order.setPickupDate(pickupDate);
-    }
-    if (StringUtils.isNotBlank(pickupTimeslot)) {
-      order.setPickupTimeslot(pickupTimeslot);
-    }
-    if (Objects.nonNull(address1)) {
-      order.setFromAddress1(address1);
-    }
-    if (Objects.nonNull(address2)) {
-      order.setFromAddress2(address2);
-    }
-    if (Objects.nonNull(postalCode)) {
-      order.setFromPostcode(postalCode);
-    }
-    if (Objects.nonNull(city)) {
-      order.setFromCity(city);
-    }
-    if (Objects.nonNull(country)) {
-      order.setFromCountry(country);
-    }
-    put(KEY_CREATED_ORDER, order);
+      page.editPickupDetailsDialog.senderName.setValue(senderName);
+      page.editPickupDetailsDialog.senderContact.setValue(senderContact);
+      page.editPickupDetailsDialog.senderEmail.setValue(senderEmail);
+      page.editPickupDetailsDialog.internalNotes.setValue(internalNotes);
+      if (StringUtils.isNotBlank(pickupDate)) {
+        page.editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
+      }
+      if (StringUtils.isNotBlank(pickupTimeslot)) {
+        page.editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+      }
+      page.editPickupDetailsDialog.shipperRequestedToChange.setValue(
+          Boolean.parseBoolean(finalData.getOrDefault("shipperRequestedToChange", "false")));
+      page.editPickupDetailsDialog.assignPickupLocation.setValue(
+          Boolean.parseBoolean(finalData.getOrDefault("assignPickupLocation", "false")));
+      page.editPickupDetailsDialog.changeAddress.click();
+      page.editPickupDetailsDialog.country.setValue(country);
+      page.editPickupDetailsDialog.city.setValue(city);
+      page.editPickupDetailsDialog.address1.setValue(address1);
+      page.editPickupDetailsDialog.address2.setValue(address2);
+      page.editPickupDetailsDialog.postcode.setValue(postalCode);
+      page.editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
+    });
   }
 
   @Then("Operator update Delivery Details on Edit Order V2 page")
@@ -1335,12 +1299,26 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("^Operator pull out parcel from the route for (Pickup|Delivery) on Edit Order V2 page$")
-  public void operatorPullsOrderFromRouteOnEditOrderPage(String txnType) {
-    page.pullFromRouteDialog.waitUntilVisible();
-    page.pullFromRouteDialog.toPull.check();
-    takesScreenshot();
-    page.pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
+  @Then("Operator pull out parcel from route on Edit Order V2 page")
+  public void operatorPullsOrderFromRouteOnEditOrderPage() {
+    page.inFrame(() -> {
+      page.pullFromRouteDialog.waitUntilVisible();
+      page.pullFromRouteDialog.toPull.check();
+      page.pullFromRouteDialog.pullFromRoute.click();
+    });
+  }
+
+  @Then("Operator verify order cannot be pulled from route on Edit Order V2 page")
+  public void cannotPullFromRoute() {
+    page.inFrame(() -> {
+      page.pullFromRouteDialog.waitUntilVisible();
+      Assertions.assertThat(page.pullFromRouteDialog.errorHint.isDisplayed())
+          .withFailMessage("Error hint is not displayed").isTrue();
+      Assertions.assertThat(page.pullFromRouteDialog.toPull.isEnabled())
+          .withFailMessage("To pull checkbox is enabled").isFalse();
+      Assertions.assertThat(page.pullFromRouteDialog.pullFromRoute.isEnabled())
+          .withFailMessage("Pull from route button is enabled").isFalse();
+    });
   }
 
   @When("^Operator verify next order info on Edit Order V2 page:$")
@@ -1417,8 +1395,10 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order V2 page$")
   public void operatorVerifyRtsTag(String state) {
-    Assertions.assertThat(page.deliveryDetailsBox.rtsTag.isDisplayed()).as("RTS tag is displayed")
-        .isEqualTo(equalsIgnoreCase(state, "displayed"));
+    page.inFrame(() -> {
+      Assertions.assertThat(page.deliveryDetailsBox.rtsTag.isDisplayed()).as("RTS tag is displayed")
+          .isEqualTo(equalsIgnoreCase(state, "displayed"));
+    });
   }
 
   @Then("Operator verifies Latest Event is {string} on Edit Order V2 page")
@@ -1426,17 +1406,6 @@ public class EditOrderV2Steps extends AbstractSteps {
     retryIfAssertionErrorOccurred(
         () -> Assertions.assertThat(page.latestEvent.getNormalizedText()).as("Latest Event")
             .isEqualTo(resolveValue(value)), "Latest Event", 1000, 3);
-  }
-
-  @Then("Operator verifies Zone is {string} on Edit Order V2 page")
-  public void operatorVerifyZone(String value) {
-    Assertions.assertThat(page.zone.getNormalizedText()).as("Zone").isEqualTo(resolveValue(value));
-  }
-
-  @Then("Operator verifies Zone is correct after RTS on Edit Order V2 page")
-  public void operatorVerifyZoneAfterRts() {
-    final AddressingZone zone = get(KEY_RTS_ZONE_TYPE);
-    operatorVerifyZone(zone.getShortName());
   }
 
   @Then("Operator verify {value} RTS hint is displayed on Edit Order V2 page")
@@ -1450,61 +1419,64 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator RTS order on Edit Order V2 page using data below:")
   public void operatorRtsOnEditOrderPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    if (!page.editRtsDetailsDialog.isDisplayedFast()) {
-      page.clickMenu("Delivery", "Return to Sender");
-      page.editRtsDetailsDialog.waitUntilVisible();
-    }
-    String value = data.get("reason");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.reason.selectValue(value);
-    }
-    value = data.get("recipientName");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.recipientName.setValue(value);
-    }
-    value = data.get("recipientContact");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.recipientContact.setValue(value);
-    }
-    value = data.get("recipientEmail");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.recipientEmail.setValue(value);
-    }
-    value = data.get("internalNotes");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.internalNotes.setValue(value);
-    }
-    value = data.get("deliveryDate");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.deliveryDate.simpleSetValue(value);
-    }
-    value = data.get("timeslot");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.timeslot.searchAndSelectValue(value);
-    }
-    value = data.get("country");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.changeAddress.click();
-      page.editRtsDetailsDialog.country.setValue(value);
-    }
-    value = data.get("city");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.city.setValue(value);
-    }
-    value = data.get("address1");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.address1.setValue(value);
-    }
-    value = data.get("address2");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.address2.setValue(value);
-    }
-    value = data.get("postalCode");
-    if (StringUtils.isNotBlank(value)) {
-      page.editRtsDetailsDialog.postcode.setValue(value);
-    }
-    page.editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
+    Map<String, String> finalData = resolveKeyValues(data);
+    ;
+    page.inFrame(() -> {
+      if (!page.editRtsDetailsDialog.isDisplayedFast()) {
+        page.clickMenu("Delivery", "Return to Sender");
+        page.editRtsDetailsDialog.waitUntilVisible();
+      }
+      String value = finalData.get("reason");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.reason.selectValue(value);
+      }
+      value = finalData.get("recipientName");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.recipientName.setValue(value);
+      }
+      value = finalData.get("recipientContact");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.recipientContact.setValue(value);
+      }
+      value = finalData.get("recipientEmail");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.recipientEmail.setValue(value);
+      }
+      value = finalData.get("internalNotes");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.internalNotes.setValue(value);
+      }
+      value = finalData.get("deliveryDate");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.deliveryDate.setValue(value);
+      }
+      value = finalData.get("timeslot");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.timeslot.selectValue(value);
+      }
+      value = finalData.get("country");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.changeAddress.click();
+        page.editRtsDetailsDialog.country.setValue(value);
+      }
+      value = finalData.get("city");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.city.setValue(value);
+      }
+      value = finalData.get("address1");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.address1.setValue(value);
+      }
+      value = finalData.get("address2");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.address2.setValue(value);
+      }
+      value = finalData.get("postalCode");
+      if (StringUtils.isNotBlank(value)) {
+        page.editRtsDetailsDialog.postcode.setValue(value);
+      }
+      page.editRtsDetailsDialog.saveChanges.click();
+    });
   }
 
   @Then("Operator resume order on Edit Order V2 page")
