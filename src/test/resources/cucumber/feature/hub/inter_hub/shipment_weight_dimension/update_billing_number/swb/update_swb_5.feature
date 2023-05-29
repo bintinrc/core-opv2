@@ -1,11 +1,11 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateSWB5
 Feature: Update SWB 5 - MY
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @henlo
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @DeleteCreatedSWBs
+  @DeleteCreatedShipments @DeleteCreatedSWBs @henlo
   Scenario: Update SWB for MY with format K14B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -21,7 +21,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -33,7 +33,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -62,7 +62,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -74,7 +74,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -103,7 +103,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -115,7 +115,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -144,7 +144,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -156,7 +156,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -185,7 +185,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -197,7 +197,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -226,7 +226,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -238,7 +238,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -267,7 +267,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -279,7 +279,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -308,7 +308,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -320,7 +320,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -349,7 +349,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -361,7 +361,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -390,7 +390,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -402,7 +402,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -431,7 +431,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -443,7 +443,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -472,7 +472,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -484,7 +484,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -513,7 +513,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -525,7 +525,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -554,7 +554,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -566,7 +566,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -595,7 +595,7 @@ Feature: Update SWB 5 - MY
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -607,7 +607,7 @@ Feature: Update SWB 5 - MY
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value - migrated
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page

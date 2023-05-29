@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue.mm;
 
+import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
 import co.nvqa.commons.model.core.hub.Shipments;
@@ -444,17 +445,18 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .hasSize(Integer.parseInt(expectedNumOfRows));
   }
 
-  @When("Operator filter Shipment Weight Dimension Table by {string} column with first shipment value - migrated")
-  public void operatorFilterShipmentWeightDimensionTableByColumnMigrated(String column,
+  @When("Operator filter Shipment Weight Dimension Table by {string} column with shipment {string} - migrated")
+  public void operatorFilterShipmentWeightDimensionTableByColumnMigrated(String column, String shipment,
       Map<String, String> dataTable) {
     String expectedNumOfRows = dataTable.getOrDefault("expectedNumOfRows", "1");
     String filterValue = dataTable.get("filterValue");
     Column col = Column.fromLabel(column);
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(shipment);
+    co.nvqa.common.mm.model.Shipment shipmentData = getList(keyIdx.get("key"), co.nvqa.common.mm.model.Shipment.class).get(
+        Integer.parseInt(keyIdx.get("idx")));
     if (filterValue != null) {
       shipmentWeightDimensionTablePage.filterColumn(col, (String) resolveValue(filterValue));
     } else {
-      List<co.nvqa.common.mm.model.Shipment> shipments = get(KEY_MM_LIST_OF_CREATED_SHIPMENTS);
-      co.nvqa.common.mm.model.Shipment shipmentData = shipments.get(0);
       if (col != SHIPMENT_ID && Integer.parseInt(expectedNumOfRows) == 1) {
         shipmentWeightDimensionTablePage
             .filterColumn(SHIPMENT_ID, shipmentData);
