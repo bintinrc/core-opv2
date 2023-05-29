@@ -9,7 +9,7 @@ Feature: Update SWB 6 - PH
   Scenario: Update SWB for PH with format 5 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-ph-2}" to "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -50,7 +50,7 @@ Feature: Update SWB 6 - PH
   Scenario: Update SWB for PH with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-ph-2}" to "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -91,7 +91,7 @@ Feature: Update SWB 6 - PH
   Scenario: Update SWB for PH with format KMMT + 3 Digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-ph-2}" to "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -132,7 +132,7 @@ Feature: Update SWB 6 - PH
   Scenario: Update SWB for PH with format KMMT + 3 Digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-ph-2}" to "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -173,7 +173,7 @@ Feature: Update SWB 6 - PH
   Scenario: Update SWB for PH with format KMMT + 3 Digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-ph-2}" to "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI

@@ -9,7 +9,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -50,7 +50,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -91,7 +91,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -132,7 +132,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -173,7 +173,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -214,7 +214,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K14B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -255,7 +255,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -296,7 +296,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -337,7 +337,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -378,7 +378,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -419,7 +419,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -460,7 +460,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format R11B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -501,7 +501,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K28B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -542,7 +542,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K28B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -583,7 +583,7 @@ Feature: Update SWB 5 - MY
   Scenario: Update SWB for MY with format K28B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-my-1}" to hub id = "{hub-id-my-2}"
+    Given Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-my-1}" to "{hub-id-my-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI

@@ -9,7 +9,7 @@ Feature: Update SWB 7 - ID
   Scenario: Update SWB for ID with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-id-1}" to hub id = "{hub-id-id-2}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-id-1}" to "{hub-id-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
