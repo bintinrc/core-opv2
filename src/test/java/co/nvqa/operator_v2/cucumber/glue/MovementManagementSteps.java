@@ -642,7 +642,8 @@ public class MovementManagementSteps extends AbstractSteps {
     }
   }
 
-  @Deprecated @And("Operator fill Add Movement Schedule form using data below:")
+  @Deprecated
+  @And("Operator fill Add Movement Schedule form using data below:")
   public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
     retryIfRuntimeExceptionOccurred(() -> {
       try {

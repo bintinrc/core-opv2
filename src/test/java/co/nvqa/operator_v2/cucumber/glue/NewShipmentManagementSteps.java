@@ -382,7 +382,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @Deprecated @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
+  @Deprecated
+  @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
   public void operatorOpenShipmentDetailsPageForCreatedShipmentOnShipmentManagementPage() {
     ShipmentInfo shipmentInfo;
 
