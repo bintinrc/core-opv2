@@ -1,5 +1,5 @@
-@OperatorV2 @Core @EditOrder @EditOrderDetails @AirwayBill
-Feature: Edit Order Details - Airway bill service
+@OperatorV2 @Core @AllOrder @AirwayBill
+Feature: All Order - Airway bill service
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
