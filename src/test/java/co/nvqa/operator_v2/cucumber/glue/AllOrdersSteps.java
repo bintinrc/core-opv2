@@ -1080,4 +1080,10 @@ public class AllOrdersSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.databaseVerifyCustomerCollect(dbCheckingCustomerCollectOrder, trackingId);
   }
+
+  @When("Operator print Waybill for order {string} on All Orders page")
+  public void operatorPrintWaybillForOrderOnAllOrdersPage(String trackingIdAsString) {
+    String trackingId = resolveValue(trackingIdAsString);
+    allOrdersPage.printWaybill(trackingId);
+  }
 }
