@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue.mm;
 
+import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
 import co.nvqa.commons.model.core.hub.Shipments;
@@ -41,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_EXISTING_SHIPMENT_SWB;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENTS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_SHIPMENT_SWB;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_MAWBS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SWBS;
@@ -430,6 +432,31 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else {
       List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
       Shipment shipmentData = shipments.get(0).getShipment();
+      if (col != SHIPMENT_ID && Integer.parseInt(expectedNumOfRows) == 1) {
+        shipmentWeightDimensionTablePage
+            .filterColumn(SHIPMENT_ID, shipmentData);
+      }
+      shipmentWeightDimensionTablePage
+          .filterColumn(col, shipmentData);
+    }
+
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using %s with correct value", column)
+        .hasSize(Integer.parseInt(expectedNumOfRows));
+  }
+
+  @When("Operator filter Shipment Weight Dimension Table by {string} column with shipment {string} - migrated")
+  public void operatorFilterShipmentWeightDimensionTableByColumnMigrated(String column, String shipment,
+      Map<String, String> dataTable) {
+    String expectedNumOfRows = dataTable.getOrDefault("expectedNumOfRows", "1");
+    String filterValue = dataTable.get("filterValue");
+    Column col = Column.fromLabel(column);
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(shipment);
+    co.nvqa.common.mm.model.Shipment shipmentData = getList(keyIdx.get("key"), co.nvqa.common.mm.model.Shipment.class).get(
+        Integer.parseInt(keyIdx.get("idx")));
+    if (filterValue != null) {
+      shipmentWeightDimensionTablePage.filterColumn(col, (String) resolveValue(filterValue));
+    } else {
       if (col != SHIPMENT_ID && Integer.parseInt(expectedNumOfRows) == 1) {
         shipmentWeightDimensionTablePage
             .filterColumn(SHIPMENT_ID, shipmentData);
