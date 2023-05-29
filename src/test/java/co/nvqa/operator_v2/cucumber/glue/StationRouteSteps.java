@@ -117,10 +117,8 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyShipmentDateMessage(String expected) {
     page.inFrame(() -> {
       Assertions.assertThat(page.shipmentDateError.isDisplayed())
-          .withFailMessage("Shipment date error is not displayed")
-          .isTrue();
-      Assertions.assertThat(page.shipmentDateError.getNormalizedText())
-          .as("Shipment date error")
+          .withFailMessage("Shipment date error is not displayed").isTrue();
+      Assertions.assertThat(page.shipmentDateError.getNormalizedText()).as("Shipment date error")
           .isEqualTo(expected);
     });
   }
@@ -129,11 +127,9 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyShipmentCompletionDateMessage(String expected) {
     page.inFrame(() -> {
       Assertions.assertThat(page.shipmentCompletionTimeError.isDisplayed())
-          .withFailMessage("Shipment completion time error is not displayed")
-          .isTrue();
+          .withFailMessage("Shipment completion time error is not displayed").isTrue();
       Assertions.assertThat(page.shipmentCompletionTimeError.getNormalizedText())
-          .as("Shipment completion time error")
-          .isEqualTo(expected);
+          .as("Shipment completion time error").isEqualTo(expected);
     });
   }
 
@@ -141,20 +137,16 @@ public class StationRouteSteps extends AbstractSteps {
   public void assignDriversIsDisabled() {
     page.inFrame(() -> {
       Assertions.assertThat(page.assignDrivers.isEnabled())
-          .as("Assign drivers button is not disabled")
-          .isFalse();
+          .as("Assign drivers button is not disabled").isFalse();
     });
   }
 
   @When("Operator verify Assign Drivers button is disabled on Station Route page")
   public void checkAssignDriversIsDisabled() {
     page.inFrame(() -> {
-      Button button = page.assignDrivers.waitUntilVisible(1) ?
-          page.assignDrivers :
-          page.assignDriversUpload;
-      assertThat(button.isEnabled())
-          .withFailMessage("Assign Drivers button is enabled")
-          .isFalse();
+      Button button =
+          page.assignDrivers.waitUntilVisible(1) ? page.assignDrivers : page.assignDriversUpload;
+      assertThat(button.isEnabled()).withFailMessage("Assign Drivers button is enabled").isFalse();
     });
   }
 
@@ -180,21 +172,18 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator cannot select {value} hub on Station Route page")
   public void cannotSelectHub(String hubName) {
     page.inFrame(() -> {
-      AntSelect3 hub = page.hub.waitUntilVisible(1) ?
-          page.hub : page.hubUpload;
+      AntSelect3 hub = page.hub.waitUntilVisible(1) ? page.hub : page.hubUpload;
       Assertions.assertThatThrownBy(() -> hub.selectValue(hubName))
-          .withFailMessage("Can select %s hub", hubName)
-          .isInstanceOf(NoSuchElementException.class);
+          .withFailMessage("Can select %s hub", hubName).isInstanceOf(NoSuchElementException.class);
     });
   }
 
   @When("Operator upload CSV file on Station Route page:")
   public void uploadCsv(List<Map<String, String>> data) {
     page.inFrame(() -> {
-      String content = resolveListOfMaps(data).stream()
-          .map(r -> StringUtils.trimToEmpty(r.get("driverId")) + "," + StringUtils.trimToEmpty(
-              r.get("trackingId")))
-          .collect(Collectors.joining("\n"));
+      String content = resolveListOfMaps(data).stream().map(
+          r -> StringUtils.trimToEmpty(r.get("driverId")) + "," + StringUtils.trimToEmpty(
+              r.get("trackingId"))).collect(Collectors.joining("\n"));
       File file = TestUtils.createFileOnTempFolder(
           String.format("station_route_%s.csv", page.generateDateUniqueString()));
       try {
@@ -212,8 +201,9 @@ public class StationRouteSteps extends AbstractSteps {
 
       StringBuilder content = new StringBuilder();
       for (int i = 0; i <= 10_000; i++) {
-        content.append("NVSGCOPV2").append(RandomStringUtils.randomAlphanumeric(9).toUpperCase(
-            Locale.ROOT)).append(",").append(RandomStringUtils.randomNumeric(8)).append("\n");
+        content.append("NVSGCOPV2")
+            .append(RandomStringUtils.randomAlphanumeric(9).toUpperCase(Locale.ROOT)).append(",")
+            .append(RandomStringUtils.randomNumeric(8)).append("\n");
       }
       File file = TestUtils.createFileOnTempFolder(
           String.format("station_route_%s.csv", page.generateDateUniqueString()));
@@ -240,8 +230,7 @@ public class StationRouteSteps extends AbstractSteps {
       page.invalidInputDialog.waitUntilVisible();
       List<String> actual = page.invalidInputDialog.trackingIds.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());
-      assertThat(actual)
-          .as("List of invalid tracking ids")
+      assertThat(actual).as("List of invalid tracking ids")
           .containsExactlyInAnyOrderElementsOf(resolveValues(data));
     });
   }
@@ -250,9 +239,7 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyTrackingIds() {
     page.inFrame(() -> {
       page.invalidInputDialog.waitUntilVisible();
-      assertThat(page.invalidInputDialog.trackingIds)
-          .as("List of invalid tracking ids")
-          .isEmpty();
+      assertThat(page.invalidInputDialog.trackingIds).as("List of invalid tracking ids").isEmpty();
     });
   }
 
@@ -260,9 +247,7 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyDriverIds() {
     page.inFrame(() -> {
       page.invalidInputDialog.waitUntilVisible();
-      assertThat(page.invalidInputDialog.drivers)
-          .as("List of invalid driver ids")
-          .isEmpty();
+      assertThat(page.invalidInputDialog.drivers).as("List of invalid driver ids").isEmpty();
     });
   }
 
@@ -280,8 +265,7 @@ public class StationRouteSteps extends AbstractSteps {
       page.invalidInputDialog.waitUntilVisible();
       List<String> actual = page.invalidInputDialog.drivers.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());
-      assertThat(actual)
-          .as("List of invalid driver ids")
+      assertThat(actual).as("List of invalid driver ids")
           .containsExactlyInAnyOrderElementsOf(resolveValues(data));
     });
   }
@@ -300,23 +284,17 @@ public class StationRouteSteps extends AbstractSteps {
       page.waitUntilLoaded();
       SoftAssertions assertions = new SoftAssertions();
       assertions.assertThat(page.numberOfShipments.isDisplayed())
-          .withFailMessage("Number of shipments is not displayed")
-          .isTrue();
+          .withFailMessage("Number of shipments is not displayed").isTrue();
       assertions.assertThat(page.parcelCount.isDisplayed())
-          .withFailMessage("Parcel count in shipments is not displayed")
-          .isTrue();
+          .withFailMessage("Parcel count in shipments is not displayed").isTrue();
       assertions.assertThat(page.additionalParcels.isDisplayed())
-          .withFailMessage("Additional parcels is not displayed")
-          .isTrue();
+          .withFailMessage("Additional parcels is not displayed").isTrue();
       assertions.assertThat(page.totalParcels.isDisplayed())
-          .withFailMessage("Total parcels is not displayed")
-          .isTrue();
+          .withFailMessage("Total parcels is not displayed").isTrue();
       assertions.assertThat(page.activeDrivers.isDisplayed())
-          .withFailMessage("Active drivers is not displayed")
-          .isTrue();
+          .withFailMessage("Active drivers is not displayed").isTrue();
       assertions.assertThat(page.averageParcels.isDisplayed())
-          .withFailMessage("Average parcels per driver")
-          .isTrue();
+          .withFailMessage("Average parcels per driver").isTrue();
       assertions.assertAll();
     });
   }
@@ -338,8 +316,7 @@ public class StationRouteSteps extends AbstractSteps {
       page.waitUntilLoaded();
       SoftAssertions assertions = new SoftAssertions();
       if (data.containsKey("additionalParcels")) {
-        assertions.assertThat(page.additionalParcels.getText())
-            .as("Additional parcels")
+        assertions.assertThat(page.additionalParcels.getText()).as("Additional parcels")
             .isEqualTo(data.get("additionalParcels"));
       }
       assertions.assertAll();
@@ -351,9 +328,8 @@ public class StationRouteSteps extends AbstractSteps {
     Parcel expected = new Parcel(resolveKeyValues(data));
     page.inFrame(() -> {
       page.parcelsTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      assertThat(page.parcelsTable.isTableEmpty())
-          .withFailMessage("Parcel " + expected.getTrackingId() + " is not displayed")
-          .isFalse();
+      assertThat(page.parcelsTable.isTableEmpty()).withFailMessage(
+          "Parcel " + expected.getTrackingId() + " is not displayed").isFalse();
       Parcel actual = page.parcelsTable.readEntity(1);
       expected.compareWithActual(actual);
     });
@@ -371,16 +347,14 @@ public class StationRouteSteps extends AbstractSteps {
 
       }
     }
-    Assertions.assertThat(found)
-        .withFailMessage("No one parcel record was not found: " + list)
+    Assertions.assertThat(found).withFailMessage("No one parcel record was not found: " + list)
         .isTrue();
   }
 
   @When("Operator verify parcels table is empty on Station Route page")
   public void verifyParcelsTableIsEmpty() {
     page.inFrame(() -> {
-      assertThat(page.parcelsTable.isTableEmpty())
-          .withFailMessage("Parcels table is not empty")
+      assertThat(page.parcelsTable.isTableEmpty()).withFailMessage("Parcels table is not empty")
           .isTrue();
     });
   }
@@ -426,60 +400,49 @@ public class StationRouteSteps extends AbstractSteps {
   public void checkParcelsTableColumn(String value, String columnId) {
     page.inFrame(() -> {
       List<String> actual = page.parcelsTable.readColumn(columnId);
-      assertThat(actual)
-          .as("List of %s column values", columnId)
-          .isNotEmpty()
+      assertThat(actual).as("List of %s column values", columnId).isNotEmpty()
           .allSatisfy(val -> assertThat(val).containsIgnoringCase(value));
     });
   }
 
   @When("Operator verify parcels table row {int} marked as removed on Station Route page")
   public void checkRemovedParcel(int index) {
-    page.inFrame(() -> assertThat(page.parcelsTable.isRowRemoved(index))
-        .withFailMessage("Row %s is not marked as removed", index)
-        .isTrue());
+    page.inFrame(() -> assertThat(page.parcelsTable.isRowRemoved(index)).withFailMessage(
+        "Row %s is not marked as removed", index).isTrue());
   }
 
   @When("Operator verify parcels table row {int} not marked as removed on Station Route page")
   public void checkNotRemovedParcel(int index) {
-    page.inFrame(() -> assertThat(page.parcelsTable.isRowRemoved(index))
-        .withFailMessage("Row %s is marked as removed", index)
-        .isFalse());
+    page.inFrame(() -> assertThat(page.parcelsTable.isRowRemoved(index)).withFailMessage(
+        "Row %s is marked as removed", index).isFalse());
   }
 
   @When("Operator verify exactly parcels are displayed on Upload CSV tab on Station Route page:")
   public void verifyExactlyUploadedParcels(List<Map<String, String>> data) {
-    List<Parcel> expected = data.stream()
-        .map(r -> new Parcel(resolveKeyValues(r)))
+    List<Parcel> expected = data.stream().map(r -> new Parcel(resolveKeyValues(r)))
         .collect(Collectors.toList());
     page.inFrame(() -> {
       page.waitUntilLoaded();
       List<Parcel> actual = page.uploadedParcelsTable.readAllEntities();
-      assertThat(actual)
-          .as("Uploaded parcels")
-          .containsExactlyInAnyOrderElementsOf(expected);
+      assertThat(actual).as("Uploaded parcels").containsExactlyInAnyOrderElementsOf(expected);
     });
   }
 
   @When("Operator verify parcels are displayed on Upload CSV tab on Station Route page:")
   public void verifyUploadedParcels(List<Map<String, String>> data) {
-    List<Parcel> expected = data.stream()
-        .map(r -> new Parcel(resolveKeyValues(r)))
+    List<Parcel> expected = data.stream().map(r -> new Parcel(resolveKeyValues(r)))
         .collect(Collectors.toList());
     page.inFrame(() -> {
       page.waitUntilLoaded();
       List<Parcel> actual = page.uploadedParcelsTable.readAllEntities();
-      assertThat(actual)
-          .as("Uploaded parcels")
-          .containsAll(expected);
+      assertThat(actual).as("Uploaded parcels").containsAll(expected);
     });
   }
 
   @When("Operator verify banner is displayed on Station Route page")
   public void verifyBanner() {
     page.inFrame(() -> {
-      assertThat(page.banner.isDisplayed())
-          .withFailMessage(
+      assertThat(page.banner.isDisplayed()).withFailMessage(
               "Banner [To check assignment and create routes, there should be no \"UNASSIGNED\" for the \"Assigned driver\" column.\n] is not displayed")
           .isTrue();
     });
@@ -489,11 +452,8 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator verify area match {value} is displayed on {int} position on Station Route page")
   public void verifyAreaMatch(String value, int index) {
     page.inFrame(() -> {
-      assertThat(page.areaMatch)
-          .as("Displayed row count")
-          .hasSizeGreaterThanOrEqualTo(index - 1);
-      assertThat(page.areaMatch.get(index - 1).getText())
-          .as("Area match in row %d", index)
+      assertThat(page.areaMatch).as("Displayed row count").hasSizeGreaterThanOrEqualTo(index - 1);
+      assertThat(page.areaMatch.get(index - 1).getText()).as("Area match in row %d", index)
           .isEqualTo(StringUtils.normalizeSpace(value));
     });
   }
@@ -501,31 +461,24 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator verify any area match is displayed on {int} position on Station Route page:")
   public void verifyAreaMatch(int index, List<String> data) {
     page.inFrame(() -> {
-      assertThat(page.areaMatch)
-          .as("Displayed row count")
-          .hasSizeGreaterThanOrEqualTo(index - 1);
-      assertThat(page.areaMatch.get(index - 1).getText())
-          .as("Area match in row %d", index)
+      assertThat(page.areaMatch).as("Displayed row count").hasSizeGreaterThanOrEqualTo(index - 1);
+      assertThat(page.areaMatch.get(index - 1).getText()).as("Area match in row %d", index)
           .isIn(resolveValues(data));
     });
   }
 
   @When("Operator verify area match is not displayed on Station Route page")
   public void verifyNoAreaMatch() {
-    page.inFrame(() -> assertThat(page.areaMatch)
-        .as("Area match list")
-        .isEmpty());
+    page.inFrame(() -> assertThat(page.areaMatch).as("Area match list").isEmpty());
   }
 
   @When("Operator verify keyword match {value} is displayed in row {int} on Station Route page")
   @When("Operator verify keyword match {value} is displayed on {int} position on Station Route page")
   public void verifyKeywordMatch(String value, int index) {
     page.inFrame(() -> {
-      assertThat(page.keywordMatch)
-          .as("Displayed row count")
+      assertThat(page.keywordMatch).as("Displayed row count")
           .hasSizeGreaterThanOrEqualTo(index - 1);
-      assertThat(page.keywordMatch.get(index - 1).getText())
-          .as("Keyword match in row %d", index)
+      assertThat(page.keywordMatch.get(index - 1).getText()).as("Keyword match in row %d", index)
           .isEqualTo(StringUtils.normalizeSpace(value));
     });
   }
@@ -537,12 +490,10 @@ public class StationRouteSteps extends AbstractSteps {
         return;
       }
       data.remove("empty");
-      assertThat(page.keywordMatch)
-          .as("Displayed row count")
+      assertThat(page.keywordMatch).as("Displayed row count")
           .hasSizeGreaterThanOrEqualTo(index - 1);
 
-      assertThat(page.keywordMatch.get(index - 1).getText())
-          .as("Keyword match in row %d", index)
+      assertThat(page.keywordMatch.get(index - 1).getText()).as("Keyword match in row %d", index)
           .isIn(resolveValues(data));
     });
   }
@@ -550,9 +501,7 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator verify keyword match is not displayed on Station Route page")
   public void verifyNoKeywordMatch() {
     page.inFrame(() -> {
-      assertThat(page.keywordMatch)
-          .as("Keyword match list")
-          .isEmpty();
+      assertThat(page.keywordMatch).as("Keyword match list").isEmpty();
     });
   }
 
@@ -563,10 +512,8 @@ public class StationRouteSteps extends AbstractSteps {
 
   @When("Operator verify Check assignment button is disabled on Station Route page")
   public void clickCheckAssignmentIsDisabled() {
-    page.inFrame(() -> assertThat(page.checkAssignment.isEnabled())
-        .withFailMessage("Check assignment button is enabled")
-        .isFalse()
-    );
+    page.inFrame(() -> assertThat(page.checkAssignment.isEnabled()).withFailMessage(
+        "Check assignment button is enabled").isFalse());
   }
 
   @When("Operator verify driver records on Select route creation method screen on Station Route page:")
@@ -583,18 +530,14 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator verify parcel count is {int} on Select route creation method screen on Station Route page")
   public void checkParcelCount(int count) {
     page.inFrame(() -> {
-      assertThat(page.rcParcelCount.getText())
-          .as("Parcel count")
-          .isEqualTo(String.valueOf(count));
+      assertThat(page.rcParcelCount.getText()).as("Parcel count").isEqualTo(String.valueOf(count));
     });
   }
 
   @When("Operator verify driver count is {int} on Select route creation method screen on Station Route page")
   public void checkDriverCount(int count) {
     page.inFrame(() -> {
-      assertThat(page.rcDriverCount.getText())
-          .as("Driver count")
-          .isEqualTo(String.valueOf(count));
+      assertThat(page.rcDriverCount.getText()).as("Driver count").isEqualTo(String.valueOf(count));
     });
   }
 
@@ -678,9 +621,7 @@ public class StationRouteSteps extends AbstractSteps {
     SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
       if (StringUtils.isNotBlank(newParams.getZone())) {
-        assertions.assertThat(page.crZone.getValue())
-            .as("Zone")
-            .isEqualTo(newParams.getZone());
+        assertions.assertThat(page.crZone.getValue()).as("Zone").isEqualTo(newParams.getZone());
       }
     });
     assertions.assertAll();
@@ -695,10 +636,9 @@ public class StationRouteSteps extends AbstractSteps {
   public void checkErrors(List<String> data) {
     page.inFrame(() -> {
       page.errorsDialog.waitUntilVisible();
-      Assertions.assertThat(page.errorsDialog.error.stream().map(PageElement::getText).collect(
-              Collectors.toList()))
-          .as("List of errors")
-          .containsExactlyInAnyOrderElementsOf(resolveValues(data));
+      Assertions.assertThat(
+              page.errorsDialog.error.stream().map(PageElement::getText).collect(Collectors.toList()))
+          .as("List of errors").containsExactlyInAnyOrderElementsOf(resolveValues(data));
     });
   }
 
@@ -734,5 +674,20 @@ public class StationRouteSteps extends AbstractSteps {
         page.parcelsTable.clickActionButton(1, ACTION_REMOVE);
       });
     });
+  }
+
+  @When("Operator select parcels on Station Route page:")
+  public void selectParcels(List<String> trackingIds) {
+    page.inFrame(() -> {
+      resolveValues(trackingIds).forEach(id -> {
+        page.parcelsTable.filterByColumn(COLUMN_TRACKING_ID, id);
+        page.parcelsTable.selectRow(1);
+      });
+    });
+  }
+
+  @When("Operator click Remove all selected parcels on Station Route page")
+  public void removeAllSelectedParcelsParcels() {
+    page.inFrame(() -> page.removeAllSelectedParcels.click());
   }
 }

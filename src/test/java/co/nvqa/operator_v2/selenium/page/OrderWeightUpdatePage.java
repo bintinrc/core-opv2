@@ -1,38 +1,38 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class OrderWeightUpdatePage extends OperatorV2SimplePage {
+public class OrderWeightUpdatePage extends SimpleReactPage<OrderWeightUpdatePage> {
 
-  @FindBy(name = "container.order-weight-update.upload-selected")
-  public NvIconTextButton upload;
+  @FindBy(css = "[data-testid='upload-button']")
+  public Button upload;
 
-  @FindBy(name = "container.order-weight-update.find-orders-with-csv")
-  public NvIconTextButton findOrdersWithCsv;
+  @FindBy(css = "[data-testid='upload-csv-button']")
+  public Button findOrdersWithCsv;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
+
+  public WeighUpdateTable weighUpdateTable;
 
   private static final String NG_REPEAT = "row in $data";
   private static final String CSV_FILENAME_PATTERN = "sample_csv";
@@ -45,83 +45,41 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
 
   public OrderWeightUpdatePage(WebDriver webDriver) {
     super(webDriver);
+    weighUpdateTable = new WeighUpdateTable(webDriver);
   }
 
   public String getTextOnTable(int rowNumber, String columnDataClass) {
     return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
   }
 
-  private File buildCreateOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
-    Double weight = Double.parseDouble(map.get("new-weight-in-double-format"));
+  private File buildCreateOrderUpdateCsv(List<Map<String, String>> list) {
 
-    StringBuilder orderAsSb = new StringBuilder()
-        .append(trimToEmpty(OrderTrackingNo)).append(',')
-        .append('"').append(trimToEmpty(String.valueOf(weight))).append('"');
+    List<String> rows = list.stream()
+        .map(e -> "\"" + e.get("trackingId") + "\",\"" + e.get("weigh") + "\"")
+        .collect(Collectors.toList());
 
     try {
       File file = TestUtils.createFileOnTempFolder(
           String.format("create-order-update_%s.csv", generateDateUniqueString()));
-
-      PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-      pw.write(orderAsSb.toString());
-      pw.write(System.lineSeparator());
-      pw.close();
-
+      FileUtils.writeLines(file, rows);
       return file;
     } catch (IOException ex) {
       throw new NvTestRuntimeException(ex);
     }
   }
 
-  private File buildMultiCreateOrderUpdateCsv(List<String> trackIds, List<String> listWeight) {
+  public static class FindOrdersWithCsvDialog extends AntModal {
 
-    try {
-      File file = TestUtils.createFileOnTempFolder(
-          String.format("create-mutli-order-update_%s.csv", generateDateUniqueString()));
+    @FindBy(css = "[data-testid='upload-dragger']")
+    public FileInput chooseButton;
 
-      PrintWriter pw = new PrintWriter(new FileOutputStream(file));
+    @FindBy(css = "[data-testid='upload-button']")
+    public Button upload;
 
-      for (int i = 0; i < trackIds.size(); i++) {
-        String orderAsSb = trimToEmpty(trackIds.get(i)) + ',' +
-            '"' + trimToEmpty(listWeight.get(i)) + '"';
-        pw.write(orderAsSb);
-        pw.write(System.lineSeparator());
+    @FindBy(css = "[data-testid='cancel-button']")
+    public Button cancel;
 
-      }
-      pause(2000);
-
-      pw.close();
-
-      return file;
-    } catch (IOException ex) {
-      throw new NvTestRuntimeException(ex);
-    }
-  }
-
-  public void uploadOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
-    findOrdersWithCsv.click();
-    File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo, map);
-    findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
-  }
-
-  public void uploadMultiOrderUpdateCsv(List<String> trackId, List<String> listWeight) {
-    findOrdersWithCsv.click();
-    File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackId, listWeight);
-    findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
-  }
-
-  public static class FindOrdersWithCsvDialog extends MdDialog {
-
-    @FindBy(css = "[label='Select File']")
-    public NvButtonFilePicker chooseButton;
-
-    @FindBy(name = "commons.upload")
-    public NvApiTextButton upload;
-
-    @FindBy(name = "commons.cancel")
-    public NvIconTextButton cancel;
-
-    @FindBy(xpath = ".//a[text()='here']")
+    @FindBy(css = "[data-testid='download-sample-file-button']")
     public Button downloadSample;
 
     public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement) {
@@ -131,7 +89,96 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     public void uploadFile(File file) {
       waitUntilVisible();
       chooseButton.setValue(file);
-      upload.clickAndWaitUntilDone();
+      upload.click();
     }
   }
+
+  public static class WeighUpdateTable extends AntTableV2<WeighUpdateRecord> {
+
+    public WeighUpdateTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(
+          ImmutableMap.<String, String>builder()
+              .put("id", "id")
+              .put("trackingId", "trackingId")
+              .put("stampId", "stampId")
+              .put("status", "status")
+              .put("newWeight", "newWeight")
+              .put("isValid", "isValid")
+              .build());
+      setEntityClass(WeighUpdateRecord.class);
+    }
+  }
+
+  public static class WeighUpdateRecord extends DataEntity<WeighUpdateRecord> {
+
+    private String id;
+    private String trackingId;
+    private String stampId;
+    private String status;
+    private String newWeight;
+    private String isValid;
+
+    public WeighUpdateRecord() {
+    }
+
+    public WeighUpdateRecord(Map<String, ?> data) {
+      super(data);
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public WeighUpdateRecord setId(String id) {
+      this.id = id;
+      return this;
+    }
+
+    public String getTrackingId() {
+      return trackingId;
+    }
+
+    public WeighUpdateRecord setTrackingId(String trackingId) {
+      this.trackingId = trackingId;
+      return this;
+    }
+
+    public String getStampId() {
+      return stampId;
+    }
+
+    public WeighUpdateRecord setStampId(String stampId) {
+      this.stampId = stampId;
+      return this;
+    }
+
+    public String getStatus() {
+      return status;
+    }
+
+    public WeighUpdateRecord setStatus(String status) {
+      this.status = status;
+      return this;
+    }
+
+    public String getNewWeight() {
+      return newWeight;
+    }
+
+    public WeighUpdateRecord setNewWeight(String newWeight) {
+      this.newWeight = newWeight;
+      return this;
+    }
+
+    public String getIsValid() {
+      return isValid;
+    }
+
+    public WeighUpdateRecord setIsValid(String isValid) {
+      this.isValid = isValid;
+      return this;
+    }
+  }
+
 }
