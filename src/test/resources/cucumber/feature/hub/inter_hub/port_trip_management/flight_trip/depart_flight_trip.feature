@@ -12,7 +12,6 @@ Feature: Airport Trip Management - Depart Flight Trip 1
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API MM - Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
