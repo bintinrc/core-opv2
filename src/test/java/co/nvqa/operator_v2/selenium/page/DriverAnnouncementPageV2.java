@@ -1,14 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverAnnouncement;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +31,7 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
     private final String uploadedCsvFileBtnXpath = "//div[contains(@class,'ant-space')][*[2][a] or *[1][svg]]";
     private final String btnNewAnnouncementXpath = "//button[contains(@class,'ant-btn')][span[text() = 'New announcement']]";
     private final String newAnnouncementPopupXpath = "//div[@class='ant-modal-content']";
-    private final String selectRecepientTypeXpath = "//div[@class='ant-select-selector'][span[@class='ant-select-selection-placeholder' and text() = 'Recipient type']]";
+    private final String selectRecipientTypeXpath = "//div[@class='ant-select-selector'][span[@class='ant-select-selection-placeholder' and text() = 'Recipient type']]";
     private final String subjectFieldXpath = "//input[@name='subject' and contains(@class,'ant-input')]";
     private final String btnMarkAsImportantXpath = "//button[contains(@class,'ant-btn')][span[text() = 'Mark as important']]";
     private final String btnSendNewAnnouncement = "//button[contains(@class,'ant-btn')][span[text()='Send']]";
@@ -40,7 +39,8 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
     private final String btnNewPayrollReportXpath = "//button[span[text()='New payroll report']]";
     private final String btnSubmitPayrollReportXpath = "//button[span[text()='Submit']]";
     private final String uploadErrorXpath = "//h3[text()='Upload Error']";
-
+    private final String inputPayrollReport = "//input[@id='bulk-update-driver-csv']";
+    private final String notificationXpath = "//div[contains(@class,'ant-notification-notice-message') and text()='Announcement sent']";
 
     public DriverAnnouncementPageV2(WebDriver webDriver) {
         super(webDriver);
@@ -142,8 +142,8 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
                 .isTrue();
     }
 
-    public void createMultipleNormalAnnouncement(Map<String, Object> data, int amount) {
-        Runnable openAnnouncementPopup = () -> {
+    public void openAnnouncementModal() {
+        doWithRetry(() -> {
             driverAnnouncementTable.waitUntilTableLoaded();
             waitUntilVisibilityOfElementLocated(btnNewAnnouncementXpath);
             click(btnNewAnnouncementXpath);
@@ -151,12 +151,16 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
             Assertions.assertThat(isElementVisible(newAnnouncementPopupXpath))
                     .as("New Announcement Popup isn't appear")
                     .isTrue();
-        };
+        }, "Open announcement popup");
+    }
 
+    public List<String> createMultipleNormalAnnouncement(Map<String, Object> data, int amount) {
+        List<String> createdAnnouncementSubjects = new ArrayList<String>();
+
+        openAnnouncementModal();
         for (int i = 0; i < amount; i++) {
-            doWithRetry(openAnnouncementPopup, "Open announcement popup", 1000, 3);
             if (data.get("recipientType") != null) {
-                click(selectRecepientTypeXpath);
+                click(selectRecipientTypeXpath);
                 getRecipientTypeOptionElement(data.get("recipientType").toString()).click();
             }
             if (data.get("recipient") != null) {
@@ -167,14 +171,21 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
                 getRecipientOptionElement(data.get("recipient").toString()).click();
             }
             if (data.get("subject") != null) {
-                findElementBy(By.xpath(subjectFieldXpath)).sendKeys(data.get("subject").toString());
+                final String subject = ((String) data.get("subject"))
+                        .replaceAll("RANDOM_SUBJECT", f("Subject %s", RandomUtil.randomString(
+                                10)));
+                createdAnnouncementSubjects.add(subject);
+                findElementBy(By.xpath(subjectFieldXpath)).sendKeys(subject);
             }
             if ((data.get("isImportant") != null) && Boolean.parseBoolean(
                     data.get("isImportant").toString())) {
                 findElementBy(By.xpath(btnMarkAsImportantXpath)).click();
             }
             if (data.get("body") != null) {
-                sendKeysInEditor(data.get("body").toString());
+                final String body = ((String) data.get("body"))
+                        .replaceAll("RANDOM_BODY", f("Auto generate test body: %s", RandomUtil.randomString(
+                                12)));
+                sendKeysInEditor(body);
             }
             if (data.get("bold") != null) {
                 sendKeysInEditor("bold", data.get("bold").toString());
@@ -198,13 +209,15 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
                 findElementBy(By.xpath(announcementEditorXpath)).click();
             }
             if (data.get("html") != null) {
+                final String html = ((String) data.get("html")).replaceAll("RANDOM_HTML",
+                        f("<h1>Auto generate HTML: %s</h1>", RandomUtil.randomString(12)));
                 String htmlTextAreaXpath = "//div[@class='ant-modal-body']/textarea";
                 String btnHtmlSave = "//button[contains(@class,'ant-btn')][span[text()='Save']]";
                 String btnHtmlXpath = "//button[contains(@class,'ql-html')]";
                 click(btnHtmlXpath);
                 List<WebElement> popupEls = findElementsBy(By.xpath(newAnnouncementPopupXpath));
                 waitUntilVisibilityOfElementLocated(popupEls.get(popupEls.size() - 1));
-                findElementBy(By.xpath(htmlTextAreaXpath)).sendKeys(data.get("html").toString());
+                findElementBy(By.xpath(htmlTextAreaXpath)).sendKeys(html);
                 waitUntilElementIsClickable(btnHtmlSave);
                 click(btnHtmlSave);
             }
@@ -212,50 +225,63 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
                 click(btnSendNewAnnouncement);
             }
         }
+
+        return createdAnnouncementSubjects;
     }
 
     public void verifyAnnouncementSent() {
-        String notificationXpath = "//div[contains(@class,'ant-notification-notice-message') and text()='Announcement sent']";
         waitUntilVisibilityOfElementLocated(notificationXpath);
         Assertions.assertThat(isElementVisible(notificationXpath))
                 .as("Notification isn't displayed")
                 .isTrue();
     }
 
-    public void operatorSendPayrollReport(File csvFile, Map<String, String> data) {
+    public String operatorSendPayrollReport(File csvFile, Map<String, String> data) {
+        String payrollSubject = null;
+
         driverAnnouncementTable.waitUntilTableLoaded();
-        click(btnNewPayrollReportXpath);
+        while (!isElementExist(inputPayrollReport)) {
+            findElementBy(By.xpath(btnNewPayrollReportXpath)).click();
+        }
         pause5s();
-        findElementBy(By.id("bulk-update-driver-csv")).sendKeys(csvFile.getAbsolutePath());
+        findElementBy(By.xpath(inputPayrollReport)).sendKeys(csvFile.getAbsolutePath());
         if (!isElementExist(uploadErrorXpath)) {
             waitUntilVisibilityOfElementLocated(btnSubmitPayrollReportXpath);
             click(btnSubmitPayrollReportXpath);
         }
         pause5s();
         if (data.get("subject") != null) {
-            findElementBy(By.xpath(subjectFieldXpath)).sendKeys(data.get("subject").toString());
+            payrollSubject = data.get("subject").replaceAll("RANDOM_SUBJECT",
+                    f("Subject %s", RandomUtil.randomString(10)));
+            findElementBy(By.xpath(subjectFieldXpath)).sendKeys(payrollSubject);
         }
         if ((data.get("isImportant") != null) && Boolean.parseBoolean(
-                data.get("isImportant").toString())) {
+                data.get("isImportant"))) {
             findElementBy(By.xpath(btnMarkAsImportantXpath)).click();
         }
         if (data.get("body") != null) {
-            sendKeysInEditor(data.get("body").toString());
+            final String body = data.get("body").replaceAll("RANDOM_BODY", f("Auto generate test body: %s",
+                    RandomUtil.randomString(12)));
+            sendKeysInEditor(body);
         }
         if (data.get("html") != null) {
+            final String html = data.get("html").replaceAll("RANDOM_HTML",
+                    f("<h1>Auto generate HTML: %s</h1>", RandomUtil.randomString(12)));
             String htmlTextAreaXpath = "//div[@class='ant-modal-body']/textarea";
             String btnHtmlSave = "//button[contains(@class,'ant-btn')][span[text()='Save']]";
             String btnHtmlXpath = "//button[contains(@class,'ql-html')]";
             click(btnHtmlXpath);
             List<WebElement> popupEls = findElementsBy(By.xpath(newAnnouncementPopupXpath));
             waitUntilVisibilityOfElementLocated(popupEls.get(popupEls.size() - 1));
-            findElementBy(By.xpath(htmlTextAreaXpath)).sendKeys(data.get("html").toString());
+            findElementBy(By.xpath(htmlTextAreaXpath)).sendKeys(html);
             waitUntilElementIsClickable(btnHtmlSave);
             click(btnHtmlSave);
         }
         if (isElementVisible(btnSendNewAnnouncement)) {
             click(btnSendNewAnnouncement);
         }
+
+        return payrollSubject;
     }
 
     public void verifyFailedUploadPayrollReport() {
@@ -273,7 +299,7 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
         public static final String COLUMN_READ_BY = "readCount";
         public static final String COLUMN_SENT_DATE_TIME = "sentTime";
 
-        public final String tableRowXpath = "//tr[@data-row-key and contains(@class,'ant-table-row')]";
+        public final String tableRowXpath = "//tbody[@class='ant-table-tbody']";
 
         public DriverAnnouncementTable(WebDriver webDriver) {
             super(webDriver);

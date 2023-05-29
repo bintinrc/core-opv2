@@ -35,9 +35,9 @@ Feature: Driver Announcement
     And Operator create Announcement on Driver Announcement page
       | recipientType | All                        |
       | recipient     | QA automation announcement |
-      | subject       | Automation test            |
+      | subject       | RANDOM_SUBJECT             |
       | isImportant   | false                      |
-      | body          | This is an automation test |
+      | body          | RANDOM_BODY                |
     Then Operator verify Driver Announcement successfully sent
 
   Scenario: Operator Send New Important Normal Announcement
@@ -46,29 +46,29 @@ Feature: Driver Announcement
     And Operator create Announcement on Driver Announcement page
       | recipientType | All                        |
       | recipient     | QA automation announcement |
-      | subject       | Automation test            |
+      | subject       | RANDOM_SUBJECT             |
       | isImportant   | true                       |
-      | body          | This is an automation test |
-    Then Operator verify Driver Announcement successfully sent
+      | body          | RANDOM_BODY                |
+    Then Operator verify important Driver Announcement successfully sent
 
   Scenario: Operator Send New HTML Announcement
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator create Announcement on Driver Announcement page
-      | recipientType | All                                 |
-      | recipient     | QA automation announcement          |
-      | subject       | Automation test                     |
-      | isImportant   | true                                |
-      | html          | <h1>This is an automation test</h1> |
-    Then Operator verify Driver Announcement successfully sent
+      | recipientType | All                        |
+      | recipient     | QA automation announcement |
+      | subject       | RANDOM_SUBJECT             |
+      | isImportant   | true                       |
+      | html          | RANDOM_HTML                |
+    Then Operator verify important Driver Announcement successfully sent
 
   Scenario: Operator Send New Payroll Report
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
       | file    | csv/driver_announcement_payroll_report_valid.csv |
-      | subject | Automation test                                  |
-      | body    | This is an automation test                       |
+      | subject | RANDOM_SUBJECT                                   |
+      | body    | RANDOM_BODY                                      |
     Then Operator verify Driver Announcement successfully sent
 
   Scenario: Operator Send New Payroll Report with HTML
@@ -76,8 +76,8 @@ Feature: Driver Announcement
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
       | file    | csv/driver_announcement_payroll_report_valid.csv |
-      | subject | Automation test                                  |
-      | html    | <h1>This is an automation test</h1>              |
+      | subject | RANDOM_SUBJECT                                   |
+      | html    | RANDOM_HTML                                      |
     Then Operator verify Driver Announcement successfully sent
 
   Scenario: Operator Send New Important Payroll Report
@@ -85,14 +85,28 @@ Feature: Driver Announcement
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
       | file        | csv/driver_announcement_payroll_report_valid.csv |
-      | subject     | Automation test                                  |
+      | subject     | RANDOM_SUBJECT                                   |
       | isImportant | true                                             |
-      | body        | This is an automation test                       |
-    Then Operator verify Driver Announcement successfully sent
+      | body        | RANDOM_BODY                                      |
+    Then Operator verify important Driver Payroll successfully sent
 
   Scenario: Operator Unable Send New Payroll Report with Invalid CSV
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
       | file | csv/driver_announcement_payroll_report_invalid.csv |
+    Then Operator verify failed to upload payroll report
+
+  Scenario: Operator Send New Payroll Report with driver_id from Other Countries
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file | csv/driver_announcement_payroll_report_driver_id_other_country.csv |
+    Then Operator verify failed to upload payroll report
+
+  Scenario: Operator Send New Payroll Report with Not Existing driver_id
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file | csv/driver_announcement_payroll_report_not_exist_driver_id.csv |
     Then Operator verify failed to upload payroll report
