@@ -26,7 +26,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Employment Type : In-House - Part-Time
@@ -48,7 +48,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}   |
       | comments       | Created by Automation     |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Employment Type : Outsourced - Subcon
@@ -70,7 +70,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}   |
       | comments       | Created by Automation     |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Employment Type : Outsourced - Vendors
@@ -93,7 +93,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}         |
       | comments       | Created by Automation           |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Employment Type : Outsourced - Manpower Agency
@@ -116,7 +116,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}             |
       | comments       | Created by Automation               |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver with Display Name contains either Letters, Numbers, Hyphens, Underscores, and Parentheses
@@ -138,7 +138,7 @@ Feature: Middle Mile Driver Management - Create Driver 3
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

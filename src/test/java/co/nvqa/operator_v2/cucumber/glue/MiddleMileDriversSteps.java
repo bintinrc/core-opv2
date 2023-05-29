@@ -308,7 +308,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     middleMileDriversPage.driverHasBeenCreatedToast(username);
   }
 
-  @Then("Operator verifies Middle Mile Driver with username {} has been created")
+  @Then("Operator verifies Middle Mile Driver with username {string} has been created")
   public void operatorVerifiesMiddleMileDriverWithUsernameHasBeenCreated(String username) {
     middleMileDriversPage.driverHasBeenCreatedToast(resolveValue(username));
   }

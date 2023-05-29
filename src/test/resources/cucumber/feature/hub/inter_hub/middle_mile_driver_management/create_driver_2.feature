@@ -26,7 +26,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is B1
@@ -49,7 +49,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is B2
@@ -72,7 +72,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is C
@@ -95,7 +95,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 1
@@ -118,7 +118,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 2
@@ -141,7 +141,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 3
@@ -164,7 +164,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is all types
@@ -187,7 +187,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies Middle Mile Driver with username {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   Scenario: Create Driver - PH - License Type is not selected
     Given Operator go to menu Shipper Support -> Blocked Dates
