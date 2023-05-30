@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @AssignDriverListOnStationRoute
 Feature: Assign Drivers List on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -571,7 +571,7 @@ Feature: Assign Drivers List on Station Route
       | orderTags | {order-tag-id} |
     Then Operator verify parcels table contains "{order-tag-name}" value in "orderTags" column on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @Debug
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Operator Show List of Bulk Removed Order on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-4}
     Given API Order - Shipper create multiple V4 orders using data below:
