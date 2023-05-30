@@ -5,7 +5,7 @@ Feature: MAWB Management - Record Offload 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: Record Offload In-transit to Airport MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -64,7 +64,7 @@ Feature: MAWB Management - Record Offload 2
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: Record Offload Handed Over to Airline MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -238,7 +238,7 @@ Feature: MAWB Management - Record Offload 2
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: Record Offload Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -309,7 +309,7 @@ Feature: MAWB Management - Record Offload 2
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: Record Offload Partially Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}

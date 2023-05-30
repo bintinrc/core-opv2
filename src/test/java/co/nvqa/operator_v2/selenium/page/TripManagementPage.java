@@ -740,19 +740,22 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void assignDriver(String driverId) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
+    pause3s();
     assignTripModal.assignDriver(driverId);
+    pause2s();
     verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
-    assignTripModal.waitUntilInvisible();
+    assignTripModal.saveButton.waitUntilInvisible();
   }
 
   public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignTripModal.addDriver.click();
+    pause3s();
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
     verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
-    assignTripModal.waitUntilInvisible();
+    assignTripModal.saveButton.waitUntilInvisible();
   }
 
   public void clearAssignedDriver() {
@@ -773,7 +776,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 //    getWebDriver().switchTo().window(windowHandle);
 //    switchTo();
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH);
-    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH);
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH, 60);
     String actualTripId = getText(DETAIL_PAGE_TRIP_ID_XPATH);
     Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_STATUS_XPATH, 5))
@@ -833,35 +836,25 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void readTheToastMessage() {
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        waitUntilVisibilityOfElementLocated(
-            "//div[contains(@class,'notification-notice-message')]");
-        WebElement toast = findElementByXpath(
-            "//div[contains(@class,'notification-notice-message')]");
-        actualToastMessageContent = toast.getText();
-        waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
-        findElementByXpath("//a[@class='ant-notification-notice-close']").click();
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        throw ex;
-      }
-    }, getCurrentMethodName(), 1000, 5);
+    doWithRetry(() -> {
+      waitUntilVisibilityOfElementLocated(
+          "//div[contains(@class,'notification-notice-message')]");
+      WebElement toast = findElementByXpath(
+          "//div[contains(@class,'notification-notice-message')]");
+      actualToastMessageContent = toast.getText();
+      waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
+      findElementByXpath("//a[@class='ant-notification-notice-close']").click();
+    }, "Retrying until toast shown", 1000, 3);
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        if (actualToastMessageContent.equals("")) {
-          readTheToastMessage();
-        }
-        Assertions.assertThat(actualToastMessageContent)
-            .as("Trip Management toast message is shown").contains(expectedToastMessage);
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        throw ex;
+    doWithRetry(() -> {
+      if (actualToastMessageContent.equals("")) {
+        readTheToastMessage();
       }
-    }, getCurrentMethodName(), 1000, 15);
+      Assertions.assertThat(actualToastMessageContent)
+          .as("Trip Management toast message is shown").contains(expectedToastMessage);
+    }, "Retrying until toast shown", 1000, 3);
   }
 
   public void verifyToastContainingMessageIsShownWithoutClosing(String expectedToastMessage) {

@@ -210,7 +210,7 @@ Feature: MAWB Management - View Details 2
       | user      | qa@ninjavan.co                                |
       | when      | ^{gradle-current-date-yyyy-MM-dd}.*           |
 
-  @DeleteShipments @DeleteDriver @ForceSuccessOrder @DeleteCreatedMAWBs
+  @DeleteShipments @DeleteDriverV2 @ForceSuccessOrder @DeleteCreatedMAWBs
   Scenario: View Details Partially Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -278,7 +278,7 @@ Feature: MAWB Management - View Details 2
       | user      | qa@ninjavan.co                                |
       | when      | ^{gradle-current-date-yyyy-MM-dd}.*           |
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: View Details Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:

@@ -5,12 +5,11 @@ Feature: Port Trip Management - Create To From Airport Trip 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with disabled Destination Hub in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     And API Operator create 1 new Driver using data below:
@@ -30,12 +29,11 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_LIST_OF_CREATED_HUBS[1].name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Create To/from Airport Trip with disabled Origin Hub in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     And API Operator create 1 new Driver using data below:
@@ -60,7 +58,6 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
@@ -72,7 +69,6 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -94,7 +90,6 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
@@ -109,7 +104,6 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -126,7 +120,6 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management

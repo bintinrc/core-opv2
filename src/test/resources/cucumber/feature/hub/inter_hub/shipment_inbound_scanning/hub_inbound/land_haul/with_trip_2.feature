@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Shipment Already Scanned (Duplicate Scan on Hub Inbound) (uid:461f477f-c49e-493a-811d-50e73389162f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -67,7 +67,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_CREATED_SHIPMENT_ID}" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment Not Expected For Hub Inbound (uid:702b9928-6e78-4a1a-b1e0-3f0e7e2247df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -135,7 +135,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "There is no SHIPMENT_HUB_INBOUND scan for shipment {KEY_CREATED_SHIPMENT_ID} and trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Completed Shipment to Hub Inbound (uid:4e81d8c9-9c65-4818-991a-b6afdacdbdcd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -205,7 +205,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Completed]" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Cancelled Shipment to Hub Inbound (uid:7aea061e-08d2-46fc-9df1-fd92faed3f94)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -261,7 +261,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Failed to scan MAWB to Hub Inbound (uid:472fd7d1-abcd-4e78-8e86-6220019f8756)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -333,7 +333,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 2
     And Operator verifies shipment counter is "0"
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @ForceSuccessOrder
   Scenario: Success Scan MAWB Partially at Hub Inbound (uid:89e24f29-ad80-4a8a-ae49-de0ebbb14e1c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment From Hub Inbounded List (uid:fe33b7eb-a7c9-494f-b61e-abb128865383)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -70,7 +70,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     And Operator verifies shipment counter is "0"
     Then Operator verify small message "Successfuly Removed. Shipment: {KEY_CREATED_SHIPMENT_ID}" appears in Remove Shipment Container
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Hub Start Inbound - Trip Completion Dialog for Transit Trip (uid:7a8aa0d0-09cd-482f-b9ea-bef4ec569eea)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -104,7 +104,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Hub Start Inbound - No Trip Completion Dialog for Arrived Trip (uid:dd213e6d-f654-432f-8e6e-02713bf0115b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -139,7 +139,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | driver         | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                                              |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Pending Shipment From Another Country to Hub Inbound (uid:9d27846c-0adc-4f0d-9c8d-c73d7dd68075)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -208,7 +208,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | userId | qa@ninjavan.co   |
     And Operator close current window and switch to Shipment management page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Closed Shipment From Another Country to Hub Inbound (uid:3abba664-7cd2-4d17-af97-e3aa384f99d5)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
@@ -287,7 +287,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | userId | qa@ninjavan.co  |
     And Operator close current window and switch to Shipment management page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Cancelled Shipment From Another Country to Hub Inbound (uid:8cc04fcd-6d84-42f5-bf40-52c57980fd62)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
@@ -359,7 +359,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | userId | qa@ninjavan.co     |
     And Operator close current window and switch to Shipment management page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Completed Shipment From Another Country to Hub Inbound (uid:911c9382-f4d5-497b-831c-8acddc793454)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"

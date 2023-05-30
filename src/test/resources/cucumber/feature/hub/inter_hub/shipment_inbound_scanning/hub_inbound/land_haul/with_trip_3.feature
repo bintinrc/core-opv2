@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Start Hub Inbound After Select Driver and Trip (uid:026a1de3-00a4-4fb3-990e-5514ea40f19b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -48,7 +48,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | driver         | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Destination Hub Inbound (uid:847aafe2-b443-4567-9ec3-5bbb2dc91c69)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -147,7 +147,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[2].id}   |
       | descriptionString | Shipment {KEY_CREATED_SHIPMENT_ID} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Transit Hub Inbound (uid:f7dd1fb0-485a-4b1a-a3b2-cf1c786b5c9e)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -254,7 +254,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                                                                   |
       | descriptionString | Hub {KEY_LIST_OF_CREATED_HUBS[3].id} ({KEY_LIST_OF_CREATED_HUBS[3].name}) Hub Location Type ORIGIN |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Incorrect Shipment to Hub Inbound (uid:e0ebe28c-a18c-4c82-bb16-5c19932d1447)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -304,7 +304,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Shipments To Unload for Hub Inbound (uid:95ed3788-2005-4b0b-ac45-4a706dec9f5e)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

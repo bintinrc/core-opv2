@@ -76,7 +76,7 @@ Feature: Movement Trip - Search Trip - Search Field - Arrival Tab
     And Operator searches for the Trip Management based on its "actual_departure_time"
     Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Search Trip on Search Field - Arrival Tab - Search Expected Arrival Time (uid:c519dd8f-6df1-4d9a-bb75-a60432661ada)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

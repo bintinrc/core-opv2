@@ -9,7 +9,7 @@ Feature: Update SWB 7 - ID
   Scenario: Update SWB for ID with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
-    Given API MM - Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = "{hub-id-id-1}" to hub id = "{hub-id-id-2}"
+    Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id-id-1}" to "{hub-id-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
@@ -21,7 +21,7 @@ Feature: Update SWB 7 - ID
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
@@ -33,7 +33,7 @@ Feature: Update SWB 7 - ID
       | destinationSeahaul | {local-seaport-2-code-id}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page

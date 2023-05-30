@@ -1,4 +1,3 @@
-@runAll
 Feature: Test
 
   @exclude

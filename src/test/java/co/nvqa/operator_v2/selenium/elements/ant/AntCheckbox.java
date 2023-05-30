@@ -44,4 +44,9 @@ public class AntCheckbox extends PageElement {
   public void setValue(boolean value) {
     input.setValue(value);
   }
+
+  @Override
+  public boolean isEnabled() {
+    return input.isEnabled();
+  }
 }

@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-#  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+#  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
 #  Scenario: Hub Inbound Scan Stayover Shipment with different drop-off trip (uid:716ecf67-5763-4dd8-9cfe-fdfd99fb3e8f)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    When Operator change the country to "Singapore"
@@ -144,7 +144,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #      | hubId             | {KEY_LIST_OF_CREATED_HUBS[3].id}               |
 #      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Skip Scan Stayover Shipment with different drop off trip (uid:18780560-c00f-4b9b-af9f-32f59e732117)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -291,7 +291,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[3].id}               |
       | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan to  Remove Stayover Shipment at Hub Inbound With Different Dropoff Trip (uid:f4aeaff5-b11a-4e99-a8a6-a94242b1fc6e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -444,7 +444,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | hubId             | {KEY_LIST_OF_CREATED_HUBS[3].id}               |
       | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
 
-#  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+#  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
 #  Scenario: Hub Inbound Scan Stayover Shipment With the same drop-off trip (uid:571b97b7-145a-45c6-beb6-540d94c65635)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -558,7 +558,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #      | hubId             | {KEY_LIST_OF_CREATED_HUBS[3].id}               |
 #      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #
-#  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+#  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
 #  Scenario: Hub Inbound Skip Scan Stayover Shipment With the same drop off trip (uid:d18b25a8-b312-4678-8eda-4744b29ed7a4)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -670,7 +670,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
 #      | descriptionString | Shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Transit Shipment From Another Country to Hub Inbound (uid:476d787f-f99b-4375-a218-6893e319e440)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator change the country to "Singapore"

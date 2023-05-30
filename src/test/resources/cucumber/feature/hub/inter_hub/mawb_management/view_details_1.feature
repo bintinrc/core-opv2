@@ -29,7 +29,7 @@ Feature: MAWB Management - View Details 1
       | user      | qa@ninjavan.co                      |
       | when      | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: View Details In-Transit to Airport MAWB (Van Inbound from OPV2)
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -85,7 +85,7 @@ Feature: MAWB Management - View Details 1
       | user      | qa@ninjavan.co                      |
       | when      | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: View Details In-Transit to Airport MAWB (Van Inbound from MMDA)
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -140,7 +140,7 @@ Feature: MAWB Management - View Details 1
       | user      | qa@ninjavan.co                      |
       | when      | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriverV2 @ForceSuccessOrder
   Scenario: Record Offload Handed Over to Airline MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:

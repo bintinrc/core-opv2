@@ -10,7 +10,6 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -37,12 +36,11 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Cancel Warehouse to Airport Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -77,7 +75,6 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -104,12 +101,11 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -139,12 +135,11 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Cancel Airport to Warehouse Trip with Other Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -175,7 +170,6 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -211,7 +205,6 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API MM - Operator create new air trip with data below:
       | airtripType         | TO_FROM_AIRPORT_TRIP                    |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |

@@ -1,11 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
@@ -101,9 +102,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("Movement Management page is loaded")
   public void movementManagementPageIsLoaded() {
-    movementManagementPage.addSchedule.waitUntilVisible(10);
-    movementManagementPage.switchTo();
-    movementManagementPage.addSchedule.waitUntilClickable(60);
+    movementManagementPage.verifyMovementSchedulesPageIsLoaded();
   }
 
   @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
@@ -114,6 +113,17 @@ public class MovementManagementSteps extends AbstractSteps {
     operatorFillAddMovementScheduleFormUsingDataBelow(data);
     operatorClickButtonOnAddMovementScheduleDialog("OK");
     pause6s();
+  }
+
+  @Then("Operator creates new {string} Movement Schedule on Movement Schedule page using data below:")
+  public void operatorCreatesNewMovementScheduleOnMovementSchedulePageUsingDataBelow(String hubType, List<String> scheduleDataAsJson) {
+    operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
+    List<Map<String, String>> scheduleMaps = scheduleDataAsJson.stream().map(json -> fromJsonToMap(json, String.class, String.class)).collect(
+        Collectors.toList());
+
+    scheduleMaps.forEach(schedule -> {
+      operatorFillsInAddMovementScheduleFormUsingDataBelow(schedule);
+    });
   }
 
   @When("Operator clicks on assign_driver icon on the action column in movement schedule page")
@@ -468,37 +478,24 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator try adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorTryAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       try {
         final Map<String, String> finalData = resolveKeyValues(data);
-        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
-        movementManagementPage.stationsTab.click();
-        movementManagementPage.addSchedule.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
-        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        movementManagementPage.fillInMovementScheduleForm(finalData, 0);
         if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
-          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
-          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
-              finalData);
-          secondStationMovementSchedule.setDepartureTime("21:15");
-          movementManagementPage.addStationMovementScheduleModal.fillAnother(
-              secondStationMovementSchedule, "1");
-          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+          finalData.put("departureTime", "21:15");
+          movementManagementPage.fillInMovementScheduleForm(finalData, 1);
+
         }
         movementManagementPage.addStationMovementScheduleModal.create.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
-        pause6s();
       } catch (Exception ex) {
         LOGGER.error(ex.getMessage());
-        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
-        navigateRefresh();
-        movementManagementPage.stationsTab.click();
-        movementManagementPage.addSchedule.click();
-        movementManagementPage.addSchedule.waitUntilClickable(60);
+        LOGGER.info("Searched element is not found, retrying after 1 seconds...");
+        movementManagementPage.refreshPage_v1();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 3);
+    }, "Creating new schedule...", 1000, 5);
 
   }
 
@@ -623,6 +620,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @And("Operator opens Add Movement Schedule modal on Movement Management page")
   public void operatorOpensAddMovementScheduleDialogOnMovementManagementPage() {
+    movementManagementPage.addSchedule.waitUntilClickable();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addMovementScheduleModal.waitUntilVisible();
   }
@@ -644,6 +642,7 @@ public class MovementManagementSteps extends AbstractSteps {
     }
   }
 
+  @Deprecated
   @And("Operator fill Add Movement Schedule form using data below:")
   public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
     retryIfRuntimeExceptionOccurred(() -> {
@@ -686,6 +685,31 @@ public class MovementManagementSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 3);
+  }
+
+  @And("Operator fills in Add Movement Schedule form using data below:")
+  public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
+    doWithRetry(() -> {
+      try {
+        if (data.containsKey("drivers")) {
+          String driversJoined = getList(data.get("drivers"), MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
+              Collectors.joining(","));
+          data.put("drivers", driversJoined);
+        }
+
+        movementManagementPage.addMovementScheduleModal.fill(data);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.info(ex.getMessage());
+        navigateRefresh();
+        movementManagementPage.switchTo();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addMovementScheduleModal.waitUntilVisible();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "Creating movement schedule...", 1000, 5);
   }
 
   @Then("Operator verify Add Movement Schedule form is empty")

@@ -5,7 +5,7 @@ Feature: Reservation Preset Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Has Not Added to Milkrun Group
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -53,7 +53,7 @@ Feature: Reservation Preset Management
       | address.1.milkrun.1.endTime   | 6PM           |
       | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Added to Milkrun Group
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -107,7 +107,7 @@ Feature: Reservation Preset Management
       | address.1.milkrun.1.endTime   | 6PM           |
       | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -158,7 +158,7 @@ Feature: Reservation Preset Management
     Then Operator verify pickup address on Edit Shipper page:
       | address.1.milkrun.isMilkrun | false |
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup @CloseNewWindows
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @CloseNewWindows
   Scenario: Operator Add and Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -240,7 +240,7 @@ Feature: Reservation Preset Management
     And Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
