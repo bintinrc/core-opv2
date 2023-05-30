@@ -31,7 +31,7 @@ Feature: Update MAWB
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
