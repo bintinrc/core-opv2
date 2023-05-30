@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.Shipment;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -54,6 +55,24 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
+  }
+
+  @When("Operator inbound scan shipment id {string} {string} in hub {string} on Shipment Inbound Scanning page")
+  public void inboundScanning(String sidAsStr, String label, String hub) {
+    doWithRetry(() ->
+    {
+      try {
+        long shipmentId = Long.parseLong(resolveValue(sidAsStr));
+        final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
+        scanningPage.inboundScanning(shipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage_v1();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "Scanning shipment...", 1000, 5);
   }
 
   @SuppressWarnings("unchecked")

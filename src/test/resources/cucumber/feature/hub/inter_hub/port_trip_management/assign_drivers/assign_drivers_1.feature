@@ -10,7 +10,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create 1 new Driver using data below:
@@ -42,7 +41,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create 2 new Driver using data below:
@@ -74,7 +72,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create 4 new Driver using data below:
@@ -106,7 +103,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create 5 new Driver using data below:
@@ -137,7 +133,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create new air trip with data below:
@@ -164,7 +159,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create new air trip with data below:
@@ -191,7 +185,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create 4 new Driver using data below:
@@ -228,7 +221,6 @@ Feature: Airport Trip Management - Assign Drivers 1
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API Operator create new air trip with data below:

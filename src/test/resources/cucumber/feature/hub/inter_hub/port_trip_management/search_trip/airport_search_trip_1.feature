@@ -8,7 +8,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Destination Facility
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -32,7 +31,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Trip ID
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -56,7 +54,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Origin Facility
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -80,7 +77,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Departure Date Time
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -104,7 +100,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Duration
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -128,7 +123,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -153,7 +147,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -177,7 +170,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Status
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |
@@ -201,7 +193,6 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @CancelTrip
   Scenario: Search by Comments
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP              |
       | originFacility      | {local-airport-1-hub-id} |

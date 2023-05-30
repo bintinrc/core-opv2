@@ -109,7 +109,7 @@ Feature: Upload Invoiced Orders
 
 
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)
-   #pre-condition: Orders are already in invoiced_orders
+  #pre-condition: Orders are already in invoiced_orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -132,7 +132,9 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    # Upload again
+    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator saves the invoiced_at value in the billing_qa_gl.order_payment_tags table for verifying purpose
+  # Upload again
     And Operator upload a CSV file with below order ids and verify success message
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
@@ -157,6 +159,7 @@ Feature: Upload Invoiced Orders
       | created_at           | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at           | null                             |
       | update_at            | {gradle-current-date-yyyy-MM-dd} |
+    Then Operator verifies the invoiced_at value in the billing_qa_gl.order_payment_tags table is same as the previous value
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing Result                           |

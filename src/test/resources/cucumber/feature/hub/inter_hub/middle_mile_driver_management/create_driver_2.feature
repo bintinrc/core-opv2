@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is B
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -26,9 +26,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is B1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -49,9 +49,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is B2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -72,9 +72,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is C
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -95,9 +95,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -118,9 +118,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -141,9 +141,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is Restriction 3
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -164,9 +164,9 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
-  @DeleteDriverV2
+  @DeleteMiddleMileDriver
   Scenario: Create Driver - PH - License Type is all types
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -187,7 +187,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
-    Then Operator verifies that the new Middle Mile Driver has been created
+    Then Operator verifies Middle Mile Driver with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" has been created
 
   Scenario: Create Driver - PH - License Type is not selected
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -208,7 +208,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
       | username       | RANDOM                         |
       | password       | {ninja-driver-password}        |
       | comments       | Created by Automation          |
-    And Operator unchecks license type on Middle Mile Drivers Page
+    And Operator unchecks license type "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].licenseType}" on Middle Mile Drivers Page
     Then Operator verifies "License Type" error message is shown on Middle Mile Drivers Page
 
   @KillBrowser @ShouldAlwaysRun
