@@ -428,9 +428,17 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void clickOnLoadTripsPortManagementDetails() {
-    loadTrips.click();
+    doWithRetry(() -> {
+      try {
+        loadTrips.click();
+        loadTrips.waitUntilInvisible();
+      } catch (NoSuchElementException e) {
+        LOGGER.info(e.getMessage());
+        loadTrips.waitUntilClickable();
+      }
+    }, "Clicking load trips button...", 1000, 5);
+
     waitUntilPageLoaded();
-    pause2s();
     backButton.waitUntilVisible(60);
   }
 
@@ -941,8 +949,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyNoResultsFound() {
-    Assertions.assertThat(noResultsFound.isDisplayed()).as("Records are not present")
-        .isTrue();
+    doWithRetry(() -> {
+      noResultsFound.waitUntilVisible();
+      Assertions.assertThat(noResultsFound.isDisplayed()).as("Records are not present")
+          .isTrue();
+    }, "Wait until result is displayed...", 1000, 5);
   }
 
   public void clickOnCreateToFromPortTrip() {
