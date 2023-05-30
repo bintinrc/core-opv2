@@ -21,6 +21,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
@@ -48,6 +49,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
@@ -75,6 +77,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
@@ -102,6 +105,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
@@ -138,6 +142,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "-" in shipper address page
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
@@ -161,6 +166,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
@@ -190,6 +196,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
 
@@ -242,7 +249,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 30 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator clicks on the Download CSV Template button
     And Verify that csv file is downloaded with filename: "CSV Template_Pickup Address Pickup Type.csv"
     Then Operator verifies header names are available in the downloaded CSV file "CSV Template_Pickup Address Pickup Type"
