@@ -91,8 +91,16 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
     String finalFilterValue = filterValue;
+    shipperAddressConfigurationPage.validateFilter(filterBy,finalFilterValue);
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies table is filtered based on input in {string} in shipper address page")
+  public void operatorVerifiesTableIsFilteredBasedOnPickUpTypeValue(String filterValue) {
+    filterValue = resolveValue(filterValue);
+    String finalFilterValue = filterValue;
     Runnable verifyTable = () -> {
-      shipperAddressConfigurationPage.validateFilter(filterBy, finalFilterValue);
+      shipperAddressConfigurationPage.validatePickUpType(finalFilterValue);
     };
     doWithRetry(verifyTable, "Operator verifies table is filtered based on input", 5000L, 3);
     takesScreenshot();
@@ -195,6 +203,15 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @And("Operator clicks on the {string} button to upload CVS")
+  public void operator_clicks_on_button_to_upload_cvs(String button){
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickUploadCVSButton();
+    };
+    doWithRetry(clickButton, "Click on Button", 5000L, 3);
+    takesScreenshot();
+  }
+
   @Then("Operator verifies that the following texts are available on the downloaded file {string}")
   public void operator_verifies_that_the_following_texts_are_available_on_the_downloaded_file(
       String filePattern,
@@ -272,6 +289,13 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
       shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
     };
     doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename", 5000L, 3);
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button to upload CSV file")
+  public void operatorClicksOnTheButtonToUploadCSVFile(String buttonText) {
+    pause3s();
+    shipperAddressConfigurationPage.clickButtonToUploadCSV(buttonText);
     takesScreenshot();
   }
 }

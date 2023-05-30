@@ -270,8 +270,8 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Configure Pickup Type" button
-    And Operator waits for 60 seconds
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
+    And Operator waits for 30 seconds
     And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 
@@ -294,8 +294,8 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 60 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator waits for 30 seconds
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator drag and drop csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 

@@ -31,7 +31,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Success_Bulk_Update_All_Shipper_Addresses.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload success message is displayed for success count "2"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
@@ -67,7 +67,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Success_Bulk_Update_Duplicate_Shipper_Addresses.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload success message is displayed for success count "1"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
@@ -100,7 +100,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_bulk_update_some_addresses.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for error count "1" and total count "3"
     And Operator clicks on the Download Errors button
@@ -136,7 +136,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Bulk_Update_All_Shipper_Addresses.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
@@ -194,7 +194,7 @@ Feature: Shipper Address Configuration
 
     Examples:
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  DY01              | JKB              | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
