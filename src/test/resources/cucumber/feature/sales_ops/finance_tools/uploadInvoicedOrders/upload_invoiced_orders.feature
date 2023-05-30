@@ -7,8 +7,8 @@ Feature: Upload Invoiced Orders
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     # MUST use qa@ninjavan.co because the email will be sent out to the operator email account.
-#    And API Operator whitelist email "{qa-email-address}"
-#    And operator marks gmail messages as read
+    And API Operator whitelist email "{qa-email-address}"
+    And operator marks gmail messages as read
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     When Upload Invoiced Orders page is loaded
 
@@ -68,10 +68,10 @@ Feature: Upload Invoiced Orders
       | completed_local_date | {gradle-current-date-yyyyMMdd}   |
       | created_at           | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at           | null                             |
-#    And Finance Operator waits for "{order-billing-wait-time}" seconds
-#    Then Operator opens Gmail and verifies email with below details
-#      | subject | Invoicing Result                           |
-#      | body    | All Tracking IDs are successfully invoiced |
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
+    Then Operator opens Gmail and verifies email with below details
+      | subject | Invoicing Result                           |
+      | body    | All Tracking IDs are successfully invoiced |
 
 
   Scenario: Upload Invoice Orders CSV - When Orders are not in priced_orders neither invoiced_orders (non-priced) (uid:6c8bb540-5f3e-428f-a271-5fa05bf154aa)
@@ -98,18 +98,18 @@ Feature: Upload Invoiced Orders
       | updated_at | notNull        |
       | deleted_at | notNull        |
     Then API Billing - Operator verifies there is no entry in the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-#    And Finance Operator waits for "{order-billing-wait-time}" seconds
-#    Then Operator opens Gmail and verifies email with below details
-#      | subject            | Invoicing Result                           |
-#      | body               | (Total failed: 0, Total not yet priced: 1) |
-#      | isZipFileAvailable | true                                       |
-#    When Operator clicks on link to download on email and verifies CSV file
-#    Then Operator verifies below tracking id(s) is\are available in the CSV file
-#      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
+    Then Operator opens Gmail and verifies email with below details
+      | subject            | Invoicing Result                           |
+      | body               | (Total failed: 0, Total not yet priced: 1) |
+      | isZipFileAvailable | true                                       |
+    When Operator clicks on link to download on email and verifies CSV file
+    Then Operator verifies below tracking id(s) is\are available in the CSV file
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-
+  @nad
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)
-   #pre-condition: Orders are already in invoiced_orders
+  #pre-condition: Orders are already in invoiced_orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
       | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -132,7 +132,9 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    # Upload again
+    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator saves the invoiced_at value in the billing_qa_gl.order_payment_tags table for verifying purpose
+  # Upload again
     And Operator upload a CSV file with below order ids and verify success message
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table
@@ -157,10 +159,11 @@ Feature: Upload Invoiced Orders
       | created_at           | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at           | null                             |
       | update_at            | {gradle-current-date-yyyy-MM-dd} |
-#    And Finance Operator waits for "{order-billing-wait-time}" seconds
-#    Then Operator opens Gmail and verifies email with below details
-#      | subject | Invoicing Result                           |
-#      | body    | All Tracking IDs are successfully invoiced |
+    Then Operator verifies the invoiced_at value in the billing_qa_gl.order_payment_tags table is same as the previous value
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
+    Then Operator opens Gmail and verifies email with below details
+      | subject | Invoicing Result                           |
+      | body    | All Tracking IDs are successfully invoiced |
 
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
     Given API Shipper create multiple V4 orders using data below:
@@ -173,14 +176,14 @@ Feature: Upload Invoiced Orders
     And Operator upload a CSV file with below order ids and verify success message
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-#    And Finance Operator waits for "{order-billing-wait-time}" seconds
-#    Then Operator opens Gmail and verifies email with below details
-#      | subject            | Invoicing Result                           |
-#      | body               | (Total failed: 0, Total not yet priced: 1) |
-#      | isZipFileAvailable | true                                       |
-#    When Operator clicks on link to download on email and verifies CSV file
-#    Then Operator verifies below tracking id(s) is\are available in the CSV file
-#      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
+    Then Operator opens Gmail and verifies email with below details
+      | subject            | Invoicing Result                           |
+      | body               | (Total failed: 0, Total not yet priced: 1) |
+      | isZipFileAvailable | true                                       |
+    When Operator clicks on link to download on email and verifies CSV file
+    Then Operator verifies below tracking id(s) is\are available in the CSV file
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
 
   Scenario: Upload Invoiced Orders with invalid file type (not .csv) (uid:3ef6bcc3-2c11-477e-82ed-27c477b783e8)
     Then Operator uploads a PDF and verifies that any other file except csv is not allowed
