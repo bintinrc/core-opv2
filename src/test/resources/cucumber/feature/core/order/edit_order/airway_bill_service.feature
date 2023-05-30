@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrderDetails @AirwayBill
+@OperatorV2 @AirwayBill
 Feature: Edit Order Details - Airway bill service
 
   @LaunchBrowser @ShouldAlwaysRun
