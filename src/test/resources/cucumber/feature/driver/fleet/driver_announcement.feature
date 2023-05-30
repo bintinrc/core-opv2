@@ -25,9 +25,9 @@ Feature: Driver Announcement
     And Operator select the first row on Driver Announcement page
     Then Operator verifies announcement "<category>" contains "<keyword>"
     Examples:
-      | category | keyword |
-      | title    | Payroll |
-      | body     | Payroll |
+      | category | keyword      |
+      | title    | Announcement |
+      | body     | Announcement |
 
   Scenario: Operator Send New Normal Announcement
     Given Operator loads Operator portal home page
