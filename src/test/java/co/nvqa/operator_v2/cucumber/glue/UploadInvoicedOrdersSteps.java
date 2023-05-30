@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB;
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_BILLING_ORDER_PAYMENT_TAGS_INVOICED_AT_DB;
-//import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_BILLING_ORDER_PAYMENT_TAGS_INVOICED_AT_DB;
 
 public class UploadInvoicedOrdersSteps extends AbstractSteps {
 
