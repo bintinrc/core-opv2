@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.pricing.model.persisted_classes.billing.OrderPaymentTags;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
@@ -9,10 +11,14 @@ import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB;
+import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_BILLING_ORDER_PAYMENT_TAGS_INVOICED_AT_DB;
 
 public class UploadInvoicedOrdersSteps extends AbstractSteps {
 
@@ -131,5 +137,27 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     softAssertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
         .contains(errorMessage);
     softAssertions.assertAll();
+  }
+
+  @Then("Operator saves the invoiced_at value in the billing_qa_gl.order_payment_tags table for verifying purpose")
+  public void operatorSavesTheUpdate_atValueInTheBilling_qa_glOrder_payment_tagsTableForVerifyingPurpose() {
+    OrderPaymentTags orderPaymentTags = get(KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB);
+    if (Objects.nonNull(orderPaymentTags)) {
+      put(KEY_BILLING_ORDER_PAYMENT_TAGS_INVOICED_AT_DB, orderPaymentTags.getInvoicedAt());
+    } else {
+      throw new NvTestRuntimeException("KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB is null");
+    }
+  }
+
+  @Then("Operator verifies the invoiced_at value in the billing_qa_gl.order_payment_tags table is same as the previous value")
+  public void operatorVerifiesTheInvoiced_atValueInTheBilling_qa_glOrder_payment_tagsTableIsSameAsThePreviousValue() {
+    OrderPaymentTags orderPaymentTags = get(KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB);
+    if (Objects.nonNull(orderPaymentTags)) {
+      Assertions.assertThat(orderPaymentTags.getInvoicedAt().toString())
+          .as("invoiced_at value is the same as below")
+          .isEqualTo(get(KEY_BILLING_ORDER_PAYMENT_TAGS_INVOICED_AT_DB).toString());
+    } else {
+      throw new NvTestRuntimeException("KEY_BILLING_ORDER_PAYMENT_TAGS_DETAILS_DB is null");
+    }
   }
 }
