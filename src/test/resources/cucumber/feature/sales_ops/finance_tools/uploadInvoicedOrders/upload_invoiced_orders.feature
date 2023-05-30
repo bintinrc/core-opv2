@@ -107,7 +107,7 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking id(s) is\are available in the CSV file
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-  @nad
+
   Scenario: Upload Invoice Orders CSV - With Orders are already in invoiced_orders (has-invoiced) (uid:0736ad19-8d02-49a4-b5a1-07368a743daa)
   #pre-condition: Orders are already in invoiced_orders
     Given API Order - Shipper create multiple V4 orders using data below:
