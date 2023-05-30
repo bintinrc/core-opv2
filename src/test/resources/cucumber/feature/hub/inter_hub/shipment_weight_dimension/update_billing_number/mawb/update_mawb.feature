@@ -9,7 +9,7 @@ Feature: Update MAWB
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2110424/scenarios/6948803
   @DeleteCreatedShipments
   Scenario: Select Some SID from Sum up Report and Update MAWB
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -27,11 +27,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -45,7 +45,7 @@ Feature: Update MAWB
 
   @DeleteCreatedShipments
   Scenario: Select All SID from Sum up Report and Update MAWB - Create New MAWB Number
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -63,11 +63,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -90,7 +90,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -108,11 +108,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -135,7 +135,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -153,11 +153,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -180,7 +180,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -198,11 +198,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -225,7 +225,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -243,11 +243,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -261,7 +261,7 @@ Feature: Update MAWB
 
   @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Invalid Format
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -279,11 +279,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -297,7 +297,7 @@ Feature: Update MAWB
 
   @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Symbols/Alphabets MAWB
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -315,11 +315,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -342,7 +342,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -360,11 +360,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -378,7 +378,7 @@ Feature: Update MAWB
 
   @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Empty MAWB
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -396,11 +396,11 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Sum Up report page UI
+    Then Operator verify Shipment Weight Sum Up report page UI for shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
     And Operator select all rows from the shipment sum up report table
     When Operator click update MAWB button on Shipment Weight Sum Up page
     Then Operator verify Shipment Weight Update MAWB page UI
@@ -414,7 +414,7 @@ Feature: Update MAWB
 
   @DeleteCreatedShipments
   Scenario: Update MAWB without Download Sum Up Report - Create New MAWB Number
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -432,7 +432,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -456,7 +456,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -474,7 +474,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -498,7 +498,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -516,7 +516,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -540,7 +540,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -558,7 +558,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -582,7 +582,7 @@ Feature: Update MAWB
       | originAirportId      | {airport-id-2}                        |
       | vendorId             | {vendor-id}                           |
     Given Operator take note of the existing mawb
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM         |
@@ -600,7 +600,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" - migrated
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
