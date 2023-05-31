@@ -1,4 +1,4 @@
-@OperatorV2 @AirwayBill
+@OperatorV2 @Core @EditOrder @EditOrderDetails @AirwayBill
 Feature: Edit Order Details - Airway bill service
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -51,7 +51,6 @@ Feature: Edit Order Details - Airway bill service
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | ToName     | binti v4.1                      |
       | ToAddress  | Orchard Road central            |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

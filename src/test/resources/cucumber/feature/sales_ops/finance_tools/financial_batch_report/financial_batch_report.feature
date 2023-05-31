@@ -76,12 +76,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | -10.60                           |
+      | TotalFeesAdjustment      | -10.60                           |
+      | AmountDueToFromShipper   | 29.37                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   @DeleteCreatedShipper
@@ -163,12 +164,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - All Shippers (uid:39f855b2-3ac3-4bb3-9647-c00030c27eba)
@@ -283,12 +285,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - No Ledgers Found (uid:6a97e9f9-804b-4bc2-ad1d-0e8292d5ef76)
@@ -382,13 +385,14 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.40                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 8.27                             |
+      | totalFees                | 8.32                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
-      | AmountOwingToFromShipper | 4.40                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
+      | AmountOwingToFromShipper | 3.32                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
@@ -405,10 +409,10 @@ Feature: Financial Batch Report
       | codFee           | 0.05                                          |
       | codTax           | 0.00                                          |
       | insuredFee       | 0.10                                          |
-      | deliveryFee      | 8.50                                          |
+      | deliveryFee      | 7.50                                          |
       | rtsFee           | 0.00                                          |
-      | totalTax         | 0.69                                          |
-      | totalWithTax     | 9.39                                          |
+      | totalTax         | 0.61                                          |
+      | totalWithTax     | 8.31                                          |
       | type             | Completed                                     |
 
   @DeleteCreatedShipper
@@ -463,12 +467,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | -10.60                           |
+      | TotalFeesAdjustment      | -10.60                           |
+      | AmountDueToFromShipper   | 29.37                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -535,12 +540,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |

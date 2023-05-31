@@ -1,11 +1,11 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateSWB5
 Feature: Update SWB 5 - MY
 
-  @LaunchBrowser @ShouldAlwaysRun @henlo
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @DeleteCreatedSWBs @henlo
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"

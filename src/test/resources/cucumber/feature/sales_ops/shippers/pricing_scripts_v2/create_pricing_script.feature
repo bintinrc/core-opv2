@@ -4,7 +4,7 @@ Feature: Pricing Scripts V2
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript @HappyPath @LastModifiedDateError
+  @DeletePricingScript @HappyPath
   Scenario: Create Pricing Script, Verify and Release Script Successfully (uid:987f2b36-b724-4858-bf15-1d06473a72d9)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -24,7 +24,7 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript @LastModifiedDateError
+  @DeletePricingScript
   Scenario: Create Draft Script (uid:3dde52f0-f02b-4bc5-9a49-323b01180fa1)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -41,7 +41,7 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator clicks validate and verify warning message "The script contains legacy params.You can continue to release the script, but pricing will be affected for shippers who are attached to this script, and is using new billing weight logics.Legacy params include the followings:- shipper_provided_length- shipper_provided_width- shipper_provided_height- shipper_provided_weight- length- width- height"
 
-  @DeletePricingScript @LastModifiedDateError
+  @DeletePricingScript
   Scenario: Create Draft Script with Legacy Params
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -215,7 +215,7 @@ Feature: Pricing Scripts V2
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript @LastModifiedDateError
+  @DeletePricingScript
   Scenario: Create Pricing Script - Import from CSV File Successfully (uid:bbc7d927-da48-41a6-a5c6-77a7803e219f)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -478,12 +478,12 @@ Feature: Pricing Scripts V2
       | insuranceFee | 0            |
       | codFee       | 0            |
       | handlingFee  | 0            |
-      | rtsFee       | <rtsFee>            |
+      | rtsFee       | <rtsFee>     |
       | comments     | OK           |
     Examples:
-      | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              |rtsFee|
-      | Yes   | is RTS = yes | 17.28      | 1.28 | uid:313b70a4-3803-40cd-8872-b08da89e3281 |1     |
-      | No    | is RTS = no  | 16.2       | 1.2  | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 |0     |
+      | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              | rtsFee |
+      | Yes   | is RTS = yes | 17.28      | 1.28 | uid:313b70a4-3803-40cd-8872-b08da89e3281 | 1      |
+      | No    | is RTS = no  | 16.2       | 1.2  | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 | 0      |
 
   Scenario: Create Draft Pricing Script Failed - Not Fill Script Name and Script Description (uid:d5a25b08-13b9-442a-bd2c-ff5077e15371)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -508,6 +508,109 @@ Feature: Pricing Scripts V2
     Then Operator clicks Verify Draft
     Then Operator verify error message
       | message | Please input a Script Name under the Script Info tab |
+
+  @DeletePricingScript
+  Scenario Outline: Create and Check Script - Script has Legacy Params and Dimension Calculation - <dataset_name>
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | global = {weight_max: 20,weight_east: [25.0,25.0,25.0,25.0,68.0,84.0,99.0,115.0,146.0,161.0,176.0,207.0,223.0,238.0,253.0,269.0,284.0,300.0,315.0,330.0,346.0],weight_east_extra_perkg: 30,weight_west: [25.0,25.0,25.0,25.0,68.0,84.0,99.0,115.0,146.0,161.0,176.0,207.0,223.0,238.0,253.0,269.0,284.0,300.0,315.0,330.0,346.0],weight_west_extra_perkg: 30,lwh_max: 140,lwh_east: {"80":25.0,"90":84.0,"100":115.0,"110": 161.0,"120":223.0,"130":269.0,"140":330.0,"max": 346.0},lwh_east_extra_perkg: 30,lwh_west: {"80":25.0,"90":84.0,"100":115.0,"110": 161.0,"120":223.0,"130":269.0,"140":330.0,"max": 346.0},lwh_west_extra_perkg: 30,weight_rate: [],weight_extra: 0,lwh_rate: [],lwh_extra: 0,extra_weight_index: 0,weight_index: 0,};global.setRateCard = function (params) {if (params.to_zone == "EAST") {global.weight_rate = global.weight_east;global.weight_extra = global.weight_east_extra_perkg;global.lwh_rate = global.lwh_east;global.lwh_extra = global.lwh_east_extra_perkg} else {global.weight_rate = global.weight_west;global.weight_extra = global.weight_west_extra_perkg;global.lwh_rate = global.lwh_west;global.lwh_extra = global.lwh_west_extra_perkg}};global.setWeightIndex = function(params) {is_extra_weight_calc = false;if (params.weight > 0.5 && params.weight <= global.weight_max) {if (params.weight % 0.5 == 0 && params.weight % 1 == 0) {global.weight_index = Math.floor(params.weight / 0.5 / 2)} else {global.weight_index = Math.floor(params.weight / 0.5 / 2) + 1}} else if (params.weight > global.weight_max) {global.weight_index = global.weight_max;is_extra_weight_calc = true}extra_weight_index = 0;if (is_extra_weight_calc) {global.extra_weight_index = Math.ceil(params.weight - 20)}};function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.service_level != "NEXTDAY") {throw "Not supported service_level: " + params.service_level}if (params.service_type != "Parcel") {throw "Not supported service_type: " + params.service_type}global.setWeightIndex(params);global.setRateCard(params);price_by_weight = global.weight_rate[global.weight_index] + (global.extra_weight_index * global.weight_extra);lwh = params.length + params.width + params.height;if (lwh > global.lwh_max) {price_by_lwh = global.lwh_rate["max"] + global.lwh_extra} else if (lwh) {for (key of Object.keys(global.lwh_rate)) {if (lwh <= parseInt(key)) {price_by_lwh = global.lwh_rate[key];break;}}} else {price_by_lwh = 0};result.delivery_fee = Math.max(price_by_weight, price_by_lwh); return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    When Operator do Run Check on specific Draft Script using this data below:
+      | orderFields  | New      |
+      | serviceLevel | Next Day |
+      | serviceType  | Parcel   |
+      | length       | <length> |
+      | width        | <width>  |
+      | height       | <height> |
+      | weight       | 8.0      |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | <grandTotal>  |
+      | gst          | <gst>         |
+      | deliveryFee  | <deliveryFee> |
+      | insuranceFee | 0             |
+      | codFee       | 0             |
+      | handlingFee  | 0             |
+      | rtsFee       | 0             |
+      | comments     | OK            |
+    And Operator close page
+
+    Examples:
+      | length | width | height | grandTotal | gst   | deliveryFee | dataset_name |
+      | 50     | 50    | 50     | 406.08     | 30.08 | 376         | Send LWH     |
+      | 0      | 0     | 0      | 157.68     | 11.68 | 146         | No Send LWH  |
+
+  Scenario: Check List Of Script Parameters on Write Script Page
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    And Operator go to Write Script Page
+    Then Operator verifies presence of following parameters under "delivery_type" in Write Script page
+      | SAME_DAY |
+      | NEXT_DAY |
+      | EXPRESS  |
+      | STANDARD |
+    Then Operator verifies presence of following parameters under "timeslot_type" in Write Script page
+      | NONE      |
+      | DAY_NIGHT |
+      | TIMESLOT  |
+    Then Operator verifies presence of following parameters under "size" in Write Script page
+      | XS  |
+      | S   |
+      | M   |
+      | L   |
+      | XL  |
+      | XXL |
+    Then Operator verifies presence of following parameters under "order_type" in Write Script page
+      | NORMAL |
+      | RETURN |
+      | C2C    |
+    Then Operator verifies presence of following parameters under "service_type" in Write Script page
+      | Parcel                    |
+      | Document                  |
+      | Return                    |
+      | Marketplace               |
+      | Bulky                     |
+      | International             |
+      | Ninja Pack                |
+      | Marketplace International |
+      | Corporate                 |
+      | Corporate Return          |
+      | Corporate AWB             |
+      | Corporate Document        |
+    Then Operator verifies presence of following parameters under "service_level" in Write Script page
+      | SAMEDAY  |
+      | NEXTDAY  |
+      | EXPRESS  |
+      | STANDARD |
+    Then Operator verifies presence of following parameters under "first_mile_type" in Write Script page
+      | PICKUP       |
+      | PUDO_DROPOFF |
+      | NONE         |
+    Then Operator verifies presence of following parameters in Write Script page
+      | weight                  |
+      | from_zone               |
+      | to_zone                 |
+      | cod_value               |
+      | insured_value           |
+      | bulky_category_name     |
+      | installation_required   |
+      | flight_of_stairs        |
+      | shipper_provided_length |
+      | shipper_provided_width  |
+      | shipper_provided_height |
+      | shipper_provided_weight |
+      | length                  |
+      | width                   |
+      | height                  |
+      | from_l1                 |
+      | from_l2                 |
+      | from_l3                 |
+      | to_l1                   |
+      | to_l2                   |
+      | to_l3                   |
+      | from_metadata.l2_tier   |
+      | to_metadata.l2_tier     |
+      | is_rts                  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
