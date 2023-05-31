@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.operator_v2.model.DriverAnnouncement;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,9 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
   public DriverAnnouncementTable driverAnnouncementTable;
 
   private final String announcementSubjectXpath = "//div[@class='ant-drawer-body']/span[contains(@class,'ant-typography')]";
-  private final String announcementMessageXpath = "//div[@class='ant-drawer-body']/p";
+  private final String announcementMessageXpath = "((//div[@class='ant-drawer-body'][span[contains(@class,'ant-typography')]])/*)";
   private final String announcementDrawerCloseXpath = "//div[contains(@class,'ant-drawer-header')]/button[@class='ant-drawer-close']";
-  private final String searchInputXpath = "//span[contains(@class,'ant-input')]/input[@placeholder='Search' and @data-testid='search-bar']";
+  private final String searchInputXpath = "//input[@data-testid='search-bar']";
   private final String uploadedCsvFileBtnXpath = "//div[contains(@class,'ant-space')][*[2][a] or *[1][svg]]";
   private final String btnNewAnnouncementXpath = "//button[contains(@class,'ant-btn')][span[text() = 'New announcement']]";
   private final String newAnnouncementPopupXpath = "//div[@class='ant-modal-content']";
@@ -80,9 +81,11 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
   }
 
   public void verifyRowOnDriverAnnouncementPage(int rowNumber) {
-    pause5s();
+    driverAnnouncementTable.waitUntilTableLoaded();
     getTableRowElement(rowNumber).click();
+
     Map<String, String> rowData = this.driverAnnouncementTable.readRow(rowNumber);
+
     waitUntilVisibilityOfElementLocated(By.xpath(announcementSubjectXpath));
     boolean isSubjectMatch = getText(announcementSubjectXpath)
         .equalsIgnoreCase(rowData.get("subject"));
@@ -90,9 +93,12 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
         .as(f("[Actual: %s\nExpected: %s]", getText(announcementSubjectXpath),
             rowData.get("subject")))
         .isTrue();
+
     pause5s();
-    boolean isMessageMatch = getText(announcementMessageXpath)
-        .equalsIgnoreCase(rowData.get("message"));
+
+    boolean isMessageMatch = Lists.reverse(findElementsBy(By.xpath(announcementMessageXpath)))
+        .get(0).getText().equalsIgnoreCase(
+            rowData.get("message"));
     Assertions.assertThat(isMessageMatch)
         .as(f("[Actual: %s\nExpected: %s]", getText(announcementMessageXpath),
             rowData.get("message")))
@@ -107,26 +113,29 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
 
   public void searchDriverAnnouncement(String keyword) {
     doWithRetry(() -> {
-      driverAnnouncementTable.waitUntilTableLoaded();
-      waitUntilVisibilityOfElementLocated(By.xpath(searchInputXpath));
-      WebElement searchInput = findElementBy(By.xpath(searchInputXpath));
-      searchInput.sendKeys(keyword);
-      Assertions.assertThat(getValue(searchInputXpath))
-          .isEqualToIgnoringCase(keyword)
-          .as("Search input not match with keyword");
-    }, "Search driver announcement");
+          driverAnnouncementTable.waitUntilTableLoaded();
+          waitUntilVisibilityOfElementLocated(searchInputXpath);
+          click(searchInputXpath);
+          sendKeys(searchInputXpath, keyword);
+          Assertions.assertThat(getValue(searchInputXpath))
+              .isEqualToIgnoringCase(keyword)
+              .as("Search input isn't match with keyword");
+        }, "Search driver announcement", DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS,
+        DEFAULT_MAX_RETRY_ON_EXCEPTION);
   }
 
   public void verifyAnnouncementContains(String category, String keyword) {
     boolean isContains;
     waitUntilVisibilityOfElementLocated(By.xpath(announcementDrawerCloseXpath));
+    pause5s();
     switch (category.toLowerCase()) {
       case "title":
         isContains = getText(announcementSubjectXpath).toLowerCase()
             .contains(keyword.toLowerCase());
         break;
       case "body":
-        isContains = getText(announcementMessageXpath).toLowerCase()
+        isContains = Lists.reverse(findElementsBy(By.xpath(announcementMessageXpath))).get(0)
+            .getText().toLowerCase()
             .contains(keyword.toLowerCase());
         break;
       default:
@@ -320,6 +329,7 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
       while (!isElementVisible(tableRowXpath)) {
         pause500ms();
       }
+      pause5s();
     }
   }
 }

@@ -27,7 +27,7 @@ Feature: Driver Announcement
     Examples:
       | category | keyword      |
       | title    | Announcement |
-      | body     | Announcement |
+      | body     | Payroll      |
 
   Scenario: Operator Send New Normal Announcement
     Given Operator loads Operator portal home page
