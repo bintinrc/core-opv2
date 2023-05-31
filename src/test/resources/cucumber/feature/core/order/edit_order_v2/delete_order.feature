@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @DeleteOrder @EditOrder4
+@OperatorV2 @Core @EditOrderv2 @DeleteOrder
 Feature: Delete Order
 
   @LaunchBrowser @ShouldAlwaysRun

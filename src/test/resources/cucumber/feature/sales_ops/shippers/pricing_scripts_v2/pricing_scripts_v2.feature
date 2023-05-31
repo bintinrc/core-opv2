@@ -1,5 +1,4 @@
 @OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @BasicPricingScript
-
 Feature: Pricing Scripts V2
 
   Background: Login to Operator Portal V2
@@ -37,7 +36,7 @@ Feature: Pricing Scripts V2
     When Operator delete Draft Script
     Then Operator verify the Draft Script is deleted successfully
 
-  @DeletePricingScript @HappyPath @LastModifiedDateError
+  @DeletePricingScript @HappyPath
   Scenario: Search Active Scripts - Search by Script Name (uid:ea84db1d-94f5-4c85-800c-f8055ff394f9)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -47,7 +46,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "name" and verify search result
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Active Scripts - Search by Last Modified (uid:92c88ad5-102e-440e-a130-d52dd3e9d20f)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -58,7 +57,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "last-modified" and verify search result
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Active Scripts - Search by Last Modified By (uid:b81f4529-da10-4471-a7b6-62aa42918c44)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -68,7 +67,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "last_modified_by" and verify search result
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Active Scripts - Update script - Verify Last Modified (uid:92c88ad5-102e-440e-a130-d52dd3e9d20f)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -86,7 +85,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Active Scripts - Search by Description (uid:4019ff18-50e3-46d2-b76b-f48ddd95a4dd)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -96,7 +95,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "description" and verify search result
 
-  @DeletePricingScript @HappyPath @LastModifiedDateError
+  @DeletePricingScript @HappyPath
   Scenario: Search Active Scripts - Search by ID (uid:2f5578ff-eb9e-452c-8eb4-a4e82224a7f2)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -150,7 +149,7 @@ Feature: Pricing Scripts V2
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}" and undo the changes
     When Operator verifies Save button is inactive
 
-  @DeletePricingScript @HappyPath @FailingForLastModifiedDate
+  @DeletePricingScript @HappyPath
   Scenario: Search Draft Scripts - Search by ID (uid:61d78204-466c-44a2-8190-3d6b81c86fcd)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -159,7 +158,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "id" and verify search result in Draft Script page
 
-  @DeletePricingScript @LastModifiedDateFailure
+  @DeletePricingScript
   Scenario: Search Draft Scripts - Search by Script Name (uid:78d8c8cd-d038-40db-97c4-9e55b672d2db)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -168,7 +167,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "name" and verify search result in Draft Script page
 
-  @DeletePricingScript @LastModifiedDateFailure
+  @DeletePricingScript
   Scenario: Search Draft Scripts - Search by Last Modified (uid:01f1da21-480d-48bc-9fc8-0984f6d6b0c6)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -178,7 +177,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "last-modified" and verify search result in Draft Script page
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Draft Scripts - Search by Description (uid:66140946-96af-445c-a0be-429be84b6dc5)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -187,7 +186,7 @@ Feature: Pricing Scripts V2
     Then DB Operator gets the pricing script details
     And Operator search according to "description" and verify search result in Draft Script page
 
-  @DeletePricingScript @FailingForLastModifiedDate
+  @DeletePricingScript
   Scenario: Search Draft Scripts - Search by Last Modified By (uid:79dd6cf4-1727-44f1-ab62-961d1cb2c301)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
