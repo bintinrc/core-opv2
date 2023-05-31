@@ -178,8 +178,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     acceptAlertDialogIfAppear();
   }
 
-  public String validateDraftAndReturnWarnings(Script script) {
-    goToEditDraftScript(script);
+  public String validateDraftAndReturnWarnings(String tabName, Script script) {
+    if (!tabName.contains("active script")) {
+      goToEditDraftScript(script);
+    }
     return pricingScriptsV2CreateEditDraftPage.validateDraftAndReturnWarnings(script);
   }
 
@@ -225,7 +227,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableActiveScripts("updated_at", script.getUpdatedAt());
+          searchTableActiveScripts("updated_at_formatted", script.getUpdatedAt());
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "id":
@@ -255,7 +257,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableDraftScripts("updated_at", script.getUpdatedAt());
+          searchTableDraftScripts("updated_at_formatted", script.getUpdatedAt());
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "id":
@@ -333,7 +335,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   }
 
   public void clickUndoBtn(String shipperId) {
-  clickf("//span[contains(@title,'%s')]/span[contains(@class,'remove')]",shipperId);
+    clickf("//span[contains(@title,'%s')]/span[contains(@class,'remove')]", shipperId);
 //    undoBtn.click();
   }
 
@@ -442,6 +444,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
 
   public void searchTableDraftsByScriptName(String scriptName) {
     String xpathExpression = "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.name']";
+    waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
     sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
     sendKeys(xpathExpression, scriptName);
@@ -459,6 +462,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
 
   public void searchTableActiveScriptsByScriptName(String scriptName) {
     String xpathExpression = "//div[@aria-hidden='false' and contains(@id,'active-scripts')]//input[@data-testid='searchInput.name']";
+    waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
     sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
     sendKeys(xpathExpression, scriptName);
@@ -468,6 +472,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     String xpathExpression = f(
         "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'active-scripts')]//input[@data-testid='searchInput.%s']",
         searchBy);
+    waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
     sendKeys(xpathExpression, scriptName);
   }
@@ -476,6 +481,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     String xpathExpression = f(
         "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.%s']",
         searchBy);
+    waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
     sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
     sendKeys(xpathExpression, scriptName);
@@ -508,5 +514,26 @@ public class PricingScriptsV2Page extends SimpleReactPage {
 
   public void switchToIframe() {
     switchToFrame("//iframe[@ng-style='iframeStyleObj']");
+  }
+
+  public void goToWriteScriptPage() {
+    pause2s();
+    clickCreateDraftBtn();
+    clickTabItem("Write Script");
+  }
+
+  public void verifyPresence(String field, String value) {
+    if (value == null) {
+      Assertions.assertThat(
+              findElementByXpath(f("//span[@data-testid='scriptParameters.%s']", field)).isDisplayed())
+          .as(f("Parameter %s present", field))
+          .isTrue();
+    } else {
+      Assertions.assertThat(
+              findElementByXpath(
+                  f("//span[@data-testid='scriptParameter.%s.%s']", field, value)).isDisplayed())
+          .as(f("Parameter %s present under %s", value, field))
+          .isTrue();
+    }
   }
 }
