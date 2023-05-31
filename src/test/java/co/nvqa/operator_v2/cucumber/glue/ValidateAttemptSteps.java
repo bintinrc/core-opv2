@@ -35,9 +35,10 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page")
-  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPage() {
+  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with {string}")
+  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPageAndURLEndsWith(String url) {
     validateAttemptPage.validatePODPageHeadingText();
+    validateAttemptPage.verifyCurrentPageURL(url);
     takesScreenshot();
   }
 
