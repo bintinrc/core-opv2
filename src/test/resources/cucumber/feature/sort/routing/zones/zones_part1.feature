@@ -10,6 +10,7 @@ Feature: Zones
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "RTS" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "RTS" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
 
   @DeleteCreatedZone
   Scenario: Create Zone - Normal Type (uid:0d5e36c9-9e9c-4547-9339-04bbf3e7501c)
@@ -25,8 +26,9 @@ Feature: Zones
       | latitude    | {KEY_SORT_CREATED_ZONE.latitude}    |
       | longitude   | {KEY_SORT_CREATED_ZONE.longitude}   |
       | description | {KEY_SORT_CREATED_ZONE.description} |
-      | type        | STANDARD                       |
+      | type        | STANDARD                            |
     Then Operator verifies that the newly created "Normal" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
 
   @DeleteCreatedZone
   Scenario: Update Zone - Normal Type to RTS Type (uid:d60632a4-27d5-4f98-8d20-caf835a00474)
@@ -34,8 +36,16 @@ Feature: Zones
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "Normal" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "Normal" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
     When Operator changes the newly created Zone to be "RTS" zone
+      | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
+      | name        | {KEY_SORT_CREATED_ZONE.name}        |
+      | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
+      | latitude    | {KEY_SORT_CREATED_ZONE.latitude}    |
+      | longitude   | {KEY_SORT_CREATED_ZONE.longitude}   |
+      | description | {KEY_SORT_CREATED_ZONE.description} |
     Then Operator verifies that the newly created "RTS" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
 
   @DeleteCreatedZone
   Scenario: Update Zone -  RTS Type to Normal Type (uid:44d1e3f5-fe53-4a8d-8354-09da276b9099)
@@ -43,8 +53,16 @@ Feature: Zones
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "RTS" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "RTS" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
     When Operator changes the newly created Zone to be "Normal" zone
+      | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
+      | name        | {KEY_SORT_CREATED_ZONE.name}        |
+      | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
+      | latitude    | {KEY_SORT_CREATED_ZONE.latitude}    |
+      | longitude   | {KEY_SORT_CREATED_ZONE.longitude}   |
+      | description | {KEY_SORT_CREATED_ZONE.description} |
     Then Operator verifies that the newly created "Normal" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
 
   @DeleteCreatedZone
   Scenario: Delete Zone (uid:fa98df0c-2681-4c86-961b-de5a9ee19bdd)
@@ -54,10 +72,12 @@ Feature: Zones
       | hubId   | {hub-id}   |
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator delete the new Zone
+      | name | {KEY_SORT_CREATED_ZONE.name} |
     And Operator verifies that success react notification displayed:
       | top | Zone Deleted Successfully |
     And Operator refresh page
     Then Operator verify the new Zone is deleted successfully
+      | name | {KEY_SORT_CREATED_ZONE.name} |
 
   Scenario: Set Coordinates Polygon of RTS Zone
     Given Operator go to menu Utilities -> QRCode Printing
