@@ -7,7 +7,6 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
     When Operator loads Shipper Address Configuration page
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
     And Operator chooses start and end date on Address Creation date using the following data:
@@ -20,7 +19,6 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid formatted file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Address ID
-    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
