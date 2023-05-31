@@ -194,7 +194,7 @@ Feature: Shipper Address Configuration
 
     Examples:
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  DY01              | JKB              | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  DYO1              | JKB              | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
