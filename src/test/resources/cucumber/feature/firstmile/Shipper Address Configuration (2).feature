@@ -41,7 +41,6 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
 
-
   Scenario: Success Bulk Update Duplicate Shipper Addresses Lat Long
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -73,7 +72,6 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "1.2,50.5" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
-
 
   Scenario: Unable to Bulk Update Some Shipper Addresses Lat Long
     When Operator loads Shipper Address Configuration page
@@ -187,6 +185,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 30 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "50.5,50.5" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
