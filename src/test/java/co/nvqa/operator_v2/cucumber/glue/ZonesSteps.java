@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.commonsort.cucumber.KeysStorage;
 import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
@@ -21,7 +22,6 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.commonsort.cucumber.KeysStorage.KEY_SORT_CREATED_ZONE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_DESCRIPTION;
@@ -70,7 +70,7 @@ public class ZonesSteps extends AbstractSteps {
   @Then("Operator verify the new Zone is created successfully")
   public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
     zonesPage.inFrame(page -> {
-      Zone expected = get(KEY_CREATED_ZONE);
+      Zone expected = get(KeysStorage.KEY_SORT_CREATED_ZONE);
       zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
@@ -110,7 +110,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
-    Zone zone = get(KEY_SORT_CREATED_ZONE);
+    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
 
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");
@@ -140,7 +140,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator changes the newly created Zone to be {string} zone")
   public void operatorChangesTheNewlyCreatedZoneToBeZone(String zoneType) {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
 
     Zone zoneEdited = new Zone();
     zoneEdited.setLatitude(zone.getLatitude());
@@ -165,7 +165,7 @@ public class ZonesSteps extends AbstractSteps {
         zoneEdited.setShortName(zone.getShortName().substring(4));
       }
     });
-    put(KEY_CREATED_ZONE, zoneEdited);
+    put(KeysStorage.KEY_SORT_CREATED_ZONE, zoneEdited);
   }
 
   @Then("Operator verify the new Zone is updated successfully")
@@ -181,7 +181,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator delete the new Zone")
   public void operatorDeleteTheNewZone() {
-   Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_SORT_CREATED_ZONE);
+   Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KeysStorage.KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zone.getName());
@@ -200,7 +200,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-   Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_SORT_CREATED_ZONE);
+   Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KeysStorage.KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
@@ -210,7 +210,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
-    Zone zone = get(KEY_SORT_CREATED_ZONE);
+    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
@@ -270,7 +270,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
-    Zone zone = get(KEY_SORT_CREATED_ZONE);
+    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
           zone.getHubName());
@@ -280,12 +280,12 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("^Operator click View Selected Polygons for zone id \"([^\"]*)\"$")
   public void operatorClickViewSelectedPolygonsForZone(String zoneId) {
-    retryIfRuntimeExceptionOccurred(() -> zonesPage.inFrame(page -> {
+    doWithRetry(() -> zonesPage.inFrame(page -> {
           zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
           zonesPage.zonesTable.selectRow(1);
           zonesPage.viewSelectedPolygons.click();
         })
-        , 5);
+        , "Operator View Selected Polygons by Zone Id");
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
@@ -358,7 +358,7 @@ public class ZonesSteps extends AbstractSteps {
       page.addZoneDialog.submit.click();
       page.addZoneDialog.waitUntilInvisible();
     });
-    put(KEY_CREATED_ZONE, zone);
+    put(KeysStorage.KEY_SORT_CREATED_ZONE, zone);
   }
 
   /* ======================= Bulk Edit Zone Polygon ======================= */
@@ -461,8 +461,8 @@ public class ZonesSteps extends AbstractSteps {
     Map<String, Object> inputMapAsObject = new HashMap<>();
     inputMapAsObject.put("zones", zonesAsObject);
 
-    put(KEY_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
-    put(KEY_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
+    put(KeysStorage.KEY_SORT_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
+    put(KeysStorage.KEY_SORT_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
     put(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, names);
   }
 
