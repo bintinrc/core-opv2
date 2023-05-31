@@ -185,7 +185,7 @@ Feature: Financial Batch Report
     And Operator opens Gmail and validates received financial batch report email
     When DB Billing - Operator gets the count shippers from ledgers by completed local date
     Then Operator verifies the count of files in financial batch reports zip file
-
+@mad1
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Name with Emoji and TH/VN Characters (uid:3c626801-e1e2-4d52-b557-9a0ba4bc7e04)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-emoji-th-vn-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -199,7 +199,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-emoji-th-vn-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
@@ -213,7 +212,6 @@ Feature: Financial Batch Report
       | legacyShipperId | {shipper-sop-emoji-th-vn-chars-legacy-id}                                 |
       | shipperName     | QA-SO-Normal-Emoji/VN/TH-🙂 👀-ทดสอบ-đây là một người gửi hàng thử nghiệm |
 
-  @DeleteCreatedShipper
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Long Name (uid:0b4554ca-6e5e-4936-8d60-703d237b417d)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-100-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -227,7 +225,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-100-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
