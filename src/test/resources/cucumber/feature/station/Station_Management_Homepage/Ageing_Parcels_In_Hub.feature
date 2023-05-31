@@ -691,7 +691,6 @@ Feature: Ageing Parcels In Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1670,13 +1669,14 @@ Feature: Ageing Parcels In Hub
       | parcelLocation          | DAMAGED RACK                               |
       | liability               | Recovery                                   |
       | damageDescription       | GENERATED                                  |
-      | orderOutcomeDamaged     | NV LIABLE - FULL                           |
+      | orderOutcomeDamaged     | NV TO REPACK AND SHIP                      |
       | custZendeskId           | 1                                          |
       | shipperZendeskId        | 1                                          |
       | ticketNotes             | GENERATED                                  |
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator updates recovery ticket on Edit Order page:
-      | status | <TicketStatus> |
+      | status                  | <TicketStatus> |
+      | keepCurrentOrderOutcome | yes            |
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1906,7 +1906,9 @@ Feature: Ageing Parcels In Hub
       | ticketNotes                 | GENERATED                                  |
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator updates recovery ticket on Edit Order page:
-      | status | <TicketStatus> |
+      | status                  | <TicketStatus>              |
+      | keepCurrentOrderOutcome | NO                          |
+      | outcome                 | REPACKED/RELABELLED TO SEND |
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -2316,7 +2318,8 @@ Feature: Ageing Parcels In Hub
       | ticketNotes             | GENERATED                                  |
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator updates recovery ticket on Edit Order page:
-      | status | <TicketStatus> |
+      | status                  | <TicketStatus> |
+      | keepCurrentOrderOutcome | yes            |
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -2377,7 +2380,8 @@ Feature: Ageing Parcels In Hub
       | ticketNotes                   | GENERATED                                  |
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator updates recovery ticket on Edit Order page:
-      | status | <TicketStatus> |
+      | status                  | <TicketStatus> |
+      | keepCurrentOrderOutcome | yes            |
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
