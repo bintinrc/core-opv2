@@ -386,13 +386,13 @@ Feature: Financial Batch Report
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
       | totalCODFees             | 0.05                             |
-      | otherFees                | 8.27                             |
-      | totalFees                | 8.32                             |
+      | otherFees                | 9.35                             |
+      | totalFees                | 9.40                             |
       | CODFeesAdjustment        | 0.00                             |
       | OtherFeesAdjustment      | 0.00                             |
       | TotalFeesAdjustment      | 0.00                             |
       | AmountDueToFromShipper   | -4.95                            |
-      | AmountOwingToFromShipper | 3.32                             |
+      | AmountOwingToFromShipper | 4.40                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
