@@ -9,20 +9,23 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
+
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.devtools.v85.input.Input;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class FailedDeliveryManagementPage extends
-    SimpleReactPage<FailedDeliveryManagementPage> {
+        SimpleReactPage<FailedDeliveryManagementPage> {
 
   @FindBy(css = "[data-testid='virtual-table.stats.header']")
   public PageElement fdmHeader;
@@ -52,6 +55,9 @@ public class FailedDeliveryManagementPage extends
   public UploadCSVDialog uploadCSVDialog;
 
   public FailedDeliveryTable fdmTable;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']")
+  public EditRTSDetailsDialog rtsDialog;
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
@@ -87,6 +93,8 @@ public class FailedDeliveryManagementPage extends
     public static final String ACTION_SELECT = "Select row";
     public static final String ACTION_RESCHEDULE = "Reschedule next day";
 
+    public static final String ACTION_RTS = "RTS next day";
+
     public final String XPATH_TRACKING_ID_FILTER_INPUT = "//input[@data-testid='virtual-table.tracking_id.header.filter']";
     public final String XPATH_SHIPPER_NAME_FILTER_INPUT = "//input[@data-testid='virtual-table.shipper_name.header.filter']";
 
@@ -95,25 +103,26 @@ public class FailedDeliveryManagementPage extends
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("trackingId", "tracking_id")
-          .put("type", "type")
-          .put("shipperName", "shipper_name")
-          .put("lastAttemptTime", "lastAttemptTimeDisplay")
-          .put("failureReasonComments", "failureReasonCommentsDisplay")
-          .put("attemptCount", "attempt_count")
-          .put("invalidFailureCount", "invalidFailureCountDisplay")
-          .put("validFailureCount", "validFailureCountDisplay")
-          .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
-          .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
-          .put("priorityLevel", "priorityLevelDisplay")
-          .put("lastScannedHubName", "lastScannedHubNameDisplay")
-          .put("orderTags", "tags")
-          .build()
+              .put("trackingId", "tracking_id")
+              .put("type", "type")
+              .put("shipperName", "shipper_name")
+              .put("lastAttemptTime", "lastAttemptTimeDisplay")
+              .put("failureReasonComments", "failureReasonCommentsDisplay")
+              .put("attemptCount", "attempt_count")
+              .put("invalidFailureCount", "invalidFailureCountDisplay")
+              .put("validFailureCount", "validFailureCountDisplay")
+              .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
+              .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
+              .put("priorityLevel", "priorityLevelDisplay")
+              .put("lastScannedHubName", "lastScannedHubNameDisplay")
+              .put("orderTags", "tags")
+              .build()
       );
       setEntityClass(FailedDelivery.class);
       setActionButtonsLocators(ImmutableMap.of(
-          ACTION_SELECT, "//input[@class='ant-checkbox-input']",
-          ACTION_RESCHEDULE, "//button[contains(@data-testid,'single-reschedule-icon')]"
+              ACTION_SELECT, "//input[@class='ant-checkbox-input']",
+              ACTION_RESCHEDULE, "//button[contains(@data-testid,'single-reschedule-icon')]",
+              ACTION_RTS, "//button[contains(@data-testid,'single-rts-icon')]"
       ));
     }
 
@@ -132,13 +141,13 @@ public class FailedDeliveryManagementPage extends
     public List<String> getFilteredValue() {
       final String FILTERED_TABLE_XPATH = "//div[contains(@class ,'BaseTable__row')]//div[@class='BaseTable__row-cell']";
       return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
-          .collect(Collectors.toList());
+              .collect(Collectors.toList());
     }
 
     private void filterTableByColumn(String xPath, String columName, String value) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         findElementBy(By.xpath(f(xPath, columName))).sendKeys(
-            value);
+                value);
       }, 1000, 5);
     }
 
@@ -149,9 +158,9 @@ public class FailedDeliveryManagementPage extends
     String selectedRows = fdmTable.selectedRowCount.getText();
     char SPACE_CHAR = ' ';
     String numberOfSelectedRows = selectedRows.substring(0, selectedRows.lastIndexOf(SPACE_CHAR))
-        .trim();
+            .trim();
     Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
-        .contains(numberOfSelectedRows);
+            .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 
@@ -189,18 +198,58 @@ public class FailedDeliveryManagementPage extends
 
     public void generateRescheduleCSV(List<String> trackingIds, String rescheduleDate) {
       String csvContents = trackingIds.stream()
-          .map(trackingId -> trackingId + "," + rescheduleDate)
-          .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+              .map(trackingId -> trackingId + "," + rescheduleDate)
+              .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
 
       csvContents = "tracking_id,delivery_date" + System.lineSeparator() + csvContents;
 
       File csvFile = createFile(
-          String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()),
-          csvContents);
+              String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()),
+              csvContents);
 
       WebElement upload = getWebDriver().findElement(
-          By.xpath(XPATH_UPLOAD_CSV));
+              By.xpath(XPATH_UPLOAD_CSV));
       dragAndDrop(csvFile, upload);
+    }
+  }
+
+  public static class EditRTSDetailsDialog extends AntModal {
+    @FindBy(xpath = "//div[@class='ant-modal-title']")
+    public PageElement title;
+    @FindBy(xpath = "//input[@class='ant-select-selection-search-input']")
+    public List<PageElement> selectionInput;
+
+    @FindBy(xpath = "//div[.='Recipient Name']//input[@class='ant-input']")
+    public PageElement recipientName;
+
+    @FindBy(xpath = "//div[.='Recipient Contact']//input[@class='ant-input']")
+    public PageElement recipientContact;
+
+    @FindBy(xpath = "//div[.='Recipient Email']//input[@class='ant-input']")
+    public PageElement recipientEmail;
+
+    @FindBy(xpath = "//div[.='Shipper Instructions']//input[@class='ant-input ant-input-borderless']")
+    public PageElement shipperInstructions;
+    @FindBy(xpath = "//div[@class='ant-picker-input']/input[@placeholder='Select date']")
+    public PageElement scheduleDate;
+
+    @FindBy(xpath = "//div[.='Country']//input[@class='ant-input ant-input-borderless']")
+    public PageElement country;
+
+    @FindBy(xpath = "//div[.='City']//input[@class='ant-input ant-input-borderless']")
+    public PageElement city;
+
+    @FindBy(xpath = "//div[.='Address 1']//input[@class='ant-input ant-input-borderless']")
+    public PageElement address1;
+
+    @FindBy(xpath = "//div[.='Address 2']//input[@class='ant-input ant-input-borderless']")
+    public PageElement address2;
+
+    @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input ant-input-borderless']")
+    public PageElement postalCode;
+
+    public EditRTSDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 
