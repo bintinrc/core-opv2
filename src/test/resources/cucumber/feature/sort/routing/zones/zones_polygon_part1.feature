@@ -12,8 +12,8 @@ Feature: Zones Polygon
     Then Operator make sure zones from KML file are listed correctly
       | zones | {polygon-single-simple-zones} |
     When Operator clicks save button in zone drawing page
-    Then DB Operator verifies zones polygons are "updated"
-    And DB Operator remove polygons from zones
+    Then DB Addressing - verifies zones polygons are "updated"
+    And DB Addressing - remove polygons from zones
 
   Scenario: Bulk Edit Polygons - Multiple Zones - Simple Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
@@ -22,8 +22,8 @@ Feature: Zones Polygon
     Then Operator make sure zones from KML file are listed correctly
       | zones | {polygon-many-simple-zones} |
     And Operator clicks save button in zone drawing page
-    Then DB Operator verifies zones polygons are "updated"
-    And DB Operator remove polygons from zones
+    Then DB Addressing - verifies zones polygons are "updated"
+    And DB Addressing - remove polygons from zones
 
   Scenario: Bulk Edit Polygons - Single Zone - Multi Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
@@ -32,8 +32,8 @@ Feature: Zones Polygon
     Then Operator make sure zones from KML file are listed correctly
       | zones | {polygon-single-multi-zones} |
     And Operator clicks save button in zone drawing page
-    Then DB Operator verifies zones polygons are "updated"
-    And DB Operator remove polygons from zones
+    Then DB Addressing - verifies zones polygons are "updated"
+    And DB Addressing - remove polygons from zones
 
   Scenario: Bulk Edit Polygons - Multiple Zones - Multi Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
@@ -42,8 +42,8 @@ Feature: Zones Polygon
     Then Operator make sure zones from KML file are listed correctly
       | zones | {polygon-many-multi-zones} |
     And Operator clicks save button in zone drawing page
-    Then DB Operator verifies zones polygons are "updated"
-    And DB Operator remove polygons from zones
+    Then DB Addressing - verifies zones polygons are "updated"
+    And DB Addressing - remove polygons from zones
 
   Scenario: Bulk Edit Polygons - Multiple Zones - Mix Polygon (Simple and Multi)
     Given Operator go to menu Routing -> Last Mile and RTS Zones
@@ -52,8 +52,8 @@ Feature: Zones Polygon
     Then Operator make sure zones from KML file are listed correctly
       | zones | {polygon-many-mix-zones} |
     And Operator clicks save button in zone drawing page
-    Then DB Operator verifies zones polygons are "updated"
-    And DB Operator remove polygons from zones
+    Then DB Addressing - verifies zones polygons are "updated"
+    And DB Addressing - remove polygons from zones
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
