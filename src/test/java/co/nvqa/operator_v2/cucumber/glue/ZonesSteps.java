@@ -68,9 +68,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator verify the new Zone is created successfully")
-  public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
+  public void operatorVerifyTheNewZoneIsCreatedSuccessfully(Zone expected) {
     zonesPage.inFrame(page -> {
-      Zone expected = get(KeysStorage.KEY_SORT_CREATED_ZONE);
       zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
@@ -81,8 +80,9 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the newly created {string} zone's details are right")
-  public void operatorVerifiesThatTheNewlyCreatedZoneSDetailsAreRight(String zoneType) {
-    operatorVerifyTheNewZoneIsCreatedSuccessfully();
+  public void operatorVerifiesThatTheNewlyCreatedZoneSDetailsAreRight(String zoneType,Map<String,String>data) {
+    Zone expected =  new Zone(resolveKeyValues(data));
+    operatorVerifyTheNewZoneIsCreatedSuccessfully(expected);
     zonesPage.inFrame(page -> {
       String actualRtsValue = zonesPage.zonesTable.readEntity(1).getType();
       if (RTS.equalsIgnoreCase(zoneType)) {
@@ -109,9 +109,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @When("Operator update the new Zone")
-  public void operatorUpdateTheNewZone() {
-    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
-
+  public void operatorUpdateTheNewZone(Map <String,String> data) {
+    Zone zone =  new Zone(resolveKeyValues(data));
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");
     zoneEdited.setShortName(zone.getShortName() + "-E");
@@ -139,9 +138,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @When("Operator changes the newly created Zone to be {string} zone")
-  public void operatorChangesTheNewlyCreatedZoneToBeZone(String zoneType) {
-    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
-
+  public void operatorChangesTheNewlyCreatedZoneToBeZone(String zoneType,Map <String,String> data) {
+    Zone zone =  new Zone(resolveKeyValues(data));
     Zone zoneEdited = new Zone();
     zoneEdited.setLatitude(zone.getLatitude());
     zoneEdited.setLongitude(zone.getLongitude());
@@ -180,8 +178,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @When("Operator delete the new Zone")
-  public void operatorDeleteTheNewZone() {
-   Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KeysStorage.KEY_SORT_CREATED_ZONE);
+  public void operatorDeleteTheNewZone(Map<String,String>data) {
+   Zone zone = new Zone (resolveKeyValues(data));
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zone.getName());
@@ -199,8 +197,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @Then("^Operator verify the new Zone is deleted successfully$")
-  public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-   Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KeysStorage.KEY_SORT_CREATED_ZONE);
+  public void operatorVerifyTheNewZoneIsDeletedSuccessfully(Map<String,String>data) {
+   Zone zone = new Zone(resolveKeyValues(data));
     zonesPage.inFrame(page -> {
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
@@ -209,9 +207,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator check all filters on Zones page work fine")
-  public void operatorCheckAllFiltersOnZonesPageWork() {
-    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
-
+  public void operatorCheckAllFiltersOnZonesPageWork(Map <String, String> data) {
+  Zone zone =  new Zone(resolveKeyValues(data));
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zone.getName());
@@ -269,8 +266,8 @@ public class ZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
-  public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
-    Zone zone = get(KeysStorage.KEY_SORT_CREATED_ZONE);
+  public void operatorVerifyZoneCsvFileIsDownloadSuccessfully(Map <String,String> data) {
+    Zone zone =  new Zone(resolveKeyValues(data));
     zonesPage.inFrame(page -> {
       String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
           zone.getHubName());
