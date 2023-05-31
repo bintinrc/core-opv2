@@ -185,7 +185,7 @@ Feature: Financial Batch Report
     And Operator opens Gmail and validates received financial batch report email
     When DB Billing - Operator gets the count shippers from ledgers by completed local date
     Then Operator verifies the count of files in financial batch reports zip file
-@mad1
+
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Name with Emoji and TH/VN Characters (uid:3c626801-e1e2-4d52-b557-9a0ba4bc7e04)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-emoji-th-vn-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
