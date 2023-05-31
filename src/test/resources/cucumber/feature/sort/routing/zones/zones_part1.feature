@@ -19,12 +19,12 @@ Feature: Zones
     Then Operator verifies that success react notification displayed:
       | top | Zone created successfully |
     Then Operator verifies zone details on Zones page:
-      | shortName   | {KEY_CREATED_ZONE.shortName}   |
-      | name        | {KEY_CREATED_ZONE.name}        |
-      | hubName     | {KEY_CREATED_ZONE.hubName}     |
-      | latitude    | {KEY_CREATED_ZONE.latitude}    |
-      | longitude   | {KEY_CREATED_ZONE.longitude}   |
-      | description | {KEY_CREATED_ZONE.description} |
+      | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
+      | name        | {KEY_SORT_CREATED_ZONE.name}        |
+      | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
+      | latitude    | {KEY_SORT_CREATED_ZONE.latitude}    |
+      | longitude   | {KEY_SORT_CREATED_ZONE.longitude}   |
+      | description | {KEY_SORT_CREATED_ZONE.description} |
       | type        | STANDARD                       |
     Then Operator verifies that the newly created "Normal" zone's details are right
 
