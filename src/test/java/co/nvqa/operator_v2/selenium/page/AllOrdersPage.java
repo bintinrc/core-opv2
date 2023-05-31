@@ -1171,8 +1171,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.list.download-selected")
     public NvIconTextButton downloadSelected;
 
+    @FindBy(id = "select-printing-size")
+    public PageElement PrintingSizeBox;
+
+    @FindBy(xpath = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']")
+    public PageElement PrintSizeList;
+
+    String PRINTING_SIZE = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']//div[@class='md-text' and contains(text(),'%s')]";
+
     public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+
+    public void SelectPrintSize(String size) {
+      PrintSizeList.waitUntilVisible();
+      findElementByXpath(f(PRINTING_SIZE, size)).click();
+      PrintSizeList.waitUntilInvisible();
     }
   }
 }
