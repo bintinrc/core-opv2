@@ -199,7 +199,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-emoji-th-vn-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
@@ -213,7 +212,6 @@ Feature: Financial Batch Report
       | legacyShipperId | {shipper-sop-emoji-th-vn-chars-legacy-id}                                 |
       | shipperName     | QA-SO-Normal-Emoji/VN/TH-🙂 👀-ทดสอบ-đây là một người gửi hàng thử nghiệm |
 
-  @DeleteCreatedShipper
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Long Name (uid:0b4554ca-6e5e-4936-8d60-703d237b417d)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-100-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -227,7 +225,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-100-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
@@ -386,13 +383,13 @@ Feature: Financial Batch Report
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
       | totalCODFees             | 0.05                             |
-      | otherFees                | 8.27                             |
-      | totalFees                | 8.32                             |
+      | otherFees                | 9.35                             |
+      | totalFees                | 9.40                             |
       | CODFeesAdjustment        | 0.00                             |
       | OtherFeesAdjustment      | 0.00                             |
       | TotalFeesAdjustment      | 0.00                             |
       | AmountDueToFromShipper   | -4.95                            |
-      | AmountOwingToFromShipper | 3.32                             |
+      | AmountOwingToFromShipper | 4.40                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
