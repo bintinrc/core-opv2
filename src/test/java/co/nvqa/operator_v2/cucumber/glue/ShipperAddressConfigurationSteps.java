@@ -294,8 +294,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator clicks on the {string} button to upload CSV file")
   public void operatorClicksOnTheButtonToUploadCSVFile(String buttonText) {
-    pause3s();
-    shipperAddressConfigurationPage.clickButtonToUploadCSV(buttonText);
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickButtonToUploadCSV(buttonText);
+    };
+    doWithRetry(clickButton, "Click on Button", 5000L, 3);
     takesScreenshot();
   }
 }

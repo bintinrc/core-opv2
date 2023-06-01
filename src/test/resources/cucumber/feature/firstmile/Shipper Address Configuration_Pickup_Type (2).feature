@@ -13,7 +13,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 60 seconds
+    And Operator waits for 30 seconds
     And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator drag and drop csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx" in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid formatted file
