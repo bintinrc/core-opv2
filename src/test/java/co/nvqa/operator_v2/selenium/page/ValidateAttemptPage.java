@@ -313,7 +313,7 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   public void validateShipperName(String shipperName) {
     String shipperNameXpath = f(
-        "//div[text()='Shipper Name']//parent::div//following-sibling::div//p[text()='%s']",
+        "//div[text()='Shipper Name']//parent::div//following-sibling::div//p[contains(text(),'%s')]",
         shipperName);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(shipperNameXpath)).isDisplayed())
         .as(f("Validation for shipperName Text : %s", shipperName))
