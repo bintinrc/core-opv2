@@ -115,7 +115,6 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
 
-
   Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
