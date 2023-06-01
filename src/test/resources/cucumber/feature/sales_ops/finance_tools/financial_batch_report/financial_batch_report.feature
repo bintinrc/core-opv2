@@ -406,10 +406,10 @@ Feature: Financial Batch Report
       | codFee           | 0.05                                          |
       | codTax           | 0.00                                          |
       | insuredFee       | 0.10                                          |
-      | deliveryFee      | 7.50                                          |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
-      | totalTax         | 0.61                                          |
-      | totalWithTax     | 8.31                                          |
+      | totalTax         | 0.69                                          |
+      | totalWithTax     | 9.39                                          |
       | type             | Completed                                     |
 
   @DeleteCreatedShipper
