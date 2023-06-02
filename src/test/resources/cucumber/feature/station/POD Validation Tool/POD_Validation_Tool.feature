@@ -274,6 +274,7 @@ Feature: POD Validation
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     When Operator click "Valid" button
     When Operator click "Valid" button
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     When Operator click "Resume Validating" button
@@ -319,10 +320,11 @@ Feature: POD Validation
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
       | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
-    Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator" and URL ends with "validate-attempt?role=validator"
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on trackingIds
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator waits for 5 seconds
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     When Operator click "End Session" button
@@ -727,7 +729,6 @@ Feature: POD Validation
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": true, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
@@ -779,7 +780,7 @@ Feature: POD Validation
     When Operator filters the PODs based on below criteria
       | job              | Delivery Job                             |
       | status           | Success                                  |
-      | startDate        | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | startDate        | {date: 1 days ago, YYYY-MM-dd} 00:00:00  |
       | endDate          | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
       | hub              | <HubName>                                |
       | driverName       | <driverName>                             |
@@ -791,8 +792,8 @@ Feature: POD Validation
     Then Operator validate the error code and error message "There are no matching tasks for the given list of TIDs [TrackingIDs:[SDGSDG7676S78DG]]"
 
     Examples:
-      | HubId       | HubName       | driverName             |
-      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} |
+      | HubId       | HubName       | driverName             | driverId             |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
 
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
@@ -922,10 +923,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                        |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","cod":"100", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                                 |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                             |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","action": "SUCCESS","cod":100}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                              |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on trackingIds
@@ -1405,9 +1406,10 @@ Feature: POD Validation
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                                             |
+      | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                       |
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobType         | RESERVATION                                                                                                            |
       | jobMode         | PICK_UP                                                                                                                |
       | jobAction       | FAIL                                                                                                                   |
       | failureReasonId | 13                                                                                                                     |
