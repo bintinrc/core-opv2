@@ -31,6 +31,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     String starteDate = mapOfData.get("startDate");
     String endDate = mapOfData.get("endDate");
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.selectDateTime(starteDate, endDate);
     takesScreenshot();
   }
@@ -44,6 +45,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
 
   @When("Operator click {string} button")
   public void operatorClickButton(String buttonText) {
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.clickButton(buttonText);
   }
 
