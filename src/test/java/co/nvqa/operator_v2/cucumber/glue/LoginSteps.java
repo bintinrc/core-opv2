@@ -46,6 +46,7 @@ public class LoginSteps extends AbstractSteps {
 
     mainPage.verifyTheMainPageIsLoaded();
   }
+
   @And("Operator login Operator portal with username = {string} and password = {string}")
   public void loginToOperatorV2WithoutURLValidation(String username, String password) {
     loginPage.loadPage();
