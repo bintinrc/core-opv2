@@ -69,7 +69,7 @@ Feature: Reservation Creation
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","latitude":50.5,"longitude":50.5,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
-    And Operator waits for 5 seconds
+    And Operator waits for 10 seconds
     And API Operator update the pickup type for the shipper address
       | addressId   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |
       | requestBody | {"pickup_type": "<pickupTypeAPI>"}            |

@@ -91,7 +91,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
     String finalFilterValue = filterValue;
-    shipperAddressConfigurationPage.validateFilter(filterBy,finalFilterValue);
+    Runnable filterColumn = () -> {
+      shipperAddressConfigurationPage.validateFilter(filterBy,finalFilterValue);
+    };
+    doWithRetry(filterColumn, "Operator verifies table", 5000L, 3);
     takesScreenshot();
   }
 

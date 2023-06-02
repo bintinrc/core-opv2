@@ -57,7 +57,6 @@ Feature: Shipper Address Configuration
       | search_field | search_value                                     | column_datakey        | pickupTypeSelect | pickupTypeAPI | pickupType |
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | formatted_pickup_type | Hybrid           | HYBRID        | Hybrid     |
 
-
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type FM Dedicated
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
