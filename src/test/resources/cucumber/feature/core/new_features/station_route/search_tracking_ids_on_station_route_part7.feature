@@ -12,7 +12,7 @@ Feature: Search Tracking IDs on Station Route
       | shipmentType               | AIR_HAUL                       |
       | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-    Then Operator verify Assign drivers button is enabled
+    Then Operator verify Assign drivers button is enabled on Station Route Page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

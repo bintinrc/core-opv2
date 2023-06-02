@@ -137,7 +137,7 @@ public class StationRouteSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator verify Assign drivers button is enabled")
+  @When("Operator verify Assign drivers button is enabled on Station Route Page")
   public void assignDriversIsEnabled() {
     page.inFrame(() -> {
       Assertions.assertThat(page.assignDrivers.isEnabled())
