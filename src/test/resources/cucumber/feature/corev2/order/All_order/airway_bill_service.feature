@@ -56,6 +56,86 @@ Feature: All Order - Airway bill service
     Then Operator verifies Airway bill infor:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  Scenario: Print order airway bill - batch awb - A6
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders below by uploading CSV on All Orders page
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator print Waybill for multiple orders with size "A6" on All Orders page
+    Then Operator verifies Airway bill infor:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+
+  Scenario: Print order airway bill - batch awb - A5
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders below by uploading CSV on All Orders page
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator print Waybill for multiple orders with size "A5" on All Orders page
+    Then Operator verifies Airway bill infor:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+
+  Scenario: Print order airway bill - batch awb - A4
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders below by uploading CSV on All Orders page
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator print Waybill for multiple orders with size "A4" on All Orders page
+    Then Operator verifies Airway bill infor:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+
+  Scenario: Print order airway bill - batch awb - shipper detail
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {fully-shipper-subscription-1-client-id}                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {fully-shipper-subscription-1-client-secret}                                                                                                                                                                                                                                                                                    |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders below by uploading CSV on All Orders page
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator print Waybill for multiple orders with size "A4" on All Orders page
+    Then Operator verifies Airway bill infor:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+
+  Scenario: Print order airway bill - batch awb - Download Selected
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders below by uploading CSV on All Orders page
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator print Waybill for multiple orders with size "A4" on All Orders page
+    Then Operator verifies Airway bill infor:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
