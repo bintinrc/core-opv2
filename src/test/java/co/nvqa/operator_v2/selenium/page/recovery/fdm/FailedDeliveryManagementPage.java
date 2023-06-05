@@ -37,6 +37,7 @@ public class FailedDeliveryManagementPage extends
 
   @FindBy(css = "[data-testid='fdm.apply-action.reschedule-selected']")
   public PageElement rescheduleSelected;
+
   @FindBy(css = "[data-testid='fdm.apply-action.set-rts-to-selected']")
   public PageElement rtsSelected;
 
@@ -59,6 +60,7 @@ public class FailedDeliveryManagementPage extends
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
   public EditRTSDetailsDialog rtsDetailsDialog;
+
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public SetSelectedToRTSDialog selectedToRTSDialog;
 
