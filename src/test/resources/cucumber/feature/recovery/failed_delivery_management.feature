@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @FailedDeliveryManagementV2 @batool
+@OperatorV2 @Recovery @FailedDeliveryManagementV2 @test
 Feature: Failed Delivery Management Page - Action Feature
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -424,7 +424,275 @@ Feature: Failed Delivery Management Page - Action Feature
 #      | dnr    | NORMAL                                |
 #      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
-  Scenario Outline: Operator - RTS Failed Delivery - Single Order - on Next Day - <Dataset_Name>
+#  Scenario Outline: Operator - RTS Failed Delivery - Single Order - on Next Day - <Dataset_Name>
+#    Given API Shipper create V4 order using data below:
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+#      | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+#    And API Driver collect all his routes
+#    And API Driver get pickup/delivery waypoint of the created order
+#    And API Operator Van Inbound parcel
+#    And API Operator start the route
+#    And API Driver failed the delivery of the created parcel
+#    When Operator go to menu Shipper Support -> Failed Delivery Management
+#    And Recovery User - Wait until FDM Page loaded completely
+#    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+#    And Recovery User - RTS order on next day
+#    Then Recovery User - verifies Edit RTS Details dialog
+#      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
+#      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
+#      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
+#      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
+#      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
+#      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+#    When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
+#    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
+#    Then Recovery User - verifies that toast displayed with message below:
+#      | message     | Order RTS Success         |
+#      | description | Success 1 order(s) RTS-ed |
+#    And Operator waits for 5 seconds
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+#    Then Operator verify order events on Edit order page using data below:
+#      | name                       |
+#      | RTS                        |
+#      | UPDATE ADDRESS             |
+#      | UPDATE CONTACT INFORMATION |
+#      | UPDATE AV                  |
+#    And Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+#    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+#    And Operator verify Pickup details on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery details on Edit order page using data below:
+#      | status | PENDING |
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | FAIL |
+#
+#    Examples:
+#      | Dataset_Name | order_type |
+#      | Normal       | Parcel     |
+#      | Return       | Return     |
+#
+#  Scenario Outline: Operator - RTS Failed Delivery - Multiple Order - <Dataset_Name>
+#    Given API Shipper create multiple V4 orders using data below:
+#      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                      |
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+#      | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    Given API Operator Global Inbound multiple parcels using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add multiple parcels to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+#    And API Driver collect all his routes
+#    And API Driver get pickup/delivery waypoints of created orders
+#    And API Operator Van Inbound multiple parcels
+#    And API Operator start the route
+#    And API Driver failed the delivery of multiple parcels
+#    When Operator go to menu Shipper Support -> Failed Delivery Management
+#    And Recovery User - Wait until FDM Page loaded completely
+#    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+#    And Recovery User - selects 1 rows on Failed Delivery Management page
+#    When Recovery User - Clear the TID filter
+#    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}"
+#    And Recovery User - selects 1 rows on Failed Delivery Management page
+#    When Recovery User - Clear the TID filter
+#    When Recovery User - clicks "Show Only Selected" button on Failed Delivery Management page
+#    And  Recovery User - RTS multiple orders on next day
+#    And Recovery User - verifies Set Selected to Return to Sender dialog
+#      | trackingId                            | status             |
+#      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Pending reschedule |
+#      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Pending reschedule |
+#    When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
+#    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}" for multiple orders
+#    Then Recovery User - verifies that toast displayed with message below:
+#      | message     | Order RTS Success         |
+#      | description | Success 2 order(s) RTS-ed |
+#    And Operator waits for 5 seconds
+#    #verify first order
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+#    Then Operator verify order events on Edit order page using data below:
+#      | name                       |
+#      | RTS                        |
+#      | UPDATE ADDRESS             |
+#      | UPDATE CONTACT INFORMATION |
+#      | UPDATE AV                  |
+#    And Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+#    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+#    And Operator verify Pickup details on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery details on Edit order page using data below:
+#      | status | PENDING |
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | FAIL |
+#    #verify second order
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+#    Then Operator verify order events on Edit order page using data below:
+#      | name                       |
+#      | RTS                        |
+#      | UPDATE ADDRESS             |
+#      | UPDATE CONTACT INFORMATION |
+#      | UPDATE AV                  |
+#    And Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+#    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+#    And Operator verify Pickup details on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery details on Edit order page using data below:
+#      | status | PENDING |
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | FAIL |
+#
+#    Examples:
+#      | Dataset_Name | order_type |
+#      | Normal       | Parcel     |
+#      | Return       | Return     |
+
+#  Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Add new address - <Dataset_Name>
+#    Given API Shipper create V4 order using data below:
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+#      | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+#    And API Driver collect all his routes
+#    And API Driver get pickup/delivery waypoint of the created order
+#    And API Operator Van Inbound parcel
+#    And API Operator start the route
+#    And API Driver failed the delivery of the created parcel
+#    When Operator go to menu Shipper Support -> Failed Delivery Management
+#    And Recovery User - Wait until FDM Page loaded completely
+#    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+#    And Recovery User - RTS order on next day
+#    Then Recovery User - verifies Edit RTS Details dialog
+#      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
+#      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
+#      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
+#      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
+#      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
+#      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+#    When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
+#    And Recovery User - change order address in Edit RTS Details dialog
+#    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
+#    Then Recovery User - verifies that toast displayed with message below:
+#      | message     | Order RTS Success         |
+#      | description | Success 1 order(s) RTS-ed |
+#    And Operator waits for 5 seconds
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+#    Then Operator verify order events on Edit order page using data below:
+#      | name                       |
+#      | RTS                        |
+#      | UPDATE ADDRESS             |
+#      | UPDATE CONTACT INFORMATION |
+#      | UPDATE AV                  |
+#    And Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+#    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+#    And Operator verify Pickup details on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery details on Edit order page using data below:
+#      | status | PENDING |
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | FAIL |
+#
+#    Examples:
+#      | Dataset_Name | order_type |
+#      | Normal       | Parcel     |
+#      | Return       | Return     |
+
+#  Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Search address by Name - <Dataset_Name>
+#    Given API Shipper create V4 order using data below:
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+#      | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+#    And API Driver collect all his routes
+#    And API Driver get pickup/delivery waypoint of the created order
+#    And API Operator Van Inbound parcel
+#    And API Operator start the route
+#    And API Driver failed the delivery of the created parcel
+#    When Operator go to menu Shipper Support -> Failed Delivery Management
+#    And Recovery User - Wait until FDM Page loaded completely
+#    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+#    And Recovery User - RTS order on next day
+#    Then Recovery User - verifies Edit RTS Details dialog
+#      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
+#      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
+#      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+#      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
+#      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
+#      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
+#      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+#    When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
+#    And Recovery User - search address by name in Edit RTS Details dialog
+#    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
+#    Then Recovery User - verifies that toast displayed with message below:
+#      | message     | Order RTS Success         |
+#      | description | Success 1 order(s) RTS-ed |
+#    And Operator waits for 5 seconds
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+#    Then Operator verify order events on Edit order page using data below:
+#      | name                       |
+#      | RTS                        |
+#      | UPDATE ADDRESS             |
+#      | UPDATE CONTACT INFORMATION |
+#      | UPDATE AV                  |
+#    And Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+#    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+#    And Operator verify Pickup details on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery details on Edit order page using data below:
+#      | status | PENDING |
+#    And Operator verify Pickup transaction on Edit order page using data below:
+#      | status | SUCCESS |
+#    And Operator verify Delivery transaction on Edit order page using data below:
+#      | status | FAIL |
+#
+#    Examples:
+#      | Dataset_Name | order_type |
+#      | Normal       | Parcel     |
+#      | Return       | Return     |
+
+  Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Cancel Change Address - <Dataset_Name>
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
@@ -447,19 +715,45 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}        |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}     |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}       |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}       |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}     |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
       | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].addressAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].addressPostcode} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+    When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
+    And Recovery User - change order address in Edit RTS Details dialog
+    And Recovery User - cancel address change in Edit RTS Details dialog
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
+    Then Recovery User - verifies that toast displayed with message below:
+      | message     | Order RTS Success         |
+      | description | Success 1 order(s) RTS-ed |
+    And Operator waits for 5 seconds
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order events on Edit order page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | UPDATE AV                  |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type |
       | Normal       | Parcel     |
-#      | Return       | Return     |
+      | Return       | Return     |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

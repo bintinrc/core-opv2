@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import com.epam.ta.reportportal.ws.model.Page;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
@@ -20,7 +21,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.devtools.v85.input.Input;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -38,6 +38,8 @@ public class FailedDeliveryManagementPage extends
 
   @FindBy(css = "[data-testid='fdm.apply-action.reschedule-selected']")
   public PageElement rescheduleSelected;
+  @FindBy(css = "[data-testid='fdm.apply-action.set-rts-to-selected']")
+  public PageElement rtsSelected;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement notifMessage;
@@ -57,7 +59,9 @@ public class FailedDeliveryManagementPage extends
   public FailedDeliveryTable fdmTable;
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
-  public EditRTSDetailsDialog rtsDialog;
+  public EditRTSDetailsDialog rtsDetailsDialog;
+  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  public SetSelectedToRTSDialog selectedToRTSDialog;
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
@@ -216,8 +220,12 @@ public class FailedDeliveryManagementPage extends
   public static class EditRTSDetailsDialog extends AntModal {
     @FindBy(xpath = "//div[@class='ant-modal-title']")
     public PageElement title;
-    @FindBy(xpath = "//input[@class='ant-select-selection-search-input']")
+    @FindBy(xpath = "//div[@data-testid='single-select']")
     public List<PageElement> selectionInput;
+    @FindBy(xpath = "//span[@title='Unable to find address']")
+    public PageElement unableToFindAddress;
+    @FindBy(xpath = "//span[@title='Night Slot (6PM - 10PM)']")
+    public PageElement nightSlot;
 
     @FindBy(xpath = "//div[.='Recipient Name']//input[@class='ant-input']")
     public PageElement recipientName;
@@ -248,9 +256,71 @@ public class FailedDeliveryManagementPage extends
     @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input ant-input-borderless']")
     public PageElement postalCode;
 
+    @FindBy(xpath = "//button/span[.='Save Changes']")
+    public Button saveChanges;
+    @FindBy(xpath = "//button/span[.='Change Address']")
+    public Button changeAddress;
+    @FindBy(xpath = "//div[.='Country']//input[@class='ant-input']")
+    public PageElement newCountry;
+    @FindBy(xpath = "//div[.='City']//input[@class='ant-input']")
+    public PageElement newCity;
+    @FindBy(xpath = "//div[.='Address 1']//input[@class='ant-input']")
+    public PageElement newAddress1;
+    @FindBy(xpath = "//div[.='Address 2']//input[@class='ant-input']")
+    public PageElement newAddress2;
+    @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input']")
+    public PageElement newPostalCode;
+    @FindBy(xpath = "//button/span[.='Address Finder']")
+    public Button addressFinder;
+    @FindBy(xpath = "//div[.='Search Term']//input[@class='ant-input']")
+    public PageElement searchTerm;
+    @FindBy(xpath = "//button/span[.='Search']")
+    public Button search;
+    @FindBy(xpath = "//button/span[.='Save Location']")
+    public Button saveLocation;
+    @FindBy(xpath = "//table[@data-testid='simple-table']//td[contains(.,'SG')]")
+    public PageElement locationResult;
+    @FindBy(xpath = "//button/span[.='Cancel Address Change']")
+    public Button cancelAddressChange;
+
+
     public EditRTSDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
+    public EditRTSDetailsDialog setDate(String value) {
+      if (value != null) {
+        scheduleDate.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
+        scheduleDate.sendKeys(value + Keys.ENTER);
+      }
+      return this;
+    }
   }
 
+  public static class SetSelectedToRTSDialog extends AntModal {
+    @FindBy(xpath = "//div[@class='ant-modal-header']")
+    public PageElement dialogTitle;
+
+    @FindBy(xpath = "//table[@data-testid='simple-table']//td[starts-with(.,'NVSG')]")
+    public List<PageElement> trackingId;
+
+    @FindBy(xpath = "//table[@data-testid='simple-table']//td[contains(.,'Pending reschedule')]")
+    public PageElement status;
+    @FindBy(xpath = "//button/span[.='Set Orders to RTS']")
+    public Button setToRTS;
+    @FindBy(xpath = "//input[@placeholder='Select date']")
+    public PageElement pickDate;
+
+    public SetSelectedToRTSDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public SetSelectedToRTSDialog setDate(String value) {
+      if (value != null) {
+        pickDate.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
+        pickDate.sendKeys(value + Keys.ENTER);
+      }
+      return this;
+    }
+  }
 }
