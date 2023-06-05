@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
-import com.epam.ta.reportportal.ws.model.Page;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
@@ -220,66 +219,89 @@ public class FailedDeliveryManagementPage extends
   public static class EditRTSDetailsDialog extends AntModal {
     @FindBy(xpath = "//div[@class='ant-modal-title']")
     public PageElement title;
+
     @FindBy(xpath = "//div[@data-testid='single-select']")
     public List<PageElement> selectionInput;
+
     @FindBy(xpath = "//span[@title='Unable to find address']")
     public PageElement unableToFindAddress;
+
     @FindBy(xpath = "//span[@title='Night Slot (6PM - 10PM)']")
     public PageElement nightSlot;
+
 
     @FindBy(xpath = "//div[.='Recipient Name']//input[@class='ant-input']")
     public PageElement recipientName;
 
+
     @FindBy(xpath = "//div[.='Recipient Contact']//input[@class='ant-input']")
     public PageElement recipientContact;
+
 
     @FindBy(xpath = "//div[.='Recipient Email']//input[@class='ant-input']")
     public PageElement recipientEmail;
 
     @FindBy(xpath = "//div[.='Shipper Instructions']//input[@class='ant-input ant-input-borderless']")
     public PageElement shipperInstructions;
+
     @FindBy(xpath = "//div[@class='ant-picker-input']/input[@placeholder='Select date']")
     public PageElement scheduleDate;
 
     @FindBy(xpath = "//div[.='Country']//input[@class='ant-input ant-input-borderless']")
     public PageElement country;
 
+
     @FindBy(xpath = "//div[.='City']//input[@class='ant-input ant-input-borderless']")
     public PageElement city;
+
 
     @FindBy(xpath = "//div[.='Address 1']//input[@class='ant-input ant-input-borderless']")
     public PageElement address1;
 
+
     @FindBy(xpath = "//div[.='Address 2']//input[@class='ant-input ant-input-borderless']")
     public PageElement address2;
+
 
     @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input ant-input-borderless']")
     public PageElement postalCode;
 
+
     @FindBy(xpath = "//button/span[.='Save Changes']")
     public Button saveChanges;
+
     @FindBy(xpath = "//button/span[.='Change Address']")
     public Button changeAddress;
+
     @FindBy(xpath = "//div[.='Country']//input[@class='ant-input']")
     public PageElement newCountry;
+
     @FindBy(xpath = "//div[.='City']//input[@class='ant-input']")
     public PageElement newCity;
+
     @FindBy(xpath = "//div[.='Address 1']//input[@class='ant-input']")
     public PageElement newAddress1;
+
     @FindBy(xpath = "//div[.='Address 2']//input[@class='ant-input']")
     public PageElement newAddress2;
+
     @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input']")
     public PageElement newPostalCode;
+
     @FindBy(xpath = "//button/span[.='Address Finder']")
     public Button addressFinder;
+
     @FindBy(xpath = "//div[.='Search Term']//input[@class='ant-input']")
     public PageElement searchTerm;
+
     @FindBy(xpath = "//button/span[.='Search']")
     public Button search;
     @FindBy(xpath = "//button/span[.='Save Location']")
     public Button saveLocation;
+
     @FindBy(xpath = "//table[@data-testid='simple-table']//td[contains(.,'SG')]")
     public PageElement locationResult;
+
     @FindBy(xpath = "//button/span[.='Cancel Address Change']")
     public Button cancelAddressChange;
 
@@ -306,8 +328,10 @@ public class FailedDeliveryManagementPage extends
 
     @FindBy(xpath = "//table[@data-testid='simple-table']//td[contains(.,'Pending reschedule')]")
     public PageElement status;
+
     @FindBy(xpath = "//button/span[.='Set Orders to RTS']")
     public Button setToRTS;
+
     @FindBy(xpath = "//input[@placeholder='Select date']")
     public PageElement pickDate;
 

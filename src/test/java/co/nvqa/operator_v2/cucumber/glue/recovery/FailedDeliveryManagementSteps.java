@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
 
-import javax.validation.constraints.AssertTrue;
-
 public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   private FailedDeliveryManagementPage failedDeliveryManagementReactPage;
