@@ -230,14 +230,11 @@ public class FailedDeliveryManagementPage extends
     @FindBy(xpath = "//span[@title='Night Slot (6PM - 10PM)']")
     public PageElement nightSlot;
 
-
     @FindBy(xpath = "//div[.='Recipient Name']//input[@class='ant-input']")
     public PageElement recipientName;
 
-
     @FindBy(xpath = "//div[.='Recipient Contact']//input[@class='ant-input']")
     public PageElement recipientContact;
-
 
     @FindBy(xpath = "//div[.='Recipient Email']//input[@class='ant-input']")
     public PageElement recipientEmail;
@@ -251,22 +248,17 @@ public class FailedDeliveryManagementPage extends
     @FindBy(xpath = "//div[.='Country']//input[@class='ant-input ant-input-borderless']")
     public PageElement country;
 
-
     @FindBy(xpath = "//div[.='City']//input[@class='ant-input ant-input-borderless']")
     public PageElement city;
-
 
     @FindBy(xpath = "//div[.='Address 1']//input[@class='ant-input ant-input-borderless']")
     public PageElement address1;
 
-
     @FindBy(xpath = "//div[.='Address 2']//input[@class='ant-input ant-input-borderless']")
     public PageElement address2;
 
-
     @FindBy(xpath = "//div[.='Postal Code']//input[@class='ant-input ant-input-borderless']")
     public PageElement postalCode;
-
 
     @FindBy(xpath = "//button/span[.='Save Changes']")
     public Button saveChanges;
@@ -297,6 +289,7 @@ public class FailedDeliveryManagementPage extends
 
     @FindBy(xpath = "//button/span[.='Search']")
     public Button search;
+
     @FindBy(xpath = "//button/span[.='Save Location']")
     public Button saveLocation;
 
