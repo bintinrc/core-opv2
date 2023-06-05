@@ -159,6 +159,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//div[.='Station']//span[contains(@class,'ant-table-column-sorter-down')]")
   public PageElement stationFilterSortDown;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement toastOnMovementSchedule;
+
 
   //region Stations tab
   @FindBy(xpath = "//input[@data-testid='station-tab']/parent::span")
@@ -344,6 +347,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
         .isEqualTo(containsMessage);
     waitUntilInvisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
+  }
+
+  public void verifyDeleteScheduleMessage(String containsMessage) {
+    toastOnMovementSchedule.waitUntilVisible();
+    Assertions.assertThat(toastOnMovementSchedule.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
+    toastOnMovementSchedule.waitUntilInvisible();
   }
 
   public void verifyNotificationWithMessage(List<String> containsMessages) {
