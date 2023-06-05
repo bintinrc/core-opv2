@@ -6,7 +6,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for COD Remittance with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info (uid:8e8ecabf-9271-429c-a1ef-e6bfb5f05039)
+  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for COD Remittance with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - Check Payment Tags
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
