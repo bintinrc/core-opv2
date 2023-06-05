@@ -24,7 +24,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class FailedDeliveryManagementPage extends
-        SimpleReactPage<FailedDeliveryManagementPage> {
+    SimpleReactPage<FailedDeliveryManagementPage> {
 
   @FindBy(css = "[data-testid='virtual-table.stats.header']")
   public PageElement fdmHeader;
@@ -106,26 +106,26 @@ public class FailedDeliveryManagementPage extends
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
       setColumnLocators(ImmutableMap.<String, String>builder()
-              .put("trackingId", "tracking_id")
-              .put("type", "type")
-              .put("shipperName", "shipper_name")
-              .put("lastAttemptTime", "lastAttemptTimeDisplay")
-              .put("failureReasonComments", "failureReasonCommentsDisplay")
-              .put("attemptCount", "attempt_count")
-              .put("invalidFailureCount", "invalidFailureCountDisplay")
-              .put("validFailureCount", "validFailureCountDisplay")
-              .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
-              .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
-              .put("priorityLevel", "priorityLevelDisplay")
-              .put("lastScannedHubName", "lastScannedHubNameDisplay")
-              .put("orderTags", "tags")
-              .build()
+          .put("trackingId", "tracking_id")
+          .put("type", "type")
+          .put("shipperName", "shipper_name")
+          .put("lastAttemptTime", "lastAttemptTimeDisplay")
+          .put("failureReasonComments", "failureReasonCommentsDisplay")
+          .put("attemptCount", "attempt_count")
+          .put("invalidFailureCount", "invalidFailureCountDisplay")
+          .put("validFailureCount", "validFailureCountDisplay")
+          .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
+          .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
+          .put("priorityLevel", "priorityLevelDisplay")
+          .put("lastScannedHubName", "lastScannedHubNameDisplay")
+          .put("orderTags", "tags")
+          .build()
       );
       setEntityClass(FailedDelivery.class);
       setActionButtonsLocators(ImmutableMap.of(
-              ACTION_SELECT, "//input[@class='ant-checkbox-input']",
-              ACTION_RESCHEDULE, "//button[contains(@data-testid,'single-reschedule-icon')]",
-              ACTION_RTS, "//button[contains(@data-testid,'single-rts-icon')]"
+          ACTION_SELECT, "//input[@class='ant-checkbox-input']",
+          ACTION_RESCHEDULE, "//button[contains(@data-testid,'single-reschedule-icon')]",
+          ACTION_RTS, "//button[contains(@data-testid,'single-rts-icon')]"
       ));
     }
 
@@ -144,13 +144,13 @@ public class FailedDeliveryManagementPage extends
     public List<String> getFilteredValue() {
       final String FILTERED_TABLE_XPATH = "//div[contains(@class ,'BaseTable__row')]//div[@class='BaseTable__row-cell']";
       return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
-              .collect(Collectors.toList());
+          .collect(Collectors.toList());
     }
 
     private void filterTableByColumn(String xPath, String columName, String value) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         findElementBy(By.xpath(f(xPath, columName))).sendKeys(
-                value);
+            value);
       }, 1000, 5);
     }
 
@@ -161,9 +161,9 @@ public class FailedDeliveryManagementPage extends
     String selectedRows = fdmTable.selectedRowCount.getText();
     char SPACE_CHAR = ' ';
     String numberOfSelectedRows = selectedRows.substring(0, selectedRows.lastIndexOf(SPACE_CHAR))
-            .trim();
+        .trim();
     Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
-            .contains(numberOfSelectedRows);
+        .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 
@@ -201,22 +201,23 @@ public class FailedDeliveryManagementPage extends
 
     public void generateRescheduleCSV(List<String> trackingIds, String rescheduleDate) {
       String csvContents = trackingIds.stream()
-              .map(trackingId -> trackingId + "," + rescheduleDate)
-              .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+          .map(trackingId -> trackingId + "," + rescheduleDate)
+          .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
 
       csvContents = "tracking_id,delivery_date" + System.lineSeparator() + csvContents;
 
       File csvFile = createFile(
-              String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()),
-              csvContents);
+          String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()),
+          csvContents);
 
       WebElement upload = getWebDriver().findElement(
-              By.xpath(XPATH_UPLOAD_CSV));
+          By.xpath(XPATH_UPLOAD_CSV));
       dragAndDrop(csvFile, upload);
     }
   }
 
   public static class EditRTSDetailsDialog extends AntModal {
+
     @FindBy(xpath = "//div[@class='ant-modal-title']")
     public PageElement title;
 
@@ -320,6 +321,7 @@ public class FailedDeliveryManagementPage extends
   }
 
   public static class SetSelectedToRTSDialog extends AntModal {
+
     @FindBy(xpath = "//div[@class='ant-modal-header']")
     public PageElement dialogTitle;
 

@@ -39,13 +39,13 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
     failedDeliveryManagementReactPage.inFrame(
-            page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
+        page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")
   public void doFilterByShipperId(String shipperName) {
     failedDeliveryManagementReactPage.inFrame(
-            page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
+        page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
   }
 
   @When("Recovery User - Clear the TID filter")
@@ -64,11 +64,11 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       List<String> actual = page.fdmTable.getFilteredValue();
 
       Assertions.assertThat(actual.get(1)).as("TrackingId is Match")
-              .isEqualTo(expected.getTrackingId());
+          .isEqualTo(expected.getTrackingId());
       Assertions.assertThat(actual.get(3)).as("Shipper Name is Match")
-              .isEqualTo(expected.getShipperName());
+          .isEqualTo(expected.getShipperName());
       Assertions.assertThat(actual.get(5)).as("Failure Comments is Match")
-              .isEqualTo(expected.getFailureReasonComments());
+          .isEqualTo(expected.getFailureReasonComments());
     });
   }
 
@@ -103,7 +103,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @Then("Recovery User - verifies number of selected rows on Failed Delivery Management page")
   public void operatorVerifiesNumberOfSelectedRows() {
     failedDeliveryManagementReactPage.inFrame(() ->
-            failedDeliveryManagementReactPage.verifyBulkSelectResult()
+        failedDeliveryManagementReactPage.verifyBulkSelectResult()
     );
   }
 
@@ -112,7 +112,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(() -> {
       String selectedRows = failedDeliveryManagementReactPage.fdmTable.selectedRowCount.getText();
       Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
-              .contains(expectedRowCount);
+          .contains(expectedRowCount);
     });
   }
 
@@ -121,7 +121,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(() -> {
       for (int i = 1; i <= numberOfRows; i++) {
         failedDeliveryManagementReactPage.fdmTable.clickActionButton(i,
-                FailedDeliveryTable.ACTION_SELECT);
+            FailedDeliveryTable.ACTION_SELECT);
       }
     });
   }
@@ -139,15 +139,15 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(page -> {
       List<FailedDelivery> expectedFailedOrder = page.fdmTable.readAllEntities();
       final String fileName = page.getLatestDownloadedFilename(
-              FailedDeliveryManagementPage.FDM_CSV_FILENAME_PATTERN);
+          FailedDeliveryManagementPage.FDM_CSV_FILENAME_PATTERN);
       page.verifyFileDownloadedSuccessfully(fileName);
       final String pathName = StandardTestConstants.TEMP_DIR + fileName;
 
       List<FailedDelivery> actualFailedOrder = DataEntity
-              .fromCsvFile(FailedDelivery.class, pathName, true);
+          .fromCsvFile(FailedDelivery.class, pathName, true);
 
       Assertions.assertThat(actualFailedOrder).as("Number of records is match")
-              .hasSameSizeAs(expectedFailedOrder);
+          .hasSameSizeAs(expectedFailedOrder);
 
       for (int i = 0; i < actualFailedOrder.size(); i++) {
         expectedFailedOrder.get(i).compareWithActual(actualFailedOrder.get(i), "orderTags");
@@ -159,7 +159,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   public void verifyCsvFileDownloadedAfterReschedule() {
     failedDeliveryManagementReactPage.inFrame(page -> {
       final String fileName = page.getLatestDownloadedFilename(
-              FailedDeliveryManagementPage.RESCHEDULE_CSV_FILENAME_PATTERN);
+          FailedDeliveryManagementPage.RESCHEDULE_CSV_FILENAME_PATTERN);
       page.verifyFileDownloadedSuccessfully(fileName);
     });
   }
@@ -179,9 +179,9 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame((page) -> {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         Assertions.assertThat(page.notifMessage.getText())
-                .as(f("Notification Message contains: %s", message)).isEqualTo(message);
+            .as(f("Notification Message contains: %s", message)).isEqualTo(message);
         Assertions.assertThat(page.notifDescription.getText())
-                .as(f("Notification Description contains %s", description)).isEqualTo(description);
+            .as(f("Notification Description contains %s", description)).isEqualTo(description);
       }, 5);
     });
   }
@@ -207,12 +207,12 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     dataTable = resolveKeyValues(dataTable);
     String rescheduleDate = dataTable.get("reschedule_date");
     List<String> trackingIds = Arrays.stream(dataTable.get("tracking_ids").split(","))
-            .map(String::trim)
-            .collect(Collectors.toList());
+        .map(String::trim)
+        .collect(Collectors.toList());
 
     failedDeliveryManagementReactPage.inFrame(() -> {
       failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds,
-              rescheduleDate);
+          rescheduleDate);
       failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
     });
   }
@@ -228,15 +228,23 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   public void verifyRTSDialog(Map<String, String> dataMap) {
     Map<String, String> dataTable = resolveKeyValues(dataMap);
     failedDeliveryManagementReactPage.inFrame((page) -> {
-      Assertions.assertThat(page.rtsDetailsDialog.recipientName.getAttribute("value")).isEqualTo(dataTable.get("recipientName"));
-      Assertions.assertThat(page.rtsDetailsDialog.recipientContact.getAttribute("value")).isEqualTo(dataTable.get("recipientContact"));
-      Assertions.assertThat(page.rtsDetailsDialog.recipientEmail.getAttribute("value")).isEqualTo(dataTable.get("recipientEmail"));
-      Assertions.assertThat(page.rtsDetailsDialog.shipperInstructions.getAttribute("value")).isEqualTo(dataTable.get("shipperInstructions"));
-      Assertions.assertThat(page.rtsDetailsDialog.country.getAttribute("value")).isEqualTo(dataTable.get("country"));
+      Assertions.assertThat(page.rtsDetailsDialog.recipientName.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientName"));
+      Assertions.assertThat(page.rtsDetailsDialog.recipientContact.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientContact"));
+      Assertions.assertThat(page.rtsDetailsDialog.recipientEmail.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientEmail"));
+      Assertions.assertThat(page.rtsDetailsDialog.shipperInstructions.getAttribute("value"))
+          .isEqualTo(dataTable.get("shipperInstructions"));
+      Assertions.assertThat(page.rtsDetailsDialog.country.getAttribute("value"))
+          .isEqualTo(dataTable.get("country"));
       Assertions.assertThat(page.rtsDetailsDialog.city.getAttribute("value")).isEqualTo("-");
-      Assertions.assertThat(page.rtsDetailsDialog.address1.getAttribute("value")).isEqualTo(dataTable.get("address1"));
-      Assertions.assertThat(page.rtsDetailsDialog.address2.getAttribute("value")).isEqualTo(dataTable.get("address2"));
-      Assertions.assertThat(page.rtsDetailsDialog.postalCode.getAttribute("value")).isEqualTo(dataTable.get("postalCode"));
+      Assertions.assertThat(page.rtsDetailsDialog.address1.getAttribute("value"))
+          .isEqualTo(dataTable.get("address1"));
+      Assertions.assertThat(page.rtsDetailsDialog.address2.getAttribute("value"))
+          .isEqualTo(dataTable.get("address2"));
+      Assertions.assertThat(page.rtsDetailsDialog.postalCode.getAttribute("value"))
+          .isEqualTo(dataTable.get("postalCode"));
 
     });
   }
@@ -279,12 +287,15 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   public void verifySetSelectedRTSDialog(List<Map<String, String>> data) {
     failedDeliveryManagementReactPage.inFrame((page) -> {
       List<Map<String, String>> dataTable = resolveListOfMaps(data);
-      Assertions.assertThat(page.selectedToRTSDialog.dialogTitle.getText()).isEqualTo("Set Selected to Return to Sender");
+      Assertions.assertThat(page.selectedToRTSDialog.dialogTitle.getText())
+          .isEqualTo("Set Selected to Return to Sender");
       for (int i = 0; i < dataTable.size(); i++) {
         if (dataTable.get(i).containsKey("trackingId")) {
-          Assertions.assertThat(page.selectedToRTSDialog.trackingId.get(i).getText()).isEqualTo(dataTable.get(i).get(resolveValue("trackingId")));
+          Assertions.assertThat(page.selectedToRTSDialog.trackingId.get(i).getText())
+              .isEqualTo(dataTable.get(i).get(resolveValue("trackingId")));
           if (dataTable.get(i).containsKey("status")) {
-            Assertions.assertThat(page.selectedToRTSDialog.status.getText()).isEqualTo(dataTable.get(i).get("status"));
+            Assertions.assertThat(page.selectedToRTSDialog.status.getText())
+                .isEqualTo(dataTable.get(i).get("status"));
           }
         }
       }
