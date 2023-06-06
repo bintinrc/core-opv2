@@ -34,7 +34,7 @@ Feature: Address Datasource
       | longitude   | {longitude-1}           |
       | whitelisted | True                    |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2CommonV2
   Scenario: SG Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -44,25 +44,24 @@ Feature: Address Datasource
       | postcode    | {datasource-postcode}      |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type":"STANDARD","latitude":{latitude-1},"longitude":{longitude-1}} |
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | postcode | {datasource-postcode}     |
-      | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | postcode | {datasource-postcode}                      |
+      | zone     | {KEY_SORT_ZONE_INFO.shortName} |
+      | hub      | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | postcode | {datasource-postcode} |
+      | postcode | {datasource-postcode}  |
     Then Operator verifies new address datasource is added:
-      | postcode    | {KEY_CREATED_ADDRESSING.postcode}  |
-      | latitude    | {KEY_CREATED_ADDRESSING.latitude}  |
-      | longitude   | {KEY_CREATED_ADDRESSING.longitude} |
-      | whitelisted | True                               |
+      | postcode    | {KEY_SORT_CREATED_ADDRESS.postcode}  |
+      | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}  |
+      | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude} |
+      | whitelisted | True                                 |
 
   Scenario: SG Address Datasource - Add a Row with No Input
     Given Operator go to menu Utilities -> QRCode Printing
