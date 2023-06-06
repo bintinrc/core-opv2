@@ -542,11 +542,29 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator fill the partner filter by {string} with value {string}")
+  public void operatorFillThePartnerFilterWithValue(String element, String value) {
+    String fillInValue = resolveValue(value);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).waitUntilVisible();
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
+    });
+  }
+
   @Then("Operator fill the Dp list filter by {string}")
   public void operatorFillTheDpListFilter(String element) {
     DpDetailsResponse newlyCreatedDpDetails = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
     dpAdminReactPage.inFrame(() -> {
       String fillInValue = dpAdminReactPage.getDpElementByMap(element, newlyCreatedDpDetails);
+      dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @Then("Operator fill the Dp list filter by {string} with value {string}")
+  public void operatorFillTheDpListFilterWithValue(String element,String value) {
+    String fillInValue = resolveValue(value);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpFilter.get(element).waitUntilVisible();
       dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
     });
   }

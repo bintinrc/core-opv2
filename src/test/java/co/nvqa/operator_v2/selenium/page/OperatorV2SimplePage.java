@@ -40,6 +40,10 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
   private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/../preceding-sibling::div";
 
+  private static final String XPATH_MENUBAR = "//app-profilenav//md-menu-bar[@role='menubar']";
+  private static final String XPATH_COUNTRY_SELECTOR = "//md-select[@md-container-class='country-selector']";
+  private static final String XPATH_SELECT_COUNTRY = "//div[contains(@class,'country-selector')]//md-option//span[text()='%s']";
+
   @FindBy(css = "div.toast-error")
   public List<ToastError> toastErrors;
   @FindBy(css = "div.toast-warning")
@@ -73,6 +77,17 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   public void waitWhilePageIsLoading() {
     waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", 60);
     waitUntilPageLoaded();
+  }
+
+  public void changeToCountryButton(String country) {
+    waitUntilInvisibilityOfElementLocated(XPATH_MENUBAR, 60);
+    click(XPATH_MENUBAR);
+
+    waitUntilInvisibilityOfElementLocated(XPATH_COUNTRY_SELECTOR, 60);
+    click(XPATH_COUNTRY_SELECTOR);
+
+    waitUntilInvisibilityOfElementLocated(f(XPATH_SELECT_COUNTRY,country), 60);
+    click(f(XPATH_SELECT_COUNTRY,country));
   }
 
   public void waitWhilePageIsLoading(int timeoutInSeconds) {
