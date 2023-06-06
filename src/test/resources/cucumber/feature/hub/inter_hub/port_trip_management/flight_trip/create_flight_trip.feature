@@ -18,7 +18,7 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
@@ -26,8 +26,8 @@ Feature: Airport Trip Management - Create Flight Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
     And Create a new flight trip on Port Trip Management using below data:
-      | originFacility       | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
-      | destinationFacility  | {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} |
+      | originFacility       | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
+      | destinationFacility  | {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} (Airport) |
       | departureTime        | 12:00                                      |
       | durationhour         | 09                                         |
       | durationminutes      | 25                                         |
@@ -54,7 +54,7 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
@@ -62,8 +62,8 @@ Feature: Airport Trip Management - Create Flight Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
     And Create a new flight trip on Port Trip Management using below data:
-      | originFacility       | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
-      | destinationFacility  | {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} |
+      | originFacility       | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
+      | destinationFacility  | {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} (Airport) |
       | departureTime        | 12:00                                      |
       | durationhour         | 09                                         |
       | durationminutes      | 25                                         |
@@ -91,14 +91,14 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
       | endDate             | {date: 1 days next, yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
-    And Create a new flight trip using below data:
+    And Create a new flight trip on Port Trip Management using below data:
       | durationhour    | 00 |
       | durationminutes | 00 |
     Then Operator verifies duration time error messages on "Create Flight Trip" Port Trip Management page
@@ -115,14 +115,14 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
       | endDate             | {date: 1 days next, yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
-    Then Operator verifies past date picker "{gradle-previous-1-day-yyyy-MM-dd}" is disable on "Create Flight Trip" Port Trip Management page
+    Then Operator verifies past date picker "{date: 1 days ago, yyyy-MM-dd}" is disable on "Create Flight Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
   @DeleteCreatedPorts
@@ -136,14 +136,14 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
       | endDate             | {date: 1 days next, yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
-    And Create a new flight trip using below data:
+    And Create a new flight trip on Port Trip Management using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
     Then Operator verifies same hub error messages on "Create Flight Trip" Port Trip Management page
@@ -160,16 +160,16 @@ Feature: Airport Trip Management - Create Flight Trip
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
       | endDate             | {date: 1 days next, yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Flight Trip' button in Port Management page
-    And Create a new flight trip using below data:
+    And Create a new flight trip on Port Trip Management using below data:
       | originFacility | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
-    And Operator removes text of "Origin Airport" field on "Create Flight Trip" page
+    And Operator removes text of "Origin Airport" field on "Create Flight Trip" Port Trip Management page
     Then Operator verifies Mandatory require error message of "Origin Airport" field on "Create Flight Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
