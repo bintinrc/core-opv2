@@ -45,19 +45,18 @@ Feature: Address Datasource
       | postcode    | {postcode-3}               |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-3}  |
-      | longitude | {longitude-3} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-3}, "longitude":{longitude-3}}|
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province    | {KEY_CREATED_ADDRESSING.province}    |
-      | district    | {KEY_CREATED_ADDRESSING.district}    |
-      | subdistrict | {KEY_CREATED_ADDRESSING.subdistrict} |
-      | postcode    | {KEY_CREATED_ADDRESSING.postcode}    |
+      | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
+      | district    | {KEY_SORT_CREATED_ADDRESS.district}    |
+      | subdistrict | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | postcode    | {KEY_SORT_CREATED_ADDRESS.postcode}    |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | whitelisted | False |
@@ -101,19 +100,18 @@ Feature: Address Datasource
       | postcode    | {postcode-3}               |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-3}  |
-      | longitude | {longitude-3} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-3}, "longitude":{longitude-3}}|
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province    | {KEY_CREATED_ADDRESSING.province}    |
-      | district    | {KEY_CREATED_ADDRESSING.district}    |
-      | subdistrict | {KEY_CREATED_ADDRESSING.subdistrict} |
-      | postcode    | {KEY_CREATED_ADDRESSING.postcode}    |
+      | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
+      | district    | {KEY_SORT_CREATED_ADDRESS.district}    |
+      | subdistrict | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | postcode    | {KEY_SORT_CREATED_ADDRESS.postcode}    |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | latlong     | {latitude-4},{longitude-4} |
@@ -122,16 +120,15 @@ Feature: Address Datasource
       | subdistrict | {subdistrict-4}            |
       | postcode    | {postcode-4}               |
       | whitelisted | False                      |
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-4}  |
-      | longitude | {longitude-4} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-4}, "longitude":{longitude-4}}|
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
       | province    | {province-4}              |
       | district    | {district-4}              |
       | subdistrict | {subdistrict-4}           |
-      | zone        | {KEY_ZONE_INFO.shortName} |
+      | zone        | {KEY_SORT_ZONE_INFO.shortName} |
       | hub         | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -190,10 +187,10 @@ Feature: Address Datasource
 #    When API Operator get Addressing Zone:
 #      | latitude  | {latitude-1}  |
 #      | longitude | {longitude-1} |
-#    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+#    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
 #    Then Operator verifies the address datasource details in Row Details modal:
 #      | postcode | {datasource-postcode}     |
-#      | zone     | {KEY_ZONE_INFO.shortName} |
+#      | zone     | {KEY_SORT_ZONE_INFO.shortName} |
 #      | hub      | {KEY_HUB_INFO.shortName}  |
 #    When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
 #    And Operator verify the data source toast:
@@ -208,7 +205,7 @@ Feature: Address Datasource
 #    When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
 #    Then Operator verifies the address datasource details in Row Details modal:
 #      | postcode | {datasource-postcode-2}   |
-#      | zone     | {KEY_ZONE_INFO.shortName} |
+#      | zone     | {KEY_SORT_ZONE_INFO.shortName} |
 #      | hub      | {KEY_HUB_INFO.shortName}  |
 #    When Operator clicks on Replace Button in Row Details modal on Address Datasource page
 #    And Operator verify the data source toast:
@@ -229,16 +226,18 @@ Feature: Address Datasource
   Scenario: TH Address Datasource - View Zone and Hub match - Existing Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     When API Operator get Addressing Zone:
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator search the existing address datasource:
       | postcode | {postcode-1} |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-1}, {longitude-1} |
-      | zone    | {KEY_ZONE_INFO.shortName}   |
+      | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.name}         |
 
   @KillBrowser @ShouldAlwaysRun
