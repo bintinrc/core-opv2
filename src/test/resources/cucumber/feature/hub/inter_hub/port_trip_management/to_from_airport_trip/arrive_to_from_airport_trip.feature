@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @ArriveToFromAirportTrip @cwf
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @ArriveToFromAirportTrip
 Feature: Airport Trip Management - Arrive To From Airport Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -32,7 +32,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @run @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
