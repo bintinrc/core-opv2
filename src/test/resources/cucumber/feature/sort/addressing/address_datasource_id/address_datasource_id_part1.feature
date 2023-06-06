@@ -47,30 +47,29 @@ Feature: Address Datasource
       | kecamatan   | {kecamatan}                |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
-      | zone      | {KEY_ZONE_INFO.shortName}         |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName}         |
       | hub       | {KEY_HUB_INFO.shortName}          |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
     Then Operator verifies new address datasource is added:
-      | province  | {KEY_CREATED_ADDRESSING.province}  |
-      | kota      | {KEY_CREATED_ADDRESSING.city}      |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district}  |
-      | latitude  | {KEY_CREATED_ADDRESSING.latitude}  |
-      | longitude | {KEY_CREATED_ADDRESSING.longitude} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province}  |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}      |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district}  |
+      | latitude  | {KEY_SORT_CREATED_ADDRESS.latitude}  |
+      | longitude | {KEY_SORT_CREATED_ADDRESS.longitude} |
 
   @DeleteAddressDatasource
   Scenario: ID Address Datasource - Add a Row with Valid Input Duplicate Entry
@@ -84,15 +83,14 @@ Feature: Address Datasource
       | kecamatan   | {kecamatan}                |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
-      | zone      | {KEY_ZONE_INFO.shortName}         |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName}         |
       | hub       | {KEY_HUB_INFO.shortName}          |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -107,15 +105,14 @@ Feature: Address Datasource
       | kecamatan   | {kecamatan}                |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-2}  |
-      | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
-      | zone      | {KEY_ZONE_INFO.shortName}         |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName}         |
       | hub       | {KEY_HUB_INFO.shortName}          |
     When Operator clicks on Replace Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -126,15 +123,15 @@ Feature: Address Datasource
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
     Then Operator verifies new address datasource is added:
-      | province  | {KEY_CREATED_ADDRESSING.province}  |
-      | kota      | {KEY_CREATED_ADDRESSING.city}      |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district}  |
-      | latitude  | {KEY_CREATED_ADDRESSING.latitude}  |
-      | longitude | {KEY_CREATED_ADDRESSING.longitude} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province}  |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}      |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district}  |
+      | latitude  | {KEY_SORT_CREATED_ADDRESS.latitude}  |
+      | longitude | {KEY_SORT_CREATED_ADDRESS.longitude} |
 
   Scenario: ID Address Datasource Landing Page
     Given Operator go to menu Utilities -> QRCode Printing

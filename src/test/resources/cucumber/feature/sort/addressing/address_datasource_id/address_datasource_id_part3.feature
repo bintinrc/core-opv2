@@ -17,35 +17,34 @@ Feature: Address Datasource
       | kecamatan   | {kecamatan-3}         |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
-      | zone      | {KEY_ZONE_INFO.shortName}         |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName}         |
       | hub       | {KEY_HUB_INFO.shortName}          |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
     Then Operator verifies new address datasource is added:
-      | province    | {KEY_CREATED_ADDRESSING.province}  |
-      | kota        | {KEY_CREATED_ADDRESSING.city}      |
-      | kecamatan   | {KEY_CREATED_ADDRESSING.district}  |
-      | latitude    | {KEY_CREATED_ADDRESSING.latitude}  |
-      | longitude   | {KEY_CREATED_ADDRESSING.longitude} |
+      | province    | {KEY_SORT_CREATED_ADDRESS.province}  |
+      | kota        | {KEY_SORT_CREATED_ADDRESS.city}      |
+      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.district}  |
+      | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}  |
+      | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude} |
       | whitelisted | True                               |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-1}, {longitude-1} |
-      | zone    | {KEY_ZONE_INFO.shortName}   |
+      | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
   @DeleteAddressDatasource
@@ -60,44 +59,42 @@ Feature: Address Datasource
       | kecamatan   | {kecamatan-3}         |
       | whitelisted | True                  |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
-      | zone      | {KEY_ZONE_INFO.shortName}         |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName}         |
       | hub       | {KEY_HUB_INFO.shortName}          |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province  | {KEY_CREATED_ADDRESSING.province} |
-      | kota      | {KEY_CREATED_ADDRESSING.city}     |
-      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
+      | province  | {KEY_SORT_CREATED_ADDRESS.province} |
+      | kota      | {KEY_SORT_CREATED_ADDRESS.city}     |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.district} |
     Then Operator verifies new address datasource is added:
-      | province    | {KEY_CREATED_ADDRESSING.province}  |
-      | kota        | {KEY_CREATED_ADDRESSING.city}      |
-      | kecamatan   | {KEY_CREATED_ADDRESSING.district}  |
-      | latitude    | {KEY_CREATED_ADDRESSING.latitude}  |
-      | longitude   | {KEY_CREATED_ADDRESSING.longitude} |
+      | province    | {KEY_SORT_CREATED_ADDRESS.province}  |
+      | kota        | {KEY_SORT_CREATED_ADDRESS.city}      |
+      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.district}  |
+      | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}  |
+      | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude} |
       | whitelisted | True                               |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | latlong | {latitude-2},{longitude-2} |
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-2}  |
-      | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {{"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {province-3}         |
       | kota      | {kota-3}             |
       | kecamatan | {kecamatan-3}        |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -112,7 +109,7 @@ Feature: Address Datasource
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-2}, {longitude-2} |
-      | zone    | {KEY_ZONE_INFO.shortName}   |
+      | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
   Scenario: ID Address Datasource - Edit Row Form
@@ -126,12 +123,12 @@ Feature: Address Datasource
     When API Operator get Addressing Zone:
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Edit A Row modal:
       | province  | {province-2}              |
       | kota      | {kota-2}                  |
       | kecamatan | {kecamatan-2}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
 
   @DeleteAddressDatasource
@@ -149,12 +146,12 @@ Feature: Address Datasource
     When API Operator get Addressing Zone:
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {province-3}              |
       | kota      | {kota-3}                  |
       | kecamatan | {kecamatan-3}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -174,7 +171,7 @@ Feature: Address Datasource
       | province  | {province-4}              |
       | kota      | {kota-4}                  |
       | kecamatan | {kecamatan-4}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -236,12 +233,12 @@ Feature: Address Datasource
     When API Operator get Addressing Zone:
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {province-3}              |
       | kota      | {kota-3}                  |
       | kecamatan | {kecamatan-3}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -277,12 +274,12 @@ Feature: Address Datasource
     When API Operator get Addressing Zone:
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {province-3}              |
       | kota      | {kota-3}                  |
       | kecamatan | {kecamatan-3}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -310,7 +307,7 @@ Feature: Address Datasource
       | province  | {province-5}              |
       | kota      | {kota-5}                  |
       | kecamatan | {kecamatan-5}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Replace Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -349,12 +346,12 @@ Feature: Address Datasource
     When API Operator get Addressing Zone:
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
-    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {province-3}              |
       | kota      | {kota-3}                  |
       | kecamatan | {kecamatan-3}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -372,7 +369,7 @@ Feature: Address Datasource
       | province  | {province-3}              |
       | kota      | {kota-3}                  |
       | kecamatan | {kecamatan-3}             |
-      | zone      | {KEY_ZONE_INFO.shortName} |
+      | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
