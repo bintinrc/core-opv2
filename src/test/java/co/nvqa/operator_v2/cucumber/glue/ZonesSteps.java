@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commonsort.cucumber.KeysStorage;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
 import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
@@ -163,7 +163,7 @@ public class ZonesSteps extends AbstractSteps {
         zoneEdited.setShortName(zone.getShortName().substring(4));
       }
     });
-    put(KeysStorage.KEY_SORT_CREATED_ZONE, zoneEdited);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ZONE, zoneEdited);
   }
 
   @Then("Operator verify the new Zone is updated successfully")
@@ -355,7 +355,7 @@ public class ZonesSteps extends AbstractSteps {
       page.addZoneDialog.submit.click();
       page.addZoneDialog.waitUntilInvisible();
     });
-    put(KeysStorage.KEY_SORT_CREATED_ZONE, zone);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ZONE, zone);
   }
 
   /* ======================= Bulk Edit Zone Polygon ======================= */
@@ -458,8 +458,8 @@ public class ZonesSteps extends AbstractSteps {
     Map<String, Object> inputMapAsObject = new HashMap<>();
     inputMapAsObject.put("zones", zonesAsObject);
 
-    put(KeysStorage.KEY_SORT_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
-    put(KeysStorage.KEY_SORT_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
+    put(SortScenarioStorageKeys.KEY_SORT_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
+    put(SortScenarioStorageKeys.KEY_SORT_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
     put(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, names);
   }
 
