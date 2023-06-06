@@ -44,7 +44,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "inactive" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "inactive" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
@@ -66,7 +66,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
@@ -78,7 +78,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @exclude @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Create To/from Airport Trip with Assign Expired License Driver in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -88,7 +88,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
