@@ -41,7 +41,7 @@ public class MainSteps extends AbstractSteps {
     operatorGoToMenu(parentMenuName, childMenuName);
     takesScreenshot();
   }
-  
+
   @And("Ninja Point V3 User generate {int} random phone number")
   public void generateMultipleRandomPhoneNum(int total) {
     int limit = 0;

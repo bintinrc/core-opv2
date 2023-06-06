@@ -320,6 +320,8 @@ public class DpAdministrationSteps extends AbstractSteps {
           dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
         }
         if (dpUser.getContactNo() != null) {
+          String number = resolveValue(dpUser.getContactNo());
+          dpUser.setContactNo(number);
           dpAdminReactPage.formDpUserContact.forceClear();
           dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
         }
