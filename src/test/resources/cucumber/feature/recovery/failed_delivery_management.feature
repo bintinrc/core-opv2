@@ -13,7 +13,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -89,7 +90,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -127,7 +129,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -191,7 +194,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -267,7 +271,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -538,7 +543,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -719,7 +725,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -792,7 +799,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -865,7 +873,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -939,7 +948,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
