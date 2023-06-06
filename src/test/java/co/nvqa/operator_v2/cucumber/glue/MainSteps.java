@@ -41,13 +41,7 @@ public class MainSteps extends AbstractSteps {
     operatorGoToMenu(parentMenuName, childMenuName);
     takesScreenshot();
   }
-
-  @Given("Operator change the country into {string}")
-  public void operatorChangeCountry(String country) {
-    String countryName = resolveValue(country);
-    mainPage.changeToCountryButton(countryName);
-  }
-
+  
   @And("Ninja Point V3 User generate {int} random phone number")
   public void generateMultipleRandomPhoneNum(int total) {
     int limit = 0;
