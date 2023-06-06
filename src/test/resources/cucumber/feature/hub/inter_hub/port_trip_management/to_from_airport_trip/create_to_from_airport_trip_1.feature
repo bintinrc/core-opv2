@@ -37,7 +37,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
       | startDate | {date: 0 days next, yyyy-MM-dd} |
       | endDate   | {date: 1 days next, yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd}                       |
@@ -144,7 +144,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
@@ -166,7 +166,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
@@ -188,7 +188,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
-    And Operator verify "inactive" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
+    And Operator verify "inactive" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
       | destinationFacility | {local-hub-3-name}         |
