@@ -50,11 +50,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Origin Facility
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -73,11 +71,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Departure Date Time
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -96,11 +92,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Duration
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -119,11 +113,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -143,11 +135,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -166,11 +156,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Status
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
@@ -189,11 +177,9 @@ Feature: Airport Trip Management - Search Airport Trip 1
   @ForceCompleteCreatedMovementTrips
   Scenario: Search by Comments
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP              |
-      | originFacility      | {local-airport-1-hub-id} |
-      | destinationFacility | {local-airport-2-hub-id} |
-      | flight_no           | 12345                    |
+    When API MM - Operator creates new "Flight" Air Haul Trip with data below:
+      | requestBody | {"origin_hub_id":"{local-airport-1-hub-id}","origin_hub_system_id":"sg","destination_hub_id":"{local-airport-2-hub-id}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+      | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                   |
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator fill the departure date for Port Management
