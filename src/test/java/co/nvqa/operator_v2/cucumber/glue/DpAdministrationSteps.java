@@ -303,6 +303,26 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(key, value);
   }
 
+  @And("Operator check the email for newly created CIF user from data below:")
+  public void checkCifUserEmail(Map<String, String> dataTableAsMap) {
+    String emailBody = resolveValue(dataTableAsMap.get("email"));
+    String key = resolveValue(dataTableAsMap.get("key"));
+    String value = null;
+    String[] emailBodyCheck = emailBody.split("\\r?\\n");
+    int index = 0;
+    for (String checkKey : emailBodyCheck){
+      if (checkKey.equalsIgnoreCase(key)){
+        value = emailBodyCheck[index + 1];
+        break;
+      } else {
+        index++;
+      }
+    }
+
+    Assertions.assertThat(value).as(f("%s: %s",key,value)).isNotNull();
+
+  }
+
   @Then("Operator Fill Dp User Details below :")
   public void operatorFillDpUserDetails(DataTable dt) {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
