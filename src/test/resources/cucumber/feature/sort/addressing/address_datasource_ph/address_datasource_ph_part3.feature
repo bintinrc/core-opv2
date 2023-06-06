@@ -131,7 +131,7 @@ Feature: Address Datasource
       | longitude    | {longitude-2}    |
       | whitelisted  | True             |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - with Empty Field
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -195,7 +195,7 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - View Zone and Hub Match - New Added Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -237,7 +237,7 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - View Zone and Hub Match - Edited Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -296,7 +296,7 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - Whitelisted
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

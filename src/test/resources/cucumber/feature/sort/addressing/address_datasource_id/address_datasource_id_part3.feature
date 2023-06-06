@@ -5,7 +5,7 @@ Feature: Address Datasource
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - View Zone and Hub Match - New Added Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -47,7 +47,7 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - View Zone and Hub Match - Edited Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -131,7 +131,7 @@ Feature: Address Datasource
       | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Edit Row - L1/L2/L3
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -331,7 +331,7 @@ Feature: Address Datasource
       | longitude   | {longitude-2} |
       | whitelisted | True          |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Edit Row - Whitelisted
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

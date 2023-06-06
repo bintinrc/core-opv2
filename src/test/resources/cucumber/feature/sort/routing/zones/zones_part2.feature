@@ -5,7 +5,7 @@ Feature: Zones
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedZone
+  @DeleteCreatedZoneCommonV2
   Scenario: Operator View All Zones & Check All Zone Filters Work Fine
     Given Operator go to menu Utilities -> QRCode Printing
     And API Sort - Operator create Addressing Zone with details:
@@ -13,6 +13,7 @@ Feature: Zones
       | hubId   | {hub-id}   |
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
     Then Operator check all filters on Zones page work fine
+      | id          | {KEY_SORT_CREATED_ZONE.id}          |
       | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
       | name        | {KEY_SORT_CREATED_ZONE.name}        |
       | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
@@ -29,7 +30,7 @@ Feature: Zones
     Then Operator verify zone "{zone-name-2}" is selected on View Selected Polygons page
     And Operator verify count of selected zones is 1 on View Selected Polygons page
 
-  @DeleteCreatedZone
+  @DeleteCreatedZoneCommonV2
   Scenario: Update Existing Zone Details
     Given Operator go to menu Utilities -> QRCode Printing
     And API Sort - Operator create Addressing Zone with details:
@@ -52,7 +53,7 @@ Feature: Zones
       | description | {KEY_EDITED_ZONE.description} |
       | type        | STANDARD                      |
 
-  @DeleteCreatedZone
+  @DeleteCreatedZoneCommonV2
   Scenario: Operator Download and Verify Zone CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     And API Sort - Operator create Addressing Zone with details:
@@ -62,9 +63,9 @@ Feature: Zones
     And Operator find "{KEY_SORT_CREATED_ZONE.name}" zone on Zones page
     And Operator download Zone CSV file
     Then Operator verify Zone CSV file is downloaded successfully
-      | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
-      | name        | {KEY_SORT_CREATED_ZONE.name}        |
-      | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
+      | shortName | {KEY_SORT_CREATED_ZONE.shortName} |
+      | name      | {KEY_SORT_CREATED_ZONE.name}      |
+      | hubName   | {KEY_SORT_CREATED_ZONE.hubName}   |
 
   Scenario: Set Coordinates Polygon of Normal Zone
     Given Operator go to menu Utilities -> QRCode Printing

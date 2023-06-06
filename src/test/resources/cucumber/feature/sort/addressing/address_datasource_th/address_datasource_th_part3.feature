@@ -32,7 +32,7 @@ Feature: Address Datasource
     And Operator verify the latlong error alert:
       | latlongError | Please provide longitude |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: TH Address Datasource - Edit Row - Whitelisted
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -87,7 +87,7 @@ Feature: Address Datasource
       | postcode | EMPTY |
     And Operator verifies empty field error shows up in address datasource page
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: TH Address Datasource - Edit Row - L1/L2/L3/L4
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

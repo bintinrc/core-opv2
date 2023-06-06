@@ -35,7 +35,7 @@ Feature: Address Datasource
     Then Operator verifies Add Button is Disabled
     And Operator verifies invalid latlong message
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -71,7 +71,7 @@ Feature: Address Datasource
       | latitude  | {KEY_SORT_CREATED_ADDRESS.latitude}  |
       | longitude | {KEY_SORT_CREATED_ADDRESS.longitude} |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Add a Row with Valid Input Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

@@ -60,7 +60,7 @@ Feature: Address Datasource
       | province | {province} |
     Then Operator verifies search box not affected by the scroll
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Edit Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

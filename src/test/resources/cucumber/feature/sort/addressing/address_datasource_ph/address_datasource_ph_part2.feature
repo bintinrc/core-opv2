@@ -82,7 +82,7 @@ Feature: Address Datasource
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
       | hub          | {KEY_HUB_INFO.shortName}  |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -148,7 +148,7 @@ Feature: Address Datasource
       | longitude    | {longitude-2}  |
       | whitelisted  | True           |
 
-  @DeleteAddressDatasource
+  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - L1/L2/L3
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
