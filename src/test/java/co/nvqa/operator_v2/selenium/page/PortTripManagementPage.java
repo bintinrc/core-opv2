@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.common.mm.model.Port;
 import co.nvqa.common.mm.model.PortTrip;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -36,9 +38,11 @@ import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_ASSIGN_DRIVER;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_DISABLED_BUTTON;
+import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.COLUMN_TRIP_ID;
 
 /**
  * @author Meganathan Ramasamy
@@ -55,7 +59,6 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
-  //    private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
   private static final String XPATH_CAL_DEPARTUREDATE_TD_DISABLE = "//table[@class='ant-picker-content']//td[@title='%s' and contains(@class,'ant-picker-cell-disabled')]";
   private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
   private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
@@ -406,7 +409,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void fillOrigDestDetails(Map<String, String> mapOfData) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       facilitiesInputLoading.waitUntilInvisible(30);
       if (mapOfData.containsKey("originOrDestination")) {
         String[] values = mapOfData.get("originOrDestination").split(";");
@@ -504,16 +507,6 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("End Of Table appear in Airport trip Management page").isTrue();
   }
 
-  //
-//    public void switchToOtherWindow() {
-//        waitUntilNewWindowOrTabOpened();
-//        Set<String> windowHandles = getWebDriver().getWindowHandles();
-//
-//        for (String windowHandle : windowHandles) {
-//            getWebDriver().switchTo().window(windowHandle);
-//        }
-//    }
-//
   public HashMap filterThePortTripsTable(String filter, String invalidData) {
     HashMap<String, String> map = new HashMap<>();
     String searchData;
@@ -702,22 +695,22 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     portCodeInput.sendKeys(map.get("portCode"));
     portNameInput.sendKeys(map.get("portName"));
     portCityInput.sendKeys(map.get("city"));
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       portRegionInput.click();
       sendKeysAndEnterById("createEditPortForm_region", map.get("region"));
-    });
+    }, "Selecting region");
     portLatitudeInput.sendKeys(map.get("latitude"));
     portLongitudeInput.sendKeys(map.get("longitude"));
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       portTypeInput.click();
       sendKeysAndEnterById("createEditPortForm_port_type", map.get("portType"));
-    });
+    }, "Selecting port type");
 
     newPortSubmit.click();
   }
 
   public void verifyPortCreationSuccessMessage(String portName) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       String actMessage = getAntTopText();
       Assertions.assertThat(actMessage).as("Success message is same").isEqualTo(portName);
     }, "Verify port creation message", 500, 2);
@@ -812,7 +805,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyTheValidationErrorInPortCreation(String expError) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       Assertions.assertThat(validationAlert.getText()).as("Validation error message is same")
           .contains(expError);
       Assertions.assertThat(createOrEditPortSubmit.isEnabled())
@@ -896,7 +889,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void clickOnCancelOrDisable(String buttonName) {
-    retryIfAssertionErrorOccurred(() ->
+    doWithRetry(() ->
     {
       try {
         if (buttonName.equalsIgnoreCase("Disable")) {
@@ -1018,6 +1011,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     createToFromAirportForm_departureDate.sendKeys(departureDate);
     createToFromAirportForm_departureDate.sendKeys(Keys.ENTER);
 
+    doWithRetry(() -> {
+      Assertions.assertThat(isElementEnabled("//input[starts-with(@id, 'createToFromAirportForm_drivers')]"))
+          .as("Drivers are loaded.")
+          .isTrue();
+    }, "Wait until button is enabled...", 10000, 5);
     if (!mapOfData.get("drivers").equals("-")) {
       String[] drivers = mapOfData.get("drivers").split(";");
       int count = 0;
@@ -1148,7 +1146,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
     if (submitButton.isEnabled()) {
       submitButton.click();
-      if (isElementVisible("//div[@class='ant-message-notice']//span[2]", 2)) {
+      if (isElementVisible("//div[@class='ant-message-notice-content']//span[2]", 2)) {
         return true;
       }
     }
@@ -1175,7 +1173,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyAirportTripCreationSuccessMessage(String message) {
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       String actMessage = getAntTopText();
       Assertions.assertThat(actMessage).as("Success message is same").contains(message);
       Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed())
@@ -1194,26 +1192,26 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     return null;
   }
 
-  //
-//    public void verifyDriverNotDisplayed(String driver) {
-//        retryIfRuntimeExceptionOccurred(() -> {
-//            try {
-//                waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
-//                createToFromAirportForm_drivers.click();
-//                sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
-//                int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
-//                Assertions.assertThat(selected)
-//                        .as("Invalid driver not displayed").isZero();
-//            } catch (Throwable ex) {
-//                LOGGER.error(ex.getMessage());
-//                LOGGER.info("Searched element is not found, retrying after 2 seconds...");
-//                refreshPage();
-//                switchTo();
-//                throw new NvTestRuntimeException(ex.getCause());
-//            }
-//        }, 2);
-//    }
-//
+
+    public void verifyDriverNotDisplayed(String driver) {
+      doWithRetry(() -> {
+        try {
+          waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+          createToFromAirportForm_drivers.click();
+          sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+          int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+          Assertions.assertThat(selected)
+              .as("Invalid driver not displayed").isZero();
+        } catch (Throwable ex) {
+          LOGGER.error(ex.getMessage());
+          LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+          refreshPage();
+          switchTo();
+          throw new NvTestRuntimeException(ex.getCause());
+        }
+      }, "Selecting driver...", 20000, 10);
+    }
+
   public void verifyInvalidItem(String name, String value) {
     switch (name) {
       case "origin facility":
@@ -1499,6 +1497,17 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
   }
 
+  public void filterPortById(long tripId) {
+    doWithRetry(() -> {
+      reloadSearch.waitUntilClickable();
+      reloadSearch.click();
+      portTable.clickColumn(1, COLUMN_TRIP_ID);
+      portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripId);
+      Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+          .isFalse();
+    }, "Filter by id...", 1000, 10);
+  }
+
   public static class PortTable extends AntTableV3<PortTrip> {
 
     public static final String COLUMN_END_HUB = "destination_hub_name";
@@ -1571,7 +1580,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     portTable.filterByColumn(PortTable.COLUMN_TRIP_ID, String.valueOf(portTripId));
     waitWhileTableIsLoading();
     PortTrip actualPorttrip = portTable.readEntity(1);
-    expectedPorttrip.compareWithActual(actualPorttrip, "tripId");
+    expectedPorttrip.compareWithActual(actualPorttrip, "tripId", "drivers");
   }
 
   public void verifyDisableItemsOnEditPage(String pageName) {
@@ -1637,13 +1646,14 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
           createToFromAirportForm_comment.clearAndSendKeys(data.get("comment"));
         }
         if (!data.get("drivers").equals("-")) {
-          retryIfRuntimeExceptionOccurred(() -> {
+          doWithRetry(() -> {
             waitUntilInvisibilityOfElementLocated(
                 "//input[@id='createToFromAirportForm_drivers' and @disabled]", 30);
-            waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+            waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 30);
             String[] drivers = data.get("drivers").split(",");
             int count = 0;
             for (String driver : drivers) {
+              createToFromAirportForm_drivers.waitUntilClickable();
               createToFromAirportForm_drivers.click();
               sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
               count++;
@@ -1654,30 +1664,33 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
                     .as("Total maximum seleted drivers are 4").isEqualTo(4);
               }
             }
-          }, 5);
+          }, "Selecting drivers...", 1000, 5);
         }
         break;
 
     }
-    pause1s();
+    createToFromAirportForm_drivers.sendKeys(Keys.ESCAPE);
+    createToFromAirportForm_comment.click();
+    pause5s();
     submitButton.waitUntilClickable();
     submitButton.click();
   }
 
-  public void verifyListDriver(List<Driver> middleMileDrivers) {
-    Boolean result = true;
-    String ActualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
-    List<String> AcutalDriversUsername = Arrays.asList(ActualDrivers.split(","));
-    List<String> ExpectedDriversUsename = getListDriverUsername(middleMileDrivers);
-    for (String driver : AcutalDriversUsername) {
-      driver = driver.replace("(main)", "").trim();
-      if (!ExpectedDriversUsename.contains(driver)) {
-        result = false;
-      }
-    }
-    Assertions.assertThat(result)
-        .as("Drivers are shown on Airport Trip Management page as expected")
-        .isTrue();
+  public void verifyListDriver(List<MiddleMileDriver> middleMileDrivers) {
+    String actualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
+    middleMileDrivers.forEach(d -> {
+      Assertions.assertThat(actualDrivers)
+          .as("Driver %s is showing in %s", d.getDisplayName(), actualDrivers)
+          .contains(d.getDisplayName());
+    });
+  }
+
+  public List<String> getListOfMiddleMileDriverUsername(List<MiddleMileDriver> middleMileDrivers) {
+    List<String> ExpectedList = new ArrayList<>();
+    middleMileDrivers.forEach((e) -> {
+      ExpectedList.add(e.getDisplayName());
+    });
+    return ExpectedList;
   }
 
   public List<String> getListDriverUsername(List<Driver> middleMileDrivers) {
@@ -1852,44 +1865,6 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Expected Duration appear in Trip Cancelled page").isTrue();
   }
 
-  //    public static class AssignDriversToTripModal extends AntModal {
-//
-//        public AssignDriversToTripModal(WebDriver webDriver, WebElement webElement) {
-//            super(webDriver, webElement);
-//            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-//        }
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-col' and contains(text(),'Assign')]")
-//        public PageElement PageMessage;
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Origin Facility']/ancestor::div[contains(@class,'ant-col')]")
-//        public PageElement originFacility;
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Destination Facility']/ancestor::div[contains(@class,'ant-col')]")
-//        public PageElement destinationFacility;
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]")
-//        public PageElement expectedDepartureTime;
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
-//        public PageElement expectedDuration;
-//
-//        @FindBy(xpath = "//button[.='Add Driver']")
-//        public Button addDriver;
-//
-//        @FindBy(xpath = "//button[.='Add Driver' and @disabled]")
-//        public Button disabledAddDriver;
-//
-//        @FindBy(xpath = "//div[contains(@class, 'remove-link')]")
-//        public Button removeDriver;
-//
-//        @FindBy(xpath = "//button[.='Unassign All']")
-//        public Button unassignAllDrivers;
-//
-//        @FindBy(xpath = "//button[.='Save']")
-//        public Button saveButton;
-//    }
-//
   public void AssignDriversAndVerifyItems() {
     portTable.clickActionButton(1, ACTION_ASSIGN_DRIVER);
     assignDriversToTripModal.waitUntilVisible();
@@ -1915,6 +1890,22 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
           getWebDriver());
       sendKeysAndEnter(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i),
           middleMileDrivers.get(i).getUsername());
+    }
+    if (numberOfDrivers > maxAssignDrivers) {
+      assignDriversToTripModal.disabledAddDriver.isDisplayed();
+    }
+  }
+
+  public void selectMultipleDriversByUsernames(Map<String, String> resolvedMapOfData,
+      List<String> usernames) {
+    int numberOfDrivers = Integer.parseInt(resolvedMapOfData.get("assignDrivers"));
+    int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
+    for (int i = 0; i < maxAssignDrivers; i++) {
+      assignDriversToTripModal.addDriver.click();
+      TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i), "xpath",
+          getWebDriver());
+      sendKeysAndEnter(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i),
+          usernames.get(i));
     }
     if (numberOfDrivers > maxAssignDrivers) {
       assignDriversToTripModal.disabledAddDriver.isDisplayed();
@@ -1978,7 +1969,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         Assertions.assertThat(
                 isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Trip Password"), 5))
             .as("Trip Password appear in To From Airport Trip details page").isTrue();
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH, 5))
+        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH, 30))
             .as("Driver appear in To From Airport Trip details page").isTrue();
         Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_COMMENTS_XPATH, 5))
             .as("Comments appear in To From Airport Trip details page").isTrue();
