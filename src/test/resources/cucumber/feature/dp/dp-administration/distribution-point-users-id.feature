@@ -9,7 +9,6 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - CIF - Create DP User - Check email notifications
     Given operator marks gmail messages as read
-    Given Ninja Point V3 User generate 1 random phone number
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -21,8 +20,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo                           | emailId               |
-      | Diaz      | Ilyasa   | {KEY_LIST_OF_GENERATE_PHONE_NUM[1]} | {check-dp-user-email} |
+      | firstName | lastName | contactNo           | emailId               |
+      | Diaz      | Ilyasa   | {default-phone-num} | {check-dp-user-email} |
     Then Operator press submit user button
     And Verifies email with details:
       | credentialsUsername | {npv3-gmailclient-email}                 |
