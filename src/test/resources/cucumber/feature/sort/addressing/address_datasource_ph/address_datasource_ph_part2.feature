@@ -73,14 +73,14 @@ Feature: Address Datasource
     When Operator clicks on Edit Button on Address Datasource Page
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
-      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {created-province}              |
-      | municipality | {created-municipality}          |
-      | barangay     | {created-barangay}              |
+      | province     | {created-province}             |
+      | municipality | {created-municipality}         |
+      | barangay     | {created-barangay}             |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub          | {KEY_HUB_INFO.shortName}  |
+      | hub          | {KEY_HUB_DETAILS.shortName}    |
 
   @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - LatLong
@@ -89,20 +89,20 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province-2}                 |
-      | municipality | {municipality-2}             |
-      | barangay     | {barangay-2}                 |
+      | province     | {province-2}               |
+      | municipality | {municipality-2}           |
+      | barangay     | {barangay-2}               |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
-      | request | {{"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_SORT_CREATED_ADDRESS.province} |
       | municipality | {KEY_SORT_CREATED_ADDRESS.city}     |
       | barangay     | {KEY_SORT_CREATED_ADDRESS.district} |
-      | zone         | {KEY_SORT_ZONE_INFO.shortName}         |
-      | hub          | {KEY_HUB_INFO.shortName}          |
+      | zone         | {KEY_SORT_ZONE_INFO.shortName}      |
+      | hub          | {KEY_HUB_DETAILS.shortName}         |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -117,20 +117,20 @@ Feature: Address Datasource
       | barangay     | {KEY_SORT_CREATED_ADDRESS.district}  |
       | latitude     | {KEY_SORT_CREATED_ADDRESS.latitude}  |
       | longitude    | {KEY_SORT_CREATED_ADDRESS.longitude} |
-      | whitelisted  | True                               |
+      | whitelisted  | True                                 |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | latlong | {latitude-2},{longitude-2} |
     When API Sort - Operator get Addressing Zone with details:
-      | request | {{"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
+      | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-2}                |
-      | municipality | {municipality-2}            |
-      | barangay     | {barangay-2}                |
+      | province     | {province-2}                   |
+      | municipality | {municipality-2}               |
+      | barangay     | {barangay-2}                   |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub          | {KEY_HUB_INFO.shortName}  |
+      | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -144,9 +144,9 @@ Feature: Address Datasource
       | province     | {province-2}     |
       | municipality | {municipality-2} |
       | barangay     | {barangay-2}     |
-      | latitude     | {latitude-2}   |
-      | longitude    | {longitude-2}  |
-      | whitelisted  | True           |
+      | latitude     | {latitude-2}     |
+      | longitude    | {longitude-2}    |
+      | whitelisted  | True             |
 
   @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Edit Row - L1/L2/L3
@@ -161,14 +161,14 @@ Feature: Address Datasource
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
-      | request | {{"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
+      | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-2}              |
-      | municipality | {municipality-2}          |
-      | barangay     | {barangay-2}              |
+      | province     | {province-2}                   |
+      | municipality | {municipality-2}               |
+      | barangay     | {barangay-2}                   |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub          | {KEY_HUB_INFO.shortName}  |
+      | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -184,11 +184,11 @@ Feature: Address Datasource
       | barangay     | {barangay-4}     |
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-4}              |
-      | municipality | {municipality-4}          |
-      | barangay     | {barangay-4}              |
+      | province     | {province-4}                   |
+      | municipality | {municipality-4}               |
+      | barangay     | {barangay-4}                   |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub          | {KEY_HUB_INFO.shortName}  |
+      | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |

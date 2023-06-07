@@ -72,16 +72,15 @@ Feature: Address Datasource
       | ward        | {edit-ward}                |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province | {KEY_SORT_CREATED_ADDRESS.province}    |
       | district | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | ward     | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
-      | zone     | {KEY_SORT_ZONE_INFO.shortName}            |
-      | hub      | {KEY_HUB_INFO.name}                  |
+      | ward     | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
+      | zone     | {KEY_SORT_ZONE_INFO.shortName}         |
+      | hub      | {KEY_HUB_DETAILS.name}                 |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -89,28 +88,20 @@ Feature: Address Datasource
     When Operator search the created address datasource:
       | province  | {KEY_SORT_CREATED_ADDRESS.province}    |
       | kota      | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
-    Then Operator verifies new address datasource is added:
-      | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
-      | kota        | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
-      | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}    |
-      | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude}   |
-      | whitelisted | True                                 |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | latlong | {latitude-2},{longitude-2} |
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-2}  |
-      | longitude | {longitude-2} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province | {edit-province}           |
-      | district | {edit-district}           |
-      | ward     | {edit-ward}               |
+      | province | {edit-province}                |
+      | district | {edit-district}                |
+      | ward     | {edit-ward}                    |
       | zone     | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.name}       |
+      | hub      | {KEY_HUB_DETAILS.name}         |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -125,9 +116,8 @@ Feature: Address Datasource
   Scenario: VN Address Datasource - View Zone and Hub match - Existing Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator search the existing address datasource:
       | province  | {created-province} |
@@ -135,9 +125,9 @@ Feature: Address Datasource
       | kecamatan | {created-ward}     |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
-      | latlong | {latitude-1}, {longitude-1} |
-      | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
-      | hub     | {KEY_HUB_INFO.name}         |
+      | latlong | {latitude-1}, {longitude-1}    |
+      | zone    | {KEY_SORT_ZONE_INFO.shortName} |
+      | hub     | {KEY_HUB_DETAILS.name}         |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

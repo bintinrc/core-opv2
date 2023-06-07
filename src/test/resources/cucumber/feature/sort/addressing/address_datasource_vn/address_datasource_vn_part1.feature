@@ -47,16 +47,15 @@ Feature: Address Datasource
       | ward        | {ward}                     |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}}|
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province | {KEY_SORT_CREATED_ADDRESS.province}    |
       | district | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | ward     | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | ward     | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | zone     | {KEY_SORT_ZONE_INFO.shortName}            |
-      | hub      | {KEY_HUB_INFO.name}                  |
+      | hub      | {KEY_HUB_DETAILS.name}                  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -64,11 +63,11 @@ Feature: Address Datasource
     When Operator search the created address datasource:
       | province  | {KEY_SORT_CREATED_ADDRESS.province}    |
       | kota      | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
     Then Operator verifies new address datasource is added:
       | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
       | kota        | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}    |
       | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude}   |
       | whitelisted | True                                 |
@@ -85,16 +84,15 @@ Feature: Address Datasource
       | ward        | {ward}                     |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}}|
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province | {KEY_SORT_CREATED_ADDRESS.province}    |
       | district | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | ward     | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | ward     | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | zone     | {KEY_SORT_ZONE_INFO.shortName}            |
-      | hub      | {KEY_HUB_INFO.name}                  |
+      | hub      | {KEY_HUB_DETAILS.name}                  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -108,16 +106,15 @@ Feature: Address Datasource
       | ward        | {ward}                     |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-2}  |
-      | longitude | {longitude-2} |
+    When API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province | {KEY_SORT_CREATED_ADDRESS.province}    |
       | district | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | ward     | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | ward     | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | zone     | {KEY_SORT_ZONE_INFO.shortName}            |
-      | hub      | {KEY_HUB_INFO.name}                  |
+      | hub      | {KEY_HUB_DETAILS.name}                  |
     When Operator clicks on Replace Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Deleted |
@@ -129,11 +126,11 @@ Feature: Address Datasource
     When Operator search the created address datasource:
       | province  | {KEY_SORT_CREATED_ADDRESS.province}    |
       | kota      | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | kecamatan | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
     Then Operator verifies new address datasource is added:
       | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
       | kota        | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | kecamatan   | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}    |
       | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude}   |
       | whitelisted | True                                 |

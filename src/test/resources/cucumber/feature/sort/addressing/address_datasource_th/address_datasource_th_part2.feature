@@ -27,7 +27,7 @@ Feature: Address Datasource
       | district    | {district-2}              |
       | subdistrict | {subdistrict-2}           |
       | zone        | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub         | {KEY_HUB_INFO.name}       |
+      | hub         | {KEY_HUB_DETAILS.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -40,7 +40,7 @@ Feature: Address Datasource
     Then Operator verifies new address datasource is added:
       | province    | {KEY_SORT_CREATED_ADDRESS.province}    |
       | district    | {KEY_SORT_CREATED_ADDRESS.district}    |
-      | subdistrict | {KEY_SORT_CREATED_ADDRESS.subdistrict} |
+      | subdistrict | {KEY_SORT_CREATED_ADDRESS.subDistrict} |
       | postcode    | {KEY_SORT_CREATED_ADDRESS.postcode}    |
       | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}    |
       | longitude   | {KEY_SORT_CREATED_ADDRESS.longitude}   |
@@ -176,7 +176,7 @@ Feature: Address Datasource
       | subdistrict | {subdistrict-2}           |
       | postcode    | {postcode-2}              |
       | zone        | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub         | {KEY_HUB_INFO.name}       |
+      | hub         | {KEY_HUB_DETAILS.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |

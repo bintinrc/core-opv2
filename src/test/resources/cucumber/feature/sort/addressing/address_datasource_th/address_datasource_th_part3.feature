@@ -129,7 +129,7 @@ Feature: Address Datasource
       | district    | {district-4}              |
       | subdistrict | {subdistrict-4}           |
       | zone        | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub         | {KEY_HUB_INFO.name}       |
+      | hub         | {KEY_HUB_DETAILS.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -191,7 +191,7 @@ Feature: Address Datasource
 #    Then Operator verifies the address datasource details in Row Details modal:
 #      | postcode | {datasource-postcode}     |
 #      | zone     | {KEY_SORT_ZONE_INFO.shortName} |
-#      | hub      | {KEY_HUB_INFO.shortName}  |
+#      | hub      | {KEY_HUB_DETAILS.shortName}  |
 #    When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
 #    And Operator verify the data source toast:
 #      | top  | Datasource Updated |
@@ -206,7 +206,7 @@ Feature: Address Datasource
 #    Then Operator verifies the address datasource details in Row Details modal:
 #      | postcode | {datasource-postcode-2}   |
 #      | zone     | {KEY_SORT_ZONE_INFO.shortName} |
-#      | hub      | {KEY_HUB_INFO.shortName}  |
+#      | hub      | {KEY_HUB_DETAILS.shortName}  |
 #    When Operator clicks on Replace Button in Row Details modal on Address Datasource page
 #    And Operator verify the data source toast:
 #      | top  | Datasource Deleted |
@@ -228,9 +228,6 @@ Feature: Address Datasource
     Given Operator go to menu Addressing -> Address Datasource
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
-    When API Operator get Addressing Zone:
-      | latitude  | {latitude-1}  |
-      | longitude | {longitude-1} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator search the existing address datasource:
       | postcode | {postcode-1} |
@@ -238,7 +235,7 @@ Feature: Address Datasource
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-1}, {longitude-1} |
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
-      | hub     | {KEY_HUB_INFO.name}         |
+      | hub     | {KEY_HUB_DETAILS.name}         |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
