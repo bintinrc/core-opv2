@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
 import co.nvqa.commonsort.model.addressing.Address;
-import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressDatasourcePage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
@@ -253,7 +252,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     Address address = new Address();
     address.setId(addressDatasourcePage.createdRawId.getText());
-    put(KEY_CREATED_ADDRESS, address);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESS, address);
 
     if (StringUtils.isNotBlank(data.get(KEY_PROVINCE))) {
       Assertions.assertThat(addressDatasourcePage.createdProvince.getText())
@@ -456,7 +455,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
-    Addressing addressing = new Addressing();
+    Address addressing = new Address();
 
     if (StringUtils.isNotBlank(latlong)) {
       Double latitude = TestUtils.generateLatitude();
