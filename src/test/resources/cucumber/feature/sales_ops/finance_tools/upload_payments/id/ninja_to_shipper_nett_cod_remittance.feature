@@ -198,7 +198,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | logs            | -80.79,-30.29 |
     Examples:
       | source   | account_id                                           | amount | type | event               | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 50.50  | Out  | Nett COD Remittance | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 50.5   | Out  | Nett COD Remittance | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with bigger amount of Nett of COD Amount and "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - ID
@@ -239,7 +239,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | system_id         | {KEY_COUNTRY}                                                                              |
       | shipper_id        | {KEY_SHIPPER_ID}                                                                           |
       | parent_shipper_id | null                                                                                       |
-      | amount            | <amount>                                                                                   |
+      | amount            | <amount>.00                                                                                |
       | type              | Credit                                                                                     |
       | subtype           | Full                                                                                       |
       | payment_method    | <payment_method>                                                                           |
@@ -252,7 +252,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
       | origin_balance | -80.79                 |
-      | total_remitted | -<amount>              |
+      | total_remitted | -<amount>.00           |
       | balance        | 19.21                  |
       | status         | In Progress            |
       | status_logs    | Open,Ready,In Progress |
