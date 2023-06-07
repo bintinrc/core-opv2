@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @FeatureFlagOn @DP
+@OperatorV2Id @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @FeatureFlagOn @DP
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
