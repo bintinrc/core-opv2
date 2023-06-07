@@ -47,7 +47,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable selectStatus = () -> {
       shipperAddressConfigurationPage.selectAddressStatus(option);
     };
-    doWithRetry(selectStatus, "Operator select Address Status", 5000L, 3);
+    doWithRetry(selectStatus, "Operator select Address Status");
     takesScreenshot();
   }
 
@@ -62,7 +62,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
           shipperAddressConfigurationPage.selectDateRange(startDate,
               endDate);
     };
-    doWithRetry(selectDates, "Operator chooses start and end date", 5000L, 3);
+    doWithRetry(selectDates, "Operator chooses start and end date");
     takesScreenshot();
   }
 
@@ -83,7 +83,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable filterColumn = () -> {
       shipperAddressConfigurationPage.filterBy(filterBy, finalFilterValue);
     };
-    doWithRetry(filterColumn, "Operator filter column", 5000L, 3);
+    doWithRetry(filterColumn, "Operator filter column");
     takesScreenshot();
   }
 
@@ -91,10 +91,21 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
     String finalFilterValue = filterValue;
-    Runnable verifyTable = () -> {
-      shipperAddressConfigurationPage.validateFilter(filterBy, finalFilterValue);
+    Runnable filterColumn = () -> {
+      shipperAddressConfigurationPage.validateFilter(filterBy,finalFilterValue);
     };
-    doWithRetry(verifyTable, "Operator verifies table is filtered based on input", 5000L, 3);
+    doWithRetry(filterColumn, "Operator verifies table");
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies table is filtered based on input in {string} in shipper address page")
+  public void operatorVerifiesTableIsFilteredBasedOnPickUpTypeValue(String filterValue) {
+    filterValue = resolveValue(filterValue);
+    String finalFilterValue = filterValue;
+    Runnable verifyTable = () -> {
+      shipperAddressConfigurationPage.validatePickUpType(finalFilterValue);
+    };
+    doWithRetry(verifyTable, "Operator verifies table is filtered based on input");
     takesScreenshot();
   }
 
@@ -115,7 +126,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable clickButton = () -> {
       shipperAddressConfigurationPage.clickDownloadAddress();
     };
-    doWithRetry(clickButton, "Click on Download Addresses Button", 5000L, 3);
+    doWithRetry(clickButton, "Click on Download Addresses Button");
     takesScreenshot();
   }
 
@@ -191,7 +202,16 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable clickButton = () -> {
       shipperAddressConfigurationPage.clickButton(buttonText);
     };
-    doWithRetry(clickButton, "Click on Button", 5000L, 3);
+    doWithRetry(clickButton, "Click on Button");
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button to upload CVS")
+  public void operator_clicks_on_button_to_upload_cvs(String button){
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickUploadCVSButton();
+    };
+    doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
 
@@ -271,7 +291,16 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable verifyDownloadedFilename = () -> {
       shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
     };
-    doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename", 5000L, 3);
+    doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename");
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button to upload CSV file")
+  public void operatorClicksOnTheButtonToUploadCSVFile(String buttonText) {
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickButtonToUploadCSV(buttonText);
+    };
+    doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
 }

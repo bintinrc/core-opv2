@@ -30,10 +30,17 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_SEARCH_BY_TABLE_CHECKBOX = "//div[text()='%s']/ancestor::div[starts-with(@class,'TableHeader')]//span[@role='button']";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
   public static final String COLUMN_NAME = "Suggested Address URL";
+  private static final String MODAL_TABLE_SEARCH_BY_HEADER_NAME_XPATH = "//div[@data-datakey='%s']";
+  private static final String TABLE_FIRST_ROW_VALUE_PICKUP_TYPE_COLUMN = "//div[@data-datakey='formatted_pickup_type']";
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
   public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
   public static final String BUTTON = "//span[text()='%s']/parent::button";
+  public static final String CONFIGURE_PICKUP_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.pickupTypeButton']";
+  public static final String SAVE_CHANGES_BUTTON = "//button[@data-testid='shipper-address.edit-pickup-type.save-changes']";
+  public static final String UPLOAD_CSV_BUTTON = "//button[@data-testid='shipper-address.results.upload-csv-button']";
+  public static final String UPDATE_LAT_LONG_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.latLongButton']";
+  public static final String UPLOAD_CVS_CONFIGURE_PICKUP_TYPE = "//button[@data-testid='shipper-address.results.upload-csv-button']";
   public static final String CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s addresses pick up has been updated!']";
   public static final String FILENAME_IN_UPLOAD_WINDOW = "//span[text()='%s']";
 
@@ -177,8 +184,16 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     searchBox.sendKeys(filterValue);
   }
 
-  public void validateFilter(String columnName, String expectedValue) {
-    String valueXpath = f(TABLE_FIRST_ROW_VALUE_BY_COLUMN, columnName);
+  public void validateFilter(String filterName , String expectedValue) {
+    String firstMileNameSearchXpath = f(MODAL_TABLE_SEARCH_BY_HEADER_NAME_XPATH, filterName);
+    pause5s();
+    String actualValue = getWebDriver().findElement(By.xpath(firstMileNameSearchXpath)).getText();
+    Assertions.assertThat(actualValue).as("Validation of Column Value")
+        .isEqualToIgnoringCase(expectedValue);
+  }
+
+  public void validatePickUpType(String expectedValue) {
+    String valueXpath = TABLE_FIRST_ROW_VALUE_PICKUP_TYPE_COLUMN;
     pause5s();
     String actualValue = getWebDriver().findElement(By.xpath(valueXpath)).getText();
     Assertions.assertThat(actualValue).as("Validation of Column Value")
@@ -266,10 +281,36 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void clickButton(String buttonText) {
+    String elementXpath = null;
+    switchToShipperAddressConfigurationFrame();
+    if(buttonText.contains("Configure Pickup Type")){
+      elementXpath = f(CONFIGURE_PICKUP_TYPE_BUTTON, buttonText);
+    }
+    if(buttonText.contains("Update Lat Long")){
+      elementXpath = f(UPDATE_LAT_LONG_TYPE_BUTTON, buttonText);
+    }
+    if(buttonText.contains("Update Addresses Lat Long")){
+      elementXpath = f(UPDATE_LAT_LONG_TYPE_BUTTON, buttonText);
+    }
+    if(buttonText.contains("Save Changes")){
+      elementXpath = f(SAVE_CHANGES_BUTTON, buttonText);
+    }
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
+    buttonXpath.click();
+  }
+
+  public void clickButtonToUploadCSV(String buttonText) {
+    String elementXpath = null;
+    switchToShipperAddressConfigurationFrame();
+    elementXpath = UPLOAD_CSV_BUTTON;
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
+    buttonXpath.click();
+  }
+
+  public void clickUploadCVSButton() {
     pause1s();
     switchToShipperAddressConfigurationFrame();
-    String errorXpath = f(BUTTON, buttonText);
-    WebElement buttonXpath = getWebDriver().findElement(By.xpath(errorXpath));
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(UPLOAD_CVS_CONFIGURE_PICKUP_TYPE));
     buttonXpath.click();
   }
 
