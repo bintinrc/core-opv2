@@ -73,8 +73,8 @@ public class ZonesSteps extends AbstractSteps {
       zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
-      put(KEY_CREATED_ZONE_ID, actual.getId());
-      putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+      put(SortScenarioStorageKeys.KEY_SORT_CREATED_ZONE_ID, actual.getId());
+      putInList(SortScenarioStorageKeys.KEY_SORT_LIST_OF_CREATED_ZONES_ID, actual.getId());
       takesScreenshot();
     });
   }
