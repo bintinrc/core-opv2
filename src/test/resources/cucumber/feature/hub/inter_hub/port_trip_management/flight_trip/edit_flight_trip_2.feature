@@ -22,7 +22,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                          |
@@ -64,7 +64,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
@@ -95,7 +95,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
@@ -109,7 +109,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
@@ -140,7 +140,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                          |
@@ -176,7 +176,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                          |
@@ -217,7 +217,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].airportCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                          |

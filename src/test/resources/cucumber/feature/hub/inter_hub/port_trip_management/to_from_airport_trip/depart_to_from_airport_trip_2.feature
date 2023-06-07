@@ -18,7 +18,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
@@ -43,7 +43,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
@@ -71,7 +71,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
@@ -100,7 +100,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
@@ -130,7 +130,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
@@ -157,7 +157,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 0 days next, yyyy-MM-dd-HH-mm}                       |
