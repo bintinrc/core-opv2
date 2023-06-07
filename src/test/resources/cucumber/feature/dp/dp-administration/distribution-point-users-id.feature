@@ -7,7 +7,7 @@ Feature: DP Administration - Distribution Point Users
     When API Operator whitelist email "{check-dp-user-email}"
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Delete Dp User - Wrong DP Partner (uid:16a7cf1b-6778-48de-b69e-7ef163edc71c)
+  Scenario: DP Administration - CIF - Create DP User - Check email notifications
     Given operator marks gmail messages as read
     Given Ninja Point V3 User generate 1 random phone number
     Given Operator go to menu Distribution Points -> DP Administration
