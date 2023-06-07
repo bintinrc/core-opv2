@@ -239,7 +239,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | system_id         | {KEY_COUNTRY}                                                                              |
       | shipper_id        | {KEY_SHIPPER_ID}                                                                           |
       | parent_shipper_id | null                                                                                       |
-      | amount            | <amount>.00                                                                                |
+      | amount            | <amount>.0                                                                                 |
       | type              | Credit                                                                                     |
       | subtype           | Full                                                                                       |
       | payment_method    | <payment_method>                                                                           |
@@ -252,7 +252,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
       | origin_balance | -80.79                 |
-      | total_remitted | -<amount>.00           |
+      | total_remitted | -<amount>.0            |
       | balance        | 19.21                  |
       | status         | In Progress            |
       | status_logs    | Open,Ready,In Progress |
