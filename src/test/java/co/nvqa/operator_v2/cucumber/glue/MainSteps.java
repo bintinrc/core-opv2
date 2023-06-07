@@ -1,17 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commonauth.utils.TokenUtils;
 import co.nvqa.operator_v2.selenium.page.MainPage;
-import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static co.nvqa.operator_v2.util.KeyConstants.KEY_LIST_OF_GENERATE_PHONE_NUM;
 
 /**
  * @author Soewandi Wirjawan
@@ -20,8 +13,6 @@ import static co.nvqa.operator_v2.util.KeyConstants.KEY_LIST_OF_GENERATE_PHONE_N
 public class MainSteps extends AbstractSteps {
 
   private MainPage mainPage;
-  private static final String SYSTEM_ID = StandardTestConstants.NV_SYSTEM_ID;
-  private static final Logger LOGGER = LoggerFactory.getLogger(MainSteps.class);
 
   public MainSteps() {
   }
