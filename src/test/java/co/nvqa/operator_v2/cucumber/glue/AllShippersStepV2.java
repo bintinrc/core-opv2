@@ -778,6 +778,7 @@ public class AllShippersStepV2 extends AbstractSteps {
                         shipperData.get("Returns for this Shipper"));
             }
 
+
             if (shipperData.get("Pickup Address 2") != null) {
                 shipperCreatePage.moreSettingsForm.replaceWithLiaisonDetails.click();
                 shipperCreatePage.moreSettingsForm.returnAddress2.type(shipperData.get("Pickup Address 2"));
