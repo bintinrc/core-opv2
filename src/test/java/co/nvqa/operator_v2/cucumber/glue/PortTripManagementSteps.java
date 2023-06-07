@@ -1,7 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.AirHaulTrip;
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.common.mm.model.Port;
 import co.nvqa.common.mm.model.PortTrip;
+import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.selenium.page.PortTripManagementPage;
@@ -21,13 +24,13 @@ import org.slf4j.LoggerFactory;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_CREATED_PORT_CODES;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_CREATED_PORT_DETAILS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_UPDATED_PORT_DETAILS;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_PORTS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_UPDATED_PORTS;
 import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_ASSIGN_MAWB;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.COLUMN_TRIP_ID;
 
 public class PortTripManagementSteps extends AbstractSteps {
 
@@ -87,8 +90,12 @@ public class PortTripManagementSteps extends AbstractSteps {
         Boolean isCreateTripSuccess = portTripManagementPage.createFlightTrip(resolvedData);
         if (isCreateTripSuccess) {
             String tripId = portTripManagementPage.getPortTripId();
+            AirHaulTrip airHaulTrip = new AirHaulTrip();
+            airHaulTrip.setTripId(Long.parseLong(tripId));
             put(KEY_CURRENT_MOVEMENT_TRIP_ID, tripId);
             putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS, tripId);
+            putInList(KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS, airHaulTrip);
+            LOGGER.info("Trip id: {}", getList(KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS, AirHaulTrip.class).get(0).getTripId());
         }
     }
 
@@ -341,8 +348,11 @@ public class PortTripManagementSteps extends AbstractSteps {
         Map<String, String> resolvedData = resolveKeyValues(mapOfData);
         portTripManagementPage.createNewAirportTrip(resolvedData);
         String tripId = portTripManagementPage.getPortTripId();
+        AirHaulTrip airHaulTrip = new AirHaulTrip();
+        airHaulTrip.setTripId(Long.parseLong(tripId));
         put(KEY_CURRENT_MOVEMENT_TRIP_ID, tripId);
         putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS, tripId);
+        putInList(KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS, airHaulTrip);
     }
 
     @And("Verify the new airport trip {string} created success message on Port Trip Management page")
@@ -351,10 +361,10 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.verifyAirportTripCreationSuccessMessage(expectedMessage);
     }
 
-//    @Then("Operator verify {string} license driver {string} is not displayed on Create Port Trip page")
-//    public void operatorVerifyDriverNotDisplayed(String driverType, String driver) {
-//        portTripManagementPage.verifyDriverNotDisplayed(driver);
-//    }
+    @Then("Operator verify {string} license driver {string} is not displayed on Create Airport Trip on Port Trip Management page")
+    public void operatorVerifyDriverNotDisplayed(String driverType, String driver) {
+        portTripManagementPage.verifyDriverNotDisplayed(driver);
+    }
 
     @Then("Operator verifies {string} with value {string} is not shown on Create Airport Trip Port Trip Management page")
     public void operatorVerifiesInvalidDriver(String name, String value) {
@@ -424,15 +434,20 @@ public class PortTripManagementSteps extends AbstractSteps {
 
     @Then("Operator verify parameters of air trip on Port Trip Management page:")
     public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
-        data = resolveKeyValues(data);
-        data = StandardTestUtils.replaceDataTableTokens(data);
-        Long tripID = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
+    }
+
+    @Then("Operator verify parameters of air trip {string} on Port Trip Management page:")
+    public void operatorVerifyParametersShipmentOnShipmentManagementPage(String storageKey, Map<String, String> dataTableAsMap) {
+        Map<String, String> data = resolveKeyValues(dataTableAsMap);
+        Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+        AirHaulTrip airHaulTrip = getList(keyIdx.get("key"), AirHaulTrip.class).get(Integer.parseInt(keyIdx.get("idx")));
+        Long tripID = airHaulTrip.getTripId();
         PortTrip aitrip = new PortTrip();
         aitrip.fromMap(data);
-        aitrip.setTripId(tripID);
+        aitrip.setTripId(airHaulTrip.getTripId());
         portTripManagementPage.validatePortTripInfo(aitrip.getTripId(), aitrip);
         if (data.get("drivers") != null) {
-            List<Driver> expectedDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            List<MiddleMileDriver> expectedDrivers = resolveValue(dataTableAsMap.get("drivers"));
             portTripManagementPage.verifyListDriver(expectedDrivers);
         }
     }
@@ -458,7 +473,7 @@ public class PortTripManagementSteps extends AbstractSteps {
     @When("Operator departs trip {string} on Port Trip Management page")
     public void operatorDepartsTripOnPortTripPage(String tripID) {
         tripID = resolveValue(tripID);
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.departTrip();
     }
 
@@ -482,7 +497,7 @@ public class PortTripManagementSteps extends AbstractSteps {
 
     @When("Operator arrives trip {string} on Port Trip Management page")
     public void operatorArrivesTripOnPortTripPage(String tripID) {
-        portTripManagementPage.portTable.filterByColumn(COLUMN_TRIP_ID, resolveValue(tripID));
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.ArriveTripAndVerifyItems();
     }
 
@@ -498,19 +513,20 @@ public class PortTripManagementSteps extends AbstractSteps {
 
     @When("Operator completes trip {string} on Port Trip Management page")
     public void operatorCompletesTripOnPortTripPage(String tripID) {
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, resolveValue(tripID));
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.CompleteTripAndVerifyItems();
     }
 
     @When("Operator cancel trip {value} on Port Trip Management page")
     public void operatorCacelsTripOnPortTripPage(String tripID) {
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
+//        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
         portTripManagementPage.CancelTripAndVerifyItems();
     }
 
     @When("Operator click assign driver button to trip {value} on Port Trip Management page")
     public void operatorAssignDriverToTripOnPortTripManagementPage(String tripID) {
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.AssignDriversAndVerifyItems();
     }
 
@@ -527,9 +543,24 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.selectMultipleDrivers(resolvedKeyOfData, middleMileDriver);
     }
 
+    @And("Operator selects drivers {string} on Port Trip Management using data below:")
+    public void operatorAssignMultipleDriversOnPortTripManagementUsingDataBelow(String driverStorageKeys,
+        Map<String, String> mapOfData) {
+        Map<String, String> resolvedKeyOfData = resolveKeyValues(mapOfData);
+        List<String> usernames = getList(driverStorageKeys, MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
+            Collectors.toList());
+        portTripManagementPage.selectMultipleDriversByUsernames(resolvedKeyOfData, usernames);
+    }
+
     @Then("Operator successful message {string} display on Assigned Driver popup on Port Trip Management")
     public void operatorSuccessfulMessageDisplayOnAssignedDriverPopup(String message) {
         List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+        portTripManagementPage.verifyTripMessageSuccessful(f(message, middleMileDriver.size()));
+    }
+
+    @Then("Operator successful message {string} display on Assigned Drivers {string} popup on Port Trip Management")
+    public void operatorSuccessfulMessageDisplayOnAssignedDriverPopup(String message, String driverStorageKey) {
+        List<MiddleMileDriver> middleMileDriver = getList(driverStorageKey, MiddleMileDriver.class);
         portTripManagementPage.verifyTripMessageSuccessful(f(message, middleMileDriver.size()));
     }
 
@@ -554,7 +585,7 @@ public class PortTripManagementSteps extends AbstractSteps {
 
     @And("Operator search created flight trip {value} on Port Trip table")
     public void operatorSearchCreatedFlightTripOnPortTripTable(String tripID) {
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(tripID));
     }
 
     @When("Operator opens view Airport Trip on Port Trip Management page with data below:")
@@ -562,7 +593,7 @@ public class PortTripManagementSteps extends AbstractSteps {
         Map<String, String> resolvedData = resolveKeyValues(data);
         String tripID = resolvedData.get("tripID");
         String tripType = resolvedData.get("tripType");
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.portTable.clickActionButton(1, ACTION_DETAILS);
         portTripManagementPage.switchToOtherWindow(tripID + "/details");
         portTripManagementPage.waitUntilPageLoaded();
@@ -617,7 +648,7 @@ public class PortTripManagementSteps extends AbstractSteps {
     public void operatorAssignsMAWBToFlightTrip(Map<String, String> data) {
         Map<String, String> resolvedData = resolveKeyValues(data);
         String tripID = resolvedData.get("tripID");
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.portTable.clickActionButton(1, ACTION_ASSIGN_MAWB);
         portTripManagementPage.verifyAssignedMawbPage();
         portTripManagementPage.assignMawb(resolvedData.get("vendor"), resolvedData.get("mawb"));
