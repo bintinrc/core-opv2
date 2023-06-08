@@ -79,7 +79,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='bulk-update-confirmation-section']")
   public ShipmentToBeUpdatedTable shipmentToBeUpdatedTable;
 
-  @FindBy(css = "[data-testid='create-shipment-button']")
+  @FindBy(xpath = ".//button[@data-testid='create-shipment-button']")
   public Button createShipment;
 
   @FindBy(css = "[data-testid='search-id-textarea']")
@@ -623,7 +623,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[data-testid='create-shipment-type-select']")
+    @FindBy(xpath = ".//div[@data-testid='create-shipment-type-select']")
     public AntSelect3 type;
 
     @FindBy(css = "[data-testid='create-shipment-origin-hub-select']")
