@@ -804,7 +804,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
   public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage() {
-    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted");
+    movementManagementPage.verifyDeleteScheduleMessage("1 schedule(s) have been deleted");
   }
 
   @Deprecated

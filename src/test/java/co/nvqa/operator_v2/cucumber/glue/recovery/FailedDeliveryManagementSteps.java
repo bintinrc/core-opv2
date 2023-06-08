@@ -9,10 +9,12 @@ import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPa
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.assertj.core.api.Assertions;
 
 public class FailedDeliveryManagementSteps extends AbstractSteps {
@@ -212,6 +214,124 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds,
           rescheduleDate);
       failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
+    });
+  }
+
+  @When("Recovery User - RTS order on next day")
+  public void selectRTS() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.fdmTable.clickActionButton(1, FailedDeliveryTable.ACTION_RTS);
+    });
+  }
+
+  @Then("Recovery User - verifies Edit RTS Details dialog")
+  public void verifyRTSDialog(Map<String, String> dataMap) {
+    Map<String, String> dataTable = resolveKeyValues(dataMap);
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      Assertions.assertThat(page.rtsDetailsDialog.recipientName.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientName"));
+      Assertions.assertThat(page.rtsDetailsDialog.recipientContact.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientContact"));
+      Assertions.assertThat(page.rtsDetailsDialog.recipientEmail.getAttribute("value"))
+          .isEqualTo(dataTable.get("recipientEmail"));
+      Assertions.assertThat(page.rtsDetailsDialog.shipperInstructions.getAttribute("value"))
+          .isEqualTo(dataTable.get("shipperInstructions"));
+      Assertions.assertThat(page.rtsDetailsDialog.country.getAttribute("value"))
+          .isEqualTo(dataTable.get("country"));
+      Assertions.assertThat(page.rtsDetailsDialog.city.getAttribute("value")).isEqualTo("-");
+      Assertions.assertThat(page.rtsDetailsDialog.address1.getAttribute("value"))
+          .isEqualTo(dataTable.get("address1"));
+      Assertions.assertThat(page.rtsDetailsDialog.address2.getAttribute("value"))
+          .isEqualTo(dataTable.get("address2"));
+      Assertions.assertThat(page.rtsDetailsDialog.postalCode.getAttribute("value"))
+          .isEqualTo(dataTable.get("postalCode"));
+
+    });
+  }
+
+  @When("Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown")
+  public void selectRTSReasonAndTimeslot() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rtsDetailsDialog.selectionInput.get(0).click();
+      page.rtsDetailsDialog.unableToFindAddress.click();
+      page.rtsDetailsDialog.selectionInput.get(1).click();
+      page.rtsDetailsDialog.nightSlot.click();
+    });
+  }
+
+  @When("Recovery User - set RTS date to {string}")
+  public void setRTSDate(String date) {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rtsDetailsDialog.setDate(resolveValue(date));
+      page.rtsDetailsDialog.saveChanges.click();
+    });
+  }
+
+  @When("Recovery User - set RTS date to {string} for multiple orders")
+  public void setRTSDateMultipleOrders(String date) {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.selectedToRTSDialog.setDate(resolveValue(date));
+      failedDeliveryManagementReactPage.selectedToRTSDialog.setToRTS.click();
+    });
+  }
+
+  @When("Recovery User - RTS multiple orders on next day")
+  public void RTSMultipleOrders() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.applyAction.click();
+      page.rtsSelected.click();
+    });
+  }
+
+  @When("Recovery User - verifies Set Selected to Return to Sender dialog")
+  public void verifySetSelectedRTSDialog(List<Map<String, String>> data) {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      List<Map<String, String>> dataTable = resolveListOfMaps(data);
+      Assertions.assertThat(page.selectedToRTSDialog.dialogTitle.getText())
+          .isEqualTo("Set Selected to Return to Sender");
+      for (int i = 0; i < dataTable.size(); i++) {
+        if (dataTable.get(i).containsKey("trackingId")) {
+          Assertions.assertThat(page.selectedToRTSDialog.trackingId.get(i).getText())
+              .isEqualTo(dataTable.get(i).get(resolveValue("trackingId")));
+          if (dataTable.get(i).containsKey("status")) {
+            Assertions.assertThat(page.selectedToRTSDialog.status.getText())
+                .isEqualTo(dataTable.get(i).get("status"));
+          }
+        }
+      }
+    });
+  }
+
+  @When("Recovery User - change order address in Edit RTS Details dialog")
+  public void changeAddress() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rtsDetailsDialog.changeAddress.click();
+      page.rtsDetailsDialog.newCountry.sendKeys("SG");
+      page.rtsDetailsDialog.newCity.sendKeys("SG");
+      page.rtsDetailsDialog.newAddress1.sendKeys("new Address1");
+      page.rtsDetailsDialog.newAddress2.sendKeys("new Address2");
+      page.rtsDetailsDialog.newPostalCode.sendKeys("546080");
+    });
+  }
+
+  @When("Recovery User - search address by name in Edit RTS Details dialog")
+  public void searchAddressByName() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rtsDetailsDialog.changeAddress.click();
+      page.rtsDetailsDialog.addressFinder.click();
+      page.rtsDetailsDialog.searchTerm.sendKeys("SG");
+      page.rtsDetailsDialog.search.click();
+      String searchResult = page.rtsDetailsDialog.locationResult.getText();
+      Assertions.assertThat(searchResult).isNotBlank();
+      page.rtsDetailsDialog.saveLocation.click();
+      Assertions.assertThat(searchResult).contains(page.rtsDetailsDialog.newAddress1.getText());
+    });
+  }
+
+  @When("Recovery User - cancel address change in Edit RTS Details dialog")
+  public void cancelAddressChange() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rtsDetailsDialog.cancelAddressChange.click();
     });
   }
 }

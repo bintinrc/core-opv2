@@ -31,18 +31,21 @@ public class ValidateAttemptSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     String starteDate = mapOfData.get("startDate");
     String endDate = mapOfData.get("endDate");
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.selectDateTime(starteDate, endDate);
     takesScreenshot();
   }
 
-  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page")
-  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPage() {
+  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with {string}")
+  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPageAndURLEndsWith(String url) {
     validateAttemptPage.validatePODPageHeadingText();
+    validateAttemptPage.verifyCurrentPageURL(url);
     takesScreenshot();
   }
 
   @When("Operator click {string} button")
   public void operatorClickButton(String buttonText) {
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.clickButton(buttonText);
   }
 

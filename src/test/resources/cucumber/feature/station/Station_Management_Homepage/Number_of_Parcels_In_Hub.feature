@@ -321,7 +321,7 @@ Feature: Number of Parcels In Hub
 
     Examples:
       | HubName      | HubId      | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
-      | {hub-name-1} | {hub-id-1} | Number of parcels in hub | CANCELLED | No                      | CANCEL - NINJA DID NOT RECEIVE | Transit     |
+      | {hub-name-1} | {hub-id-1} | Number of parcels in hub | CANCELLED | No                      | NV DID NOT RECEIVE | Transit     |
 
   Scenario Outline: View Parcel of Pending Missing Ticket Type
     Given Operator loads Operator portal home page

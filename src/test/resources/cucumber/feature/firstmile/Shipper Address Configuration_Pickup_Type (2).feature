@@ -7,21 +7,19 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
     When Operator loads Shipper Address Configuration page
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
     And Operator chooses start and end date on Address Creation date using the following data:
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 60 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator waits for 30 seconds
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator drag and drop csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx" in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid formatted file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Address ID
     When Operator loads Shipper Address Configuration page
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
     And Operator chooses start and end date on Address Creation date using the following data:
@@ -29,7 +27,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_AddresId.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -53,7 +51,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 30 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_ShipperId.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -77,7 +75,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_PickupType.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -107,7 +105,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 30 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Success Bulk Configure Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the pickup type file "2"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
@@ -116,7 +114,6 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
-
 
   Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
@@ -143,13 +140,13 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator waits for 30 seconds
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the pickup type file "1"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
-
 
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
@@ -160,7 +157,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 30 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
@@ -196,7 +193,8 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator waits for 30 seconds
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable to Bulk Configure Some Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for error count "1" and total count "2"
     And Operator clicks on the Download Errors button
@@ -220,7 +218,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator waits for 30 seconds
-    And Operator clicks on the "Configure Pickup Type" button
+    And Operator clicks on the "Configure Pickup Type" button to upload CSV file
     And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
@@ -242,7 +240,7 @@ Feature: Shipper Address Configuration
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"9.99999","longitude":"9.99999","milkrun_settings":[],"is_milk_run":false} |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"-71.53","longitude":"51.81","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -250,7 +248,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 120 seconds
+    And Operator waits for 60 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
@@ -261,10 +259,10 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
 
     Examples:
-      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
-      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyo123            | DYOEDIT          |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
+      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue   | expectedHubValue  |
+      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | LeriLastMileZone    | LERIHUBSG         |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | LeriFirstMileZones  | STATION-A-SG-TEST |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | LeriFirstMileZones  | STATION-A-SG-TEST |
 
   @HappyPath
   Scenario Outline: View Updated Shipper Address Detail on Configure Pickup Type
@@ -308,7 +306,7 @@ Feature: Shipper Address Configuration
 
     Examples:
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude | newZoneValue | newHubValue |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        | AUTO-FM-ZONE | AUTO-FM-VN  |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  DYO1              | JKB              | 30 SenokoRd,Singapore  | 50.5        |  50.5        | AUTO-FM-ZONE | AUTO-FM-VN  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

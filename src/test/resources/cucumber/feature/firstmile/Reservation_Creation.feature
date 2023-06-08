@@ -69,6 +69,7 @@ Feature: Reservation Creation
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","latitude":50.5,"longitude":50.5,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
+    And Operator waits for 10 seconds
     And API Operator update the pickup type for the shipper address
       | addressId   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |
       | requestBody | {"pickup_type": "<pickupTypeAPI>"}            |
@@ -150,7 +151,7 @@ Feature: Reservation Creation
     | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator selects "Unverified" in the Address Status dropdown
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Create_Reservation_After_Update_Lat_Long.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload success message is displayed for success count "2"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
