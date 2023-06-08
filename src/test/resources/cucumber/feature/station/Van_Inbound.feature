@@ -1,8 +1,8 @@
 @StationManagement @Van-Inbound
 Feature: Van Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @Happypath @ForceSuccessOrder @ArchiveRoute
