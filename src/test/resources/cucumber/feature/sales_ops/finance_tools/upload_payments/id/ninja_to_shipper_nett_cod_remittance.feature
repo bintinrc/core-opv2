@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOpsID @UploadPaymentsID @Muti
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOpsID @UploadPaymentsID
 
 Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remittance
 
@@ -6,7 +6,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - ID
+  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payee Info - ID
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -71,7 +71,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 80.79   | Out  | Nett COD Remittance   | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with Transaction Amount =  Nett of COD Amount - CSV Has Shipper Legacy ID And Payer Info - ID
+  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with Transaction Amount =  Nett of COD Amount - CSV Has Shipper Legacy ID And Payee Info - ID
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -136,7 +136,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 98.989 | 98.99           | Out  | Nett COD Remittance | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with smaller amount of Nett of COD Amount and "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - ID
+  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with smaller amount of Nett of COD Amount and "Ready" ledger balance - CSV Has Shipper Legacy ID And Payee Info - ID
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -201,7 +201,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 50.50  | Out  | Nett COD Remittance | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with bigger amount of Nett of COD Amount and "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - ID
+  Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with bigger amount of Nett of COD Amount and "Ready" ledger balance - CSV Has Shipper Legacy ID And Payee Info - ID
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
