@@ -59,7 +59,12 @@ public class StationRouteSteps extends AbstractSteps {
     Map<String, String> finalData = resolveKeyValues(data);
     page.inFrame(() -> {
       page.waitUntilLoaded(2, 60);
-      page.assignDrivers.waitUntilVisible();
+      if (!page.assignDrivers.waitUntilVisible(30)) {
+        page.refreshPage();
+        page.waitUntilLoaded(2, 60);
+        page.assignDrivers.waitUntilVisible();
+      }
+
       if (finalData.containsKey("hub")) {
         page.hub.selectValue(finalData.get("hub"));
       }

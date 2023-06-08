@@ -385,7 +385,7 @@ Feature: Pending Pickup Jobs
       | {hub-name-3} | {hub-id-3} | 2.22222  | 2.22222   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs | Shipper Name/ Shipper ID | STATION-SHIPPER   | fdgdfg            |
 
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn @Debug
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
   Scenario Outline: Search Pending Pickup Job - Search by Shipper ID
     Given Operator loads Operator portal home page
     When DB Station - Operator delete Station Pending Pickup records for the hub "<HubId>"
