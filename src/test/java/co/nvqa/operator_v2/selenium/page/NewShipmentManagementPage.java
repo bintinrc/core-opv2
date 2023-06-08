@@ -238,7 +238,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder) {
     createShipment.click();
     createShipmentDialog.waitUntilVisible();
-    createShipmentDialog.type.selectValue("Air Haul");
+    createShipmentDialog.type.selectValue(shipmentInfo.getShipmentType());
     createShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
     createShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
     createShipmentDialog.comments.setValue(shipmentInfo.getComments());

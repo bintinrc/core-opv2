@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENTS;
 import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
@@ -239,6 +240,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           put(KEY_CREATED_SHIPMENT, shipmentInfo);
           put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
           putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
+          putInList(KEY_MM_LIST_OF_CREATED_SHIPMENTS,shipmentInfo);
 
           if (isNextOrder) {
             Long secondShipmentId = page.createAnotherShipment();
