@@ -17,7 +17,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator verifies "origin facility" with value "{hub-disable-name}" is not shown on Create Airport Trip Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |
@@ -39,7 +39,7 @@ Feature: Airport Trip Management - Create To From Airport Trip 1
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator verifies "destination facility" with value "{hub-disable-name}" is not shown on Create Airport Trip Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |

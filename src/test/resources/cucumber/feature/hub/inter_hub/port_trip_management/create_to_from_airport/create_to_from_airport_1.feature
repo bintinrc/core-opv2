@@ -24,7 +24,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode}                                                                                                                                                                        |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport)                                                                                                                                                                        |
       | destinationFacility | {local-hub-3-name}                                                                                                                                                                                |
       | departureTime       | 12:00                                                                                                                                                                                                             |
       | durationhour        | 01                                                                                                                                                                                                                |
@@ -46,7 +46,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator verify "inactive" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |
@@ -68,7 +68,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |
@@ -90,7 +90,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip on Port Trip Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |
@@ -117,7 +117,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode}                                                                                                                              |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport)                                                                                                                              |
       | destinationFacility | {local-hub-3-name}                                                                                                                                      |
       | departureTime       | 12:00                                                                                                                                                                   |
       | durationhour        | 01                                                                                                                                                                      |
@@ -148,7 +148,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
       | destinationFacility | {local-hub-3-name}         |
       | departureTime       | 12:00                                      |
       | durationhour        | 01                                         |
@@ -171,7 +171,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator create new airport trip on Port Trip Management page using below data:
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode}                                          |
+      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport)                                          |
       | destinationFacility | {local-hub-3-name}                                                  |
       | departureTime       | 12:00                                                                               |
       | durationhour        | 01                                                                                  |
