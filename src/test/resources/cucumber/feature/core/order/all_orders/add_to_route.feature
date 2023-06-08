@@ -136,8 +136,9 @@ Feature: All Orders - Add To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
+  @DeleteOrArchiveRoute
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
-    Given API Shipper create V4 order using data below:
+    Given API Shipper create V4 order u sing data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Shipper create V4 order using data below:
@@ -157,6 +158,35 @@ Feature: All Orders - Add To Route
     Then Operator verifies that info toast displayed:
       | top    | 1 order(s) updated |
       | bottom | add to route       |
+
+  @DeleteOrArchiveRoute
+  Scenario: Block Add to Route for On Hold Order on All Orders Page
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Recovery - Create ticket for tracking id: "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator go to menu Order -> All Orders
+    And Operator find orders by uploading CSV on All Orders page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator add multiple orders to route on All Orders page:
+      | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
+    Then Operator verifies error messages in dialog on All Orders page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Order is On Hold and cannot be added to route |
+    When Operator close Errors dialog on All Orders page
+    Then Operator verifies that info toast displayed:
+      | top    | 1 order(s) updated |
+      | bottom | add to route       |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
