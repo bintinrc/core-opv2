@@ -27,6 +27,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String LOCATOR_RTS_INFO = "//h5[@data-testid='rts']";
   private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//div[@class='order-tag']";
   private static final String HUB_DROPDOWN_XPATH = "//span[contains(text(),'Search or select hub')]//preceding::input[@type='search']";
+  private static final String PARCEL_TYPE_DROPDOWN_XPATH = "//div[@data-testid='parcel-type-selection-select']";
+  private static final String PARCEL_TYPE_SELECTION_XPATH = "//div[@class='ant-select-item-option-content'][text()='%s']";
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//div[@label='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//span[contains(text(),'Search or select task')]//preceding::input[@type='search'][1]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
@@ -45,8 +47,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void selectHubToBegin(String hubName) {
-    selectHubToBeginWithTask(hubName, hubName);
+  public void selectHubToBegin(String hubName,String parcelType) {
+    selectHubToBeginWithTask(hubName, hubName,parcelType);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -129,7 +131,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
-  public void selectHubToBeginWithTask(String hubName, String task) {
+  public void selectHubToBeginWithTask(String hubName, String task, String parcelType) {
     pause2s();
 
     // Select Hub
@@ -137,6 +139,10 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
     sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
+    pause2s();
+    click(PARCEL_TYPE_DROPDOWN_XPATH);
+    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
+    click(parcelTypeSelection);
     pause2s();
 
     //Select Sort Task
