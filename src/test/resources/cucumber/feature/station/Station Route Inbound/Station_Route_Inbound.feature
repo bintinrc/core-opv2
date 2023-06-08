@@ -1,8 +1,8 @@
 @StationManagement @StationRouteInbound
 Feature: Route Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
