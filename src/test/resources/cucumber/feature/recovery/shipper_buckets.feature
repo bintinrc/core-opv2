@@ -5,6 +5,7 @@ Feature: Shipper Buckets
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario Outline: Operator Create New Shipper - <Dataset_Name>
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -48,6 +49,7 @@ Feature: Shipper Buckets
       | Discount Value  | 1                              |
     Then Operator save new shipper
     And DB Recovery - verify shipper "{KEY_CREATED_SHIPPER_ID}" is found in the bucket "<bucket_id>"
+    And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_CREATED_SHIPPER_ID}"
 
     Examples:
       | Dataset_Name   | bucket_type                                       | bucket_id |
@@ -55,6 +57,7 @@ Feature: Shipper Buckets
       | SG - Bucket 15 | Pending                                           | 15        |
       | SG - Bucket 23 | SG - 2 Max return attempts <Max PETS>             | 23        |
 
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario Outline: Operator Update Shipper Bucket  - <Dataset_Name>
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -105,6 +108,7 @@ Feature: Shipper Buckets
       | No. of Maximum Storage Days | 46            |
     Then Operator save changes on Edit Shippers page
     And DB Recovery - verify shipper "{KEY_CREATED_SHIPPER_ID}" is found in the bucket "<bucket_id>"
+    And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_CREATED_SHIPPER_ID}"
 
     Examples:
       | Dataset_Name   | bucket_type                           | bucket_id |
