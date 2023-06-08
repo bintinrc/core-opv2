@@ -17,6 +17,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -37,6 +38,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 10                                         |
       | weightWarning  | Weight is higher than original by 6.0 kg   |
@@ -60,6 +62,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 2                                          |
       | weightWarning  | Weight is lower than original by 8.0 kg    |
@@ -78,6 +81,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -106,6 +110,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -141,6 +146,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -195,6 +201,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType     | Bulky                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
