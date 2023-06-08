@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.addressing.Address;
-import co.nvqa.operator_v2.model.Addressing;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
+import co.nvqa.commonsort.model.addressing.Address;
 import co.nvqa.operator_v2.selenium.page.AddressDatasourcePage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
@@ -75,7 +75,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
-    Addressing addressing = new Addressing();
+    Address addressing = new Address();
 
     if (StringUtils.isNotBlank(latlong) && StringUtils.equalsIgnoreCase(latlong, "generated")) {
       Double latitude = TestUtils.generateLatitude();
@@ -107,7 +107,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
     if (StringUtils.isNotBlank(ward)) {
       addressDatasourcePage.kecamatan.setValue(ward);
-      addressing.setSubdistrict(ward);
+      addressing.setSubDistrict(ward);
     }
     if (StringUtils.isNotBlank(municipality)) {
       addressDatasourcePage.municipality.setValue(municipality);
@@ -123,7 +123,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
     if (StringUtils.isNotBlank(subdistrict)) {
       addressDatasourcePage.barangay.setValue(subdistrict);
-      addressing.setSubdistrict(subdistrict);
+      addressing.setSubDistrict(subdistrict);
     }
     if (StringUtils.isNotBlank(postcode)) {
       addressDatasourcePage.postcode.setValue(postcode);
@@ -133,7 +133,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.whitelisted.selectValue(whitelisted);
     }
 
-    put(KEY_CREATED_ADDRESSING, addressing);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESS, addressing);
   }
 
   @When("^Operator clicks on Add Button in Add a Row modal on Address Datasource page$")
@@ -252,7 +252,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     Address address = new Address();
     address.setId(addressDatasourcePage.createdRawId.getText());
-    put(KEY_CREATED_ADDRESS, address);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESS, address);
 
     if (StringUtils.isNotBlank(data.get(KEY_PROVINCE))) {
       Assertions.assertThat(addressDatasourcePage.createdProvince.getText())
@@ -455,7 +455,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
-    Addressing addressing = new Addressing();
+    Address addressing = new Address();
 
     if (StringUtils.isNotBlank(latlong)) {
       Double latitude = TestUtils.generateLatitude();
@@ -542,7 +542,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.whitelisted.selectValue(whitelisted);
     }
 
-    put(KEY_CREATED_ADDRESSING, addressing);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESS, addressing);
     addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
