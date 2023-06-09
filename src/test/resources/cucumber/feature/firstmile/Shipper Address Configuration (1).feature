@@ -136,7 +136,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator clicks on the Download CSV Template button
     And Verify that csv file is downloaded with filename: "CSV Template_Pickup Address Lat Long.csv"
     Then Operator verifies header names are available in the downloaded CSV file "CSV Template_Pickup Address Lat Long.csv"
@@ -164,7 +164,7 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "1.288147,103.740233" in shipper address page
     Then Operator verifies that green check mark icon is not shown under the Lat Long
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Shipper_Addresses_with_Invalid_Shipper_ID.csv" by browsing files in "Update Addresses Lat Long" upload window
     And Operator clicks on the Download Errors button
     Then Operator verifies header names are available in the downloaded CSV file "Update Lat Long Failure Reasons"
@@ -193,7 +193,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Address_ID.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
@@ -224,7 +224,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -244,7 +244,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Upload_Invalid_Formatted_Shipper_Address_File.xlsx" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -264,7 +264,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
@@ -284,7 +284,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator drag and drop csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
