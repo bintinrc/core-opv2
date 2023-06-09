@@ -78,7 +78,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount>,0.0 |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.39   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper with smaller amount of "Ready" ledger balance - CSV Has Netsuite ID And Payee Info (uid:85cdeeea-65fb-4558-a999-a74e3eedf638)
@@ -219,7 +219,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
       | origin_balance | <amount>             |
-      | total_remitted | 7.38                 |
+      | total_remitted | 7.39                 |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
@@ -230,7 +230,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount>,-2.62 |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.39   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 3 Shippers - "Ready" ledger is exists for each shipper - Payment via CSV Upload from Shipper is enough to offset balance of all shippers (uid:8298abe9-6199-42cf-9d1d-86c7203b2faf)
