@@ -27,7 +27,6 @@ import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_PORTS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_UPDATED_PORTS;
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_ASSIGN_MAWB;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_EDIT;
@@ -456,7 +455,7 @@ public class PortTripManagementSteps extends AbstractSteps {
     public void operatorEditAirTripOnPortTripPage(Map<String, String> data) {
         Map<String, String> resolvedData = resolveKeyValues(data);
         String tripID = resolvedData.get("tripID");
-        portTripManagementPage.portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.portTable.clickActionButton(1, ACTION_EDIT);
         portTripManagementPage.switchToOtherWindow(tripID);
         portTripManagementPage.waitUntilPageLoaded();

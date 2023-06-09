@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -111,6 +112,10 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
   public static final String VIEW_MAWB_DETAIL_PAGE_XPATH = "//div/span[contains(text(),'%s')]";
   public static final String VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH = "//div/span/strong[contains(text(),'Assigned MAWB on Flight Trip')]";
+
+  public static final String FACILITIES_DROPDOWN_OPTIONS_XPATH = "//div[@id='facilities_list']/parent::div/parent::div[contains(@class,'ant-select-dropdown')]";
+  public static final String DROPDOWN_INPUT_ITEM_XPATH = "//span[contains(@title,'%s')]";
+  public static final String DROPDOWN_INPUT_CLEAR_XPATH = "//span[contains(@class,'ant-select-clear')]";
 
   @FindBy(xpath = "//button/span[contains(text(), 'View MAWB')]")
   public static Button viewMawb;
@@ -410,16 +415,27 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
   public void fillOrigDestDetails(Map<String, String> mapOfData) {
     doWithRetry(() -> {
-      facilitiesInputLoading.waitUntilInvisible(30);
+      // Click facilities dropdown
+      facilitiesInput.click();
+      if(!isElementExist(FACILITIES_DROPDOWN_OPTIONS_XPATH, 2)) {
+        throw new NvTestRuntimeException("Dropdown doesn't show up.");
+      }
+
+      // Input facilities
       if (mapOfData.containsKey("originOrDestination")) {
         String[] values = mapOfData.get("originOrDestination").split(";");
         facilitiesInput.click();
         for (String value : values) {
           sendKeysAndEnter(XPATH_FACILITIES_INPUT, value);
-          click(f(XPATH_DIV_STARTSWITH_TEMPLATE, value));
+
+          // Check if input has correct values
+          if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, value), 2)) {
+            throw new NvTestRuntimeException(f("Facility %s is not selected", value));
+          }
         }
+        facilitiesInput.sendKeys(Keys.ESCAPE);
       }
-    }, "Input port code until text is shown.");
+    }, "Input port code until text is shown.", 1000, 5);
   }
 
   public void verifyMaxOrigDestDetails() {
@@ -434,12 +450,13 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     doWithRetry(() -> {
       try {
         loadTrips.click();
-        loadTrips.waitUntilInvisible();
+        loadTrips.waitUntilInvisible(30);
       } catch (NoSuchElementException e) {
         LOGGER.info(e.getMessage());
-        loadTrips.waitUntilClickable();
+        loadTrips.waitUntilClickable(2);
+        throw new NoSuchElementException("Failed to load trips.");
       }
-    }, "Clicking load trips button...", 1000, 5);
+    }, "Clicking load trips button...", 1000, 10);
 
     waitUntilPageLoaded();
     backButton.waitUntilVisible(60);
@@ -1499,12 +1516,17 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
   public void filterPortById(long tripId) {
     doWithRetry(() -> {
-      reloadSearch.waitUntilClickable();
-      reloadSearch.click();
-      portTable.clickColumn(1, COLUMN_TRIP_ID);
-      portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripId);
-      Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
-          .isFalse();
+      try {
+        portTable.clickColumn(1, COLUMN_TRIP_ID);
+        portTable.filterByColumn(COLUMN_AIRTRIP_ID, tripId);
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+            .isFalse();
+      } catch (AssertionError e){
+        LOGGER.info(e.getMessage());
+        reloadSearch.waitUntilClickable();
+        reloadSearch.click();
+        throw new AssertionError(e.getCause());
+      }
     }, "Filter by id...", 1000, 10);
   }
 
@@ -1646,43 +1668,65 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
           createToFromAirportForm_comment.clearAndSendKeys(data.get("comment"));
         }
         if (!data.get("drivers").equals("-")) {
+          // Get drivers
+          List<String> drivers = Arrays.asList(data.get("drivers").split(","));
+          List<String> selectedDrivers = findElementsByXpath("//div[contains(@class,'ant-select-selection-item-content')]").stream().map(WebElement::getText).collect(
+              Collectors.toList());
+
+          // Wait until input field can be interacted
+          waitUntilInvisibilityOfElementLocated(
+              "//input[@id='createToFromAirportForm_drivers' and @disabled]", 30);
+          if (!selectedDrivers.isEmpty()) waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 30);
+
+          selectedDrivers.addAll(drivers);
+
+          // Input usernames
           doWithRetry(() -> {
-            waitUntilInvisibilityOfElementLocated(
-                "//input[@id='createToFromAirportForm_drivers' and @disabled]", 30);
-            waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 30);
-            String[] drivers = data.get("drivers").split(",");
-            int count = 0;
-            for (String driver : drivers) {
+            try {
+              int count = selectedDrivers.size();
               createToFromAirportForm_drivers.waitUntilClickable();
               createToFromAirportForm_drivers.click();
-              sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
-              count++;
-              if (count > 4) {
-                int selected = findElementsByXpath(
-                    "//div[@class='ant-select-selection-overflow-item']").size();
-                Assertions.assertThat(selected)
-                    .as("Total maximum seleted drivers are 4").isEqualTo(4);
+              for (String driver : selectedDrivers) {
+  //              sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                sendKeysAndEnter("//input[@id='createToFromAirportForm_drivers']", driver);
+                if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, driver), 2)) {
+                  throw new NvTestRuntimeException(f("Driver with username %s is not selected"));
+                }
+
+                count++;
+                if (count > 4) {
+                  int selected = findElementsByXpath(
+                      "//div[@class='ant-select-selection-overflow-item']").size();
+                  Assertions.assertThat(selected)
+                      .as("Total maximum selected drivers are 4").isEqualTo(4);
+                }
               }
+            } catch (NvTestRuntimeException e) {
+              LOGGER.info(e.getMessage());
+              click(DROPDOWN_INPUT_CLEAR_XPATH);
+              throw new NvTestRuntimeException(e.getCause());
             }
           }, "Selecting drivers...", 1000, 5);
+          sendKeys("//input[@id='createToFromAirportForm_drivers']", Keys.ESCAPE);
         }
         break;
 
     }
-    createToFromAirportForm_drivers.sendKeys(Keys.ESCAPE);
-    createToFromAirportForm_comment.click();
-    pause5s();
+//    createToFromAirportForm_comment.click();
+//    pause5s();
     submitButton.waitUntilClickable();
     submitButton.click();
   }
 
   public void verifyListDriver(List<MiddleMileDriver> middleMileDrivers) {
-    String actualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
-    middleMileDrivers.forEach(d -> {
-      Assertions.assertThat(actualDrivers)
-          .as("Driver %s is showing in %s", d.getDisplayName(), actualDrivers)
-          .contains(d.getDisplayName());
-    });
+    doWithRetry(() -> {
+      String actualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
+      middleMileDrivers.forEach(d -> {
+        Assertions.assertThat(actualDrivers)
+            .as("Driver %s is showing in %s", d.getDisplayName(), actualDrivers)
+            .contains(d.getDisplayName());
+      });
+    }, "Waiting until drivers are displayed...", 1000, 30);
   }
 
   public List<String> getListOfMiddleMileDriverUsername(List<MiddleMileDriver> middleMileDrivers) {
