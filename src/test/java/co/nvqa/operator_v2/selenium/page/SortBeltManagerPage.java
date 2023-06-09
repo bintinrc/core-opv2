@@ -320,13 +320,14 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
   public void fillLogicRules(List<Map<String, String>> ruleAsList, boolean isEdit) {
     // Loop through given rules
+    webDriver.manage().window().fullscreen();
     for (int i = 0; i < ruleAsList.size(); i++) {
       List<String> keyList = new ArrayList<>(ruleAsList.get(i).keySet());
       // Loop through filters
       for (int j = 0; j < keyList.size(); j++) {
+
         String columnXpath = String.format(COLUMN_MAPPING_XPATH, i + 1, j + 2);
-        retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-          scrollIntoView(columnXpath);
+        doWithRetry(() -> {
           waitUntilElementIsClickable(columnXpath);
           click(columnXpath);
           Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
@@ -350,7 +351,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
           if (j != 1 && k == filterValueList.size() - 1) {
             filterInput.sendKeys(Keys.TAB);
             pause500ms();
-            scrollIntoView(ADD_RULE_XPATH);
             pause200ms();
           }
         }
@@ -360,7 +360,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       if (i < ruleAsList.size() - 1) {
         addRule.click();
         pause200ms();
-        scrollIntoView(ADD_RULE_XPATH);
         pause200ms();
       }
     }
