@@ -57,7 +57,7 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below details in billing_qa_gl.priced_orders table
       | column       | expected_value |
       | payment_tags | ["INVOICED"]   |
-    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
       | column               | expected_value                   |
       | order_id             | {KEY_CREATED_ORDER_ID}           |
@@ -97,7 +97,7 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then API Billing - Operator verifies there is no entry in the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Billing - Operator verifies there is no entry in the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing Result                           |
@@ -132,7 +132,7 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator saves the invoiced_at value in the billing_qa_gl.order_payment_tags table for verifying purpose
   # Upload again
     And Operator upload a CSV file with below order ids and verify success message
@@ -147,7 +147,7 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
       | column               | expected_value                   |
       | order_id             | {KEY_CREATED_ORDER_ID}           |
@@ -225,7 +225,7 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below details in billing_qa_gl.priced_orders table
       | column       | expected_value |
       | payment_tags | ["INVOICED"]   |
-    Then API Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
       | column               | expected_value                      |
       | order_id             | {KEY_CREATED_ORDER_ID}              |

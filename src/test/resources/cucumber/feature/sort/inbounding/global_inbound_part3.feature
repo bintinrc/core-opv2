@@ -44,6 +44,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType | {parcel-type-bulky}                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | ON HOLD - SHIPPER ISSUE |
@@ -70,6 +71,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -89,6 +91,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -108,6 +111,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -115,7 +119,7 @@ Feature: Global Inbound
       | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                                               |
+      | status  | PENDING                                              |
       | endDate | {date: 1 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
 
   @CloseNewWindows
@@ -127,6 +131,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -146,6 +151,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -185,6 +191,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -220,6 +227,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -253,6 +261,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                    |
+      | parcelType | {parcel-type-bulky}                           |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
@@ -288,6 +297,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType | {parcel-type-bulky}                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | tags       | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3              |
     Then Operator verify info on Global Inbound page using data below:
@@ -315,6 +325,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                               |
+      | parcelType | {parcel-type-bulky}                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |

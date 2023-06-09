@@ -6,7 +6,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info (uid:29cebde6-2502-459b-8988-f472637d949d)
+  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payer Info - Check Payment Tags
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -158,7 +158,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper Remit with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer And Payee Info (uid:04036c7b-d541-4223-92aa-d222da2d5932)
+  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper Remit with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer And Payee Info - Check Payment Tags (uid:04036c7b-d541-4223-92aa-d222da2d5932)
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
