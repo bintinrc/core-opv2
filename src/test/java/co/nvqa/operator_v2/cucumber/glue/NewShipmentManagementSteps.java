@@ -206,7 +206,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("^Operator create Shipment on Shipment Management page:$")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       page.inFrame(page -> {
         page.waitUntilLoaded();
         try {
@@ -229,9 +229,11 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           ShipmentInfo shipmentInfo = new ShipmentInfo();
           shipmentInfo.fromMap(finalData);
           shipmentInfo.setOrdersCount((long) listOfOrders.size());
+          System.out.println(f("this is shipment type value 1: %s", finalData.get("shipmentType")));
           if(finalData.containsKey("shipmentType"))
           {
             shipmentInfo.setShipmentType(finalData.get("shipmentType"));
+            System.out.println(f("this is shipment type value 2: %s", shipmentInfo.getShipmentType()));
           }
 
           page.createShipment(shipmentInfo, isNextOrder);
@@ -259,7 +261,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           throw new NvTestRuntimeException(ex);
         }
       });
-    }, 1);
+    }, "create shipment");
   }
 
   @When("^Operator create Shipment without confirm on Shipment Management page:$")

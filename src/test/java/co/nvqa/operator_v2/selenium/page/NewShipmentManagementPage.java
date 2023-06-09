@@ -238,6 +238,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   }
 
   public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder) {
+    System.out.println(f("this is shipment type value 3: %s", shipmentInfo.getShipmentType()));
     createShipment.waitUntilClickable(2);
     createShipment.click();
     createShipmentDialog.waitUntilVisible(2);
