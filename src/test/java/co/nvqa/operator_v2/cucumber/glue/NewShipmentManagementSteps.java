@@ -229,12 +229,12 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           ShipmentInfo shipmentInfo = new ShipmentInfo();
           shipmentInfo.fromMap(finalData);
           shipmentInfo.setOrdersCount((long) listOfOrders.size());
+          if(finalData.containsKey("shipmentType"))
+          {
+            shipmentInfo.setShipmentType(finalData.get("shipmentType"));
+          }
 
           page.createShipment(shipmentInfo, isNextOrder);
-
-          if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
-            shipmentInfo.setShipmentType("AIR_HAUL");
-          }
 
           put(KEY_SHIPMENT_INFO, shipmentInfo);
           put(KEY_CREATED_SHIPMENT, shipmentInfo);
