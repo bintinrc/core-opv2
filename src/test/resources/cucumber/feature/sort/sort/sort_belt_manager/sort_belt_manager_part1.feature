@@ -14,10 +14,10 @@ Feature: Sort Belt Manager V2
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
     And Operator fills logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator fills logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -41,10 +41,10 @@ Feature: Sort Belt Manager V2
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
     And Operator fills logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator fills logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -71,10 +71,10 @@ Feature: Sort Belt Manager V2
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
     And Operator fills logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator fills logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -94,10 +94,10 @@ Feature: Sort Belt Manager V2
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
     And Operator fills logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator fills logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -112,10 +112,10 @@ Feature: Sort Belt Manager V2
     Then Operator make sure redirected to "Create" logic page
     And Operator make sure logic form is pre-populated
     And Operator edits logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator edits logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -137,10 +137,10 @@ Feature: Sort Belt Manager V2
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
     And Operator fills logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator fills logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic
@@ -155,10 +155,10 @@ Feature: Sort Belt Manager V2
     Then Operator make sure redirected to "Edit" logic page
     And Operator make sure logic form is pre-populated
     And Operator edits logic basic information
-      | name          | GENERATED                                 |
-      | description   | GENERATED                                 |
+      | name          | GENERATED                                         |
+      | description   | GENERATED                                         |
       | armFilters    | AV Statuses,Granular Statuses,Service Levels,Tags |
-      | unassignedArm | 15                                        |
+      | unassignedArm | 15                                                |
     And Operator edits logic rules
       | rules | [{"Arm":"1,10,11","Description":"Brief description","AV Statuses":"Unverified","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","AV Statuses":"Verified","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
     And Operator deletes extra rules in create logic

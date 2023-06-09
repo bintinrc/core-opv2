@@ -16,7 +16,7 @@ Feature: Sort Code
     Then Operator verifies that there will be success toast shown
     When Operator searches for Sort Code based on its "postcode"
     Then Operator verifies that the sort code details are right
-    And DB Order Create gets sort code details by sort code
+
 
   Scenario: Fail to Upload CSV with Invalid Postcode (uid:1ac226a7-430a-4dfb-9f97-91402cd1748e)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -42,7 +42,6 @@ Feature: Sort Code
     Then Operator verifies that there will be success toast shown
     When Operator searches for Sort Code based on its "postcode"
     Then Operator verifies that the sort code details are right
-    And DB Order Create gets sort code details by sort code
 
   Scenario: Upload CSV to Delete Existing Postcode and Existing Sort Code (uid:ecc0fefa-5e07-440b-bf09-8693e1d39a83)
     Given Operator go to menu Shipper Support -> Blocked Dates
