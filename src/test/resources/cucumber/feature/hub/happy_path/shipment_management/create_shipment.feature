@@ -13,10 +13,10 @@ Feature: Shipment Management - Create Shipment
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | shipmentType | awokaowk |
+      | shipmentType | awokaowk                                                            |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
-      | shipmentType | awokaowk |
+      | shipmentType | awokaowk   |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | LAND_HAUL                            |
@@ -42,6 +42,7 @@ Feature: Shipment Management - Create Shipment
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | shipmentType | Land Haul                                                           |
+      | hello        | hello                                                               |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
