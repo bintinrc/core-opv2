@@ -299,7 +299,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | Netsuite | QA-SO-AUTO-TC5-{gradle-current-date-yyyyMMddHHmmsss} | 81.64  | QA-SO-AUTO-TC5-2-{gradle-current-date-yyyyMMddHHmmsss} | 81.64    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with smaller amount of "Ready" ledger balance - CSV Has Netsuite ID And Payee Info (uid:4ee22504-4e2c-4e8a-9513-daa8211dbd48)
+  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with smaller amount of "Ready" ledger balance - CSV Has Netsuite ID And Payee Info - Check Payment Tags
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |

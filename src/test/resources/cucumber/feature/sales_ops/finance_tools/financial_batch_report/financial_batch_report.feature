@@ -568,7 +568,7 @@ Feature: Financial Batch Report
       | type             | Completed                                     |
 
   @DeleteCreatedShipper
-  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details - With No COD, INS and handling fee (uid:6046902b-d077-43c0-babc-9683f3dd2b3b)
+  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Script Engine - Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_SHIPPER.id}"
