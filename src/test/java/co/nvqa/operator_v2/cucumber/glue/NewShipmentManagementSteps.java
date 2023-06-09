@@ -211,6 +211,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         page.waitUntilLoaded();
         try {
           final Map<String, String> finalData = resolveKeyValues(mapOfData);
+          finalData.forEach((key, value) -> System.out.println(key + " " + value));
+          mapOfData.forEach((key, value) -> System.out.println(key + " " + value));
           List<Order> listOfOrders;
           boolean isNextOrder = false;
 
@@ -225,7 +227,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           } else {
             listOfOrders = new ArrayList<>();
           }
-
           ShipmentInfo shipmentInfo = new ShipmentInfo();
           shipmentInfo.fromMap(finalData);
           shipmentInfo.setOrdersCount((long) listOfOrders.size());
