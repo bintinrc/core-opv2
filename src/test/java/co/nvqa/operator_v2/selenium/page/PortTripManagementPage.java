@@ -435,7 +435,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         }
         facilitiesInput.sendKeys(Keys.ESCAPE);
       }
-    }, "Input port code until text is shown.", 1000, 5);
+    }, "Input port code until text is shown.", 2000, 10);
   }
 
   public void verifyMaxOrigDestDetails() {
@@ -1599,7 +1599,8 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void validatePortTripInfo(Long portTripId, PortTrip expectedPorttrip) {
-    portTable.filterByColumn(PortTable.COLUMN_TRIP_ID, String.valueOf(portTripId));
+    filterPortById(portTripId);
+//    portTable.filterByColumn(PortTable.COLUMN_TRIP_ID, String.valueOf(portTripId));
     waitWhileTableIsLoading();
     PortTrip actualPorttrip = portTable.readEntity(1);
     expectedPorttrip.compareWithActual(actualPorttrip, "tripId", "drivers");
@@ -1670,24 +1671,27 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         if (!data.get("drivers").equals("-")) {
           // Get drivers
           List<String> drivers = Arrays.asList(data.get("drivers").split(","));
-          List<String> selectedDrivers = findElementsByXpath("//div[contains(@class,'ant-select-selection-item-content')]").stream().map(WebElement::getText).collect(
+          List<String> initDrivers = findElementsByXpath("//div[contains(@class,'ant-select-selection-item-content')]").stream().map(WebElement::getText).collect(
               Collectors.toList());
 
           // Wait until input field can be interacted
-          waitUntilInvisibilityOfElementLocated(
-              "//input[@id='createToFromAirportForm_drivers' and @disabled]", 30);
-          if (!selectedDrivers.isEmpty()) waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 30);
-
-          selectedDrivers.addAll(drivers);
+          doWithRetry(() -> {
+            Assertions.assertThat(isElementExist("//input[@id='createToFromAirportForm_drivers' and @disabled]"))
+                .as("Assign drivers dropdown is clickable")
+                .isFalse();
+            if (!initDrivers.isEmpty()) waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 10);
+          }, "Waiting until dropdown is not disabled", 2000, 15);
 
           // Input usernames
           doWithRetry(() -> {
             try {
-              int count = selectedDrivers.size();
+              int count = initDrivers.size();
+              List<String> selectedDrivers = new ArrayList<>(initDrivers);
+              selectedDrivers.addAll(drivers);
               createToFromAirportForm_drivers.waitUntilClickable();
               createToFromAirportForm_drivers.click();
+
               for (String driver : selectedDrivers) {
-  //              sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
                 sendKeysAndEnter("//input[@id='createToFromAirportForm_drivers']", driver);
                 if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, driver), 2)) {
                   throw new NvTestRuntimeException(f("Driver with username %s is not selected"));
@@ -1706,14 +1710,12 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
               click(DROPDOWN_INPUT_CLEAR_XPATH);
               throw new NvTestRuntimeException(e.getCause());
             }
-          }, "Selecting drivers...", 1000, 5);
+          }, "Selecting drivers...", 1000, 10);
           sendKeys("//input[@id='createToFromAirportForm_drivers']", Keys.ESCAPE);
         }
         break;
 
     }
-//    createToFromAirportForm_comment.click();
-//    pause5s();
     submitButton.waitUntilClickable();
     submitButton.click();
   }

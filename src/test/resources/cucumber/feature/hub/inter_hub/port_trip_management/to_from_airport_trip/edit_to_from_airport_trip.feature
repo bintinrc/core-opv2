@@ -129,7 +129,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
     And Operator click on 'Load Trips' on Port Management
     Then Operator verify parameters of air trip "KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1]" on Port Trip Management page:
       | tripID  | {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}                                          |
-      | drivers | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username},{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[2].username} |
+      | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS |
       | comment | API automation update                                                               |
 
   @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
@@ -172,10 +172,12 @@ Feature: Airport Trip Management - Edit To From Airport Trip
     When Operator fill the departure date for Port Management
       | startDate | {date: 0 days next, yyyy-MM-dd-HH-mm} |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Operator verify parameters of air trip "KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1]" on Port Trip Management page:
       | tripID  | {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}                                                                                                                              |
-      | drivers | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username},{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[2].username},{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[3].username},{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[4].username} |
+      | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS |
       | comment | API automation update                                                                                                                                                   |
 
   @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips

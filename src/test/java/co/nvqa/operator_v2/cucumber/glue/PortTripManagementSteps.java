@@ -5,6 +5,7 @@ import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.common.mm.model.Port;
 import co.nvqa.common.mm.model.PortTrip;
 import co.nvqa.common.mm.utils.MiddleMileUtils;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.selenium.page.PortTripManagementPage;
@@ -458,9 +459,17 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.filterPortById(Long.parseLong(resolveValue(tripID)));
         portTripManagementPage.portTable.clickActionButton(1, ACTION_EDIT);
         portTripManagementPage.switchToOtherWindow(tripID);
-        portTripManagementPage.waitUntilPageLoaded();
-        portTripManagementPage.switchTo();
-        portTripManagementPage.verifyDisableItemsOnEditPage(resolvedData.get("tripType"));
+
+        doWithRetry(() -> {
+            try {
+                portTripManagementPage.waitUntilPageLoaded();
+                portTripManagementPage.switchTo();
+                portTripManagementPage.verifyDisableItemsOnEditPage(resolvedData.get("tripType"));
+            } catch (NvTestRuntimeException e) {
+                portTripManagementPage.refreshPage_v1();
+                throw new NvTestRuntimeException(e.getCause());
+            }
+        }, "Reloading until page is properly loaded...", 1000, 3);
     }
 
     @When("Operator edit data on Edit Trip Port Trip Management page:")
