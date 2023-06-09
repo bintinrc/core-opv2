@@ -10,10 +10,10 @@ Feature: Shipment Management - Create Shipment
     When Operator go to menu Inter-Hub -> Shipment Management
     Given Operator intends to create a new Shipment directly from the Shipment Toast
     When Operator create Shipment on Shipment Management page:
-      | shipmentType | Land Haul                                                           |
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | shipmentType | Land Haul |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
@@ -38,10 +38,10 @@ Feature: Shipment Management - Create Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
-      | shipmentType | Land Haul                                                           |
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | shipmentType | Land Haul |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
