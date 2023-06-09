@@ -70,7 +70,6 @@ Feature: Sort Code
     Then Operator verifies that there will be success toast shown
     When Operator searches for Sort Code based on its "postcode"
     Then Operator verifies that the sort code details are right
-    And DB Order Create gets sort code details by sort code
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
