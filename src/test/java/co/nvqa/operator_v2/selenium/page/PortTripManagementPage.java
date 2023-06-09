@@ -114,8 +114,10 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   public static final String VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH = "//div/span/strong[contains(text(),'Assigned MAWB on Flight Trip')]";
 
   public static final String FACILITIES_DROPDOWN_OPTIONS_XPATH = "//div[@id='facilities_list']/parent::div/parent::div[contains(@class,'ant-select-dropdown')]";
+  public static final String DRIVERS_DROPDOWN_INPUT_FIELD_XPATH = "//input[@id='createToFromAirportForm_drivers']";
   public static final String DROPDOWN_INPUT_ITEM_XPATH = "//span[contains(@title,'%s')]";
   public static final String DROPDOWN_INPUT_CLEAR_XPATH = "//span[contains(@class,'ant-select-clear')]";
+  public static final String DROPDOWN_INPUT_NO_DATA_XPATH = "//div[contains(@class,'ant-empty-description')]";
 
   @FindBy(xpath = "//button/span[contains(text(), 'View MAWB')]")
   public static Button viewMawb;
@@ -426,7 +428,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         String[] values = mapOfData.get("originOrDestination").split(";");
         facilitiesInput.click();
         for (String value : values) {
-          sendKeysAndEnter(XPATH_FACILITIES_INPUT, value);
+          sendKeys(XPATH_FACILITIES_INPUT, value);
+          if (isElementExist(DROPDOWN_INPUT_NO_DATA_XPATH, 1)) {
+            waitUntilInvisibilityOfElementLocated(DROPDOWN_INPUT_NO_DATA_XPATH, 10);
+          }
+          facilitiesInput.sendKeys(Keys.RETURN);
 
           // Check if input has correct values
           if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, value), 2)) {
@@ -435,7 +441,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         }
         facilitiesInput.sendKeys(Keys.ESCAPE);
       }
-    }, "Input port code until text is shown.", 2000, 10);
+    }, "Input port code until text is shown.", 1000, 10);
   }
 
   public void verifyMaxOrigDestDetails() {
@@ -1676,11 +1682,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
           // Wait until input field can be interacted
           doWithRetry(() -> {
-            Assertions.assertThat(isElementExist("//input[@id='createToFromAirportForm_drivers' and @disabled]"))
+            Assertions.assertThat(isElementExist("//input[@id='createToFromAirportForm_drivers' and @disabled]", 5))
                 .as("Assign drivers dropdown is clickable")
                 .isFalse();
             if (!initDrivers.isEmpty()) waitUntilInvisibilityOfElementLocated("//span[.='Select to assign drivers']", 10);
-          }, "Waiting until dropdown is not disabled", 2000, 15);
+          }, "Waiting until dropdown is not disabled", 2000, 20);
 
           // Input usernames
           doWithRetry(() -> {
@@ -1692,7 +1698,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
               createToFromAirportForm_drivers.click();
 
               for (String driver : selectedDrivers) {
-                sendKeysAndEnter("//input[@id='createToFromAirportForm_drivers']", driver);
+                sendKeysAndEnter(DRIVERS_DROPDOWN_INPUT_FIELD_XPATH, driver);
                 if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, driver), 2)) {
                   throw new NvTestRuntimeException(f("Driver with username %s is not selected"));
                 }
