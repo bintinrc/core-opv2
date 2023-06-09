@@ -239,7 +239,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     createShipment.waitUntilClickable(2);
     createShipment.click();
     createShipmentDialog.waitUntilVisible(2);
-    createShipmentDialog.type.selectValue(shipmentInfo.getShipmentType());
+    createShipmentDialog.type.selectValueWithoutSearch(shipmentInfo.getShipmentType());
     createShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
     createShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
     createShipmentDialog.comments.setValue(shipmentInfo.getComments());
