@@ -203,7 +203,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.clearAllFilters.click());
   }
 
-  @When("^Operator create Shipment on Shipment Management page:$")
+  @When("Operator create Shipment on Shipment Management page:")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
     doWithRetry(() -> {
