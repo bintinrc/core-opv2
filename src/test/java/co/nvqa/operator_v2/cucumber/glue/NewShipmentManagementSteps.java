@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -17,8 +17,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,7 +34,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.LocalDateTime;
 
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENTS;
 import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
@@ -206,13 +211,16 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator create Shipment on Shipment Management page:")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
+
+    LOGGER.info("map of data size: {}", mapOfData.size());
     doWithRetry(() -> {
       page.inFrame(page -> {
         page.waitUntilLoaded();
         try {
           final Map<String, String> finalData = resolveKeyValues(mapOfData);
-          finalData.forEach((key, value) -> System.out.println(key + " " + value));
-          mapOfData.forEach((key, value) -> System.out.println(key + " " + value));
+
+          finalData.forEach((key, value) -> LOGGER.info(key + " " + value));
+          mapOfData.forEach((key, value) -> LOGGER.info(key + " " + value));
           List<Order> listOfOrders;
           boolean isNextOrder = false;
 
@@ -326,8 +334,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     Map<String, String> resolvedData = resolveKeyValues(data);
     String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
-      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
       if (resolvedData.containsKey("origHubName")) {
         page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
@@ -349,8 +357,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     Map<String, String> resolvedData = resolveKeyValues(data);
     String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
-      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
       if (resolvedData.containsKey("origHubName")) {
         page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
@@ -381,7 +389,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
       List<String> shipmentIds) {
     page.inFrame(() -> {
-      List<String> actual = page.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
+      List<String> actual = NewShipmentManagementPage.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
       Assertions.assertThat(actual).as("List of Shipment IDs")
           .containsExactlyInAnyOrderElementsOf(resolveValues(shipmentIds));
     });
@@ -662,7 +670,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator clicks on reopen shipment button under the Apply Action")
   public void operatorClicksOnReopenShipmentButtonUnderTheApplyAction() {
     page.inFrame(() -> {
-      page.shipmentsTable.selectRow(1);
+      NewShipmentManagementPage.shipmentsTable.selectRow(1);
       page.actionsMenu.selectOption("Reopen Shipments");
     });
   }
@@ -717,7 +725,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyActionButtonIsDisabled(String actionButton) {
     page.inFrame(() -> {
       if ("Cancel".equals(actionButton)) {
-        Assertions.assertThat(page.shipmentsTable.getActionButton(1, ACTION_CANCEL).isEnabled())
+        Assertions.assertThat(
+                NewShipmentManagementPage.shipmentsTable.getActionButton(1, ACTION_CANCEL).isEnabled())
             .as("Cancel button is enabled").isFalse();
       }
     });
@@ -736,8 +745,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     List<String> ids = resolveValues(shipmentIds);
     page.inFrame(() -> {
       ids.forEach(id -> {
-        page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, id);
-        page.shipmentsTable.selectRow(1);
+        NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, id);
+        NewShipmentManagementPage.shipmentsTable.selectRow(1);
       });
       page.actionsMenu.selectOption("Bulk Update");
     });
@@ -998,7 +1007,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @And("Operator clicks Edit action button on Shipment Management page")
   public void operatorClicksEditActionButtonOnShipmentManagementPage() {
     page.inFrame(()-> {
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
     });
   }
