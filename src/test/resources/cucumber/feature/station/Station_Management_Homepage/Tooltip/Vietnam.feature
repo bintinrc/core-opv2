@@ -1,8 +1,8 @@
 @StationManagement @StationHome @StationTooltip @VietnamToolTip
 Feature: Vietnam
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Vietnam Tooltip for COD Collected from Courier
