@@ -14,6 +14,7 @@ Feature: Global Inbound
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName           | {hub-name}                                 |
+      | parcelType        | {parcel-type-bulky}                                      |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideSize      | L                                          |
       | overrideWeight    | 7.2                                        |
@@ -57,6 +58,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
+      | parcelType | {parcel-type-bulky}                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | NO AV   |
@@ -101,6 +103,7 @@ Feature: Global Inbound
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
+      | parcelType | {parcel-type-bulky}                                      |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
