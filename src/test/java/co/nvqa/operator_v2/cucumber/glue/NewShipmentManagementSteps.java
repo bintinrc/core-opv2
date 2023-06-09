@@ -230,10 +230,10 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           ShipmentInfo shipmentInfo = new ShipmentInfo();
           shipmentInfo.fromMap(finalData);
           shipmentInfo.setOrdersCount((long) listOfOrders.size());
-          System.out.println(f("this is shipment type value 1: %s", finalData.get("shipmentType")));
-          if(finalData.containsKey("shipmentType"))
+          System.out.println(f("this is shipment type value 1: %s", finalData.get("shipment_type")));
+          if(finalData.containsKey("shipment_type"))
           {
-            shipmentInfo.setShipmentType(finalData.get("shipmentType"));
+            shipmentInfo.setShipmentType(finalData.get("shipment_type"));
             System.out.println(f("this is shipment type value 2: %s", shipmentInfo.getShipmentType()));
           }
 

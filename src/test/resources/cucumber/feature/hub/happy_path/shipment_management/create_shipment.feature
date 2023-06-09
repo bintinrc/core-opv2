@@ -13,7 +13,7 @@ Feature: Shipment Management - Create Shipment
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | shipmentType | Land Haul |
+      | shipment_type | Land Haul |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
@@ -41,7 +41,7 @@ Feature: Shipment Management - Create Shipment
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | shipmentType | Land Haul |
+      | shipment_type | Land Haul |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
