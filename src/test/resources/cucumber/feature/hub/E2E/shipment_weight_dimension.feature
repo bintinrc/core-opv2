@@ -5,7 +5,7 @@ Feature: Shipment Weight Dimension E2E
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Search Shipment's Weight Dimension with Valid Closed SID
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -138,7 +138,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Search Shipment's Weight Dimension with Valid Completed SID
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -293,7 +293,7 @@ Feature: Shipment Weight Dimension E2E
 
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Search Shipment's Weight Dimension with Valid Cancelled SID
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -447,7 +447,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Add Shipment's Weight Dimension
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -591,7 +591,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update Shipment's Weight Dimension of Pending Shipment
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -725,7 +725,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update Shipment's Weight Dimension of Completed Shipment
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -868,7 +868,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update Shipment's Weight Dimension of Closed Shipment
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1012,7 +1012,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update Shipment's Weight Dimension of Closed Shipment with weight > 100
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1158,7 +1158,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update Shipment's Weight Dimension of Closed Shipment with weight = 0
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1298,7 +1298,7 @@ Feature: Shipment Weight Dimension E2E
 
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update MAWB with Invalid MAWB Format
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1452,7 +1452,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update MAWB with Existing MAWB
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1615,7 +1615,7 @@ Feature: Shipment Weight Dimension E2E
 
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update MAWB with New MAWB
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1773,7 +1773,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Update MAWB with Same Origin and Destination Airport
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -1930,7 +1930,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Add Shipment's MAWB with new MAWB
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |
@@ -2079,7 +2079,7 @@ Feature: Shipment Weight Dimension E2E
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Add Shipment's MAWB with existing MAWB
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602 |

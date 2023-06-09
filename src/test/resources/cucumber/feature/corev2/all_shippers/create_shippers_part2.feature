@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @Shippers @CreateShipper @CWF
+@OperatorV2 @CoreV2 @Shippers @CreateShipper
 Feature: Create shipper part1
 
   Background:
@@ -267,7 +267,6 @@ Feature: Create shipper part1
       | Billing Address   | test address |
       | Billing Post Code | 45685        |
 
-  @RT
   Scenario: Create marketplace shipper - mandatory field
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button

@@ -140,14 +140,19 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     getWebDriver().switchTo().defaultContent();
   }
 
-  @Then("Operator edit the created Draft Script using data below:")
-  public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
+  @Then("^Operator (just edit|edit) the created Draft Script using data below:$")
+  public void operatorEditCreatedDraft(String validate, Map<String, String> mapOfData) {
     pricingScriptsV2Page.switchToIframe();
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
     pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
-    pricingScriptsV2CreateEditDraftPage.clickButtonByText("Verify Draft");
-    pricingScriptsV2CreateEditDraftPage.validateDraft();
+
+    if (validate.equalsIgnoreCase("edit")) {
+      pricingScriptsV2CreateEditDraftPage.clickButtonByText("Verify Draft");
+      pricingScriptsV2CreateEditDraftPage.validateDraft();
+    } else if (validate.equalsIgnoreCase("just edit")) {
+      pricingScriptsV2CreateEditDraftPage.selectAction(2);
+    }
     getWebDriver().switchTo().defaultContent();
   }
 
@@ -159,11 +164,15 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     getWebDriver().switchTo().defaultContent();
   }
 
-  @Then("Operator edit the created Active Script using data below:")
-  public void operatorEditCreatedActiveScript(Map<String, String> mapOfData) {
+  @Then("^Operator (just edit|edit) the created Active Script using data below:$")
+  public void operatorEditCreatedActiveScript(String verify, Map<String, String> mapOfData) {
     pricingScriptsV2Page.switchToIframe();
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedActive(script);
+    if (verify.equalsIgnoreCase("just edit")) {
+      pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
+    }
+    pause3s();
     getWebDriver().switchTo().defaultContent();
   }
 
@@ -279,13 +288,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     getWebDriver().switchTo().defaultContent();
   }
 
-  @Then("Operator clicks validate and verify warning message {string}")
-  public void operatorValidateAndVerifyErrors(String warningMessage) {
+  @Then("^Operator clicks (validate|validate active script) and verify warning message (.+)$")
+  public void operatorValidateAndVerifyErrors(String tabName, String warningMessage) {
     pricingScriptsV2Page.switchToIframe();
     SoftAssertions softAssertions = new SoftAssertions();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     softAssertions.assertThat(warningMessage).as("Error text is correct")
-        .contains(pricingScriptsV2Page.validateDraftAndReturnWarnings(script));
+        .contains(pricingScriptsV2Page.validateDraftAndReturnWarnings(tabName, script));
     getWebDriver().switchTo().defaultContent();
   }
 
@@ -696,4 +705,32 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     takesScreenshot();
     getWebDriver().switchTo().defaultContent();
   }
+
+  @And("Operator go to Write Script Page")
+  public void operatorGoToWriteScriptPage() {
+    pricingScriptsV2Page.switchToIframe();
+    pricingScriptsV2Page.goToWriteScriptPage();
+    getWebDriver().switchTo().defaultContent();
+  }
+
+  @Then("Operator verifies presence of following parameters under {string} in Write Script page")
+  public void operatorVerifiesPresenceOfFollowingParametersUnderInWriteScriptPage(String field,
+      List<String> listOfData) {
+    pricingScriptsV2Page.switchToIframe();
+    for (String value : listOfData) {
+      pricingScriptsV2Page.verifyPresence(field, value);
+    }
+    getWebDriver().switchTo().defaultContent();
+  }
+
+  @Then("Operator verifies presence of following parameters in Write Script page")
+  public void operatorVerifiesPresenceOfParametersInWriteScriptPage(List<String> listOfParams) {
+    pricingScriptsV2Page.switchToIframe();
+    for (String param : listOfParams
+    ) {
+      pricingScriptsV2Page.verifyPresence(param, null);
+    }
+    getWebDriver().switchTo().defaultContent();
+  }
+
 }

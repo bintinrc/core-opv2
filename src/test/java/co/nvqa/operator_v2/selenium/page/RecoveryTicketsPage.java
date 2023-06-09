@@ -88,6 +88,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//md-input-container[@label='Last Instruction']/div[@class='readonly']")
   public PageElement lastInstructionText;
 
+  @FindBy(xpath = "//md-toolbar[@title='Create Ticket']")
+  public PageElement createTicketDialogBox;
+
+
   public RecoveryTicketsPage(WebDriver webDriver) {
     super(webDriver);
     ticketsTable = new TicketsTable(webDriver);
@@ -99,7 +103,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     String ticketType = recoveryTicket.getTicketType();
 
     createNewTicket.click();
-    createTicketDialog.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated(createTicketDialogBox.getWebElement());
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());

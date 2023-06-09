@@ -54,20 +54,16 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   @And("Operator searches data in the pending pickup table by applying the following filters and expect one record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_one_record(
       DataTable searchParameters) {
-    retryIfExpectedExceptionOccurred(() -> {
-          List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
-          Map<String, String> filter = resolveKeyValues(filters.get(0));
-          stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
-          if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 1) {
-            getWebDriver().navigate().refresh();
-            throw new NvTestRuntimeException("One record is not displayed after filtering "
-                + "the table Pending Pickup table record" + filter);
-          }
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class);
+    doWithRetry(() -> {
+      List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+      Map<String, String> filter = resolveKeyValues(filters.get(0));
+      stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+      if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 1) {
+        getWebDriver().navigate().refresh();
+        throw new NvTestRuntimeException("One record is not displayed after filtering "
+            + "the table Pending Pickup table record" + filter);
+      }
+    }, "filter records and expect one record");
     takesScreenshot();
   }
 
@@ -75,20 +71,16 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   @And("Operator searches data in the pending pickup table by applying the following filters and expect zero record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_zero_record(
       DataTable searchParameters) {
-    retryIfExpectedExceptionOccurred(() -> {
-          List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
-          Map<String, String> filter = resolveKeyValues(filters.get(0));
-          stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
-          if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 0) {
-            getWebDriver().navigate().refresh();
-            throw new NvTestRuntimeException("Record are displayed after filtering "
-                + "the table Pending Pickup table record" + filter);
-          }
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class);
+    doWithRetry(() -> {
+      List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+      Map<String, String> filter = resolveKeyValues(filters.get(0));
+      stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+      if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 0) {
+        getWebDriver().navigate().refresh();
+        throw new NvTestRuntimeException("Record are displayed after filtering "
+            + "the table Pending Pickup table record" + filter);
+      }
+    }, "filter records and expect zero records");
     takesScreenshot();
   }
 

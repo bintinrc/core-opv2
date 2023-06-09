@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue.mm;
 
+import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
 import co.nvqa.commons.model.core.hub.Shipments;
@@ -41,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_EXISTING_SHIPMENT_SWB;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENTS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_SHIPMENT_SWB;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_MAWBS;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SWBS;
@@ -443,6 +445,31 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .hasSize(Integer.parseInt(expectedNumOfRows));
   }
 
+  @When("Operator filter Shipment Weight Dimension Table by {string} column with shipment {string} - migrated")
+  public void operatorFilterShipmentWeightDimensionTableByColumnMigrated(String column, String shipment,
+      Map<String, String> dataTable) {
+    String expectedNumOfRows = dataTable.getOrDefault("expectedNumOfRows", "1");
+    String filterValue = dataTable.get("filterValue");
+    Column col = Column.fromLabel(column);
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(shipment);
+    co.nvqa.common.mm.model.Shipment shipmentData = getList(keyIdx.get("key"), co.nvqa.common.mm.model.Shipment.class).get(
+        Integer.parseInt(keyIdx.get("idx")));
+    if (filterValue != null) {
+      shipmentWeightDimensionTablePage.filterColumn(col, (String) resolveValue(filterValue));
+    } else {
+      if (col != SHIPMENT_ID && Integer.parseInt(expectedNumOfRows) == 1) {
+        shipmentWeightDimensionTablePage
+            .filterColumn(SHIPMENT_ID, shipmentData);
+      }
+      shipmentWeightDimensionTablePage
+          .filterColumn(col, shipmentData);
+    }
+
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using %s with correct value", column)
+        .hasSize(Integer.parseInt(expectedNumOfRows));
+  }
+
   @And("Operator select all data on Shipment Weight Dimension Table")
   public void operatorSelectAllDataOnShipmentWeightDimensionTable() {
     shipmentWeightDimensionTablePage.selectAllCheckbox.check();
@@ -714,6 +741,102 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     Assertions.assertThat(
         shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.totalWeightSection)
     ).as("Total weight should show correct value")
+        .isEqualTo(df.format(totalWeight));
+
+    // kgv formula
+    // kgv = width * length * height / country divisor . by default is 1 if unspecified.
+
+    Assertions.assertThat(
+            shipmentWeightSumUpreport.findValueFromSection(
+                shipmentWeightSumUpreport.totalKgvSection
+            )
+        ).as("Total weight should show correct value")
+        .isEqualTo(df.format(totalKgv));
+
+    Assertions.assertThat(
+            shipmentWeightSumUpreport.findValueFromSection(
+                shipmentWeightSumUpreport.totalParcelsSection)
+
+        ).as(f("Total shipment should show correct value:  %d", totalParcels))
+        .isEqualTo(String.valueOf(totalParcels));
+  }
+
+  @Then("Operator verify Shipment Weight Sum Up report page UI for shipment {string} - migrated")
+  public void operatorVerifyShipmentWeightSumUpReportPageUIMigrated(String shipment) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(shipment);
+    co.nvqa.common.mm.model.Shipment shipmentData = getList(keyIdx.get("key"), co.nvqa.common.mm.model.Shipment.class).get(
+        Integer.parseInt(keyIdx.get("idx")));
+
+    shipmentWeightSumUpreport.waitUntilLoaded();
+    ZonedDateTime date = get(KEY_GENERATED_SHIPMENT_WEIGHT_SUM_UP_REPORT_TIMESTAMP);
+//    List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
+    List<ShipmentDimensionResponse> dimensions = get(KEY_UPDATED_SHIPMENTS_DIMENSIONS);
+    if (dimensions == null) {
+      dimensions = Collections.singletonList(get(KEY_UPDATED_SHIPMENT_DIMENSIONS));
+    }
+    DecimalFormat df = new DecimalFormat("#.##");
+
+    List<String> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
+        .rows
+        .stream()
+        .map( s -> s.shipmentId.getText())
+        .collect(Collectors.toList());
+
+    put(KEY_LIST_SELECTED_SHIPMENT_IDS, selectedShipmentIds);
+    List<ShipmentDimensionResponse> selectedDimension = dimensions.stream()
+        .filter(s -> selectedShipmentIds.contains(String.valueOf(s.getShipment().getId())))
+        .collect(
+            Collectors.toList());
+
+    Double totalWeight = selectedDimension.stream()
+        .map(ShipmentDimensionResponse::getWeight)
+        .reduce(0.0d, Double::sum);
+
+    Double totalKgv = selectedDimension.stream()
+        .map( sd -> sd.getHeight() * sd.getLength() * sd.getWidth())
+        .reduce(0.0d, Double::sum);
+
+    Long totalParcels = selectedDimension.stream()
+        .map(sd -> sd.getShipment().getOrdersCount())
+        .reduce(0L, Long::sum);
+
+
+//    Shipment s = shipments.get(0).getShipment();
+    String reportDate = date.format(DateUtil.DATE_TIME_FORMATTER);
+
+
+    //verify ui elements
+
+    Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.isDisplayed())
+        .as("Page title is displayed")
+        .isTrue();
+    try {
+      Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.getText())
+          .as("Page title show correctly")
+          .isEqualTo(f("%s Sum-up Report", reportDate));
+    }catch (AssertionError err) {
+      //usually error because UI has offset 1 second
+      LOGGER.info("retrying with 1 second offset");
+      date = date.plusSeconds(1);
+      reportDate = date.format(DateUtil.DATE_TIME_FORMATTER);
+      Assertions.assertThat(shipmentWeightSumUpreport.sumUpReportTitle.getText())
+          .as("Page title show correctly")
+          .isEqualTo(f("%s Sum-up Report", reportDate));
+    }
+
+    //verify end hub
+    Assertions.assertThat(shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.endHubSection))
+        .as("End hub show correct value")
+        .isEqualTo(shipmentData.getDestHubName());
+
+    Assertions.assertThat(
+            Integer.parseInt(shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.totalShipmentSection)))
+        .as("Total shipments show correct value")
+        .isEqualTo(shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.size());
+
+    Assertions.assertThat(
+            shipmentWeightSumUpreport.findValueFromSection(shipmentWeightSumUpreport.totalWeightSection)
+        ).as("Total weight should show correct value")
         .isEqualTo(df.format(totalWeight));
 
     // kgv formula
@@ -1043,11 +1166,11 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         } else if (mawb.equalsIgnoreCase("empty")) {
           mawb = "";
         } else if (mawb.equalsIgnoreCase("tbn-lower-random")) {
-          mawb = "tbn" + RandomStringUtils.randomNumeric(8);
+          mawb = "tbn-" + RandomStringUtils.randomNumeric(8);
         } else if (mawb.equalsIgnoreCase("tbn-upper-random")) {
-          mawb = "TBN" + RandomStringUtils.randomNumeric(8);
+          mawb = "TBN-" + RandomStringUtils.randomNumeric(8);
         } else if (mawb.equalsIgnoreCase("tbn-mix-random")) {
-          mawb = "TBn" + RandomStringUtils.randomNumeric(8);
+          mawb = "TBn-" + RandomStringUtils.randomNumeric(8);
         } else if (mawb.equalsIgnoreCase("ai-d-lower-random")) {
           mawb = "ai-d" + RandomStringUtils.randomNumeric(6);
         } else if (mawb.equalsIgnoreCase("ai-d-upper-random")) {
@@ -1055,11 +1178,11 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         } else if (mawb.equalsIgnoreCase("ai-d-mix-random")) {
           mawb = "aI-d" + RandomStringUtils.randomNumeric(6);
         }else if (mawb.equalsIgnoreCase("ai-lower-random")) {
-          mawb = "ai" + RandomStringUtils.randomNumeric(6);
+          mawb = "ai-" + RandomStringUtils.randomNumeric(6);
         } else if (mawb.equalsIgnoreCase("ai-upper-random")) {
-          mawb = "AI" + RandomStringUtils.randomNumeric(6);
+          mawb = "AI-" + RandomStringUtils.randomNumeric(6);
         } else if (mawb.equalsIgnoreCase("ai-mix-random")) {
-          mawb = "aI" + RandomStringUtils.randomNumeric(6);
+          mawb = "aI-" + RandomStringUtils.randomNumeric(6);
         }
         put(KEY_SHIPMENT_UPDATED_AWB, mawb);
         putInList(KEY_MM_LIST_OF_CREATED_MAWBS, mawb);

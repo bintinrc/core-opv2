@@ -5,7 +5,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit for Same Trip (Validation at Start Inbound) (uid:8fbc0cd3-24fc-4634-8e99-e4a1725ca59d)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -104,7 +104,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
 #    Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan At Transit Hub Shipment with Stay-over Shipment (uid:a3a1027b-8526-48ba-96b2-e6f331040c49)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -251,7 +251,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
       | type       | STAYOVER                              |
       | scanType   | SHIPMENT_VAN_INBOUND                  |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Invalid Scan Stay-over Shipment (uid:97a81421-c6f3-48e5-b5d5-6cfacbbd0fae)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -375,7 +375,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Duplicate scan for shipment {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" is shown on Shipment Inbound Scanning page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Pending Shipment From Another Country to Van Inbound (uid:0e92d53f-103b-445a-90ce-4b3a88faa336)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -437,7 +437,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
       | result | Pending          |
       | userId | qa@ninjavan.co   |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Cancelled Shipment From Another Country to Van Inbound (uid:56226f31-bd34-4e44-a2ac-e3697a3fa8cb)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -500,7 +500,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
       | result | Cancelled          |
       | userId | qa@ninjavan.co     |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Completed Shipment From Another Country to Van Inbound (uid:b929b5ef-13b3-46fc-bbd4-30a33ccafb6b)
     Given Operator change the country to "Singapore"
     Given Operator go to menu Utilities -> QRCode Printing

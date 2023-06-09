@@ -31,18 +31,21 @@ public class ValidateAttemptSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     String starteDate = mapOfData.get("startDate");
     String endDate = mapOfData.get("endDate");
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.selectDateTime(starteDate, endDate);
     takesScreenshot();
   }
 
-  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page")
-  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPage() {
+  @Then("Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with {string}")
+  public void operatorIsRedirectedToValidateDeliveryOrPickupAttemptPageAndURLEndsWith(String url) {
     validateAttemptPage.validatePODPageHeadingText();
+    validateAttemptPage.verifyCurrentPageURL(url);
     takesScreenshot();
   }
 
   @When("Operator click {string} button")
   public void operatorClickButton(String buttonText) {
+    validateAttemptPage.switchToFrame();
     validateAttemptPage.clickButton(buttonText);
   }
 
@@ -54,6 +57,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
     String status = mapOfData.get("status");
     String cod = mapOfData.get("cod");
     String rts = mapOfData.get("rts");
+    String failureReason = mapOfData.get("failureReason");
     String startDate = mapOfData.get("startDate");
     String endDate = mapOfData.get("endDate");
     String hub = mapOfData.get("hub");
@@ -79,6 +83,9 @@ public class ValidateAttemptSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(hub)) {
       validateAttemptPage.selectHub(hub);
     }
+    if (StringUtils.isNotBlank(failureReason)) {
+      validateAttemptPage.selectFailureReason(failureReason);
+    }
     if (StringUtils.isNotBlank(driverName)) {
       validateAttemptPage.selectDriver(driverName);
     }
@@ -88,7 +95,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(masterShipperIds)) {
       validateAttemptPage.enterMasterShipperIds(masterShipperIds);
     }
-    pause5s();
+    pause2s();
     validateAttemptPage.clickButton("Start Validating");
     takesScreenshot();
   }
@@ -104,6 +111,20 @@ public class ValidateAttemptSteps extends AbstractSteps {
       validateAttemptPage.enterTrackingIds(trackingIds);
       validateAttemptPage.clickButton("Filter & Validate");
     }
+  }
+
+  @Then("Operator validate filterByTackingId modal")
+  public void operatorvalidateFilterByTackingIdModal() {
+    validateAttemptPage.validatetrackingIDtextboxIsEmpty();
+    validateAttemptPage.validateDisabledButton();
+    validateAttemptPage.clickButton("Cancel");
+  }
+
+  @Then("Operator validate Enter Reason for invalid attempt modal {value}")
+  public void OperatorValidateEnterReasonForInvalidAttemptModal(String trackingId) {
+    validateAttemptPage.validateTrackingIdInInvalidAttemptModal(trackingId);
+    validateAttemptPage.validateSaveReasonButtonIsDiabled();
+    validateAttemptPage.clickButton("Cancel");
   }
 
 
@@ -136,6 +157,8 @@ public class ValidateAttemptSteps extends AbstractSteps {
     String attemptDateTime = mapOfData.get("attemptDateTime");
     String cod = mapOfData.get("cod");
     String shipperName = mapOfData.get("shipperName");
+    String podPhoto = mapOfData.get("podPhoto");
+    String podSignature = mapOfData.get("podSignature");
     String latitude = mapOfData.get("latitude");
     String longitude = mapOfData.get("longitude");
     String address1 = mapOfData.get("address1");
@@ -164,6 +187,12 @@ public class ValidateAttemptSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(shipperName)) {
       validateAttemptPage.validateShipperName(shipperName);
     }
+    if (StringUtils.isNotBlank(podPhoto)) {
+      validateAttemptPage.validatePODPhoto();
+    }
+    if (StringUtils.isNotBlank(podSignature)) {
+      validateAttemptPage.validatePODSignature();
+    }
     if (StringUtils.isNotBlank(longitude)) {
       validateAttemptPage.validateLatitudeLongitude(latitude, longitude);
     }
@@ -172,7 +201,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
       validateAttemptPage.validateAddress(address1, address2, postcode);
     }
     if (StringUtils.isNotBlank(distanceFromWaypoint)) {
-      validateAttemptPage.validateDistance(distanceFromWaypoint);
+      validateAttemptPage.validateDistanceFromWaypiontIsDisplayed();
     }
     if (StringUtils.isNotBlank(phone)) {
       validateAttemptPage.validatePhone(phone);

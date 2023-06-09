@@ -255,6 +255,16 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
   }
 
+  @And("Operator searches for the Trip Management for driver {value}")
+  public void operatorSearchesForTheTripManagementBasedOnItsDriver(String driverUsername) {
+    TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+    TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType
+        .fromString("driver");
+
+    tripManagementPage
+        .tableFiltering(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
+  }
+
   @And("Operator searches for the Trip Management based on its {string} on arrival tab")
   public void operatorSearchesForTheTripManagementBasedOnItsOnArrivalTab(String filteringName) {
     TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
@@ -284,6 +294,17 @@ public class TripManagementSteps extends AbstractSteps {
     }
 
     tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
+  }
+
+  @Then("Operator verifies that the trip management assigned to driver {value}")
+  public void operatorVerifiesThatTheTripManagementAssignedToDriver(
+      String driverUsername) {
+    TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+    TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType
+        .fromString("driver");
+
+    tripManagementPage
+        .verifyResult(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
   }
 
   @Then("Operator verifies that the trip management shown with {string} as its filter is right on arrival tab")

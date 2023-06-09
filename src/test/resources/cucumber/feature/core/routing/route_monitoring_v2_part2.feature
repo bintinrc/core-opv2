@@ -425,7 +425,7 @@ Feature: Route Monitoring V2
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriverV2
   Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

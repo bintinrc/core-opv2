@@ -5,13 +5,12 @@ Feature: Airport Trip Management - View MAWB
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @DeleteCreatedPorts @DeleteDriver @CancelTrip
+  @DeleteCreatedShipments @DeleteCreatedPorts @DeleteDriverV2 @CancelTrip
   Scenario: View MAWB on Pending Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
@@ -51,7 +50,6 @@ Feature: Airport Trip Management - View MAWB
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
@@ -92,7 +90,6 @@ Feature: Airport Trip Management - View MAWB
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
@@ -134,7 +131,6 @@ Feature: Airport Trip Management - View MAWB
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
@@ -176,7 +172,6 @@ Feature: Airport Trip Management - View MAWB
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                             |
       | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |

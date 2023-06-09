@@ -30,6 +30,9 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Select Hubs']//parent::div//following::div[@class='ant-select-selector'][1]")
   public AntSelect2 hubs;
 
+  @FindBy(xpath = "//label[text()='Select Failure Reason']//parent::div//following::div[@class='ant-select-selector'][1]")
+  public AntSelect2 failureReason;
+
   @FindBy(xpath = "//div[contains(@class,'ant-select-dropdown')]//div[contains(@class,'ant-select-item ant-select-item-option')]")
   public PageElement hubDropdownValue;
 
@@ -88,6 +91,21 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//a[@class='ant-notification-notice-close']")
   public PageElement notificationCloseIcon;
 
+  @FindBy(xpath = "//textarea[@data-testid='tracking-ids-textarea']")
+  public PageElement trackingIdTextArea;
+
+  @FindBy(xpath = "//button[@disabled and @data-testid='filter-and-validate-button']")
+  public PageElement disabledValidateButton;
+
+  @FindBy(xpath = "//button[@disabled and @data-testid='save-failure-reason']")
+  public PageElement disabledSaveReasonButton;
+
+  @FindBy(xpath = "//div[@class='ant-image']//img//ancestor::div[@class='ant-row']//div[text()='Photos']")
+  public PageElement podPhoto;
+
+  @FindBy(xpath = "//div[@class='ant-image']//img//ancestor::div[@class='ant-row']//div[text()='Signature']")
+  public PageElement podSignature;
+
 
   public ValidateAttemptPage(WebDriver webDriver) {
     super(webDriver);
@@ -109,6 +127,16 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     webDriver.findElement(
             By.xpath(
                 "//label[text()='Select Hubs']//parent::div//following::div[@class='ant-select-selector'][1]//input"))
+        .sendKeys(Keys.TAB);
+  }
+
+  public void selectFailureReason(String failReason) {
+    failureReason.enterSearchTerm(failReason);
+    pause2s();
+    failureReason.sendReturnButton();
+    webDriver.findElement(
+            By.xpath(
+                "//label[text()='Select Failure Reason']//parent::div//following::div[@class='ant-select-selector'][1]//input"))
         .sendKeys(Keys.TAB);
   }
 
@@ -179,8 +207,7 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   }
 
   public void selectDateTime(String startDateRange, String endDateRange) {
-    switchToFrame();
-    pause3s();
+    pause1s();
     startDate.click();
     startDate.clearAndSendKeys(startDateRange);
     endDate.click();
@@ -189,7 +216,7 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   }
 
   public void clickButton(String buttonText) {
-    switchToFrame();
+    pause1s();
     String filterColumnXpath = f(BUTTON_XPATH, buttonText);
     getWebDriver().findElement(By.xpath(filterColumnXpath)).click();
   }
@@ -197,10 +224,34 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   public void validateModalTitle(String modalText) {
     waitWhilePageIsLoading();
     pause2s();
-    switchToFrame();
     String modalXpath = f("//div[text()='%s']", modalText);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(modalXpath)).isDisplayed())
         .as(f("Validation for Modal Title Text : %s", modalText))
+        .isTrue();
+  }
+
+  public void validatetrackingIDtextboxIsEmpty() {
+    Assertions.assertThat(trackingIdTextArea.getText().isEmpty())
+        .as("Validation for TrackingID textbox is empty")
+        .isTrue();
+  }
+
+  public void validateDisabledButton() {
+    Assertions.assertThat(disabledValidateButton.getText().isEmpty())
+        .as("Validation for disabled button")
+        .isTrue();
+  }
+
+  public void validateSaveReasonButtonIsDiabled() {
+    Assertions.assertThat(disabledSaveReasonButton.isDisplayed())
+        .as("Validation for disabled save reason button")
+        .isTrue();
+  }
+
+  public void validateTrackingIdInInvalidAttemptModal(String trackingId) {
+    String trackingIdXpath = f("//strong[text()='%s']", trackingId);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(trackingIdXpath)).isDisplayed())
+        .as(f("Validation for Tracking ID Text : %s in the Invalid attempy modal", trackingId))
         .isTrue();
   }
 
@@ -262,12 +313,25 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   public void validateShipperName(String shipperName) {
     String shipperNameXpath = f(
-        "//div[text()='Shipper Name']//parent::div//following-sibling::div//p[text()='%s']",
+        "//div[text()='Shipper Name']//parent::div//following-sibling::div//p[contains(text(),'%s')]",
         shipperName);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(shipperNameXpath)).isDisplayed())
         .as(f("Validation for shipperName Text : %s", shipperName))
         .isTrue();
   }
+
+  public void validatePODPhoto() {
+    Assertions.assertThat(podPhoto.isDisplayed())
+        .as("Validation for POD photo")
+        .isTrue();
+  }
+
+  public void validatePODSignature() {
+    Assertions.assertThat(podSignature.isDisplayed())
+        .as("Validation for POD signature")
+        .isTrue();
+  }
+
 
   public void validateLatitudeLongitude(String latitude, String logitude) {
     String latitudeXpath = f(
@@ -285,12 +349,10 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
-  public void validateDistance(String distance) {
-    String distanceXpath = f(
-        "//div[text()='Distance from Waypoint']//parent::div//following-sibling::div[text()='%s']",
-        distance);
+  public void validateDistanceFromWaypiontIsDisplayed() {
+    String distanceXpath = "//div[text()='Distance from Waypoint']//parent::div//following-sibling::div";
     Assertions.assertThat(getWebDriver().findElement(By.xpath(distanceXpath)).isDisplayed())
-        .as(f("Validation for distance Text : %s", distance))
+        .as("Validation for distance Text")
         .isTrue();
   }
 

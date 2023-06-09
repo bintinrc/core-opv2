@@ -46,16 +46,17 @@ Feature: Resume Order
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator create new recovery ticket on Edit Order page:
-      | entrySource                   | CUSTOMER COMPLAINT |
-      | investigatingDepartment       | Recovery           |
-      | investigatingHub              | {hub-name}         |
-      | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | exceptionReason               | GENERATED          |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | PARCEL EXCEPTION                      |
+      | subTicketType      | INACCURATE ADDRESS                    |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
     And Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
@@ -151,14 +152,9 @@ Feature: Resume Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | Pending Reschedule                |
     And API Operator force cancels the created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page

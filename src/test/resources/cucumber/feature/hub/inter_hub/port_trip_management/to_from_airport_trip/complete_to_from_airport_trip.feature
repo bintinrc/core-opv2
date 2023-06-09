@@ -5,12 +5,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -50,12 +49,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Warehouse to Airport Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -96,12 +94,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Warehouse to Airport Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -142,12 +139,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Warehouse to Airport Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -189,12 +185,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -234,12 +229,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Airport to Warehouse Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -280,12 +274,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Airport to Warehouse Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -326,12 +319,11 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Complete Airport to Warehouse Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:

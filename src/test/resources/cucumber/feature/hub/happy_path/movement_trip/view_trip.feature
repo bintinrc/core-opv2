@@ -29,7 +29,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Arrival Trip (uid:78d3df1b-2cb5-488f-a49a-ada0ed15a7a8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
