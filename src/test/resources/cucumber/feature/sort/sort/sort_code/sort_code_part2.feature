@@ -6,7 +6,7 @@ Feature: Sort Code
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Malaysia"
 
-  @DeleteCreatedSortCode
+#  @DeleteCreatedSortCode need to Move to Commonv2
   Scenario: Upload CSV with New Postcode and New Sort Code (uid:66eb9b8f-d4e2-4725-895e-8860261a53c9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator has created a sort code
@@ -32,7 +32,7 @@ Feature: Sort Code
     When Operator uploads the CSV file with name "{sort-invalid-format-csv-file}"
     Then Operator verifies that there will be an error toast "invalid_format" shown
 
-  @DeleteCreatedSortCode
+#  @DeleteCreatedSortCode need to move to CommonV2
   Scenario: Upload CSV to Overwrite Existing Postcode and Existing Sort Code (uid:8d010fe1-0601-4c54-8424-3b77f5701063)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator has created a sort code
