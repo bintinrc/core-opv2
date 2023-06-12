@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @LaunchBrowser @SalesOps @AllOrdersFees @nad
+@OperatorV2 @OperatorV2Part1 @LaunchBrowser @SalesOps @AllOrdersFees
 Feature: All Orders
 
   Background: Login to Operator Portal V2
