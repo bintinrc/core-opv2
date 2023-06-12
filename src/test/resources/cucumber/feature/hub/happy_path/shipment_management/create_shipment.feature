@@ -1,7 +1,7 @@
 @OperatorV2 @HappyPath @Hub @InterHub @ShipmentManagement @CreateShipment
 Feature: Shipment Management - Create Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun @henlo
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -13,10 +13,10 @@ Feature: Shipment Management - Create Shipment
       | origHubName  | {hub-name}                                                          |
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | shipmentType | awokaowk                                                            |
+      | shipmentType | Land Haul                                                           |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
-      | shipmentType | awokaowk   |
+      | shipmentType | Land Haul  |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | LAND_HAUL                            |
@@ -33,7 +33,7 @@ Feature: Shipment Management - Create Shipment
       | destHubName  | {hub-name-2}                         |
       | status       | Pending                              |
 
-  @DeleteCreatedShipments @henlo
+  @DeleteCreatedShipments
   Scenario: Create Shipment without Create Another Shipment (uid:20aadc4d-b1f8-4adf-9c45-6eb0b636c5bb)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -42,7 +42,6 @@ Feature: Shipment Management - Create Shipment
       | destHubName  | {hub-name-2}                                                        |
       | comments     | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | shipmentType | Land Haul                                                           |
-      | hello        | hello                                                               |
     When Operator apply filters on Shipment Management Page:
       | originHub    | {hub-name} |
       | shipmentType | Land Haul  |
