@@ -81,7 +81,7 @@ Feature: All test cases related to insufficient permission for Finance related p
     Then Operator waits for 3 seconds
     When Operator select financial batch report using data below:
       | For          | All Shippers          |
-      | emailAddress | {qa-email-address} |
+      | emailAddress | {order-billing-email} |
     Then Operator verifies that error toast is displayed on Financial Batch Reports page:
       | top    | Network Request Error                                                                                                                                           |
       | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
