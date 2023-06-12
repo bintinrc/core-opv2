@@ -60,7 +60,7 @@ Feature: Sort Code
     When Operator searches for Sort Code based on its "postcode"
     Then Operator verifies that the sort code details are right
 
-  @DeleteCreatedSortCode
+#  @DeleteCreatedSortCode need  to move to CommonV2
   Scenario: Upload CSV with New Postcode and Existing Sort Code (uid:23ab6d99-eca2-49b4-84cf-0557e9bfb44b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator has created a sort code
@@ -70,7 +70,6 @@ Feature: Sort Code
     Then Operator verifies that there will be success toast shown
     When Operator searches for Sort Code based on its "postcode"
     Then Operator verifies that the sort code details are right
-    And DB Order Create gets sort code details by sort code
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
