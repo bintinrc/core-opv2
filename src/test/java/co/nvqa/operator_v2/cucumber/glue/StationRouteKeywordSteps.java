@@ -5,12 +5,17 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.Coverage;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.TransferKeywordsDialog.AreaBox;
+import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -70,6 +75,142 @@ public class StationRouteKeywordSteps extends AbstractSteps {
         page.createNewCoverageDialog.fallbackDriver.selectValue(finalData.get("fallbackDriver"));
       }
       page.createNewCoverageDialog.add.click();
+    });
+  }
+
+  @When("Operator bulk create new coverages on Station Route Keyword page:")
+  public void createNewCoverage(List<Map<String, String>> data) {
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      page.bulkCreateCoverage.click();
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      List<String> rows = resolveListOfMaps(data).stream()
+          .peek(e -> putInList(KEY_LIST_OF_CREATED_AREAS, e.get("area")))
+          .map(e -> "\"" + StringUtils.trimToEmpty(e.get("area")) + "\",\""
+              + StringUtils.trimToEmpty(e.get("variations")) + "\",\"" + StringUtils.trimToEmpty(
+              e.get("keywords")) + "\",\"" + StringUtils.trimToEmpty(e.get("primaryDriver"))
+              + "\",\""
+              + StringUtils.trimToEmpty(e.get("fallbackDriver")) + "\"")
+          .collect(Collectors.toList());
+      rows.add(0,
+          "\"Area*\",\"Area Variations\",\"Keywords\",\"Primary Driver*\",\"Fallback Driver*\"");
+      File file = TestUtils.createFileOnTempFolder(
+          String.format("bulk_create_coverage_%s.csv", page.generateDateUniqueString()));
+      try {
+        FileUtils.writeLines(file, rows);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      page.bulkCreateCoverageDialog.file.setValue(file);
+      page.bulkCreateCoverageDialog.uploadAndCreateCoverages.click();
+    });
+  }
+
+  @When("Operator upload invalid bulk create coverage CSV on Station Route Keyword page")
+  public void uploadInvalidCreateNewCoverageCsv() {
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      page.bulkCreateCoverage.click();
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      File file = TestUtils.createFileOnTempFolder(
+          String.format("bulk_create_coverage_%s.csv", page.generateDateUniqueString()));
+      try {
+        FileUtils.write(file, "Area*\n"
+            + "AREA1\n"
+            + "AREA2");
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      page.bulkCreateCoverageDialog.file.setValue(file);
+      page.bulkCreateCoverageDialog.uploadAndCreateCoverages.click();
+    });
+  }
+
+  @When("Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:")
+  public void checkErrorMessages(List<String> expected) {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      Assertions.assertThat(page.bulkCreateCoverageDialog.errors)
+          .withFailMessage("No bulk create coverage errors are displayed")
+          .isNotEmpty();
+      var actual = page.bulkCreateCoverageDialog.errors.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of bulk create coverage errors")
+          .containsExactlyElementsOf(resolveValues(expected));
+    });
+  }
+
+  @When("Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page")
+  public void checkErrorTipDisplayed() {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      Assertions.assertThat(page.bulkCreateCoverageDialog.message.isDisplayed())
+          .withFailMessage("No bulk create coverage error tip is displayed")
+          .isTrue();
+    });
+  }
+
+  @When("Operator click Bulk create coverage on Station Route Keyword page")
+  public void clickBulkCreateCoverage() {
+    page.inFrame(() -> page.bulkCreateCoverage.click());
+  }
+
+  @When("Operator click Download template in Bulk create coverage dialog on Station Route Keyword page")
+  public void clickDownloadTemplate() {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      page.bulkCreateCoverageDialog.downloadTemplate.click();
+    });
+  }
+
+  @When("Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page")
+  public void clickDownloadErrorReport() {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      page.bulkCreateCoverageDialog.downloadErrorReport.click();
+    });
+  }
+
+  @When("Operator click Ok, got it in Bulk create coverage dialog on Station Route Keyword page")
+  public void clickOkGotIt() {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilVisible();
+      page.bulkCreateCoverageDialog.ok.click();
+    });
+  }
+
+  @When("Operator verify Bulk create coverage dialog is closed on Station Route Keyword page")
+  public void bulckCreateCoverageDialogIsClosed() {
+    page.inFrame(() -> {
+      page.bulkCreateCoverageDialog.waitUntilInvisible();
+    });
+  }
+
+  @Then("Operator verify Bulk create coverage template file is downloaded on Station Route Keyword page")
+  public void operatorVerifySampleCsvFileIsDownloaded() {
+    page.verifyFileDownloadedSuccessfully("bulk_create_coverage_template.csv",
+        "\"Area*\",\"Area Variations\",\"Keywords\",\"Primary Driver*\",\"Fallback Driver*\"\n"
+            + "\"SINGAPORE\",\"SG,SING,SPORE\",\"BUKIT MERAH,BKT MERAH,B MERAH\",\"1282\",\"1375\"");
+  }
+
+  @Then("Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:")
+  public void operatorVerifySampleCsvFileIsDownloaded(List<Map<String, String>> data) {
+    page.inFrame(() -> {
+      List<String> rows = resolveListOfMaps(data).stream()
+          .peek(e -> putInList(KEY_LIST_OF_CREATED_AREAS, e.get("area")))
+          .map(e -> "\"" + StringUtils.trimToEmpty(e.get("area")) + "\",\""
+              + StringUtils.trimToEmpty(e.get("variations")) + "\",\"" + StringUtils.trimToEmpty(
+              e.get("keywords")) + "\",\"" + e.get("primaryDriver")
+              + "\",\""
+              + e.get("fallbackDriver") + "\",\""
+              + StringUtils.trimToEmpty(e.get("error")) + "\"")
+          .collect(Collectors.toList());
+      rows.add(0,
+          "\"Area*\",\"Area Variations\",\"Keywords\",\"Primary Driver*\",\"Fallback Driver*\",\"Error\"");
+      String expected = StringUtils.join(rows, "\n");
+      page.verifyFileDownloadedSuccessfully("bulk_create_coverage_error_report.csv", expected);
     });
   }
 

@@ -216,6 +216,31 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[2]}" barcode on Implanted Manifest page
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Invalid Tracking Id
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "INVALIDTRACKINGID" barcode on Implanted Manifest page
+    Then Operator verifies that error react notification displayed:
+      | top    | Error               |
+      | bottom | Unknown Tracking ID |
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
+    Then Operator verifies that error toast displayed:
+      | top | Not a success reservation! |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | FAIL                             |
+      | shipperName | {filter-shipper-name}            |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | scannedAtShipperCount | 0       |
+      | scannedAtShipperPOD   | No data |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
