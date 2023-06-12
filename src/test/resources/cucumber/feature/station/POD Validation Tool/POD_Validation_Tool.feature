@@ -3313,7 +3313,7 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Reopen Page via URL Given User has Remaining Task
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
@@ -3364,7 +3364,7 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Reopen Page via Side Nav Given User has Remaining Task
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
@@ -3413,7 +3413,7 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Resume Validating Remaining Task Given Filter has more Than 5 PODs
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
@@ -3532,8 +3532,8 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2
-  Scenario Outline: Reopen Page via Side Nav Given User has Remaining Task
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Back to POD Filter page
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
