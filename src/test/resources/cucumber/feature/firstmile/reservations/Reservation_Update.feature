@@ -191,7 +191,7 @@ Feature: Reservation Update
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "50.5,50.5" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
-    Then DB Core - verifies that zone type is equal to "zone" and zone id is null for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
+    Then DB Core - verifies that zone type is equal to "<zone>" and zone id is null for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
     Then DB Core - verifies that latitude is equal to "1.2881" and longitude is equal to "103.74" and for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
 
     Examples:
