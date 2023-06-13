@@ -408,8 +408,8 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
     And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                    |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold\nNew Order Status: Transit\n\nReason: TICKET_RESOLUTION |
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
 
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
     When Operator go to menu Utilities -> QRCode Printing
@@ -453,8 +453,8 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
     And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                    |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold\nNew Order Status: Transit\n\nReason: TICKET_RESOLUTION |
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
