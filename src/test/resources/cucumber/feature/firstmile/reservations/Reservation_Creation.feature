@@ -33,7 +33,6 @@ Feature: Reservation Creation
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "LAST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
-
   Scenario: Create Reservation Given the Lat Long Fall in a Zone
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -46,7 +45,6 @@ Feature: Reservation Creation
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
-
 
   Scenario: Create Reservation Given the Lat Long does not Fall in Any Zone
     When Operator loads Shipper Address Configuration page
@@ -61,8 +59,8 @@ Feature: Reservation Creation
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is null for waypointId "{KEY_WAYPOINT_ID}"
 
-  @HappyPath @Debug
-  Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured - HYBRID
+  @HappyPath
+  Scenario Outline: Create Reservation Given the Address Pickup Type is Configured - HYBRID
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
