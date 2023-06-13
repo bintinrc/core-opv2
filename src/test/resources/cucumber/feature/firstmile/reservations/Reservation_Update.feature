@@ -96,10 +96,13 @@ Feature: Reservation Update
       | requestBody | {"pickup_type": "<pickUpType>"}                  |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-0} , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
+      And API Core - Operator add reservation to route using data below:
+      | routeId                |   {KEY_CREATED_ROUTE_ID}                           |
+      | reservationId          |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}         |
     And API Core - Operator force success waypoint via route manifest:
       | routeId                |   {KEY_CREATED_ROUTE_ID}                                   |
       | waypointId             |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}         |
+    And Operator waits for 30 seconds
     Then DB Core - verifies that zone type is equal to "<zone>" and zone id is null for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
     Then DB Core - verifies that latitude is equal to "1.2881" and longitude is equal to "103.74" and for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
 
@@ -120,7 +123,9 @@ Feature: Reservation Update
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-0} , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
+    And API Core - Operator add reservation to route using data below:
+      | routeId                |   {KEY_CREATED_ROUTE_ID}                           |
+      | reservationId          |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}         |
     And API Core - Operator force success waypoint via route manifest:
       | routeId                |   {KEY_CREATED_ROUTE_ID}                                   |
       | waypointId             |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}         |
@@ -160,7 +165,9 @@ Feature: Reservation Update
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-0} , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
+    And API Core - Operator add reservation to route using data below:
+      | routeId                |   {KEY_CREATED_ROUTE_ID}                           |
+      | reservationId          |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}         |
     And API Core - Operator force fail waypoint via route manifest:
       | routeId                |   {KEY_CREATED_ROUTE_ID}                                    |
       | waypointId             |   {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}          |
