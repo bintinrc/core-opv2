@@ -6,7 +6,7 @@ Feature: Shipper Address Verification
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: [SG] New Shipper Address Without Lat Long is Created After Order Creation
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -51,7 +51,7 @@ Feature: Shipper Address Verification
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
       | FirstMile | 1234567890 | Test ID, Test Street | ID      | 99443    | 1.463    | 103.801   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: New Shipper Address with Lat Long is Created from OPV2
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -109,7 +109,7 @@ Feature: Shipper Address Verification
 
     Examples:
       | name      | contact    | fromAddress              | country | postcode |  latitude | longitude  |
-      | FirstMile | 1234567890 | Test VN, Test Street     | VN      |          |  1.46378  | 103.801811 |
+      | Firstmile | 1234567890 | Test VN, Test Street     | VN      |          |  1.46378  | 103.801811 |
 
   @ForceSuccessOrder @default-vn
   Scenario Outline: [VN] Lat Long of Existing Shipper Address is Not Updated After Order Creation
@@ -129,7 +129,7 @@ Feature: Shipper Address Verification
       | name      | contact    | fromAddress              | country | postcode |  latitude | longitude  |
       | FirstMile | 1234567890 | Test VN, Test Street     | VN      |          |  24.5     | 47.5       |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: Lat Long of Existing Shipper Address is Updated from OPV2 - Verified Address
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -152,7 +152,7 @@ Feature: Shipper Address Verification
       | search_value                                  | newLatitude | newLongitude | newAddress            |
       | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | 50.5        |  50.5        | 30 SenokoRd,Singapore |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: Lat Long of Existing Shipper Address is Updated from OPV2 - Unverified Address
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -176,7 +176,7 @@ Feature: Shipper Address Verification
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | 50.5        |  50.5        | 30 SenokoRd,Singapore |
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: Lat Long of Existing Shipper Address is Not Updated After Order Creation
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -231,7 +231,7 @@ Feature: Shipper Address Verification
       | name      | contact    | Address1             | country | postcode |
       | FirstMile | 1234567890 | Test ID, Test Street | ID      | 99443    |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @default-sg
   Scenario Outline: New Shipper Address with Lat Long is Created from OPV2
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
