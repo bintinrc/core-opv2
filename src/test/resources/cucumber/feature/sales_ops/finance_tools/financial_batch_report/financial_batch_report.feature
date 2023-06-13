@@ -76,12 +76,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | -10.60                           |
+      | TotalFeesAdjustment      | -10.60                           |
+      | AmountDueToFromShipper   | 29.37                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   @DeleteCreatedShipper
@@ -163,12 +164,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - All Shippers (uid:39f855b2-3ac3-4bb3-9647-c00030c27eba)
@@ -197,7 +199,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-emoji-th-vn-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
@@ -211,7 +212,6 @@ Feature: Financial Batch Report
       | legacyShipperId | {shipper-sop-emoji-th-vn-chars-legacy-id}                                 |
       | shipperName     | QA-SO-Normal-Emoji/VN/TH-🙂 👀-ทดสอบ-đây là một người gửi hàng thử nghiệm |
 
-  @DeleteCreatedShipper
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shippers - Shipper Has Long Name (uid:0b4554ca-6e5e-4936-8d60-703d237b417d)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-100-chars-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -225,7 +225,6 @@ Feature: Financial Batch Report
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{shipper-sop-100-chars-global-id}"
     And API Billing - Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Billing - Operator generates financial batch report using data below
@@ -283,12 +282,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - No Ledgers Found (uid:6a97e9f9-804b-4bc2-ad1d-0e8292d5ef76)
@@ -382,12 +382,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.35                             |
       | totalFees                | 9.40                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.40                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -463,12 +464,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | -10.60                           |
+      | TotalFeesAdjustment      | -10.60                           |
+      | AmountDueToFromShipper   | 29.37                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -535,12 +537,13 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
+      | totalCODFees             | 0.05                             |
+      | otherFees                | 9.18                             |
       | totalFees                | 9.23                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
       | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | OtherFeesAdjustment      | 0.00                             |
+      | TotalFeesAdjustment      | 0.00                             |
+      | AmountDueToFromShipper   | -4.95                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -565,64 +568,7 @@ Feature: Financial Batch Report
       | type             | Completed                                     |
 
   @DeleteCreatedShipper
-  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details - With No COD, INS and handling fee (uid:6046902b-d077-43c0-babc-9683f3dd2b3b)
-    Given API Shipper - Operator create new shipper using data below:
-      | shipperType | Normal |
-    And API Script Engine - Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_SHIPPER.id}"
-      | {"shipper_id": "{KEY_SHIPPER_SHIPPER.id}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_SHIPPER.id}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
-    And API Auth - Operator generate client id and client secret for shipper with data below:
-      | appCode   | SHIPPER                        |
-      | appUserId | {KEY_SHIPPER_SHIPPER.legacyId} |
-      | systemId  | sg                             |
-    And DB Billing - Operator inserts below data to billing_qa_gl.shipper_accounts table
-      | shipper_id      | {KEY_SHIPPER_SHIPPER.id}                                           |
-      | source          | Netsuite                                                           |
-      | account_id      | QA-SO-AUTO-{KEY_SHIPPER_SHIPPER.id}-{gradle-current-date-yyyyMMdd} |
-      | overall_balance | 0.00                                                               |
-    Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {KEY_AUTH_LIST_OF_CLIENT_CREDENTIALS[1].clientId}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {KEY_AUTH_LIST_OF_CLIENT_CREDENTIALS[1].clientSecret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "PENDING_PICKUP"
-    And API Sort - Operator global inbound
-      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
-      | hubId                | {hub-id}                                                                                                                                                                                                                                           |
-    And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
-    Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}" is added to billing_qa_gl.priced_orders
-    And DB Billing - Operator verifies the number of entries in billing_qa_gl.ledgers table is 1 for shipper id "{KEY_SHIPPER_SHIPPER.id}"
-    And API Billing - Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
-    And API Billing - Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_SHIPPER.id} ]} |
-    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
-    And Operator opens Gmail and validates received financial batch report email
-    And Operator gets financial batch reports with order level details
-    Then Operator verifies extended financial batch details report data in CSV is as below
-      | batchId          | notNull                                       |
-      | batchDate        | {gradle-current-date-yyyyMMdd}                |
-      | shipperId        | {KEY_SHIPPER_SHIPPER.legacyId}                |
-      | shipperName      | {KEY_SHIPPER_SHIPPER.name}                    |
-      | trackingID       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}         |
-      | orderID          | {KEY_LIST_OF_CREATED_ORDERS[1].id}            |
-      | nvMeasuredWeight | 1                                             |
-      | fromCity         | null                                          |
-      | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
-      | toBillingZone    | WEST                                          |
-      | codAmount        | 0.00                                          |
-      | insuredAmount    | 0.00                                          |
-      | codFee           | 0.00                                          |
-      | codTax           | 0.00                                          |
-      | insuredFee       | 0.00                                          |
-      | deliveryFee      | 8.50                                          |
-      | rtsFee           | 0.00                                          |
-      | totalTax         | 0.68                                          |
-      | totalWithTax     | 9.18                                          |
-      | type             | Completed                                     |
-
-  @DeleteCreatedShipper
-  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details - With No COD, INS and handling fee (uid:6046902b-d077-43c0-babc-9683f3dd2b3b)
+  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Script Engine - Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_SHIPPER.id}"

@@ -45,12 +45,13 @@ public class SortCodeSteps extends AbstractSteps {
   @When("Operator searches for Sort Code based on its {string}")
   public void operatorSearchesForSortCodeBasedOnIts(String key) {
     SortCode sortCode = get(KEY_CREATED_SORT_CODE);
-
-    if (POSTCODE.equalsIgnoreCase(key)) {
-      sortCodePage.postcodeInput.setValue(sortCode.getPostcode());
-      return;
-    }
-    sortCodePage.sortCodeInput.setValue(sortCode.getSortCode());
+    doWithRetry(() -> {
+      if (POSTCODE.equalsIgnoreCase(key)) {
+        sortCodePage.postcodeInput.setValue(sortCode.getPostcode());
+        return;
+      }
+      sortCodePage.sortCodeInput.setValue(sortCode.getSortCode());
+    }, "Searching for Sort Codes");
   }
 
   @Then("Operator verifies that the sort code details are right")

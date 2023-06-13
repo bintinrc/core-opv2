@@ -124,9 +124,10 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
       if (filterFields.size() > 0) {
         waitWhilePageIsLoading();
         filterFields.get(0).click();
-        filterFields.get(0).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        filterFields.get(0).sendKeys(Keys.chord(Keys.COMMAND, "a"));
         filterFields.get(0).sendKeys(Keys.BACK_SPACE);
         filterFields.get(0).sendKeys(filter.getValue());
+        pause2s();
       }
     }
   }

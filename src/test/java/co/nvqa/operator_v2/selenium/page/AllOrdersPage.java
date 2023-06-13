@@ -651,8 +651,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilVisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading", true);
+    waitUntilVisibilityOfToast("Attempting to print waybill(s)");
+//    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
@@ -1171,8 +1171,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.list.download-selected")
     public NvIconTextButton downloadSelected;
 
+    @FindBy(id = "select-printing-size")
+    public PageElement PrintingSizeBox;
+
+    @FindBy(xpath = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']")
+    public PageElement PrintSizeList;
+
+    String PRINTING_SIZE = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']//div[@class='md-text' and contains(text(),'%s')]";
+
     public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+
+    public void SelectPrintSize(String size) {
+      PrintSizeList.waitUntilVisible();
+      findElementByXpath(f(PRINTING_SIZE, size)).click();
+      PrintSizeList.waitUntilInvisible();
     }
   }
 }

@@ -303,6 +303,26 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(key, value);
   }
 
+  @And("Operator check the email for newly created CIF user from data below:")
+  public void checkCifUserEmail(Map<String, String> dataTableAsMap) {
+    String emailBody = resolveValue(dataTableAsMap.get("email"));
+    String key = resolveValue(dataTableAsMap.get("key"));
+    String value = null;
+    String[] emailBodyCheck = emailBody.split("\\r?\\n");
+    int index = 0;
+    for (String checkKey : emailBodyCheck){
+      if (checkKey.equalsIgnoreCase(key)){
+        value = emailBodyCheck[index + 1];
+        break;
+      } else {
+        index++;
+      }
+    }
+
+    Assertions.assertThat(value).as(f("%s: %s",key,value)).isNotNull();
+
+  }
+
   @Then("Operator Fill Dp User Details below :")
   public void operatorFillDpUserDetails(DataTable dt) {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
@@ -320,6 +340,8 @@ public class DpAdministrationSteps extends AbstractSteps {
           dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
         }
         if (dpUser.getContactNo() != null) {
+          String number = resolveValue(dpUser.getContactNo());
+          dpUser.setContactNo(number);
           dpAdminReactPage.formDpUserContact.forceClear();
           dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
         }
@@ -542,11 +564,29 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator fill the partner filter by {string} with value {string}")
+  public void operatorFillThePartnerFilterWithValue(String element, String value) {
+    String fillInValue = resolveValue(value);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).waitUntilVisible();
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
+    });
+  }
+
   @Then("Operator fill the Dp list filter by {string}")
   public void operatorFillTheDpListFilter(String element) {
     DpDetailsResponse newlyCreatedDpDetails = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
     dpAdminReactPage.inFrame(() -> {
       String fillInValue = dpAdminReactPage.getDpElementByMap(element, newlyCreatedDpDetails);
+      dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @Then("Operator fill the Dp list filter by {string} with value {string}")
+  public void operatorFillTheDpListFilterWithValue(String element,String value) {
+    String fillInValue = resolveValue(value);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpFilter.get(element).waitUntilVisible();
       dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
     });
   }

@@ -57,7 +57,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_ERROR_NOTIFICATION_XPATH = "//div[contains(@class,'ant-notification-notice-error')]//div[@class='ant-notification-notice-message']";
   private static final String MS_PAGE_PICKER_HOUR_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[1]//div[text()='%s']";
   private static final String MS_PAGE_PICKER_MIN_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[2]//div[text()='%s']";
-  private static final String MS_PAGE_NOTIFICATION_XPATH = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
+  private static final String MS_PAGE_NOTIFICATION_XPATH = "//div[@class='ant-notification-notice-message']";
   private static final String MS_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
   private static final String MS_PAGE_LOADING_ICON_XPATH = "//span[@class='ant-spin-dot ant-spin-dot-spin']";
   private static final String MS_PAGE_ITEM_CHECKBOX_XPATH = "//td//label[@class='ant-checkbox-wrapper']//input[@class='ant-checkbox-input'][%d]";
@@ -158,6 +158,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   @FindBy(xpath = "//div[.='Station']//span[contains(@class,'ant-table-column-sorter-down')]")
   public PageElement stationFilterSortDown;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement toastOnMovementSchedule;
 
 
   //region Stations tab
@@ -341,8 +344,16 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public void verifyNotificationWithMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
     WebElement notificationElement = findElementByXpath(MS_PAGE_NOTIFICATION_XPATH);
-   Assertions.assertThat(notificationElement.getText()).as("Toast message is the same").isEqualTo(containsMessage);
-    waitUntilInvisibilityOfNotification(MS_PAGE_NOTIFICATION_XPATH, false);
+    Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
+    waitUntilInvisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
+  }
+
+  public void verifyDeleteScheduleMessage(String containsMessage) {
+    toastOnMovementSchedule.waitUntilVisible();
+    Assertions.assertThat(toastOnMovementSchedule.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
+    toastOnMovementSchedule.waitUntilInvisible();
   }
 
   public void verifyNotificationWithMessage(List<String> containsMessages) {
