@@ -13,8 +13,8 @@ Feature: Order Dimensions Value and Type
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"dimensions":{"weight":<oldWeight>,"height":<oldHeight>,"length":<oldLength>,"width":<oldWidth>,"size":"<oldSize>"}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                             |
-      | globalInboundRequest | { "hubId":{hub-id}, "dimensions":{"width":<newWidth>,"height":<newHeight>,"length":<newLength>,"weight":<newWeight>,"size":<newSize>}} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                               |
+      | globalInboundRequest | { "hubId":{hub-id}, "dimensions":{"width":<newWidth>,"height":<newHeight>,"length":<newLength>,"weight":<newWeight>,"size":"<newSize>"}} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
