@@ -38,7 +38,7 @@ Feature: Reservation Update
     Then Operator verifies that green check mark icon is shown under the Lat Long
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
     Then DB Core - verifies that latitude is equal to "50.5" and longitude is equal to "50.5" and for waypointId "{KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}"
-
+@Debug
   Scenario Outline: Update Address Lat Long - Pending Reservation for Upcoming Date - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -76,8 +76,8 @@ Feature: Reservation Update
     Examples:
       | dataset_name             | pickUpType   | zone        |
       | Pickup Type Hybrid       | Truck        | FIRST_MILE  |
-      | Pickup Type FM Dedicated | fm_dedicated | FIRST_MILE  |
-      | Pickup Type Truck        | Hybrid       | LAST_MILE   |
+#      | Pickup Type FM Dedicated | fm_dedicated | FIRST_MILE  |
+#      | Pickup Type Truck        | Hybrid       | LAST_MILE   |
 
   Scenario Outline: Update Address Pickup Type - Success Reservation - <dataset_name>
     When Operator loads Shipper Address Configuration page

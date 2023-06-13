@@ -61,7 +61,7 @@ Feature: Reservation Creation
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is null for waypointId "{KEY_WAYPOINT_ID}"
 
-  @HappyPath
+  @HappyPath @Debug
   Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured - HYBRID
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -72,10 +72,10 @@ Feature: Reservation Creation
     And API Operator update the pickup type for the shipper address
       | addressId   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |
       | requestBody | {"pickup_type": "<pickupTypeAPI>"}            |
+    And Operator waits for 10 seconds
     When Operator loads Shipper Address Configuration page
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":<search_value>, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And Operator waits for 30 seconds
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "LAST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
