@@ -366,6 +366,96 @@ Feature: Resolve Recovery Ticket
 #      | ROUTE INBOUND  SCAN |
       | TICKET RESOLVED |
 
+  Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
+    When Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | PARCEL EXCEPTION                      |
+      | subTicketType      | INACCURATE ADDRESS                    |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED      |
+      | outcome | RESUME PICKUP |
+    And Operator refresh page
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator get "Pickup" transaction with status "Fail"
+    Then DB Operator verifies waypoint status is "FAIL"
+    When Operator get "Pickup" transaction with status "Pending"
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | RESUME PICKUP   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
+
+  Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
+    When Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | SHIPPER ISSUE                         |
+      | subTicketType      | POOR LABELLING                        |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (POOR LABELLING)        |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED      |
+      | outcome | RESUME PICKUP |
+    And Operator refresh page
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator get "Pickup" transaction with status "Fail"
+    Then DB Operator verifies waypoint status is "FAIL"
+    When Operator get "Pickup" transaction with status "Pending"
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | RESUME PICKUP   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

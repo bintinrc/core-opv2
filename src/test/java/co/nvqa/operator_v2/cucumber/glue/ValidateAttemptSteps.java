@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.ValidateAttemptPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Map;
@@ -74,10 +75,10 @@ public class ValidateAttemptSteps extends AbstractSteps {
       validateAttemptPage.selectStatus(status);
     }
     if (StringUtils.isNotBlank(cod)) {
-      validateAttemptPage.selectCOD(cod);
+      validateAttemptPage.selectDropdownValue("COD", cod);
     }
     if (StringUtils.isNotBlank(rts)) {
-      validateAttemptPage.selectRTS(rts);
+      validateAttemptPage.selectDropdownValue("RTS", rts);
     }
     validateAttemptPage.selectDateTime(startDate, endDate);
     if (StringUtils.isNotBlank(hub)) {
@@ -247,4 +248,19 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @When("Operator loads Validate Validate Delivery or Pickup Attempt page")
+  public void operatorLoadsValidateDeliveryOrPickupAttemptPage() {
+    validateAttemptPage.loadValidateDeliveryOrPickAttemptPage();
+  }
+
+  @Then("Operator validate Pending assigned POD modal")
+  public void operatorValidatePendingAssignedPODModal() {
+    validateAttemptPage.validatePendingAssignedPODModal();
+    takesScreenshot();
+  }
+
+  @And("Operator goes back on browser")
+  public void operatorGoesBackOnBrowser() {
+    validateAttemptPage.navigateBackInBrowser();
+  }
 }

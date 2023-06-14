@@ -57,6 +57,9 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//h2[text()='Filter PODs to start validating']")
   public PageElement validateAttemptHeadingText;
 
+  @FindBy(xpath = "//p[text()='You have some PODs assigned to you that have not been validated. Do you want to resume validation?']")
+  public PageElement pendingAssignedPodText;
+
   @FindBy(xpath = "//label[contains(text(),'Select Job')]/ancestor::div[contains(@class,'ant-row ant-form-item')]//div[@class='ant-select-selector']")
   public AntSelect4 selectJob;
 
@@ -430,6 +433,30 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     notificationCloseIcon.click();
   }
 
+  public void selectDropdownValue(String fieldName, String value) {
+    String dropDownxpath = "//label[contains(text(),'" + fieldName
+        + "')]/ancestor::div[contains(@class,'ant-row ant-form-item')]//div[@class='ant-select-selector']//span[@class='ant-select-selection-item']";
+    getWebDriver().findElement(By.xpath(dropDownxpath)).click();
+    pause1s();
+    getWebDriver().findElement(By.xpath(
+        "//div[contains(@class, 'ant-select-dropdown')]//*[contains(normalize-space(text()), '"
+            + value + "')]")).click();
+  }
+
+  public void loadValidateDeliveryOrPickAttemptPage() {
+    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/validate-attempt");
+  }
+
+  public void navigateBackInBrowser() {
+    getWebDriver().navigate().back();
+  }
+
+  public void validatePendingAssignedPODModal() {
+    switchToFrame();
+    Assertions.assertThat(pendingAssignedPodText.isDisplayed())
+        .as("Validation for Pending Assigned POD popup")
+        .isTrue();
+  }
 
 }
 
