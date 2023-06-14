@@ -366,7 +366,7 @@ Feature: Resolve Recovery Ticket
 #      | ROUTE INBOUND  SCAN |
       | TICKET RESOLVED |
 
-  @wip2
+  @wip
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
