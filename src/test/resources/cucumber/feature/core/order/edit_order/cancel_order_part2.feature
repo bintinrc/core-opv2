@@ -105,6 +105,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
+    @RT
   Scenario: Operator Cancel Order From Resolved Recovery Ticket
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
