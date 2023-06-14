@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @Recovery @ResolveTicket @ResolveTicketPart2 @EditOrder3 @current
+@OperatorV2 @Core @EditOrder @Recovery @ResolveTicket @ResolveTicketPart2 @EditOrder3
 Feature: Resolve Recovery Ticket
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -365,8 +365,7 @@ Feature: Resolve Recovery Ticket
 #  need to enable once issue is fixed
 #      | ROUTE INBOUND  SCAN |
       | TICKET RESOLVED |
-
-  @wip
+    
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -412,7 +411,6 @@ Feature: Resolve Recovery Ticket
       | tags          | name          | description                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
 
-  @wip
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
