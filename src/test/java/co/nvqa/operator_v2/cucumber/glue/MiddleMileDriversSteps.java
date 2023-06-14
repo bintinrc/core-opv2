@@ -333,8 +333,9 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @When("Operator searches by {string} with value {string}")
   public void operatorSearchesByWithValue(String filterName, String filterValue) {
+    String data = resolveValue(filterValue);
     if ("id".equals(filterName)) {
-      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolveValue(filterValue)));
+      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(data));
     } else {
       middleMileDriversPage.tableFilterByIdWithValue(resolveValue(filterValue));
     }
@@ -710,5 +711,21 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @Then("Operator verifies {string} error notification is shown on Middle Mile Drivers Page")
   public void operatorVerifiesErrorNotificationIsShownOnMiddleMileDriversPage(String error) {
     middleMileDriversPage.verifyErrorNotificationDriverAlreadyRegistered();
+  }
+
+  @And("Operator edit Employment Type on edit driver dialog with value {string} with vendor name is {string}")
+  public void operatorEditOnEditDriverDialogWithValueWithVendorNameIs(String employmentType, String vendorName) {
+    String resolvedValue = resolveValue(employmentType);
+    middleMileDriversPage.editDriverByWithVendorValue(resolvedValue, vendorName);
+  }
+
+  @When("Operator clicks clear button on {string} field on the middle mile driver edit popup")
+  public void operatorClicksClearButtonOnFieldOnTheMiddleMileDriverEditPopup(String fieldName) {
+    middleMileDriversPage.clearTextonField(fieldName);
+  }
+
+  @Then("Operator verifies error message on {string} field on the middle mile driver is shown")
+  public void operatorVerifiesErrorMessageOnFieldOnTheMiddleMileDriverIsShown(String fieldName) {
+    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(fieldName);
   }
 }

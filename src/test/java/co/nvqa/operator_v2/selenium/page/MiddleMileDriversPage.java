@@ -133,6 +133,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), '%s')]";
 
+    private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -1356,14 +1358,37 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             case "License Type":
                 actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "License Type")).getText();
                 break;
+            case "Employment Type":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Employment Type")).getText();
+                break;
         }
         Assertions.assertThat(actualMessage).as("Mandatory field error message is same")
                 .isEqualTo(expectedMessage);
+    }
+
+    public void clearTextonField(String fieldName) {
+        switch (fieldName) {
+            case "Employment Type":
+                findElementByXpath(f(MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH, "employment_type")).click();
+                break;
+        }
     }
 
     public void verifyErrorNotificationDriverAlreadyRegistered() {
         Assertions.assertThat(isElementExist(NOTIFICATION_DRIVER_ALREADY_REGISTERED_XPATH))
             .as("Error notification is Username already registered")
             .isTrue();
+    }
+
+    public void editDriverByWithVendorValue(String employmentType, String vendorName) {
+        if (employmentType.equalsIgnoreCase("Outsourced - Vendors")) {
+            chooseEmploymentType(employmentType);
+            chooseVendorName(vendorName);
+        } else if (employmentType.equalsIgnoreCase("Outsourced - Manpower Agency")) {
+            chooseEmploymentType(employmentType);
+            chooseVendorName(vendorName);
+        }
+        editDriverDialog.save.click();
+        editDriverDialog.waitUntilInvisible();
     }
 }
