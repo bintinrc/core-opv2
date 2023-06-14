@@ -196,7 +196,7 @@ Feature: Addressing
     When Operator switch to edit order page using direct URL
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE AV                                                                                                                                                                                                                                                                                       |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: {KEY_CREATED_ADDRESSING.streetName} \|\|\|\|112233 Zone ID: 1 Destination Hub ID: 1 Lat, Long: {KEY_CREATED_ADDRESSING.latitude}, {KEY_CREATED_ADDRESSING.longitude} Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+      | description | User: AUTO (system AV) (support@ninjavan.co) Address: Click to reveal (tracked) \|\|\|\|112233 Zone ID: 1 Destination Hub ID: 1 Lat, Long: {KEY_CREATED_ADDRESSING.latitude}, {KEY_CREATED_ADDRESSING.longitude} Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
