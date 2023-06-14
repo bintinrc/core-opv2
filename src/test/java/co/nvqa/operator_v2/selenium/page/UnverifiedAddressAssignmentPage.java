@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import com.google.common.collect.ImmutableMap;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -69,8 +70,8 @@ public class UnverifiedAddressAssignmentPage extends
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
-    assertThat("Toast message is the same", notificationElement.getText(),
-        equalTo(containsMessage));
+    Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
     waitUntilInvisibilityOfNotification(notificationXpath, false);
   }
 

@@ -5,8 +5,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
@@ -164,8 +164,8 @@ public class LoginPage extends OperatorV2SimplePage {
   public void backToLoginPage() {
     pause1s();
     String currentUrl = getCurrentUrl();
-    assertThat("Default Operator Portal URL not loaded.", currentUrl,
-        Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
+    Assertions.assertThat(currentUrl).as("Default Operator Portal URL not loaded.")
+        .contains(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
   }
 
   public void changeCountry(String countryName) {

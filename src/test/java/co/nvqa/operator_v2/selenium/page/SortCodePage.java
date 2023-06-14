@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.io.File;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -50,9 +51,10 @@ public class SortCodePage extends OperatorV2SimplePage {
   }
 
   public void checkPageComponents() {
-    assertTrue("Sort Code Table", isElementExist(TABLE_XPATH));
-    assertTrue("Upload CSV Button", isElementExist(UPLOAD_CSV_BUTTON_XPATH));
-    assertTrue("Download CSV Button", isElementExist(DOWNLOAD_CSV_BUTTON_XPATH));
+    Assertions.assertThat(isElementExist(TABLE_XPATH)).as("Sort Code Table").isTrue();
+    Assertions.assertThat(isElementExist(UPLOAD_CSV_BUTTON_XPATH)).as("Upload CSV Button").isTrue();
+    Assertions.assertThat(isElementExist(DOWNLOAD_CSV_BUTTON_XPATH)).as("Download CSV Button")
+        .isTrue();
   }
 
   public void verifiesSortCodeDetailsAreRight(SortCode sortCode) {
@@ -71,8 +73,8 @@ public class SortCodePage extends OperatorV2SimplePage {
       actualSortCode = getText(SORT_CODE_RESULT_MARK_XPATH);
     }
 
-    assertEquals("Postcode : ", sortCode.getPostcode(), actualPostcode);
-    assertEquals("Sort Code : ", sortCode.getSortCode(), actualSortCode);
+    Assertions.assertThat(actualPostcode).as("Postcode : ").isEqualTo(sortCode.getPostcode());
+    Assertions.assertThat(actualSortCode).as("Sort Code : ").isEqualTo(sortCode.getSortCode());
   }
 
   public void verifiesDownloadedCsvDetailsAreRight(SortCode sortCode) {
@@ -85,6 +87,7 @@ public class SortCodePage extends OperatorV2SimplePage {
   }
 
   public void verifiiesSortCodeIsNotFound() {
-    assertTrue("Sort Code is Not Found", isElementExist(SORT_CODE_IS_NOT_FOUND_XPATH));
+    Assertions.assertThat(isElementExist(SORT_CODE_IS_NOT_FOUND_XPATH)).as("Sort Code is Not Found")
+        .isTrue();
   }
 }

@@ -11,8 +11,9 @@ import java.util.Date;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
+//import org.junit.jupiter.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.PendingPriorityModal.PendingPriorityTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_INVALID_FAILED_WP;
@@ -81,7 +82,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
 
       RouteMonitoringParams expected = new RouteMonitoringParams(resolveKeyValues(data));
       Long routeId = expected.getRouteId();
-      Assertions.assertNotNull(routeId, "Route ID was not defined");
+      Assertions.assertThat(routeId).as("Route ID was not defined").isNotNull();
       page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       page.smallSpinner.waitUntilInvisible();
 
@@ -146,62 +147,57 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
   @When("^Operator check there are (\\d+) Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page$")
   public void checkPendingPriorityPickupsNumber(Integer expectedCount) {
     routeMonitoringV2Page.inFrame(page -> {
-      Assertions.assertEquals(f("Pending Priority Pickups (%d)", expectedCount),
-          page.pendingPriorityModal.pendingPriorityPickupsTitle.getText().trim(),
-          "Pending Priority Pickups Title");
-      Assertions.assertEquals(expectedCount,
-          page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount(),
-          "Pending Priority Pickups Table rows count");
+      Assertions.assertThat(page.pendingPriorityModal.pendingPriorityPickupsTitle.getText().trim())
+          .as("Pending Priority Pickups Title")
+          .isEqualTo("Pending Priority Pickups (%d)", expectedCount);
+      Assertions.assertThat(page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount())
+          .as("Pending Priority Pickups Table rows count").isEqualTo(expectedCount);
     });
   }
 
   @When("^Operator check there are (\\d+) Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page$")
   public void checkInvalidFailedPickupsNumber(Integer expectedCount) {
     routeMonitoringV2Page.inFrame(page -> {
-      Assertions.assertEquals(f("Invalid Failed Pickups (%d)", expectedCount),
-          page.invalidFailedWpModal.invalidFailedPickupsTitle.getText().trim(),
-          "Invalid Failed Pickups Title");
-      Assertions.assertEquals(expectedCount,
-          page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount(),
-          "Invalid Failed Pickups Table rows count");
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedPickupsTitle.getText().trim())
+          .as("Invalid Failed Pickups Title")
+          .isEqualTo(f("Invalid Failed Pickups (%d)", expectedCount));
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount())
+          .as("Invalid Failed Pickups Table rows count").isEqualTo(expectedCount);
     });
   }
 
   @When("^Operator check there are (\\d+) Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page$")
   public void checkInvalidFailedReservationsNumber(Integer expectedCount) {
     routeMonitoringV2Page.inFrame(page -> {
-      Assertions.assertEquals(f("Invalid Failed Reservations (%d)", expectedCount),
-          page.invalidFailedWpModal.invalidFailedReservationsTitle.getText()
-              .trim(),
-          "Invalid Failed Reservations Title");
-      Assertions.assertEquals(expectedCount,
-          page.invalidFailedWpModal.invalidFailedReservationsTable.getRowsCount(),
-          "Invalid Failed Reservations Table rows count");
+      Assertions.assertThat(
+              page.invalidFailedWpModal.invalidFailedReservationsTitle.getText().trim())
+          .as("Invalid Failed Reservations Title")
+          .isEqualTo(f("Invalid Failed Reservations (%d)", expectedCount));
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedReservationsTable.getRowsCount())
+          .as("Invalid Failed Reservations Table rows count").isEqualTo(expectedCount);
     });
   }
 
   @When("^Operator check there are (\\d+) Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page$")
   public void checkPendingPriorityDeliveriesNumber(Integer expectedCount) {
     routeMonitoringV2Page.inFrame(page -> {
-      Assertions.assertEquals(f("Pending Priority Deliveries (%d)", expectedCount),
-          page.pendingPriorityModal.pendingPriorityDeliveriesTitle.getText()
-              .trim(),
-          "Pending Priority Deliveries Title");
-      Assertions.assertEquals(expectedCount,
-          page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(),
-          "Pending Priority Deliveries Table rows count");
+      Assertions.assertThat(
+              page.pendingPriorityModal.pendingPriorityDeliveriesTitle.getText().trim())
+          .as("Pending Priority Deliveries Title")
+          .isEqualTo(f("Pending Priority Deliveries (%d)", expectedCount));
+      Assertions.assertThat(page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount())
+          .as("Pending Priority Deliveries Table rows count").isEqualTo(expectedCount);
     });
   }
 
   @When("^Operator check there are (\\d+) Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page$")
   public void checkInvalidFailedDeliveriesNumber(Integer expectedCount) {
     routeMonitoringV2Page.inFrame(page -> {
-      Assertions.assertEquals(f("Invalid Failed Deliveries (%d)", expectedCount),
-          page.invalidFailedWpModal.invalidFailedDeliveriesTitle.getText().trim(),
-          "Invalid Failed Deliveries Title");
-      Assertions.assertEquals(expectedCount,
-          page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount(),
-          "Invalid Failed Deliveries Table rows count");
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedDeliveriesTitle.getText().trim())
+          .as("Invalid Failed Deliveries Title")
+          .isEqualTo(f("Invalid Failed Deliveries (%d)", expectedCount));
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount())
+          .as("Invalid Failed Deliveries Table rows count").isEqualTo(expectedCount);
     });
   }
 
@@ -211,9 +207,8 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
       PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
       page.pendingPriorityModal.pendingPriorityPickupsTable
           .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      Assertions.assertEquals(1,
-          page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount(),
-          "Pending Priority Pickups Table rows count");
+      Assertions.assertThat(page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount())
+          .as("Pending Priority Pickups Table rows count").isEqualTo(1);
       PendingPriorityOrder actual = page.pendingPriorityModal.pendingPriorityPickupsTable.readEntity(
           1);
       expected.compareWithActual(actual);
@@ -226,14 +221,13 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
       PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
       page.invalidFailedWpModal.invalidFailedPickupsTable
           .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      Assertions.assertEquals(1,
-          page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount(),
-          "Invalid Failed Pickups Table rows count");
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount())
+          .as("Invalid Failed Pickups Table rows count").isEqualTo(1);
       PendingPriorityOrder actual = page.invalidFailedWpModal.invalidFailedPickupsTable.readEntity(
           1);
       if (StringUtils.equals(data.get("tags"), "-")) {
         expected.clearTags();
-        assertNull("List of tags", actual.getTags());
+        Assertions.assertThat(actual.getTags()).as("List of tags").isNull();
       }
       expected.compareWithActual(actual);
     });
@@ -245,9 +239,8 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
       PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
       page.pendingPriorityModal.pendingPriorityDeliveriesTable
           .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      Assertions.assertEquals(1,
-          page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(),
-          "Pending Priority Deliveries Table rows count");
+      Assertions.assertThat(page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount())
+          .as("Pending Priority Deliveries Table rows count").isEqualTo(1);
       PendingPriorityOrder actual = page.pendingPriorityModal.pendingPriorityDeliveriesTable.readEntity(
           1);
       expected.compareWithActual(actual);
@@ -260,14 +253,13 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps {
       PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
       page.invalidFailedWpModal.invalidFailedDeliveriesTable
           .filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
-      Assertions.assertEquals(1,
-          page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount(),
-          "Invalid Failed Deliveries Table rows count");
+      Assertions.assertThat(page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount())
+          .as("Invalid Failed Deliveries Table rows count").isEqualTo(1);
       PendingPriorityOrder actual = page.invalidFailedWpModal.invalidFailedDeliveriesTable
           .readEntity(1);
       if (StringUtils.equals(data.get("tags"), "-")) {
         expected.clearTags();
-        assertNull("List of tags", actual.getTags());
+        Assertions.assertThat(actual.getTags()).as("List of tags").isNull();
       }
       expected.compareWithActual(actual);
     });

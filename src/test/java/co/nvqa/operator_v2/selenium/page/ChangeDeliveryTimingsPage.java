@@ -2,38 +2,41 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.List;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * @author Tristania Siagian
+ * @author Sergey Mishanin
  */
-public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
+public class ChangeDeliveryTimingsPage extends SimpleReactPage<ChangeDeliveryTimingsPage> {
 
-  @FindBy(css = "div[ng-repeat='error in ctrl.payload.errors track by $index']")
+  @FindBy(css = ".error-box li")
   public PageElement errorMessage;
 
-  @FindBy(name = "Upload CSV")
-  public NvApiTextButton uploadCsv;
+  @FindBy(css = ".error-box li")
+  public List<PageElement> errorMessages;
 
-  @FindBy(name = "commons.download-sample-excel")
-  public NvIconTextButton downloadSampleCsv;
+  @FindBy(css = "[data-testid='upload-csv-button']")
+  public Button uploadCsv;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "[data-testid='close-button']")
+  public Button close;
+
+  @FindBy(css = "[data-testid='download-sample-excel-file-button']")
+  public Button downloadSampleCsv;
+
+  @FindBy(css = ".ant-modal")
   public UploadChangeDeliveryTimingCsvDialog uploadCsvDialog;
 
   private static final String CSV_FILENAME_PATTERN = "sample_change_delivery_timings";
@@ -69,12 +72,12 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
           sb.append(COMMA);
         }
 
-        csvData.append(sb.toString()).append(System.lineSeparator());
+        csvData.append(sb).append(System.lineSeparator());
       });
 
-      PrintWriter pw = new PrintWriter(new FileOutputStream(csvResultFile));
+      PrintWriter pw = new PrintWriter(Files.newOutputStream(csvResultFile.toPath()));
       pw.println(CSV_CAMPAIGN_HEADER);
-      pw.print(csvData.toString());
+      pw.print(csvData);
       pw.close();
     } catch (IOException ex) {
       throw new NvTestRuntimeException(ex);
@@ -83,19 +86,13 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
     return csvResultFile;
   }
 
-  public void invalidTrackingIdVerification() {
-    errorMessage.waitUntilClickable();
-    assertThat("Tracking ID is valid.", errorMessage.getText(),
-        Matchers.containsStringIgnoringCase("Invalid tracking Id"));
-  }
+  public static class UploadChangeDeliveryTimingCsvDialog extends AntModal {
 
-  public static class UploadChangeDeliveryTimingCsvDialog extends MdDialog {
+    @FindBy(css = "[data-testid='upload-dragger']")
+    public FileInput selectFile;
 
-    @FindBy(css = "[label='Choose']")
-    public NvButtonFilePicker selectFile;
-
-    @FindBy(name = "Upload CSV")
-    public NvButtonSave upload;
+    @FindBy(css = "[data-testid='upload-button']")
+    public Button upload;
 
     public UploadChangeDeliveryTimingCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -199,7 +200,7 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
   public Button lastAssignZoneButton;
 
   private final static String ZONE_LIST_XPATH = "//div[@class='address-name' and text()='%s']";
-  private final static String ZONE_ADDRESS_SIZE_XPATH = "(%s/following-sibling::div[@class='address-size'])[1]";
+  private final static String ZONE_ADDRESS_SIZE_XPATH = "(%s/following-sibling::div[@class='address-size'])";
   private final static String ZONE_SELECTED_OPTION_XPATH = "(//div[contains(@class, 'ant-select-item-option-content') and text()='%s'])[last()]";
 
   //endregion
@@ -231,8 +232,8 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
-    assertThat("Toast message is the same", notificationElement.getText(),
-        equalTo(containsMessage));
+    Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
     waitUntilInvisibilityOfNotification(notificationXpath, false);
   }
 
@@ -255,10 +256,21 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
   }
 
   public void fetchAddressFromInitializedPool(String zoneName) {
-    String addressSizeStr = findElementByXpath(
-        String.format(ZONE_ADDRESS_SIZE_XPATH, String.format(ZONE_LIST_XPATH, zoneName))).getText()
-        .split(" ")[0];
-
+    String addressSize = "0";
+    for (int i = 1; i < 4; i++) {
+      String s =
+          String.format(ZONE_ADDRESS_SIZE_XPATH, String.format(ZONE_LIST_XPATH, zoneName)) + "[" + i
+              + "]";
+      if (!isElementExist(s)) {
+        break;
+      }
+      String addressSizeStr = findElementByXpath(
+          (s)).getText()
+          .split(" ")[0];
+      if (Integer.parseInt(addressSizeStr) > Integer.parseInt(addressSize)) {
+        addressSize = addressSizeStr;
+      }
+    }
     // Select zone
     zoneSearchInputWrapper.click();
     zoneSearchInput.sendKeys(zoneName);
@@ -267,7 +279,7 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
     // Edit address number
     addressSizeInputWrapper.click();
     addressSizeInput.forceClear();
-    addressSizeInput.sendKeys(addressSizeStr);
+    addressSizeInput.sendKeys(addressSize);
     addressSizeInput.sendKeys(Keys.TAB);
 
     // Fetch addresses

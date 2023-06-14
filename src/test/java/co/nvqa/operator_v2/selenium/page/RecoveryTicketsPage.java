@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -15,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -86,6 +88,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//md-input-container[@label='Last Instruction']/div[@class='readonly']")
   public PageElement lastInstructionText;
 
+  @FindBy(xpath = "//md-toolbar[@title='Create Ticket']")
+  public PageElement createTicketDialogBox;
+
+
   public RecoveryTicketsPage(WebDriver webDriver) {
     super(webDriver);
     ticketsTable = new TicketsTable(webDriver);
@@ -97,7 +103,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     String ticketType = recoveryTicket.getTicketType();
 
     createNewTicket.click();
-    createTicketDialog.waitUntilVisible();
+    waitUntilVisibilityOfElementLocated(createTicketDialogBox.getWebElement());
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
@@ -309,7 +315,8 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   public void verifyTicketIsMade(String trackingId) {
     pause1s();
     String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-    assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+    Assertions.assertThat(actualTrackingId).as("Ticket with this tracking ID is not created")
+        .isEqualTo(trackingId);
   }
 
   public void verifyTicketStatus(String expectedStatus) {
@@ -372,7 +379,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class CreateTicketDialog extends MdDialog {
+  public static class CreateTicketDialog extends AntModal {
 
     @FindBy(id = "trackingId")
     public TextBox trackingId;

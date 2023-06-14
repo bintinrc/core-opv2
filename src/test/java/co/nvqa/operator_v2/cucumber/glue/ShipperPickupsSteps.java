@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -33,9 +32,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
 
+import static co.nvqa.common.utils.StandardTestUtils.convertToZonedDateTime;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.COLUMN_PICKUP_ADDRESS;
@@ -59,8 +58,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
   @When("^Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page$")
   public void operatorSetFilterReservationDateToCurrentDateAndClickLoadSelectionOnShipperPickupsPage() {
-    Date currentDate = new Date();
-    Date nextDayDate = TestUtils.getNextDate(1);
+    ZonedDateTime currentDate = ZonedDateTime.now();
+    ZonedDateTime nextDayDate = ZonedDateTime.from(TestUtils.getNextDate(1));
     shipperPickupsPage.filtersForm.filterReservationDate(currentDate, nextDayDate);
     shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
   }
@@ -108,10 +107,13 @@ public class ShipperPickupsSteps extends AbstractSteps {
     shipperPickupsPage.waitUntilPageLoaded();
     String value = mapOfData.get("fromDate");
 
-    Date fromDate = StringUtils.isNotBlank(value) ? YYYY_MM_DD_SDF.parse(value) : new Date();
+    ZonedDateTime fromDate =
+        StringUtils.isNotBlank(value) ? convertToZonedDateTime(value, DTF_NORMAL_DATE)
+            : ZonedDateTime.now();
     value = mapOfData.get("toDate");
-    Date toDate =
-        StringUtils.isNotBlank(value) ? YYYY_MM_DD_SDF.parse(value) : TestUtils.getNextDate(1);
+    ZonedDateTime toDate =
+        StringUtils.isNotBlank(value) ? convertToZonedDateTime(value, DTF_NORMAL_DATE)
+            : ZonedDateTime.from(TestUtils.getNextDate(1));
     shipperPickupsPage.filtersForm.filterReservationDate(fromDate, toDate);
 
     value = mapOfData.get("hub");
@@ -254,6 +256,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
     String priorityLevel = mapOfData.get("priorityLevel");
     String approxVolume = mapOfData.get("approxVolume");
     String comments = mapOfData.get("comments");
+    String readyBy = mapOfData.get("readyBy");
+    String latestBy = mapOfData.get("latestBy");
 
     if ("GET_FROM_CREATED_SHIPPER".equalsIgnoreCase(shipperName)) {
       shipperName = this.<Shipper>get(KEY_CREATED_SHIPPER).getName();
@@ -269,7 +273,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
     shipperPickupsPage
         .verifyReservationInfo(address, shipperName, routeId, driverName, priorityLevel,
-            approxVolume, comments);
+            approxVolume, comments, readyBy, latestBy);
   }
 
   private String resolveExpectedRouteId(String routeIdParam) {
@@ -345,8 +349,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   private List<ReservationInfo> duplicateReservations(List<Address> addresses,
       Reservation reservation) {
     int daysShift = 1;
-    DateTimeFormatter reservationDateTimeFormatter = DateTimeFormatter
-        .ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
+    DateTimeFormatter reservationDateTimeFormatter = DTF_NORMAL_DATETIME.withZone(ZoneId.of("UTC"));
     ZonedDateTime readyDatetime = DateUtil
         .getDate(reservation.getReadyDatetime(), reservationDateTimeFormatter);
     ZonedDateTime latestDatetime = DateUtil
@@ -360,9 +363,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
     String newLatestDatetimeAsString = DateUtil
         .displayDateTime(newLatestDatetime.withZoneSameInstant(ZoneId.systemDefault()));
 
-    Date newDate = Date.from(newReadyDatetime.toInstant());
     List<ReservationInfo> duplicatedReservationsInfo = shipperPickupsPage
-        .duplicateReservations(addresses, newDate);
+        .duplicateReservations(addresses, newReadyDatetime);
 
     duplicatedReservationsInfo.forEach(reservationInfo ->
     {
@@ -443,7 +445,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @And("^Operator verifies no route suggested for selected reservations$")
   public void operatorVerifiesNoRouteSuggestedForSelectedReservations() {
     shipperPickupsPage.bulkRouteAssignmentDialog.suggestedRoutes.forEach(routeSelector ->
-        assertEquals("Suggested route value", "", routeSelector.getValue())
+        Assertions.assertThat(routeSelector.getValue()).as("Suggested route value").isEmpty()
     );
   }
 
@@ -482,8 +484,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
     Address address = get(KEY_CREATED_ADDRESS);
     shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
     ReservationInfo actual = shipperPickupsPage.reservationsTable.readEntity(1);
-    assertNull("Route Id", actual.getRouteId());
-    assertNull("Driver Name", actual.getDriverName());
+    Assertions.assertThat(actual.getRouteId()).as("Route Id").isNull();
+    Assertions.assertThat(actual.getDriverName()).as("Driver Name").isNull();
   }
 
   @Then("^Operator verify the route was removed from the created reservations$")
@@ -493,8 +495,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
     {
       shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
       ReservationInfo actual = shipperPickupsPage.reservationsTable.readEntity(1);
-      assertNull("Route Id", actual.getRouteId());
-      assertNull("Driver Name", actual.getDriverName());
+      Assertions.assertThat(actual.getRouteId()).as("Route Id").isNull();
+      Assertions.assertThat(actual.getDriverName()).as("Driver Name").isNull();
     });
   }
 
@@ -575,8 +577,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @Then("^Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page$")
   public void operatorVerifiesPodNotFound() {
     shipperPickupsPage.reservationDetailsDialog.waitUntilVisible();
-    assertTrue("POD not found",
-        shipperPickupsPage.reservationDetailsDialog.podNotFound.isDisplayed());
+    Assertions.assertThat(shipperPickupsPage.reservationDetailsDialog.podNotFound.isDisplayed())
+        .as("POD not found").isTrue();
   }
 
   @Then("^Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:$")
@@ -585,27 +587,29 @@ public class ShipperPickupsSteps extends AbstractSteps {
     shipperPickupsPage.reservationDetailsDialog.waitUntilVisible();
     String expectedValue = data.get("timestamp");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertThat("Timestamp",
-          shipperPickupsPage.reservationDetailsDialog.timestamp.getNormalizedText(),
-          Matchers.startsWith(expectedValue));
+      Assertions.assertThat(
+              shipperPickupsPage.reservationDetailsDialog.timestamp.getNormalizedText()).as("Timestamp")
+          .startsWith(expectedValue);
     }
     expectedValue = data.get("inputOnPod");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Input on POD (Driver)", expectedValue,
-          shipperPickupsPage.reservationDetailsDialog.inputOnPod.getNormalizedText());
+      Assertions.assertThat(
+              shipperPickupsPage.reservationDetailsDialog.inputOnPod.getNormalizedText())
+          .as("Input on POD (Driver)").isEqualTo(expectedValue);
     }
     expectedValue = data.get("scannedAtShipperCount");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Scanned at Shipper count", expectedValue,
-          shipperPickupsPage.reservationDetailsDialog.scannedAtShipperCount.getNormalizedText());
+      Assertions.assertThat(
+              shipperPickupsPage.reservationDetailsDialog.scannedAtShipperCount.getNormalizedText())
+          .as("Scanned at Shipper count").isEqualTo(expectedValue);
     }
     expectedValue = data.get("scannedAtShipperPOD");
     if (StringUtils.isNotBlank(expectedValue)) {
       List<String> expected = splitAndNormalize(expectedValue);
       List<String> actual = shipperPickupsPage.reservationDetailsDialog.scannedAtShipperPOD.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());
-      assertThat("Scanned at Shipper (POD)", actual,
-          Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+      Assertions.assertThat(actual).as("Scanned at Shipper (POD)")
+          .contains(expected.toArray(new String[0]));
     }
   }
 
@@ -614,9 +618,11 @@ public class ShipperPickupsSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String expectedValue = data.get("shippers");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertThat("Shipper filter", shipperPickupsPage.shipperFilter.getSelectedValues(), Matchers
-          .containsInAnyOrder(
-              Arrays.stream(expectedValue.split(",")).map(StringUtils::trim).toArray()));
+      String[] array = Arrays.stream(expectedValue.split(",")).map(StringUtils::trim)
+          .toArray(String[]::new);
+      Assertions.assertThat(shipperPickupsPage.shipperFilter.getSelectedValues())
+          .as("Shipper filter")
+          .contains(array);
     }
   }
 
@@ -628,8 +634,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
   @Then("^Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page$")
   public void operatorVerifyBulkRouteAssignmentSidePanelIsShown() {
-    assertTrue("Bulk Route Assignment Side Panel is shown",
-        shipperPickupsPage.bulkAssignRoute.waitUntilVisible(5));
+    Assertions.assertThat(shipperPickupsPage.bulkAssignRoute.waitUntilVisible(5))
+        .as("Bulk Route Assignment Side Panel is shown").isTrue();
   }
 
   @Then("Operator verify that title of Bulk Route Assignment Side Panel is {value}")
@@ -643,23 +649,24 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @Then("^Operator verify reservations data in Bulk Route Assignment Side Panel using data below:$")
   public void operatorVerifyReservationDataInBulkRouteAssignmentSidePanelTitle(
       List<Map<String, String>> data) {
-    assertEquals("Count of Reservation Cards in Bulk Route Assignment Side Panel", data.size(),
-        shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards.size());
+    Assertions.assertThat(shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards.size())
+        .as("Count of Reservation Cards in Bulk Route Assignment Side Panel")
+        .isEqualTo(data.size());
     for (int i = 0; i < data.size(); i++) {
       ReservationCard reservationCard = shipperPickupsPage.bulkRouteAssignmentSidePanel.reservationCards
           .get(i);
       Map<String, String> expected = resolveKeyValues(data.get(i));
       if (expected.containsKey("title")) {
-        assertThat(f("Reservation card title %d", i + 1), reservationCard.title.getText(),
-            Matchers.startsWith(expected.get("title")));
+        Assertions.assertThat(reservationCard.title.getText())
+            .as("Reservation card title %d", i + 1).startsWith(expected.get("title"));
       }
       if (expected.containsKey("description")) {
-        assertThat(f("Reservation card description %d", i + 1),
-            reservationCard.description.getText(), Matchers.equalTo(expected.get("description")));
+        Assertions.assertThat(reservationCard.description.getText())
+            .as("Reservation card description %d", i + 1).isEqualTo(expected.get("description"));
       }
       if (expected.containsKey("subtitle")) {
-        assertThat(f("Reservation card subtitle %d", i + 1), reservationCard.subtitle.getText(),
-            Matchers.equalTo(expected.get("subtitle")));
+        Assertions.assertThat(reservationCard.subtitle.getText())
+            .as("Reservation card subtitle %d", i + 1).isEqualTo(expected.get("subtitle"));
       }
     }
   }
@@ -683,57 +690,57 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @Then("^Operator verify that reservation checkbox is not selected on Shipper Pickups page$")
   public void operatorReservationCheckboxIsNotSelected() {
     MdCheckbox checkBox = shipperPickupsPage.reservationsTable.getCheckbox(1);
-    assertFalse("Checkbox is enabled", checkBox.isEnabled());
-    assertFalse("Checkbox is checked", checkBox.isChecked());
+    Assertions.assertThat(checkBox.isEnabled()).as("Checkbox is enabled").isFalse();
+    Assertions.assertThat(checkBox.isChecked()).as("Checkbox is checked").isFalse();
   }
 
   @Then("^Operator verify that \"(.+)\" icon is disabled for created reservation on Shipper Pickups page$")
   public void operatorVerifyThatFinishIconIsDisabled(String buttonName) {
     Address address = get(KEY_CREATED_ADDRESS);
     shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
-    assertFalse(f("%s button is disabled", buttonName),
-        shipperPickupsPage.reservationsTable.getActionButton(buttonName, 1).isEnabled());
+    Assertions.assertThat(
+            shipperPickupsPage.reservationsTable.getActionButton(buttonName, 1).isEnabled())
+        .as(f("%s button is disabled", buttonName)).isFalse();
   }
 
   @Then("^Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:$")
   public void operatorVerifiesPodDetailsDialog(Map<String, String> data) {
     data = resolveKeyValues(data);
     if (!shipperPickupsPage.podDetailsDialog.isDisplayedFast()) {
-      assertTrue("Reservation dialog is opened",
-          shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+      Assertions.assertThat(shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5))
+          .as("Reservation dialog is opened").isTrue();
       shipperPickupsPage.reservationDetailsDialog.viewPod.click();
       shipperPickupsPage.podDetailsDialog.waitUntilVisible();
     }
     String expectedValue = data.get("reservationId");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Reservation ID",
-          expectedValue,
-          shipperPickupsPage.podDetailsDialog.reservationId.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.reservationId.getNormalizedText())
+          .as("Reservation ID").isEqualTo(expectedValue);
     }
     expectedValue = data.get("recipientName");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Recipient Name", expectedValue,
-          shipperPickupsPage.podDetailsDialog.recipientName.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.recipientName.getNormalizedText())
+          .as("Recipient Name").isEqualTo(expectedValue);
     }
     expectedValue = data.get("shipperId");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Shipper ID", expectedValue,
-          shipperPickupsPage.podDetailsDialog.shipperId.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.shipperId.getNormalizedText())
+          .as("Shipper ID").isEqualTo(expectedValue);
     }
     expectedValue = data.get("shipperName");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Shipper Name", expectedValue,
-          shipperPickupsPage.podDetailsDialog.shipperName.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.shipperName.getNormalizedText())
+          .as("Shipper Name").isEqualTo(expectedValue);
     }
     expectedValue = data.get("shipperContact");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Shipper Contact", expectedValue,
-          shipperPickupsPage.podDetailsDialog.shipperContact.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.shipperContact.getNormalizedText())
+          .as("Shipper Contact").isEqualTo(expectedValue);
     }
     expectedValue = data.get("status");
     if (StringUtils.isNotBlank(expectedValue)) {
-      assertEquals("Status", expectedValue,
-          shipperPickupsPage.podDetailsDialog.status.getNormalizedText());
+      Assertions.assertThat(shipperPickupsPage.podDetailsDialog.status.getNormalizedText())
+          .as("Status").isEqualTo(expectedValue);
     }
     shipperPickupsPage.podDetailsDialog.forceClose();
   }
@@ -741,8 +748,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
   @Then("^Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:$")
   public void operatorVerifiesPodCsvFile(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    assertTrue("Reservation dialog is opened",
-        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+    Assertions.assertThat(shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5))
+        .as("Reservation dialog is opened").isTrue();
     String podId = shipperPickupsPage.reservationDetailsDialog.podName.getAttribute("name")
         .replace("POD-", "");
     shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
@@ -754,8 +761,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
   @Then("^Operator verifies downloaded POD CSV file on Shipper Pickups page contains no details$")
   public void operatorVerifiesEmptyPodCsvFile() {
-    assertTrue("Reservation dialog is opened",
-        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5));
+    Assertions.assertThat(shipperPickupsPage.reservationDetailsDialog.waitUntilVisible(5))
+        .as("Reservation dialog is opened").isTrue();
     String podId = shipperPickupsPage.reservationDetailsDialog.podName.getAttribute("name")
         .replace("POD-", "");
     shipperPickupsPage.reservationDetailsDialog.downloadCsvFile.click();
@@ -770,6 +777,36 @@ public class ShipperPickupsSteps extends AbstractSteps {
     Address newAddress = resolveValue(data.get("newAddress"));
     shipperPickupsPage.reservationsTable.searchByPickupAddress(oldAddress);
     shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
+    var value = data.get("readyByHours");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.readyByHours.setValue(value);
+    }
+    value = data.get("readyByMinutes");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.readyByMinutes.setValue(value);
+    }
+    value = data.get("readyByAmPm");
+    if (StringUtils.isNotBlank(value)) {
+      if (!StringUtils.equalsIgnoreCase(
+          shipperPickupsPage.editRouteDialog.readyByAmPm.getAttribute("aria-label"), value)) {
+        shipperPickupsPage.editRouteDialog.readyByAmPm.click();
+      }
+    }
+    value = data.get("lastByHours");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.lastByHours.setValue(value);
+    }
+    value = data.get("lastByMinutes");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.lastByMinutes.setValue(value);
+    }
+    value = data.get("lastByAmPm");
+    if (StringUtils.isNotBlank(value)) {
+      if (!StringUtils.equalsIgnoreCase(
+          shipperPickupsPage.editRouteDialog.lastByAmPm.getAttribute("aria-label"), value)) {
+        shipperPickupsPage.editRouteDialog.lastByAmPm.click();
+      }
+    }
     shipperPickupsPage.editRouteDialog.editAddress.click();
     if (StringUtils.isNotBlank(newAddress.getAddress1())) {
       shipperPickupsPage.editRouteDialog.address1.setValue(newAddress.getAddress1());

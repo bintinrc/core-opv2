@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTextBox;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -41,17 +42,17 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage {
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
 
     String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-    assertEquals("Tracking ID", trackingId, actualTrackingId);
+    Assertions.assertThat(actualTrackingId).as("Tracking ID").isEqualTo(trackingId);
 
     if (StringUtils.isNotBlank(shipperName)) {
       String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
-      assertEquals("Shipper", shipperName, actualShipper);
+      Assertions.assertThat(actualShipper).as("Shipper").isEqualTo(shipperName);
     }
 
     if (StringUtils.isNotBlank(daysSinceInbound)) {
       String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
-      assertThat("Days since inbound", actualDaysSinceInbound,
-          equalToIgnoringCase(daysSinceInbound));
+      Assertions.assertThat(actualDaysSinceInbound).as("Days since inbound")
+          .isEqualToIgnoringCase(daysSinceInbound);
     }
   }
 

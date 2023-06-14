@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -14,15 +14,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
-import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * Modified by Sergey Mishanin
@@ -30,7 +26,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public class DriverTypeManagementPage extends OperatorV2SimplePage {
+public class DriverTypeManagementPage extends SimpleReactPage {
 
   private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
   private static final String CSV_FILENAME_PATTERN = "driver-types";
@@ -44,21 +40,29 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   private AddDriverTypeDialog addDriverTypeDialog;
   public EditDriverTypeDialog editDriverTypeDialog;
   private FiltersForm filtersForm;
-
-  @FindBy(name = "Create Driver Type")
-  public NvIconTextButton createDriverType;
-
-  @FindBy(css = "input[placeholder='Search Driver Types...']")
+  @FindBy(xpath = "//input[@placeholder='Search']")
   public TextBox searchDriverType;
 
-  @FindBy(css = "ng-pluralize")
+  @FindBy(xpath = "//h3[contains(text(),'out of')]/strong")
   public PageElement rowsCount;
 
-  @FindBy(xpath = "//*[@type='submit']")
-  public PageElement submitButton;
+  @FindBy(xpath = "//button[contains(@class,'ant-btn')][span[text() = 'Update']]")
+  public PageElement updateButton;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//*[@type='button' and contains(@class, 'ant-btn')][span[text() = 'Add']]")
+  public PageElement btnAdd;
+
+  @FindBy(xpath = "//div[@class='ant-modal-header'][div[text() = 'Confirm delete']]")
   public ConfirmDeleteDialog confirmDeleteDialog;
+
+  @FindBy(xpath = "//button[text()='Download CSV File']")
+  public Button btnDownloadSCV;
+
+  @FindBy(xpath = "//button/span[text()='Create Driver Type']")
+  public Button btnCreateDriverType;
+
+  @FindBy(xpath = "//span[@role=\"button\" and contains(@class,\"ant-input-clear-icon\")]")
+  public Button btnClear;
 
   public DriverTypeManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -68,9 +72,10 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     filtersForm = new FiltersForm(webDriver);
   }
 
-  public void clickSubmitButton() {
-    waitUntilElementIsClickable(submitButton.getWebElement());
-    submitButton.click();
+  public void clickUpdateButton() {
+    waitUntilElementIsClickable(updateButton.getWebElement());
+    updateButton.click();
+    pause2s();
   }
 
   public FiltersForm filtersForm() {
@@ -88,8 +93,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     NvLogger.info("FILE_NAME = " + fileName);
     List<DriverTypeParams> actualDriverTypeParams = DriverTypeParams.fromCsvFile(pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualDriverTypeParams.size(),
-        greaterThanOrEqualTo(expectedDriverTypeParams.size()));
+    Assertions.assertThat(actualDriverTypeParams.size())
+        .as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(expectedDriverTypeParams.size());
 
     Map<Long, DriverTypeParams> actualMap = actualDriverTypeParams.stream()
         .collect(Collectors.toMap(
@@ -100,15 +106,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     for (DriverTypeParams expectedParams : expectedDriverTypeParams) {
       DriverTypeParams actualParams = actualMap.get(expectedParams.getDriverTypeId());
 
-      assertThat("Driver Type with Id", actualParams, notNullValue());
-      assertEquals("Driver Type Name", expectedParams.getDriverTypeName(),
-          actualParams.getDriverTypeName());
-      assertEquals(DELIVERY_TYPE, expectedParams.getDeliveryType(), actualParams.getDeliveryType());
-      assertEquals(PRIORITY_LEVEL, expectedParams.getPriorityLevel(),
-          actualParams.getPriorityLevel());
-      assertEquals(RESERVATION_SIZE, expectedParams.getReservationSize(),
-          actualParams.getReservationSize());
-      assertEquals(PARCEL_SIZE, expectedParams.getParcelSize(), actualParams.getParcelSize());
+      Assertions.assertThat(actualParams).as("Driver Type with Id").isNotNull();
+      Assertions.assertThat(actualParams.getDriverTypeName()).as("Driver Type Name")
+          .isEqualTo(expectedParams.getDriverTypeName());
     }
   }
 
@@ -118,9 +118,11 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     filterResults.forEach(driverTypeParams ->
     {
       if (StringUtils.isNotBlank(filterParams.getDeliveryType())) {
-        assertThat(DELIVERY_TYPE,
-            driverTypeParams.getDeliveryTypes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getDeliveryTypes()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getDeliveryTypes()).as(DELIVERY_TYPE)
+            .anySatisfy(deliveryType -> {
+              Assertions.assertThat(deliveryType).isIn(filterParams.getDeliveryTypes());
+              Assertions.assertThat(deliveryType).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getPriorityLevel())) {
         List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item -> {
@@ -129,30 +131,42 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
           }
           return item;
         }).collect(Collectors.toList());
-        assertThat(PRIORITY_LEVEL, driverTypeParams.getPriorityLevels(),
-            anyOf(hasItemsIgnoreCase(expectedItems), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getPriorityLevels()).as(PRIORITY_LEVEL)
+            .anySatisfy(priorityLevel -> {
+              Assertions.assertThat(priorityLevel).isIn(expectedItems);
+              Assertions.assertThat(priorityLevel).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getReservationSize())) {
-        assertThat(RESERVATION_SIZE, driverTypeParams.getReservationSizes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getReservationSizes()),
-                hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getReservationSizes()).as(RESERVATION_SIZE)
+            .anySatisfy(size -> {
+              Assertions.assertThat(size).isIn(filterParams.getReservationSizes());
+              Assertions.assertThat(size).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getParcelSize())) {
-        assertThat(PARCEL_SIZE, driverTypeParams.getParcelSizes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getParcelSizes()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getParcelSizes()).as(PARCEL_SIZE)
+            .anySatisfy(size -> {
+              Assertions.assertThat(size).isIn(filterParams.getParcelSizes());
+              Assertions.assertThat(size).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getTimeslot())) {
-        assertThat(TIMESLOT, driverTypeParams.getTimeslots(),
-            anyOf(hasItemsIgnoreCase(filterParams.getTimeslots()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getTimeslots()).as(TIMESLOT).anySatisfy(timeslot -> {
+          Assertions.assertThat(timeslot).isIn(filterParams.getTimeslots());
+          Assertions.assertThat(timeslot).isEqualToIgnoringCase("All");
+        });
       }
     });
   }
 
   public void createDriverType(DriverTypeParams driverTypeParams) {
-    createDriverType.click();
-    pause3s();
+    waitUntilLoaded();
+    btnCreateDriverType.click();
+    pause2s();
     addDriverTypeDialog.fillForm(driverTypeParams);
-    clickSubmitButton();
+    btnAdd.click();
+    pause2s();
   }
 
   public static class ConfirmDeleteDialog extends MdDialog {
@@ -166,7 +180,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
       super(webDriver, searchContext, webElement);
     }
 
-    @FindBy(xpath = "//md-dialog//button[@aria-label='Delete']")
+    @FindBy(xpath = "//button[contains(@class, 'ant-btn')][span[text() = 'Delete']]")
     public Button delete;
   }
 
@@ -175,38 +189,31 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   }
 
   public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
-    clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    List<WebElement> buttons = findElementsByXpath(
+        f("//button[contains(@class, 'ant-btn') and @data-testid='%s-button']",
+            actionButtonName.toLowerCase()));
+    WebElement selectedButton = buttons.get(rowNumber - 1);
+    selectedButton.click();
   }
 
-  public static class DriverTypesTable extends MdVirtualRepeatTable<DriverTypeParams> {
+  public static class DriverTypesTable extends AntTableV3<DriverTypeParams> {
 
     public static final String COLUMN_ID = "driverTypeId";
     public static final String COLUMN_NAME = "driverTypeName";
-    private static final String COLUMN_DELIVERY_TYPE = "deliveryType";
-    private static final String COLUMN_PRIORITY_LEVEL = "priorityLevel";
-    private static final String COLUMN_RESERVATION_SIZE = "reservationSize";
-    private static final String COLUMN_PARCEL_SIZE = "parcelSize";
-    private static final String COLUMN_TIMESLOT = "timeslot";
 
-    public static final String ACTION_EDIT = "Edit";
-    public static final String ACTION_DELETE = "Delete";
+    public static final String ACTION_UPDATE = "update";
+    public static final String ACTION_DELETE = "delete";
 
     public DriverTypesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_ID, "id")
-          .put(COLUMN_NAME, "name")
-          .put(COLUMN_DELIVERY_TYPE, "delivery-type")
-          .put(COLUMN_PRIORITY_LEVEL, "priority-level")
-          .put(COLUMN_RESERVATION_SIZE, "reservation-size")
-          .put(COLUMN_PARCEL_SIZE, "parcel-size")
-          .put(COLUMN_TIMESLOT, "timeslot")
+          .put(COLUMN_ID, "1")
+          .put(COLUMN_NAME, "2")
           .build()
       );
       setActionButtonsLocators(ImmutableMap
-          .of(ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));
+          .of(ACTION_UPDATE, "1", ACTION_DELETE, "2"));
       setEntityClass(DriverTypeParams.class);
-      setMdVirtualRepeat("driverTypeProp in ctrl.tableData");
     }
   }
 
@@ -216,7 +223,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   public static class AddDriverTypeDialog extends FiltersForm {
 
     private static final String DIALOG_TITLE = "Add Driver Type";
-    private static final String FIELD_NAME_LOCATOR = "Name";
+    private static final String FIELD_NAME_LOCATOR_XPATH = "//input[@id='name' and @class='ant-input' and @type='text']";
     private static final String BUTTON_SUBMIT_LOCATOR = "Submit";
     private static final String LOCATOR_BUTTON_PRIORITY_LEVEL_BOTH = "Both";
 
@@ -232,7 +239,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
 
     public AddDriverTypeDialog setName(String name) {
       if (StringUtils.isNotBlank(name)) {
-        sendKeysByAriaLabel(FIELD_NAME_LOCATOR, name);
+        sendKeys(FIELD_NAME_LOCATOR_XPATH, name);
       }
       return this;
     }
@@ -392,7 +399,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
 
     @Override
     public void fillForm(DriverTypeParams driverTypeParams) {
-      waitUntilVisible();
       setName(driverTypeParams.getDriverTypeName());
       if (StringUtils.isNotBlank(driverTypeParams.getDeliveryType())) {
         selectDeliveryType(driverTypeParams.getDeliveryTypes());
@@ -426,7 +432,8 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
 
     @Override
     public EditDriverTypeDialog waitUntilVisible() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+      waitUntilVisibilityOfElementLocated(
+          "//div[@class='ant-modal-header'][div[text() = 'Update Driver Type']]");
       return this;
     }
 

@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -84,6 +85,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void addNewGroup(ReservationGroup reservationPreset) {
     waitUntilPageLoaded();
+    overviewTab.click();
     moreActions.selectOption("Add New Group");
     addNewGroupDialog.waitUntilVisible();
     addNewGroupDialog.fillForm(reservationPreset);
@@ -110,8 +112,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void verifyGroupDeleted(String groupName) {
     reservationPresetTable.filterByColumn(COLUMN_NAME, groupName);
-    assertTrue("Group with Name [" + groupName + "] was not deleted",
-        reservationPresetTable.isTableEmpty());
+   Assertions.assertThat(        reservationPresetTable.isTableEmpty()).as("Group with Name [" + groupName + "] was not deleted").isTrue();
   }
 
   /**

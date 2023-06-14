@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.MilkrunSettings;
+import co.nvqa.common.model.address.Address;
+import co.nvqa.common.model.address.MilkrunSettings;
+import co.nvqa.common.model.others.LatLong;
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.utils.factory.address.AddressFactory;
 import co.nvqa.commons.model.order_create.v4.Marketplace;
-import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.commons.model.pricing.PricingLevers;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
@@ -25,7 +27,6 @@ import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
@@ -44,10 +45,14 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,14 +66,14 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
+import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
+import static co.nvqa.common.utils.StandardTestUtils.generateDateUniqueString;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_DASH_LOGIN;
@@ -188,9 +193,9 @@ public class AllShippersSteps extends AbstractSteps {
       List<Address> pickupAddresses = new ArrayList<>();
 
       for (int i = 0; i < count; i++) {
-        Address address = generateRandomAddress();
+        Address address = AddressFactory.getRandomAddress();
         address.setName("DA-" + generateDateUniqueString());
-        LatLong latLong = generateRandomLatLong();
+        LatLong latLong = StandardTestUtils.generateRandomLatLong();
         address.setLongitude(latLong.getLongitude());
         address.setLatitude(latLong.getLatitude());
         fillMilkrunReservationsProperties(address, i + 1, mapOfData);
@@ -248,7 +253,7 @@ public class AllShippersSteps extends AbstractSteps {
 
       // Billing
       MarketplaceBilling mb = new MarketplaceBilling();
-      Address billingAddress = generateRandomAddress();
+      Address billingAddress = StandardTestUtils.generateRandomAddress();
       String dateUniqueString = generateDateUniqueString();
 
       value = mapOfData.get("marketplace.billingName");
@@ -256,7 +261,8 @@ public class AllShippersSteps extends AbstractSteps {
 
       value = mapOfData.get("marketplace.billingContact");
       mb.setBillingContact(
-          StringUtils.isNotBlank(value) ? value : generatePhoneNumber(dateUniqueString + "2"));
+          StringUtils.isNotBlank(value) ? value
+              : StandardTestUtils.generatePhoneNumber(dateUniqueString + "2"));
 
       value = mapOfData.get("marketplace.billingAddress");
       mb.setBillingAddress(StringUtils.isNotBlank(value) ? value
@@ -318,17 +324,10 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       ms.setNoOfReservation(Integer.valueOf(value));
     }
-
-    List<MilkrunSettings> milkrunSettings = new LinkedList<>();
-    milkrunSettings.add(ms);
-
     address.setMilkRun(true);
 
-    if (address.getMilkrunSettings() == null) {
-      address.setMilkrunSettings(milkrunSettings);
-    } else {
-      address.getMilkrunSettings().addAll(milkrunSettings);
-    }
+    List<MilkrunSettings> milkrunSettings = Collections.singletonList(ms);
+    address.setMilkrunSettings(milkrunSettings);
   }
 
   @Then("^Operator verify the new Shipper is created successfully$")
@@ -367,7 +366,7 @@ public class AllShippersSteps extends AbstractSteps {
           .isEnabled();
       i++;
     }
-    assertTrue("Ninja Dashboard Login (NEW) in row 1 is enabled", enabled);
+    Assertions.assertThat(enabled).as("Ninja Dashboard Login (NEW) in row 1 is enabled").isTrue();
     allShippersPage.shippersTable.clickActionButton(1, ACTION_DASH_LOGIN);
     allShippersPage.waitUntilNewWindowOrTabOpened();
     allShippersPage.switchToOtherWindowAndWaitWhileLoading(
@@ -394,99 +393,110 @@ public class AllShippersSteps extends AbstractSteps {
 
     String value = data.get("shipperId");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Shipper ID", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperId.getText());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperId.getText())
+          .as("Shipper ID").isEqualTo(value);
     }
     value = data.get("shipperName");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Shipper Name", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText())
+          .as("Shipper Name").isEqualTo(value);
     }
     value = data.get("startDate");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Start Date", value,
-          getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
+      Assertions.assertThat(
+              getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText())
+          .as("Start Date").isEqualTo(value);
     }
     value = data.get("endDate");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("End Date", value,
-          getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
+      Assertions.assertThat(
+              getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText())
+          .as("End Date").isEqualTo(value);
     }
     value = data.get("pricingScriptName");
     if (StringUtils.isNotBlank(value)) {
-      assertThat("Pricing Script",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.getValue(),
-          Matchers.containsString(value));
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.getValue())
+          .as("Pricing Script").contains(value);
     }
     value = data.get("type");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Salesperson Discount Type", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType.getText());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType.getText())
+          .as("Salesperson Discount Type").isEqualTo(value);
     }
     value = data.get("discount");
     if (StringUtils.equalsIgnoreCase("none", value)) {
-      assertThat("Discount Value",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue(),
-          Matchers.is(Matchers.emptyOrNullString()));
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue())
+          .as("Discount Value").isNullOrEmpty();
     } else if (StringUtils.isNotBlank(value)) {
-      assertEquals("Discount Value", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue())
+          .as("Discount Value").isEqualTo(value);
     }
     value = data.get("comments");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Comments", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue())
+          .as("Comments").isEqualTo(value);
     }
     value = data.get("insuranceMinFee");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Insurance Min Fee", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue())
+          .as("Insurance Min Fee").isEqualTo(value);
     }
     value = data.get("insurancePercentage");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Insurance Percentage", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.getValue())
+          .as("Insurance Percentage").isEqualTo(value);
     }
     value = data.get("insuranceThreshold");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Insurance Threshold", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.getValue())
+          .as("Insurance Threshold").isEqualTo(value);
     }
     value = data.get("isDefaultIns");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-      assertTrue("Default Insurance",
+      Assertions.assertThat(
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.getAttribute(
-              "aria-checked").equalsIgnoreCase("true"));
+              "aria-checked")).as("Default Insurance").isEqualToIgnoringCase("true");
     }
     value = data.get("isDefaultCod");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-      assertTrue("Default Cod",
+      Assertions.assertThat(
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.getAttribute(
-              "aria-checked").equalsIgnoreCase("true"));
+              "aria-checked")).as("Default Cod").isEqualToIgnoringCase("true");
     }
     value = data.get("isDefaultRts");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-      assertTrue("Default Rts",
+      Assertions.assertThat(
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox.getAttribute(
-              "aria-checked").equalsIgnoreCase("true"));
+              "aria-checked")).as("Default Rts").isEqualToIgnoringCase("true");
     }
     value = data.get("rtsChargeType");
     if (StringUtils.isNotBlank(value)) {
       if (value.equalsIgnoreCase("Surcharge")) {
         String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge.getAttribute(
             "class");
-        assertThat("RTS Surcharge", attributeValue, Matchers.containsString("raised"));
+        Assertions.assertThat(attributeValue).as("RTS Surcharge").contains("raised");
       }
       if (value.equalsIgnoreCase("Discount")) {
         String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount.getAttribute(
             "class");
-        assertThat("RTS Discount", attributeValue, Matchers.containsString("raised"));
+        Assertions.assertThat(attributeValue).as("RTS Discount").contains("raised");
       }
     }
     value = data.get("rtsChargeValue");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Rts Value", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.getValue());
+      Assertions.assertThat(
+              allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.getValue())
+          .as("Rts Value").isEqualTo(value);
     }
   }
 
@@ -509,14 +519,18 @@ public class AllShippersSteps extends AbstractSteps {
         LOGGER.info("Set Start date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(
             value);
-        pricing.setEffectiveDate(YYYY_MM_DD_SDF.parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtEffectiveDate = date.atStartOfDay(ZoneId.systemDefault());
+        pricing.setEffectiveDate(Date.from(zdtEffectiveDate.toInstant()));
       }
       value = data.get("endDate");
       if (StringUtils.isNotBlank(value)) {
         LOGGER.info("Set End date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(
             value);
-        pricing.setContractEndDate(YYYY_MM_DD_SDF.parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtContractEndDate = date.atStartOfDay(ZoneId.systemDefault());
+        pricing.setContractEndDate(Date.from(zdtContractEndDate.toInstant()));
       }
       value = data.get("pricingScriptName");
       if (StringUtils.isNotBlank(value)) {
@@ -655,7 +669,7 @@ public class AllShippersSteps extends AbstractSteps {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.selectValue(
             value);
       }
-    } catch (ParseException e) {
+    } catch (DateTimeParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
   }
@@ -778,13 +792,13 @@ public class AllShippersSteps extends AbstractSteps {
     // Shipper Details
     shipper.setActive(!shipper.getActive());
     shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
-    shipper.setContact(generatePhoneNumber(dateUniqueString));
+    shipper.setContact(StandardTestUtils.generatePhoneNumber(dateUniqueString));
 
     // Liaison Details
-    Address liaisonAddress = generateRandomAddress();
+    Address liaisonAddress = StandardTestUtils.generateRandomAddress();
 
     shipper.setLiaisonName("Liaison #" + dateUniqueString);
-    shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+    shipper.setLiaisonContact(StandardTestUtils.generatePhoneNumber(dateUniqueString + "1"));
     shipper.setLiaisonEmail("ln." + dateUniqueString + "@ninjavan.co");
     shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
     shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
@@ -864,11 +878,11 @@ public class AllShippersSteps extends AbstractSteps {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
     String dateUniqueString = generateDateUniqueString();
-    Address returnAddress = generateRandomAddress();
+    Address returnAddress = StandardTestUtils.generateRandomAddress();
 
     Return returnSettings = new Return();
     returnSettings.setName("Return #" + dateUniqueString);
-    returnSettings.setContact(generatePhoneNumber(dateUniqueString));
+    returnSettings.setContact(StandardTestUtils.generatePhoneNumber(dateUniqueString));
     returnSettings.setEmail("return." + dateUniqueString + "@ninjavan.co");
     returnSettings.setAddress1(returnAddress.getAddress1());
     returnSettings.setAddress2(returnAddress.getAddress2());
@@ -965,7 +979,7 @@ public class AllShippersSteps extends AbstractSteps {
     String dateUniqueString = generateDateUniqueString();
 
     Shopify shopify = new Shopify();
-    shopify.setMaxDeliveryDays(randomLong(0, 3));
+    shopify.setMaxDeliveryDays(StandardTestUtils.randomLong(0, 3));
     shopify.setDdOffset(1L);
     shopify.setDdTimewindowId(2L);
     shopify.setBaseUri(f("https://www.shopify%s.com", dateUniqueString));
@@ -1192,7 +1206,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
 
     String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
-        TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipperLegacyId));
+        TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.NV_SYSTEM_ID, shipperLegacyId));
     pause10ms();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
@@ -1260,9 +1274,13 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsMin(insuranceMinFee);
       pricing.setRtsChargeType(rtsChargeType);
       pricing.setRtsChargeValue(rtsChargeValue);
-      pricing.setEffectiveDate(Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
-      pricing.setContractEndDate(Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
-      String country = COUNTRY_CODE;
+      pricing.setEffectiveDate(
+          Objects.nonNull(startDate) ? StandardTestUtils.convertToDate(startDate, DTF_NORMAL_DATE)
+              : null);
+      pricing.setContractEndDate(
+          Objects.nonNull(endDate) ? StandardTestUtils.convertToDate(endDate, DTF_NORMAL_DATE)
+              : null);
+      String country = NV_SYSTEM_ID;
       if (!country.equalsIgnoreCase("SG")) {
         if (Objects.isNull(billingWeightLogic)) {
           pricing.setBillingWeight(BillingWeightEnum.STANDARD);
@@ -1273,7 +1291,7 @@ public class AllShippersSteps extends AbstractSteps {
         pricing.setBillingWeight(BillingWeightEnum.LEGACY);
       }
 
-    } catch (ParseException e) {
+    } catch (DateTimeParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
     shipper.setPricing(pricing);
@@ -1323,10 +1341,10 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void setBilling(Shipper shipper, String dateUniqueString) {
-    Address billingAddress = generateRandomAddress();
+    Address billingAddress = StandardTestUtils.generateRandomAddress();
 
     shipper.setBillingName("Billing #" + dateUniqueString);
-    shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
+    shipper.setBillingContact(StandardTestUtils.generatePhoneNumber(dateUniqueString + "2"));
     shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
     shipper.setBillingPostcode(billingAddress.getPostcode());
   }
@@ -1431,10 +1449,10 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private void setLiaisonDetails(String dateUniqueString, Shipper shipper) {
-    Address liaisonAddress = generateRandomAddress();
+    Address liaisonAddress = StandardTestUtils.generateRandomAddress();
 
     shipper.setLiaisonName("Liaison #" + dateUniqueString);
-    shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+    shipper.setLiaisonContact(StandardTestUtils.generatePhoneNumber(dateUniqueString + "1"));
     shipper.setLiaisonEmail("ln." + dateUniqueString + "@automation.co");
     shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
     shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
@@ -1446,7 +1464,7 @@ public class AllShippersSteps extends AbstractSteps {
     shipper.setType(mapOfData.get("shipperType"));
     shipper.setName("Dummy Shipper #" + dateUniqueString);
     shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
-    shipper.setContact(generatePhoneNumber(dateUniqueString));
+    shipper.setContact(StandardTestUtils.generatePhoneNumber(dateUniqueString));
     if (mapOfData.containsKey("email")) {
       shipper.setEmail(mapOfData.get("email"));
     } else {
@@ -1496,7 +1514,8 @@ public class AllShippersSteps extends AbstractSteps {
   @When("Operator verifies toast {string} displayed on edit shipper page")
   public void verifiesToast(String msg) {
     String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
-    assertThat("Error message", actualMsg, Matchers.containsString(resolveValue(msg)));
+    String resolveValue = resolveValue(msg);
+    Assertions.assertThat(actualMsg).as("Error message").contains(resolveValue);
   }
 
   @And("Operator verifies the pricing profile and shipper discount details are correct")
@@ -1555,10 +1574,12 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("hint {string} is displayed on Edit Shipper page")
   public void verifyHint(String expected) {
-    assertTrue("Hint is displayed",
-        allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.isDisplayed());
-    assertEquals("Hint text", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.getText());
+    Assertions.assertThat(
+            allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.isDisplayed())
+        .as("Hint is displayed").isTrue();
+    Assertions.assertThat(
+            allShippersPage.allShippersCreateEditPage.basicSettingsForm.tabHint.getText())
+        .as("Hint text").isEqualTo(resolveValue(expected));
   }
 
   @When("Operator verifies corporate sub shipper is correct")
@@ -1568,8 +1589,9 @@ public class AllShippersSteps extends AbstractSteps {
       List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
 
       for (Shipper shipper : actualSubShipper) {
-        assertTrue(f("Check shipper with id %d on API", shipper.getId()),
-            subShipper.stream().anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())));
+        Assertions.assertThat(
+                subShipper.stream().anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())))
+            .as(f("Check shipper with id %d on API", shipper.getId())).isTrue();
       }
     });
   }
@@ -1586,7 +1608,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
       boolean isExist = actualSubShipper.stream().allMatch(s -> s.getName().contains(shipperName));
-      assertTrue(f("Check shippers name contain %s", shipperName), isExist);
+      Assertions.assertThat(isExist).as(f("Check shippers name contain %s", shipperName)).isTrue();
     });
   }
 
@@ -1604,7 +1626,8 @@ public class AllShippersSteps extends AbstractSteps {
       List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
       boolean isExist = actualSubShipper.stream()
           .allMatch(s -> s.getEmail().contains(shipperEmail));
-      assertTrue(f("Check shippers email contain %s", shipperEmail), isExist);
+      Assertions.assertThat(isExist).as(f("Check shippers email contain %s", shipperEmail))
+          .isTrue();
     });
   }
 
@@ -1814,7 +1837,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void qaVerifyErrorMessageIsDisplayedOnBBManagementPage(String errorMsg) {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       String actualErrorMsg = page.errorMessage.get(0).getText();
-      assertEquals(f("Check error message : %s", errorMsg), errorMsg, actualErrorMsg);
+      Assertions.assertThat(actualErrorMsg).as(f("Check error message : %s", errorMsg))
+          .isEqualTo(errorMsg);
     });
   }
 
@@ -1824,8 +1848,8 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<String> actualErrorMsg = page.bulkCreationErrorMessage.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());
-      assertThat("List of bulk create error messages", actualErrorMsg,
-          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+      Assertions.assertThat(actualErrorMsg).as("List of bulk create error messages")
+          .containsAll(errorMessages);
     });
   }
 
@@ -1835,8 +1859,8 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<String> actualErrorMsg = page.bulkCreationWarningMessage.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());
-      assertThat("List of bulk create warning messages", actualErrorMsg,
-          Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
+      Assertions.assertThat(actualErrorMsg).as("List of bulk create warning messages")
+          .containsAll(errorMessages);
     });
   }
 
@@ -1850,8 +1874,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void checkBeforeYouGoModal(String message) {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       page.beforeYouGoModal.waitUntilVisible();
-      assertEquals("Modal message", resolveValue(message),
-          page.beforeYouGoModal.message.getNormalizedText());
+      Assertions.assertThat(page.beforeYouGoModal.message.getNormalizedText()).as("Modal message")
+          .isEqualTo(resolveValue(message));
     });
   }
 
@@ -1894,8 +1918,8 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
     Pricing pricingProfile =
-        Objects.isNull(get(KEY_PRICING_PROFILE)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
-            : get(KEY_PRICING_PROFILE);
+        Objects.isNull(get(KEY_CREATED_PRICING_PROFILE_OPV2)) ? get(KEY_PRICING_PROFILE_DETAILS)
+            : get(KEY_CREATED_PRICING_PROFILE_OPV2);
 
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
     if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {
@@ -1996,8 +2020,9 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
   public void verifyShipperType(String expected) {
-    assertEquals("Shipper type", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly.getValue());
+    Assertions.assertThat(
+            allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly.getValue())
+        .as("Shipper type").isEqualTo(resolveValue(expected));
   }
 
   @And("Operator verifies the pricing profile is referred to parent shipper {string}")
@@ -2005,22 +2030,26 @@ public class AllShippersSteps extends AbstractSteps {
       String parentShipperLegacyId) {
     takesScreenshot();
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
-    assertEquals(
-        "This is a Marketplace Seller / Corporate Branch that refers to its parent's profile(s). To see cascaded profiles,",
-        allShippersPage.getReferParentsProfileText());
+    Assertions.assertThat(allShippersPage.getReferParentsProfileText()).isEqualTo(
+        "This is a Marketplace Seller / Corporate Branch that refers to its parent's profile(s). To see cascaded profiles,");
 
     String parentShipperPageURL = (f("%s/%s/shippers/%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
-        TestConstants.COUNTRY_CODE, parentShipperLegacyId));
-    assertEquals("Parent Shipper link mismatch", parentShipperPageURL,
-        allShippersPage.getReferParentsProfileLink());
+        TestConstants.NV_SYSTEM_ID, parentShipperLegacyId));
+    Assertions.assertThat(allShippersPage.getReferParentsProfileLink())
+        .as("Parent Shipper link mismatch").isEqualTo(parentShipperPageURL);
   }
 
   @Then("Operator search for marketplace sub shipper by shipper name and get sub shipper id")
   public void operatorSearchForMarketplaceSubShipperByShipperNameAndGetSubShipperId() {
-    Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
-    String legacyId = allShippersPage.allShippersCreateEditPage.searchMarketplaceSubshipperAndGetLegacyId(
-        "name", marketplaceSubShipper.getSellerCompanyName());
-    put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+    try {
+      Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
+      String legacyId = allShippersPage.allShippersCreateEditPage.searchMarketplaceSubshipperAndGetLegacyId(
+          "name", marketplaceSubShipper.getSellerCompanyName());
+      Long.parseLong(legacyId);
+      put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+    } catch (NumberFormatException e) {
+      throw new NvTestRuntimeException("Legacy Id could not be parsed", e);
+    }
   }
 
   @Then("Operator verifies country default text is displayed like below")
@@ -2029,7 +2058,8 @@ public class AllShippersSteps extends AbstractSteps {
     String actualText;
     if (dataTableAsMap.containsKey("rtsCharge")) {
       actualText = allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.rtsCountryDefaultText.getText();
-      assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"), actualText);
+      Assertions.assertThat(actualText).as("Rts Charge country default text ")
+          .isEqualTo(dataTableAsMap.get("rtsCharge"));
     }
   }
 
@@ -2044,5 +2074,15 @@ public class AllShippersSteps extends AbstractSteps {
         .isTrue();
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     openSpecificShipperEditPage(String.valueOf(createdSubShipper.get().getLegacyId()));
+  }
+
+  @When("Operator delete all shipper pickup services on Edit Shipper page")
+  public void operatorDeleteAllShipperPickupServices() {
+    allShippersPage.allShippersCreateEditPage.deleteAllPickupServices();
+  }
+
+  @Then("Operator verifies all shipper pickup services are deleted on Edit Shipper page")
+  public void allShipperPickupServicesdeleted() {
+    allShippersPage.allShippersCreateEditPage.verifyPickupServicesIsEmpty();
   }
 }

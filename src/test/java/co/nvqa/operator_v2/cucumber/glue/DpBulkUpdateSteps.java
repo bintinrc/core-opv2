@@ -112,7 +112,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
       case SPECIAL_CHAR:
         dp = get(KEY_DISTRIBUTION_POINT);
         dpIds.add(dp.getId());
-        dpIds.add(TestConstants.DP_ID);
+        dpIds.add(TestConstants.OPV2_DP_DP_ID);
 
         for (Long dpId : dpIds) {
           dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + ",");
@@ -317,7 +317,14 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   public void operatorEditsTheMaxCapacityOfPickDPViaDPBulkUpdatePageFor(String pickDp) {
     if("XS".equalsIgnoreCase(pickDp)) {
       dpBulkUpdatePage.maxPickCapacityXs.sendKeys(100L);
-    } else {
+    } else if ("XL".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityXL.sendKeys(100L);
+    }else if ("L".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityL.sendKeys(100L);
+    }else if ("M".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityM.sendKeys(100L);
+    }
+    else {
       dpBulkUpdatePage.maxPickCapacityS.sendKeys(100L);
     }
   }

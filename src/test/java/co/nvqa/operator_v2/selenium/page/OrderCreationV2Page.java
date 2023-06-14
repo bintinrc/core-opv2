@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -68,15 +68,15 @@ public class OrderCreationV2Page extends OperatorV2SimplePage {
     String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
     String orderRefNo = getTextOnTable(1, COLUMN_CLASS_DATA_ORDER_REF_NO);
 
-    assertEquals("Status", "SUCCESS", status);
-    assertEquals("Message", expectedMessage, message);
+    Assertions.assertThat(status).as("Status").isEqualTo("SUCCESS");
+    Assertions.assertThat(message).as("Message").isEqualTo(expectedMessage);
 
     if (validateTrackingId) {
-      assertThat("Tracking ID", trackingId, Matchers
-          .endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
+      Assertions.assertThat(trackingId).as("Check tracking id")
+          .endsWith(expectedTrackingIdEndsWith);
     }
 
-    assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
+    Assertions.assertThat(orderRefNo).as("Order Ref No").isEqualTo(expectedOrderRefNo);
   }
 
   public void verifyOrderIsNotCreated() {
@@ -84,9 +84,9 @@ public class OrderCreationV2Page extends OperatorV2SimplePage {
     String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
     String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
 
-    assertEquals("Status", "FAIL", status);
-    assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));
-    assertThat("Tracking ID", trackingId, Matchers.isEmptyString());
+    Assertions.assertThat(status).as("Status").isEqualTo("FAIL");
+    Assertions.assertThat(message).as("Check message").startsWith("Invalid requested tracking ID");
+    Assertions.assertThat(trackingId).as("Check tracking id").isEmpty();
   }
 
   private String normalize(Object value) {

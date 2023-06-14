@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.ShipperBillingRecord;
 import co.nvqa.operator_v2.selenium.page.ShipperBillingPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -36,9 +37,9 @@ public class ShipperBillingSteps extends AbstractSteps {
   }
 
   private void updateShipperBilling(Map<String, String> mapOfData, String type) {
-    Map<String, String> mapOfTokens = createDefaultTokens();
+    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
     mapOfTokens.put("unique-id", TestUtils.generateDateUniqueString());
-    mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
 
     ShipperBillingRecord billingRecord = new ShipperBillingRecord();
     billingRecord.fromMap(mapOfData);

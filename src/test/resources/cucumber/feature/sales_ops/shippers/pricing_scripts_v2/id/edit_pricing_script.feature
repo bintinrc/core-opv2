@@ -16,9 +16,9 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | <is_RTS> |
       | size         | S        |
       | weight       | 1.0      |
@@ -31,6 +31,7 @@ Feature: Edit Pricing Script
       | insuranceFee | 0             |
       | codFee       | 0             |
       | handlingFee  | 0             |
+      | rtsFee       | 0             |
       | comments     | OK            |
     And Operator close page
     Then Operator verify the script is saved successfully

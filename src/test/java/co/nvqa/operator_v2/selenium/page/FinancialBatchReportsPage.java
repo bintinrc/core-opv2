@@ -41,7 +41,6 @@ public class FinancialBatchReportsPage extends SimpleReactPage<FinancialBatchRep
   private static final String XPATH_ERROR = "//p[text()='%s']";
   private static final String XPATH_EMAIL_ADDRESS_TXT_BOX = "//span[text()='Enter Email Addresses']//preceding-sibling::div/div/div/input";
 
-
   public FinancialBatchReportsPage(WebDriver webDriver) {
     super(webDriver);
   }

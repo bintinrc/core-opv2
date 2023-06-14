@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 
 public class DpBulkUpdateInfo extends DataEntity<DpBulkUpdateInfo> {
 

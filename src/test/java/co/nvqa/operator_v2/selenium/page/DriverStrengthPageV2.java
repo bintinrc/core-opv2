@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -10,12 +11,14 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.driver_strength.DriverStrengthAntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
@@ -69,9 +72,6 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(xpath = "//button[.='Download Failure Reasons']")
   public Button downloadFailureReasons;
 
-  @FindBy(id = "bulk-update-driver-csv")
-  public PageElement bulkUploadDrivers;
-
   @FindBy(xpath = "//button[.='Update Driver Details']")
   public Button updateDriverDetails;
 
@@ -99,7 +99,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(name = "driverTypes")
   public AntSelect driverTypesFilter;
 
-//  @FindBy(className = "//span[.='All']")
+  //  @FindBy(className = "//span[.='All']")
   @FindBy(xpath = "//div[contains(@class, 'ant-select') and @name='resigned']")
   public PageElement resignedFilter;
 
@@ -108,6 +108,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]")
+  public PageElement notificationPopup;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]")
+  public PageElement notificationTitle;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]")
+  public PageElement notificationDesc;
 
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -163,16 +169,16 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
     DriverInfo actualContactDetails = contactDetailsMenu.readData();
     if (StringUtils.isNotBlank(expectedContactDetails.getLicenseNumber())) {
-      assertThat("License Number", actualContactDetails.getLicenseNumber(),
-          equalTo(expectedContactDetails.getLicenseNumber()));
+      Assertions.assertThat(actualContactDetails.getLicenseNumber()).as("License Number")
+          .isEqualTo(expectedContactDetails.getLicenseNumber());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContact())) {
-      assertThat("Contact", actualContactDetails.getContact().replaceAll("\\s", ""),
-          equalTo(expectedContactDetails.getContact()));
+      Assertions.assertThat(actualContactDetails.getContact()).as("Contact")
+          .isEqualTo(expectedContactDetails.getContact());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContactType())) {
-      assertThat("Contact Type", actualContactDetails.getContactType(),
-          containsString(expectedContactDetails.getContactType()));
+      Assertions.assertThat(actualContactDetails.getContactType()).as("Contact Type")
+          .contains(expectedContactDetails.getContactType());
     }
   }
 
@@ -180,32 +186,36 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     filterBy(COLUMN_USERNAME, expectedDriverInfo.getUsername());
     DriverInfo actualDriverInfo = driversTable.readEntity(1);
     if (expectedDriverInfo.getId() != null) {
-      assertThat("Id", actualDriverInfo.getId(), equalTo(expectedDriverInfo.getId()));
+      Assertions.assertThat(actualDriverInfo.getId()).as("Id")
+          .isEqualTo(expectedDriverInfo.getId());
     }
     if (StringUtils.isNotBlank(expectedDriverInfo.getUsername())) {
-      assertThat("Username", actualDriverInfo.getUsername(),
-          equalTo(expectedDriverInfo.getUsername()));
+      Assertions.assertThat(actualDriverInfo.getUsername()).as("Username")
+          .isEqualTo(expectedDriverInfo.getUsername());
     }
     if (StringUtils.isNotBlank(expectedDriverInfo.getFirstName())) {
-      assertThat("First Name", actualDriverInfo.getFirstName(),
-          equalTo(expectedDriverInfo.getFirstName()));
+      Assertions.assertThat(actualDriverInfo.getFirstName()).as("First Name")
+          .isEqualTo(expectedDriverInfo.getFirstName());
     }
     if (StringUtils.isNotBlank(expectedDriverInfo.getLastName())) {
-      assertThat("Last Name", actualDriverInfo.getLastName(),
-          equalTo(expectedDriverInfo.getLastName()));
+      Assertions.assertThat(actualDriverInfo.getLastName()).as("Last Name")
+          .isEqualTo(expectedDriverInfo.getLastName());
     }
     if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
-      assertThat("Type", actualDriverInfo.getType(), equalTo(expectedDriverInfo.getType()));
+      Assertions.assertThat(actualDriverInfo.getType()).as("Type")
+          .isEqualTo(expectedDriverInfo.getType());
     }
     if (expectedDriverInfo.getZoneMin() != null) {
-      assertThat("Min", actualDriverInfo.getZoneMin(), equalTo(expectedDriverInfo.getZoneMin()));
+      Assertions.assertThat(actualDriverInfo.getZoneMin()).as("Min")
+          .isEqualTo(expectedDriverInfo.getZoneMin());
     }
     if (expectedDriverInfo.getZoneMax() != null) {
-      assertThat("Max", actualDriverInfo.getZoneMax(), equalTo(expectedDriverInfo.getZoneMax()));
+      Assertions.assertThat(actualDriverInfo.getZoneMax()).as("Max")
+          .isEqualTo(expectedDriverInfo.getZoneMax());
     }
     if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
-      assertThat("Comments", actualDriverInfo.getComments(),
-          equalTo(expectedDriverInfo.getComments()));
+      Assertions.assertThat(actualDriverInfo.getComments()).as("Comments")
+          .isEqualTo(expectedDriverInfo.getComments());
     }
   }
 
@@ -219,15 +229,47 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
   }
 
-  public void clickResignedOption(String resigned){
-    pause2s();
+  public void updloadFile(File absoluteFile) {
+    String inputXpath = "//div[@class='ant-space-item']/div[span[text()='Drag and drop CSV file here']]";
+    waitUntilVisibilityOfElementLocated(inputXpath);
+    dragAndDrop(absoluteFile, findElementBy(By.xpath(inputXpath)));
+    pause3s();
+  }
+
+  public void clickResignedOption(String resigned) {
+    String notResignedXpath = "//div[@label='Not Resigned' and contains(@class,'ant-select-item-option')]";
+    String resignedXPath = "//div[@label='Resigned' and contains(@class,'ant-select-item-option')]";
+    String allXpath = "//div[@label='All' and contains(@class,'ant-select-item-option')]";
+
     resignedFilter.click();
-    pause2s();
-    if(resigned.equalsIgnoreCase("no")){
-        click("//div[@label='Not Resigned']");
-    } else {
-      click("//div[@label='Resigned']");
+    pause5s();
+    if (resigned.equalsIgnoreCase("no") && isElementVisible(notResignedXpath)) {
+      click(notResignedXpath);
     }
+    if (resigned.equalsIgnoreCase("yes") && isElementVisible(resignedXPath)) {
+      click(resignedXPath);
+    }
+    if (resigned.equalsIgnoreCase("all") && isElementVisible(allXpath)) {
+      click(allXpath);
+    }
+    pause5s();
+  }
+
+  public void verifyNotificationAppear(String notifTitle, String notifDesc) {
+    String notificationPopupXpath = "//div[contains(@class, 'ant-notification')]";
+    String notificationTitleXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]";
+    String notificationDescXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]";
+    waitUntilVisibilityOfElementLocated(notificationPopupXpath);
+    while (isElementVisible(notificationPopupXpath)) {
+      boolean isTitleMatch = getText(notificationTitleXpath).equalsIgnoreCase(notifTitle);
+      boolean isDescMatch = getText(notificationDescXpath).equalsIgnoreCase(notifDesc);
+      Assertions.assertThat(isTitleMatch).as("Title is not match")
+          .isTrue();
+      Assertions.assertThat(isDescMatch).as("Desc is not match")
+          .isTrue();
+      waitUntilInvisibilityOfElementLocated(notificationPopupXpath);
+    }
+    pause500ms();
   }
 
   /**
@@ -253,6 +295,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     @FindBy(id = "firstName")
     public ForceClearTextBox firstName;
+
+    @FindBy(id = "displayName")
+    public ForceClearTextBox displayName;
 
     @FindBy(id = "lastName")
     public ForceClearTextBox lastName;
@@ -281,7 +326,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "username")
     public ForceClearTextBox username;
 
-    @FindBy(id = "password")
+    @FindBy(xpath = "//span[contains(@class,'ant-input')]/input[@name='password' and @id='password']")
     public ForceClearTextBox password;
 
     @FindBy(id = "comment")
@@ -390,6 +435,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
+    public AddDriverDialog setDisplayNameName(String value) {
+      if (value != null) {
+        displayName.setValue(value);
+      }
+      return this;
+    }
+
     public AddDriverDialog setLastName(String value) {
       if (value != null) {
         lastName.setValue(value);
@@ -427,10 +479,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       maximumOnDemandWaypoints.sendKeys(param);
     }
 
-    public void setDpmsId(String dpmsIdValue){
-      if(dpmsId.isDisplayed()){
+    public void setDpmsId(String dpmsIdValue) {
+      if (dpmsId.isDisplayed()) {
         dpmsId.click();
-        for(char key : dpmsIdValue.toCharArray()){
+        for (char key : dpmsIdValue.toCharArray()) {
           dpmsId.sendKeys(Keys.BACK_SPACE);
         }
         dpmsId.sendKeys(dpmsIdValue);
@@ -453,7 +505,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public AddDriverDialog addContact(String contactType, String contact) {
       addMoreContacts.click();
       ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
-      if(contact != null) {
+      if (contact != null) {
         form.contact.setValue(contact + Keys.TAB);
       }
       return this;
@@ -485,7 +537,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public AddDriverDialog setPassword(String value) {
-      if (value != null) {
+      if (value != null && password.isDisplayed()) {
         password.setValue(value);
       }
       return this;
@@ -506,6 +558,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public void fillForm(DriverInfo driverInfo) {
       waitUntilVisible();
       pause3s();
+      setDisplayNameName(driverInfo.getDisplayName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
@@ -516,7 +569,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setHub(driverInfo.getHub());
       setEmploymentStartDate(driverInfo.getEmploymentStartDate());
       if (driverInfo.hasVehicleInfo()) {
-        addVehicle(driverInfo.getVehicleType(), driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
+        addVehicle(driverInfo.getVehicleType(), driverInfo.getVehicleLicenseNumber(),
+            driverInfo.getVehicleCapacity());
       }
       if (driverInfo.hasContactsInfo()) {
         addContact(driverInfo.getContactType(), driverInfo.getContact());
@@ -644,6 +698,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void fillForm(DriverInfo driverInfo) {
       waitUntilVisible();
+      setDisplayNameName(driverInfo.getDisplayName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
@@ -653,7 +708,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         if (vehicleSettingsForm.size() > 0) {
           editVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
         } else {
-          addVehicle(driverInfo.getVehicleType(),driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
+          addVehicle(driverInfo.getVehicleType(), driverInfo.getVehicleLicenseNumber(),
+              driverInfo.getVehicleCapacity());
         }
       }
       if (driverInfo.hasContactsInfo()) {
@@ -683,13 +739,22 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     private static final String LOCATOR_COMING_VALUE = "//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//span[contains(@class,'ant-typography')]";
 
     public static final String COLUMN_ID = "id";
-    //    public static final String COLUMN_ID = "//span[@class='ant-table-filter-column-title']/div/div/span[.='Id']";
     public static final String COLUMN_USERNAME = "username";
+    public static final String COLUMN_DISPLAY_NAME = "displayName";
+
     public static final String COLUMN_TYPE = "type";
-    public static final String COLUMN_ZONE = "zoneId";
-    public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartName";
-    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndName";
-    public static final String COLUMN_RESIGNED = "resign";
+    public static final String COLUMN_ZONE_ID = "zoneId";
+    public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartDate";
+    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndDate";
+    public static final String COLUMN_RESIGNED = "resigned";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DPMS_ID = "dpmsId";
+    public static final String COLUMN_HUB = "hub";
+    public static final String COLUMN_VEHICLE_TYPE = "vehicleType";
+    public static final String COLUMN_VEHICLE_OWN = "vehicleOwn";
+    public static final String COLUMN_ZONE_MIN = "zoneMin";
+    public static final String COLUMN_ZONE_MAX = "zoneMax";
+    public static final String COLUMN_COMMENTS = "comments";
 
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_DELETE = "delete";
@@ -700,19 +765,20 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_ID, "2")
           .put(COLUMN_USERNAME, "3")
-          .put("name", "4")
-          .put("hub", "5")
-          .put(COLUMN_TYPE, "6")
-          .put("dpmsId", "7")
-          .put("vehicleType", "8")
-          .put("vehicleOwn", "9")
-          .put(COLUMN_ZONE, "10")
-          .put("zoneMin", "11")
-          .put("zoneMax", "12")
-          .put("comments", "13")
-          .put(COLUMN_EMPLOYMENT_START_DATE, "14")
-          .put(COLUMN_EMPLOYMENT_END_DATE, "15")
-          .put(COLUMN_RESIGNED, "16")
+          .put(COLUMN_DISPLAY_NAME, "4")
+          .put(COLUMN_NAME, "5")
+          .put(COLUMN_HUB, "6")
+          .put(COLUMN_TYPE, "7")
+          .put(COLUMN_DPMS_ID, "8")
+          .put(COLUMN_VEHICLE_TYPE, "9")
+          .put(COLUMN_VEHICLE_OWN, "10")
+          .put(COLUMN_ZONE_ID, "11")
+          .put(COLUMN_ZONE_MIN, "12")
+          .put(COLUMN_ZONE_MAX, "13")
+          .put(COLUMN_COMMENTS, "14")
+          .put(COLUMN_EMPLOYMENT_START_DATE, "15")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "16")
+          .put(COLUMN_RESIGNED, "17")
           .build()
       );
       setActionButtonsLocators(ImmutableMap
@@ -734,15 +800,28 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void waitUntilTableLoaded() {
-    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
+    String tableRowXpath = "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]";
+    Runnable verifyLoadedTable = () -> {
+      if (!findElementBy(By.xpath(tableRowXpath)).isDisplayed()) {
+        pause500ms();
+      }
+    };
+
+    try {
+      doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
+    } catch (NoSuchElementException ignored) {
+      NvLogger.error("===== Table isn't loaded =====");
+      NvLogger.error(ignored.getMessage());
+    }
   }
 
-  public boolean isTableLoaded(){
+  public boolean isTableLoaded() {
     return isElementExist("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
   }
 
-  public boolean verifyNoDataOnTable(){
-    final WebElement noData = findElementByXpath("//div[@class='ant-empty ant-empty-normal']/p[.='No Data']");
+  public boolean verifyNoDataOnTable() {
+    final WebElement noData = findElementByXpath(
+        "//div[@class='ant-empty ant-empty-normal']/p[.='No Data']");
     return noData.getText().equals("No Data");
   }
 
@@ -774,18 +853,18 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     return isDisplayed;
   }
 
-  public List<String> getAllDownloadOptions(){
+  public List<String> getAllDownloadOptions() {
     waitUntilPageLoaded();
     downloadHamburgerIcon.click();
     pause2s();
     List<String> options = new ArrayList<String>();
-    for(PageElement option : downloadOptions){
+    for (PageElement option : downloadOptions) {
       options.add(option.getText());
     }
     return options;
   }
 
-  public void verifyFileDownloadForUpdate(String downloadOption){
+  public void verifyFileDownloadForUpdate(String downloadOption) {
     waitUntilPageLoaded();
     downloadHamburgerIcon.click();
     String downloadOptionXpath = f(DOWNLOAD_OPTS_HAMBURGER_XPATH, downloadOption);
@@ -793,12 +872,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     downloadToUpdate.click();
   }
 
-  public boolean verifyNoticeDisplayed(String notice){
+  public boolean verifyNoticeDisplayed(String notice) {
     String noticeXpath = f(ALERT_MESSAGE_XPATH, notice);
-    waitUntilVisibilityOfElementLocated(noticeXpath);
-    List<WebElement> message = getWebDriver().findElements(By.xpath(noticeXpath));
-    boolean isDisplayed = message.size() > 0;
-    return isDisplayed;
+    Boolean isExist = isElementExist(noticeXpath);
+    Assertions.assertThat(isExist)
+        .as(f("Assert that notice : %s  is displayed as expected!", notice))
+        .isTrue();
+    return isExist;
   }
-
 }

@@ -12,12 +12,11 @@ Feature: Add To Shipment 2
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB_ID}
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan multiple created order to shipment in hub {hub-name-2} to hub id = {KEY_DESTINATION_HUB}
+    When Operator add order to shipment in hub "{hub-name}" to hub "{hub-name-2}"
     And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
@@ -27,12 +26,11 @@ Feature: Add To Shipment 2
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB_ID}
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan multiple created order to shipment in hub {hub-name-2} to hub id = {KEY_DESTINATION_HUB}
+    When Operator add order to shipment in hub "{hub-name}" to hub "{hub-name-2}"
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
 

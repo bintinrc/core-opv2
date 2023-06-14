@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -25,15 +25,18 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Condition;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -71,6 +74,30 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "nv-filter-box[main-title='Status']")
   public NvFilterBox statusFilter;
+
+  @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
+  public Button disablePendingPickup;
+
+  @FindBy(xpath = "//button[@aria-label='Pending']/i")
+  public Button disablePending;
+
+  @FindBy(xpath = "//input[@class='md-datepicker-input']")
+  public TextBox datePickerInput;
+
+  @FindBy(css = "[aria-label='Submit']")
+  public PageElement submit;
+
+  @FindBy(xpath = "//button//span[text()='Apply Action']")
+  public Button buttonApplyAction;
+
+  @FindBy(name = "commons.load-selection")
+  public NvApiTextButton loadSelection;
+
+  @FindBy(xpath = "//nv-search-input-filter[@search-text='filter.trackingId']//input")
+  public TextBox trackingIdFilter;
+
+  @FindBy(xpath = "//td[@class='column-checkbox']//md-checkbox")
+  public PageElement buttonCheckboxOrder;
 
   @FindBy(css = "nv-filter-box[main-title='Granular Status']")
   public NvFilterBox granularStatusFilter;
@@ -150,6 +177,15 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void addFilter(String value) {
     addFilter.simpleSelectValue(value);
   }
+
+  public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending Pickup", disablePendingPickup)
+      .build();
+
+  public ImmutableMap<String, Button> disableStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending", disablePending)
+      .build();
+
 
   public enum Category {
     TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
@@ -234,7 +270,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void verifyItsCurrentPage() {
     super.waitUntilPageLoaded();
-    assertTrue(getWebDriver().getCurrentUrl().endsWith("/order"));
+    Assertions.assertThat(getWebDriver().getCurrentUrl())
+        .withFailMessage("All Orders page is not opened")
+        .endsWith("/order");
   }
 
   public void downloadSampleCsvFile() {
@@ -272,15 +310,25 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         "//div[@ng-repeat='error in ctrl.payload.errors track by $index']");
     List<String> listOfActualInvalidTrackingId = listOfWe.stream()
         .map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId,
-        hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualInvalidTrackingId).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfInvalidTrackingId), ""));
+  }
+
+  public void applyActionOrder(String action) {
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath(f("//button[@aria-label = '%s']", action)));
+    pause2s();
+
   }
 
   public void verifyOrderStatus(String trackingId, String expectedOrderStatus) {
     filterTableOrderByTrackingId(trackingId);
     String actualGranularStatus = getTextOnTableOrder(1,
         COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
-    assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(expectedOrderStatus));
+    Assertions.assertThat(actualGranularStatus).as("Granular Status")
+        .isEqualToIgnoringCase(expectedOrderStatus);
   }
 
   public void verifyOrderInfoOnTableOrderIsCorrect(Order order) {
@@ -302,22 +350,23 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     String actualGranularStatus = getTextOnTableOrder(1,
         COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
 
-    assertEquals("Tracking ID", trackingId, actualTrackingId);
+    Assertions.assertThat(actualTrackingId).as("Tracking ID").isEqualTo(trackingId);
 
-    assertEquals("From Name", order.getFromName(), actualFromName);
-    assertEquals("From Contact", order.getFromContact(), actualFromContact);
-    assertThat("From Address", actualFromAddress, containsString(order.getFromAddress1()));
-    assertThat("From Address", actualFromAddress, containsString(order.getFromAddress2()));
-    assertEquals("From Postcode", order.getFromPostcode(), actualFromPostcode);
+    Assertions.assertThat(actualFromName).as("From Name").isEqualTo(order.getFromName());
+    Assertions.assertThat(actualFromContact).as("From Contact").isEqualTo(order.getFromContact());
+    Assertions.assertThat(actualFromAddress).as("From Address").contains(order.getFromAddress1());
+    Assertions.assertThat(actualFromAddress).as("From Address").contains(order.getFromAddress2());
+    Assertions.assertThat(actualFromPostcode).as("From Postcode")
+        .isEqualTo(order.getFromPostcode());
 
-    assertEquals("To Name", order.getToName(), actualToName);
-    assertEquals("To Contact", order.getToContact(), actualToContact);
-    assertThat("To Address", actualToAddress, containsString(order.getToAddress1()));
-    assertThat("To Address", actualToAddress, containsString(order.getToAddress2()));
-    assertEquals("To Postcode", order.getToPostcode(), actualToPostcode);
+    Assertions.assertThat(actualToName).as("To Name").isEqualTo(order.getToName());
+    Assertions.assertThat(actualToContact).as("To Contact").isEqualTo(order.getToContact());
+    Assertions.assertThat(actualToAddress).as("To Address").contains(order.getToAddress1());
+    Assertions.assertThat(actualToAddress).as("To Address").contains(order.getToAddress2());
+    Assertions.assertThat(actualToPostcode).as("To Postcode").isEqualTo(order.getToPostcode());
 
-    assertThat("Granular Status", actualGranularStatus,
-        equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
+    Assertions.assertThat(actualGranularStatus).as("Granular Status")
+        .isEqualToIgnoringCase(order.getGranularStatus().replaceAll("_", " "));
   }
 
   public void verifyOrderInfoIsCorrect(Order order) {
@@ -398,8 +447,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         "//tr[@ng-repeat='order in ctrl.orders']/td[1]");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
         .collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
+            "Has Expected tracking id"));
 
     setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
     selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
@@ -422,12 +472,13 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
     List<String> listOfActualTrackingIds = cancelSelectedDialog.trackingIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
+            "Has Expected tracking id"));
 
     cancelSelectedDialog.cancellationReason.setValue(String.format(
         "This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.",
-        CREATED_DATE_SDF.format(new Date())));
+        DTF_CREATED_DATE.format(ZonedDateTime.now())));
 
     if (listOfActualTrackingIds.size() == 1) {
       cancelSelectedDialog.cancelOrder.clickAndWaitUntilDone();
@@ -447,8 +498,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     resumeSelectedDialog.waitUntilVisible();
     List<String> listOfActualTrackingIds = resumeSelectedDialog.trackingIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
+            "Has Expected tracking id"));
 
     if (listOfActualTrackingIds.size() == 1) {
       resumeSelectedDialog.resumeOrder.clickAndWaitUntilDone();
@@ -479,8 +531,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         "//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
         .collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
+            "Has Expected tracking id"));
   }
 
   public void applyActionToOrdersByTrackingId(
@@ -493,13 +546,14 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void verifySelectionErrorDialog(List<String> listOfExpectedTrackingId,
       AllOrdersAction action, List<String> expectedReasons) {
     WebElement failedToUpdateWe = findElementByXpath("//div[contains(text(), 'Failed to update')]");
-    assertNotNull("Failed to update n item(s) dialog not found.", failedToUpdateWe);
+    Assertions.assertThat(failedToUpdateWe).as("Failed to update n item(s) dialog not found.")
+        .isNotNull();
     pause3s();
 
     //To-Do: Enable this codes below when they fix the UI.
 //        Pattern p = Pattern.compile("([^\\s]+)\\s?.*Message:(.+)].*");
 //        List<String> errors = pullSelectedFromRouteDialog.errors.stream().map(PageElement::getText).collect(Collectors.toList());
-//        assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), errors.size());
+//       Assertions.assertThat(errors.size()).as("Unexpected number of Orders").isEqualTo(listOfExpectedTrackingId.size());
 //        assertThat("Expected Tracking ID not found", errors, hasItems(errors.stream().map(error ->
 //        {
 //            Matcher m = p.matcher(error);
@@ -542,8 +596,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     List<String> actualTrackingId = addToRouteDialog.trackingIds.stream().map(PageElement::getText)
         .collect(Collectors.toList());
 
-    assertThat("List of Tracking IDs", actualTrackingId,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(actualTrackingId).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
+            "Has Expected tracking id"));
 
     addToRouteDialog.setToAll.click();
     if (StringUtils.isNotBlank(routeId)) {
@@ -596,8 +651,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilVisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading", true);
+    waitUntilVisibilityOfToast("Attempting to print waybill(s)");
+//    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
@@ -607,7 +662,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void verifiesTrackingIdIsCorrect(String trackingId) {
     String actualTrackingId = getText(
         "//div[@id='header']//label[text()='Tracking ID']/following-sibling::h3");
-    assertEquals("Tracking ID is Not the same: ", actualTrackingId, trackingId);
+    Assertions.assertThat(trackingId).as("Tracking ID is Not the same: ")
+        .isEqualTo(actualTrackingId);
   }
 
   public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm) {
@@ -626,7 +682,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     pause100ms();
     getWebDriver().switchTo().window(
         mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
-    search.waitUntilDone();
   }
 
   public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm,
@@ -710,8 +765,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       switchToEditOrderWindow(orderId);
       String xpath = "//label[text()='Latest Event']/following-sibling::h3";
       String actualLatestEvent = getText(xpath);
-      assertEquals("Latest Event is not the same", latestEvent.toLowerCase(),
-          actualLatestEvent.toLowerCase());
+      Assertions.assertThat(actualLatestEvent.toLowerCase()).as("Latest Event is not the same")
+          .isEqualTo(latestEvent.toLowerCase());
     } finally {
       closeAllWindows(mainWindowHandle);
     }
@@ -983,8 +1038,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     verifyFileDownloadedSuccessfully(downloadedFile);
     String pathName = StandardTestConstants.TEMP_DIR + downloadedFile;
     List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
-    assertTrue(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId));
-    assertTrue(reg.get(0).getErrorMessage().contains(message));
+    Assertions.assertThat(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId)).isTrue();
+    Assertions.assertThat(reg.get(0).getErrorMessage().contains(message)).isTrue();
   }
 
   public static class SelectionErrorDialog extends MdDialog {
@@ -1043,13 +1098,17 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifyCustomerDeliveryAddress(Order order, String address1, String address2) {
-    assertEquals("Delivery Address1 is correct: ", order.getToAddress1().trim(), address1);
-    assertEquals("Delivery Address2 is correct: ", order.getToAddress2().trim(), address2);
+    Assertions.assertThat(address1).as("Delivery Address1 is correct: ")
+        .isEqualTo(order.getToAddress1().trim());
+    Assertions.assertThat(address2).as("Delivery Address2 is correct: ")
+        .isEqualTo(order.getToAddress2().trim());
   }
 
   public void verifyDeliveryAddressIsRts(Order order) {
-    assertEquals("Delivery Address1 is correct: ", order.getFromAddress1(), order.getToAddress1());
-    assertEquals("Delivery Address2 is correct: ", order.getFromAddress2(), order.getToAddress2());
+    Assertions.assertThat(order.getToAddress1()).as("Delivery Address1 is correct: ")
+        .isEqualTo(order.getFromAddress1());
+    Assertions.assertThat(order.getToAddress2()).as("Delivery Address2 is correct: ")
+        .isEqualTo(order.getFromAddress2());
   }
 
   public void verifyDriverCollect(
@@ -1057,17 +1116,18 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
-    assertEquals("Barcode is different : ", dbCheckingDriverCollectOrder.getBarcode(), trackingId);
-    assertEquals("DP Reservation Status is not the same : ",
-        dbCheckingDriverCollectOrder.getRsvnStatus(), "RELEASED");
-    assertEquals("DP Reservation Event Name is not the same : ",
-        dbCheckingDriverCollectOrder.getRsvnEventName(), "DRIVER_COLLECTED");
-    assertEquals("DP Job Status is not the same : ", dbCheckingDriverCollectOrder.getJobStatus(),
-        "COMPLETED");
-    assertEquals("DP Job Order Status is not the same : ",
-        dbCheckingDriverCollectOrder.getJobOrderStatus(), "SUCCESS");
-    assertEquals("Released To is not the same : ", dbCheckingDriverCollectOrder.getReleasedTo(),
-        "DRIVER");
+    Assertions.assertThat(trackingId).as("Barcode is different : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getBarcode());
+    Assertions.assertThat("RELEASED").as("DP Reservation Status is not the same : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getRsvnStatus());
+    Assertions.assertThat("DRIVER_COLLECTED").as("DP Reservation Event Name is not the same : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getRsvnEventName());
+    Assertions.assertThat("COMPLETED").as("DP Job Status is not the same : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getJobStatus());
+    Assertions.assertThat("SUCCESS").as("DP Job Order Status is not the same : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getJobOrderStatus());
+    Assertions.assertThat("DRIVER").as("Released To is not the same : ")
+        .isEqualTo(dbCheckingDriverCollectOrder.getReleasedTo());
     assertTrue("Released At is not the same : ",
         dbCheckingDriverCollectOrder.getReleasedAt().toString()
             .startsWith(formatter.format(today)));
@@ -1085,23 +1145,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
-    assertEquals("Barcode is different : ", dbCheckingCustomerCollectOrder.getBarcode(),
-        trackingId);
-    assertEquals("Released To is not the same : ", dbCheckingCustomerCollectOrder.getReleasedTo(),
-        "CUSTOMER");
-    assertEquals("Reservation Event Name is not correct: ",
-        dbCheckingCustomerCollectOrder.getRsvnEventName(),
-        "DP_RELEASED_TO_CUSTOMER");
+    Assertions.assertThat(trackingId).as("Barcode is different : ")
+        .isEqualTo(dbCheckingCustomerCollectOrder.getBarcode());
+    Assertions.assertThat("CUSTOMER").as("Released To is not the same : ")
+        .isEqualTo(dbCheckingCustomerCollectOrder.getReleasedTo());
+    Assertions.assertThat("DP_RELEASED_TO_CUSTOMER").as("Reservation Event Name is not correct: ")
+        .isEqualTo(dbCheckingCustomerCollectOrder.getRsvnEventName());
     assertTrue("Released At is not the same : ",
         dbCheckingCustomerCollectOrder.getReleasedAt().toString()
             .startsWith(formatter.format(today)));
     assertTrue("Collected At is not the same : ",
         dbCheckingCustomerCollectOrder.getCollectedAt().toString()
             .startsWith(formatter.format(today)));
-    assertEquals("Status is not the same : ", dbCheckingCustomerCollectOrder.getStatus(),
-        "RELEASED");
-    assertEquals("Source is not the same : ", dbCheckingCustomerCollectOrder.getSource(),
-        "OPERATOR");
+    Assertions.assertThat("RELEASED").as("Status is not the same : ")
+        .isEqualTo(dbCheckingCustomerCollectOrder.getStatus());
+    Assertions.assertThat("OPERATOR").as("Source is not the same : ")
+        .isEqualTo(dbCheckingCustomerCollectOrder.getSource());
   }
 
   public static class PrintWaybillsDialog extends MdDialog {
@@ -1112,8 +1171,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.list.download-selected")
     public NvIconTextButton downloadSelected;
 
+    @FindBy(id = "select-printing-size")
+    public PageElement PrintingSizeBox;
+
+    @FindBy(xpath = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']")
+    public PageElement PrintSizeList;
+
+    String PRINTING_SIZE = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']//div[@class='md-text' and contains(text(),'%s')]";
+
     public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+
+    public void SelectPrintSize(String size) {
+      PrintSizeList.waitUntilVisible();
+      findElementByXpath(f(PRINTING_SIZE, size)).click();
+      PrintSizeList.waitUntilInvisible();
     }
   }
 }

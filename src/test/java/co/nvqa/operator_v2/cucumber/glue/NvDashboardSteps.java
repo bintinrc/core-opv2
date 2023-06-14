@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.operator_v2.selenium.page.NvDashboardPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
-import io.cucumber.guice.ScenarioScoped;
 import org.apache.commons.collections.CollectionUtils;
 
 /**

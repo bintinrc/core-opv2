@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -99,8 +100,8 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
   public void updateHub(String searchHubsKeyword, Hub hub) {
     loadingHubsLabel.waitUntilInvisible();
     hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
-    assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword),
-        hubsTable.isEmpty());
+    Assertions.assertThat(hubsTable.isEmpty())
+        .as(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword)).isFalse();
     hubsTable.clickActionButton(1, ACTION_EDIT);
     editHubDialog.waitUntilVisible();
     pause1s();

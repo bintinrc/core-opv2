@@ -1,32 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.support.DateUtil;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage.InvalidFailedWP;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage.StationRouteMonitoring;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
@@ -36,11 +19,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.COLUMN_NAME;
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.CSV_DOWNLOADED_FILENAME_PATTERN;
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.DOWNLOADED_CSV_FILENAME;
-
 
 @SuppressWarnings("unused")
 @ScenarioScoped
@@ -66,13 +44,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   @And("Operator selects {string} in the Address Status dropdown")
   public void operatorSelectsInTheAddressStatusDropdown(String option) {
-    retryIfExpectedExceptionOccurred(
-        () -> shipperAddressConfigurationPage.selectAddressStatus(option),
-        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class, InvalidArgumentException.class);
+    Runnable selectStatus = () -> {
+      shipperAddressConfigurationPage.selectAddressStatus(option);
+    };
+    doWithRetry(selectStatus, "Operator select Address Status");
     takesScreenshot();
   }
 
@@ -83,23 +58,17 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     addressCreationDate = resolveKeyValues(addressCreationDate);
     String startDate = addressCreationDate.get("From");
     String endDate = addressCreationDate.get("To");
-
-    retryIfExpectedExceptionOccurred(
-        () -> shipperAddressConfigurationPage.selectDateRange(startDate,
-            endDate),
-        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class, InvalidArgumentException.class);
+    Runnable selectDates = () -> {
+          shipperAddressConfigurationPage.selectDateRange(startDate,
+              endDate);
+    };
+    doWithRetry(selectDates, "Operator chooses start and end date");
     takesScreenshot();
   }
-
 
   @And("Operator selects  following picktypes in the dropdown:")
   public void operatorSelectsFollowingPicktypesInTheDropdown(List<String> pickType) {
     shipperAddressConfigurationPage.selectPickupType(pickType);
-
   }
 
   @And("Operator clicks on the load selection button")
@@ -110,15 +79,33 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator filter the column {string} with {string}")
   public void operator_Searches_By(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
-    shipperAddressConfigurationPage.filterBy(filterBy, filterValue);
+    String finalFilterValue = filterValue;
+    Runnable filterColumn = () -> {
+      shipperAddressConfigurationPage.filterBy(filterBy, finalFilterValue);
+    };
+    doWithRetry(filterColumn, "Operator filter column");
     takesScreenshot();
   }
 
   @Then("Operator verifies table is filtered {string} based on input in {string} in shipper address page")
-  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddresPage(String filterBy,
-      String filterValue) {
+  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
-    shipperAddressConfigurationPage.validateFilter(filterBy, filterValue);
+    String finalFilterValue = filterValue;
+    Runnable filterColumn = () -> {
+      shipperAddressConfigurationPage.validateFilter(filterBy,finalFilterValue);
+    };
+    doWithRetry(filterColumn, "Operator verifies table");
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies table is filtered based on input in {string} in shipper address page")
+  public void operatorVerifiesTableIsFilteredBasedOnPickUpTypeValue(String filterValue) {
+    filterValue = resolveValue(filterValue);
+    String finalFilterValue = filterValue;
+    Runnable verifyTable = () -> {
+      shipperAddressConfigurationPage.validatePickUpType(finalFilterValue);
+    };
+    doWithRetry(verifyTable, "Operator verifies table is filtered based on input");
     takesScreenshot();
   }
 
@@ -136,9 +123,11 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator clicks on the Download Addresses button")
   public void operatorClicksOnTheDownloadAddressesButton() {
-    shipperAddressConfigurationPage.clickDownloadAddress();
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickDownloadAddress();
+    };
+    doWithRetry(clickButton, "Click on Download Addresses Button");
     takesScreenshot();
-
   }
 
   @And("Operator clicks on the edit pickup button")
@@ -150,7 +139,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @And("Operator selects the picktype {string} in the dropdown")
   public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
     shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValueWithoutSearch(pickType);
-
   }
 
   @And("Operator clicks on the Update Addresses Lat Long button")
@@ -208,17 +196,22 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-
   @And("Operator clicks on the {string} button")
   @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
-    retryIfExpectedExceptionOccurred(
-        () -> shipperAddressConfigurationPage.clickButton(buttonText),
-        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class, InvalidArgumentException.class);
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickButton(buttonText);
+    };
+    doWithRetry(clickButton, "Click on Button");
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button to upload CVS")
+  public void operator_clicks_on_button_to_upload_cvs(String button){
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickUploadCVSButton();
+    };
+    doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
 
@@ -229,28 +222,25 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     expected = resolveValues(expected);
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
         filePattern);
-    expected.forEach((expectedText) -> {
-      shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
-          expectedText, true);
-    });
+    expected.forEach(
+        (expectedText) -> shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(
+            downloadedCsvFile,
+            expectedText, true));
   }
 
   @Then("Operator verifies header names are available in the downloaded CSV file {string}")
   public void verifyHeaderNamesInDownloadedCsv(String fileName, List<String> headerNames) {
     headerNames = resolveValues(headerNames);
     fileName = resolveValue(fileName);
-    pause5s();
+    pause9s();
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
         fileName);
     List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
         downloadedCsvFile);
     String headers = actual.get(0).toString().replaceAll("^\"|\"$", "").replaceAll("^\"|\"$", "");
-    headerNames.forEach((e) -> {
-      Assertions.assertThat(headers)
-          .as("Validation for Header Names in Downloaded CSV file")
-          .contains(e);
-    });
-
+    headerNames.forEach((e) -> Assertions.assertThat(headers)
+        .as("Validation for Header Names in Downloaded CSV file")
+        .contains(e));
   }
 
   @And("Operator uploads csv file: {string} by browsing files in {string} upload window")
@@ -269,7 +259,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.dragAndDrop(fileName);
     shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
-
   }
 
   @Then("Operator updates the CSV file with below data:")
@@ -283,7 +272,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     File file = new File(Filepath);
     shipperAddressConfigurationPage.updateCSVFile(Filepath, columnIndex, rowIndex, value);
-
   }
 
   @Then("Operator verifies page url ends with {string}")
@@ -298,7 +286,21 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Verify that csv file is downloaded with filename: {string}")
+  public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
+    Runnable verifyDownloadedFilename = () -> {
+      shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
+    };
+    doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename");
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button to upload CSV file")
+  public void operatorClicksOnTheButtonToUploadCSVFile(String buttonText) {
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickButtonToUploadCSV(buttonText);
+    };
+    doWithRetry(clickButton, "Click on Button");
+    takesScreenshot();
+  }
 }
-
-
-

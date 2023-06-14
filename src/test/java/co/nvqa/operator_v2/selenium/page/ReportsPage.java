@@ -5,7 +5,7 @@ import co.nvqa.commons.util.GmailClient;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.mail.internet.MimeMultipart;
 import javax.xml.parsers.DocumentBuilder;
@@ -40,7 +40,7 @@ public class ReportsPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void filterCodReportsBy(String mode, Date date) {
+  public void filterCodReportsBy(String mode, ZonedDateTime date) {
     clickToggleButton("ctrl.codReport.mode", mode);
     codReportDate.setDate(date);
   }

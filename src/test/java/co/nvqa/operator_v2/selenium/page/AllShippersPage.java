@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Address;
+import co.nvqa.common.model.address.Address;
 import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
@@ -169,15 +170,13 @@ public class AllShippersPage extends OperatorV2SimplePage {
     Shipper actualShipper = shippersTable.readEntity(1);
     shipper.setLegacyId(actualShipper.getLegacyId());
 
-    assertEquals("Name", shipper.getName(), actualShipper.getName());
-    assertEquals("Email", shipper.getEmail(), actualShipper.getEmail());
-    assertEquals("Industry", shipper.getIndustryName(), actualShipper.getIndustryName());
-    assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualShipper.getLiaisonEmail());
-    assertEquals("Contact", shipper.getContact(), actualShipper.getContact());
-    assertEquals("Sales Person",
-        shipper.getSalesPerson().substring(0, shipper.getSalesPerson().lastIndexOf("-")),
-        actualShipper.getSalesPerson());
-    assertEquals("Expected Status = Inactive", shipper.getActive(), actualShipper.getActive());
+   Assertions.assertThat(actualShipper.getName()).as("Name").isEqualTo(shipper.getName());
+   Assertions.assertThat(actualShipper.getEmail()).as("Email").isEqualTo(shipper.getEmail());
+   Assertions.assertThat(actualShipper.getIndustryName()).as("Industry").isEqualTo(shipper.getIndustryName());
+   Assertions.assertThat(actualShipper.getLiaisonEmail()).as("Liaison Email").isEqualTo(shipper.getLiaisonEmail());
+   Assertions.assertThat(actualShipper.getContact()).as("Contact").isEqualTo(shipper.getContact());
+   Assertions.assertThat(        actualShipper.getSalesPerson()).as("Sales Person").isEqualTo(        shipper.getSalesPerson().substring(0, shipper.getSalesPerson().lastIndexOf("-")));
+   Assertions.assertThat(actualShipper.getActive()).as("Expected Status = Inactive").isEqualTo(shipper.getActive());
 
     openEditShipperPage();
     allShippersCreateEditPage.verifyNewShipperIsCreatedSuccessfully(shipper);
@@ -214,7 +213,7 @@ public class AllShippersPage extends OperatorV2SimplePage {
 
   public void verifyShipperIsDeletedSuccessfully(Shipper shipper) {
     searchTableByName(shipper.getShortName());
-    assertTrue("Table should be empty.", isTableEmpty());
+   Assertions.assertThat(isTableEmpty()).as("Table should be empty.").isTrue();
   }
 
   public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper,
@@ -347,14 +346,13 @@ public class AllShippersPage extends OperatorV2SimplePage {
       columnXpath = f(XPATH_FOR_COLUMNS, "name");
     }
     String text = getText(columnXpath);
-    assertTrue("The keyword is found on the respective column",
-        text.toLowerCase().contains(keyword.toLowerCase()));
+   Assertions.assertThat(        text.toLowerCase().contains(keyword.toLowerCase())).as("The keyword is found on the respective column").isTrue();
   }
 
   public void quickSearchShipper(String keyword) {
     String currentURL = getWebDriver().getCurrentUrl();
     String editShipperPageURL = (f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL,
-        TestConstants.COUNTRY_CODE));
+        TestConstants.NV_SYSTEM_ID));
 
     if (currentURL.contains(editShipperPageURL)) {
       getWebDriver().navigate().to(editShipperPageURL);
@@ -369,9 +367,9 @@ public class AllShippersPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       getWebDriver().navigate()
           .to(f("%s/%s/shippers/list?keyword=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
-              TestConstants.COUNTRY_CODE, keyword));
-      assertTrue("Shipper table is empty", !shippersTable.isTableEmpty());
-      assertEquals("Shipper table has more than one row", 1, shippersTable.getRowsCount());
+              TestConstants.NV_SYSTEM_ID, keyword));
+     Assertions.assertThat(!shippersTable.isTableEmpty()).as("Shipper table is empty").isTrue();
+     Assertions.assertThat(shippersTable.getRowsCount()).as("Shipper table has more than one row").isEqualTo(1);
     }, "Search specific shipper in shipper table", 100, 5);
   }
 
@@ -535,49 +533,40 @@ public class AllShippersPage extends OperatorV2SimplePage {
   public void verifyPricingProfileDetails(Pricing pricingProfile, Pricing pricingProfileFromOPV2) {
     String scriptName = pricingProfile.getScriptName();
     if (Objects.nonNull(scriptName)) {
-      assertTrue("Script Name is not same: ",
-          scriptName.contains(pricingProfileFromOPV2.getScriptName()));
+     Assertions.assertThat(          scriptName.contains(pricingProfileFromOPV2.getScriptName())).as("Script Name is not same: ").isTrue();
     }
     Long discount = pricingProfile.getShipperDiscountId();
     if (Objects.nonNull(discount)) {
-      assertEquals("Shipper Discount is not the same: ", discount,
-          pricingProfileFromOPV2.getShipperDiscountId());
+     Assertions.assertThat(          pricingProfileFromOPV2.getShipperDiscountId()).as("Shipper Discount is not the same: ").isEqualTo(discount);
     }
     String comments = pricingProfile.getComments();
     if (Objects.nonNull(discount)) {
-      assertEquals("Comments are not the same: ", comments,
-          pricingProfileFromOPV2.getComments());
+     Assertions.assertThat(          pricingProfileFromOPV2.getComments()).as("Comments are not the same: ").isEqualTo(comments);
     }
-    assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
+   Assertions.assertThat(pricingProfileFromOPV2.getEffectiveDate()).as("Start Date is null:").isNotNull();
     Date endDate = pricingProfile.getContractEndDate();
     if (Objects.nonNull(endDate)) {
-      assertEquals("End Date is not the same: ", endDate,
-          pricingProfileFromOPV2.getContractEndDate());
+     Assertions.assertThat(          pricingProfileFromOPV2.getContractEndDate()).as("End Date is not the same: ").isEqualTo(endDate);
     }
     String codMin = pricingProfile.getCodMin();
     if (Objects.nonNull(codMin)) {
-      assertEquals("COD min fee is not the same: ", codMin,
-          pricingProfileFromOPV2.getCodMin());
+     Assertions.assertThat(          pricingProfileFromOPV2.getCodMin()).as("COD min fee is not the same: ").isEqualTo(codMin);
     }
     String codPercentage = pricingProfile.getCodPercentage();
     if (Objects.nonNull(codPercentage)) {
-      assertEquals("COD percentage is not the same: ", codPercentage + "%",
-          pricingProfileFromOPV2.getCodPercentage());
+     Assertions.assertThat(          pricingProfileFromOPV2.getCodPercentage()).as("COD percentage is not the same: ").isEqualTo(codPercentage + "%");
     }
     String insMin = pricingProfile.getInsMin();
     if (Objects.nonNull(insMin)) {
-      assertEquals("INS min fee is not the same: ", insMin,
-          pricingProfileFromOPV2.getInsMin());
+     Assertions.assertThat(          pricingProfileFromOPV2.getInsMin()).as("INS min fee is not the same: ").isEqualTo(insMin);
     }
     String insPercentage = pricingProfile.getInsPercentage();
     if (Objects.nonNull(insPercentage)) {
-      assertEquals("INS min percentage is not the same: ", insPercentage + "%",
-          pricingProfileFromOPV2.getInsPercentage());
+     Assertions.assertThat(          pricingProfileFromOPV2.getInsPercentage()).as("INS min percentage is not the same: ").isEqualTo(insPercentage + "%");
     }
     String insThreshold = pricingProfile.getInsThreshold();
     if (Objects.nonNull(insThreshold)) {
-      assertEquals("INS min threshold is not the same: ", insThreshold,
-          pricingProfileFromOPV2.getInsThreshold());
+     Assertions.assertThat(          pricingProfileFromOPV2.getInsThreshold()).as("INS min threshold is not the same: ").isEqualTo(insThreshold);
     }
   }
 

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
 import co.nvqa.operator_v2.selenium.page.DpCompanyAgentPage;
@@ -28,7 +29,7 @@ public class DpCompanyManagementSteps extends AbstractSteps {
 
   @When("Operator create new DP Company")
   public void operatorCreateDpCompany() {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     DpCompany dpCompany = new DpCompany();
     dpCompany.setName(f("DP Company #%s", uniqueCode));
     dpCompany.setEmail(f("dp.company.%s@test.co", uniqueCode));
@@ -106,7 +107,7 @@ public class DpCompanyManagementSteps extends AbstractSteps {
     DpCompany dpCompany = get("dpCompany");
     dpCompanyManagementPage.clickSeeVault(dpCompany);
 
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     DpCompanyAgent dpCompanyAgent = new DpCompanyAgent();
     dpCompanyAgent.setName(f("DP Company Agent #%s", uniqueCode));
     dpCompanyAgent.setEmail(f("dp.company.agent.%s@test.co", uniqueCode));

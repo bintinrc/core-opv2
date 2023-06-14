@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
@@ -21,8 +22,9 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
-
-import static org.hamcrest.Matchers.blankString;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -124,16 +123,18 @@ public class RouteInboundSteps extends AbstractSteps {
 
     Long routeId = getRouteId(routeIdAsString);
 
-    Date routeDate;
+    ZonedDateTime routeDate;
 
     try {
       if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
         Route route = get(KEY_CREATED_ROUTE);
-        routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(route.getCreatedAt());
+        routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
+            DTF_ISO_8601_LITE);
       } else {
-        routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(routeDateAsString);
+        routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+            DTF_NORMAL_DATE);
       }
-    } catch (ParseException ex) {
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse route date.", ex);
     }
 
@@ -150,8 +151,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
   @Then("Operator verifies that Problematic Parcels table exactly contains records:")
   public void operatorVerifyProblematicParcelsRecordsExactly(List<Map<String, String>> data) {
-    assertEquals("Number of problematic parcels", data.size(),
-        routeInboundPage.problematicParcelsTable.getRowsCount());
+    Assertions.assertThat(routeInboundPage.problematicParcelsTable.getRowsCount())
+        .as("Number of problematic parcels").isEqualTo(data.size());
 
     List<WaypointOrderInfo> actualRecords = routeInboundPage.problematicParcelsTable
         .readAllEntities();
@@ -170,8 +171,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
   @Then("Operator verifies that Problematic Waypoints table exactly contains records:")
   public void operatorVerifyProblematicWaypointsRecordsExactly(List<Map<String, String>> data) {
-    assertEquals("Number of problematic waypoints", data.size(),
-        routeInboundPage.problematicWaypointsTable.getRowsCount());
+    Assertions.assertThat(routeInboundPage.problematicWaypointsTable.getRowsCount())
+        .as("Number of problematic waypoints").isEqualTo(data.size());
 
     List<WaypointOrderInfo> actualRecords = routeInboundPage.problematicWaypointsTable
         .readAllEntities();
@@ -200,16 +201,20 @@ public class RouteInboundSteps extends AbstractSteps {
 
     Long routeId = getRouteId(routeIdAsString);
 
-    Date routeDate = null;
+    ZonedDateTime routeDate = null;
     if (StringUtils.isNotBlank(routeDateAsString)) {
       try {
         if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
           Route route = get(KEY_CREATED_ROUTE);
-          routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(route.getCreatedAt());
+          StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
+              DTF_ISO_8601_LITE);
+          routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(),
+              ZoneId.of("UTC"), DTF_ISO_8601_LITE);
         } else {
-          routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(routeDateAsString);
+          routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+              DTF_ISO_8601_LITE);
         }
-      } catch (ParseException ex) {
+      } catch (DateTimeParseException ex) {
         throw new NvTestRuntimeException("Failed to parse route date.", ex);
       }
     }
@@ -466,6 +471,7 @@ public class RouteInboundSteps extends AbstractSteps {
     pause5s();
     routeInboundPage.photoAuditDialog.completePhotoAudit.click();
     routeInboundPage.photoAuditDialog.waitUntilInvisible();
+    routeInboundPage.waitWhilePageIsLoading();
   }
 
   @When("Operator search {string} Tracking ID in Photo Audit dialog")
@@ -499,7 +505,7 @@ public class RouteInboundSteps extends AbstractSteps {
   public void operatorVerifyWaypointTitle(WaypointsSection section, String expected, String type) {
     pause5s();
     String actual = section.title.getNormalizedText();
-    assertEquals(type + " waypoints title", resolveValue(expected), actual);
+    Assertions.assertThat(actual).as(type + " waypoints title").isEqualTo(resolveValue(expected));
   }
 
   @When("Operator clicks on {int} unsuccessful waypoint address in Photo Audit dialog")
@@ -544,21 +550,21 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.waypointsDetailsDialog.waitUntilVisible();
     String value = data.get("address");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Waypoint address", value,
-          routeInboundPage.waypointsDetailsDialog.address.getNormalizedText());
+      Assertions.assertThat(routeInboundPage.waypointsDetailsDialog.address.getNormalizedText())
+          .as("Waypoint address").isEqualTo(value);
     }
     value = data.get("contact");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Waypoint contact", value,
-          routeInboundPage.waypointsDetailsDialog.contact.getNormalizedText());
+      Assertions.assertThat(routeInboundPage.waypointsDetailsDialog.contact.getNormalizedText())
+          .as("Waypoint contact").isEqualTo(value);
     }
     value = data.get("trackingId");
     if (StringUtils.isNotBlank(value)) {
       List<String> trackingIds = routeInboundPage.waypointsDetailsDialog.trackingId.stream()
           .map(PageElement::getNormalizedText)
           .collect(Collectors.toList());
-      assertThat("Waypoint Tracking IDs", splitAndNormalize(value),
-          Matchers.containsInAnyOrder(trackingIds.toArray(new String[0])));
+      Assertions.assertThat(splitAndNormalize(value)).as("Waypoint Tracking IDs")
+          .contains(trackingIds.toArray(new String[0]));
     }
   }
 
@@ -568,19 +574,20 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.photoDetailsDialog.waitUntilVisible();
     String value = data.get("address");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Waypoint address", value,
-          routeInboundPage.photoDetailsDialog.address.getNormalizedText());
+      Assertions.assertThat(routeInboundPage.photoDetailsDialog.address.getNormalizedText())
+          .as("Waypoint address").isEqualTo(value);
     }
     value = data.get("contact");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Waypoint contact", value,
-          routeInboundPage.photoDetailsDialog.contact.getNormalizedText());
+      Assertions.assertThat(routeInboundPage.photoDetailsDialog.contact.getNormalizedText())
+          .as("Waypoint contact").isEqualTo(value);
     }
     String submissionDate = routeInboundPage.photoDetailsDialog.submissionDate.getNormalizedText();
-    assertThat("Submission date", submissionDate, Matchers.not(blankString()));
-    assertEquals("Submission date below the photo", submissionDate,
-        routeInboundPage.photoDetailsDialog.submissionDate2.getNormalizedText());
-    assertTrue("Photo is displayed", routeInboundPage.photoDetailsDialog.image.isDisplayedFast());
+    Assertions.assertThat(submissionDate).as("Submission date").isNotEmpty();
+    Assertions.assertThat(routeInboundPage.photoDetailsDialog.submissionDate2.getNormalizedText())
+        .as("Submission date below the photo").isEqualTo(submissionDate);
+    Assertions.assertThat(routeInboundPage.photoDetailsDialog.image.isDisplayedFast())
+        .as("Photo is displayed").isTrue();
   }
 
   @When("Operator clicks on {string} Tracking Id in Waypoint Details dialog")
@@ -605,8 +612,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
   @When("Operator verifies no successful waypoints photos displayed in Photo Audit dialog")
   public void operatorVerifyNoSuccessfulWaypointPhotosDisplayed() {
-    assertEquals("Number of displayed successful waypoint photos", 0,
-        routeInboundPage.photoAuditDialog.successfulWaypoints.photos.size());
+    Assertions.assertThat(routeInboundPage.photoAuditDialog.successfulWaypoints.photos.size())
+        .as("Number of displayed successful waypoint photos").isEqualTo(0);
   }
 
   @When("Operator verifies partial waypoints parameters in Photo Audit dialog:")
@@ -643,15 +650,16 @@ public class RouteInboundSteps extends AbstractSteps {
                   () -> new AssertionError("Waypoint with address [" + finalValue + "] was not found"));
           value = waypointParams.get("photo");
           if (StringUtils.isNotBlank(value)) {
-            assertEquals("Photo src", value, actualWpParams.get("photo"));
+            Assertions.assertThat(actualWpParams.get("photo")).as("Photo src").isEqualTo(value);
           }
           value = waypointParams.get("photoCount");
           if (StringUtils.isNotBlank(value)) {
             int count = Integer.parseInt(value);
             if (count > 0) {
-              assertNotNull("Waypoint photo is displayed", actualWpParams.get("photo"));
-              assertEquals("Waypoint photos count", count,
-                  Integer.parseInt(actualWpParams.get("count")));
+              Assertions.assertThat(actualWpParams.get("photo")).as("Waypoint photo is displayed")
+                  .isNotNull();
+              Assertions.assertThat(Integer.parseInt(actualWpParams.get("count")))
+                  .as("Waypoint photos count").isEqualTo(count);
             }
           }
         }
@@ -765,21 +773,22 @@ public class RouteInboundSteps extends AbstractSteps {
   @Then("^Operator verify 'Money to collect' value is \"(.+)\" on Route Inbound page$")
   public void operatorVerifyMoneyToCollectValueOnRouteInboundPage(String expectedValue) {
     String actualValue = routeInboundPage.getMoneyToCollectValue();
-    if(StringUtils.isNumeric(expectedValue))
-       expectedValue = f("%,d",Integer.parseInt(expectedValue));
-    Assertions.assertEquals(expectedValue, actualValue, "Money to collect value");
+    if (StringUtils.isNumeric(expectedValue)) {
+      expectedValue = f("%,d", Integer.parseInt(expectedValue));
+    }
+    Assertions.assertThat(actualValue).as("Money to collect value").isEqualTo(expectedValue);
   }
 
   @Then("^Operator verify 'Expected Total' value is \"(.+)\" on Money Collection dialog$")
   public void operatorVerifyExpectedTotalValueOnMoneyCollectionDialog(String expectedValue) {
     String actualValue = routeInboundPage.moneyCollectionDialog().getExpectedTotal();
-    Assertions.assertEquals(expectedValue, actualValue, "Expected Total value");
+    Assertions.assertThat(actualValue).as("Expected Total value").isEqualTo(expectedValue);
   }
 
   @Then("^Operator verify 'Outstanding amount' value is \"(.+)\" on Money Collection dialog$")
   public void operatorVerifyOutstandingAmountValueOnMoneyCollectionDialog(String expectedValue) {
     String actualValue = routeInboundPage.moneyCollectionDialog().getOutstandingAmount();
-    Assertions.assertEquals(expectedValue, actualValue, "Outstanding Amount value");
+    Assertions.assertThat(actualValue).as("Outstanding Amount value").isEqualTo(expectedValue);
   }
 
   @Then("^Operator submit following values on Money Collection dialog:$")
@@ -875,7 +884,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
 
   @Then("Operator ends session incompletely for route {string} with reason as {string}")
-  public void operator_ends_session_incompletely_for_route_with_reason_as(String routeId, String reason) {
+  public void operator_ends_session_incompletely_for_route_with_reason_as(String routeId,
+      String reason) {
     routeId = resolveValue(routeId);
     routeInboundPage.endSession.clickAndWaitUntilDone();
     routeInboundPage.reason.selectValue(reason);

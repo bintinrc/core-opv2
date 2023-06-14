@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -8,10 +8,8 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
-import com.epam.ta.reportportal.ws.model.Page;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.assertj.core.api.Assertions;
@@ -28,6 +26,7 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   public static final String CSV_FILENAME = "zones.csv";
   public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
+  public static final String BULK_ZONE_UPDATE_ERROR_DESCRIPTION = "//div[@class='ant-modal-body']//li[contains(text(),'%s')]";
 
   @FindBy(css = ".loading-container")
   public PageElement loading;
@@ -133,7 +132,6 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
     int count = 0;
     while (zonesTable.isEmpty() && count < 10) {
       pause5s();
-      refreshCash();
       zonesTable.filterByColumn(COLUMN_NAME, zoneName);
       count++;
     }

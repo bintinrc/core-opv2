@@ -4,7 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
 import io.cucumber.java.en.And;
@@ -14,8 +14,7 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.support.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +54,14 @@ public class GlobalInboundSteps extends AbstractSteps {
   private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData) {
     String hubName = mapOfData.get("hubName");
     String deviceId = mapOfData.get("deviceId");
+    String parcelType = mapOfData.get("parcelType");
     String trackingId = mapOfData.get("trackingId");
     String overrideSize = mapOfData.get("overrideSize");
     String tags = mapOfData.get("tags");
 
+   if(parcelType==null){
+     parcelType = "Bulky";
+   }
     Double overrideWeight = parseDoubleOrNull(mapOfData.get("overrideWeight"));
     Double overrideDimHeight = parseDoubleOrNull(mapOfData.get("overrideDimHeight"));
     Double overrideDimWidth = parseDoubleOrNull(mapOfData.get("overrideDimWidth"));
@@ -71,6 +74,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     GlobalInboundParams globalInboundParams = new GlobalInboundParams();
     globalInboundParams.setHubName(hubName);
     globalInboundParams.setDeviceId(deviceId);
+    globalInboundParams.setParcelType(parcelType);
     globalInboundParams.setTrackingId(trackingId);
     globalInboundParams.setOverrideSize(overrideSize);
     globalInboundParams.setOverrideWeight(overrideWeight);
@@ -83,7 +87,7 @@ public class GlobalInboundSteps extends AbstractSteps {
 
   @When("^Operator global inbounds parcel using data below:$")
   public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
+    doWithRetry(() ->
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
@@ -96,7 +100,7 @@ public class GlobalInboundSteps extends AbstractSteps {
         globalInboundPage.refreshPage();
         throw new NvTestRuntimeException(ex);
       }
-    }, 5);
+    }, "OperatorV2 Global Inbound Parcel");
   }
 
   @When("^Operator global inbounds parcel using data below and check alert:$")
@@ -154,35 +158,36 @@ public class GlobalInboundSteps extends AbstractSteps {
       String expected = data.get("destinationHub");
       String actual = globalInboundPage.destinationHub.getText();
       actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Assigned Hub:"));
-      Assert.assertThat("Destination Hub", actual, Matchers.equalToIgnoringCase(expected));
+      Assertions.assertThat(actual).as("Destination Hub").isEqualToIgnoringCase(expected);
     }
 
     if (data.containsKey("rackInfo")) {
       String expected = data.get("rackInfo");
       String actual = globalInboundPage.rackInfo.getText();
       actual = StringUtils.normalizeSpace(actual);
-      Assert.assertThat("Rack Info", actual, Matchers.equalToIgnoringCase(expected));
+      Assertions.assertThat(actual).as("Rack Info").isEqualToIgnoringCase(expected);
     }
 
     if (data.containsKey("setAsideGroup")) {
       String expected = data.get("setAsideGroup");
       String actual = globalInboundPage.setAsideGroup.getText();
       actual = StringUtils.normalizeSpace(actual);
-      Assert.assertThat("Set Aside Group", actual, Matchers.equalToIgnoringCase(expected));
+      Assertions.assertThat(actual).as("Set Aside Group").isEqualToIgnoringCase(expected);
     }
 
     if (data.containsKey("setAsideRackSector")) {
       String expected = data.get("setAsideRackSector");
       String actual = globalInboundPage.setAsideRackSector.getText();
       actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Rack Sector:"));
-      Assert.assertThat("Set Aside Rack Sector", actual, Matchers.equalToIgnoringCase(expected));
+      Assertions.assertThat(actual).as("Set Aside Rack Sector").isEqualToIgnoringCase(expected);
     }
 
     if (data.containsKey("color")) {
       String expected = data.get("color");
       Color actualColor = Color.fromString(
           globalInboundPage.getCssValue(globalInboundPage.XPATH_CONTAINER, "background-color"));
-      assertEquals("Expected another color for Route ID background", expected, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex())
+          .as("Expected another color for Route ID background").isEqualTo(expected);
     }
     takesScreenshot();
     pause3s();
@@ -243,7 +248,7 @@ public class GlobalInboundSteps extends AbstractSteps {
 
   @And("Operator verifies order weight is overridden based on the volumetric weight")
   public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight() {
-    String countryCode = StandardTestConstants.COUNTRY_CODE;
+    String countryCode = StandardTestConstants.NV_SYSTEM_ID;
     Order order = get(KEY_CREATED_ORDER);
     double orderWeight;
     double height = order.getDimensions().getHeight();
@@ -278,8 +283,8 @@ public class GlobalInboundSteps extends AbstractSteps {
     String orderWeightAsString = String.valueOf(orderWeight);
     String actualOrderWeightAsString = String.valueOf(order.getWeight());
 
-    assertTrue("Order weight is overridden",
-        orderWeightAsString.contains(actualOrderWeightAsString));
+    Assertions.assertThat(orderWeightAsString.contains(actualOrderWeightAsString))
+        .as("Order weight is overridden").isTrue();
     takesScreenshot();
   }
 }

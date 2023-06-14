@@ -104,6 +104,32 @@ Feature: All Shippers page
     And Operator login to Ninja Dash as shipper "TEST-SHIPPER-{gradle-current-date-yyyyMMddHHmmsss}" from All Shippers page
     Then account name is "TEST-SHIPPER-{gradle-current-date-yyyyMMddHHmmsss}" on Ninja Dash page
 
+  @DeleteShipper @CloseNewWindows
+  Scenario: Ninja dash - delete all shipper pickup services
+    When Operator go to menu Shipper -> All Shippers
+    And Operator create new Shipper with basic settings using data below:
+      | isShipperActive               | true                  |
+      | shipperType                   | Normal                |
+      | ocVersion                     | v4                    |
+      | services                      | STANDARD              |
+      | trackingType                  | Fixed                 |
+      | isAllowCod                    | false                 |
+      | isAllowCashPickup             | true                  |
+      | isPrepaid                     | true                  |
+      | isAllowStagedOrders           | false                 |
+      | isMultiParcelShipper          | false                 |
+      | isDisableDriverAppReschedule  | false                 |
+      | pricingScriptName             | {pricing-script-name} |
+      | industryName                  | {industry-name}       |
+      | salesPerson                   | {sales-person}        |
+      | pickupServiceTypeLevels       | Scheduled:Standard    |
+    And API Operator reload shipper's cache
+    And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    And Operator delete all shipper pickup services on Edit Shipper page
+    And Operator save changes on Edit Shipper Page
+    And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    Then Operator verifies all shipper pickup services are deleted on Edit Shipper page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

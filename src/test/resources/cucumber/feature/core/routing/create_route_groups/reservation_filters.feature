@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CRG4
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ReservationFilters @CRG4
 Feature: Create Route Groups - Reservation Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Filter Pickup Size Create Route Groups - Reservation Filters - Pickup Size = <pickupSize> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Pickup Size Create Route Groups - Reservation Filters - Pickup Size = <pickupSize>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -25,15 +25,15 @@ Feature: Create Route Groups - Reservation Filters
       | id                           | type        | shipper                    | address                                                     | startDateTime                                       | endDateTime                                          | pickupSize   |
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} | <pickupSize> |
     Examples:
-      | pickupSize           | hiptest-uid                              |
-      | Full-Van Load        | uid:11a6d913-d732-4a61-b7c6-4fc24a293d87 |
-      | Half-Van Load        | uid:935c2b68-b31d-4583-838c-c1ee0587558f |
-      | Larger than Van Load | uid:5020e1fd-e4ee-4709-97ae-0d1b13ecc48b |
-      | Less than 10 Parcels | uid:8af3a126-8065-4532-bfaf-a1941e9eedc1 |
-      | Less than 3 Parcels  | uid:c67e3f41-6050-4538-8ba8-6c99a1bae151 |
-      | Trolley Required     | uid:8b653bac-c2b0-43c9-bb29-844abc48c546 |
+      | pickupSize           |
+      | Full-Van Load        |
+      | Half-Van Load        |
+      | Larger than Van Load |
+      | Less than 10 Parcels |
+      | Less than 3 Parcels  |
+      | Trolley Required     |
 
-  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Cancel - Reservation Filters (uid:22004205-3670-432a-9978-24ad8208355d)
+  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Cancel - Reservation Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -55,7 +55,7 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | CANCEL | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Fail - Reservation Filters (uid:460a7768-733a-4293-b6e0-55ae57315247)
+  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Fail - Reservation Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -85,7 +85,7 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | FAIL   | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Success - Reservation Filters (uid:34b7b9f2-3668-493e-bd57-be5100fc2afc)
+  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Success - Reservation Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -124,7 +124,7 @@ Feature: Create Route Groups - Reservation Filters
       | id                           | type        | shipper                    | address                                                     | status  | startDateTime                                       | endDateTime                                          |
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | SUCCESS | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
-  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Pending - Reservation Filters (uid:ee03cd80-6d01-4a82-93a7-d6b3eaeb88f5)
+  Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Pending - Reservation Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -144,7 +144,7 @@ Feature: Create Route Groups - Reservation Filters
       | id                           | type        | shipper                    | address                                                     | status  | startDateTime                                       | endDateTime                                          |
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
-  Scenario Outline: Operator Filter Reservation Type on Create Route Groups - Reservation Filters - <Note> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Reservation Type on Create Route Groups - Reservation Filters - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -167,9 +167,9 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING |
 
     Examples:
-      | Note                                 | hiptest-uid                              | rsvn_type         | pickup_service_level |
-      | Reservation Type : Normal            | uid:77ac93be-96a4-4019-a584-bf32c5831000 | Normal            | Standard             |
-      | Reservation Type : Premium Scheduled | uid:bea12c7f-ce7d-45dd-8c0c-79497f89c9b5 | Premium Scheduled | Premium              |
+      | Note                                 | rsvn_type         | pickup_service_level |
+      | Reservation Type : Normal            | Normal            | Standard             |
+      | Reservation Type : Premium Scheduled | Premium Scheduled | Premium              |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

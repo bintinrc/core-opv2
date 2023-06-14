@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPage> {
 
   public static final String ITEM_CONTAINS_XPATH = "(//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')])[2]";
+  public static final String ITEM_CONTAINS_XPATH_FOR_DISCOUNT_OPERATOR = "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')]";
   public static final String SERVICE_TYPE_XPATH = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceType']]";
   public static final String SERVICE_LEVEL_XPATH = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceLevel']]";
   public static final String SERVICE_DISCOUNT_XPATH = "services_%s_discount_value";
@@ -22,9 +23,29 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public static final String SERVICE_DISCOUNT_XPATH_LIST = "//input[contains(@id,'discount_value')]";
   private static final String CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
 
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='discount_operator']]")
+  public PageElement discountOperator;
+
+  @FindBy(className = "ant-form-item-explain")
+  public PageElement generalError;
+
+  @FindBy(xpath = "//div[.//input[contains(@id,'serviceType')] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  public PageElement campaignServiceTypeError;
+
+  @FindBy(xpath = "//div[.//input[contains(@id,'serviceLevel')] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  public PageElement campaignServiceLevelError;
+
+  @FindBy(xpath = "(//div[.//input[contains(@id,'discount_value')] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error'])[1]")
+  public PageElement campaignDiscountValueError;
 
   @FindBy(id = "name")
   public PageElement campaignName;
+
+  @FindBy(xpath = "//div[.//input[@id='name'] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  public PageElement campaignNameError;
+
+  @FindBy(id = "services_0_discount_value")
+  public PageElement campaign1stDiscountValue;
 
   @FindBy(id = "description")
   public PageElement campaignDescription;
@@ -38,8 +59,14 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(id = "start_date")
   public PageElement startDateInputBox;
 
+  @FindBy(xpath = "//div[.//input[@id='start_date'] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  public PageElement startDateError;
+
   @FindBy(id = "end_date")
   public PageElement endDateInputBox;
+
+  @FindBy(xpath = "//div[.//input[@id='end_date'] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  public PageElement endDateError;
 
   @FindBy(xpath = "(//span[text()='Add']/parent::button)[1]")
   public PageElement addButton;
@@ -56,7 +83,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//span[text()='Search by shipper']//parent::li")
   public PageElement searchByShipperTab;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_7']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_14']]")
   public AntSelect searchByShipper;
 
   @FindBy(xpath = "//span[text()='Upload']//parent::button")
@@ -74,16 +101,27 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//span[contains(text(),'Shippers')]")
   public PageElement shipperCount;
 
+  @FindBy(xpath = "//span[text()='Publish']/parent::button")
+  public PageElement campaignPublishButton;
+
+  @FindBy(xpath = "//span[text()='Cancel']/parent::button")
+  public PageElement campaignCancelButton;
+
   public CampaignCreateEditPage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void clickAddButton(List<String> options){
+  public void clickAddButton(List<String> options) {
     if (options.size() > 1) {
       for (int x = 1; x < options.size(); x++) {
         addButton.click();
       }
     }
+  }
+
+  public void selectDiscountOperator(String option) {
+    AntSelect discountType = new AntSelect(getWebDriver(), discountOperator.getWebElement());
+    discountType.selectValue(option, ITEM_CONTAINS_XPATH_FOR_DISCOUNT_OPERATOR);
   }
 
   public void selectServiceType(List<String> options) {
@@ -96,6 +134,10 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }
   }
 
+  public String getCampaignServiceTypeError() {
+    return campaignServiceTypeError.getText();
+  }
+
   public void selectServiceLevel(List<String> options) {
     int i = 0;
     for (String option : options) {
@@ -106,6 +148,10 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }
   }
 
+  public String getCampaignServiceLevelError() {
+    return campaignServiceLevelError.getText();
+  }
+
   public void enterDiscountValue(List<String> values) {
     int i = 0;
     for (String value : values) {
@@ -114,10 +160,22 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }
   }
 
+  public String getCampaignGeneralError() {
+    return generalError.getText();
+  }
+
+  public String getCampaignDiscountValueAlert() {
+    return campaign1stDiscountValue.getAttribute("validationMessage");
+  }
+
+  public String getCampaignDiscountValueError() {
+    return campaignDiscountValueError.getText();
+  }
+
   public List<String> getServiceType() {
     List<WebElement> elements = findElementsBy(By.xpath(SERVICE_TYPE_XPATH_LIST));
     List<String> serviceTypeList = new ArrayList<>();
-    for (WebElement element: elements) {
+    for (WebElement element : elements) {
       serviceTypeList.add(element.getText());
     }
     return serviceTypeList;
@@ -149,6 +207,10 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return campaignName.getValue();
   }
 
+  public String getCampaignNameError() {
+    return campaignNameError.getText();
+  }
+
   public void enterCampaignDescription(String value) {
     campaignDescription.sendKeys(value);
   }
@@ -161,8 +223,16 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return startDateInputBox.getValue();
   }
 
+  public String getStartDateError() {
+    return startDateError.getText();
+  }
+
   public String getEndDate() {
     return endDateInputBox.getValue();
+  }
+
+  public String getEndDateError() {
+    return endDateError.getText();
   }
 
   public String getNotificationMessageText() {
@@ -219,5 +289,19 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
 
   public Boolean isShippersRemoveButtonDisplayed() {
     return shippersRemoveButton.isDisplayed();
+  }
+
+  public void clickPublishButton() {
+    campaignPublishButton.waitUntilVisible();
+    campaignPublishButton.click();
+  }
+
+  public void clickCancelButton() {
+    campaignCancelButton.waitUntilVisible();
+    campaignCancelButton.click();
+  }
+
+  public void waitUntilCampaignPageIsLoaded() {
+    campaignPublishButton.waitUntilClickable(30);
   }
 }

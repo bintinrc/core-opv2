@@ -8,7 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
@@ -74,7 +74,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
-  public String TRIP_COMPLETION_DIALOG="//div[@class='ant-modal-content']";
+  public String TRIP_COMPLETION_DIALOG = "//div[@class='ant-modal-content']";
 
   @FindBy(xpath = ".//button[.='Cancel']")
   public Button cancel;
@@ -119,7 +119,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void inboundScanningShipment(long shipmentId, String label, String hub) {
-    pause2s();
+    hubSelect.waitUntilEnabled();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
     hubSelect.selectValue(hub);
@@ -207,20 +207,21 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     switch (condition) {
       case "Completed":
       case "Cancelled":
-        assertTrue("Error Message is not the same : ", resultWebElement
-            .contains(f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
+        assertTrue("Error Message is not the same : ", resultWebElement.contains(
+            f("shipment %d is in terminal state: [%s]", shipmentId, condition)));
         break;
       case "Pending":
       case "Closed":
-        assertTrue("Error Message is different : ",
-            resultWebElement.contains(f("shipment %d is [%s]", shipmentId, condition)));
+        Assertions.assertThat(
+                resultWebElement.contains(f("shipment %d is [%s]", shipmentId, condition)))
+            .as("Error Message is different : ").isTrue();
         break;
     }
 
   }
 
-  public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate) {
-    String formattedEndDate = MD_DATEPICKER_SDF.format(endDate);
+  public void checkEndDateSessionScanChange(List<String> mustCheckId, LocalDateTime endDate) {
+    String formattedEndDate = DTF_NORMAL_DATE.format(endDate);
 
     for (String shipmentId : mustCheckId) {
       waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + f(
@@ -236,7 +237,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     waitUntilInvisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
   }
 
-  public void inputEndDate(Date date) {
+  public void inputEndDate(LocalDateTime date) {
     setMdDatepicker("ctrl.date", date);
   }
 
@@ -252,19 +253,20 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
         break;
       case "Pending":
       case "Closed":
-        assertTrue("Error Message is different : ",
-            errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)));
+        Assertions.assertThat(
+                errorMessage.contains(f("shipment %d is [%s]", shipmentId, condition)))
+            .as("Error Message is different : ").isTrue();
         break;
       case "different country van":
         Assertions.assertThat(
             f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
+                TestConstants.NV_SYSTEM_ID.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "different country hub":
         Assertions.assertThat(
             f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.",
-                TestConstants.COUNTRY_CODE.toLowerCase()).contains(errorMessage)).isTrue();
+                TestConstants.NV_SYSTEM_ID.toLowerCase()).contains(errorMessage)).isTrue();
         break;
 
       case "pending shipment":
@@ -278,8 +280,8 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
         break;
 
       case "shipment not found":
-        assertThat("Error Message is true",
-            errorMessage, containsString(f("shipment for %d not found", shipmentId)));
+        Assertions.assertThat(errorMessage).as("Error Message is true")
+            .contains(f("shipment for %d not found", shipmentId));
         break;
 
       case "Transit":
@@ -332,8 +334,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
 
   public void verifyStartInboundButtonIsEnabledOrDisabled(String status) {
     if ("enabled".equals(status)) {
-      assertThat("Inbound button enabled", startInboundButton.isEnabled(),
-          equalTo(true));
+      Assertions.assertThat(startInboundButton.isEnabled()).as("Inbound button enabled").isTrue();
       return;
     }
     if ("disabled".equals(status)) {
@@ -344,17 +345,17 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
       if (value != null) {
         result = true;
       }
-      assertThat("Inbound button disabled", result, equalTo(false));
+      Assertions.assertThat(result).as("Inbound button disabled").isFalse();
     }
   }
 
   public void validateDriverAndMovementTripIsCleared() {
-    assertThat("Driver place holder is equal", getWebDriver().findElements(
+    Assertions.assertThat(getWebDriver().findElements(
             By.xpath("//div[@data-testid='driver-select']//span[@class='ant-select-selection-item']"))
-        .size(), equalTo(0));
-    assertThat("Movement trip place holder is equal", getWebDriver().findElements(
+        .size()).as("Driver place holder is equal").isEqualTo(0);
+    Assertions.assertThat(getWebDriver().findElements(
             By.xpath("//div[@data-testid='trip-select']//span[@class='ant-select-selection-item']"))
-        .size(), equalTo(0));
+        .size()).as("Movement trip place holder is equal").isEqualTo(0);
   }
 
   public static class TripCompletion extends MdDialog {
@@ -373,9 +374,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     }
   }
 
-  public void verifyConfirmMessage(String message){
+  public void verifyConfirmMessage(String message) {
     waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
     String actualMessage = confirmMessage.getText();
-    Assertions.assertThat(actualMessage).as("Message show on dialog is correct").isEqualToIgnoringCase(message);
+    Assertions.assertThat(actualMessage).as("Message show on dialog is correct")
+        .isEqualToIgnoringCase(message);
   }
 }

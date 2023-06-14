@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
-import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -57,7 +57,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_ERROR_NOTIFICATION_XPATH = "//div[contains(@class,'ant-notification-notice-error')]//div[@class='ant-notification-notice-message']";
   private static final String MS_PAGE_PICKER_HOUR_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[1]//div[text()='%s']";
   private static final String MS_PAGE_PICKER_MIN_DROPDOWN_XPATH = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[2]//div[text()='%s']";
-  private static final String MS_PAGE_NOTIFICATION_XPATH = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
+  private static final String MS_PAGE_NOTIFICATION_XPATH = "//div[@class='ant-notification-notice-message']";
   private static final String MS_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
   private static final String MS_PAGE_LOADING_ICON_XPATH = "//span[@class='ant-spin-dot ant-spin-dot-spin']";
   private static final String MS_PAGE_ITEM_CHECKBOX_XPATH = "//td//label[@class='ant-checkbox-wrapper']//input[@class='ant-checkbox-input'][%d]";
@@ -159,12 +159,15 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//div[.='Station']//span[contains(@class,'ant-table-column-sorter-down')]")
   public PageElement stationFilterSortDown;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement toastOnMovementSchedule;
+
 
   //region Stations tab
-  @FindBy(xpath = "//label[starts-with(.,'Station')]")
+  @FindBy(xpath = "//input[@data-testid='station-tab']/parent::span")
   public PageElement stationsTab;
 
-  @FindBy(xpath = "//button[.='Add Schedule']")
+  @FindBy(xpath = "//button/span[contains(text(),'Add Schedule')]/parent::button")
   public Button addSchedule;
 
   @FindBy(xpath = "//button[.='Delete']")
@@ -324,7 +327,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public void assignDriver(String driverId) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignDriverModal.addDriver.click();
+    pause3s();
     assignDriverModal.assignDriver(driverId);
+    pause2s();
     assignDriverModal.saveButton.click();
     assignDriverModal.waitUntilInvisible();
   }
@@ -339,9 +344,16 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public void verifyNotificationWithMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
     WebElement notificationElement = findElementByXpath(MS_PAGE_NOTIFICATION_XPATH);
-    assertThat("Toast message is the same", notificationElement.getText(),
-        equalTo(containsMessage));
-    waitUntilInvisibilityOfNotification(MS_PAGE_NOTIFICATION_XPATH, false);
+    Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
+    waitUntilInvisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
+  }
+
+  public void verifyDeleteScheduleMessage(String containsMessage) {
+    toastOnMovementSchedule.waitUntilVisible();
+    Assertions.assertThat(toastOnMovementSchedule.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
+    toastOnMovementSchedule.waitUntilInvisible();
   }
 
   public void verifyNotificationWithMessage(List<String> containsMessages) {
@@ -365,6 +377,24 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       element.click();
       pause1s();
     });
+  }
+
+  public void verifyMovementSchedulesPageIsLoaded() {
+    switchTo();
+    addSchedule.waitUntilVisible(10);
+    addSchedule.waitUntilClickable(60);
+    stationsTab.waitUntilVisible(10);
+  }
+
+  public void fillInMovementScheduleForm(Map<String, String> finalData, int i) {
+    if (i <= 0) {
+      stationsTab.click();
+      addSchedule.click();
+      addStationMovementScheduleModal.waitUntilVisible();
+    } else {
+      addStationMovementScheduleModal.addAnotherSchedule.click();
+    }
+    addStationMovementScheduleModal.fill(finalData, String.valueOf(i));
   }
 
   public static class EditStationRelationsModal extends AntModal {
@@ -409,6 +439,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = ".//button[.='Cancel']")
     public Button cancel;
 
+    @Deprecated
     public void fill(MovementSchedule schedule) {
       for (int i = 1; i <= schedule.getSchedules().size(); i++) {
         ScheduleForm scheduleForm = getScheduleForm(i);
@@ -417,6 +448,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           addAnotherSchedule.click();
         }
       }
+    }
+
+    public void fill(Map<String, String> schedule) {
+      int idx = Integer.parseInt(schedule.get("idx"));
+      if (idx > 1) addAnotherSchedule.click();
+      ScheduleForm scheduleForm = getScheduleForm(idx);
+      scheduleForm.fill(schedule, idx - 1);
     }
 
     public ScheduleForm getScheduleForm(int index) {
@@ -493,6 +531,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         jse.executeScript(argument, element);
       }
 
+      @Deprecated
       public void fill(MovementSchedule.Schedule schedule, int scheduleNo) {
         scrollIntoView(findElement(By.id(f(scheduleCommentId, scheduleNo))));
         if (StringUtils.isNotBlank(schedule.getOriginHub())) {
@@ -551,6 +590,77 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         }
       }
 
+      public void fill(Map<String, String> schedule, int scheduleNo) {
+        scrollIntoView(findElement(By.id(f(scheduleCommentId, scheduleNo))));
+        if (StringUtils.isNotBlank(schedule.get("originHub"))) {
+          sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.get("originHub"));
+        }
+        if (StringUtils.isNotBlank(schedule.get("destinationHub"))) {
+          sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo),
+              schedule.get("destinationHub"));
+        }
+        if (StringUtils.isNotBlank(schedule.get("movementType"))) {
+          sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), schedule.get("movementType"));
+        }
+        if (StringUtils.isNotBlank(schedule.get("departureTime"))) {
+          String[] hourTime = schedule.get("departureTime").split(":");
+          TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+          pause1s();
+          String hour = f(scheduleDepartureTimeXpath, 1, hourTime[0]);
+          String time = f(scheduleDepartureTimeXpath, 2, hourTime[1]);
+          moveToElementWithXpath(
+              antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+          moveToElementWithXpath(
+              antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']",
+              "xpath", getWebDriver());
+        }
+
+        doWithRetry(() -> {
+          setDurationDays(schedule, scheduleNo);
+        }, "Setting durations...", 1000, 5);
+
+        if (StringUtils.isNotBlank(schedule.get("durationTime"))) {
+          String[] hourTime = schedule.get("durationTime").split(":");
+          TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id",
+              getWebDriver());
+          String hour = f(scheduleDurationTimeXpath, 1, hourTime[0]);
+          String time = f(scheduleDurationTimeXpath, 2, hourTime[1]);
+          moveToElementWithXpath(hour);
+          TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+          moveToElementWithXpath(time);
+          TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+          TestUtils.findElementAndClick(
+              antpickerdropdownhidden + "//span[text()='Ok']",
+              "xpath", getWebDriver());
+        }
+        if (StringUtils.isNotBlank(schedule.get("daysOfWeek"))) {
+          String days = schedule.get("daysOfWeek");
+          if (schedule.get("daysOfWeek").equalsIgnoreCase("all")) {
+            days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+          }
+          setDaysOfWeek(Set.of(days.split(",")), scheduleNo);
+        }
+        if (StringUtils.isNotBlank(schedule.get("comment"))) {
+          WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
+          element.sendKeys(schedule.get("comment"));
+        }
+
+        if (schedule.containsKey("drivers")) {
+//          MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
+//          movementPage.assignDrivers(middleMileDrivers.size(), middleMileDrivers, scheduleNo);
+          List<String> usernames = List.of(schedule.get("drivers").split(","));
+          usernames.forEach(username -> {
+            TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH, scheduleNo), "xpath", getWebDriver());
+            sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH, scheduleNo), username);
+            click(f(MS_PAGE_DROPDOWN_LIST_XPATH, username));
+          });
+        }
+      }
+
+      @Deprecated
       public void setDurationDays(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (schedule.getDurationDays() != null) {
           TestUtils.findElementAndClick(
@@ -562,6 +672,20 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
               + schedule.getDurationDays() + ")]", "xpath", getWebDriver());
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + schedule.getDurationDays() + "']")).isDisplayed());
+        }
+      }
+
+      public void setDurationDays(Map<String, String> schedule, int scheduleNo) {
+        if (schedule.get("durationDays") != null) {
+          TestUtils.findElementAndClick(
+              "//input[@id='" + f(scheduleDurationDayId, scheduleNo) + "']", "xpath",
+              getWebDriver());
+          pause1s();
+          TestUtils.findElementAndClick("//div[@id='schedules_" + scheduleNo
+              + "_durationDay_list']/following-sibling::div//div[contains(@text,"
+              + schedule.get("durationDays") + ")]", "xpath", getWebDriver());
+          assertTrue("duration days input is wrong", findElement(
+              By.xpath("//span[@title='" + schedule.get("durationDays") + "']")).isDisplayed());
         }
       }
 
@@ -632,6 +756,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = ".//button[.='Cancel']")
     public Button cancel;
 
+    @Deprecated
     public void fill(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
       if (scheduleNo.equals("0")) {
         Optional.ofNullable(stationMovementSchedule.getCrossdockHub())
@@ -708,6 +833,84 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       }
     }
 
+    public void fill(Map<String, String> stationMovementSchedule, String scheduleNo) {
+      if (scheduleNo.equals("0")) {
+        Optional.ofNullable(stationMovementSchedule.get("crossdockHub"))
+            .ifPresent(value -> sendKeysAndEnterById(crossdockHub, value));
+      }
+
+      Optional.ofNullable(stationMovementSchedule.get("originHub"))
+          .ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));
+
+      Optional.ofNullable(stationMovementSchedule.get("destinationHub"))
+          .ifPresent(value -> sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), value));
+
+      Optional.ofNullable(stationMovementSchedule.get("movementType"))
+          .ifPresent(value -> sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), value));
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.get("departureTime"))) {
+        String[] hourTime = stationMovementSchedule.get("departureTime").split(":");
+        TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDepartureTimeXpath, 1, hourTime[0]);
+        String time = f(scheduleDepartureTimeXpath, 2, hourTime[1]);
+        WebElement hourEle = findElementByXpath(hour, 1L);
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",
+            hourEle);
+        hourEle.click();
+        WebElement timeEle = findElementByXpath(time, 1L);
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",
+            timeEle);
+        timeEle.click();
+        findElementsByXpath("//li[@class='ant-picker-ok']").get(0).click();
+      }
+
+      if (stationMovementSchedule.get("duration") != null) {
+        doWithRetry(() ->
+        {
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          pause1s();
+          TestUtils.findElementAndClick(
+              "//div[contains(@text," + stationMovementSchedule.get("duration") + ")]", "xpath",
+              getWebDriver());
+          pause500ms();
+          assertTrue("duration days input is wrong", findElement(
+              By.xpath(
+                  "//span[@title='" + stationMovementSchedule.get("duration") + "']")).isDisplayed());
+        }, "Filling durations...", 1000, 5);
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.get("endTime"))) {
+        String[] hourTime = stationMovementSchedule.get("endTime").split(":");
+        TestUtils.findElementAndClick(f(scheduleDurationTimeId, scheduleNo), "id", getWebDriver());
+        String hour = f(scheduleDurationTimeXpath, 1, hourTime[0]);
+        String time = f(scheduleDurationTimeXpath, 2, hourTime[1]);
+        WebElement hourEle = findElementByXpath(hour, 1L);
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",
+            hourEle);
+        hourEle.click();
+
+        WebElement timeEle = findElementByXpath(time, 1L);
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",
+            timeEle);
+        timeEle.click();
+        findElementsByXpath("//li[@class='ant-picker-ok']").get(1).click();
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.get("daysOfWeek"))) {
+        String days = stationMovementSchedule.get("daysOfWeek");
+        if (stationMovementSchedule.get("daysOfWeek").equalsIgnoreCase("all")) {
+          days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+        }
+        setDaysOfWeek(Set.of(days.split(",")), scheduleNo);
+      }
+
+      if (StringUtils.isNotBlank(stationMovementSchedule.get("comment"))) {
+        WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
+        element.sendKeys(stationMovementSchedule.get("comment"));
+      }
+    }
+
+    @Deprecated
     public void fillAnother(StationMovementSchedule stationMovementSchedule, String scheduleNo) {
       Optional.ofNullable(stationMovementSchedule.getOriginHub())
           .ifPresent(value -> sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), value));

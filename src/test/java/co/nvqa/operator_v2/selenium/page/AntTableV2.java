@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -10,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -21,8 +23,11 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
   private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='%s']";
-  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input]";
+  private static final String COLUMN_TEXT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input[@type='text']]";
+  private static final String COLUMN_FILTER_LOCATOR_PATTERN_V2 = "//div[@role='gridcell'][@data-key='%s']//div[./input]";
+  private static final String CELL_LOCATOR_PATTERN_V2 = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][%d]";
   private static final String COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'ant-select')]";
+  private static final String COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'FilterSelect')]";
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
   public PageElement noResultsFound;
@@ -47,7 +52,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    return getText(xpath);
+    if (isElementExistFast(xpath)) {
+      scrollIntoView(xpath);
+      return getText(xpath);
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -77,12 +87,22 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    click(xpath);
+    new CheckBox(getWebDriver(), xpath).check();
   }
 
   public boolean isRowSelected(int rowNumber) {
     String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
     return findElementByXpath(xpath).isSelected();
+  }
+
+  public boolean isButtonEnabled(int rowNumber, String actionId) {
+    String actionButtonLocator = getActionButtonsLocators().get(actionId);
+    String xpath = actionButtonLocator.startsWith("/") ? f(actionButtonLocator, rowNumber)
+        : f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    return findElementByXpath(xpath).isEnabled();
   }
 
   @Override
@@ -100,7 +120,38 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
       select.selectValue(value);
     } else {
-      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+      xpath = f(COLUMN_TEXT_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+      if (StringUtils.isNotBlank(tableLocator)) {
+        xpath = tableLocator + xpath;
+      }
+      if (isElementExistWait0Second(xpath)) {
+        AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+        input.scrollIntoView();
+        input.setValue(value);
+      } else {
+        xpath = f(COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+        if (isElementExistWait0Second(xpath)) {
+          click(xpath);
+          new AntTextBox(getWebDriver(),
+              "//*[./input[@placeholder='Search or Select']]").setValue(value + Keys.ENTER);
+          click(xpath);
+        }
+      }
+
+    }
+    return this;
+  }
+
+  public AbstractTable<T> filterByColumnV2(String columnId, String value) {
+    String xpath = f(COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    if (isElementExistWait0Second(xpath)) {
+      AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
+      select.selectValueV2(columnId, value);
+    } else {
+      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN_V2, columnLocators.get(columnId));
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
@@ -113,13 +164,20 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   public void clearColumnFilters() {
     getColumnLocators().values().forEach(value -> {
-      String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, value);
+      String xpath = f(COLUMN_TEXT_FILTER_LOCATOR_PATTERN, value);
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
       if (isElementExistWait0Second(xpath)) {
         AntTextBox input = new AntTextBox(getWebDriver(), xpath);
         input.clear();
+      } else {
+        xpath = f(COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN, columnLocators.get(value));
+        if (isElementExistWait0Second(xpath)) {
+          click(xpath);
+          click("//ul//span[.='Clear All']");
+          click(xpath);
+        }
       }
     });
   }
@@ -136,6 +194,21 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public void clickColumn(int rowNumber, String columnId) {
     String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, getColumnLocators().get(columnId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    if (isElementExistFast(xpath + "//a")) {
+      click(xpath + "//a");
+    } else if (isElementExistWait0Second(xpath + "//input")) {
+      click(xpath + "//input");
+    } else {
+      click(xpath);
+    }
+  }
+
+
+  public void clickColumn(int rowNumber, int columnId) {
+    String xpath = f(CELL_LOCATOR_PATTERN_V2, rowNumber, columnId);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
@@ -167,8 +240,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   public void sortColumn(String columnId, boolean ascending) {
     String headerLocator = f("div[data-headerkey='%s'] > div > div",
         getColumnLocators().get(columnId));
-    String xpath = f(".//div[@data-headerkey='%s']//*[contains(@class, 'Sort%s')]",
-        getColumnLocators().get(columnId), ascending ? "Up" : "Down");
+    String xpath = f(".//div[@data-headerkey='%s']//*[contains(@data-testid, 'sort-%s')]",
+        getColumnLocators().get(columnId), ascending ? "up" : "down");
     Button button = new Button(getWebDriver(), findElementBy(By.cssSelector(headerLocator)));
     while (!isElementExistFast(xpath)) {
       button.click();

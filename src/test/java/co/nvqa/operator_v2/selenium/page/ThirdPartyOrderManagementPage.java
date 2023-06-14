@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -135,13 +136,14 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
 
   public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping) {
     searchTableByTrackingIdUntilFound(expectedOrderMapping.getTrackingId());
-    assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(),
-        getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
-    assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(),
-        getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
-    assertEquals("Third Party Order 3PL Provider",
-        StringUtils.trim(expectedOrderMapping.getShipperName()),
-        StringUtils.trim(getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME)));
+    Assertions.assertThat(getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID))
+        .as("Third Party Order Tracking ID").isEqualTo(expectedOrderMapping.getTrackingId());
+    Assertions.assertThat(getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID))
+        .as("Third Party Order 3PL Tracking ID")
+        .isEqualTo(expectedOrderMapping.getThirdPlTrackingId());
+    Assertions.assertThat(StringUtils.trim(getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME)))
+        .as("Third Party Order 3PL Provider")
+        .isEqualTo(StringUtils.trim(expectedOrderMapping.getShipperName()));
   }
 
   public void verifyOrderMappingRecords(List<ThirdPartyOrderMapping> expectedOrderMappings) {
@@ -183,7 +185,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage {
     searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
     boolean isTableEmpty = isTableEmpty();
     message = "Third Party Order Mapping still exist in table. " + message;
-    assertTrue(message, isTableEmpty);
+    Assertions.assertThat(isTableEmpty).as(message).isTrue();
   }
 
   public void searchTableByTrackingId(String trackingId) {

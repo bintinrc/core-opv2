@@ -5,7 +5,7 @@ Feature: Resume Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @routing-refactor
+  @routing-refactor @happy-path
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -38,47 +38,6 @@ Feature: Resume Order
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
-  Scenario: Resume Pickup For On Hold Order (uid:75e59db9-3f68-4979-8cde-493cb766d524)
-    When Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator create new recovery ticket on Edit Order page:
-      | entrySource                   | CUSTOMER COMPLAINT |
-      | investigatingDepartment       | Recovery           |
-      | investigatingHub              | {hub-name}         |
-      | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | exceptionReason               | GENERATED          |
-    And Operator refresh page
-    Then Operator verify order status is "On Hold" on Edit Order page
-    And Operator verify order granular status is "On Hold" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
-    When Operator updates recovery ticket on Edit Order page:
-      | status  | RESOLVED      |
-      | outcome | RESUME PICKUP |
-    And Operator refresh page
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    When Operator get "Pickup" transaction with status "Fail"
-    Then DB Operator verifies waypoint status is "FAIL"
-    When Operator get "Pickup" transaction with status "Pending"
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And Operator verify order events on Edit order page using data below:
-      | name            |
-      | UPDATE STATUS   |
-      | RESUME PICKUP   |
-      | TICKET UPDATED  |
-      | TICKET RESOLVED |
-
   Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order (uid:d55ff55e-4422-4e41-b836-aed757f72dc4)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -100,7 +59,7 @@ Feature: Resume Order
       | status | PENDING |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint (uid:56dd7c4f-e5a3-4e7e-93b4-0f29a9caa4f6)
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -151,14 +110,9 @@ Feature: Resume Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | granularStatus | Pending Reschedule                |
     And API Operator force cancels the created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page

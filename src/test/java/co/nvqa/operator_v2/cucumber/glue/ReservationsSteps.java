@@ -7,7 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -31,7 +31,7 @@ public class ReservationsSteps extends AbstractSteps {
   public void operatorCreateNewReservationUsingDataBelow(DataTable dataTable) {
     Address address = get(KEY_CREATED_ADDRESS);
 
-    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String createdDate = DTF_CREATED_DATE.format(ZonedDateTime.now());
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
 
     Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);

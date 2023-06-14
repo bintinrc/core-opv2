@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CRG3
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @CRG3
 Feature: Create Route Groups - Priority Parcel Filters
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Filter Service Level on Create Route Groups - <serviceLevel> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Service Level on Create Route Groups - <serviceLevel>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                |
@@ -31,11 +31,11 @@ Feature: Create Route Groups - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
     Examples:
-      | serviceLevel | hiptest-uid                              |
-      | STANDARD     | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
-      | NEXTDAY      | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
-      | SAMEDAY      | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
-      | EXPRESS      | uid:9aa3eb6d-560a-4c00-b625-c91a4377a2f9 |
+      | serviceLevel |
+      | STANDARD     |
+      | NEXTDAY      |
+      | SAMEDAY      |
+      | EXPRESS      |
 
   Scenario: Operator Filter Excluded Shipper and Non Excluded Shipper on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing

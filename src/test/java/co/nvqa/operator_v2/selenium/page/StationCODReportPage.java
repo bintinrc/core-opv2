@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvCountry;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.StationDetailsTabInfo;
 import co.nvqa.operator_v2.model.StationSummaryTabInfo;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -10,11 +10,13 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -35,11 +37,11 @@ public class StationCODReportPage extends OperatorV2SimplePage {
 
   public final static String SUMMARY_TAB = "SUMMARY";
   public final static String DETAILS_TAB = "DETAILS";
-  public static final String CSV_DETAILS_FILE_DOWNLOAD_PATTERN ="station-cod-report-details.csv";
-  public static final String CSV_SUMMARY_FILE_DOWNLOAD_PATTERN ="station-cod-report-summary.csv";
+  public static final String CSV_DETAILS_FILE_DOWNLOAD_PATTERN = "station-cod-report-details.csv";
+  public static final String CSV_SUMMARY_FILE_DOWNLOAD_PATTERN = "station-cod-report-summary.csv";
   private static final String STATION_COD_REPORT_BUTTON_XPATH = "//button[@disabled]//*[text()='%s']";
-  private static final String STATION_COD_REPORT_LABELS_XPATH = "//div[@class='nv-filter-container']//div[@class='ant-col']//div[contains(text(),'%s')]";
-  private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//ancestor::div[@class='ant-row ant-row-flex']//div[@class='ant-select-selector']";
+  private static final String STATION_COD_REPORT_LABELS_XPATH = "//div[contains(@class,'ant-row')]//div[contains(text(),'%s')]";
+  private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//parent::div[contains(@class,'ant-col styled')]//following-sibling::div//div[@class='ant-select-selector']";
   private static final String STATION_COD_COLUMN_NAME_XPATH = "//div[@role='gridcell']//div[contains(@class,'th')]";
   private static final String STATION_COD_COLUMN_VALUE_XPATH = "//div[@role='gridcell']";
   private static final String STATION_COD_TABLE_FILTER_BY_COLUMN_NAME_XPATH = "//div[text()='%s']/parent::div[contains(@class,'th')]//input";
@@ -51,7 +53,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindAll(@FindBy(xpath = "//div[@class='nv-filter-container']//div[@class='ant-col']//div[contains(text(),'%s')]"))
   private List<PageElement> fieldNames;
 
-  @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
+  @FindBy(xpath = "//div[contains(@class,'ant-select-item ant-select-item-option')]")
   public PageElement filterDropdownValue;
 
   @FindBy(id = "station-cod-report_load-selection-button")
@@ -60,7 +62,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@role='table']//div[contains(@class,'base-row')]")
   private List<PageElement> results;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[@*='ant-picker ant-picker-range']]")
+  @FindBy(xpath = "//div[@data-testid='station-cod-report_filter-date-box']")
   public AntIntervalCalendarPicker transactionEndDateFilter;
 
   @FindBy(id = "station-cod-report_details-button")
@@ -75,7 +77,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTable___StyledDiv')]"))
   private List<PageElement> columnValues;
 
-    @FindBy(css = "div.ant-row div.ant-col:nth-child(1)")
+  @FindBy(css = "div.ant-row div.ant-col:nth-child(1)")
   private List<PageElement> summaryColumns;
 
   @FindBy(xpath = "//button//span[text()='Download CSV']")
@@ -86,10 +88,11 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   }
 
   public void verifyFieldInCODReport(String expectedField) {
+    waitWhilePageIsLoading();
     if (pageFrame.size() > 0) {
       switchToStationCODReportFrame();
     }
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 30);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(30));
     String fieldLabelXpath = f(STATION_COD_REPORT_LABELS_XPATH, expectedField);
     wdWait.until((driver) -> {
       List<WebElement> labels = driver.findElements(By.xpath(fieldLabelXpath));
@@ -108,14 +111,18 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   }
 
   public void applyFilters(Map<String, String> filters) {
-
+    waitWhilePageIsLoading();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterXpath = f(STATION_COD_REPORT_COMBOBOX_XPATH, filter.getKey());
       List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
       if (filterFields.size() > 0) {
         AntSelect2 dropdown = new AntSelect2(getWebDriver(), filterFields.get(0));
         dropdown.enterSearchTerm(filter.getValue());
-        filterDropdownValue.click();
+        String filterValueXpath = f(
+            "//span[contains(text(),'%s')]//ancestor::div[contains(@class,'ant-select-item ant-select-item-option')]",
+            filter.getValue());
+        WebElement filterValue = getWebDriver().findElement(By.xpath(filterValueXpath));
+        filterValue.click();
       }
     }
     loadSelection.click();
@@ -143,8 +150,10 @@ public class StationCODReportPage extends OperatorV2SimplePage {
 
   public void verifyDetailsAndSummaryTabsDisplayed() {
     waitUntilVisibilityOfElementLocated(detailsTab.getWebElement());
-    assertTrue("Assert that Details tab is displayed!", detailsTab.isDisplayed());
-    assertTrue("Assert that Summary tab is displayed!", summaryTab.isDisplayed());
+    Assertions.assertThat(detailsTab.isDisplayed()).as("Assert that Details tab is displayed!")
+        .isTrue();
+    Assertions.assertThat(summaryTab.isDisplayed()).as("Assert that Summary tab is displayed!")
+        .isTrue();
   }
 
   public void verifyColumnsInTableDisplayed(String tabName, List<String> expectedColumns) {
@@ -164,7 +173,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     summaryTab.click();
     pause3s();
     boolean isActive = summaryTab.getAttribute("class").contains("active");
-    assertTrue("Assert that Summary tab is highlighted!", isActive);
+    Assertions.assertThat(isActive).as("Assert that Summary tab is highlighted!").isTrue();
   }
 
   public void setTransactionEndDateFilter(String fromDate, String toDate) {
@@ -201,6 +210,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
 
   public Map<String, String> getSummaryRowByRouteId(String routeId) {
     Map<String,String> gridContent = new HashMap<String, String>();
+    pause8s();
     String columnName, columnValue;
     String summaryRowXpath = f(STATION_COD_SUMMARY_ROW_BY_ROUTE_ID_XPATH, routeId).concat(STATION_COD_COLUMN_VALUE_XPATH);
     scrollIntoView(footerRow.getWebElement());
@@ -238,8 +248,9 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     if(countryCd.equals(NvCountry.ID)){
       expectedTotal = expectedTotal.replaceAll("\\.", "").replaceAll(",",".");
     }
-     expectedTotal = formatCODAmountByCountry(countryCd, expectedTotal);
-    Assert.assertTrue("Assert that the cash collected has separators, comma and dot", expectedTotal.contentEquals(actualTotal));
+    expectedTotal = formatCODAmountByCountry(countryCd, expectedTotal);
+    Assert.assertTrue("Assert that the cash collected has separators, comma and dot",
+        expectedTotal.contentEquals(actualTotal));
   }
 
   public void verifyColumnsInCashCollectedSummary(List<String> expectedColumns) {

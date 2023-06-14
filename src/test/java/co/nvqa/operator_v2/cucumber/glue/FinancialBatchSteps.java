@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -21,6 +21,15 @@ public class FinancialBatchSteps extends AbstractSteps {
   @Override
   public void init() {
     financialBatchPage = new FinancialBatchPage(getWebDriver());
+  }
+
+  //  need to remove this step after all the Pricing steps are moved to commonv2
+  @Then("CV2 - Add common v1 data")
+  public void test(Map<String, String> rawParameter) {
+    final Map<String, String> testData = resolveKeyValues(rawParameter);
+    put(KEY_CREATED_ORDER_TRACKING_ID, testData.get("tracking_id"));
+    put(KEY_CREATED_ORDER_ID, Long.parseLong(testData.get("order_id")));
+    put(KEY_ORDER_DETAILS, resolveValue(rawParameter.get("order_object")));
   }
 
 
@@ -194,5 +203,6 @@ public class FinancialBatchSteps extends AbstractSteps {
       financialBatchPage.setEmailAddress(mapOfData.get("emailAddress"));
     }
     financialBatchPage.requestReportBtn.click();
+    takesScreenshot();
   }
 }

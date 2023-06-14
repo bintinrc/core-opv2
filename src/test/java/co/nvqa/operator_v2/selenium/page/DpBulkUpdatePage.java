@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DpBulkUpdateInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -59,6 +59,15 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//span[text()='S']/following-sibling::input")
   public PageElement maxPickCapacityS;
+
+  @FindBy(xpath = "//span[text()='M']/following-sibling::input")
+  public PageElement maxPickCapacityM;
+
+  @FindBy(xpath = "//span[text()='L']/following-sibling::input")
+  public PageElement maxPickCapacityL;
+
+  @FindBy(xpath = "//span[text()='XL']/following-sibling::input")
+  public PageElement maxPickCapacityXL;
 
   @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_collect']")
   public PageElement canCustomerCollectEnable;
@@ -171,17 +180,17 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
     List<DpBulkUpdateInfo> contentsOfCsv = DpBulkUpdateInfo.fromCsvFile(DpBulkUpdateInfo.class, pathName, true);
     if("SUCCESS".equalsIgnoreCase(status)) {
       for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
-        assertEquals("Status is Success", dpBulkUpdateInfo.getStatus(), "SUCCESS");
+       Assertions.assertThat("SUCCESS").as("Status is Success").isEqualTo(dpBulkUpdateInfo.getStatus());
       }
     } else {
       for(DpBulkUpdateInfo dpBulkUpdateInfo: contentsOfCsv) {
         if(dpBulkUpdateInfo.getStatus().equalsIgnoreCase("ERROR")) {
-          assertEquals("Status is Error", dpBulkUpdateInfo.getStatus(), "ERROR");
+         Assertions.assertThat("ERROR").as("Status is Error").isEqualTo(dpBulkUpdateInfo.getStatus());
           flag = true;
           break;
         }
       }
-      assertTrue(flag);
+     Assertions.assertThat(flag).isTrue();
     }
   }
 }

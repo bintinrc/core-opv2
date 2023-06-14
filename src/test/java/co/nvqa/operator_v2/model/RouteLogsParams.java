@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
-import java.util.Arrays;
+import co.nvqa.common.model.DataEntity;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -105,7 +103,7 @@ public class RouteLogsParams extends DataEntity<RouteLogsParams> {
 
   public void setTags(String tags) {
     if (StringUtils.isNotBlank(tags)) {
-      setTags(Arrays.stream(tags.split(",")).map(StringUtils::trim).collect(Collectors.toList()));
+      setTags(splitAndNormalize(tags));
     }
   }
 

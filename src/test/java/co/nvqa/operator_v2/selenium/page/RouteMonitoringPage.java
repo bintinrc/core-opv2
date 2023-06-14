@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
@@ -7,11 +8,11 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
-
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -48,7 +49,8 @@ public class RouteMonitoringPage extends OperatorV2SimplePage {
 
   public void filterAndLoadSelection(RouteMonitoringFilters routeMonitoringFilters) {
     waitUntilPageLoaded();
-    setMdDatepicker("fromModel", routeMonitoringFilters.getRouteDate());
+    setMdDatepicker("fromModel",
+        StandardTestUtils.convertToZonedDateTime(routeMonitoringFilters.getRouteDate()));
 
     for (String hub : routeMonitoringFilters.getHubs()) {
       selectValueFromNvAutocompleteByItemTypes("Hubs", hub);
@@ -74,8 +76,9 @@ public class RouteMonitoringPage extends OperatorV2SimplePage {
     String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
     String actualInboundHub = getTextOnTable(1, COLUMN_CLASS_DATA_HUB_NAME);
 
-    assertEquals("Route ID", String.valueOf(routeId), actualRouteId);
-    assertThat("Hub", actualInboundHub, isOneOf(routeMonitoringFilters.getHubs()));
+    Assertions.assertThat(actualRouteId).as("Route ID").isEqualTo(String.valueOf(routeId));
+    Assertions.assertThat(actualInboundHub).as("Hub")
+        .isIn(Arrays.stream(routeMonitoringFilters.getHubs()).iterator());
   }
 
   public void verify1DeliverySuccessAtRouteManifest(Route route, Order order) {
@@ -147,23 +150,23 @@ public class RouteMonitoringPage extends OperatorV2SimplePage {
         .getRouteMonitoringParams(1);
 
     if (expectedRouteMonitoringParams.getRouteId() != null) {
-      assertThat("Route ID", actualRouteMonitoringParams.getRouteId(),
-          equalTo(expectedRouteMonitoringParams.getRouteId()));
+      Assertions.assertThat(actualRouteMonitoringParams.getRouteId()).as("Route ID")
+          .isEqualTo(expectedRouteMonitoringParams.getRouteId());
     }
 
     if (expectedRouteMonitoringParams.getTotalWaypoint() != null) {
-      assertThat("Total WP", actualRouteMonitoringParams.getTotalWaypoint(),
-          equalTo(expectedRouteMonitoringParams.getTotalWaypoint()));
+      Assertions.assertThat(actualRouteMonitoringParams.getTotalWaypoint()).as("Total WP")
+          .isEqualTo(expectedRouteMonitoringParams.getTotalWaypoint());
     }
 
     if (expectedRouteMonitoringParams.getCompletionPercentage() != null) {
-      assertThat("Completion %", actualRouteMonitoringParams.getCompletionPercentage(),
-          equalTo(expectedRouteMonitoringParams.getCompletionPercentage()));
+      Assertions.assertThat(actualRouteMonitoringParams.getCompletionPercentage())
+          .as("Completion %").isEqualTo(expectedRouteMonitoringParams.getCompletionPercentage());
     }
 
     if (expectedRouteMonitoringParams.getPendingCount() != null) {
-      assertThat("Pending Count", actualRouteMonitoringParams.getPendingCount(),
-          equalTo(expectedRouteMonitoringParams.getPendingCount()));
+      Assertions.assertThat(actualRouteMonitoringParams.getPendingCount()).as("Pending Count")
+          .isEqualTo(expectedRouteMonitoringParams.getPendingCount());
     }
 
     if (expectedRouteMonitoringParams.getSuccessCount() != null) {
@@ -171,18 +174,18 @@ public class RouteMonitoringPage extends OperatorV2SimplePage {
           actualRouteMonitoringParams.getSuccessCount(),
           actualRouteMonitoringParams.getEarlyCount(),
           actualRouteMonitoringParams.getLateCount());
-      assertThat("Success Count or Early WP or Late WP", actualValues,
-          hasItem(expectedRouteMonitoringParams.getSuccessCount()));
+      Assertions.assertThat(actualValues).as("Success Count or Early WP or Late WP")
+          .contains(expectedRouteMonitoringParams.getSuccessCount());
     }
 
     if (expectedRouteMonitoringParams.getFailedCount() != null) {
-      assertThat("Valid Failed", actualRouteMonitoringParams.getFailedCount(),
-          equalTo(expectedRouteMonitoringParams.getFailedCount()));
+      Assertions.assertThat(actualRouteMonitoringParams.getFailedCount()).as("Valid Failed")
+          .isEqualTo(expectedRouteMonitoringParams.getFailedCount());
     }
 
     if (expectedRouteMonitoringParams.getCmiCount() != null) {
-      assertThat("Invalid Failed", actualRouteMonitoringParams.getCmiCount(),
-          equalTo(expectedRouteMonitoringParams.getCmiCount()));
+      Assertions.assertThat(actualRouteMonitoringParams.getCmiCount()).as("Invalid Failed")
+          .isEqualTo(expectedRouteMonitoringParams.getCmiCount());
     }
   }
 
@@ -209,7 +212,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage {
     }
 
     public RouteMonitoringParams getRouteMonitoringParams(int rowIndex) {
-      assertThat("Number of rows", getRowsCount(), greaterThanOrEqualTo(rowIndex));
+      Assertions.assertThat(getRowsCount()).as("Number of rows").isGreaterThanOrEqualTo(rowIndex);
       moveToElementWithXpath(String.format(
           "//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]",
           MD_VIRTUAL_REPEAT, rowIndex, COLUMN_CLASS_LATE_WP));

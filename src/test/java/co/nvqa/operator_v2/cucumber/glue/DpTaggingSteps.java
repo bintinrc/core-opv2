@@ -3,15 +3,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.event.Events;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDPJobsAndJobOrders;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNotificationEvents;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.page.DpTaggingPage;
-import io.cucumber.java.en.And;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,14 +41,16 @@ public class DpTaggingSteps extends AbstractSteps {
     List<DpTagging> listOfDpTagging = new ArrayList<>();
     listOfDpTagging.add(dpTagging);
 
-    dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
-    dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
-    dpTaggingPage.selectDateToNextDay();
-    dpTaggingPage.checkAndAssignAll(false);
-    takesScreenshot();
-    pause5s();
-    put("listOfDpTagging", listOfDpTagging);
-    put(KEY_DISTRIBUTION_POINT_ID, dpId);
+    dpTaggingPage.inFrame(() -> {
+      dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
+      dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+      dpTaggingPage.selectDateToNextDay();
+      dpTaggingPage.checkAndAssignAll(false);
+      takesScreenshot();
+      pause5s();
+      put("listOfDpTagging", listOfDpTagging);
+      put(KEY_DISTRIBUTION_POINT_ID, dpId);
+    });
   }
 
   @When("Operator untags created orders from DP with DPMS ID = {string} on DP Tagging page")
@@ -108,8 +107,7 @@ public class DpTaggingSteps extends AbstractSteps {
 
   @When("Operator wait for DP tagging page to load")
   public void operatorWaitsForDpTaggingToLoad() {
-    dpTaggingPage.switchToIframe();
-    dpTaggingPage.waitUntilLoaded();
+    dpTaggingPage.inFrame(() -> dpTaggingPage.waitUntilLoaded());
   }
 
   @When("Operator verify invalid DP Tagging CSV is not uploaded successfully")
@@ -126,7 +124,7 @@ public class DpTaggingSteps extends AbstractSteps {
     String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
     Events orderEvent = get(KEY_ORDER_EVENTS);
     dpTaggingPage
-            .verifiesDetailsRightConfirmedOptTag(dbCheckingResult, dpDetails, orderEvent, barcode);
+        .verifiesDetailsRightConfirmedOptTag(dbCheckingResult, dpDetails, orderEvent, barcode);
     takesScreenshot();
   }
 

@@ -1,11 +1,11 @@
-@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @CreateDriver
+@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @CreateDriverHappyPath
 Feature: Middle Mile Driver Management - Create Driver
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - SG (uid:e3373dc3-1505-476b-9d5c-45091c0f356c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Singapore"

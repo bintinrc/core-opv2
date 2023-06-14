@@ -16,11 +16,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME;
+import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHORT_NAME;
 
 public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
 
   @FindBy(css = ".loading-container")
   public PageElement loading;
+
+  @FindBy(css = ".ant-btn-loading-icon")
+  public PageElement loadingIcon;
 
   @FindBy(tagName = "iframe")
   public PageElement pageFrame;
@@ -102,14 +106,8 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     }
   }
 
-  public void findZone(String zoneName) {
-    zonesTable.filterByColumn(COLUMN_NAME, zoneName);
-    int count = 0;
-    while (zonesTable.isEmpty() && count < 10) {
-      pause5s();
-      zonesTable.filterByColumn(COLUMN_NAME, zoneName);
-      count++;
-    }
+  public void findZone(String zoneShortName) {
+    zonesTable.filterByColumn(COLUMN_SHORT_NAME, zoneShortName);
   }
 
   public boolean isNotificationShowUp(String message) {

@@ -6,8 +6,9 @@ import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -93,7 +94,7 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
       isTableEmpty = routeCashInboundTable.isEmpty();
     }
 
-    assertTrue("Table should be empty.", isTableEmpty);
+   Assertions.assertThat(isTableEmpty).as("Table should be empty.").isTrue();
   }
 
   public void verifyCsvFileDownloadedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
@@ -101,15 +102,15 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
   }
 
   public void searchAndVerifyTableIsNotEmpty(RouteCashInboundCod routeCashInboundCod) {
-    fromDateFilter.setValue(TestUtils.getNextDate(0));
-    toDateFilter.setValue(TestUtils.getNextDate(1));
+    fromDateFilter.setValue(ZonedDateTime.now());
+    toDateFilter.setValue(ZonedDateTime.now().plusDays(1));
     fetchCod.click();
     waitUntilLoaded(2);
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
          */
-    assertFalse("Table should not be empty.", routeCashInboundTable.isTableEmpty());
+   Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.").isFalse();
 
         /*
           If the table is not empty, then filter table by receiptNo
@@ -117,7 +118,7 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
          */
     routeCashInboundTable
         .filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
-    assertFalse("Table should not be empty.", routeCashInboundTable.isTableEmpty());
+   Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.").isFalse();
   }
 
   public static class RouteCashInboundTable extends AntTableV2<RouteCashInboundCod> {

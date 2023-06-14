@@ -12,9 +12,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -23,12 +23,13 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 17.12 |
-      | gst          | 1.12  |
+      | grandTotal   | 17.28 |
+      | gst          | 1.28  |
       | deliveryFee  | 16    |
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
@@ -42,9 +43,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -53,12 +54,13 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 13.91 |
-      | gst          | 0.91  |
+      | grandTotal   | 14.04 |
+      | gst          | 1.04  |
       | deliveryFee  | 13    |
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
@@ -72,9 +74,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -83,12 +85,13 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 3.21 |
-      | gst          | 0.21 |
+      | grandTotal   | 3.24 |
+      | gst          | 0.24 |
       | deliveryFee  | 3    |
       | insuranceFee | 0    |
       | codFee       | 0    |
       | handlingFee  | 0    |
+      | rtsFee       | 0    |
       | comments     | OK   |
     And Operator close page
     And Operator validate and release Draft Script

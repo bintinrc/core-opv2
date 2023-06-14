@@ -71,7 +71,7 @@ public class CreateOrEditJobPage extends PageElement {
   public final String TIME_RANGE_FILTER_LABEL = "div[label='%s']";
   public final String JOB_TAG_FILTER_LOCATOR = "div[aria-label='%s']";
   public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
-  public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
+
   public final String SELECTED_TIME_RANGE_LOCATOR = "span[title='%s']";
   public final String BACKGROUND_COLOR = "background-color";
   public final String NOTIFICATION_MESSAGE_LOCATOR = "//div[@class='ant-notification-notice-message']";
@@ -85,6 +85,7 @@ public class CreateOrEditJobPage extends PageElement {
   public final String CALENDAR_STATUS_WEB_ELEMENT_LOCATOR = "div[status='%s']";
   public final String CUSTOMISED_TIME_RANGE_BY_LOCATOR = "//label[@for='%s']//parent::div//following-sibling::div//span[@class='ant-select-selection-item']";
   public final String TITLE = "title";
+  public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
 
   public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
@@ -195,8 +196,8 @@ public class CreateOrEditJobPage extends PageElement {
 
   public boolean isDisplayedCommentTextInCalendar(String date, String text) {
     moveToElement(getCalendarWebElementByDate(date));
-    return getWebDriver().findElements(By.cssSelector(VISIBLE_SPAN_COMMENT_LOCATOR))
-        .stream().anyMatch(pageElement -> pageElement.getText().equalsIgnoreCase(text));
+    return getWebDriver().findElements(By.cssSelector(VISIBLE_SPAN_COMMENT_LOCATOR)).stream()
+        .anyMatch(pageElement -> pageElement.getText().equalsIgnoreCase(text));
   }
 
   public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
@@ -295,7 +296,7 @@ public class CreateOrEditJobPage extends PageElement {
     return day;
   }
 
-  public String getColorAttributeInPickupJobFromCalendar(String date,String status) {
+  public String getColorAttributeInPickupJobFromCalendar(String date, String status) {
     return webDriver.findElement(
             By.cssSelector(f(CALENDAR_DAY_WEB_ELEMENT_LOCATOR, getDayFromFullDate(date))))
         .findElement(By.cssSelector(f(CALENDAR_STATUS_WEB_ELEMENT_LOCATOR, status)))

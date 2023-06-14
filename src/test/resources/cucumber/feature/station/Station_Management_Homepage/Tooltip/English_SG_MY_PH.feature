@@ -1,8 +1,8 @@
 @StationManagement @StationHome @StationTooltip
 Feature: English (SG, MY, PH)
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: English Tooltip for COD Collected from Courier
@@ -202,10 +202,9 @@ Feature: English (SG, MY, PH)
       | HubName      | Language | TileText     |
       | {hub-name-9} | English  | For Shipment |
 
+
   Scenario Outline: English Tooltip for N+0 Pickup Rates
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
@@ -214,12 +213,11 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText         |
-      | {hub-name-1vn} | Vietnam | N+0 Pickup Rates |
+      | {hub-name-9} | Vietnam | N+0 Pickup Rates |
+
 
   Scenario Outline: English Tooltip for Addresses with No Job Created
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
@@ -228,12 +226,11 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText                       |
-      | {hub-name-1vn} | Vietnam | Addresses with no jobs created |
+      | {hub-name-9} | Vietnam | Addresses with no jobs created |
+
 
   Scenario Outline: English Tooltip for Addresses with Unrouted Jobs
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
@@ -242,7 +239,7 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText                     |
-      | {hub-name-1vn} | Vietnam | Addresses with unrouted jobs |
+      | {hub-name-9} | Vietnam | Addresses with unrouted jobs |
 
 
   @KillBrowser @ShouldAlwaysRun

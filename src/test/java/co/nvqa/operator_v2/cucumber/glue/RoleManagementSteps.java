@@ -1,11 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RoleManagement;
 import co.nvqa.operator_v2.selenium.page.RoleManagementPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 /**
  * @author Tristania Siagian
@@ -26,13 +27,13 @@ public class RoleManagementSteps extends AbstractSteps {
   @When("^Operator creates new role on Role Management page$")
   public void createNewRole() {
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
 
     RoleManagement roleManagement = new RoleManagement();
     roleManagement.setRoleName("QA_" + uniqueCode);
     roleManagement.setDesc(
         f("This role is created for testing purpose only. Ignore this role. Created at %s by scenario \"%s\".",
-            CREATED_DATE_SDF.format(new Date()), scenarioName));
+            DTF_CREATED_DATE.format(ZonedDateTime.now()), scenarioName));
     roleManagement.setScope("ALL_ACCESS");
 
     roleManagementPage.createNewRole(roleManagement);
@@ -63,7 +64,8 @@ public class RoleManagementSteps extends AbstractSteps {
     RoleManagement roleManagementEdited = new RoleManagement();
     roleManagementEdited.setRoleName(roleManagement.getRoleName() + "_EDITED");
     roleManagementEdited.setDesc(
-        f(roleManagement.getDesc() + " Modified at %s.", CREATED_DATE_SDF.format(new Date())));
+        f(roleManagement.getDesc() + " Modified at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
     roleManagementEdited.setScope("AUTH_ADMIN");
 
     put("roleManagementEdited", roleManagementEdited);

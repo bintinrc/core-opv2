@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.RandomUtil;
@@ -44,12 +45,13 @@ public class SortCodeSteps extends AbstractSteps {
   @When("Operator searches for Sort Code based on its {string}")
   public void operatorSearchesForSortCodeBasedOnIts(String key) {
     SortCode sortCode = get(KEY_CREATED_SORT_CODE);
-
-    if (POSTCODE.equalsIgnoreCase(key)) {
-      sortCodePage.postcodeInput.setValue(sortCode.getPostcode());
-      return;
-    }
-    sortCodePage.sortCodeInput.setValue(sortCode.getSortCode());
+    doWithRetry(() -> {
+      if (POSTCODE.equalsIgnoreCase(key)) {
+        sortCodePage.postcodeInput.setValue(sortCode.getPostcode());
+        return;
+      }
+      sortCodePage.sortCodeInput.setValue(sortCode.getSortCode());
+    }, "Searching for Sort Codes");
   }
 
   @Then("Operator verifies that the sort code details are right")
@@ -130,7 +132,7 @@ public class SortCodeSteps extends AbstractSteps {
 
     //Replacing new sort code
     if (content.contains("new-sort-code")) {
-      sortCodeValue = "SA" + randomInt(0, 999) + RandomUtil.randomString(5);
+      sortCodeValue = "SA" + StandardTestUtils.randomInt(0, 999) + RandomUtil.randomString(5);
       content = content.replaceAll("new-sort-code", sortCodeValue);
       LOGGER.info(sortCodeValue);
       sortCode.setSortCode(sortCodeValue);

@@ -39,7 +39,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Arrival Trip Detail - Trip Events (uid:567dc293-b7c3-441a-8f00-2998fad953a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -93,7 +93,7 @@ Feature: Movement Trip - View Trips
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Departure Trip Details - Shipment (uid:26f6c205-bc90-4ce8-991f-77a95f38f4fe)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -142,7 +142,7 @@ Feature: Movement Trip - View Trips
     When Operator click on Shipment tab
     Then Operator verifies the elements on Shipment tab are correct
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Arrival Trip Details - Shipment (uid:59055ed6-2715-44b3-b4a2-52de02393fea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -186,7 +186,7 @@ Feature: Movement Trip - View Trips
     When Operator click on Shipment tab
     Then Operator verifies the elements on Shipment tab are correct
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Archived Trip Details - Shipment (uid:72ab7c07-33d4-4040-9197-b95f06f35eb5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -230,7 +230,7 @@ Feature: Movement Trip - View Trips
     When Operator click on Shipment tab
     Then Operator verifies the elements on Shipment tab are correct
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Trip Details with pagination (uid:4d613467-2aa5-4603-a9dc-f5e859adbb4b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

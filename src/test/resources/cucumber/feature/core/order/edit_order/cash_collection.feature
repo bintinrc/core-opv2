@@ -18,6 +18,7 @@ Feature: Cash Collection
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Add Cash on Delivery (uid:a1290675-50c1-4c63-b371-3af1f2b61e22)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
@@ -46,6 +47,7 @@ Feature: Cash Collection
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Update Cash on Delivery (uid:c747a488-2545-4cba-8982-f148bffd3c57)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
@@ -75,6 +77,7 @@ Feature: Cash Collection
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery (uid:6da65f1f-b866-424f-8cf3-2e4a982c9191)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |

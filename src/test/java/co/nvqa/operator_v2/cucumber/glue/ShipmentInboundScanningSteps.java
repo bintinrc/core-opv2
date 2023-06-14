@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.Shipment;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -9,7 +10,7 @@ import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
@@ -54,6 +55,24 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 5);
+  }
+
+  @When("Operator inbound scan shipment id {string} {string} in hub {string} on Shipment Inbound Scanning page")
+  public void inboundScanning(String sidAsStr, String label, String hub) {
+    doWithRetry(() ->
+    {
+      try {
+        long shipmentId = Long.parseLong(resolveValue(sidAsStr));
+        final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
+        scanningPage.inboundScanning(shipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage_v1();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "Scanning shipment...", 1000, 5);
   }
 
   @SuppressWarnings("unchecked")
@@ -117,7 +136,8 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     String alert = data.get("alert");
     scanningPage.inFrame(page -> {
       scanningPage.scanAlertMessage.waitUntilVisible();
-      assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
+      Assertions.assertThat(scanningPage.scanAlertMessage.getText())
+          .as("Inbound Scan Alert Message").isEqualTo(alert);
     });
   }
 
@@ -190,7 +210,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
   @When("^Operator change End Date on Shipment Inbound Scanning page$")
   public void clickChangeEndDateButton() {
-    Date next2DaysDate = TestUtils.getNextWorkingDay();
+    LocalDateTime next2DaysDate = TestUtils.getNextWorkingDay();
     List<String> mustCheckId = scanningPage.grabSessionIdNotChangedScan();
     scanningPage.clickEditEndDate();
     scanningPage.inputEndDate(next2DaysDate);
@@ -256,13 +276,13 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @Then("Operator verify small message {string} {string} in Start Inbound Box")
   public void verifySmallMessage(String message, String status) {
     if ("appears".equals(status)) {
-      assertThat("Small message is equal", scanningPage.tripUnselectedWarning.getText(),
-          equalTo(message));
+      Assertions.assertThat(scanningPage.tripUnselectedWarning.getText())
+          .as("Small message is equal").isEqualTo(message);
       return;
     }
     if ("not appears".equals(status)) {
-      assertThat("Small message is not shown", scanningPage.tripUnselectedWarning.isDisplayedFast(),
-          equalTo(false));
+      Assertions.assertThat(scanningPage.tripUnselectedWarning.isDisplayedFast())
+          .as("Small message is not shown").isFalse();
     }
   }
 
@@ -274,16 +294,19 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @When("Operator click proceed in trip completion dialog")
   public void clickProceedInTripCompletionDialog() {
     scanningPage.completeTrip();
+    pause5s();
   }
 
   @Then("Operator verify hub {string} not found on Shipment Inbound Scanning page")
   public void operatorVerifyHubNotFoundOnShipmentInboundScanningPage(String hubName) {
     String hubNameResolved = resolveValue(hubName);
     scanningPage.switchTo();
-    TestUtils.findElementAndClick(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, "xpath", getWebDriver());
+    TestUtils.findElementAndClick(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, "xpath",
+        getWebDriver());
     scanningPage.sendKeysAndEnter(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, hubNameResolved);
-    Assertions.assertThat(scanningPage.findElementByXpath(ShipmentInboundScanningPage.XPATH_INBOUND_HUB).getText())
-            .as("value does not exist").isEqualTo("");
+    Assertions.assertThat(
+            scanningPage.findElementByXpath(ShipmentInboundScanningPage.XPATH_INBOUND_HUB).getText())
+        .as("value does not exist").isEqualTo("");
   }
 
   @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")
@@ -330,7 +353,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies message {string} show on dialog")
-  public void operatorVerifiesMessageOnDialog(String message){
+  public void operatorVerifiesMessageOnDialog(String message) {
     scanningPage.verifyConfirmMessage(message);
   }
 

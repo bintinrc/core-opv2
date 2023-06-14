@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.assertj.core.api.Assertions;
 import java.util.List;
-import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,17 +67,18 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
   }
 
   @When("Operator searches with created TID")
-    public void operatorSearchCreatedTID(){
-      operatorSearchWithValue(TRACKING_ID_FILTER, get(KEY_CREATED_ORDER_TRACKING_ID));
+  public void operatorSearchCreatedTID() {
+    operatorSearchWithValue(TRACKING_ID_FILTER, get(KEY_CREATED_ORDER_TRACKING_ID));
   }
 
   @When("Operator searches with {string} created TIDs")
-  public void operatorSearchCreatedTIDs(String numberOfTIDs){
-    Integer numberTIDs = Integer.parseInt(numberOfTIDs);
-    List<ParcelDownloadConfig> parcelDownloadConfigs = get(KEY_LIST_OF_SORT_BELT_DOWNLOADED_PARCEL_CONFIGS);
-    List<String> createdTrackingIDs = new ArrayList<String>();
+  public void operatorSearchCreatedTIDs(String numberOfTIDs) {
+    int numberTIDs = Integer.parseInt(numberOfTIDs);
+    List<ParcelDownloadConfig> parcelDownloadConfigs = get(
+        KEY_LIST_OF_SORT_BELT_DOWNLOADED_PARCEL_CONFIGS);
+    List<String> createdTrackingIDs = new ArrayList<>();
 
-    for(int i = 0; i < numberTIDs; i++) {
+    for (int i = 0; i < numberTIDs; i++) {
       operatorSearchWithValue(TRACKING_ID_FILTER, parcelDownloadConfigs.get(i).getTrackingId());
       createdTrackingIDs.add(parcelDownloadConfigs.get(i).getTrackingId());
     }
@@ -87,7 +87,7 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
   }
 
   @When("Operator searches with created ArmID")
-  public void operatorSearchCreatedArmID(){
+  public void operatorSearchCreatedArmID() {
     List<Integer> createdArmTargets = get(KEY_LIST_OF_CREATED_SORT_BELT_PARCEL_ARM_ID);
     operatorSearchWithValue(ARM_ID_FILTER, String.valueOf(createdArmTargets.get(0)));
     put(KEY_CREATED_SORT_BELT_PARCEL_ARM_ID, createdArmTargets.get(0).toString());
@@ -108,7 +108,7 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
   }
 
   @When("Operator selects created session")
-  public void selectCreatedSession(){
+  public void selectCreatedSession() {
     sortBeltMonitoringPage.selectSessionItemByName(get(KEY_CREATED_SESSION_ID));
   }
 
@@ -189,22 +189,23 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
   public void operatorVerifyTrackingIDs(List<String> expectedTIDs) {
     expectedTIDs = resolveValues(expectedTIDs);
     List<String> actualTIDs = sortBeltMonitoringPage.getListOfTrackingIDs();
-    this.assertThat("List of Tracking IDs", actualTIDs,
-        Matchers.hasItems(expectedTIDs.toArray(new String[0])));
+    Assertions.assertThat(actualTIDs).as("List of Tracking IDs")
+        .contains(expectedTIDs.toArray(new String[0]));
   }
 
   @Then("Operator verifies sort belt monitoring result has tracking ids displayed correctly")
   public void operatorVerifyCreatedTrackingIDs() {
     List<String> expectedTIDs = get(KEY_LIST_OF_SORT_BELT_PARCEL_TRACKING_ID);
     List<String> actualTIDs = sortBeltMonitoringPage.getListOfTrackingIDs();
-    this.assertThat("Verify List of Tracking IDs displayed", actualTIDs,
-        Matchers.hasItems(expectedTIDs.toArray(new String[0])));
+    Assertions.assertThat(actualTIDs).as("Verify List of Tracking IDs displayed")
+        .contains(expectedTIDs.toArray(new String[0]));
   }
 
   @Then("Operator verifies sort belt monitoring result has tracking id displayed")
   public void operatorVerifyTrackingID() {
     String actualTID = sortBeltMonitoringPage.getListOfTrackingIDs().get(0);
-    this.assertEquals("Verify Tracking ID displayed", get(KEY_CREATED_ORDER_TRACKING_ID), actualTID);
+    Assertions.assertThat(actualTID).as("Verify Tracking ID displayed")
+        .isEqualTo(get(KEY_CREATED_ORDER_TRACKING_ID));
   }
 
   @Then("Operator verifies sort belt monitoring result has expected arm id displayed")

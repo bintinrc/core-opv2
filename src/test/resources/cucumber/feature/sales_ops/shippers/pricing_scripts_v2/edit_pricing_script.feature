@@ -15,9 +15,9 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | XS       |
       | weight       | 1.0      |
@@ -26,12 +26,13 @@ Feature: Edit Pricing Script
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 16.692 |
-      | gst          | 1.092  |
+      | grandTotal   | 16.848 |
+      | gst          | 1.248  |
       | deliveryFee  | 15.6   |
       | insuranceFee | 0      |
       | codFee       | 0      |
       | handlingFee  | 0      |
+      | rtsFee       | 0      |
       | comments     | OK     |
     And Operator close page
     Then Operator verify the script is saved successfully
@@ -47,9 +48,9 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | SAMEDAY  |
+      | serviceLevel | Same Day |
       | serviceType  | Document |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | XS       |
       | weight       | 1.0      |
@@ -58,12 +59,13 @@ Feature: Edit Pricing Script
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 42.8 |
-      | gst          | 2.8  |
+      | grandTotal   | 43.2 |
+      | gst          | 3.2  |
       | deliveryFee  | 40   |
       | insuranceFee | 0    |
       | codFee       | 0    |
       | handlingFee  | 0    |
+      | rtsFee       | 0    |
       | comments     | OK   |
     And Operator close page
     Then Operator verify the script is saved successfully
@@ -79,14 +81,14 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | <is_RTS> |
       | size         | XS       |
-      | weight       | 1.0      |
-      | insuredValue | 0.00     |
-      | codValue     | 0.00     |
+      | weight       | 1        |
+      | insuredValue | 0        |
+      | codValue     | 0        |
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
@@ -96,13 +98,14 @@ Feature: Edit Pricing Script
       | insuranceFee | 0             |
       | codFee       | 0             |
       | handlingFee  | 0             |
+      | rtsFee       | 0             |
       | comments     | OK            |
     And Operator close page
     Then Operator verify the script is saved successfully
     Examples:
       | dataset_name | Condition   | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
-      | RTS = True   | RTS = True  | Yes    | 2.14       | 0.14 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
-      | RTS = False  | RTS = False | No     | 2.14       | 0.14 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
+      | RTS = True   | RTS = True  | Yes    | 2.16       | 0.16 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
+      | RTS = False  | RTS = False | No     | 2.16       | 0.16 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
 
   @DeletePricingScript @HappyPath
   Scenario: Edit Active Script - No Syntax Error (uid:5256ee16-eda2-4963-a7c9-a129845f6b3d)
@@ -145,6 +148,63 @@ Feature: Edit Pricing Script
     And Operator verify Active Script data is correct
 
   @DeletePricingScript
+  Scenario: Edit Draft Script - Remove Legacy Params From Script
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.delivery_type == "Standard") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator edit the created Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 0.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result;} |
+    Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
+  Scenario: Edit Active Script - Remove Legacy Params From Script
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    And Operator edit the created Active Script using data below:
+      | source | function calculatePricing(params) {var price = 0.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result;} |
+    And Operator clicks Check Syntax, Verify Draft and Validate Draft
+    Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
+  Scenario: Edit Draft Script - Add Legacy Params To Script
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 0.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator just edit the created Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 1;var result = {};result.delivery_fee = price * params.width * params.length * params.height * params.shipper_provided_length * params.shipper_provided_width * params.shipper_provided_height * params.shipper_provided_weight;return result;} |
+    And Operator clicks validate and verify warning message "The script contains legacy params.You can continue to release the script, but pricing will be affected for shippers who are attached to this script, and is using new billing weight logics.Legacy params include the followings:- shipper_provided_length- shipper_provided_width- shipper_provided_height- shipper_provided_weight- length- width- height"
+    Then Operator release Draft Script
+    And Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
+  Scenario: Edit Active Script - Add Legacy Params To Script
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 0.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    And Operator just edit the created Active Script using data below:
+      | source | function calculatePricing(params) {var price = 1;var result = {};result.delivery_fee = price * params.width * params.length * params.height * params.shipper_provided_length * params.shipper_provided_width * params.shipper_provided_height * params.shipper_provided_weight;return result;} |
+    And Operator clicks validate active script and verify warning message "The script contains legacy params.You can continue to release the script, but pricing will be affected for shippers who are attached to this script, and is using new billing weight logics.Legacy params include the followings:- shipper_provided_length- shipper_provided_width- shipper_provided_height- shipper_provided_weight- length- width- height"
+    Then Operator release Draft Script
+    And Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
   Scenario: Edit Draft Script - Syntax Error (uid:4daf468e-2dc4-46cf-9a5e-2b0bda48668e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -163,9 +223,9 @@ Feature: Edit Pricing Script
     And Operator send below data to created Draft Script:
       | source | function calculatePricing(params) {const price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
     Then Operator clicks Check Syntax
-    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
-      | top    | Network Request Error                 |
-      | bottom | `const` is not support in the script. |
+    Then Operator verify error message
+      | message  | Error Message: `const` is not support in the script. |
+      | response | Status: 400 Unknown                                  |
 
   Scenario: Edit Active Script - with "const" Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -177,10 +237,9 @@ Feature: Edit Pricing Script
     And Operator edit the created Active Script using data below:
       | source | function calculatePricing(params) {const price = 3.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;return result; |
     Then Operator clicks Check Syntax
-    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
-      | top    | Network Request Error                 |
-      | bottom | `const` is not support in the script. |
-
+    Then Operator verify error message
+      | message  | Error Message: `const` is not support in the script. |
+      | response | Status: 400 Unknown                                  |
 
   @DeletePricingScript
   Scenario: Edit Active Script - Edit Script Info (uid:ba483b50-bc2c-4304-90e9-524523533323)

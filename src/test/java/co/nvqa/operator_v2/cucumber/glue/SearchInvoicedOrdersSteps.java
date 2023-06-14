@@ -1,16 +1,20 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.InvoicedOrdersSearchPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class SearchInvoicedOrdersSteps extends AbstractSteps {
 
@@ -27,88 +31,97 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
     invoicedOrdersSearchPage = new InvoicedOrdersSearchPage(getWebDriver());
   }
 
+  @When("Search Invoiced Orders page is loaded")
+  public void searchInvoicedOrdersPageIsLoaded() {
+    invoicedOrdersSearchPage.switchToIframe();
+    invoicedOrdersSearchPage.waitUntilLoaded();
+  }
 
   @And("Operator upload a CSV file with below order ids on Invoiced Orders Search Page")
   public void operatorUploadACSVFileWithBelowOrderIdsOnInvoicedOrdersSearchPage(
       List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    File csvFile = createFile(filename, String.join("\n", trackingIds));
+    File csvFile = StandardTestUtils.createFile(filename, String.join("\n", trackingIds));
     String absolutePath = csvFile.getAbsolutePath();
     LOGGER.info("Path of the created file : " + absolutePath);
     invoicedOrdersSearchPage.uploadFile(absolutePath);
+    invoicedOrdersSearchPage.antDotSpinner.waitUntilInvisible();
     takesScreenshot();
   }
 
-  @And("Operator clicks Search Invoiced Order button and wait till CSV is uploaded")
-  public void operatorClicksSearchInvoicedOrderButtonAndWait() {
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    invoicedOrdersSearchPage.goBackToFilterBtn.waitUntilVisible();
-  }
-
   @And("Operator clicks Search Invoiced Order button")
-  public void operatorClicksSearchInvoicedOrderButton() {
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
+  public void operatorClicksSearchInvoicedOrderButtonAndWait() {
+    invoicedOrdersSearchPage.searchInvoiceOrdersButton.click();
+    invoicedOrdersSearchPage.antDotSpinner.waitUntilInvisible();
     takesScreenshot();
   }
 
   @And("Operator verifies below tracking ID\\(s) and creation time is displayed")
   public void operatorVerifiesBelowTrackingIDSAndCreationTimeIsDisplayed(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
+    invoicedOrdersSearchPage.noDataFound.waitUntilInvisible();
     String actualTrackingIdValue = invoicedOrdersSearchPage.trackingIdOutput.getText();
     String actualCreationTimeValue = invoicedOrdersSearchPage.createdAtOutput.getText();
-    softAssert
-        .assertEquals("TrackingId is not expected ", trackingIds.get(0), actualTrackingIdValue);
-    softAssert.assertContains("Creation time is not expected ", DateUtil.getTodayDate_YYYY_MM_DD(),
-        actualCreationTimeValue);
+    Assertions.assertThat(actualTrackingIdValue).as("TrackingId is expected ")
+        .isEqualTo(trackingIds.get(0));
+    Assertions.assertThat(actualCreationTimeValue).as("Creation time is expected")
+        .startsWith(DateUtil.getTodayDate_YYYY_MM_DD());
   }
 
-  @And("Operator verifies No Results Found is displayed")
+  @And("Operator verifies No Data is displayed")
   public void operatorVerifiesNoResultsFoundIsDisplayed() {
-    invoicedOrdersSearchPage.noResultsFound.waitUntilVisible(3);
-    assertTrue("No Results Found Message is not displayed",
-        invoicedOrdersSearchPage.noResultsFound.isDisplayed());
+    invoicedOrdersSearchPage.noDataFound.waitUntilVisible(3);
+    Assertions.assertThat(invoicedOrdersSearchPage.noDataFound.isDisplayed())
+        .as("No Results Found Message is not displayed").isTrue();
   }
 
-  @Then("Operator uploads a PDF on Invoiced Orders Search Page and verifies error message {string}")
+  @Then("Operator uploads a PDF on Invoiced Orders Search Page and verifies error message as below:")
   public void operatorUploadsAPDFOnInvoicedOrdersSearchPageAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed(
-      String expectedErrorMsg) {
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> map = resolveKeyValues(dataTableAsMap);
     String pdfFileName = "invalid-upload.pdf";
-    File pdfFile = createFile(pdfFileName, "TEST");
+    File pdfFile = StandardTestUtils.createFile(pdfFileName, "TEST");
     invoicedOrdersSearchPage.uploadFile(pdfFile.getAbsolutePath());
-    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
-    verifyErrorMessage(expectedErrorMsg);
+    String expectedNotifMsgTop = map.get("top");
+    String expectedNotifDescription = map.get("bottom");
+    verifyErrorMessage(expectedNotifMsgTop, expectedNotifDescription);
   }
 
-  @Then("Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
+  @Then("Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message as below:")
   public void operatorUploadsAnInvalidOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
-      String expectedErrorMsg) {
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> map = resolveKeyValues(dataTableAsMap);
     String csvFileName = "upload.csv";
-    File csvFile = createFile(csvFileName, "TEST1 , TEST2");
+    File csvFile = StandardTestUtils.createFile(csvFileName, "TEST1 , TEST2");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    verifyErrorMessage(expectedErrorMsg);
+    String expectedNotifMsgTop = map.get("top");
+    String expectedNotifDescription = map.get("bottom");
+    verifyErrorMessage(expectedNotifMsgTop, expectedNotifDescription);
   }
 
-  @Then("Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message {string}")
+  @Then("Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message as below:")
   public void operatorUploadsAnEmptyCSVOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
-      String expectedErrorMsg) {
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> map = resolveKeyValues(dataTableAsMap);
     String csvFileName = "upload.csv";
-    File csvFile = createFile(csvFileName, "");
+    File csvFile = StandardTestUtils.createFile(csvFileName, "");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-    verifyErrorMessage(expectedErrorMsg);
+    String expectedNotifMsgTop = map.get("top");
+    String expectedNotifDescription = map.get("bottom");
+    verifyErrorMessage(expectedNotifMsgTop, expectedNotifDescription);
   }
 
-  private void verifyErrorMessage(String expectedErrorMsg) {
-    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
-    softAssert
-        .assertEquals("Actual Notification Description is not expected", expectedErrorMsg,
-            actualNotifDescription);
+  private void verifyErrorMessage(String expectedNotifMsgTop, String expectedNotifDescription) {
+    String actualNotifMsgTop = invoicedOrdersSearchPage.getNotificationMessageText();
+    String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageDescText();
+    Assertions.assertThat(actualNotifMsgTop)
+        .as("Actual Notification is expected").isEqualTo(expectedNotifMsgTop);
+    Assertions.assertThat(actualNotifDescription)
+        .as("Actual Notification Description is expected").isEqualTo(expectedNotifDescription);
   }
 
   @When("Operator clicks in Enter Tracking ID\\(s) tab")
   public void operatorClicksInEnterTrackingIDSTab() {
-    invoicedOrdersSearchPage.switchTo();
     invoicedOrdersSearchPage.trackingIDsButton.waitUntilVisible();
     invoicedOrdersSearchPage.trackingIDsButton.click();
   }
@@ -117,70 +130,21 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   public void operatorEntersTrackingIdOnInvoicedOrdersSearchPage(String trackingId) {
     trackingId = resolveValue(trackingId);
     invoicedOrdersSearchPage.trackingIdInput.sendKeys(trackingId);
+    invoicedOrdersSearchPage.trackingIdInput.sendKeys(Keys.ENTER);
   }
 
   @And("Operator verifies the order count is correctly displayed as {int}")
   public void operatorVerifiesTheOrderCountIsCorrectlyDisplayed(int count) {
     invoicedOrdersSearchPage.orderCount.waitUntilVisible();
     String trackingIdCount = invoicedOrdersSearchPage.orderCount.getText();
-    softAssert.assertEquals("Tracking IDs from CSV Count is not expected", String.valueOf(count),
-        trackingIdCount);
-
+    Assertions.assertThat(trackingIdCount)
+        .as("Tracking IDs from CSV Count is expected").isEqualTo(String.valueOf(count));
   }
 
-  @Then("Operator verifies error message {string} is displayed")
-  public void operatorVerifiesErrorMessageIsDisplayed(String errorMessage) {
-    takesScreenshot();
-    String actualErrorMsgText = invoicedOrdersSearchPage.errorMessageText.getText();
-    softAssert.assertEquals("Actual and expected error message text mismatch", errorMessage,
-        actualErrorMsgText);
-  }
-
-  @And("Operator clicks Search Invoiced Order button without any input")
-  public void operatorClicksSearchInvoicedOrderButtonWithoutAnyInput() {
-    invoicedOrdersSearchPage.switchTo();
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
-  }
-
-  @And("Operator verifies the file name is displayed")
-  public void operatorVerifiesTheFileNameIsDisplayed() {
-    softAssert.assertContains("Expected and actual CSV file name mismatch", filename,
-        invoicedOrdersSearchPage.chooseFileButton.getValue());
-  }
-
-  @And("Operator verifies the file name is not displayed")
-  public void operatorVerifiesTheFileNameIsNotDisplayed() {
-    softAssert.assertContains("CSV file name is displayed", "",
-        invoicedOrdersSearchPage.chooseFileButton.getValue());
-  }
 
   @And("Operator clicks on Upload CSV tab")
   public void operatorClicksOnUploadCSVTab() {
     invoicedOrdersSearchPage.uploadCsvButton.click();
-  }
-
-  @Then("Operator search {string} tracking id in Tracking Number Search field")
-  public void operatorSearchTrackingIdInTrackingNumberSearchField(String trackingId) {
-    trackingId = resolveValue(trackingId);
-    invoicedOrdersSearchPage.trackingIdSearchInput.sendKeys(trackingId);
-  }
-
-  @Then("Operator verifies {string} tracking id is highlighted")
-  public void operatorVerifiesTrackingIdIsHighlighted(String trackingId) {
-    trackingId = resolveValue(trackingId);
-    softAssert.assertEquals("Actual and expected highlighted tracking id mismatch", trackingId,
-        invoicedOrdersSearchPage.searchOutput.getText());
-  }
-
-  @Then("Operator search {string} in Creation Time Search field")
-  public void operatorSearchInCreationTimeSearchField(String date) {
-    invoicedOrdersSearchPage.createdAtSearchInput.sendKeys(date);
-  }
-
-  @Then("Operator verifies {string} is highlighted")
-  public void operatorVerifiesIsHighlighted(String date) {
-    softAssert.assertContains("Actual and expected highlighted date mismatch", date,
-        invoicedOrdersSearchPage.searchOutput.getText());
   }
 
   @And("Operator clicks Refresh button")
@@ -192,11 +156,39 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   @And("Operator clicks Go Back To Filter button")
   public void operatorClicksGoBackToFilterButton() {
     invoicedOrdersSearchPage.goBackToFilterBtn.click();
-    invoicedOrdersSearchPage.searchInvoicedOrdersButton.waitUntilClickable();
+  }
+
+  @And("Operator clicks Search Invoiced Order button without a tracking ID")
+  public void operatorClicksSearchInvoicedOrderButtonWithoutATrackingID() {
+    invoicedOrdersSearchPage.searchInvoiceOrdersButton.click();
+  }
+
+  @Then("Operator verifies message {string} is displayed")
+  public void operatorVerifiesMessageIsDisplayed(String expectedWarningMsg) {
+    String actualWarningMsg = invoicedOrdersSearchPage.warningText.getText();
+    Assertions.assertThat(actualWarningMsg).as("Warning msg is displayed")
+        .isEqualTo(expectedWarningMsg);
   }
 
   @Then("Operator verifies that error toast is displayed on Invoiced Orders Search page:")
-  public void operatorVerifiesThatErrorToastIsDisplayedOnInvoicedOrdersSearchPage(String value) {
-    verifyErrorMessage(value);
+  public void operatorVerifiesThatErrorToastDisplayedOnInvoicedOrdersSearchPage(
+      Map<String, String> mapOfData) {
+    String errorTitle = mapOfData.get("top");
+    String errorMessage = mapOfData.get("bottom");
+
+    retryIfAssertionErrorOccurred(
+        () -> Assertions.assertThat(
+                invoicedOrdersSearchPage.noticeNotifications.get(0).message.getText())
+            .as("Notifications are available").isNotEmpty(), "Get Notifications",
+        500, 3);
+    AntNotification notification = invoicedOrdersSearchPage.noticeNotifications.get(0);
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(notification.message.getText()).as("Toast top text is correct")
+        .isEqualTo(errorTitle);
+    softAssertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
+        .contains(errorMessage);
+    softAssertions.assertAll();
   }
+
+
 }

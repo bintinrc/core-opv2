@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,7 +46,8 @@ public class AddOrderToRoutePage extends OperatorV2SimplePage {
     setPrefixDialog.prefix.setValue(prefix);
     setPrefixDialog.save.click();
     setPrefixDialog.waitUntilInvisible();
-    assertTrue("Remove Prefix button in present", removePrefix.isDisplayed());
+    Assertions.assertThat(removePrefix.isDisplayed()).as("Remove Prefix button in present")
+        .isTrue();
   }
 
   public static class SetPrefixDialog extends MdDialog {

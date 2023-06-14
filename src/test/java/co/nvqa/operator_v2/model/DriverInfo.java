@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.model.core.Driver;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Map;
 import java.util.Random;
@@ -17,6 +17,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   private String uuid;
   private Long id;
+  private String displayName;
   private String firstName;
   private String lastName;
   private String licenseNumber;
@@ -79,6 +80,17 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     return firstName;
   }
 
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    if ("GENERATED".equalsIgnoreCase(displayName)) {
+      displayName = "Station" + TestUtils.generateDateUniqueString();
+    }
+    this.displayName = displayName;
+  }
+
   public void setFirstName(String firstName) {
     if ("GENERATED".equalsIgnoreCase(firstName)) {
       firstName = "Driver";
@@ -92,7 +104,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setLastName(String lastName) {
     if ("GENERATED".equalsIgnoreCase(lastName)) {
-      lastName = TestUtils.generateDateUniqueString();
+      lastName = "Auto";
     }
     this.lastName = lastName;
   }
@@ -116,12 +128,12 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     this.type = type;
   }
 
-  public String getDpmsId(){
+  public String getDpmsId() {
     return dpmsId;
   }
 
-  public void setDpmsId(String dpmsId){
-    if("GENERATED".equalsIgnoreCase(dpmsId)){
+  public void setDpmsId(String dpmsId) {
+    if ("GENERATED".equalsIgnoreCase(dpmsId)) {
       dpmsId = String.valueOf(new Random().nextInt(99999));
     }
     this.dpmsId = dpmsId;
@@ -176,7 +188,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setContact(String contact) {
     if ("GENERATED".equalsIgnoreCase(contact)) {
-      final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
+      final String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
       switch (country) {
         case "SG":
           contact = "31594329";
@@ -264,7 +276,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setPassword(String password) {
     if ("GENERATED".equalsIgnoreCase(password)) {
-      password = "D00" + TestUtils.generateDateUniqueString();
+      password = "Ninjitsu89";
     }
     this.password = password;
   }
@@ -322,6 +334,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   public void fromDriver(Driver driver) {
     setUuid(driver.getUuid());
     setId(driver.getId());
+    setDisplayName(driver.getDisplayName());
     setFirstName(driver.getFirstName());
     setLastName(driver.getLastName());
     setLicenseNumber(driver.getLicenseNumber());

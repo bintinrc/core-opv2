@@ -9,8 +9,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class RouteCleaningReportSteps extends AbstractSteps {
 
   @And("^Operator fetch by current date on Route Cleaning Report page$")
   public void operatorFetchByCurrentDateOnRouteCleaningReportPage() {
-    routeCleaningReportPage.fetchByDate(new Date());
+    routeCleaningReportPage.fetchByDate(ZonedDateTime.now());
   }
 
   @Then("^Operator verify the COD information on Route Cleaning Report page by following parameters:$")

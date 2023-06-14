@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.model.address.Address;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage;
@@ -21,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable.COLUMN_VALIDATION;
@@ -32,16 +34,16 @@ import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage
 @ScenarioScoped
 public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
-  private UpdateDeliveryAddressWithCsvPage updateDeliveryAddressWithCsvPage;
+  private UpdateDeliveryAddressWithCsvPage page;
 
   @Override
   public void init() {
-    updateDeliveryAddressWithCsvPage = new UpdateDeliveryAddressWithCsvPage(getWebDriver());
+    page = new UpdateDeliveryAddressWithCsvPage(getWebDriver());
   }
 
   @When("^Operator update delivery address of created orders on Update Delivery Address with CSV page$")
   public void operatorUpdateDeliveryAddresses() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
     operatorUpdateDeliveryAddresses(trackingIds);
   }
 
@@ -58,7 +60,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
   public void operatorUpdateDeliveryAddresses2(List<Map<String, String>> data) {
     List<UpdateDeliveryAddressRecord> records = data.stream()
         .map(map -> {
-          Address address = generateAddress("RANDOM");
+          Address address = StandardTestUtils.generateAddress("RANDOM");
           address.setName("TEST CUSTOMER");
           UpdateDeliveryAddressRecord record = new UpdateDeliveryAddressRecord(address);
           map = resolveKeyValues(map);
@@ -68,13 +70,12 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
         })
         .collect(Collectors.toList());
     File file = createUpdateDeliveryAddressCsvFile(records);
-    updateDeliveryAddressWithCsvPage.updateAddressWithCsvButton.click();
-    updateDeliveryAddressWithCsvPage.updateAddressWithCsvDialog.waitUntilVisible();
-    updateDeliveryAddressWithCsvPage.updateAddressWithCsvDialog.selectFile.setValue(file);
-    updateDeliveryAddressWithCsvPage.updateAddressWithCsvDialog.uploadButton
-        .clickAndWaitUntilDone();
-    updateDeliveryAddressWithCsvPage.updateAddressWithCsvDialog.waitUntilInvisible();
-
+    page.inFrame(() -> {
+      page.updateAddressWithCsvButton.click();
+      page.updateAddressWithCsvDialog.waitUntilVisible();
+      page.updateAddressWithCsvDialog.selectFile.setValue(file);
+      page.updateAddressWithCsvDialog.uploadButton.click();
+    });
     put(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES, records);
   }
 
@@ -82,20 +83,18 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
   public void operatorVerifyUpdatedAddresses() {
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
 
-    int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-    assertEquals("Number of updated addresses", expected.size(), tableSize);
+    page.inFrame(() -> {
+      int tableSize = page.addressesTable.getRowsCount();
+      Assertions.assertThat(tableSize).as("Number of updated addresses").isEqualTo(expected.size());
+      List<UpdateDeliveryAddressRecord> actual = page.addressesTable
+          .readAllEntities();
 
-    List<UpdateDeliveryAddressRecord> actual = updateDeliveryAddressWithCsvPage.addressesTable
-        .readAllEntities();
-
-    expected.forEach(expectedRecord -> {
-      UpdateDeliveryAddressRecord actualRecord = actual.stream()
-          .filter(atc -> StringUtils.equals(atc.getTrackingId(), expectedRecord.getTrackingId()))
-          .findFirst()
-          .orElseThrow(() -> new AssertionError(
-              "Record with Tracking ID " + expectedRecord.getTrackingId() + " was not found"));
-      expectedRecord.compareWithActual(actualRecord);
+      expected.forEach(expectedRecord -> {
+        DataEntity.assertListContains(actual, expectedRecord,
+            "Changed address " + expectedRecord.getTrackingId());
+      });
     });
+
   }
 
   @When("^Operator verify validation statuses on Update Delivery Address with CSV page:$")
@@ -104,49 +103,55 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
         map -> resolveValue(map.get("trackingId")),
         map -> resolveValue(map.get("status"))
     ));
-    int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-    assertEquals("Number of updated addresses", data.size(), tableSize);
+    page.inFrame(() -> {
+      int tableSize = page.addressesTable.getRowsCount();
+      Assertions.assertThat(tableSize).as("Number of updated addresses").isEqualTo(data.size());
 
-    for (int i = 1; i <= tableSize; i++) {
-      String trackingId = updateDeliveryAddressWithCsvPage.addressesTable
-          .getColumnText(i, COLUMN_TRACKING_ID);
-      assertTrue("Unexpected Tracking ID " + trackingId, data.containsKey(trackingId));
-      String actualStatus = updateDeliveryAddressWithCsvPage.addressesTable
-          .getColumnText(i, COLUMN_VALIDATION);
-      String status = data.get(trackingId);
-      assertThat("Validation status for Tracking ID " + trackingId, actualStatus,
-          Matchers.equalToIgnoringCase(status));
-    }
+      for (int i = 1; i <= tableSize; i++) {
+        String trackingId = page.addressesTable
+            .getColumnText(i, COLUMN_TRACKING_ID);
+        Assertions.assertThat(data).containsKey(trackingId);
+        String actualStatus = page.addressesTable
+            .getColumnText(i, COLUMN_VALIDATION);
+        String status = data.get(trackingId);
+        Assertions.assertThat(actualStatus).as("Validation status for Tracking ID " + trackingId)
+            .isEqualToIgnoringCase(status);
+      }
+    });
   }
 
   @When("^Operator confirm addresses update on Update Delivery Address with CSV page$")
   public void operatorConfirmAddressesUpdate() {
-    updateDeliveryAddressWithCsvPage.confirmUpdatesButton.click();
-    updateDeliveryAddressWithCsvPage.confirmUpdatesDialog.waitUntilVisible();
-    updateDeliveryAddressWithCsvPage.confirmUpdatesDialog.proceedButton.click();
-    updateDeliveryAddressWithCsvPage.confirmUpdatesDialog.proceedButton.waitUntilInvisible();
+    page.inFrame(() -> {
+      page.confirmUpdatesButton.click();
+      page.confirmUpdatesDialog.waitUntilVisible();
+      page.confirmUpdatesDialog.proceedButton.click();
+      page.confirmUpdatesDialog.proceedButton.waitUntilInvisible();
+    });
   }
 
   @When("^Operator verify addresses were updated successfully on Update Delivery Address with CSV page$")
   public void operatorVerifyAddressesUpdatedSuccessfully() {
     List<UpdateDeliveryAddressRecord> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
-    retryIfAssertionErrorOccurred(
-        () -> assertEquals("Number of updated addresses",
-            f("All %d records updated", addresses.size()),
-            updateDeliveryAddressWithCsvPage.tableDescription.getText()),
-        "Assert Addresses table description after addresses update");
+    page.inFrame(() -> {
+      retryIfAssertionErrorOccurred(
+          () -> Assertions.assertThat(page.tableDescription.getText())
+              .as("Number of updated addresses")
+              .isEqualTo(f("All %d records updated", addresses.size())),
+          "Assert Addresses table description after addresses update");
+    });
   }
 
   @And("^Operator verify created orders info after address update$")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
     apiOperatorVerifyOrdersInfoAfterAddressUpdate(trackingIds);
   }
 
   @And("^Operator verify orders info after address update:$")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate(List<String> values) {
     List<String> trackingIds = resolveValues(values);
-    List<Order> orders = get(KEY_LIST_OF_ORDER_DETAILS);
+    List<Order> orders = getList(KEY_LIST_OF_ORDER_DETAILS, Order.class);
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
     expected = expected.stream().filter(exp -> trackingIds.contains(exp.getTrackingId()))
         .collect(Collectors.toList());
@@ -158,7 +163,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
           .orElseThrow(() -> new AssertionError(
               f("Could not find order with Tracking ID [%s]", record.getTrackingId())));
 
-      UpdateDeliveryAddressRecord actual = new UpdateDeliveryAddressRecord(order.getToAddress());
+      UpdateDeliveryAddressRecord actual = new UpdateDeliveryAddressRecord(getToAddress(order));
       record.compareWithActual(actual, "trackingId");
     });
   }
@@ -172,7 +177,8 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     );
     try {
       File file = TestUtils.createFileOnTempFolder(
-          String.format("update-delivery-address-request_%s.csv", generateDateUniqueString()));
+          String.format("update-delivery-address-request_%s.csv",
+              StandardTestUtils.generateDateUniqueString()));
 
       PrintWriter pw = new PrintWriter(new FileOutputStream(file));
       pw.write("Fill in '-' for non-optional fields that are blank");
@@ -191,7 +197,9 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
   @Then("Operator closes the modal for unsuccessful update")
   public void operatorVerifiesTheModalForUnsuccessfulUpdateAndClosesIt() {
-    updateDeliveryAddressWithCsvPage.confirmUpdatesDialog.closeButton.click();
-    updateDeliveryAddressWithCsvPage.confirmUpdatesDialog.waitUntilInvisible();
+    page.inFrame(() -> {
+      page.confirmUpdatesDialog.close.click();
+      page.confirmUpdatesDialog.waitUntilInvisible();
+    });
   }
 }

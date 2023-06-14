@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
@@ -45,7 +46,7 @@ public class ShipmentInboundSteps extends AbstractSteps {
     trackingId = resolveValue(trackingId);
 
     if ("RANDOM".equalsIgnoreCase(trackingId)) {
-      trackingId = "RANDOMTID" + randomLong(0, 99999);
+      trackingId = "RANDOMTID" + StandardTestUtils.randomLong(0, 99999);
     }
 
     shipmentInboundPage.enterTrackingId(trackingId);

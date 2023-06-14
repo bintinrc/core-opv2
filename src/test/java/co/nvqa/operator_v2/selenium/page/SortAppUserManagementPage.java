@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.model.SortAppUser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
@@ -140,8 +141,6 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     click(EMPLOYMENT_START_DATE_XPATH);
     waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
     click(f(TEST_CALENDAR, startDate));
-//        sendKeys(RECENT_MONTH_XPATH, startDate);
-//        sendKeys(RECENT_MONTH_XPATH, Keys.ENTER);
     getWebDriver().switchTo().parentFrame();
   }
 
@@ -331,29 +330,35 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
 
     String actualUsernameShown = getText(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
-    assertEquals("Username is different : ", sortAppUser.getUsername(), actualUsernameShown);
+    Assertions.assertThat(actualUsernameShown).as("Username is different : ")
+        .isEqualTo(sortAppUser.getUsername());
 
     String actualPrimaryHubShown = getText(f(TABLE_RESULT_XPATH, HUB_CLASS, "span"));
-    assertEquals("Primary Hub is different : ", sortAppUser.getPrimaryHub(), actualPrimaryHubShown);
+    Assertions.assertThat(actualPrimaryHubShown).as("Primary Hub is different : ")
+        .isEqualTo(sortAppUser.getPrimaryHub());
 
     String actualPositionShown = getText(f(TABLE_RESULT_XPATH, POSITION_CLASS, "span"));
-    assertEquals("Position is different : ", sortAppUser.getPosition(), actualPositionShown);
+    Assertions.assertThat(actualPositionShown).as("Position is different : ")
+        .isEqualTo(sortAppUser.getPosition());
 
     String actualEmploymentTypeShown = getText(
         f(TABLE_RESULT_XPATH, EMPLOYMENT_TYPE_CLASS, "span"));
-    assertEquals("Employment Type is different : ", sortAppUser.getEmploymentType(),
-        actualEmploymentTypeShown);
+    Assertions.assertThat(actualEmploymentTypeShown).as("Employment Type is different : ")
+        .isEqualTo(sortAppUser.getEmploymentType());
 
     String actualFirstNameShown = getText(f(TABLE_RESULT_XPATH, FIRST_NAME_CLASS, "span"));
-    assertEquals("First Name is different : ", sortAppUser.getFirstName(), actualFirstNameShown);
+    Assertions.assertThat(actualFirstNameShown).as("First Name is different : ")
+        .isEqualTo(sortAppUser.getFirstName());
 
     String actualLastNameShown = getText(f(TABLE_RESULT_XPATH, LAST_NAME_CLASS, "span"));
-    assertEquals("Last Name is different : ", sortAppUser.getLastName(), actualLastNameShown);
+    Assertions.assertThat(actualLastNameShown).as("Last Name is different : ")
+        .isEqualTo(sortAppUser.getLastName());
 
     String actualEmploymentStartDateShown = getText(
         f(TABLE_RESULT_XPATH, EMPLOYMENT_START_DATE_CLASS, "span"));
-    assertEquals("Employment Start Date is different : ", sortAppUser.getEmploymentStartDate(),
-        actualEmploymentStartDateShown);
+    Assertions.assertThat(actualEmploymentStartDateShown)
+        .as("Employment Start Date is different : ")
+        .isEqualTo(sortAppUser.getEmploymentStartDate());
 
     getWebDriver().switchTo().parentFrame();
   }

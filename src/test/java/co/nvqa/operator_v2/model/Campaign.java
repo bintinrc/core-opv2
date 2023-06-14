@@ -1,5 +1,5 @@
 package co.nvqa.operator_v2.model;
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +11,7 @@ public class Campaign extends DataEntity<Campaign> implements Serializable {
   private String campaignDescription;
   private String startDate;
   private String endDate;
+  private String discountOperator;
   private List<String> serviceType;
   private List<String> serviceLevel;
   private List<String> discountValue;
@@ -45,6 +46,14 @@ public class Campaign extends DataEntity<Campaign> implements Serializable {
 
   public void setEndDate(String endDate) {
     this.endDate = endDate;
+  }
+
+  public void setDiscountOperator(String operator) {
+    this.discountOperator = operator;
+  }
+
+  public String getDiscountOperator() {
+    return discountOperator;
   }
 
   public List<String> getServiceType() {

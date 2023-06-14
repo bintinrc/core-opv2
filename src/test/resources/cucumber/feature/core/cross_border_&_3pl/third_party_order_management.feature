@@ -49,6 +49,7 @@ Feature: Third Party Order Management
     When Operator delete the new mapping
     Then Operator verify the new mapping is deleted successfully
 
+  @happy-path
   Scenario: Operator Upload Bulk Third Party Orders Successfully (uid:77d98b59-635e-409e-8b0d-9e2aaa0f8a04)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:

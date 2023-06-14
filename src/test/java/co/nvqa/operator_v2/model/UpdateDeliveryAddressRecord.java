@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
-import co.nvqa.commons.model.core.Address;
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.model.address.Address;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -195,5 +195,26 @@ public class UpdateDeliveryAddressRecord extends DataEntity<UpdateDeliveryAddres
         + "\"" + getToAddressDistrict() + "\","
         + "\"" + getToAddressLatitude() + "\","
         + "\"" + getToAddressLongitude() + "\"";
+  }
+
+  public String buildString() {
+    String address = toAddressAddress1;
+    if (StringUtils.isNotBlank(toAddressAddress2) && !"-".equals(toAddressAddress2.trim())) {
+      address += " " + toAddressAddress2;
+    }
+    address += " " + toAddressPostcode;
+    if (StringUtils.isNotBlank(toAddressCity)) {
+      address += " " + toAddressCity;
+    }
+    if (StringUtils.isNotBlank(toAddressDistrict)) {
+      address += " " + toAddressDistrict;
+    }
+    if (StringUtils.isNotBlank(toAddressState)) {
+      address += " " + toAddressState;
+    }
+    if (StringUtils.isNotBlank(toAddressCountry)) {
+      address += " " + toAddressCountry;
+    }
+    return address;
   }
 }

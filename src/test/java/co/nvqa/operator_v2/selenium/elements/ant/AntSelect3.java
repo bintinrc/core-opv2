@@ -49,6 +49,9 @@ public class AntSelect3 extends PageElement {
   @FindBy(css = ".ant-select-selection-item")
   public PageElement selectedValue;
 
+  @FindBy(css = ".ant-select-selection-placeholder")
+  public PageElement selectionPlaceholder;
+
   @FindBy(css = ".ant-select-selection-item")
   public List<SelectedItem> selectedItems;
 
@@ -78,6 +81,7 @@ public class AntSelect3 extends PageElement {
   }
 
   public void selectValues(Iterable<String> values) {
+    clearValue();
     values.forEach(v -> {
       enterSearchTerm(v);
       clickMenuItem(v);
@@ -108,8 +112,8 @@ public class AntSelect3 extends PageElement {
       if (isElementVisible(xpath, 1)) {
         click(xpath);
       } else {
-      xpath = getItemContainsLocator(value);
-      click(xpath);
+        xpath = getItemContainsLocator(value);
+        click(xpath);
       }
     }
   }
@@ -168,7 +172,8 @@ public class AntSelect3 extends PageElement {
   }
 
   private String getListBoxLocator() {
-    String listId = searchInput.getAttribute("aria-owns");
+    String listId = searchInput.isDisplayedFast() ?
+        searchInput.getAttribute("aria-owns") : searchInput.getAttribute("aria-controls");
     return "//div[./div/div[@id='" + listId + "']]";
   }
 
@@ -187,7 +192,7 @@ public class AntSelect3 extends PageElement {
     String listBoxLocator = getListBoxLocator();
     try {
       waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
-    } catch (Exception ex) {
+    } catch (Exception ignored) {
     }
     if (isElementVisible(listBoxLocator, 0)) {
       jsClick();
@@ -210,8 +215,10 @@ public class AntSelect3 extends PageElement {
   public void fillSearchTermAndEnter(String value) {
     searchInput.sendKeysAndEnterNoXpath(value);
   }
+
   public String getValue() {
-    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title") : null;
+    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title")
+        : selectionPlaceholder.isDisplayed() ? selectionPlaceholder.getText() : null;
   }
 
   public List<String> getValues() {
@@ -254,14 +261,15 @@ public class AntSelect3 extends PageElement {
     public void remove() {
       remove.click();
     }
+
   }
 
   public void waitUntilEnabled() {
     searchInput.waitUntilClickable();
   }
 
-  private void waitUntilLoaded(){
-    if (spinner.waitUntilVisible(1)){
+  private void waitUntilLoaded() {
+    if (spinner.waitUntilVisible(1)) {
       spinner.waitUntilInvisible();
     }
   }

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.support.RandomUtil;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.page.SortBeltShipmentPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -9,6 +9,9 @@ import io.cucumber.java.en.When;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 
 public class SortBeltShipmentSteps extends AbstractSteps {
 
@@ -16,7 +19,7 @@ public class SortBeltShipmentSteps extends AbstractSteps {
   private static final String KEY_NUMBER_OF_SHIPMENT = "KEY_NUMBER_OF_SHIPMENT";
 
   private final String randomName =
-      "QA-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + RandomUtil.randomString(7);
+      "QA-" + StandardTestConstants.NV_SYSTEM_ID.toUpperCase() + RandomUtil.randomString(7);
 
   private SortBeltShipmentPage sortBeltShipmentPage;
 
@@ -44,7 +47,7 @@ public class SortBeltShipmentSteps extends AbstractSteps {
           } else if (DEVICE.equalsIgnoreCase(key)) {
             sortBeltShipmentPage.selectDeviceIdComboBox.click();
           }
-          assertTrue(sortBeltShipmentPage.activeDropDownInput.isDisplayed());
+          Assertions.assertThat(sortBeltShipmentPage.activeDropDownInput.isDisplayed()).isTrue();
         }, "Clicking Dropdown"
     );
 
@@ -61,8 +64,8 @@ public class SortBeltShipmentSteps extends AbstractSteps {
   public void operatorClicksOnCreateShipmentButton() {
     sortBeltShipmentPage.createShipmentButton.click();
     retryIfAssertionErrorOccurred(() ->
-            assertTrue("Dialog is not Showing", sortBeltShipmentPage.dialog.isDisplayed()),
-        "Waiting for Dialog to Show...");
+        Assertions.assertThat(sortBeltShipmentPage.dialog.isDisplayed())
+            .as("Dialog is not Showing").isTrue(), "Waiting for Dialog to Show...");
   }
 
   @And("Operator fills all the data correctly in Create Shipments Dialog on Sort Belt Shipment")
@@ -112,10 +115,14 @@ public class SortBeltShipmentSteps extends AbstractSteps {
 
     // Number of Shipment
     sortBeltShipmentPage.shipmentOutput.sendKeys(numberOfShipments);
-    String changedShipmentNumber = sortBeltShipmentPage.shipmentOutput.getText();
-    assertTrue("Shipment Number is Changed to 30", "30".equalsIgnoreCase(changedShipmentNumber));
+    sortBeltShipmentPage.shipmentOutput.sendKeys(Keys.ENTER);
+    String changedShipmentNumber = sortBeltShipmentPage.shipmentOutput.getValue();
+    Assertions.assertThat("30".equalsIgnoreCase(changedShipmentNumber))
+        .as("Shipment Number is Changed to 30").isTrue();
+    WebElement we = sortBeltShipmentPage.shipmentOutput.getWebElement();
+    sortBeltShipmentPage.clearWebField(we);
     sortBeltShipmentPage.shipmentOutput.sendKeys(String.valueOf(n));
-
+    sortBeltShipmentPage.shipmentOutput.sendKeys(Keys.ENTER);
     // Comment
     sortBeltShipmentPage.comment.sendKeys(comment);
 
@@ -134,7 +141,7 @@ public class SortBeltShipmentSteps extends AbstractSteps {
     List<Long> shipmentIds = sortBeltShipmentPage.getCreatedShipmentIds();
 
     int numberOfShipment = get(KEY_NUMBER_OF_SHIPMENT);
-    assertEquals("Number of Shipments", numberOfShipment, shipmentIds.size());
+    Assertions.assertThat(shipmentIds.size()).as("Number of Shipments").isEqualTo(numberOfShipment);
 
     put(KEY_LIST_OF_CREATED_SHIPMENT_ID, shipmentIds);
   }
@@ -142,6 +149,7 @@ public class SortBeltShipmentSteps extends AbstractSteps {
   @Then("Operator verifies that the details of created shipments are correct")
   public void operatorVerifiesThatTheDetailsOfCreatedShipmentsAreCorrect() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    sortBeltShipmentPage.switchTo();
     for (Long shipmentId : shipmentIds) {
       sortBeltShipmentPage.validateShipmentDetails(shipmentId);
     }
@@ -155,7 +163,8 @@ public class SortBeltShipmentSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies there will be empty field error notification shown")
-  public void operatorVerifiesThereWillBeErrorNotificationShown() { }
+  public void operatorVerifiesThereWillBeErrorNotificationShown() {
+  }
 
   @When("Operator clicks on back button on Sort Belt Shipment Page")
   public void operatorClicksOnBackButtonOnSortBeltShipmentPage() {
@@ -183,12 +192,13 @@ public class SortBeltShipmentSteps extends AbstractSteps {
     Collections.sort(expectedShipmentIds);
     Collections.sort(actualShipmentIds);
 
-    assertTrue("Shipments are the same", expectedShipmentIds.equals(actualShipmentIds));
+    Assertions.assertThat(expectedShipmentIds.equals(actualShipmentIds))
+        .as("Shipments are the same").isTrue();
   }
 
   private void verifiesTableStatsExist() {
     retryIfAssertionErrorOccurred(() ->
-            assertTrue("Table Stat Is Not Showing", sortBeltShipmentPage.tableStats.isDisplayed()),
-        "Waiting for Table Stat to Show...");
+        Assertions.assertThat(sortBeltShipmentPage.tableStats.isDisplayed())
+            .as("Table Stat Is Not Showing").isTrue(), "Waiting for Table Stat to Show...");
   }
 }

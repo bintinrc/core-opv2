@@ -73,11 +73,16 @@ public class SsbTemplatePage extends SimpleReactPage {
   }
 
   public void clickSubmitBtn() {
+    submitBtn.waitUntilClickable();
     submitBtn.click();
   }
 
   public void clickDownloadCsvBtn() {
     downloadExampleCsvBtn.click();
+  }
+
+  public void clickGoBackBtn() {
+    goBackBtn.click();
   }
 
   public void setTemplateName(String name) {
@@ -133,5 +138,9 @@ public class SsbTemplatePage extends SimpleReactPage {
     }
     clickAndWaitUntilDone(templateDeleteBtn);
     okBtn.click();
+  }
+
+  public boolean isLegacyIdHeaderColumnAvailable() {
+    return isElementExist(f(XPATH_HEADER_COLUMN_IN_AVAILABLE_HEADERS, "Legacy Shipper ID"));
   }
 }

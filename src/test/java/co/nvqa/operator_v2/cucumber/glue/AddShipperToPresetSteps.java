@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipperInfo;
 import co.nvqa.operator_v2.selenium.page.AddShipperToPresetPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -44,13 +44,11 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String value = data.get("shipperCreationDateFrom");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Shipper Creation Date from", value,
-          addShipperToPresetPage.shipperCreationDateFilter.getValueFrom());
+     Assertions.assertThat(          addShipperToPresetPage.shipperCreationDateFilter.getValueFrom()).as("Shipper Creation Date from").isEqualTo(value);
     }
     value = data.get("shipperCreationDateTo");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Shipper Creation Date to", value,
-          addShipperToPresetPage.shipperCreationDateFilter.getValueTo());
+     Assertions.assertThat(          addShipperToPresetPage.shipperCreationDateFilter.getValueTo()).as("Shipper Creation Date to").isEqualTo(value);
     }
   }
 
@@ -99,7 +97,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   @When("Operator verify records on Add Shipper To Preset page using data below:")
   public void operatorVerifyRecords(List<Map<String, String>> listOfData) {
     List<ShipperInfo> actual = addShipperToPresetPage.shippersTable.readAllEntities();
-    assertEquals("Number of records", listOfData.size(), actual.size());
+   Assertions.assertThat(actual.size()).as("Number of records").isEqualTo(listOfData.size());
     for (Map<String, String> listOfDatum : listOfData) {
       Map<String, String> data = resolveKeyValues(listOfDatum);
       ShipperInfo expected = new ShipperInfo(data);
@@ -130,7 +128,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     } else {
       actualValues.sort(Collections.reverseOrder());
     }
-    assertEquals(f("values of %s column", columnName), expectedValues, actualValues);
+   Assertions.assertThat(actualValues).as(f("values of %s column", columnName)).isEqualTo(expectedValues);
   }
 
   @When("Operator adds shipper to preset on Add Shipper To Preset page using data below:")
@@ -201,7 +199,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   public void operatorVerifyAllRowsAreChecked() {
     int rowsCount = addShipperToPresetPage.shippersTable.getRowsCount();
     for (int i = 1; i <= rowsCount; i++) {
-      assertTrue("Is row" + i + " selected", addShipperToPresetPage.shippersTable.isRowSelected(i));
+     Assertions.assertThat(addShipperToPresetPage.shippersTable.isRowSelected(i)).as("Is row" + i + " selected").isTrue();
     }
   }
 
@@ -209,8 +207,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   public void operatorVerifyAllRowsAreUnselected() {
     int rowsCount = addShipperToPresetPage.shippersTable.getRowsCount();
     for (int i = 1; i <= rowsCount; i++) {
-      assertFalse("Is row" + i + " selected",
-          addShipperToPresetPage.shippersTable.isRowSelected(i));
+     Assertions.assertThat(          addShipperToPresetPage.shippersTable.isRowSelected(i)).as("Is row" + i + " selected").isFalse();
     }
   }
 

@@ -9,7 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -170,11 +170,11 @@ public class PathManagementPage extends OperatorV2SimplePage {
       expectedActionText += "\nEdit\nRemove";
     }
 
-    assertThat("Origin Hub not empty", originHubName, not(equalTo("")));
-    assertThat("Destination Hub not empty", destinationHubName, not(equalTo("")));
-    assertThat("Path Tag is not empty", pathTagText, equalTo(pathType));
-    assertThat("Path is not empty", path, not(equalTo("")));
-    assertThat("Action Text is not empty", actionText, equalTo(expectedActionText));
+   Assertions.assertThat(originHubName).as("Origin Hub not empty").isNotEmpty();
+   Assertions.assertThat(destinationHubName).as("Destination Hub not empty").isNotEmpty();
+   Assertions.assertThat(pathTagText).as("Path Tag is not empty").isEqualTo(pathType);
+   Assertions.assertThat(path).as("Path is not empty").isNotEmpty();
+   Assertions.assertThat(actionText).as("Action Text is not empty").isEqualTo(expectedActionText);
   }
 
   public void verifyShownPathDetail(String pathType) {
@@ -189,29 +189,25 @@ public class PathManagementPage extends OperatorV2SimplePage {
       expectedPathType = "MANUAL";
     }
 
-    assertThat("Actual Path is true", actualPath, not(equalTo("")));
-    assertThat("Actual Path Type is true", actualPathType, equalTo(expectedPathType));
-    assertThat("Actual Movement Type is true", actualMovementType, not(equalTo("")));
+   Assertions.assertThat(actualPath).as("Actual Path is true").isNotEmpty();
+   Assertions.assertThat(actualPathType).as("Actual Path Type is true").isEqualTo(expectedPathType);
+   Assertions.assertThat(actualMovementType).as("Actual Movement Type is true").isNotEmpty();
 
     Boolean actualAddManualPathButtonExistence = pathDetailsModal.addManualPathButton.isDisplayed();
-    assertThat("Add Manual Path Button existed", actualAddManualPathButtonExistence, equalTo(true));
+   Assertions.assertThat(actualAddManualPathButtonExistence).as("Add Manual Path Button existed").isEqualTo(true);
     if ("manual paths".equals(pathType)) {
       String actualPathScheduleTableHeadText = pathDetailsModal.pathScheduleTableHead.getText();
       String departureTimeText = "Departure Time";
       String daysOfWeekText = "Days of Week";
-      assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText,
-          containsString(departureTimeText));
-      assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText,
-          containsString(daysOfWeekText));
+     Assertions.assertThat(actualPathScheduleTableHeadText).as("Departure Time in Table Head").contains(departureTimeText);
+     Assertions.assertThat(actualPathScheduleTableHeadText).as("Departure Time in Table Head").contains(daysOfWeekText);
 
       Boolean actualRemoveManualPathButtonExistence = pathDetailsModal.removePathButton
           .isDisplayed();
-      assertThat("Remove Manual Path Button existed", actualRemoveManualPathButtonExistence,
-          equalTo(true));
+     Assertions.assertThat(actualRemoveManualPathButtonExistence).as("Remove Manual Path Button existed").isTrue();
 
       Boolean actualEditManualPathButtonExistence = pathDetailsModal.editPathButton.isDisplayed();
-      assertThat("Edit Manual Path Button existed", actualEditManualPathButtonExistence,
-          equalTo(true));
+     Assertions.assertThat(actualEditManualPathButtonExistence).as("Edit Manual Path Button existed").isTrue();
     }
   }
 
@@ -221,7 +217,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
     String expectedRemovePathInfo =
         "Removing path cannot be undone! Are you sure want to remove? " +
             "The following schedule(s) will be associated with the default path instead.";
-    assertThat("Remove path info is equal", removePathInfo, equalTo(expectedRemovePathInfo));
+   Assertions.assertThat(removePathInfo).as("Remove path info is equal").isEqualTo(expectedRemovePathInfo);
 
     String pathDetailsRaw = removePathModal.pathDetails.getText();
     String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
@@ -233,22 +229,19 @@ public class PathManagementPage extends OperatorV2SimplePage {
       expectedPathType = "MANUAL";
     }
 
-    assertThat("Actual Path is true", actualPath, not(equalTo("")));
-    assertThat("Actual Path Type is true", actualPathType, equalTo(expectedPathType));
-    assertThat("Actual Movement Type is true", actualMovementType, not(equalTo("")));
+   Assertions.assertThat(actualPath).as("Actual Path is true").isNotEmpty();
+   Assertions.assertThat(actualPathType).as("Actual Path Type is true").isEqualTo(expectedPathType);
+   Assertions.assertThat(actualMovementType).as("Actual Movement Type is true").isNotEmpty();
     if ("manual paths".equals(pathType)) {
       String actualPathScheduleTableHeadText = removePathModal.pathScheduleTableHead.getText();
       String departureTimeText = "Departure Time";
       String daysOfWeekText = "Days of Week";
-      assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText,
-          containsString(departureTimeText));
-      assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText,
-          containsString(daysOfWeekText));
+     Assertions.assertThat(actualPathScheduleTableHeadText).as("Departure Time in Table Head").contains(departureTimeText);
+     Assertions.assertThat(actualPathScheduleTableHeadText).as("Departure Time in Table Head").contains(daysOfWeekText);
 
       Boolean actualRemoveManualPathButtonExistence = removePathModal.removePathButton
           .isDisplayed();
-      assertThat("Remove Manual Path Button existed", actualRemoveManualPathButtonExistence,
-          equalTo(true));
+     Assertions.assertThat(actualRemoveManualPathButtonExistence).as("Remove Manual Path Button existed").isTrue();
     }
   }
 
@@ -260,19 +253,19 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     String expectedPath = String.join(arrow.equals("")? " → " : " " + arrow + " ", passedHub);
 
-    assertThat("Origin Hub is equal", originHubName, equalTo(expectedOriginHub));
-    assertThat("Destination Hub is equal", destinationHubName, equalTo(expectedDestinationHub));
-    assertThat("Path is equal", path, equalTo(expectedPath));
+   Assertions.assertThat(originHubName).as("Origin Hub is equal").isEqualTo(expectedOriginHub);
+   Assertions.assertThat(destinationHubName).as("Destination Hub is equal").isEqualTo(expectedDestinationHub);
+   Assertions.assertThat(path).as("Path is equal").isEqualTo(expectedPath);
     String actualActionText = actionFirstRow.getText();
-    assertThat("View Hyperlink in action column", actualActionText, containsString("View"));
-    assertThat("View Hyperlink in action column", actualActionText, containsString("Edit"));
-    assertThat("View Hyperlink in action column", actualActionText, containsString("Remove"));
+   Assertions.assertThat(actualActionText).as("View Hyperlink in action column").contains("View");
+   Assertions.assertThat(actualActionText).as("View Hyperlink in action column").contains("Edit");
+   Assertions.assertThat(actualActionText).as("View Hyperlink in action column").contains("Remove");
   }
 
   public void verifyNoResultsFound() {
     String actualMessage = footerRowDiv.getText();
     String expectedMessage = "No data";
-    assertThat("Message is no results found", actualMessage, equalTo(expectedMessage));
+   Assertions.assertThat(actualMessage).as("Message is no results found").isEqualTo(expectedMessage);
   }
 
   public void searchOriginHub(String resolvedValue) {
@@ -290,8 +283,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void createManualPathFirstStage(String originHubName, String destinationHubName) {
     String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
     String expectedFirstCreateManualPathModalTitle = "Create Manual Path (1/3)";
-    assertThat("Modal title is the same", actualCreateManualPathModalTitle,
-        equalTo(expectedFirstCreateManualPathModalTitle));
+   Assertions.assertThat(actualCreateManualPathModalTitle).as("Modal title is the same").isEqualTo(expectedFirstCreateManualPathModalTitle);
     createManualPathModal.originHubFilter.click();
     sendKeysAndEnter("//input[@id='originHub']", originHubName);
     createManualPathModal.destinationHubFilter.click();
@@ -301,8 +293,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void createManualPathSecondStage(String transitHubName, String transitHubInfo) {
     String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
     String expectedSecondCreateManualPathModalTitle = "Create Manual Path (2/3)";
-    assertThat("Modal title is the same", actualCreateManualPathModalTitle,
-        equalTo(expectedSecondCreateManualPathModalTitle));
+   Assertions.assertThat(actualCreateManualPathModalTitle).as("Modal title is the same").isEqualTo(expectedSecondCreateManualPathModalTitle);
     if (transitHubName != null) {
       switch (transitHubInfo) {
         case "first":
@@ -324,8 +315,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void createManualPathThirdStage(Boolean hasMultipleSchedule) {
     String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
     String expectedThirdCreateManualPathModalTitle = "Create Manual Path (3/3)";
-    assertThat("Modal title is the same", actualCreateManualPathModalTitle,
-        equalTo(expectedThirdCreateManualPathModalTitle));
+   Assertions.assertThat(actualCreateManualPathModalTitle).as("Modal title is the same").isEqualTo(expectedThirdCreateManualPathModalTitle);
     createManualPathModal.departureScheduleFirst.click();
     if (hasMultipleSchedule) {
       createManualPathModal.departureScheduleSecond.click();
@@ -337,40 +327,35 @@ public class PathManagementPage extends OperatorV2SimplePage {
     String actualNotificationMessage = antNotificationMessage.getText();
     closeAntNotificationMessage.click();
     antNotificationMessage.waitUntilInvisible();
-    assertThat("Notification message is the same", actualNotificationMessage,
-        equalTo(expectedNotificationMessage));
+   Assertions.assertThat(actualNotificationMessage).as("Notification message is the same").isEqualTo(expectedNotificationMessage);
   }
 
   public void verifyCreatedPathDetail(String expectedPath, List<String> departureTimes) {
     createdPathDetailsModal.waitUntilVisible();
     String pathDetailsRaw = createdPathDetailsModal.pathDetails.getText();
     String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
-    assertThat("Path is the same", actualPath, equalTo(expectedPath));
+   Assertions.assertThat(actualPath).as("Path is the same").isEqualTo(expectedPath);
 
     if (departureTimes != null) {
       if (departureTimes.size() != 0) {
         String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
-        assertThat("Departure time is the same", actualDepartureTime,
-            equalTo(departureTimes.get(0)));
+       Assertions.assertThat(actualDepartureTime).as("Departure time is the same").isEqualTo(departureTimes.get(0));
         String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
         String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
-        assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
+       Assertions.assertThat(actualDaysOfWeek).as("Days of week is the same").isEqualTo(expectedDaysOfWeek);
         if (departureTimes.size() > 1) {
           String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime
               .getText();
           String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek
               .getText();
-          assertThat("Departure time is the same", secondActualDepartureTime,
-              equalTo(departureTimes.get(1)));
-          assertThat("Days of week is the same", secondActualDaysOfWeek,
-              equalTo(expectedDaysOfWeek));
+         Assertions.assertThat(secondActualDepartureTime).as("Departure time is the same").isEqualTo(departureTimes.get(1));
+         Assertions.assertThat(secondActualDaysOfWeek).as("Days of week is the same").isEqualTo(expectedDaysOfWeek);
         }
       }
       if (departureTimes.size() == 0) {
         String actualEmptyDescription = createdPathDetailsModal.emptyDescription.getText();
         String expectedEmptyDescription = "No data";
-        assertThat("Empty Description is the same", actualEmptyDescription,
-            equalTo(expectedEmptyDescription));
+       Assertions.assertThat(actualEmptyDescription).as("Empty Description is the same").isEqualTo(expectedEmptyDescription);
       }
     }
 
@@ -389,37 +374,32 @@ public class PathManagementPage extends OperatorV2SimplePage {
       String expectedBorderColor = "#f5222d";
       String expectedTextColor = "#ff4d4f";
 
-      assertThat("Border color is correct", actualBorderColor.asHex(),
-          equalTo(expectedBorderColor));
-      assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
-      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedTextColor));
+     Assertions.assertThat(actualBorderColor.asHex()).as("Border color is correct").isEqualTo(expectedBorderColor);
+     Assertions.assertThat(actualErrorInfo).as("Error info is correct").isEqualTo(expectedErrorInfo);
+     Assertions.assertThat(actualErrorInfoColor.asHex()).as("Text color is correct").isEqualTo(expectedTextColor);
     }
     if ("no schedules between hubs".equals(reason)) {
       List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorTypography;
       String expectedErrorInfo = f("No schedule from: %s to %s", sourceHub, targetHub);
-      assertThat("Error info is contained",
-          actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText())),
-          equalTo(true));
+     Assertions.assertThat(actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText()))).as("Error info is contained").isTrue();
 
       Boolean actualNextButtonIsEnabled = createManualPathModal.nextButton.isEnabled();
-      assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
+     Assertions.assertThat(actualNextButtonIsEnabled).as("NextButton is disabled").isEqualTo(false);
     }
     if ("multiple same transit hubs".equals(reason)) {
       createManualPathModal.secondTransitHubFilter.click();
       createManualPathModal.secondTransitHubInput.sendKeys(sourceHub);
       Boolean actualTransitHubExistence = isElementExist(
           "//div[@role='listbox']//div[@class='ant-empty-description'][.='No data']");
-      assertThat("Cannot find a selected transit hub", actualTransitHubExistence, equalTo(true));
+     Assertions.assertThat(actualTransitHubExistence).as("Cannot find a selected transit hub").isEqualTo(true);
     }
     if ("no schedules between transit hubs".equals(reason)) {
       List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorAlert;
       String expectedErrorInfo = f("No schedule from: %s to %s", sourceHub, targetHub);
-      assertThat("Error info is contained",
-          actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText())),
-          equalTo(true));
+     Assertions.assertThat(actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText()))).as("Error info is contained").isTrue();
 
       Boolean actualNextButtonIsEnabled = createManualPathModal.nextButton.isEnabled();
-      assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
+     Assertions.assertThat(actualNextButtonIsEnabled).as("NextButton is disabled").isEqualTo(false);
     }
     if ("no schedule(s) available".equals(reason)) {
       String actualErrorInfo = createManualPathModal.thirdStageErrorTypography.get(0).getText();
@@ -432,22 +412,22 @@ public class PathManagementPage extends OperatorV2SimplePage {
       Boolean actualScheduleButtonAvailability = createManualPathModal.departureScheduleFirst
           .isEnabled();
 
-      assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
-      assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedTextColor));
-      assertThat("Error detail is correct", actualErrorDetail, equalTo(expectedErrorDetail));
-      assertThat("Schedule button is disabled", actualScheduleButtonAvailability, equalTo(false));
+     Assertions.assertThat(actualErrorInfo).as("Error info is correct").isEqualTo(expectedErrorInfo);
+     Assertions.assertThat(actualErrorInfoColor.asHex()).as("Text color is correct").isEqualTo(expectedTextColor);
+     Assertions.assertThat(actualErrorDetail).as("Error detail is correct").isEqualTo(expectedErrorDetail);
+     Assertions.assertThat(actualScheduleButtonAvailability).as("Schedule button is disabled").isEqualTo(false);
     }
   }
 
   public void verifyCurrentPageIsPathManagementPage() {
     String actualPageTitle = parentPageTitle.getText();
     String expectedPageTitle = "Path Management";
-    assertThat("Page title is the same", actualPageTitle, equalTo(expectedPageTitle));
+   Assertions.assertThat(actualPageTitle).as("Page title is the same").isEqualTo(expectedPageTitle);
   }
 
   public void verifyTransitHubInputIsEmpty() {
     String actualTransitHubValue = createManualPathModal.firstTransitHubFilter.getValue();
-    assertThat("Transit Hub Value is empty", actualTransitHubValue, isEmptyOrNullString());
+   Assertions.assertThat(actualTransitHubValue).as("Transit Hub Value is empty").isNullOrEmpty();
   }
 
   public void removeTransitHubInManualPathCreation(String transitHubInfo) {
@@ -514,8 +494,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
     String expectedCreateDefaultPathInfoText = f(
         "The system is generating a path from: %s to %s\nThis might take up few minutes...",
         originHubName, destinationHubName);
-    assertThat("Create default path is equal", actualCreateDefaultPathInfoText,
-        equalTo(expectedCreateDefaultPathInfoText));
+   Assertions.assertThat(actualCreateDefaultPathInfoText).as("Create default path is equal").isEqualTo(expectedCreateDefaultPathInfoText);
   }
 
   public void editManualPathFirstStage(String resolvedTransitHub, boolean createdEditPath) {
@@ -526,7 +505,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
       actualModalTitle = editManualPathModal.title.getText();
     }
     String expectedModalTitle = "Edit Path (1/2)";
-    assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+   Assertions.assertThat(actualModalTitle).as("Modal title is the same").isEqualTo(expectedModalTitle);
     if (StringUtils.isNotEmpty(resolvedTransitHub)) {
       if (createdEditPath) {
         createdEditPathModal.selectTransitHub(resolvedTransitHub);
@@ -540,7 +519,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void editManualPathFirstStage(List<String> resolvedTransitHubs) {
     String actualModalTitle = editManualPathModal.title.getText();
     String expectedModalTitle = "Edit Path (1/2)";
-    assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+   Assertions.assertThat(actualModalTitle).as("Modal title is the same").isEqualTo(expectedModalTitle);
     for (String resolvedTransitHub : resolvedTransitHubs) {
       sendKeysAndEnter("//div[span[.='Add Transit Hub']]//input", resolvedTransitHub);
     }
@@ -550,7 +529,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void editManualPathSecondStage(boolean second) {
     String actualModalTitle = editManualPathModal.title.getText();
     String expectedModalTitle = "Edit Path (2/2)";
-    assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+   Assertions.assertThat(actualModalTitle).as("Modal title is the same").isEqualTo(expectedModalTitle);
     if (second) {
       editManualPathModal.selectSecondSchedule();
       pause1s();
@@ -563,7 +542,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   public void editCreatedManualPathSecondStage() {
     String actualModalTitle = createdEditPathModal.title.getText();
     String expectedModalTitle = "Edit Path (2/2)";
-    assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+   Assertions.assertThat(actualModalTitle).as("Modal title is the same").isEqualTo(expectedModalTitle);
     createdEditPathModal.selectFirstSchedule();
     pause1s();
   }

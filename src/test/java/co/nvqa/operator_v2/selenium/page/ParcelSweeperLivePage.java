@@ -1,12 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.selenium.elements.PageElement;
-import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,6 +27,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String LOCATOR_RTS_INFO = "//h5[@data-testid='rts']";
   private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//div[@class='order-tag']";
   private static final String HUB_DROPDOWN_XPATH = "//span[contains(text(),'Search or select hub')]//preceding::input[@type='search']";
+  private static final String PARCEL_TYPE_DROPDOWN_XPATH = "//div[@data-testid='parcel-type-selection-select']";
+  private static final String PARCEL_TYPE_SELECTION_XPATH = "//div[@class='ant-select-item-option-content'][text()='%s']";
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//div[@label='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//span[contains(text(),'Search or select task')]//preceding::input[@type='search'][1]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
@@ -46,8 +47,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void selectHubToBegin(String hubName) {
-    selectHubToBeginWithTask(hubName, hubName);
+  public void selectHubToBegin(String hubName,String parcelType) {
+    selectHubToBeginWithTask(hubName, hubName,parcelType);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -60,29 +61,33 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     String[] textInRouteIdExpected = value.split(";");
     waitUntilVisibilityOfElementLocated(ROUTE_ID_DIV_XPATH + SCAN_ERROR_CLASS_XPATH);
     String textInRouteIdActual = getText(ROUTE_ID_DIV_XPATH + ROUTE_ID_DIV_TEXT_XPATH);
-    assertThat("Expected another value for Route ID", textInRouteIdActual,
-        containsString(textInRouteIdExpected[0]));
-    assertThat("Expected another value for Route ID", textInRouteIdActual,
-        containsString(textInRouteIdExpected[0]));
+    Assertions.assertThat(textInRouteIdActual).as("Expected another value for Route ID")
+        .contains(textInRouteIdExpected[0]);
+    Assertions.assertThat(textInRouteIdActual).as("Expected another value for Route ID")
+        .contains(textInRouteIdExpected[0]);
     Color actualColor = Color.fromString(getCssValue(ROUTE_ID_DIV_XPATH, "background-color"));
-    assertEquals("Expected another color for Route ID background", color, actualColor.asHex());
+    Assertions.assertThat(actualColor.asHex()).as("Expected another color for Route ID background")
+        .isEqualTo(color);
   }
 
   public void verifyZone(String value, String color) {
     waitUntilVisibilityOfElementLocated(ZONE_DIV_XPATH + SCAN_ERROR_CLASS_XPATH);
     String textInZone = getText(ZONE_DIV_XPATH + ZONE_DIV_TEXT_XPATH);
-    assertThat("Expected another value for Zone", textInZone, containsString(value));
+    Assertions.assertThat(textInZone).as("Expected another value for Zone").contains(value);
     Color actualColor = Color.fromString(getCssValue(ZONE_DIV_XPATH, "background-color"));
-    assertEquals("Expected another color for Route ID background", color, actualColor.asHex());
+    Assertions.assertThat(actualColor.asHex()).as("Expected another color for Route ID background")
+        .isEqualTo(color);
   }
 
   public void verifyDestinationHub(String value, String color) {
     waitUntilVisibilityOfElementLocated(DESTINATION_HUB_DIV_XPATH + SCAN_ERROR_CLASS_XPATH);
     String textInZone = getText(DESTINATION_HUB_DIV_XPATH + DESTINATION_HUB_DIV_TEXT_XPATH);
-    assertThat("Expected another value for Destination Hub", textInZone, containsString(value));
+    Assertions.assertThat(textInZone).as("Expected another value for Destination Hub")
+        .contains(value);
     Color actualColor = Color
         .fromString(getCssValue(DESTINATION_HUB_DIV_XPATH, "background-color"));
-    assertEquals("Expected another color for Route ID background", color, actualColor.asHex());
+    Assertions.assertThat(actualColor.asHex()).as("Expected another color for Route ID background")
+        .isEqualTo(color);
   }
 
   public void verifiesPriorityLevel(int expectedPriorityLevel,
@@ -90,19 +95,22 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     String actualPriorityLevel = getText(PRIORITY_LEVEL_XPATH);
     Color actualPriorityLevelColor = getBackgroundColor(PRIORITY_LEVEL_COLOR_XPATH);
 
-    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
-    assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex,
-        actualPriorityLevelColor.asHex());
+    Assertions.assertThat(actualPriorityLevel).as("Priority Level")
+        .isEqualTo(String.valueOf(expectedPriorityLevel));
+    Assertions.assertThat(actualPriorityLevelColor.asHex()).as("Priority Level Color")
+        .isEqualTo(expectedPriorityLevelColorAsHex);
   }
 
   public void verifyRTSInfo(boolean isRTSed) {
     if (isRTSed) {
       pause2s();
-      assertTrue("RTS Label is not displayed", isElementVisible(LOCATOR_RTS_INFO));
-      assertThat("Unexpected text of RTS Label", getText(LOCATOR_RTS_INFO),
-          equalToIgnoringCase("RTS"));
+      Assertions.assertThat(isElementVisible(LOCATOR_RTS_INFO)).as("RTS Label is not displayed")
+          .isTrue();
+      Assertions.assertThat(getText(LOCATOR_RTS_INFO)).as("Unexpected text of RTS Label")
+          .isEqualToIgnoringCase("RTS");
     } else {
-      assertFalse("RTS Label is displayed, but must not", isElementVisible(LOCATOR_RTS_INFO));
+      Assertions.assertThat(isElementVisible(LOCATOR_RTS_INFO))
+          .as("RTS Label is displayed, but must not").isFalse();
     }
   }
 
@@ -120,17 +128,21 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
   public void verifyPriorTag() {
     String actualTag = priorTag.getText();
-    assertEquals("Prior tag", "PRIOR", actualTag);
+    Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
-  public void selectHubToBeginWithTask(String hubName, String task) {
+  public void selectHubToBeginWithTask(String hubName, String task, String parcelType) {
     pause2s();
 
     // Select Hub
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
-    sendKeys(HUB_DROPDOWN_XPATH, hubName,Keys.ENTER);
+    sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
+    pause2s();
+    click(PARCEL_TYPE_DROPDOWN_XPATH);
+    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
+    click(parcelTypeSelection);
     pause2s();
 
     //Select Sort Task
@@ -142,7 +154,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
       }
     }
 
-    proceedButton.waitUntilClickable();
-    proceedButton.click();
+    if (proceedButton.waitUntilVisible(5)) {
+      proceedButton.click();
+    }
   }
 }

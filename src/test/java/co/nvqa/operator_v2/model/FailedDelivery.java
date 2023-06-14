@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
@@ -20,6 +21,12 @@ public class FailedDelivery extends DataEntity<FailedDelivery> {
   private Integer priorityLevel;
   private String lastScannedHubName;
   private String orderTags;
+
+  public FailedDelivery() {}
+
+  public FailedDelivery(Map<String, ?> data) {
+    fromMap(data);
+  }
 
   public String getTrackingId() {
     return trackingId;
@@ -147,5 +154,22 @@ public class FailedDelivery extends DataEntity<FailedDelivery> {
 
   public void setOrderTags(String orderTags) {
     this.orderTags = orderTags;
+  }
+
+  @Override
+  public void fromCsvLine(String csvLine) {
+    String[] values = splitCsvLine(csvLine);
+    setTrackingId(getValueIfIndexExists(values, 1));
+    setType(getValueIfIndexExists(values, 2));
+    setShipperName(getValueIfIndexExists(values, 3));
+    setLastAttemptTime(getValueIfIndexExists(values, 4));
+    setFailureReasonComments(getValueIfIndexExists(values, 5));
+    setAttemptCount(getValueIfIndexExists(values, 6));
+    setInvalidFailureCount(getValueIfIndexExists(values, 7));
+    setValidFailureCount(getValueIfIndexExists(values, 8));
+    setFailureReasonCodeDescription(getValueIfIndexExists(values, 9));
+    setDaysSinceLastAttempt(getValueIfIndexExists(values, 10));
+    setPriorityLevel(getValueIfIndexExists(values,11));
+    setLastScannedHubName(getValueIfIndexExists(values,12));
   }
 }

@@ -5,7 +5,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntAbstractFilterBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDecimalFilterNumberBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect3;
@@ -21,8 +22,9 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -136,7 +138,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
   }
 
   public void setCreationTimeFilter() {
-    creationTimeFilter.selectToDate(TestUtils.getNextDate(1));
+    creationTimeFilter.selectToDate(Date.from(ZonedDateTime.now().plusDays(1).toInstant()));
     creationTimeFilter.selectToHours("23");
     creationTimeFilter.selectToMinutes("30");
     creationTimeFilter.selectFromHours("00");
@@ -195,6 +197,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public static final String MD_VIRTUAL_REPEAT = "trvn in getTableData()";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_TRACKING_ID = "trackingId";
+    public static final String COLUMN_ORDER_ID = "orderId";
     public static final String COLUMN_TYPE = "type";
 
     public TxnRsvnTable(WebDriver webDriver) {
@@ -202,7 +205,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put("sequence", "__index__")
           .put(COLUMN_ID, "id")
-          .put("orderId", "orderId")
+          .put(COLUMN_ORDER_ID, "orderId")
           .put("waypointId", "waypointId")
           .put(COLUMN_TRACKING_ID, "trackingId")
           .put(COLUMN_TYPE, "type")
@@ -249,13 +252,13 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntSelect3 addFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Start Datetime')]]")
-    public AntDateRangePicker startDateTimeFilter;
+    public AntDateRangePicker2 startDateTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'End Datetime')]]")
-    public AntDateRangePicker endDateTimeFilter;
+    public AntDateRangePicker2 endDateTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Creation Time')]]")
-    public AntDateRangePicker creationTimeFilter;
+    public AntDateTimeRangePicker creationTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipper')]]")
     public AntFilterSelect3 shipperFilter;
@@ -282,10 +285,10 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntFilterSelect3 hubInboundUserFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub Inbound Datetime')]]")
-    public AntDateRangePicker hubInboundDatetimeFilter;
+    public AntDateTimeRangePicker hubInboundDatetimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Original Transaction End Time')]]")
-    public AntDateRangePicker originalTransactionEndTimeFilter;
+    public AntDateTimeRangePicker originalTransactionEndTimeFilter;
 
     public void addFilter(String filterName) {
       addFilter.selectValue(filterName);
@@ -387,10 +390,10 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntSwitch includeShipments;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Date')]]")
-    public AntDateRangePicker shipmentDateFilter;
+    public AntDateTimeRangePicker shipmentDateFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'ETA (Date Time)')]]")
-    public AntDateRangePicker etaDateTimeFilter;
+    public AntDateRangePicker2 etaDateTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'End Hub')]]")
     public AntFilterSelect3 endHubFilter;
@@ -402,7 +405,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntFilterFreeTextBox mawbFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Completion Date Time')]]")
-    public AntDateRangePicker shipmentCompletionDateTimeFilter;
+    public AntDateRangePicker2 shipmentCompletionDateTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Status')]]")
     public AntFilterSelect3 shipmentStatusFilter;
@@ -414,7 +417,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntFilterSelect3 startHubFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Transit Date Time')]]")
-    public AntDateRangePicker transitDateTimeFilter;
+    public AntDateTimeRangePicker transitDateTimeFilter;
 
     public ShipmentFiltersForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.hub.Hub;
@@ -54,7 +55,7 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     String region = data.get("region");
     String sortHub = data.get("sortHub");
 
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     Address address = AddressFactory.getRandomAddress();
 
     if ("GENERATED".equals(name)) {
@@ -262,21 +263,19 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
 
     if ("facility type".equals(columnName)) {
-      assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
-          actualHub.getFacilityTypeDisplay());
+     Assertions.assertThat(          actualHub.getFacilityTypeDisplay()).as("Facility Type Display").isEqualTo(expectedHub.getFacilityTypeDisplay());
     }
     if ("status".equals(columnName)) {
-      assertEquals("Status", expectedHub.getActive(), actualHub.getActive());
+     Assertions.assertThat(actualHub.getActive()).as("Status").isEqualTo(expectedHub.getActive());
     }
     if ("lat/long".equals(columnName)) {
-      assertEquals("Hub latitude", expectedHub.getLatitude(), actualHub.getLatitude());
-      assertEquals("Hub longitude", expectedHub.getLongitude(), actualHub.getLongitude());
+     Assertions.assertThat(actualHub.getLatitude()).as("Hub latitude").isEqualTo(expectedHub.getLatitude());
+     Assertions.assertThat(actualHub.getLongitude()).as("Hub longitude").isEqualTo(expectedHub.getLongitude());
     }
     if ("facility type and lat/long".equals(columnName)) {
-      assertEquals("Facility Type Display", expectedHub.getFacilityTypeDisplay(),
-          actualHub.getFacilityTypeDisplay());
-      assertEquals("Hub latitude", expectedHub.getLatitude(), actualHub.getLatitude());
-      assertEquals("Hub longitude", expectedHub.getLongitude(), actualHub.getLongitude());
+     Assertions.assertThat(          actualHub.getFacilityTypeDisplay()).as("Facility Type Display").isEqualTo(expectedHub.getFacilityTypeDisplay());
+     Assertions.assertThat(actualHub.getLatitude()).as("Hub latitude").isEqualTo(expectedHub.getLatitude());
+     Assertions.assertThat(actualHub.getLongitude()).as("Hub longitude").isEqualTo(expectedHub.getLongitude());
     }
   }
 

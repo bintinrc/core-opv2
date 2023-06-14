@@ -1,11 +1,11 @@
-@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @UpdateDriver
+@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @UpdateDriverHappyPath
 Feature: Middle Mile Driver Management - Update Driver
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Details - Contact Number (uid:d7cb2360-8d10-4270-836d-826aa7551f21)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -21,7 +21,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "contactNumber" on edit driver dialog with value "52568567180"
     Then DB Operator verifies driver "contactNumber" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "52568567180" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Details - Hub (uid:58f3e310-5a91-4352-adfe-40225aed35d7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -37,7 +37,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "hub" on edit driver dialog with value "{hub-name-2}"
     Then DB Operator verifies driver "hub" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "{hub-id-2}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver License - Expiry Date (uid:fea77ac3-f5f0-4f4a-873a-29183c637371)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -53,7 +53,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "licenseExpiryDate" on edit driver dialog with value "{gradle-next-3-day-yyyy-MM-dd}"
     Then DB Operator verifies driver "licenseExpiryDate" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "{gradle-next-3-day-yyyy-MM-dd}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Employment Details - Employment Type (uid:5cb4be10-8ff6-4d77-966f-a2d7d84562e8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -69,7 +69,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "employmentType" on edit driver dialog with value "Vendor"
     Then DB Operator verifies driver "employmentType" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "Vendor" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Employment Details - Employment End Date (uid:faaba5ad-ef68-4551-955f-29688893c8a6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -85,7 +85,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "employmentEndDate" on edit driver dialog with value "{gradle-next-3-day-yyyy-MM-dd}"
     Then DB Operator verifies driver "employmentEndDate" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "{gradle-next-3-day-yyyy-MM-dd}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Availability - From No to Yes (uid:cf05dd18-6e41-4d9f-8b6d-c0ec5575ca32)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -103,7 +103,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator DB gets that the driver availability value
     Then Operator verifies that the driver availability's value is the same
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Availability - From Yes to No (uid:353c5748-066c-434d-b62c-ad71d5b8871f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -116,7 +116,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator DB gets that the driver availability value
     Then Operator verifies that the driver availability's value is the same
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Bulk Update Driver Availability - Set All to Coming (uid:d38e8010-252c-4581-bac5-16a4068ba393)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

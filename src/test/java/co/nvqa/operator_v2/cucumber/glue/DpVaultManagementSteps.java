@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpVault;
 import co.nvqa.operator_v2.selenium.page.DpVaultManagementPage;
 import io.cucumber.java.en.Then;
@@ -24,7 +25,7 @@ public class DpVaultManagementSteps extends AbstractSteps {
 
   @When("^Operator create new DP Vault using DP \"([^\"]*)\"$")
   public void operatorCreateDpVault(String dpName) {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
 
     DpVault dpVault = new DpVault();

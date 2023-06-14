@@ -5,7 +5,7 @@ Feature: Stations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with Single Driver (uid:68c0da7a-14dc-45e7-8068-40bba8d570d6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -49,7 +49,7 @@ Feature: Stations
       | assignDrivers  | 1                                  |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with Multiple Drivers (uid:cec5c175-357d-45d9-b39a-4b1cf0c92349)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -93,7 +93,7 @@ Feature: Stations
       | assignDrivers  | 2                                  |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with 4 Drivers (uid:5845f0c5-fd1a-4deb-99e9-f1b18629a770)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -137,7 +137,7 @@ Feature: Stations
       | assignDrivers  | 4                                  |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with > 4 Drivers (uid:c8a06a13-d366-40bc-862b-247db882c5a1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -181,7 +181,7 @@ Feature: Stations
       | assignDrivers  | 5                                  |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with Inactive License Status Driver (uid:e8568e01-c4b3-4dac-ae94-2d254e29a109)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -226,7 +226,7 @@ Feature: Stations
     Then Operator verifies "driver" with value "{expired-driver-username}" is not shown on Movement Schedules page
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Create with Inactive Employment Status Driver (uid:4c1b1b7b-4e25-4d93-ae20-2abce8a849ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -271,7 +271,7 @@ Feature: Stations
     Then Operator verifies "driver" with value "{inactive-driver-username}" is not shown on Movement Schedules page
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Add Multiple Schedules with Single Driver (uid:4538d147-440a-45a2-a3cd-178fca8f35a0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -316,7 +316,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Add Multiple Schedules with Multiple Drivers (uid:2e79f606-2b7a-44b4-a875-a7e3f8ea24d9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -361,7 +361,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Add Multiple Schedules with 4 Drivers (uid:5d339478-b839-44a0-a14f-ed1f7f41dbea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -406,7 +406,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Add Multiple Schedules with >4 Drivers (uid:428ede20-c299-40f5-a687-07251496dad2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -451,7 +451,7 @@ Feature: Stations
       | addAnother     | true                               |
     Then Operator verify all station schedules are correct from UI
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create Station Schedule - Add Multiple Schedules with Existing Schedule Data (uid:dc04635f-825a-465c-93ce-75de41dcce05)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:

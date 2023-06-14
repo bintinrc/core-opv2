@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.io.File;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,7 +42,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage {
       f.delete();
     }
 
-    assertTrue(isFileExisted);
+    Assertions.assertThat(isFileExisted).isTrue();
   }
 
   public void filteredBy(String type) {
@@ -62,7 +63,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage {
     List<WebElement> listDriver = findElementsByXpath(
         "//tr[@md-virtual-repeat='driver in getTableData()']");
     pause100ms();
-    assertTrue(listDriver.size() > 0);
+    Assertions.assertThat(listDriver.size() > 0).isTrue();
   }
 
   public void findZoneAndType() {
@@ -103,7 +104,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage {
       }
     }
 
-    assertTrue(isFound);
+    Assertions.assertThat(isFound).isTrue();
   }
 
   public void changeComingStatus() {
@@ -112,7 +113,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage {
     String before = getComingStatusState(firstDriver);
     changeComingStatusState(firstDriver);
     String after = getComingStatusState(firstDriver);
-    assertTrue(!before.equals(after));
+    Assertions.assertThat(!before.equals(after)).isTrue();
   }
 
   public void clickViewContactButton() {
@@ -123,7 +124,8 @@ public class DriverStrengthPage extends OperatorV2SimplePage {
     String expectedLicenseNo = "D" + SingletonStorage.getInstance().getTmpId();
     String actualLicenseNo = getText(
         "//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
-    assertEquals("License No. is not equal.", expectedLicenseNo, actualLicenseNo);
+    Assertions.assertThat(actualLicenseNo).as("License No. is not equal.")
+        .isEqualTo(expectedLicenseNo);
     closeModal();
   }
 

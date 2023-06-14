@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -12,9 +14,6 @@ import org.openqa.selenium.WebDriver;
  */
 @SuppressWarnings("WeakerAccess")
 public class UnroutedPrioritiesPage extends OperatorV2SimplePage {
-
-  private static final SimpleDateFormat TRANSACTION_END_DATE_SDF = new SimpleDateFormat(
-      "yyyy-MM-dd HH:mm:ss");
 
   private static final String MD_VIRTUAL_REPEAT = "unroutedPriority in getTableData()";
   public static final String COLUMN_ClASS_DATA_TRACKING_ID = "tracking_id";
@@ -26,7 +25,7 @@ public class UnroutedPrioritiesPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void filterAndClickLoadSelection(Date routeDate) {
+  public void filterAndClickLoadSelection(ZonedDateTime routeDate) {
     setMdDatepicker("ctrl.date", routeDate);
     clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
   }
@@ -36,25 +35,29 @@ public class UnroutedPrioritiesPage extends OperatorV2SimplePage {
     String trackingId = order.getTrackingId();
 
     searchTableByTrackingId(trackingId);
-    assertFalse(f("Order (ID = %d - Tracking ID = %s) not found on table.", orderId, trackingId),
-        isTableEmpty());
+    Assertions.assertThat(isTableEmpty())
+        .as(f("Order (ID = %d - Tracking ID = %s) not found on table.", orderId, trackingId))
+        .isFalse();
 
     String actualTrackingId = getTextOnTable(1, COLUMN_ClASS_DATA_TRACKING_ID);
     String actualShipperName = getTextOnTable(1, COLUMN_ClASS_DATA_SHIPPER_NAME);
     String actualGranularStatus = getTextOnTable(1, COLUMN_ClASS_DATA_GRANULAR_STATUS);
     String actualTransactionEndTime = getTextOnTable(1, COLUMN_ClASS_DATA_TRANSACTION_END_TIME);
 
-    assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
-    assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
-    assertThat("Granular Status", actualGranularStatus,
-        equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
-
+    Assertions.assertThat(actualTrackingId).as("Tracking ID").isEqualTo(order.getTrackingId());
+    Assertions.assertThat(actualShipperName).as("Shipper Name")
+        .isEqualTo(order.getShipper().getName());
+    Assertions.assertThat(actualGranularStatus).as("Check Granular Status")
+        .isEqualToIgnoringCase(order.getGranularStatus().replace("_", " "));
     try {
-      Date transactionEndDate = ISO_8601_WITHOUT_MILLISECONDS
-          .parse(order.getTransactions().get(order.getTransactions().size() - 1).getEndTime());
-      String expectedTransactionEndDate = TRANSACTION_END_DATE_SDF.format(transactionEndDate);
-      assertEquals("Transaction End Time", expectedTransactionEndDate, actualTransactionEndTime);
-    } catch (ParseException ex) {
+      String orderEndTime = order.getTransactions().get(order.getTransactions().size() - 1)
+          .getEndTime();
+      ZonedDateTime zonedDateTime = StandardTestUtils.convertToZonedDateTime(orderEndTime,
+          ZoneId.of("UTC"), DTF_ISO_8601_LITE);
+      String expectedTransactionEndDate = DTF_NORMAL_DATETIME.format(zonedDateTime);
+      Assertions.assertThat(actualTransactionEndTime).as("Transaction End Time")
+          .isEqualTo(expectedTransactionEndDate);
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse transaction end date.");
     }
   }

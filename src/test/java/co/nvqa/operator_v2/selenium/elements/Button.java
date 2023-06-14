@@ -23,7 +23,7 @@ public class Button extends PageElement {
   }
 
   public void click() {
-    waitUntilClickable();
+//    waitUntilClickable();
     super.click();
   }
 }

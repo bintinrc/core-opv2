@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
+import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -18,7 +20,7 @@ import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class PickupAppointmentJobPage extends OperatorV2SimplePage {
+public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJobPage> {
 
   Logger LOGGER = getLogger(PickupAppointmentJobPage.class);
 
@@ -29,10 +31,14 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   private Button selectDateRange;
 
   @FindBy(css = "div.ant-collapse-extra button")
-  private Button createEditJobButton;
+  public Button createEditJobButton;
 
   @FindBy(css = "[type='submit']")
-  private PageElement loadSelection;
+  public PageElement loadSelection;
+
+  @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
+  public PageElement loadingIcon;
+
 
   @FindAll(@FindBy(css = ".BaseTable__table-frozen-left .BaseTable__row-cell-text"))
   private List<PageElement> jobIdElements;
@@ -48,6 +54,21 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//*[text()='Update route']/..")
   private PageElement updateRouteButton;
+
+  @FindBy(xpath = "//span[text()='Success']/parent::button")
+  public PageElement forceSuccess;
+
+  @FindBy(xpath = "//span[text()='Fail']/parent::button")
+  public PageElement forceFail;
+
+  @FindBy(xpath = "//span[text()='Proceed']/parent::button")
+  public PageElement failProceed;
+  @FindBy(xpath = "//div[@role='tooltip' and contains(text(),'Job cannot be')]")
+  public PageElement successFailToolTip;
+
+
+  @FindBy(xpath = "//span[text()='Submit']/..")
+  private PageElement submitButton;
 
   @FindBy(css = "")
   private PageElement successJobButton;
@@ -100,6 +121,29 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "#masterShippers")
   private PageElement jobMasterShipperInput;
 
+  @FindBy(xpath = "//label[@for='jobStatus']/following::span[@aria-label='close-circle']")
+  private PageElement clearJobStatusButton;
+
+  @FindBy(xpath = "//div[text()='In Progress']")
+  private PageElement inProgressFilterOption;
+
+  @FindBy(css = "input[data-testid='successPickupAppointmentModal.photoSelect']")
+  private PageElement uploadSuccessPhotoInput;
+
+  @FindBy(css = "input[data-testid='failureReasonPopover.photoSelect']")
+  private PageElement uploadFailPhotoInput;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(text(),'Fail job')]")
+  private PageElement failModelTitle;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//span[contains(@class,'ant-typo')]")
+  private List<PageElement> failModelLines;
+
+  @FindBy(xpath = "//div[@class='ant-space-item']/img")
+  private PageElement proofPhotoInDrawer;
+
+  @FindBy(css = "div[data-testid='photoPreview']")
+  private PageElement failModelPhotoPreview;
   @FindBy(css = "#priority")
   private PageElement priorityInput;
 
@@ -151,14 +195,55 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
+
+
   public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
   public final String ARIA_LABEL = "aria-label";
   public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
   public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "td.ant-picker-cell-selected";
   public final String SHOW_PREVIOUS_MONTH_BUTTON_LOCATION = "button.ant-picker-header-prev-btn";
 
+  public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
+  public final String FAILURE_REASON_DROPDOWN_ITEM = "//div[@label='%s']";
+
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
+
+  }
+
+
+  public void clickFailureReasonDropDown(String index) {
+    WebElement dropDown = getWebDriver().findElement(By.xpath(f(FAILURE_REASON_DROPDOWN, index)));
+    dropDown.click();
+  }
+
+  public PageElement getProofPhotoInDrawer() {
+    return proofPhotoInDrawer;
+  }
+
+  public void clickFailProceed() {
+    
+    failProceed.click();
+  }
+
+
+  public String getFailModelReasons() {
+    String modelReason = failModelLines.get(1).getText();
+    return modelReason;
+  }
+
+  public String getFailModelTitle() {
+    String modalTitle = failModelTitle.getText();
+    return modalTitle;
+  }
+
+  public void selectFailureReasonItem(String Reason) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      WebElement reasonItem = getWebDriver().findElement(
+          By.xpath(f(FAILURE_REASON_DROPDOWN_ITEM, Reason)));
+      reasonItem.click();
+    }, 1000, 3);
+
   }
 
   public PickupAppointmentJobPage clickLoadSelectionButton() {
@@ -167,8 +252,64 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     return this;
   }
 
+  public PickupAppointmentJobPage clearJobStatusFilter() {
+
+    jobStatusInput.click();
+    clearJobStatusButton.click();
+    return this;
+  }
+
+  public PickupAppointmentJobPage addSuccessProofPhoto() {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    uploadSuccessPhotoInput.sendKeys(file.getPath());
+    return this;
+  }
+
+  public PickupAppointmentJobPage addFailProofPhoto() {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    uploadFailPhotoInput.sendKeys(file.getPath());
+    return this;
+  }
+
+  public PickupAppointmentJobPage selectInprogressJobStatus() {
+
+    jobStatusInput.click();
+
+    inProgressFilterOption.click();
+    return this;
+  }
+
   public PickupAppointmentJobPage clickEditButton() {
+    waitUntilVisibilityOfElementLocated(editButton.getWebElement());
     editButton.click();
+
+    return this;
+  }
+
+  public PickupAppointmentJobPage clickSubmitButton() {
+    waitUntilVisibilityOfElementLocated(submitButton.getWebElement());
+    submitButton.click();
+
+    return this;
+  }
+
+  public PickupAppointmentJobPage clickForceSuccessButton() {
+    waitUntilVisibilityOfElementLocated(forceSuccess.getWebElement());
+    forceSuccess.click();
+
+    return this;
+  }
+
+  public PickupAppointmentJobPage clickForceFailButton() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      waitUntilVisibilityOfElementLocated(forceFail.getWebElement());
+      forceFail.click();
+    }, 1000, 3);
+
     return this;
   }
 
@@ -211,11 +352,11 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public PickupAppointmentJobPage selectDataRangeByTitle(String dayStart, String dayEnd) {
     selectDateRange.click();
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-            By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
+        By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
     webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-            .click();
+        .click();
     webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
-            .click();
+        .click();
     return this;
   }
 
@@ -243,13 +384,13 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public JobCreatedModalWindowPage getJobCreatedModalWindowElement() {
     return new JobCreatedModalWindowPage(webDriver,
-            getWebDriver().findElement(By.cssSelector(MODAL_CONTENT_LOCAL)));
+        getWebDriver().findElement(By.cssSelector(MODAL_CONTENT_LOCAL)));
   }
 
   public boolean verifyMessageInToastModalIsDisplayed(String messageBody) {
     String xpathExpression = StringUtils.isNotBlank(messageBody)
-            ? f("//div[@id='toast-container']//strong[contains(text(), '%s')]", messageBody)
-            : "//div[@id='toast-container']";
+        ? f("//div[@id='toast-container']//strong[contains(text(), '%s')]", messageBody)
+        : "//div[@id='toast-container']";
     return webDriver.findElement(By.xpath(xpathExpression)).isDisplayed();
   }
 
@@ -271,7 +412,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public List<String> getAllSelectedByJobName(String selectedItem) {
     return webDriver.findElements(By.xpath(f(SELECTION_ITEMS, selectedItem)))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
+        .stream().map(WebElement::getText).collect(Collectors.toList());
   }
 
   public void clickOnShowOrHideFilters() {
@@ -301,7 +442,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public boolean isFilterDropdownMenuWithoutDataDisplayed() {
     return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(DROPDOWN_MENU_NO_DATA_LOCATOR)).isDisplayed();
+        .findElement(By.cssSelector(DROPDOWN_MENU_NO_DATA_LOCATOR)).isDisplayed();
   }
 
   public boolean isFilterDropdownMenuShipperWithDataDisplayed() {
@@ -385,29 +526,31 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public void selectJobSelection(String selection) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
   }
 
   public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
     waitUntilVisibilityOfElementLocated(
-            webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-                    .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
-            .isDisplayed();
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
+        .isDisplayed();
   }
 
   public void selectJobStatus() {
     jobStatusInput.sendKeys(Keys.RETURN);
   }
 
+
   public void selectJobStatusByString(String jobStatus) {
     jobStatusInput.click();
     int retry = 10;
-    while (retry > 0 && !webDriver.findElement(By.id(jobStatusInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
-            .getAttribute(ARIA_LABEL).equals(jobStatus)) {
+    while (retry > 0 && !webDriver.findElement(
+            By.id(jobStatusInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(jobStatus)) {
       jobStatusInput.sendKeys(Keys.ARROW_DOWN);
       retry--;
     }
@@ -418,8 +561,9 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public void selectJobServiceLevelByString(String jobServiceLevel) {
     jobServiceLevelInput.click();
     int retry = 2;
-    while (retry > 0 && !webDriver.findElement(By.id(jobServiceLevelInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
-            .getAttribute(ARIA_LABEL).equals(jobServiceLevel)) {
+    while (retry > 0 && !webDriver.findElement(
+            By.id(jobServiceLevelInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(jobServiceLevel)) {
       jobServiceLevelInput.sendKeys(Keys.ARROW_DOWN);
       retry--;
     }
@@ -431,8 +575,9 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     clickOnPriorityButton();
     int retry = 2;
     priorityInput.sendKeys(Keys.ARROW_DOWN);
-    while (retry > 0 && !webDriver.findElement(By.id(priorityInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
-            .getAttribute(ARIA_LABEL).equals(priority)) {
+    while (retry > 0 && !webDriver.findElement(
+            By.id(priorityInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(priority)) {
       priorityInput.sendKeys(Keys.ARROW_DOWN);
       retry--;
     }
@@ -472,7 +617,9 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public void choosePresetByName(String presetName) {
     int retry = 100;
-    while (retry > 0 && !webDriver.findElement(By.cssSelector("div.ant-select-item-option-active div")).getText().equalsIgnoreCase(presetName)) {
+    while (retry > 0 && !webDriver.findElement(
+            By.cssSelector("div.ant-select-item-option-active div")).getText()
+        .equalsIgnoreCase(presetName)) {
       presetFilters.sendKeys(Keys.ARROW_DOWN);
       retry--;
     }
@@ -484,30 +631,32 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     updateCurrentPresetButton.click();
   }
 
-  public boolean isCurrentPresetUpdatedPopupDisplayed() {
-    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
-    return currentPresetUpdatedPopup.isDisplayed();
-  }
-
-  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
-    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
-  }
-
-  public void clickOnDeletePresetButton() {
-    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
-    deletePresetButton.click();
-  }
-
-  public boolean isPresetDeletedPopupDisplayed() {
-    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
-    return presetDeletedPopup.isDisplayed();
-  }
-
-  public void waitUntilPresetDeletedPopupInvisible() {
-    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
-  }
+//  public boolean isCurrentPresetUpdatedPopupDisplayed() {
+//    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+//    return currentPresetUpdatedPopup.isDisplayed();
+//  }
+//
+//  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
+//    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+//  }
+//
+//  public void clickOnDeletePresetButton() {
+//    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+//    deletePresetButton.click();
+//  }
+//
+//  public boolean isPresetDeletedPopupDisplayed() {
+//    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+//    return presetDeletedPopup.isDisplayed();
+//  }
+//
+//  public void waitUntilPresetDeletedPopupInvisible() {
+//    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+//  }
 
   public void waitUntilCreateOrModifyPresetDropdownManyIsVisible() {
     waitUntilVisibilityOfElementLocated(DROPDOWN_BOTTOM_LEFT_LOCATOR);
   }
+
+
 }

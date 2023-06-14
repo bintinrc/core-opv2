@@ -98,70 +98,70 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_submit_edit_user']")
   public TextBox buttonSubmitEditDpUser;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_partner_id']")
+  @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_partner_name']")
+  @FindBy(xpath = "//input[@data-testId='field_partner_name']")
   public TextBox filterPartnerName;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_partner_name']")
   public TextBox formPartnerName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_poc_name']")
+  @FindBy(xpath = "//input[@data-testId='field_poc_name']")
   public TextBox filterPocName;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_name']")
   public TextBox formPocName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_poc_no']")
+  @FindBy(xpath = "//input[@data-testId='field_poc_no']")
   public TextBox filterPocNo;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_tel']")
   public TextBox formPocNo;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_poc_email']")
+  @FindBy(xpath = "//input[@data-testId='field_poc_email']")
   public TextBox filterPocEmail;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_poc_email']")
   public TextBox formPocEmail;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_restrictions']")
+  @FindBy(xpath = "//input[@data-testId='field_restrictions']")
   public TextBox filterRestrictions;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_id']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_id']")
   public TextBox filterDpId;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_name']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_name']")
   public TextBox filterDpName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_shortname']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_shortname']")
   public TextBox filterDpShortName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_hub']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_hub']")
   public TextBox filterDpHub;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_address']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_address']")
   public TextBox filterDpAddress;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_direction']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_direction']")
   public TextBox filterDpDirection;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_dp_activity']")
+  @FindBy(xpath = "//input[@data-testId='field_dp_activity']")
   public TextBox filterDpActivity;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_username']")
+  @FindBy(xpath = "//input[@data-testId='field_username']")
   public TextBox filterDpUserUsername;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_first_name']")
+  @FindBy(xpath = "//input[@data-testId='field_first_name']")
   public TextBox filterDpUserFirstName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_last_name']")
+  @FindBy(xpath = "//input[@data-testId='field_last_name']")
   public TextBox filterDpUserLastName;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_email']")
+  @FindBy(xpath = "//input[@data-testId='field_email']")
   public TextBox filterDpUserEmail;
 
-  @FindBy(xpath = "//input[@data-testId='virtual-table.field_contact']")
+  @FindBy(xpath = "//input[@data-testId='field_contact']")
   public TextBox filterDpUserContact;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_restrictions']")
@@ -437,52 +437,52 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Point']")
   public PageElement ninjaPointPudoPointType;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_partner_id']/span")
+  @FindBy(xpath = "//div[@data-testid='label_partner_id']/span")
   public PageElement labelPartnerId;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_partner_name']/span")
+  @FindBy(xpath = "//div[@data-testid='label_partner_name']/span")
   public PageElement labelPartnerName;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_poc_name']/span")
+  @FindBy(xpath = "//div[@data-testid='label_poc_name']/span")
   public PageElement labelPocName;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_poc_no']/span")
+  @FindBy(xpath = "//div[@data-testid='label_poc_no']/span")
   public PageElement labelPocNo;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_poc_email']/span")
+  @FindBy(xpath = "//div[@data-testid='label_poc_email']/span")
   public PageElement labelPocEmail;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_restrictions']/span")
+  @FindBy(xpath = "//div[@data-testid='label_restrictions']/span")
   public PageElement labelRestrictions;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_name']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_name']/span")
   public PageElement labelDpName;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_shortname']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_shortname']/span")
   public PageElement labelDpShortName;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_hub']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_hub']/span")
   public PageElement labelDpHub;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_address']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_address']/span")
   public PageElement labelDpAddress;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_direction']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_direction']/span")
   public PageElement labelDpDirection;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_activity']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_activity']/span")
   public PageElement labelDpActivity;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_username']/span")
+  @FindBy(xpath = "//div[@data-testid='label_username']/span")
   public PageElement labelUsername;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_id']/span")
+  @FindBy(xpath = "//div[@data-testid='label_dp_id']/span")
   public PageElement labelDpId;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_first_name']/span")
+  @FindBy(xpath = "//div[@data-testid='label_first_name']/span")
   public PageElement labelUserFirstName;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_last_name']/span")
+  @FindBy(xpath = "//div[@data-testid='label_last_name']/span")
   public PageElement labelUserLastName;
 
   @FindBy(xpath = "//div[@class='ant-space-item']/span[contains(@class,'ant-typography')]")
@@ -491,10 +491,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='edit-user-title']")
   public PageElement labelEditUserTitle;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_email']/span")
+  @FindBy(xpath = "//div[@data-testid='label_email']/span")
   public PageElement labelUserEmail;
 
-  @FindBy(xpath = "//div[@data-testid='virtual-table.label_contact']/span")
+  @FindBy(xpath = "//div[@data-testid='label_contact']/span")
   public PageElement labelUserContact;
 
   @FindBy(xpath = "//div[@data-headerkey='id']/div/div[1]/*[name()='svg']")
@@ -1257,6 +1257,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
         formDpUserLastName.forceClear();
+        break;
+      case "INFIRNME":
+        formDpUserFirstName.forceClear();
+        formDpUserFirstName.setValue(value);
+        break;
+      case "INLANME":
+        formDpUserLastName.forceClear();
+        formDpUserLastName.setValue(value);
         break;
       case "CONTACT":
         formDpUserContact.forceClear();

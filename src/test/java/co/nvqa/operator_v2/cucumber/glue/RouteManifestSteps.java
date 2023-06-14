@@ -4,6 +4,8 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.util.factory.FailureReasonFactory;
+import co.nvqa.operator_v2.model.PoaInfo;
+import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -13,8 +15,8 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.hamcrest.Matchers;
 
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_CODE_ID_ALL;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_DELIVERY;
@@ -45,7 +47,7 @@ public class RouteManifestSteps extends AbstractSteps {
     Route route = get(KEY_CREATED_ROUTE);
     getWebDriver().navigate()
         .to(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-            TestConstants.COUNTRY_CODE, route.getId()).toLowerCase());
+            TestConstants.NV_SYSTEM_ID, route.getId()).toLowerCase());
   }
 
   @Then("^Operator verify 1 delivery success at Route Manifest$")
@@ -79,8 +81,8 @@ public class RouteManifestSteps extends AbstractSteps {
     data.forEach((tag, expected) -> {
       routeManifestPage.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
       List<String> actual = routeManifestPage.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
-      assertThat("List of Tracking IDs for tag " + tag, actual,
-          Matchers.containsInAnyOrder(splitAndNormalize(expected).toArray(new String[0])));
+      Assertions.assertThat(actual).as("List of Tracking IDs for tag " + tag)
+          .contains(splitAndNormalize(expected).toArray(new String[0]));
     });
   }
 
@@ -134,7 +136,8 @@ public class RouteManifestSteps extends AbstractSteps {
           break;
         }
       }
-      assertTrue("Tracking id " + trackingId + " was not found in COD collection dialog", found);
+      Assertions.assertThat(found)
+          .as("Tracking id " + trackingId + " was not found in COD collection dialog").isTrue();
     });
     routeManifestPage.codCollectionDialog.ok.clickAndWaitUntilDone();
     routeManifestPage.confirmationDialog.waitUntilVisible();
@@ -160,5 +163,87 @@ public class RouteManifestSteps extends AbstractSteps {
           .isEqualTo(data.get("routeId"));
     }
     assertions.assertAll();
+  }
+
+  @When("Operator click view POA/POH button on Route Manifest page")
+  public void clickViewPoaPoh() {
+    routeManifestPage.clickViewPoaPoH();
+  }
+
+  @Then("Operator verify POA/POH button is disabled on Route Manifest page")
+  public void verifyViewPoaPohDisabled() {
+    Assertions.assertThat(routeManifestPage.isViewPoaPohDisabled());
+  }
+
+  @Then("Operator verifies Proof of Arrival table for the row number {string} on Route Manifest page:")
+  public void verifyTableEntry(String row, Map<String, String> data) {
+    data = resolveKeyValues(data);
+    PoaInfo expected = new PoaInfo(data);
+    final String expectedVerifiedByGps = data.get("verifiedByGps");
+    final String expectedDistanceFromSortHub = data.get("distanceFromSortHub");
+    final int index = Integer.parseInt(row) - 1;
+
+    expected.setVerifiedByGps(expectedVerifiedByGps);
+    expected.setDistanceFromSortHub(expectedDistanceFromSortHub);
+
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfArrivalTable.verifyPoAInfo(expected, index));
+  }
+
+  @When("Operator click View on Map")
+  public void clickViewOnMapButton() {
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfArrivalTable.clickViewOnMap());
+  }
+
+  @Then("Operator verifies Proof of Handover table for the row number {string} on Route Manifest page:")
+  public void verifyPoHTableEntry(String row, Map<String, String> data) {
+    data = resolveKeyValues(data);
+    PohInfo expected = new PohInfo(data);
+    final String expectedEstQty = data.get("estQty");
+    final String expectedCntQty = data.get("cntQty");
+    final String expectedStaffUsername = data.get("staffUsername");
+    final String expectedHandover = data.get("handover");
+    final String expectedCSortHubName = data.get("sortHubName");
+    final int index = Integer.parseInt(row) - 1;
+
+    expected.setEstQty(Integer.parseInt(expectedEstQty));
+    expected.setCntQty(Integer.parseInt(expectedCntQty));
+    expected.setHandover(expectedHandover);
+    expected.setSortHubName(expectedCSortHubName);
+    expected.setStaffUsername(expectedStaffUsername);
+
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfHandoverTable.verifyPoHInfo(expected, index));
+  }
+
+  @When("Operator click View Photo")
+  public void clickViewPhotoButton() {
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfHandoverTable.clickViewPhoto());
+  }
+
+  @Then("Operator verifies route detail information below on Route Manifest page:")
+  public void operatorVerifiesRouteDetailInformation(Map<String, String> dataTable) {
+    Map<String, String> resolvedData = resolveKeyValues(dataTable);
+    routeManifestPage.waitUntilPageLoaded();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      if (resolvedData.get("Route ID") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Route ID")).
+            as("Route Id is the same").isEqualToIgnoringCase(resolvedData.get("Route ID"));
+      }
+      if (resolvedData.get("Driver ID") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver ID")).
+            as("Driver ID is the same").isEqualToIgnoringCase(resolvedData.get("Driver ID"));
+      }
+      if (resolvedData.get("Driver Name") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver Name")).
+            as("Driver Name is the same").isEqualToIgnoringCase(resolvedData.get("Driver Name"));
+      }
+      if (resolvedData.get("Date") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Date")).
+            as("Date is the same").isEqualToIgnoringCase(resolvedData.get("Date"));
+      }
+    }, 2000, 3);
   }
 }

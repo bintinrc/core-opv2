@@ -3,7 +3,8 @@
 Feature: Generate COD Report - Select by Parent Shipper
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Gmail - Operator connect to "{financial-batch-report-email}" inbox using password "{financial-batch-report-email-password}"
+    Given API Operator whitelist email "{financial-batch-report-email}"
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute
@@ -28,7 +29,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{financial-batch-report-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -63,7 +64,7 @@ Feature: Generate COD Report - Select by Parent Shipper
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{financial-batch-report-email}"],"date_type": "ROUTE", "report_type" : "COD", "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -81,5 +82,5 @@ Feature: Generate COD Report - Select by Parent Shipper
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
       | generateFile | Select By Parent Shipper |
-      | emailAddress | {order-billing-email}    |
+      | emailAddress | {financial-batch-report-email} |
     Then Operator verifies error message "Please select at least one marketplace."

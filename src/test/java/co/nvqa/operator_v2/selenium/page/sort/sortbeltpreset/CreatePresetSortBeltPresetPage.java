@@ -19,6 +19,8 @@ public class CreatePresetSortBeltPresetPage extends
 
   @FindBy(css = "[data-testid='cancel-button']")
   public Button cancelBtn;
+  @FindBy(css = "[data-icon='loading']")
+  public PageElement loadingIcon;
   @FindBy(css = "[data-testid='next-button']")
   public Button nextBtn;
   @FindBy(css = "[data-testid='add-criteria-button']")
