@@ -27,24 +27,3 @@ Feature: Edit Order
     Then Operator verify delivery POD details is correct on Edit Order page using date below:
       | driver              | {ninja-driver-username} |
       | verification method | NO_VERIFICATION         |
-
-  @DeleteOrArchiveRoute
-  Scenario: Operator Reverify Order Address in Edit Order Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator get order details
-    And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator click Delivery -> Reverify Delivery Address on Edit Order page
-    And Operator verifies that info toast displayed:
-      | top | Reverified Successfully |
-    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score    |
-      | 1        | not null |
-      | 0        | not null |

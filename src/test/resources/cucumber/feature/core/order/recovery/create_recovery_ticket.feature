@@ -130,7 +130,7 @@ Feature: Create Recovery Ticket
     When API Recovery - Operator search recovery ticket:
       | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
-  @DeleteOrArchiveRoute @RT
+  @DeleteOrArchiveRoute
   Scenario: Operator Create Recovery Ticket For Pickup Fail
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
