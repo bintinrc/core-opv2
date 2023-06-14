@@ -1,8 +1,8 @@
-@OperatorV2 @Core @EditOrder @EditOrder3 @ViewPOD @ReverifyAddress @EditOrderPage
+@OperatorV2 @Core @EditOrderv2 @EditOrder3 @ViewPOD @ReverifyAddress @EditOrderPage
 Feature: Edit Order
 
-  Background:
-    Given Launch browser
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -102,3 +102,7 @@ Feature: Edit Order
       | waypointId | {KEY_TRANSACTION.waypointId} |
       | archived   | 0                            |
       | score      | not null                     |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
