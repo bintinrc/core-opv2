@@ -313,7 +313,7 @@ Feature: Parcel Sweeper Live
       | Priority 2 - 90 | uid:5ad3c195-9f34-4987-863b-0ceb8e7b09d8 | 50            | #e29d4a                 |
       | Priority >90    | uid:fc7de149-fc0a-48db-993e-f7cbcf57e301 | 100           | #c65d44                 |
 
-  @DeleteOrArchiveRoute @ForceSuccessOrder @currentrun
+  @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Parcel Sweep Scans a Routed Parcel
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -351,7 +351,7 @@ Feature: Parcel Sweeper Live
       | hubId   | {KEY_DESTINATION_HUB_ID} |
       | routeId | {KEY_CREATED_ROUTE_ID}   |
 
-  @ForceSuccessOrder @currentrun
+  @ForceSuccessOrder
   Scenario: Operator Parcel Sweep Scans an Unrouted Parcel
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
