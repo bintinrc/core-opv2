@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3
 Feature: Edit Order Details
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -314,8 +314,3 @@ Feature: Edit Order Details
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE DIMENSION                                                                                                |
       | description | Length updated: assigned new value 5\nWidth updated: assigned new value 6\nHeight updated: assigned new value 7 |
-
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
