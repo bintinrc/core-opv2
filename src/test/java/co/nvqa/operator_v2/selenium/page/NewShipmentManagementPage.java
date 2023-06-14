@@ -19,6 +19,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import io.opentelemetry.api.logs.LoggerBuilder;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -79,7 +81,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='bulk-update-confirmation-section']")
   public ShipmentToBeUpdatedTable shipmentToBeUpdatedTable;
 
-  @FindBy(css = "[data-testid='create-shipment-button']")
+  @FindBy(xpath = ".//button[@data-testid='create-shipment-button']")
   public Button createShipment;
 
   @FindBy(css = "[data-testid='search-id-textarea']")
@@ -236,9 +238,11 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   }
 
   public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder) {
+    createShipment.waitUntilClickable(2);
     createShipment.click();
-    createShipmentDialog.waitUntilVisible();
-    createShipmentDialog.type.selectValue("Air Haul");
+    createShipmentDialog.waitUntilVisible(2);
+    createShipmentDialog.type.click();
+    click(f(".//div[contains(@class,'ant-select-item')]//div[text()='%s']", shipmentInfo.getShipmentType()));
     createShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
     createShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
     createShipmentDialog.comments.setValue(shipmentInfo.getComments());
@@ -622,7 +626,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[data-testid='create-shipment-type-select']")
+    @FindBy(xpath = ".//div[@data-testid='create-shipment-type-select']")
     public AntSelect3 type;
 
     @FindBy(css = "[data-testid='create-shipment-origin-hub-select']")

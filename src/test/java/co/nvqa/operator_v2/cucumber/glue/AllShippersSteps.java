@@ -2041,10 +2041,15 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator search for marketplace sub shipper by shipper name and get sub shipper id")
   public void operatorSearchForMarketplaceSubShipperByShipperNameAndGetSubShipperId() {
-    Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
-    String legacyId = allShippersPage.allShippersCreateEditPage.searchMarketplaceSubshipperAndGetLegacyId(
-        "name", marketplaceSubShipper.getSellerCompanyName());
-    put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+    try {
+      Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
+      String legacyId = allShippersPage.allShippersCreateEditPage.searchMarketplaceSubshipperAndGetLegacyId(
+          "name", marketplaceSubShipper.getSellerCompanyName());
+      Long.parseLong(legacyId);
+      put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
+    } catch (NumberFormatException e) {
+      throw new NvTestRuntimeException("Legacy Id could not be parsed", e);
+    }
   }
 
   @Then("Operator verifies country default text is displayed like below")

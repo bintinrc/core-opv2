@@ -511,6 +511,55 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: View RTS Ageing Parcel
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP","cash_on_delivery": 100, "is_pickup_required": false, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: 4 days ago, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator get the count from the tile: "<TileName>"
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    When API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                              |
+      | rtsRequest | { "reason": "Return to sender: Nobody at address", "timewindow_id":1, "date":"{date: 1 days next, yyyy-MM-dd}"} |
+    Given Operator loads Operator portal home page
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
+    And Operator verifies that the count in tile: "<TileName>" has increased by 0
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
+
+
   @ForceSuccessOrder
   Scenario Outline: Cancelled Ageing Parcel Disappear
     Given Operator loads Operator portal home page
