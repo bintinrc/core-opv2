@@ -124,6 +124,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
   public PageElement dimensions;
 
+  @FindBy(xpath = "//span[contains(text(), 'Click to reveal (tracked)')]")
+  public List<Button> masking;
+
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
 
