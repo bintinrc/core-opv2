@@ -361,7 +361,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   public TextBox editFlightTrip_flightNo;
 
   @FindBy(xpath = "//textarea[@id = 'editForm_comment']")
-  public TextBox editFlightTrip_comment;
+  public PageElement editFlightTrip_comment;
 
   @FindBy(css = "[data-testid$='confirm-button']")
   public Button confirmButton;
@@ -1217,22 +1217,26 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
 
     public void verifyDriverNotDisplayed(String driver) {
+      // Wait until input field can be interacted
+      doWithRetry(() -> {
+        Assertions.assertThat(isElementExist("//input[@id='createToFromAirportForm_drivers' and @disabled]", 5))
+            .as("Assign drivers dropdown is clickable")
+            .isFalse();
+      }, "Waiting until dropdown is not disabled", 2000, 20);
+
       doWithRetry(() -> {
         try {
-          waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
           createToFromAirportForm_drivers.click();
           sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
           int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
           Assertions.assertThat(selected)
               .as("Invalid driver not displayed").isZero();
         } catch (Throwable ex) {
-          LOGGER.error(ex.getMessage());
-          LOGGER.info("Searched element is not found, retrying after 2 seconds...");
-          refreshPage();
-          switchTo();
+          LOGGER.info(ex.getMessage());
+          click(DROPDOWN_INPUT_CLEAR_XPATH);
           throw new NvTestRuntimeException(ex.getCause());
         }
-      }, "Selecting driver...", 20000, 10);
+      }, "Selecting driver...", 2000, 20);
     }
 
   public void verifyInvalidItem(String name, String value) {
@@ -1655,7 +1659,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     switch (pageName) {
       case "Flight Trip":
         if (data.get("comment") != null) {
-          editFlightTrip_comment.clearAndSendkeysV2(data.get("comment"));
+          editFlightTrip_comment.clearAndSendKeys(data.get("comment"));
         }
         if (data.get("flight_no") != null) {
           editFlightTrip_flightNo.click();
@@ -1698,13 +1702,13 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
               createToFromAirportForm_drivers.click();
 
               for (String driver : selectedDrivers) {
-                sendKeysAndEnter(DRIVERS_DROPDOWN_INPUT_FIELD_XPATH, driver);
-                if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, driver), 2)) {
-                  throw new NvTestRuntimeException(f("Driver with username %s is not selected"));
-                }
-
                 count++;
-                if (count > 4) {
+                sendKeysAndEnter(DRIVERS_DROPDOWN_INPUT_FIELD_XPATH, driver);
+                if (count <= 4) {
+                  if (!isElementExist(f(DROPDOWN_INPUT_ITEM_XPATH, driver), 2)) {
+                    throw new NvTestRuntimeException(f("Driver with username %s is not selected"));
+                  }
+                } else {
                   int selected = findElementsByXpath(
                       "//div[@class='ant-select-selection-overflow-item']").size();
                   Assertions.assertThat(selected)

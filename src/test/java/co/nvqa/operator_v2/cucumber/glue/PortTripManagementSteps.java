@@ -13,6 +13,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -447,7 +448,19 @@ public class PortTripManagementSteps extends AbstractSteps {
         aitrip.setTripId(airHaulTrip.getTripId());
         portTripManagementPage.validatePortTripInfo(aitrip.getTripId(), aitrip);
         if (data.get("drivers") != null) {
-            List<MiddleMileDriver> expectedDrivers = resolveValue(dataTableAsMap.get("drivers"));
+            String driversAsStr = dataTableAsMap.get("drivers");
+            List<MiddleMileDriver> expectedDrivers = new ArrayList<>(); //= driversAsStr.contains(".username") ? Arrays.asList(driversAsStr.split(",")) : resolveValue(driversAsStr);
+            if (driversAsStr.contains(";")) {
+                String[] driverInput = driversAsStr.split(";");
+                driversAsStr = driverInput[0];
+                int maxIdx = Integer.parseInt(driverInput[1]);
+                List<MiddleMileDriver> drivers = getList(driversAsStr, MiddleMileDriver.class);
+                for (int i = 0; i < maxIdx - 1; i++) {
+                    expectedDrivers.add(drivers.get(i));
+                }
+            } else {
+                expectedDrivers = resolveValue(driversAsStr);
+            }
             portTripManagementPage.verifyListDriver(expectedDrivers);
         }
     }
