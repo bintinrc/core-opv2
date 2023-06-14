@@ -333,9 +333,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @When("Operator searches by {string} with value {string}")
   public void operatorSearchesByWithValue(String filterName, String filterValue) {
-    String data = resolveValue(filterValue);
     if ("id".equals(filterName)) {
-      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(data));
+      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolveValue(filterValue)));
     } else {
       middleMileDriversPage.tableFilterByIdWithValue(resolveValue(filterValue));
     }
