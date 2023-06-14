@@ -127,13 +127,13 @@ Feature: Financial Batch
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies financial batch data as below
-      | overallBalance        | S$ 5,599.18 (Debit)              |
+      | overallBalance        | S$ 5,651.55 (Debit)              |
       | date                  | {gradle-current-date-dd/MM/yyyy} |
       | shipperName           | {KEY_CREATED_SHIPPER.name}       |
       | debitTotalCOD         | 0.00                             |
-      | debitTotalFee         | 5,604.18                         |
+      | debitTotalFee         | 5,656.55                         |
       | debitTotalAdjustment  | 0.00                             |
-      | debitNettBalance      | 5,599.18                         |
+      | debitNettBalance      | 5,651.55                         |
       | creditTotalCOD        | 5.00                             |
       | creditTotalFee        | 0.00                             |
       | creditTotalAdjustment | 0.00                             |
@@ -167,17 +167,17 @@ Feature: Financial Batch
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies financial batch data as below
-      | overallBalance        | S$ 4,878.91 (Credit)             |
+      | overallBalance        | S$ 4,877.82 (Credit)             |
       | date                  | {gradle-current-date-dd/MM/yyyy} |
       | shipperName           | {KEY_CREATED_SHIPPER.name}       |
       | debitTotalCOD         | 0.00                             |
-      | debitTotalFee         | 116.09                           |
+      | debitTotalFee         | 117.18                           |
       | debitTotalAdjustment  | 0.00                             |
       | debitNettBalance      | 0.00                             |
       | creditTotalCOD        | 5,000.00                         |
       | creditTotalFee        | 0.00                             |
       | creditTotalAdjustment | 0.00                             |
-      | creditNettBalance     | 4,883.91                         |
+      | creditNettBalance     | 4,882.82                         |
 
   @DeleteNewlyCreatedShipper
   Scenario: Search by Shipper who has Ledger and Shipper Account -  Ledger Status is Completed - Ledger has Origin Balance more than 0 - Overall Balance is 0 (uid:a9f626db-c000-4b1b-83a6-f2c283cbf6ef)

@@ -48,6 +48,9 @@ public class ShipperCreatePageV2 extends OperatorV2SimplePage {
     @FindBy(name = "container.shippers.create-shipper")
     public NvIconTextButton createShipper;
 
+    @FindBy(name = "Save Changes")
+    public NvIconTextButton saveChanges;
+
     @FindBy(css = "md-dialog")
     public NewPricingProfileDialog newPricingProfileDialog;
     @FindBy(xpath = "//md-content[./form[@name='ctrl.moreForm']]")

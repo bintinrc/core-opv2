@@ -1,12 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
-import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -27,7 +26,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.cucumber.java.en.But;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -272,7 +270,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void verifyItsCurrentPage() {
     super.waitUntilPageLoaded();
-    Assertions.assertThat(getWebDriver().getCurrentUrl().endsWith("/order")).isTrue();
+    Assertions.assertThat(getWebDriver().getCurrentUrl())
+        .withFailMessage("All Orders page is not opened")
+        .endsWith("/order");
   }
 
   public void downloadSampleCsvFile() {
@@ -318,7 +318,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectAllShown();
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-        findElementByXpath(f("//button[@aria-label = '%s']",action)));
+        findElementByXpath(f("//button[@aria-label = '%s']", action)));
     pause2s();
 
   }
@@ -651,8 +651,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void printWaybill(String trackingId) {
     filterTableOrderByTrackingId(trackingId);
     clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
-    waitUntilVisibilityOfToast("Attempting to download");
-    waitUntilInvisibilityOfToast("Downloading", true);
+    waitUntilVisibilityOfToast("Attempting to print waybill(s)");
+//    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
   public void verifyWaybillContentsIsCorrect(Order order) {
@@ -682,7 +682,6 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     pause100ms();
     getWebDriver().switchTo().window(
         mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
-    search.waitUntilDone();
   }
 
   public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm,
@@ -1172,8 +1171,22 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(name = "container.order.list.download-selected")
     public NvIconTextButton downloadSelected;
 
+    @FindBy(id = "select-printing-size")
+    public PageElement PrintingSizeBox;
+
+    @FindBy(xpath = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']")
+    public PageElement PrintSizeList;
+
+    String PRINTING_SIZE = "//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']//div[@class='md-text' and contains(text(),'%s')]";
+
     public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+
+    public void SelectPrintSize(String size) {
+      PrintSizeList.waitUntilVisible();
+      findElementByXpath(f(PRINTING_SIZE, size)).click();
+      PrintSizeList.waitUntilInvisible();
     }
   }
 }

@@ -63,10 +63,15 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         String task = finalMapOfData.get("task");
-        if (task!= null) {
-          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
+        String parcelType = finalMapOfData.get("parcelType");
+        if (parcelType == null) {
+          parcelType = "Bulky";
+        }
+        if (task != null) {
+          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task,
+              parcelType);
         } else {
-          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
+          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"), parcelType);
         }
 
         String trackingId = finalMapOfData.get("trackingId");
@@ -93,7 +98,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
               "Could not find DELIVERY transaction for order [" + order.getId() + "]"));
       List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
       Zone routingZone = zones.stream().filter(
-          zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
+              zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
           .findFirst()
           .orElseThrow(() -> new RuntimeException(
               "Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));

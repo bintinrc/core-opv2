@@ -5,12 +5,11 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelTrip @DeleteCreatedPorts @DeleteDriver
+  @CancelTrip @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Depart Airport to Warehouse Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -39,12 +38,11 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
       | {KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive    |
       | {KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive |
 
-  @CancelTrip @DeleteCreatedPorts @DeleteDriver
+  @CancelTrip @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Depart Warehouse to Airport Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -71,12 +69,11 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
     Then Operator verifies driver error messages below on Port Trip Management page:
       | {KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive |
 
-  @CancelTrip @DeleteCreatedPorts @DeleteDriver
+  @CancelTrip @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Depart Warehouse to Airport Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:
@@ -103,12 +100,11 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
     Then Operator verifies driver error messages below on Port Trip Management page:
       | {KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive |
 
-  @CancelTrip @DeleteCreatedPorts @DeleteDriver
+  @CancelTrip @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Depart Warehouse to Airport Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
     And API Operator assign these hubs as created hubs
       | hubIds | {local-hub-3-id} |
     Given API MM - Operator create new air trip with data below:

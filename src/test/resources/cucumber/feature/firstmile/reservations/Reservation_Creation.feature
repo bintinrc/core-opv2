@@ -33,7 +33,6 @@ Feature: Reservation Creation
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "LAST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
-
   Scenario: Create Reservation Given the Lat Long Fall in a Zone
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -46,7 +45,6 @@ Feature: Reservation Creation
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
-
 
   Scenario: Create Reservation Given the Lat Long does not Fall in Any Zone
     When Operator loads Shipper Address Configuration page
@@ -62,7 +60,7 @@ Feature: Reservation Creation
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is null for waypointId "{KEY_WAYPOINT_ID}"
 
   @HappyPath
-  Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured - HYBRID
+  Scenario Outline: Create Reservation Given the Address Pickup Type is Configured - HYBRID
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
@@ -72,6 +70,7 @@ Feature: Reservation Creation
     And API Operator update the pickup type for the shipper address
       | addressId   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |
       | requestBody | {"pickup_type": "<pickupTypeAPI>"}            |
+    And Operator waits for 10 seconds
     When Operator loads Shipper Address Configuration page
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":<search_value>, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
@@ -150,7 +149,7 @@ Feature: Reservation Creation
     | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator selects "Unverified" in the Address Status dropdown
     And Operator clicks on the load selection button
-    And Operator clicks on the "Update Addresses Lat Long" button
+    And Operator clicks on the "Update Addresses Lat Long" button to upload CSV file
     And Operator uploads csv file: "Create_Reservation_After_Update_Lat_Long.csv" by browsing files in "Update Addresses Lat Long" upload window
     Then Operator verifies upload success message is displayed for success count "2"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"

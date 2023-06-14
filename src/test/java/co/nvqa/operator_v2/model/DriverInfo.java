@@ -334,6 +334,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   public void fromDriver(Driver driver) {
     setUuid(driver.getUuid());
     setId(driver.getId());
+    setDisplayName(driver.getDisplayName());
     setFirstName(driver.getFirstName());
     setLastName(driver.getLastName());
     setLicenseNumber(driver.getLicenseNumber());

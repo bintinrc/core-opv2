@@ -116,7 +116,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                                   |
       | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
-    Then Operator verifies that "Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:

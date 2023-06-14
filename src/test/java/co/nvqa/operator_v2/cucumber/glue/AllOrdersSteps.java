@@ -8,7 +8,6 @@ import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
-import co.nvqa.operator_v2.model.dp.OrderCsvData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
@@ -20,7 +19,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +55,13 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator switch to Edit Order's window$")
   public void operatorSwitchToEditOrderWindow() {
     Long orderId = get(KEY_CREATED_ORDER_ID);
+    if (orderId == null) {
+      List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
+      if (org.apache.commons.collections4.CollectionUtils.isEmpty(orders)) {
+        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_ORDERS is empty");
+      }
+      orderId = orders.get(orders.size() - 1).getId();
+    }
     String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
     allOrdersPage.switchToEditOrderWindow(orderId);
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
@@ -75,6 +80,7 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator find order on All Orders page using this criteria below:$")
   public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(
       Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
     AllOrdersPage.Category category = AllOrdersPage.Category
         .findByValue(dataTableAsMap.get("category"));
     AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic
@@ -1073,5 +1079,29 @@ public class AllOrdersSteps extends AbstractSteps {
         get(KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.databaseVerifyCustomerCollect(dbCheckingCustomerCollectOrder, trackingId);
+  }
+
+  @When("Operator print Waybill for order {string} on All Orders page")
+  public void operatorPrintWaybillForOrderOnAllOrdersPage(String trackingIdAsString) {
+    String trackingId = resolveValue(trackingIdAsString);
+    allOrdersPage.printWaybill(trackingId);
+  }
+
+  @When("Operator print Waybill for multiple orders with size {string} on All Orders page")
+  public void operatorPrintWaybillOrdersOnAllOrdersPage(String size) {
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption("Print Waybills");
+    allOrdersPage.printWaybillsDialog.waitUntilVisible();
+    allOrdersPage.printWaybillsDialog.checkbox.check();
+    allOrdersPage.printWaybillsDialog.PrintingSizeBox.click();
+    allOrdersPage.printWaybillsDialog.SelectPrintSize(size);
+    allOrdersPage.printWaybillsDialog.downloadSelected.click();
+    allOrdersPage.printWaybillsDialog.forceClose();
+  }
+
+  @When("Operator find multiple orders below by uploading CSV on All Orders page")
+  public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage(List<String> listOfOrder) {
+    List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
+    operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
   }
 }

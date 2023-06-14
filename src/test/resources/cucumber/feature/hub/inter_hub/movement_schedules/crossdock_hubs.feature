@@ -15,7 +15,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     When Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
@@ -40,7 +39,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
@@ -76,7 +74,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
@@ -125,7 +122,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
@@ -162,7 +158,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
@@ -218,7 +213,6 @@ Feature: Crossdock Hubs
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator reloads hubs cache
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Operator refresh page

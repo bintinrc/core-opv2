@@ -6,6 +6,7 @@ package co.nvqa.operator_v2.model;
 public class GlobalInboundParams {
 
   private String hubName;
+  private String parcelType;
   private String deviceId;
   private String trackingId;
   private String overrideSize;
@@ -24,6 +25,13 @@ public class GlobalInboundParams {
 
   public void setHubName(String hubName) {
     this.hubName = hubName;
+  }
+  public String getParcelType() {
+    return parcelType;
+  }
+
+  public void setParcelType(String parcelType) {
+    this.parcelType = parcelType;
   }
 
   public String getDeviceId() {

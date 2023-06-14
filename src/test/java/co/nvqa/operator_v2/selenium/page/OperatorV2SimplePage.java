@@ -40,6 +40,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
   private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/../preceding-sibling::div";
 
+
   @FindBy(css = "div.toast-error")
   public List<ToastError> toastErrors;
   @FindBy(css = "div.toast-warning")
@@ -74,6 +75,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", 60);
     waitUntilPageLoaded();
   }
+
 
   public void waitWhilePageIsLoading(int timeoutInSeconds) {
     waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']", timeoutInSeconds);

@@ -42,7 +42,7 @@ Feature: Driver Type Management
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
 
-   @DeleteDriverType @DeleteDriver
+   @DeleteDriverType @DeleteDriverV2
   Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management

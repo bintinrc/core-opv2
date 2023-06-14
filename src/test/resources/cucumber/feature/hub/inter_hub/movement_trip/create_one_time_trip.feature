@@ -5,7 +5,7 @@ Feature: Movement Trip - Create One Time Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign > 4 drivers (uid:97eca75b-a487-4879-8979-d5645c351438)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -34,7 +34,7 @@ Feature: Movement Trip - Create One Time Trip
     And Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign Single Driver (uid:043eed30-91b2-4a88-83c2-6a0bd9629016)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -63,7 +63,7 @@ Feature: Movement Trip - Create One Time Trip
     And Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign Multiple Drivers (uid:54ad5e4c-c2f0-48c5-8c19-3e2dd56dab73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -92,7 +92,7 @@ Feature: Movement Trip - Create One Time Trip
     And Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create One Time Trip with same Origin and Destination Hub (uid:2669eafe-16bd-4417-993e-cfd71cff1fd6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 1 new Hub using data below:
@@ -116,7 +116,7 @@ Feature: Movement Trip - Create One Time Trip
     Then Operator verifies same hub error messages on Create One Time Trip page
     And Operator verifies Submit button is disable on Create One Trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign Expired License Driver (uid:6a9d8b70-64cd-406b-983b-b0b833263f68)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -146,7 +146,7 @@ Feature: Movement Trip - Create One Time Trip
     Given Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign Expired Employment Driver (uid:d73a6e36-3c6b-4305-b170-47275b666bb9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -176,7 +176,7 @@ Feature: Movement Trip - Create One Time Trip
     Given Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with disabled Origin Hub (uid:c5de607c-0e75-483f-a261-e2453b439d66)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -206,7 +206,7 @@ Feature: Movement Trip - Create One Time Trip
     Given Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with disabled Destination Hub (uid:c5de607c-0e75-483f-a261-e2453b439d66)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -236,7 +236,7 @@ Feature: Movement Trip - Create One Time Trip
     Given Operator clicks Submit button on Create One Trip page
     Then Operator verifies toast message display on create one time trip page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @CancelTrip
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2 @CancelTrip
   Scenario: Create One Time Trip with Assign Active and Inactive Driver (uid:d25b8c2c-0d01-4a9b-b949-748ffb2ade11)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

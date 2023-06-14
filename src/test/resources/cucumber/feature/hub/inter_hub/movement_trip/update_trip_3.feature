@@ -6,7 +6,7 @@ Feature: Movement Trip - Update Trip
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Departure with single Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -39,7 +39,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Complete (uid:b6d4ffd1-5960-48c6-bd09-4b311909f9e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -78,7 +78,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
     Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Can Register Trip Departure With Driver from deleted Hub Relation (uid:75a4f2b5-de52-4946-94c9-47269dbb7f23)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -108,7 +108,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Multiple Different Trips (uid:d7dbab63-4e63-4f98-b1f2-5b9c18e5a39c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 3 new Hub using data below:
@@ -156,7 +156,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -197,7 +197,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Departure via Trip Details page - Status Pending and not Archived (uid:ba270a28-8fc2-48e1-930f-58c434afb19b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -236,7 +236,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on movement page
     And DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "TRANSIT"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Departure via Trip Details page - Status Pending and Archived (uid:08867801-23a7-459c-9362-fea46e90f792)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -270,7 +270,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} departed" is shown on movement page
     And DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "TRANSIT"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Register Trip Arrival via Trip Details page (uid:11626b18-5a20-409b-97c2-fb66d7d2f7ca)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -304,7 +304,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} arrived" is shown on movement page
     And DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "ARRIVED"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Trip via Trip Details page - Arrived Trip (uid:d91e960c-eb51-416a-8ad4-815d66e569ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -340,7 +340,7 @@ Feature: Movement Trip - Update Trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
     Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Force Complete Trip via Trip Details page - Transit Trip in Archived (uid:08867801-23a7-459c-9362-fea46e90f792)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

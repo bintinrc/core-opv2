@@ -5,7 +5,7 @@ Feature: Crossdock Hubs
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with Single Driver (uid:5a5db671-e5e7-48ea-890c-20bd18e65396)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -35,7 +35,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with Multiple Drivers (uid:9267b27e-7a72-4c67-baf0-64d95018cc2a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -65,7 +65,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with 4 Drivers (uid:366d4221-9c99-4b4a-9f03-4ec479ee2345)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -95,7 +95,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with > 4 Drivers (uid:97200116-acee-4a3b-a403-90e41b19c0b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -125,7 +125,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with Inactive License Status Driver (uid:b8e5456a-2a83-4606-913a-d19df430f306)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -161,7 +161,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Create with Inactive Employment Status Driver (uid:c803b569-759a-4ca9-89cb-c74be22c933d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -197,7 +197,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with Single Driver (uid:58995063-2777-4d7c-8d00-7de3d45155ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -239,7 +239,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with Multiple Drivers (uid:58995063-2777-4d7c-8d00-7de3d45155ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -281,7 +281,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with 4 Drivers (uid:36f10f8f-ba71-4e25-bbe2-c4e9033430a8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -323,7 +323,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with >4 Drivers (uid:37166d72-193c-4f1b-97e9-4087efaeec3a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:

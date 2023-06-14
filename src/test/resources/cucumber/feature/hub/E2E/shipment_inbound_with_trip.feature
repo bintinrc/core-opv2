@@ -5,7 +5,7 @@ Feature: E2E With Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Shipment Inbound Parcel with Trip - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -123,7 +123,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Fail Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -241,7 +241,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Reversion Failed Delivery to Success - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -365,7 +365,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Success Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -483,7 +483,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Fail Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -601,7 +601,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Reversion Failed Delivery to Success - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -725,7 +725,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Success Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -843,7 +843,7 @@ Feature: E2E With Trip
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Fail Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -949,7 +949,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Reversion Failed Delivery to Success -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1061,7 +1061,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to Existing Route - Success Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1167,7 +1167,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Fail Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1273,7 +1273,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Reversion Failed Delivery to Success -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1385,7 +1385,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: End Inbound Parcel  with Trip in Shipment Destination Hub - Add to New Route - Success Delivery -  e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -1491,7 +1491,7 @@ Feature: E2E With Trip
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-    @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+    @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
     Scenario: Hub Inbound Parcel with Trip in Shipment Destination Hub - Transfer Parcel - e2e
       When API Operator create new shipper address V2 using data below:
         | shipperId       | {shipper-v4-id} |

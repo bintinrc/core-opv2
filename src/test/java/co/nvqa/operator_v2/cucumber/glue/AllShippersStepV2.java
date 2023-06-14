@@ -1207,6 +1207,15 @@ public class AllShippersStepV2 extends AbstractSteps {
         }, 1000, 3);
     }
 
+    @When("Operator save changes on Edit Shippers page")
+    public void operatorUpdateShipper() {
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+            pause8s();
+            shipperCreatePage.saveChanges.click();
+            shipperCreatePage.waitUntilInvisibilityOfToast("All changes saved successfully");
+        }, 1000, 3);
+    }
+
     @When("Operator verify {string} equals {string}")
     public void verifySettingsValue(String value, String setting) {
         String val = resolveValue(value);

@@ -5,9 +5,9 @@ Feature: Create New Routes on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -17,13 +17,13 @@ Feature: Create New Routes on Station Route
     And API Sort - Operator adds order to shipment:
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
       | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-5}
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator create new coverage:
-      | hubId            | {hub-id-2}                                          |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id-5}                                          |
       | area             | {KEY_CREATED_ORDER.toAddress1}                      |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | {KEY_CREATED_ORDER.toAddress2}                      |
@@ -31,7 +31,7 @@ Feature: Create New Routes on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub                        | {hub-name-2}                   |
+      | hub                        | {hub-name-5}                   |
       | shipmentType               | AIR_HAUL                       |
       | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
@@ -57,7 +57,7 @@ Feature: Create New Routes on Station Route
       | date     | {gradle-current-date-yyyy-MM-dd}                    |
       | tags     | {route-tag-name}                                    |
       | zone     | {zone-name}                                         |
-      | hub      | {hub-name-2}                                        |
+      | hub      | {hub-name-5}                                        |
       | comments | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click Create routes button on Station Route page
     Then Operator verifies that success react notification displayed:
@@ -65,7 +65,7 @@ Feature: Create New Routes on Station Route
       | bottom | 1 parcels added to 1 routes |
     And Operator verify table records on Created routes detail screen on Station Route page:
       | driverName                                 | parcelCount | routeId  | routeDate                        | routeTags        | zone        | hub          | comment                                             |
-      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-2} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-5} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE                      |
@@ -91,9 +91,9 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -103,13 +103,13 @@ Feature: Create New Routes on Station Route
     And API Sort - Operator adds order to shipment:
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
       | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-5}
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}","zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}]}} |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator create new coverage:
-      | hubId            | {hub-id-2}                                          |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id-5}                                          |
       | area             | {KEY_CREATED_ORDER.toAddress1}                      |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | {KEY_CREATED_ORDER.toAddress2}                      |
@@ -117,7 +117,7 @@ Feature: Create New Routes on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub                        | {hub-name-2}                   |
+      | hub                        | {hub-name-5}                   |
       | shipmentType               | AIR_HAUL                       |
       | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
@@ -143,7 +143,7 @@ Feature: Create New Routes on Station Route
       | date             | {gradle-current-date-yyyy-MM-dd}                    |
       | tags             | {route-tag-name}                                    |
       | usePreferredZone | true                                                |
-      | hub              | {hub-name-2}                                        |
+      | hub              | {hub-name-5}                                        |
       | comments         | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click Create routes button on Station Route page
     Then Operator verifies that success react notification displayed:
@@ -151,7 +151,7 @@ Feature: Create New Routes on Station Route
       | bottom | 1 parcels added to 1 routes |
     And Operator verify table records on Created routes detail screen on Station Route page:
       | driverName                                 | parcelCount | routeId  | routeDate                        | routeTags        | zone        | hub          | comment                                             |
-      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-2} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-5} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE                      |
@@ -177,9 +177,9 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone Different To Zone Selected
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -189,13 +189,13 @@ Feature: Create New Routes on Station Route
     And API Sort - Operator adds order to shipment:
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
       | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-5}
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}","zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}]}} |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator create new coverage:
-      | hubId            | {hub-id-2}                                          |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id-5}                                          |
       | area             | {KEY_CREATED_ORDER.toAddress1}                      |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | {KEY_CREATED_ORDER.toAddress2}                      |
@@ -203,7 +203,7 @@ Feature: Create New Routes on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub                        | {hub-name-2}                   |
+      | hub                        | {hub-name-5}                   |
       | shipmentType               | AIR_HAUL                       |
       | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
@@ -230,7 +230,7 @@ Feature: Create New Routes on Station Route
       | tags             | {route-tag-name}                                    |
       | zone             | {zone-name-2}                                       |
       | usePreferredZone | true                                                |
-      | hub              | {hub-name-2}                                        |
+      | hub              | {hub-name-5}                                        |
       | comments         | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click Create routes button on Station Route page
     Then Operator verifies that success react notification displayed:
@@ -238,7 +238,7 @@ Feature: Create New Routes on Station Route
       | bottom | 1 parcels added to 1 routes |
     And Operator verify table records on Created routes detail screen on Station Route page:
       | driverName                                 | parcelCount | routeId  | routeDate                        | routeTags        | zone        | hub          | comment                                             |
-      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-2} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-5} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE                      |
@@ -264,9 +264,9 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Partial Success Assign Unrouted Order To new Route on Station Route
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -285,13 +285,13 @@ Feature: Create New Routes on Station Route
     And API Sort - Operator adds order to shipment:
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
       | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-5}
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator create new coverage:
-      | hubId            | {hub-id-2}                                                 |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id-5}                                                 |
       | area             | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}  |
       | areaVariations   | 998 Toa Payoh, North {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | home {gradle-current-date-yyyyMMddHHmmsss}                 |
@@ -299,7 +299,7 @@ Feature: Create New Routes on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                        |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub                        | {hub-name-2}                   |
+      | hub                        | {hub-name-5}                   |
       | shipmentType               | AIR_HAUL                       |
       | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
@@ -329,7 +329,7 @@ Feature: Create New Routes on Station Route
       | date     | {gradle-current-date-yyyy-MM-dd}                    |
       | tags     | {route-tag-name}                                    |
       | zone     | {zone-name}                                         |
-      | hub      | {hub-name-2}                                        |
+      | hub      | {hub-name-5}                                        |
       | comments | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click Create routes button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
@@ -340,7 +340,7 @@ Feature: Create New Routes on Station Route
       | bottom | 1 parcels added to 1 routes |
     And Operator verify table records on Created routes detail screen on Station Route page:
       | driverName                                 | parcelCount | routeId  | routeDate                        | routeTags        | zone        | hub          | comment                                             |
-      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-2} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} | 1           | not null | {gradle-current-date-yyyy-MM-dd} | {route-tag-name} | {zone-name} | {hub-name-5} | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE |

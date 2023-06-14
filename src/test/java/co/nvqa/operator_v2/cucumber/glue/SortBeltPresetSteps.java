@@ -294,11 +294,12 @@ public class SortBeltPresetSteps extends AbstractSteps {
           String shipper = dataTable.get("shipper");
           if (shipper != null) {
             String finalShipper = resolveValue(shipper);
-            Assertions.assertThat(row.getFilterValue())
-                .as(f("shipper show correct value : %s", finalShipper))
-                .isEqualTo(finalShipper);
+            doWithRetry(() -> {
+              Assertions.assertThat(row.getFilterValue())
+                  .as(f("shipper show correct value : %s", finalShipper))
+                  .isEqualTo(finalShipper);
+            },"Assert shipper filter show correct value ");
           }
-
           break;
         case "Granular Status":
           String statuses = String.join(", ", f.getGranularStatuses());

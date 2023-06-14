@@ -54,10 +54,14 @@ public class GlobalInboundSteps extends AbstractSteps {
   private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData) {
     String hubName = mapOfData.get("hubName");
     String deviceId = mapOfData.get("deviceId");
+    String parcelType = mapOfData.get("parcelType");
     String trackingId = mapOfData.get("trackingId");
     String overrideSize = mapOfData.get("overrideSize");
     String tags = mapOfData.get("tags");
 
+   if(parcelType==null){
+     parcelType = "Bulky";
+   }
     Double overrideWeight = parseDoubleOrNull(mapOfData.get("overrideWeight"));
     Double overrideDimHeight = parseDoubleOrNull(mapOfData.get("overrideDimHeight"));
     Double overrideDimWidth = parseDoubleOrNull(mapOfData.get("overrideDimWidth"));
@@ -70,6 +74,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     GlobalInboundParams globalInboundParams = new GlobalInboundParams();
     globalInboundParams.setHubName(hubName);
     globalInboundParams.setDeviceId(deviceId);
+    globalInboundParams.setParcelType(parcelType);
     globalInboundParams.setTrackingId(trackingId);
     globalInboundParams.setOverrideSize(overrideSize);
     globalInboundParams.setOverrideWeight(overrideWeight);
@@ -82,7 +87,7 @@ public class GlobalInboundSteps extends AbstractSteps {
 
   @When("^Operator global inbounds parcel using data below:$")
   public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
+    doWithRetry(() ->
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
@@ -95,7 +100,7 @@ public class GlobalInboundSteps extends AbstractSteps {
         globalInboundPage.refreshPage();
         throw new NvTestRuntimeException(ex);
       }
-    }, 5);
+    }, "OperatorV2 Global Inbound Parcel");
   }
 
   @When("^Operator global inbounds parcel using data below and check alert:$")

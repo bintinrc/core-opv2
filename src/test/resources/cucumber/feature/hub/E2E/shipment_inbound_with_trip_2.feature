@@ -247,7 +247,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel with Trip in Shipment Destination Hub - RTS - New Route - Fail Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -368,7 +368,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Parcel with Trip in Shipment Destination Hub - RTS - Existing Route - Fail Delivery - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -489,7 +489,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Stayover Shipment In Operator
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -636,7 +636,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Stayover Shipment With Different Driver In Operator
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -748,7 +748,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Stayover Shipment With Different Driver But Same Origin Destination Pair
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -860,7 +860,7 @@ Feature: E2E With Trip 2
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Hub Inbound Stayover Shipment With Different Driver But Same Origin Destination Pair
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

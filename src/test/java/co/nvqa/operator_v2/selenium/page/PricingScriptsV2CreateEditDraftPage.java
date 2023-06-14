@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -39,8 +41,11 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
   @FindBy(xpath = "//button[@data-testid='deleteScript.confirmBtn']")
   public PageElement buttonConfirmDelete;
 
-  @FindBy(xpath = "//span[text()='Delete Draft']")
+  @FindBy(xpath = "//span[contains(text(),'Delete')]")
   private PageElement buttonDeleteDraft;
+
+  @FindBy(xpath = "//span[text()='Save Draft and Exit']")
+  private PageElement buttonSaveExit;
 
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
@@ -265,22 +270,10 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
       sendKeysByName("codValue", String.valueOf(codValue));
     }
     if (Objects.nonNull(runCheckParams.getFromZone())) {
-      scrollIntoView(f("//div[@name='%s']//input", "fromZone"));
-      clickf("//div[@name='%s']//input", "fromZone");
-      pause1s();
-      clickf(
-          "//div[@class='ant-select-dropdown ant-select-dropdown-placement-bottomLeft ']//div[text()='%s' and contains(@class,'option')]",
-          runCheckParams.getFromZone());
-      pause50ms();
+      scrollDropdown("fromZone", runCheckParams.getFromZone());
     }
     if (Objects.nonNull(runCheckParams.getToZone())) {
-      scrollIntoView(f("//div[@name='%s']//input", "toZone"));
-      clickf("//div[@name='%s']//input", "toZone");
-      pause1s();
-      clickf(
-          "//div[@class='ant-select-dropdown ant-select-dropdown-placement-bottomLeft ']//div[text()='%s' and contains(@class,'option')]",
-          runCheckParams.getToZone());
-      pause50ms();
+      scrollDropdown("toZone", runCheckParams.getToZone());
     }
     if (Objects.nonNull(runCheckParams.getFromL1())) {
       sendKeysByName("fromL1",
@@ -329,14 +322,15 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
 
   public void verifyErrorMessage(String errorMessage, String status) {
     Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
-
+    SoftAssertions softAssertions = new SoftAssertions();
     if (StringUtils.isNotBlank(status)) {
-      Assertions.assertThat(toastData.get("status")).as("Error toast status")
+      softAssertions.assertThat(toastData.get("status")).as("Error toast status")
           .isEqualToIgnoringCase(status);
     }
     if (StringUtils.isNotBlank(errorMessage)) {
-      Assertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
+      softAssertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
           .isEqualToIgnoringCase(errorMessage);
+      softAssertions.assertAll();
     }
   }
 
@@ -361,8 +355,7 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
 
     // Remove [CURRENCY_CODE] + [SPACE]
     actualGrandTotal = actualGrandTotal.substring(4);
-//Undo below comment once GST currecy bug is fixed
-    //    actualGst = actualGst.substring(4);
+    actualGst = actualGst.substring(4);
     actualDeliveryFee = actualDeliveryFee.substring(4);
     actualInsuranceFee = actualInsuranceFee.substring(4);
     actualCodFee = actualCodFee.substring(4);
@@ -370,21 +363,33 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
     actualRTSFee = actualRTSFee.substring(4);
 
     SoftAssertions softAssertions = new SoftAssertions();
-    softAssertions.assertThat(actualGrandTotal).as("Grand Total is correct")
+    softAssertions.assertThat(actualGrandTotal)
+        .as(f("Grand Total expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()), actualGrandTotal))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()));
-    softAssertions.assertThat(actualGst).as("GST is correct")
+    softAssertions.assertThat(actualGst).as(f("GST expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()), actualGst))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()), actualGst);
-    softAssertions.assertThat(actualDeliveryFee).as("Delivery Fee is correct")
+    softAssertions.assertThat(actualDeliveryFee)
+        .as(f("Delivery Fee expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()), actualDeliveryFee))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()));
-    softAssertions.assertThat(actualInsuranceFee).as("Insurance Fee is correct")
+    softAssertions.assertThat(actualInsuranceFee)
+        .as(f("Insurance Fee expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()), actualInsuranceFee))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()));
-    softAssertions.assertThat(actualCodFee).as("COD Fee is correct")
+    softAssertions.assertThat(actualCodFee).as(f("COD Fee expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()), actualCodFee))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()), actualCodFee);
-    softAssertions.assertThat(actualHandlingFee).as("Handling Fee is correct")
+    softAssertions.assertThat(actualHandlingFee)
+        .as(f("Handling Fee expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()), actualHandlingFee))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()));
-    softAssertions.assertThat(actualRTSFee).as("RTS Fee is correct")
+    softAssertions.assertThat(actualRTSFee).as(f("RTS Fee expected is %s and actual is %s",
+            RUN_CHECK_RESULT_DF.format(runCheckResult.getRTSFee()), actualRTSFee))
         .isEqualTo(RUN_CHECK_RESULT_DF.format(runCheckResult.getRTSFee()));
-    softAssertions.assertThat(actualComments).as("Comments is correct")
+    softAssertions.assertThat(actualComments).as(f("Comments expected is %s and actual is %s",
+            runCheckResult.getComments(), actualComments))
         .isEqualTo(runCheckResult.getComments(), actualComments);
     softAssertions.assertAll();
   }
@@ -429,11 +434,10 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
 
     switch (actionType) {
       case ACTION_SAVE:
-        click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save']");
+        click("//span[text()='Save Draft']");
         break;
       case ACTION_SAVE_AND_EXIT:
-        click(
-            "//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save and Exit']");
+        buttonSaveExit.click();
         break;
       case ACTION_DELETE:
         buttonDeleteDraft.click();
@@ -464,5 +468,32 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
           return currentUrl.endsWith(expectedUrlEndsWith);
         }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS,
         String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
+  }
+
+  private void scrollDropdown(String fieldName, String fieldValue) {
+    scrollIntoView(f("//div[@name='%s']//input", fieldName));
+    clickf("//div[@name='%s']//input", fieldName);
+    pause1s();
+    if (
+        getElementsCount(f(
+            "//div[@class='ant-select-dropdown ant-select-dropdown-placement-bottomLeft ']//div[text()='%s' and contains(@class,'option')]",
+            fieldValue)) > 0) {
+      clickf(
+              "//div[@class='ant-select-dropdown ant-select-dropdown-placement-bottomLeft ']//div[text()='%s' and contains(@class,'option')]",
+          fieldValue);
+    } else {
+      clickf("//div[@name='%s']//input", fieldName);
+      clickf("//div[@name='%s']//input", fieldName);
+      pause1s();
+      WebElement scrollBar = findElementByXpath(
+          "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(@class,'rc-virtual-list-scrollbar-thumb')]");
+      scrollToElement(scrollBar,
+          f("//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[text()='%s']",
+              fieldValue), 1500, 2);
+      TestUtils.findElementAndClick(
+          f("//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[text()='%s']",
+              fieldValue), "xpath", getWebDriver());
+    }
+    pause50ms();
   }
 }
