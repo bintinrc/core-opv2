@@ -12,10 +12,10 @@ import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
+import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -45,7 +45,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +58,7 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class EditOrderSteps extends AbstractSteps {
+public class EditOrderSteps extends AbstractSteps{
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EditOrderSteps.class);
   public static final String KEY_CHAT_MESSAGE = "KEY_CHAT_MESSAGE";
@@ -1440,12 +1442,24 @@ public class EditOrderSteps extends AbstractSteps {
         .isEqualTo(parcelSize);
   }
 
-  @When("^Operator open Edit Order page for order ID \"(.+)\"$")
+  @When("Operator open Edit Order page for order ID {value}")
   public void operatorOpenEditOrderPage(String orderId) {
-    orderId = resolveValue(orderId);
-    editOrderPage.openPage(Long.parseLong(orderId));
+    openEditOrderPage(Long.valueOf(orderId), true);
+  }
+
+  @When("Operator open Edit Order page for order ID {value} without unmask")
+  public void operatorOpenEditOrderPageUnmask(String orderId) {
+    openEditOrderPage(Long.valueOf(orderId), false);
+  }
+
+  private void openEditOrderPage(Long orderId, boolean isUnmask) {
+    editOrderPage.openPage(orderId);
     if (!editOrderPage.status.isDisplayedFast()) {
       editOrderPage.refreshPage();
+    }
+    if (isUnmask) {
+      List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+      editOrderPage.operatorClickMaskingText(masks);
     }
   }
 
@@ -1976,15 +1990,5 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator click all masking text")
-  public void operatorClickMaskingText() {
-    editOrderPage.masking.forEach(masking -> {
-      try {
-        masking.click();
 
-      } catch (Exception ex) {
-        LOGGER.info("not found element", ex);
-      }
-    });
-  }
 }
