@@ -140,9 +140,9 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
     sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
     pause2s();
-    click(PARCEL_TYPE_DROPDOWN_XPATH);
-    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
-    click(parcelTypeSelection);
+//    click(PARCEL_TYPE_DROPDOWN_XPATH);
+//    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
+//    click(parcelTypeSelection);
     pause2s();
 
     //Select Sort Task

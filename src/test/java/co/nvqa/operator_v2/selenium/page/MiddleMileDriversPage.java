@@ -133,6 +133,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), '%s')]";
 
+    private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+
+    private static final String TOAST_ERROR_400_MESSAGE_XPATH = "//div[contains(@class,'ant-notification-notice-message')]";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -671,9 +674,17 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void editDriverByWithValue(String column, String value) {
         switch (column) {
-            case "name":
+            case "firstName":
                 editDriverDialog.name.forceClear();
                 editDriverDialog.name.sendKeys(value);
+                break;
+            case "lastName":
+                editDriverDialog.lastName.forceClear();
+                editDriverDialog.lastName.sendKeys(value);
+                break;
+            case "displayName":
+                editDriverDialog.displayName.forceClear();
+                editDriverDialog.displayName.sendKeys(value);
                 break;
             case "contactNumber":
                 editDriverDialog.contactNumber.forceClear();
@@ -1074,6 +1085,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         public TextBox dialogTitle;
         @FindBy(id = "first_name")
         public TextBox name;
+        @FindBy(id = "last_name")
+        public TextBox lastName;
+        @FindBy(id = "display_name")
+        public TextBox displayName;
         @FindBy(id = "contact_number")
         public TextBox contactNumber;
         @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='hub_id']]")
@@ -1356,14 +1371,43 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             case "License Type":
                 actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "License Type")).getText();
                 break;
+            case "Employment Type":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Employment Type")).getText();
+                break;
         }
         Assertions.assertThat(actualMessage).as("Mandatory field error message is same")
                 .isEqualTo(expectedMessage);
+    }
+
+    public void clearTextonField(String fieldName) {
+        if (fieldName.equals("Employment Type")) {
+            findElementByXpath(f(MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH, "employment_type")).click();
+        }
     }
 
     public void verifyErrorNotificationDriverAlreadyRegistered() {
         Assertions.assertThat(isElementExist(NOTIFICATION_DRIVER_ALREADY_REGISTERED_XPATH))
             .as("Error notification is Username already registered")
             .isTrue();
+    }
+
+    public void editDriverByWithVendorValue(String employmentType, String vendorName) {
+        if (employmentType.equalsIgnoreCase("Outsourced - Vendors")) {
+            chooseEmploymentType(employmentType);
+            chooseVendorName(vendorName);
+        } else if (employmentType.equalsIgnoreCase("Outsourced - Manpower Agency")) {
+            chooseEmploymentType(employmentType);
+            chooseVendorName(vendorName);
+        }
+        editDriverDialog.save.click();
+        editDriverDialog.waitUntilInvisible();
+    }
+
+    public void verifiesToastWithMessage(String errorMessage) {
+        if (errorMessage.equals("Request failed with status code 400")) {
+            Assertions.assertThat(isElementExistFast(TOAST_ERROR_400_MESSAGE_XPATH))
+                    .as("Toast Error Request 400")
+                    .isTrue();
+        }
     }
 }
