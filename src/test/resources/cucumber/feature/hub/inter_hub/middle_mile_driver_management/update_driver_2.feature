@@ -68,6 +68,7 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
 	And Operator edit Employment Type on edit driver dialog with value "Outsourced - Vendors" with vendor name is "{default-driver-vendor-name-sg}"
+	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Outsourced - Vendors" is updated
 	When Operator clicks edit button on the middle mile driver page
 	When Operator clicks clear button on "Employment Type" field on the middle mile driver edit popup
 	Then Operator verifies error message on "Employment Type" field on the middle mile driver is shown
