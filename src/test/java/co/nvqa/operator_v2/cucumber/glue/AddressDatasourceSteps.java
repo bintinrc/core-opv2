@@ -376,6 +376,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @When("^Operator search the existing address datasource:$")
   public void operatorSearchExistingAddressDatasource(Map<String, String> data) {
+    addressDatasourcePage.waitUntilPageLoaded();
     addressDatasourcePage.switchTo();
     data = resolveKeyValues(data);
 
