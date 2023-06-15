@@ -17,6 +17,7 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
   private Long deliveriesCount;
   private Long pickupsCount;
   private String comments;
+  private String contact;
   private String trackingIds;
 
   private Reservation reservation;
@@ -114,6 +115,12 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     this.comments = comments;
   }
 
+  public String getContact() {
+    return contact;
+  }
+  public void setContact(String contact) {
+    this.contact = contact;
+  }
   public String getTrackingIds() {
     return trackingIds;
   }
