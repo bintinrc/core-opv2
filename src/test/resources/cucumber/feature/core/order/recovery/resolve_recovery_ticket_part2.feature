@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @Recovery @ResolveTicket @ResolveTicketPart2 @EditOrder3
 Feature: Resolve Recovery Ticket
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = XMAS CAGE
@@ -365,7 +365,7 @@ Feature: Resolve Recovery Ticket
 #  need to enable once issue is fixed
 #      | ROUTE INBOUND  SCAN |
       | TICKET RESOLVED |
-    
+
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -455,7 +455,3 @@ Feature: Resolve Recovery Ticket
     And Operator verify order events with description on Edit order page using data below:
       | tags          | name          | description                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

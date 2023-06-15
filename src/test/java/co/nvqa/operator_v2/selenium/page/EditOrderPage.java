@@ -71,7 +71,7 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class EditOrderPage extends OperatorV2SimplePage {
+public class EditOrderPage extends OperatorV2SimplePage implements MaskedPage{
 
   @FindBy(id = "header")
   public PageElement header;
@@ -124,8 +124,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
   public PageElement dimensions;
 
-  @FindBy(xpath = "//span[contains(text(), 'Click to reveal (tracked)')]")
-  public List<Button> masking;
+
 
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3
 Feature: Edit Order Details
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -107,7 +107,6 @@ Feature: Edit Order Details
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator click all masking text
     And Operator click Delivery -> Edit Delivery Details on Edit Order page
     And Operator update Delivery Details on Edit Order Page
       | recipientName    | test sender name                       |
@@ -124,7 +123,6 @@ Feature: Edit Order Details
     Then Operator verifies that success toast displayed:
       | top | Delivery Details Updated |
     And Operator refresh page
-    And Operator click all masking text
     And Operator verify Delivery details on Edit order page using data below:
       | name    | test sender name                              |
       | contact | +9727894434                                   |
@@ -314,8 +312,3 @@ Feature: Edit Order Details
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE DIMENSION                                                                                                |
       | description | Length updated: assigned new value 5\nWidth updated: assigned new value 6\nHeight updated: assigned new value 7 |
-
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
