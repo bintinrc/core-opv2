@@ -376,6 +376,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @When("^Operator search the existing address datasource:$")
   public void operatorSearchExistingAddressDatasource(Map<String, String> data) {
+    addressDatasourcePage.waitUntilPageLoaded();
     addressDatasourcePage.switchTo();
     data = resolveKeyValues(data);
 
@@ -562,22 +563,27 @@ public class AddressDatasourceSteps extends AbstractSteps {
   @Then("^Operator verifies the zone and hub details in View Zone and Hub Match modal:")
   public void operatorVerifiesZoneAndHub(Map<String, String> data) {
     data = resolveKeyValues(data);
+    String latlong = data.get("latlong");
+    String hub = data.get("hub");
+    String zone = data.get("zone");
+    doWithRetry(() -> {
+      if (StringUtils.isNotBlank(latlong)){
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
+            .as("latlong")
+            .isEqualToIgnoringCase(latlong);
+      }
+      if (StringUtils.isNotBlank(hub)) {
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneHub.getText())
+            .as("hub")
+            .isEqualToIgnoringCase(hub);
+      }
+      if (StringUtils.isNotBlank(zone) ){
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
+            .as("zone")
+            .isEqualToIgnoringCase(zone);
+      }
+    }, "Verifying Zone and Hub Lat Long");
 
-    if (StringUtils.isNotBlank(data.get("latlong"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
-          .as("latlong")
-          .isEqualToIgnoringCase(data.get("latlong"));
-    }
-    if (StringUtils.isNotBlank(data.get("hub"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneHub.getText())
-          .as("hub")
-          .isEqualToIgnoringCase(data.get("hub"));
-    }
-    if (StringUtils.isNotBlank(data.get("zone"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
-          .as("zone")
-          .isEqualToIgnoringCase(data.get("zone"));
-    }
   }
 
   @And("Operator verify the latlong error alert:")

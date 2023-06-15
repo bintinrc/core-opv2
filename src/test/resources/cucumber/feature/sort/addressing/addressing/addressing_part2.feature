@@ -68,7 +68,7 @@ Feature: Addressing
       | source      | {addressing-default-source}       |
       | addresstype | {addressing-default-addresstype}  |
 
-  @DeleteAddres
+  @DeleteAddress
   Scenario: Add Address PH
     Given Operator change the country to "Philippines"
     And Operator refresh page
@@ -100,7 +100,7 @@ Feature: Addressing
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "Niko","contact": "+659143425","email": "test@mail.co","phone_number": "+659143429","address": {"address1": "{KEY_CREATED_ADDRESSING.streetName}","address2": "", "country": "SG","postcode": "{KEY_CREATED_ADDRESSING.postcode}"}},"parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator switch to edit order page using direct URL
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE AV                                                                                                                                                                                                                                                                                       |
       | description | User: AUTO (system AV) (support@ninjavan.co) Address: {KEY_CREATED_ADDRESSING.streetName} \|\|\|\|112233 Zone ID: 1 Destination Hub ID: 1 Lat, Long: {KEY_CREATED_ADDRESSING.latitude}, {KEY_CREATED_ADDRESSING.longitude} Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
