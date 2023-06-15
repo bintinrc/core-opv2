@@ -5,23 +5,21 @@ import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
-import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
@@ -36,8 +34,6 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
-import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ManuallyCompleteOrderDialog;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.CreateTicketDialog;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -169,7 +165,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public EditInstructionsDialog editInstructionsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
 
   @FindBy(css = ".ant-modal")
@@ -432,27 +428,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     TransactionInfo actual = transactionsTable.readEntity(1);
     Assertions.assertThat(actual.getPriorityLevel()).as(txnType + " Priority Level")
         .isEqualTo(String.valueOf(priorityLevel));
-  }
-
-  public String confirmCompleteOrder() {
-    String changeReason = f("This reason is created by automation at %s.",
-        DTF_CREATED_DATE.format(ZonedDateTime.now()));
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
-    manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("The order has been completed", true);
-    return changeReason;
-  }
-
-  public void confirmCompleteOrder(String reason, String reasonDescr) {
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue(reason);
-    if (StringUtils.isNotBlank(reasonDescr)) {
-      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
-    }
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
@@ -899,7 +874,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       setTableLocator("//div[./div/span[.='Events']]/div[contains(@class,'VirtualTable')]");
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(DATE_TIME, "_time")
-          .put(EVENT_TAGS, "_tags")
+          .put(EVENT_TAGS, "_tagsString")
           .put(EVENT_NAME, "_name")
           .put(USER_TYPE, "_userType")
           .put(USER_ID, "_user")
@@ -1091,13 +1066,13 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(xpath = "./div/span[2]")
     public PageElement status;
-    @FindBy(xpath = ".//div[@class='layout-row']//h5")
+    @FindBy(xpath = "./div[2]/div[1]")
     public PageElement to;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
+    @FindBy(xpath = "./div[2]/div[2]")
     public PageElement toEmail;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[2]/span")
+    @FindBy(xpath = "./div[2]/div[3]")
     public PageElement toContact;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[3]/span")
+    @FindBy(css = "[data-testid='delivery-info.to-address.mask.testid']")
     public PageElement toAddress;
     @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
     public PageElement startDateTime;
@@ -1897,6 +1872,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
     @FindBy(css = "[text='container.order.edit.rts-hint'] p")
     public PageElement hint;
 
@@ -1942,6 +1918,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.new-address-form.postal-code.input']")
     public ForceClearTextBox postcode;
   }
+
   public static class ResumeOrderDialog extends AntModal {
 
     public ResumeOrderDialog(WebDriver webDriver, WebElement webElement) {
@@ -2304,6 +2281,34 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
     String eventTime = eventRow.getEventTime();
     return eventTime;
+  }
+
+  public static class ManuallyCompleteOrderDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.complete-order.button']")
+    public Button completeOrder;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.mark-all.button']")
+    public Button markAll;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.unmark-all.button']")
+    public Button unmarkAll;
+
+    @FindBy(xpath = ".//tbody/tr[not(contains(.,'Tracking ID'))]/td[1]")
+    public List<PageElement> trackingIds;
+
+    @FindBy(xpath = ".//tbody/tr[not(contains(.,'Tracking ID'))]/td[2]//input")
+    public List<CheckBox> codCheckboxes;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.reason.single-select']")
+    public AntSelect3 changeReason;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.custom-reason.input']")
+    public ForceClearTextBox reasonForChange;
+
+    public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 
 }

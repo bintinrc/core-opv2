@@ -372,47 +372,58 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @When("^Operator confirm manually complete order on Edit Order V2 page$")
-  public void operatorManuallyCompleteOrderOnEditOrderPage() {
-    String changeReason = page.confirmCompleteOrder();
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
-
-  @When("^Operator confirm manually complete order on Edit Order V2 page:$")
+  @When("Operator confirm manually complete order on Edit Order V2 page:")
   public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    page.confirmCompleteOrder(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      page.manuallyCompleteOrderDialog.changeReason.selectValue(finalData.get("reason"));
+      if (finalData.containsKey("reasonForChange")) {
+        page.manuallyCompleteOrderDialog.reasonForChange.setValue(finalData.get("reasonForChange"));
+      }
+      if (finalData.containsKey("markAll")) {
+        page.manuallyCompleteOrderDialog.markAll.click();
+      }
+      page.manuallyCompleteOrderDialog.completeOrder.click();
+    });
   }
 
-  @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order V2 page")
+  @When("Operator verify 'COD Collected' checkbox is disabled in Manually complete order dialog on Edit Order V2 page")
   public void verifyCodCollectedIsDisabled() {
-    page.manuallyCompleteOrderDialog.waitUntilVisible();
-    Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
-        .as("COD Collected checkbox is enabled").isFalse();
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
+          .as("COD Collected checkbox is enabled").isFalse();
+    });
+  }
 
+  @When("Operator verify Complete order button is disabled in Manually complete order dialog on Edit Order V2 page")
+  public void verifyCompleteOrderIsDisabled() {
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.completeOrder.isEnabled())
+          .as("Complete order button is enabled").isFalse();
+    });
   }
 
   @When("Operator confirm manually complete order with COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.markAll.click();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   @When("Operator confirm manually complete order without collecting COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
