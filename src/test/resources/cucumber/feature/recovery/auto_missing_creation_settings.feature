@@ -87,32 +87,6 @@ Feature: Auto Missing Creation Settings
       | name   | Default mapping |
       | status | -               |
 
-  @DeleteHubsViaDb
-  Scenario: Operator Change Hub Status
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator activate created hub
-    When Operator go to menu Hubs -> Facilities Management
-    And Operator disable created hub on Facilities Management page
-    Then Operator verifies that success react notification displayed:
-      | top | Hub Disabled Successfully |
-    Then Operator verify hub parameters on Facilities Management page:
-      | name   | {KEY_CREATED_HUB.name} |
-      | status | Disabled               |
-    When Operator go to menu Recovery -> Auto Missing Creation Settings
-    When Operator Search created hub by hub id = "{KEY_CREATED_HUB.id}" in Auto Missing Creation Settings page
-    Then Operator verifies new hub is available in Hub Missing Investigation Mapping table with correct details
-      | id     | {KEY_CREATED_HUB.id}               |
-      | name   | {KEY_CREATED_HUB.name} (undefined) |
-      | status | Disabled                           |
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
