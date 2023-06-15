@@ -78,7 +78,6 @@ Feature: Auto Missing Creation Settings
       | scanEvents        | DRIVER_INBOUND_SCAN,DRIVER_PICKUP_SCAN,HUB_INBOUND_SCAN,OUTBOUND_SCAN,PARCEL_ROUTING_SCAN,RECOVERY_SCAN,ROUTE_INBOUND_SCAN,ROUTE_TRANSFER_SCAN,SHIPMENT_COMPLETED  |
       | systemId          | ID                                                                                                                                                                 |
 
-
   Scenario: Default Mapping Hub For Missing Investigation Mapping
     Given DB Recovery - verify default assignee rule "SG"
     When Operator go to menu Recovery -> Auto Missing Creation Settings
