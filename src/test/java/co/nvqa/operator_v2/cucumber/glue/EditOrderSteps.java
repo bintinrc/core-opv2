@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
+import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -44,7 +45,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +58,7 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class EditOrderSteps extends AbstractSteps {
+public class EditOrderSteps extends AbstractSteps{
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EditOrderSteps.class);
   public static final String KEY_CHAT_MESSAGE = "KEY_CHAT_MESSAGE";
@@ -796,6 +799,32 @@ public class EditOrderSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verify order events with description on Edit order page using data below:")
+  public void operatorVerifyOrderEventsWithDescriptionOnEditOrderPage(
+      List<Map<String, String>> data) {
+    data.forEach(eventData -> {
+      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+      OrderEvent actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+          .filter(event -> (equalsIgnoreCase(event.getName(), expectedEvent.getName())
+              && equalsIgnoreCase(event.getDescription(), expectedEvent.getDescription())))
+          .findAny()
+          .orElse(null);
+      if (actualEvent == null) {
+        pause5s();
+        editOrderPage.refreshPage();
+        actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+            .filter(event -> (equalsIgnoreCase(event.getName(), expectedEvent.getName())
+                && equalsIgnoreCase(event.getDescription(), expectedEvent.getDescription())))
+            .findAny()
+            .orElse(null);
+      }
+      Assertions.assertThat(actualEvent)
+          .withFailMessage("There is no [%s] event on Edit Order page", expectedEvent.getName())
+          .isNotNull();
+      expectedEvent.compareWithActual(actualEvent);
+    });
+  }
+
   @Then("Operator verify order events are not presented on Edit order page:")
   public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
     List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
@@ -1151,7 +1180,8 @@ public class EditOrderSteps extends AbstractSteps {
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.updateDeliveryDetails(mapOfData);
     takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
+    List<co.nvqa.common.core.model.order.Order> order = get(KEY_LIST_OF_CREATED_ORDERS);
+    //Order order = get(KEY_CREATED_ORDER);
     String recipientName = mapOfData.get("recipientName");
     String recipientContact = mapOfData.get("recipientContact");
     String recipientEmail = mapOfData.get("recipientEmail");
@@ -1166,37 +1196,38 @@ public class EditOrderSteps extends AbstractSteps {
     String postalCode = mapOfData.get("postalCode");
 
     if (Objects.nonNull(recipientName)) {
-      order.setToName(recipientName);
+      order.get(0).setToName(recipientName);
     }
     if (Objects.nonNull(recipientContact)) {
-      order.setToContact(recipientContact);
+      order.get(0).setToContact(recipientContact);
     }
     if (Objects.nonNull(recipientEmail)) {
-      order.setToEmail(recipientEmail);
+      order.get(0).setToEmail(recipientEmail);
     }
 //        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
     if (Objects.nonNull(deliveryDate)) {
-      order.setDeliveryDate(deliveryDate);
+      order.get(0).setDeliveryDate(deliveryDate);
     }
     if (Objects.nonNull(deliveryTimeslot)) {
-      order.setDeliveryTimeslot(deliveryTimeslot);
+      order.get(0).setDeliveryTimeslot(deliveryTimeslot);
     }
     if (Objects.nonNull(address1)) {
-      order.setToAddress1(address1);
+      order.get(0).setToAddress1(address1);
     }
     if (Objects.nonNull(address2)) {
-      order.setToAddress2(address2);
+      order.get(0).setToAddress2(address2);
     }
     if (Objects.nonNull(postalCode)) {
-      order.setToPostcode(postalCode);
+      order.get(0).setToPostcode(postalCode);
     }
     if (Objects.nonNull(city)) {
-      order.setToCity(city);
+      order.get(0).setToCity(city);
     }
     if (Objects.nonNull(country)) {
-      order.setToCountry(country);
+      order.get(0).setToCountry(country);
     }
-    put(KEY_CREATED_ORDER, order);
+    //   put(KEY_CREATED_ORDER, order);
+    put(KEY_LIST_OF_CREATED_ORDERS, order);
   }
 
   @Then("Operator verifies Pickup Details are updated on Edit Order Page")
@@ -1411,12 +1442,24 @@ public class EditOrderSteps extends AbstractSteps {
         .isEqualTo(parcelSize);
   }
 
-  @When("^Operator open Edit Order page for order ID \"(.+)\"$")
+  @When("Operator open Edit Order page for order ID {value}")
   public void operatorOpenEditOrderPage(String orderId) {
-    orderId = resolveValue(orderId);
-    editOrderPage.openPage(Long.parseLong(orderId));
+    openEditOrderPage(Long.valueOf(orderId), true);
+  }
+
+  @When("Operator open Edit Order page for order ID {value} without unmask")
+  public void operatorOpenEditOrderPageUnmask(String orderId) {
+    openEditOrderPage(Long.valueOf(orderId), false);
+  }
+
+  private void openEditOrderPage(Long orderId, boolean isUnmask) {
+    editOrderPage.openPage(orderId);
     if (!editOrderPage.status.isDisplayedFast()) {
       editOrderPage.refreshPage();
+    }
+    if (isUnmask) {
+      List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+      editOrderPage.operatorClickMaskingText(masks);
     }
   }
 
@@ -1946,4 +1989,6 @@ public class EditOrderSteps extends AbstractSteps {
           .containsIgnoringCase(data.get("ToPostcode"));
     }
   }
+
+
 }
