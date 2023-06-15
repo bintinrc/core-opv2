@@ -711,4 +711,25 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorVerifiesErrorNotificationIsShownOnMiddleMileDriversPage(String error) {
     middleMileDriversPage.verifyErrorNotificationDriverAlreadyRegistered();
   }
+
+  @And("Operator edit Employment Type on edit driver dialog with value {string} with vendor name is {string}")
+  public void operatorEditOnEditDriverDialogWithValueWithVendorNameIs(String employmentType, String vendorName) {
+    String resolvedValue = resolveValue(employmentType);
+    middleMileDriversPage.editDriverByWithVendorValue(resolvedValue, vendorName);
+  }
+
+  @When("Operator clicks clear button on {string} field on the middle mile driver edit popup")
+  public void operatorClicksClearButtonOnFieldOnTheMiddleMileDriverEditPopup(String fieldName) {
+    middleMileDriversPage.clearTextonField(fieldName);
+  }
+
+  @Then("Operator verifies error message on {string} field on the middle mile driver is shown")
+  public void operatorVerifiesErrorMessageOnFieldOnTheMiddleMileDriverIsShown(String fieldName) {
+    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(fieldName);
+  }
+
+  @Then("Operator verifies toast with message {string} is shown on edit Middle Mile Driver popup")
+  public void operatorVerifiesToastWithMessageIsShownOnEditMiddleMileDriverPopup(String errorMessage) {
+    middleMileDriversPage.verifiesToastWithMessage(errorMessage);
+  }
 }
