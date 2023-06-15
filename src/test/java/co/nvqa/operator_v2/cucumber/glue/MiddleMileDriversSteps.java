@@ -727,4 +727,9 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorVerifiesErrorMessageOnFieldOnTheMiddleMileDriverIsShown(String fieldName) {
     middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(fieldName);
   }
+
+  @Then("Operator verifies toast with message {string} is shown on edit Middle Mile Driver popup")
+  public void operatorVerifiesToastWithMessageIsShownOnEditMiddleMileDriverPopup(String errorMessage) {
+    middleMileDriversPage.verifiesToastWithMessage(errorMessage);
+  }
 }
