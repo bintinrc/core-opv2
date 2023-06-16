@@ -31,7 +31,7 @@ Feature: Cancel RTS
     Then Operator verifies that info toast displayed:
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
-    Then Operator unmask edit order page
+    Then Operator refresh page
     And API Operator get order details
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verify order event on Edit order page using data below:

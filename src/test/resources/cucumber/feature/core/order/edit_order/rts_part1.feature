@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @RTS @RTSPart1 @EditOrder4
 Feature: RTS
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @routing-refactor @happy-path
@@ -782,7 +782,3 @@ Feature: RTS
       | granular_status         |
       | En-route to Sorting Hub |
       | Transferred to 3PL      |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
