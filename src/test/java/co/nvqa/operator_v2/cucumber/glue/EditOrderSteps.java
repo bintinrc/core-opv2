@@ -1178,6 +1178,9 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorUpdateDeliveryDetailsOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
+    //    to click unmask before performing changes
+    List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    editOrderPage.operatorClickMaskingText(masks);
     editOrderPage.updateDeliveryDetails(mapOfData);
     takesScreenshot();
     List<co.nvqa.common.core.model.order.Order> order = get(KEY_LIST_OF_CREATED_ORDERS);
@@ -1308,9 +1311,6 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorReschedulePickupOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
-//    to click unmask before performing changes
-    List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
-    editOrderPage.operatorClickMaskingText(masks);
     editOrderPage.reschedulePickup(mapOfData);
     takesScreenshot();
   }
