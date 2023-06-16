@@ -41,7 +41,7 @@ Feature: Bulk Address Verification
       | toBillingZone.l3_name       | {KEY_LIST_OF_FOUND_ZONES_INFO[2].l3Name}      |
     Examples:
       | fromLatitude | fromLongitude | toLatitude | toLongitude |
-      | -6.1594307   | 106.7856113   | -8.0021898 | 110.503534  |
+      | -6.035939  | 106.843739   | -8.0021898 | 110.503534  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -711,4 +711,56 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorVerifiesErrorNotificationIsShownOnMiddleMileDriversPage(String error) {
     middleMileDriversPage.verifyErrorNotificationDriverAlreadyRegistered();
   }
+
+  @And("Operator edit Employment Type on edit driver dialog with value {string} with vendor name is {string}")
+  public void operatorEditOnEditDriverDialogWithValueWithVendorNameIs(String employmentType, String vendorName) {
+    String resolvedValue = resolveValue(employmentType);
+    middleMileDriversPage.editDriverByWithVendorValue(resolvedValue, vendorName);
+  }
+
+  @When("Operator clicks clear button on {string} field on the middle mile driver edit popup")
+  public void operatorClicksClearButtonOnFieldOnTheMiddleMileDriverEditPopup(String fieldName) {
+    middleMileDriversPage.clearTextonField(fieldName);
+  }
+
+  @Then("Operator verifies error message on {string} field on the middle mile driver is shown")
+  public void operatorVerifiesErrorMessageOnFieldOnTheMiddleMileDriverIsShown(String fieldName) {
+    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(fieldName);
+  }
+
+  @Then("Operator verifies toast with message {string} is shown on edit Middle Mile Driver popup")
+  public void operatorVerifiesToastWithMessageIsShownOnEditMiddleMileDriverPopup(String errorMessage) {
+    middleMileDriversPage.verifiesToastWithMessage(errorMessage);
+  }
+
+  @And("Operator edit License Type with uncheck {string} value and update with {string} on the middle mile driver page")
+  public void operatorEditWithUncheckValueAndUpdateWithOnTheMiddleMileDriverPage(String prevValue, String updatedValue) {
+    middleMileDriversPage.chooseLicenseType(prevValue);
+
+    if (updatedValue.equalsIgnoreCase("all types")) {
+      middleMileDriversPage.chooseLicenseType("B");
+      middleMileDriversPage.chooseLicenseType("B1");
+      middleMileDriversPage.chooseLicenseType("B2");
+      middleMileDriversPage.chooseLicenseType("C");
+      middleMileDriversPage.chooseLicenseType("Restriction 1");
+      middleMileDriversPage.chooseLicenseType("Restriction 2");
+      middleMileDriversPage.chooseLicenseType("Restriction 3");
+    } else {
+      middleMileDriversPage.chooseLicenseType(updatedValue);
+    }
+
+    middleMileDriversPage.editDriverDialog.save.click();
+    middleMileDriversPage.editDriverDialog.waitUntilInvisible();
+  }
+
+  @And("Operator edit License Type with uncheck {string} value on the middle mile driver page")
+  public void operatorEditLicenseTypeWithUncheckValueOnTheMiddleMileDriverPage(String value) {
+    middleMileDriversPage.chooseLicenseType(value);
+  }
+
+  @When("Operator edits {string} on edit driver dialog with invalid value {string}")
+  public void operatorEditsOnEditDriverDialogWithInvalidValue(String fieldName, String value) {
+    String resolvedValue = resolveValue(value);
+    middleMileDriversPage.editDriverByWithInvalidValue(fieldName, resolvedValue);
+  }
 }

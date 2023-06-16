@@ -2,10 +2,19 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Sergey Mishanin
  */
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypointDetails> {
 
   private Long id;
@@ -17,18 +26,12 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
   private Long deliveriesCount;
   private Long pickupsCount;
   private String comments;
+  private String contact;
   private String trackingIds;
 
   private Reservation reservation;
   private Pickup pickup;
   private Delivery delivery;
-
-  public RouteManifestWaypointDetails() {
-  }
-
-  public Long getId() {
-    return id;
-  }
 
   public void setId(Long id) {
     this.id = id;
@@ -38,13 +41,6 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     setId(Long.parseLong(id));
   }
 
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
-  }
 
   public List<String> getOrderTags() {
     return orderTags;
@@ -58,33 +54,6 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     setOrderTags(splitAndNormalize(tags));
   }
 
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
-
-  public String getPriority() {
-    return priority;
-  }
-
-  public void setPriority(String priority) {
-    this.priority = priority;
-  }
-
-  public String getTimeslot() {
-    return timeslot;
-  }
-
-  public void setTimeslot(String timeslot) {
-    this.timeslot = timeslot;
-  }
-
-  public Long getDeliveriesCount() {
-    return deliveriesCount;
-  }
 
   public void setDeliveriesCount(Long deliveriesCount) {
     this.deliveriesCount = deliveriesCount;
@@ -94,9 +63,6 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     setDeliveriesCount(Long.parseLong(deliveriesCount));
   }
 
-  public Long getPickupsCount() {
-    return pickupsCount;
-  }
 
   public void setPickupsCount(Long pickupsCount) {
     this.pickupsCount = pickupsCount;
@@ -106,21 +72,6 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     setPickupsCount(Long.parseLong(pickupsCount));
   }
 
-  public String getComments() {
-    return comments;
-  }
-
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
-
-  public String getTrackingIds() {
-    return trackingIds;
-  }
-
-  public void setTrackingIds(String trackingIds) {
-    this.trackingIds = trackingIds;
-  }
 
   public Reservation getReservation() {
     return reservation;
@@ -146,15 +97,16 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     this.delivery = delivery;
   }
 
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Reservation extends DataEntity<Reservation> {
 
     private Long id;
     private String status;
     private String failureReason;
 
-    public Long getId() {
-      return id;
-    }
 
     public void setId(Long id) {
       this.id = id;
@@ -164,82 +116,30 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
       setId(Long.parseLong(id));
     }
 
-    public String getStatus() {
-      return status;
-    }
 
-    public void setStatus(String status) {
-      this.status = status;
-    }
-
-    public String getFailureReason() {
-      return failureReason;
-    }
-
-    public void setFailureReason(String failureReason) {
-      this.failureReason = failureReason;
-    }
   }
 
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Pickup extends DataEntity<Pickup> {
 
     private String trackingId;
     private String status;
     private String failureReason;
 
-    public String getTrackingId() {
-      return trackingId;
-    }
-
-    public void setTrackingId(String trackingId) {
-      this.trackingId = trackingId;
-    }
-
-    public String getStatus() {
-      return status;
-    }
-
-    public void setStatus(String status) {
-      this.status = status;
-    }
-
-    public String getFailureReason() {
-      return failureReason;
-    }
-
-    public void setFailureReason(String failureReason) {
-      this.failureReason = failureReason;
-    }
   }
 
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Delivery extends DataEntity<Delivery> {
 
     private String trackingId;
     private String status;
     private String failureReason;
 
-    public String getTrackingId() {
-      return trackingId;
-    }
-
-    public void setTrackingId(String trackingId) {
-      this.trackingId = trackingId;
-    }
-
-    public String getStatus() {
-      return status;
-    }
-
-    public void setStatus(String status) {
-      this.status = status;
-    }
-
-    public String getFailureReason() {
-      return failureReason;
-    }
-
-    public void setFailureReason(String failureReason) {
-      this.failureReason = failureReason;
-    }
   }
 }

@@ -47,8 +47,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void selectHubToBegin(String hubName,String parcelType) {
-    selectHubToBeginWithTask(hubName, hubName,parcelType);
+  public void selectHubToBegin(String hubName) {
+    selectHubToBeginWithTask(hubName, hubName);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -131,7 +131,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
-  public void selectHubToBeginWithTask(String hubName, String task, String parcelType) {
+  public void selectHubToBeginWithTask(String hubName, String task) {
     pause2s();
 
     // Select Hub
@@ -140,9 +140,9 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
     sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
     pause2s();
-    click(PARCEL_TYPE_DROPDOWN_XPATH);
-    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
-    click(parcelTypeSelection);
+//    click(PARCEL_TYPE_DROPDOWN_XPATH);
+//    String parcelTypeSelection =String.format(PARCEL_TYPE_SELECTION_XPATH,parcelType);
+//    click(parcelTypeSelection);
     pause2s();
 
     //Select Sort Task

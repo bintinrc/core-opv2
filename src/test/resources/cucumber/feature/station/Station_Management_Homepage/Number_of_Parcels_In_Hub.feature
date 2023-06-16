@@ -1,4 +1,4 @@
-@StationManagement @StationHome @NumberOfParcels
+@StationManagement @NumberOfParcels
 Feature: Number of Parcels In Hub
 
   @LaunchBrowser @ShouldAlwaysRun

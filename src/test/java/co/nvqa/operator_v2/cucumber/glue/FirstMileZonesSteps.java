@@ -242,12 +242,13 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @And("Operator click View Selected Polygons for First Mile Zones name {string}")
   public void operatorClickViewSelectedPolygonsForFirstMileZonesName(String zoneShortName) {
-    firstMileZonesPage.waitUntilLoaded();
-    firstMileZonesPage.inFrame(page -> {
-      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
-      firstMileZonesPage.zonesTable.selectRow(1);
-      firstMileZonesPage.viewSelectedPolygons.click();
-    });
+    doWithRetry(()->{
+      firstMileZonesPage.waitUntilLoaded();
+      firstMileZonesPage.inFrame(page -> {
+        firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
+        firstMileZonesPage.zonesTable.selectRow(1);
+        firstMileZonesPage.viewSelectedPolygons.click();
+      });},"Click View Selected Polygons Zone Name");
   }
 
   @And("Operator click Zones in First Mile Zones drawing page")

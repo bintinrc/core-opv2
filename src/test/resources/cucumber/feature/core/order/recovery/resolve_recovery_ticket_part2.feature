@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @Recovery @ResolveTicket @ResolveTicketPart2 @EditOrder3
 Feature: Resolve Recovery Ticket
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = XMAS CAGE
@@ -371,8 +371,6 @@ Feature: Resolve Recovery Ticket
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -403,21 +401,21 @@ Feature: Resolve Recovery Ticket
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order events on Edit order page using data below:
       | name            |
-      | UPDATE STATUS   |
       | RESUME PICKUP   |
       | TICKET UPDATED  |
       | TICKET RESOLVED |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events with description on Edit order page using data below:
       | tags          | name          | description                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And Operator verify order events with description on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
 
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -448,14 +446,12 @@ Feature: Resolve Recovery Ticket
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order events on Edit order page using data below:
       | name            |
-      | UPDATE STATUS   |
       | RESUME PICKUP   |
       | TICKET UPDATED  |
       | TICKET RESOLVED |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events with description on Edit order page using data below:
       | tags          | name          | description                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Pending Pickup\n\nOld Order Status: On Hold\nNew Order Status: Pending\n\nReason: TICKET_RESOLUTION |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And Operator verify order events with description on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
