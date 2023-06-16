@@ -11,7 +11,6 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
-import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
