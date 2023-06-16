@@ -58,20 +58,15 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
 
   @Then("^Operator provides data on Parcel Sweeper Live page:$")
   public void operatorProvidesDataOnParcelSweeperLivePage(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
+    doWithRetry(() ->
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         String task = finalMapOfData.get("task");
-        String parcelType = finalMapOfData.get("parcelType");
-        if (parcelType == null) {
-          parcelType = "Bulky";
-        }
         if (task != null) {
-          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task,
-              parcelType);
+          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
         } else {
-          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"), parcelType);
+          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
         }
 
         String trackingId = finalMapOfData.get("trackingId");
@@ -85,7 +80,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         parcelSweeperLivePage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 5);
+    }, "Operator Parcel Sweeping");
   }
 
   private String getExpectedZoneName(String zoneNameFromDataTable) {
