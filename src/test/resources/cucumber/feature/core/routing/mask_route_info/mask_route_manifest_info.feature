@@ -4,7 +4,7 @@ Feature: Mask Route Manifest Info
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    
+
   @DeleteOrArchiveRoute
   Scenario: Operator View Mask Order for Normal Delivery on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
