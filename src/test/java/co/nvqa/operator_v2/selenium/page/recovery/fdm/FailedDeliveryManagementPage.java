@@ -47,7 +47,7 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement notifDescription;
 
-  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  @FindBy(xpath = "//div[@class='ant-modal reschedule-selected-dialog']")
   public RescheduleDialog rescheduleDialog;
 
   @FindBy(xpath = "//button//span[contains(text(),'CSV Reschedule')]")
@@ -56,6 +56,7 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@class='ant-modal-title']")
   public UploadCSVDialog uploadCSVDialog;
 
+  @FindBy(css = "[data-testid='virtual-table']")
   public FailedDeliveryTable fdmTable;
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
@@ -66,7 +67,7 @@ public class FailedDeliveryManagementPage extends
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
-  public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv.csv";
+  public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv";
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);

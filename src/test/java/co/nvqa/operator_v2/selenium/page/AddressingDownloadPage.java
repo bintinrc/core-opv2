@@ -334,14 +334,15 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void verifiesPresetIsNotExisted(String presetName) {
-    getWebDriver().navigate().refresh();
-    switchToIframe();
-    verifiesPageIsFullyLoaded();
-    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
-    click(EXISTED_PRESET_SELECTION_XPATH);
-    sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
-    waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
-    Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();
+    doWithRetry(()->{getWebDriver().navigate().refresh();
+      switchToIframe();
+      verifiesPageIsFullyLoaded();
+      waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
+      click(EXISTED_PRESET_SELECTION_XPATH);
+      sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
+      waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
+      Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();},"Verifies Preset is Deleted");
+
   }
 
   public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders,

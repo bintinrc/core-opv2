@@ -196,9 +196,9 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - set reschedule date to {string}")
   public void doSetRescheduleDate(String date) {
-    failedDeliveryManagementReactPage.inFrame((page) -> {
-      page.rescheduleDialog.setRescheduleDate(resolveValue(date));
-      page.rescheduleDialog.rescheduleButton.click();
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.rescheduleDialog.setRescheduleDate(resolveValue(date));
+      failedDeliveryManagementReactPage.rescheduleDialog.rescheduleButton.click();
     });
   }
 

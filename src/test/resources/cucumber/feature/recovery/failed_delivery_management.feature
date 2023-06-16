@@ -331,7 +331,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     |
       | Return       | Return     |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder @batool
+  @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario: Operator - Reschedule Failed Delivery - Multiple Orders
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -360,6 +360,9 @@ Feature: Failed Delivery Management Page - Action Feature
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
@@ -465,6 +468,9 @@ Feature: Failed Delivery Management Page - Action Feature
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
@@ -482,12 +488,14 @@ Feature: Failed Delivery Management Page - Action Feature
       | jobAction       | FAIL                                                                                |
       | jobMode         | DELIVERY                                                                            |
       | failureReasonId | 139                                                                                 |
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" with granular status "PENDING_RESCHEDULE"
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}" with granular status "PENDING_RESCHEDULE"
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Recovery User - Wait until FDM Page loaded completely
     And Recovery User - clicks "CSV Reschedule" button on Failed Delivery Management page
     And Recovery User - Reschedule failed orders with CSV
-      | tracking_ids    | {KEY_LIST_OF_CREATED_ORDER_ID[1]},{KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-      | reschedule_date | {date: 2 days next, yyyy-MM-dd}                                     |
+      | tracking_ids    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId},{KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | reschedule_date | {date: 2 days next, yyyy-MM-dd}                                                       |
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 2 order(s) |
