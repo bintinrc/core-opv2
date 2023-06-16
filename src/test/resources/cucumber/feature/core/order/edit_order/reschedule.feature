@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2 @current
+@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2
 Feature: Reschedule
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -108,7 +108,7 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
 
-  @DeleteOrArchiveRoute @routing-refactor @happy-path @wip
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Reschedule Fail Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |

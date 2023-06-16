@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @ImplantedManifestPart2 @NewFeatures1 @current2
+@OperatorV2 @Core @NewFeatures @ImplantedManifestPart2 @NewFeatures1
 Feature: Implanted Manifest
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -122,7 +122,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShipperPOD   | No data |
 
-  @DeleteOrArchiveRoute @happy-path @wip2
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -164,45 +164,43 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" barcode on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}" reservation on Implanted Manifest page
-    Then Operator verifies that success react notification displayed:
-      | top | Manifest has been created |
-#    And Operator go to menu Pick Ups -> Shipper Pickups
-#    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-#      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-#      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-#      | type        | Normal                           |
-#      | status      | SUCCESS                          |
-#      | shipperName | {filter-shipper-name}            |
-#    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-#    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-#      | inputOnPod            | 2                                                                           |
-#      | scannedAtShipperCount | 2                                                                           |
-#      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-#    And Operator verify order event on Edit order page using data below:
-#      | name    | DRIVER PICKUP SCAN     |
-#      | routeId | {KEY_CREATED_ROUTE_ID} |
-#    And Operator verify order events on Edit order page using data below:
-#      | tags          | name          | description                                                                                                                                                            |
-#      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
-#    And Operator verify order events on Edit order page using data below:
-#      | tags         | name                    | description                                                                                                                                                                                                  |
-#      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
-#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-#    And Operator verify order event on Edit order page using data below:
-#      | name    | DRIVER PICKUP SCAN     |
-#      | routeId | {KEY_CREATED_ROUTE_ID} |
-#    And Operator verify order events on Edit order page using data below:
-#      | tags          | name          | description                                                                                                                                                            |
-#      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
-#    And Operator verify order events on Edit order page using data below:
-#      | tags         | name                    | description                                                                                                                                                                                                  |
-#      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
-#    And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | type        | Normal                           |
+      | status      | SUCCESS                          |
+      | shipperName | {filter-shipper-name}            |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | inputOnPod            | 2                                                                           |
+      | scannedAtShipperCount | 2                                                                           |
+      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER PICKUP SCAN     |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+    And Operator verify order events on Edit order page using data below:
+      | tags         | name                    | description                                                                                                                                                                                                  |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER PICKUP SCAN     |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+    And Operator verify order events on Edit order page using data below:
+      | tags         | name                    | description                                                                                                                                                                                                  |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
+    And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID
     Given Operator go to menu Utilities -> QRCode Printing
