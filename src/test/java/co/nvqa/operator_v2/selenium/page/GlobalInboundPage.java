@@ -115,7 +115,7 @@ public class GlobalInboundPage extends SimpleReactPage {
       pause1s();
       doWithRetry(() -> {
         selectHub.selectValue(hubName);
-//        selectParcelType.selectValue(parcelType);
+        selectParcelType.selectValue(parcelType);
       }, "Select Hub and Parcel Type");
 
       if (StringUtils.isNotBlank(deviceId)) {
