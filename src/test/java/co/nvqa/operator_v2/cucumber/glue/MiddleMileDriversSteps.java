@@ -11,6 +11,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
+import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -756,5 +757,11 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @And("Operator edit License Type with uncheck {string} value on the middle mile driver page")
   public void operatorEditLicenseTypeWithUncheckValueOnTheMiddleMileDriverPage(String value) {
     middleMileDriversPage.chooseLicenseType(value);
+  }
+
+  @When("Operator edits {string} on edit driver dialog with invalid value {string}")
+  public void operatorEditsOnEditDriverDialogWithInvalidValue(String fieldName, String value) {
+    String resolvedValue = resolveValue(value);
+    middleMileDriversPage.editDriverByWithInvalidValue(fieldName, resolvedValue);
   }
 }

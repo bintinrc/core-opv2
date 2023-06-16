@@ -136,6 +136,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
 
     private static final String TOAST_ERROR_400_MESSAGE_XPATH = "//div[contains(@class,'ant-notification-notice-message')]";
+
+    public static String actualToastMessageContent = "";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -1405,9 +1407,28 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void verifiesToastWithMessage(String errorMessage) {
         if (errorMessage.equals("Request failed with status code 400")) {
-            Assertions.assertThat(isElementExistFast(TOAST_ERROR_400_MESSAGE_XPATH))
+            String actualMessage = findElementByXpath(TOAST_ERROR_400_MESSAGE_XPATH).getText();
+            Assertions.assertThat(actualMessage)
                     .as("Toast Error Request 400")
-                    .isTrue();
+                    .isEqualTo(errorMessage);
         }
+    }
+
+    public void editDriverByWithInvalidValue(String fieldName, String value) {
+        switch (fieldName) {
+            case "firstName":
+                editDriverDialog.name.forceClear();
+                editDriverDialog.name.sendKeys(value);
+                break;
+            case "lastName":
+                editDriverDialog.lastName.forceClear();
+                editDriverDialog.lastName.sendKeys(value);
+                break;
+            case "displayName":
+                editDriverDialog.displayName.forceClear();
+                editDriverDialog.displayName.sendKeys(value);
+                break;
+        }
+        editDriverDialog.save.click();
     }
 }
