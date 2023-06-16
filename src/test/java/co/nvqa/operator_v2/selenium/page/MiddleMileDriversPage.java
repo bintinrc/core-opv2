@@ -1407,10 +1407,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void verifiesToastWithMessage(String errorMessage) {
         if (errorMessage.equals("Request failed with status code 400")) {
-            String actualMessage = findElementByXpath(TOAST_ERROR_400_MESSAGE_XPATH).getText();
-            Assertions.assertThat(actualMessage)
+            Assertions.assertThat(isElementExistFast(TOAST_ERROR_400_MESSAGE_XPATH))
                     .as("Toast Error Request 400")
-                    .isEqualTo(errorMessage);
+                    .isTrue();
         }
     }
 

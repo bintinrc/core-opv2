@@ -45,7 +45,7 @@ Feature: Middle Mile Driver Management - Update Driver 4
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
 	And Operator edit License Type with uncheck "{default-license-type-ph}" value and update with "B2" on the middle mile driver page
-	Then DB Operator verifies driver "licenseType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "B1" is updated
+	Then DB Operator verifies driver "licenseType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "B2" is updated
 
   @DeleteMiddleMileDriver
   Scenario: Update Driver License - PH - License Type is B2
