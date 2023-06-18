@@ -503,8 +503,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       return findElementByXpath(f(JOB_DETAIL_ITEMS_XPATH, itemName)).getText();
     }
 
-    public String[] getJobDTimeStampXpath(String itemName) {
+    public String[] getJobDetailTimeStampXpath(String itemName) {
       String[] formattedDate = findElementByXpath(f(JOB_TIMESTAMP_XPATH, itemName)).getText().split(" ");
+      formattedDate[0].replace("["," ");
+      formattedDate[0].replace("]"," ");
       return new String[]{formattedDate[0]};
     }
 
