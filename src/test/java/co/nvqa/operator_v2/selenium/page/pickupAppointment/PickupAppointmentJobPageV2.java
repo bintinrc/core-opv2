@@ -507,6 +507,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String[] formattedDate = findElementByXpath(f(JOB_TIMESTAMP_XPATH, itemName)).getText().split(" ");
       formattedDate[0].replace("["," ");
       formattedDate[0].replace("]"," ");
+      System.out.println(formattedDate[0]);
       return new String[]{formattedDate[0]};
     }
 
