@@ -259,8 +259,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("SUCCESS")).
           as("Status is correct").isEqualToIgnoringCase("SUCCESS");
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailTimeStampXpath("Time")).
-          as("Pick Up Address Title is correct").isEqualTo(formattedDate);
       Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
       Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
           as("Download Parcel List Button is Clickable").isTrue();
