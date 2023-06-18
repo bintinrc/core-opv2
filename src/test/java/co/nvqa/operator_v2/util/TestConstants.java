@@ -43,7 +43,7 @@ public final class TestConstants extends CommonUiTestConstants {
   public static Integer SORT_BELT_MANAGER_DEVICE_ARMS_COUNT;
   public static String SORT_BELT_MANAGER_DEFAULT_LOGIC;
 
-  public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
+  public static final int VERY_LONG_WAIT_FOR_TOAST = 200;
 
   public static final String ADDRESSING_PRESET_NAME;
   public static final String ADDRESSING_SHIPPER_NAME;

@@ -43,9 +43,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
-
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-      getWebDriver().manage().window().maximize();
       getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
       if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
         pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
@@ -53,8 +50,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       getWebDriver().switchTo().frame(0);
       pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
           pickupAppointmentJobPage.getLoadSelection().getWebElement());
-      pickupAppointmentJobPage.waitWhilePageIsLoading();
-    }, 1000, 5);
   }
 
   @When("Operator click on Create or edit job button on this top right corner of the page")
@@ -234,7 +229,66 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       page.createOrEditJobPage.clickCreateButton();
     });
+  }
 
+  @And("Operator click on button to view job details")
+  public void clickOnJobDetailsButton() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.clickOnJobDetailsButton();
+      });    };
+    doWithRetry(clickButton, "Click on View Job Detail Button");
+    takesScreenshot();
+  }
+
+  @Then("QA verify values on Pickup Jobs Details page are shown")
+  public void verifyFiltersOnPickupJobsDetailsPageAreShown(Map<String, String> dataTable) {
+    Map<String, String> resolvedData = resolveKeyValues(dataTable);
+    String resolvedDate = resolvedData.get("time");
+    String formattedDate = "[" + resolvedDate + "]";
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
+      as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Pickup Address")).
+          as("Pick Up Address Title is correct").isEqualToIgnoringCase("Pickup Address");
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("waypointId"))).
+          as("Waypoint Id is correct").isEqualToIgnoringCase(resolvedData.get("waypointId"));
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("shipperId"))).
+          as("Shipper Id is correct").isEqualToIgnoringCase(resolvedData.get("shipperId"));
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
+          as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("SUCCESS")).
+          as("Status is correct").isEqualToIgnoringCase("SUCCESS");
+      Assertions.assertThat(page.viewJobDetailModal.getJobDTimeStampXpath("Time")).
+          as("Pick Up Address Title is correct").isEqualTo(formattedDate);
+      Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
+      Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
+          as("Download Parcel List Button is Clickable").isTrue();
+      Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
+          as("Download Signature Button is Click").isTrue();
+    });
+  }
+
+  @And("Operator click on button to download parcel list")
+  public void clickDownloadParcelList() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.viewJobDetailModal.clickOnButtons("Download Parcel List");
+      });
+    };
+    doWithRetry(clickButton, "Click on Download Parcel List Button");
+    takesScreenshot();
+  }
+
+  @Then("Verify that csv file is downloaded in pick up job page with filename: {string}")
+  public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
+    Runnable verifyDownloadedFilename = () -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(filename);
+      });
+    };
+    doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename");
+    takesScreenshot();
   }
 
   @Then("Operator verify Job Created dialog displays data below:")

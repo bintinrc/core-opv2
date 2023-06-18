@@ -19,6 +19,9 @@ import com.google.common.collect.ImmutableMap;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +63,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public FilterJobByID filterJobByIDModal;
   @FindBy(css = "#toast-container")
   private PageElement toastContainer;
+  @FindBy(xpath = "//button[@data-testid='resultTable.showDetailButton']")
+  public PageElement viewJobDetailButton;
   @FindBy(css = "[type='submit']")
   public PageElement loadSelection;
   @FindBy(xpath = "//button[.='Create / edit job']")
@@ -68,6 +73,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public CreateOrEditJobPage createOrEditJobPage;
   @FindBy(className = "ant-modal-wrap")
   public DeletePickupJobModal deletePickupJobModal;
+
+  @FindBy(css = "div.ant-modal-content")
+  public ViewJobDetailModal viewJobDetailModal;
 
   @FindBy(className = "ant-modal-wrap")
   public JobCreatedModal jobCreatedModal;
@@ -135,6 +143,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
   }
 
+  public void clickOnJobDetailsButton() {
+    viewJobDetailButton.waitUntilClickable();
+    viewJobDetailButton.click();
+  }
+
   public void verifyPresetByNameNotInList(String presetName) {
     HashMap keys = new HashMap();
     presetFilters.sendKeys(Keys.ARROW_UP);
@@ -151,7 +164,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       keys.put(name, "founded");
       presetFilters.sendKeys(Keys.ARROW_DOWN);
     }
-
   }
 
   public void choosePresetByName(String presetName) {
@@ -193,10 +205,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private Button saveButton;
     @FindBy(css = "#dateRange")
     private Button selectDateRange;
-
     @FindBy(css = "input[aria-owns=timeRange_list]")
     private PageElement selectTimeRange;
-
     @FindBy(css = "#tags")
     private PageElement tagsField;
     @FindBy(css = "#readyBy")
@@ -205,13 +215,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
-
     @FindBy(xpath = "//label[@for='comments']/following::span[@aria-label='close-circle']")
     public PageElement clearJobComments;
-
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
-
     @FindBy(xpath = "//label[@for='timeRange']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTimeRange;
 
@@ -293,7 +300,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
-
     public boolean isCreateButtonDisabled() {
       try {
 
@@ -311,7 +317,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         return false;
       }
     }
-
 
     public void clickCreateButton() {
       createButton.click();
@@ -348,7 +353,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       tagsField.sendKeys(Keys.ESCAPE);
     }
 
-
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -364,7 +368,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     }
 
-
     public void selectLatestbyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         latestByField.click();
@@ -377,7 +380,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
                 f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
       }, 2000, 10);
-
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {
@@ -401,7 +403,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
       }
     }
-
 
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
@@ -466,10 +467,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         clearLatestByTimeRange.click();
       }, 1000, 5);
     }
-
-
   }
-
 
   public static class DeletePickupJobModal extends AntModal {
 
@@ -487,8 +485,46 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))));
       return webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))).getText();
     }
+  }
+
+  public static class ViewJobDetailModal extends AntModal {
+
+    public static final String JOB_DETAIL_ITEMS_XPATH = "//span[contains(text(),'%s')]";
+    public static final String JOB_TIMESTAMP_XPATH = "//span[contains(text(),'%s')]/following-sibling::span";
+    public static final String JOB_IMAGES_ITEMS_XPATH = "//div[@class='ant-image-preview-mask']";
 
 
+    public ViewJobDetailModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public String getJobDetailItemsXpath(String itemName) {
+      return findElementByXpath(f(JOB_DETAIL_ITEMS_XPATH, itemName)).getText();
+    }
+
+    public String[] getJobDTimeStampXpath(String itemName) {
+      String[] formattedDate = findElementByXpath(f(JOB_TIMESTAMP_XPATH, itemName)).getText().split(" ");
+      return new String[]{formattedDate[0]};
+    }
+
+    public Boolean getButtonsOnJobDetailsPage(String itemName) {
+      return findElementByXpath(f(JOB_DETAIL_ITEMS_XPATH, itemName)).isEnabled();
+    }
+
+    public Boolean getImagesOnJobDetailsPage() {
+      return findElementByXpath(JOB_IMAGES_ITEMS_XPATH).isEnabled();
+    }
+
+    public void clickOnButtons(String itemName) {
+      findElementByXpath(f(JOB_DETAIL_ITEMS_XPATH, itemName)).click();
+    }
+
+    public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
+      String downloadedCsvFile = getLatestDownloadedFilename(
+          fileName);
+      Assertions.assertThat(fileName.equals(downloadedCsvFile));
+    }
   }
 
   public static class PresetModal extends AntModal {
@@ -507,7 +543,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public void fillPresetName(String name) {
       presetNameInput.sendKeys(name);
     }
-
 
   }
 
@@ -851,7 +886,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//span[text()='Jobs created for the following dates:']/following-sibling::span")
     public PageElement followingDates;
 
-
   }
 
   public static class EditPAJobModel {
@@ -929,7 +963,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//span[text()='Submit']/parent::button")
     public Button submitButton;
 
-
   }
 
   public static class EditJobRouteModal extends AntModal {
@@ -955,8 +988,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           By.xpath(f(JOB_ROUTE_SELECT_INPUT, jobId) + "//input")).sendKeys(routeName);
       webDriver.findElement(By.xpath((f(ROUTE_OPTION, jobId, routeName)))).click();
     }
-
-
   }
 
   public static class EditJobTagModel extends AntModal {
@@ -1037,8 +1068,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String errorMessage = findElementByXpath(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId)).getText();
       return errorMessage;
     }
-
-
   }
 
   public void setProofUploadFile() {
@@ -1073,5 +1102,4 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       LOGGER.warn("Can not create random image file: {}", e);
     }
   }
-
 }
