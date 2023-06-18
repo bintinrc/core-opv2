@@ -245,7 +245,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void verifyFiltersOnPickupJobsDetailsPageAreShown(Map<String, String> dataTable) {
     Map<String, String> resolvedData = resolveKeyValues(dataTable);
     String resolvedDate = resolvedData.get("time");
-    String formattedDate = "[" + resolvedDate + "]";
+    String formattedDate = resolvedDate ;
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
       as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
