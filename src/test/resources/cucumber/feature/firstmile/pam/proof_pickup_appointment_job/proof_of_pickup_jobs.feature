@@ -51,6 +51,7 @@ Feature: Force Fail Single Pickup Job
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
     And Operator click on button to view image
     And QA verify signature image
+    And Operator waits for 10 seconds
     And Operator click on button to download parcel list
     And Verify that csv file is downloaded in pick up job page with filename: "pop-file-id-55003.csv"
 
