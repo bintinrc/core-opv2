@@ -492,6 +492,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String JOB_DETAIL_ITEMS_XPATH = "//span[contains(text(),'%s')]";
     public static final String JOB_TIMESTAMP_XPATH = "//span[contains(text(),'%s')]/following-sibling::span";
     public static final String JOB_IMAGES_ITEMS_XPATH = "//div[@class='ant-image-preview-mask']";
+    public static final String JOB_SIGNATURE_IMAGE_ITEMS_XPATH = "//img[@alt='signature']";
+
 
 
     public ViewJobDetailModal(WebDriver webDriver, WebElement webElement) {
@@ -513,6 +515,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void clickOnButtons(String itemName) {
       findElementByXpath(f(JOB_DETAIL_ITEMS_XPATH, itemName)).click();
+    }
+
+    public void clickOnSignatureImage() {
+      findElementByXpath(JOB_SIGNATURE_IMAGE_ITEMS_XPATH).click();
     }
 
     public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {

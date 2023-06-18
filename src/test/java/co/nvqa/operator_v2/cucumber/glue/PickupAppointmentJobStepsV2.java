@@ -241,11 +241,21 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
+  @And("Operator click on button to view image")
+  public void clickOnJobToViewImageButton() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame((page) -> {
+       page.viewJobDetailModal.clickOnSignatureImage();
+      });    };
+    doWithRetry(clickButton, "Click On Button To View Image");
+    takesScreenshot();
+  }
+
   @Then("QA verify values on Pickup Jobs Details page are shown")
   public void verifyFiltersOnPickupJobsDetailsPageAreShown(Map<String, String> dataTable) {
     Map<String, String> resolvedData = resolveKeyValues(dataTable);
     String resolvedDate = resolvedData.get("time");
-    String formattedDate = resolvedDate ;
+    String formattedDate = "[" + resolvedDate + "]";
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
       as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
@@ -259,11 +269,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("SUCCESS")).
           as("Status is correct").isEqualToIgnoringCase("SUCCESS");
-      Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
       Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
           as("Download Parcel List Button is Clickable").isTrue();
       Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
           as("Download Signature Button is Click").isTrue();
+    });
+  }
+
+  @Then("QA verify signature image")
+  public void verifySignatureImage() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
     });
   }
 
