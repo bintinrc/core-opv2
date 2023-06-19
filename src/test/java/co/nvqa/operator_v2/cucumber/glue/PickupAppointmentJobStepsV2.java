@@ -309,10 +309,10 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void verifyThatCsvFileIsDownloadedWithFilename(Map<String, String> dataTable) {
     Map<String, String> data = resolveKeyValues(dataTable);
     String newFilename = "pop-file-id-JobId.csv";
-    newFilename.replaceAll("JobId", data.get("Job Id"));
+    String formattedFilename = newFilename.replaceAll("JobId", data.get("Job Id"));
     Runnable verifyDownloadedFilename = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
-        page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(newFilename);
+        page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(formattedFilename);
       });
     };
     doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename");
