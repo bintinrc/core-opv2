@@ -278,8 +278,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           as("Shipper Id is correct").isEqualToIgnoringCase(resolvedData.get("shipperId"));
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
           as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("SUCCESS")).
-          as("Status is correct").isEqualToIgnoringCase("SUCCESS");
+      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("status"))).
+          as("Status is correct").isEqualToIgnoringCase(resolvedData.get("status"));
       Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
           as("Download Parcel List Button is Clickable").isTrue();
       Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
@@ -299,6 +299,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.viewJobDetailModal.clickOnButtons("Download Parcel List");
+      });
+    };
+    doWithRetry(clickButton, "Click on Download Parcel List Button");
+    takesScreenshot();
+  }
+
+  @And("Operator click on button to download image signature")
+  public void clickDownloadSignature() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.viewJobDetailModal.clickOnButtons("Download Signature");
       });
     };
     doWithRetry(clickButton, "Click on Download Parcel List Button");

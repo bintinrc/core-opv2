@@ -76,16 +76,17 @@ Feature: Force Fail Single Pickup Job
       | driverId        | {driver-id}                        |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                         |
-      | waypointId | {KEY_WAYPOINT_ID}                                                          |
-      | parcels    | [{ "tracking_id": "{KEY_CREATED_ORDER_TRACKING_ID}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                          |
-      | jobType    | PICKUP_APPOINTMENT                                                         |
-      | jobAction  | FAIL                                                                       |
-      | jobMode    | PICK_UP                                                                    |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                         |
+      | waypointId      | {KEY_WAYPOINT_ID}                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_CREATED_ORDER_TRACKING_ID}", "action": "FAIL"}]    |
+      | routes          | KEY_DRIVER_ROUTES                                                          |
+      | jobType         | PICKUP_APPOINTMENT                                                         |
+      | jobAction       | FAIL                                                                       |
+      | jobMode         | PICK_UP                                                                    |
+      | failureReasonId | {failure-reason-id-1}                                                      |
     And API Driver - Driver add photo to created route waypoint
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                         |
-      | waypointId | {KEY_WAYPOINT_ID}                                                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_WAYPOINT_ID}                                                               |
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Then Operator verifies Filter Job button is disabled on Pickup job page
@@ -99,12 +100,14 @@ Feature: Force Fail Single Pickup Job
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |
       | waypointId | {KEY_WAYPOINT_ID}                                |
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
+      | status     | FAIL                                             |
     And Operator click on button to view image
     And QA verify signature image
     And Operator click on button to cancel image
     And Operator click on button to download parcel list
     And Verify that csv file is downloaded in pick up job page with filename for Job Id
       |  Job Id     |  {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}             |
+    And Operator click on button to download image signature
 
 
   @KillBrowser @ShouldAlwaysRun
