@@ -66,6 +66,7 @@ public class StationCODReportSteps extends AbstractSteps {
   @When("Operator searches for station cod report by applying following filters:")
   public void operator_searches_for_station_cod_report_by_applying_following_filters(
       DataTable searchParam) {
+    pause2s();
     List<Map<String, String>> filters = searchParam.asMaps(String.class, String.class);
     for (Map<String, String> filter : filters) {
       Map<String, String> resolvedFilter = resolveKeyValues(filters.get(0));
