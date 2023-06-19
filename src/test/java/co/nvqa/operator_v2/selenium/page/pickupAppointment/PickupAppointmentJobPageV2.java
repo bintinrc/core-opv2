@@ -488,7 +488,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public static class ViewJobDetailModal extends AntModal {
 
     public static final String JOB_DETAIL_ITEMS_XPATH = "//span[contains(text(),'%s')]";
-    public static final String JOB_TIMESTAMP_XPATH = "//span[contains(text(),'%s')]/following-sibling::span";
     public static final String JOB_IMAGES_ITEMS_XPATH = "//div[@class='ant-image-preview-mask']";
     public static final String JOB_SIGNATURE_IMAGE_ITEMS_XPATH = "//img[@alt='signature']";
 
