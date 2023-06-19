@@ -308,8 +308,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @Then("Verify that csv file is downloaded in pick up job page with filename for Job Id")
   public void verifyThatCsvFileIsDownloadedWithFilename(Map<String, String> dataTable) {
     Map<String, String> data = resolveKeyValues(dataTable);
+    int ss = Integer.parseInt(data.get("Job Id")) ;
     String newFilename = "pop-file-id-%s.csv";
-    String formattedFilename = f(newFilename, data.get("Job Id"));
+    String formattedFilename = f(newFilename,ss);
     Runnable verifyDownloadedFilename = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(formattedFilename);
