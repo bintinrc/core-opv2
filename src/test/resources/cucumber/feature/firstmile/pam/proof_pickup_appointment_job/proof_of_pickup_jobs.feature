@@ -106,7 +106,7 @@ Feature: Force Fail Single Pickup Job
     And Operator click on button to download image signature
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario: Proof of pickup - Fail Pickup by Driver - PA Job
+  Scenario: Proof of pickup - Multiple proof - PA Job
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {normal-shipper-pickup-appointment-1-client-id}                                                                                                                                                                                                                                                                                          |
