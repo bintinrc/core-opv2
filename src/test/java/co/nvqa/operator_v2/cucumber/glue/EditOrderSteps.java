@@ -2002,5 +2002,11 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
+  @Given("Operator unmask edit order page")
+  public void unmaskEditOrder() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    editOrderPage.operatorClickMaskingText(elements);
+  }
+
 
 }
