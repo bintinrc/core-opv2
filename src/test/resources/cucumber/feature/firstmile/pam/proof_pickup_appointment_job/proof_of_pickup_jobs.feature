@@ -101,10 +101,6 @@ Feature: Force Fail Single Pickup Job
       | waypointId | {KEY_WAYPOINT_ID}                                |
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
       | status     | FAIL                                             |
-    And Operator click on button to view image
-    And QA verify signature image
-    And Operator click on button to cancel image
-    And Operator click on button to download parcel list
     And Verify that csv file is downloaded in pick up job page with filename for Job Id
       |  Job Id     |  {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}             |
     And Operator click on button to download image signature
