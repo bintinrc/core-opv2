@@ -241,6 +241,16 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
+  @And("Operator click on button to view second pick up proof")
+  public void clickOnPickUpProofButton() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame((page) -> {
+        page.viewJobDetailModal.clickOnSecondPickUpProofButton();
+      });    };
+    doWithRetry(clickButton, "Click on View Job Detail Button");
+    takesScreenshot();
+  }
+
   @And("Operator click on button to view image")
   public void clickOnJobToViewImageButton() {
     Runnable clickButton = () -> {

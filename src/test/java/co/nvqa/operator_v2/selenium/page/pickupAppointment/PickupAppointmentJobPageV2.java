@@ -493,6 +493,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String JOB_SIGNATURE_IMAGE_ITEMS_XPATH = "//img[@alt='signature']";
 
     public static final String JOB_SIGNATURE_IMAGE_CANCEL_ITEMS_XPATH = "//li[@class='ant-image-preview-operations-operation']/span[@aria-label='close']";
+
+    public static final String JOB_SECOND_PICK_UP_PROOF_ITEMS_XPATH = "//span[@data-testid='proof-1']";
+
     public ViewJobDetailModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -526,6 +529,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String downloadedCsvFile = getLatestDownloadedFilename(
           fileName);
       Assertions.assertThat(fileName.equals(downloadedCsvFile));
+    }
+
+    public void clickOnSecondPickUpProofButton() {
+      findElementByXpath(JOB_SECOND_PICK_UP_PROOF_ITEMS_XPATH).click();
     }
   }
 
