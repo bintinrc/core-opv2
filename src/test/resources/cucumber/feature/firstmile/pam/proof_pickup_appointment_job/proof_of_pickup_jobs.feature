@@ -48,6 +48,7 @@ Feature: Force Fail Single Pickup Job
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |
       | waypointId | {KEY_WAYPOINT_ID}                                |
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
+      | status     | SUCCESS                                          |
     And Operator click on button to view image
     And QA verify signature image
     And Operator click on button to cancel image
