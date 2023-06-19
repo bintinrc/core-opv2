@@ -121,7 +121,7 @@ Feature: Mask Route Manifest Info
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
-      | status  | Unknown                                                                                                                                                                        |
+      | status  | Pending                                                                                                                                                                        |
       | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} |
 
 
