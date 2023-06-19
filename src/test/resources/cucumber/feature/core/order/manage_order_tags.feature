@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @ManageOrderTags
 Feature: Manage Order Tags
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrderTags
@@ -27,7 +27,6 @@ Feature: Manage Order Tags
 
   @DeleteOrderTags
   Scenario: Operator Search Order Tag
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new order tag:
       | name        | AAA                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
@@ -51,7 +50,6 @@ Feature: Manage Order Tags
 
   @DeleteOrderTags
   Scenario: Operator Fail Create Duplicate Order Tag
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new order tag:
       | name        | AAA                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
@@ -78,7 +76,3 @@ Feature: Manage Order Tags
     Then Operator verifies that error react notification displayed:
       | top    | SERVER_ERROR_EXCEPTION                          |
       | bottom | Order Tag {KEY_CREATED_ORDER_TAG.id} not found! |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
