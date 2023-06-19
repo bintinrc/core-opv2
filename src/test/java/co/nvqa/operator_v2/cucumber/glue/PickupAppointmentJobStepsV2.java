@@ -251,6 +251,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
+  @And("Operator click on button to cancel image")
+  public void clickOnJobToCancelImageButton() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame((page) -> {
+        page.viewJobDetailModal.clickOnSignatureImageToCancel();
+      });
+    };
+    doWithRetry(clickButton, "Click On Button To View Image");
+    takesScreenshot();
+  }
+
   @Then("QA verify values on Pickup Jobs Details page are shown")
   public void verifyFiltersOnPickupJobsDetailsPageAreShown(Map<String, String> dataTable) {
     Map<String, String> resolvedData = resolveKeyValues(dataTable);

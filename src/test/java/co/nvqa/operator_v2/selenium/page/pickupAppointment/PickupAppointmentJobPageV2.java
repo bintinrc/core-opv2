@@ -492,6 +492,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String JOB_IMAGES_ITEMS_XPATH = "//div[@class='ant-image-preview-mask']";
     public static final String JOB_SIGNATURE_IMAGE_ITEMS_XPATH = "//img[@alt='signature']";
 
+    public static final String JOB_SIGNATURE_IMAGE_CANCEL_ITEMS_XPATH = "//li[@class='ant-image-preview-operations-operation']/span[@aria-label='close']";
     public ViewJobDetailModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -515,6 +516,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void clickOnSignatureImage() {
       findElementByXpath(JOB_SIGNATURE_IMAGE_ITEMS_XPATH).click();
+    }
+
+    public void clickOnSignatureImageToCancel() {
+      findElementByXpath(JOB_SIGNATURE_IMAGE_CANCEL_ITEMS_XPATH).click();
     }
 
     public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
