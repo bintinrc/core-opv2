@@ -53,7 +53,7 @@ Feature: Force Fail Single Pickup Job
     And Operator click on button to cancel image
     And Operator click on button to download parcel list
     And Verify that csv file is downloaded in pick up job page with filename for Job Id
-      |  Job Id |  "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"   |
+      |  Job Id |  {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}   |
 
 
 #      | jobServiceLevel | Premium, Standard                                 |
