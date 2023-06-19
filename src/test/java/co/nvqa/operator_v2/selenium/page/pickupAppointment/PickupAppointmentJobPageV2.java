@@ -73,10 +73,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public CreateOrEditJobPage createOrEditJobPage;
   @FindBy(className = "ant-modal-wrap")
   public DeletePickupJobModal deletePickupJobModal;
-
   @FindBy(css = "div.ant-modal-content")
   public ViewJobDetailModal viewJobDetailModal;
-
   @FindBy(className = "ant-modal-wrap")
   public JobCreatedModal jobCreatedModal;
   @FindBy(css = ".ant-notification")
@@ -493,8 +491,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String JOB_TIMESTAMP_XPATH = "//span[contains(text(),'%s')]/following-sibling::span";
     public static final String JOB_IMAGES_ITEMS_XPATH = "//div[@class='ant-image-preview-mask']";
     public static final String JOB_SIGNATURE_IMAGE_ITEMS_XPATH = "//img[@alt='signature']";
-
-
 
     public ViewJobDetailModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

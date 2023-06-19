@@ -294,11 +294,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Verify that csv file is downloaded in pick up job page with filename: {string}")
-  public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
+  @Then("Verify that csv file is downloaded in pick up job page with filename for Job Id")
+  public void verifyThatCsvFileIsDownloadedWithFilename(Map<String, String> dataTable) {
+    Map<String, String> data = resolveKeyValues(dataTable);
+    String newFilename = "pop-file-id-" + data.get("Job Id") + ".csv";
     Runnable verifyDownloadedFilename = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
-        page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(filename);
+        page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(newFilename);
       });
     };
     doWithRetry(verifyDownloadedFilename, "Verify Downloaded Filename");
