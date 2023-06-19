@@ -70,6 +70,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String LICENSE_TYPE_FILTER = "license type";
   private static final String LICENSE_STATUS_FILTER = "license status";
   private static final String COMMENTS_FILTER = "comments";
+  private static final String VENDOR_FILTER = "vendor";
 
   private static final String IN_HOUSE_FULL_TIME_CONTRACT = "In-House - Full-Time";
   private static final String IN_HOUSE_PART_TIME_CONTRACT = "In-House - Part-Time";
@@ -354,6 +355,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       case USERNAME_FILTER:
       case HUB_FILTER:
       case COMMENTS_FILTER:
+      case VENDOR_FILTER:
         middleMileDriversPage.tableFilter(driver, filterBy.toLowerCase());
         break;
       case EMPLOYMENT_TYPE_FILTER:
