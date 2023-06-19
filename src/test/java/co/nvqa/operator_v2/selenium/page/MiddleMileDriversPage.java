@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
@@ -114,6 +115,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 3;
     private static final Integer NEW_HUB_TABLE_FILTER_ID = 4;
     private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 5;
+    private static final Integer NEW_VENDOR_FILTER_ID = 6;
     private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
     private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
     private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
@@ -570,6 +572,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
         String actualEmploymentType = getText(
             f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+        String actualVendor = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_VENDOR_FILTER_ID));
         String actualEmpStatus = getText(f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID));
         String actualLicenseType = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
@@ -585,6 +589,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             .isEqualTo(middleMileDriver.getHubName());
         Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same")
             .isEqualTo(middleMileDriver.getEmploymentType());
+        Assertions.assertThat(actualVendor).as("The Vendor Name is the same")
+            .isEqualTo(Objects.nonNull(middleMileDriver.getVendorId()) ? middleMileDriver.getVendorName() : "-");
         Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same")
             .isEqualTo(middleMileDriver.getIsEmploymentActive() ? "Active" : "Inactive");
         Assertions.assertThat(actualLicenseType).as("The License Type is the same")
