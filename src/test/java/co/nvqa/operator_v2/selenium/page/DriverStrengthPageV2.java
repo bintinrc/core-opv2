@@ -356,6 +356,24 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         .isTrue();
   }
 
+  public void verifyContactDetailsAlreadyVerified(DriverInfo driverInfo) {
+    final String contactsXpath = f(
+        "//div[contains(@class,'ant-col') and contains(text(),'%s')]", driverInfo.getContact());
+    final String verifiedXpath = "//div[contains(@class, 'ant-typography') and text()='Verified']";
+    if (!isElementExist(contactsXpath)) {
+      refreshPage();
+      waitUntilPageLoaded();
+      loadSelection();
+      waitUntilTableLoaded();
+      filterBy(COLUMN_USERNAME, driverInfo.getUsername());
+      driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
+    }
+    waitUntilVisibilityOfElementLocated(verifiedXpath);
+    Assertions.assertThat(isElementExist(verifiedXpath))
+        .as("Contact details should be verified")
+        .isTrue();
+  }
+
   /**
    * Accessor for Add Driver dialog
    */

@@ -47,6 +47,7 @@ Feature: Driver Strength
       | driverTypes | {driver-type-name} |
       | resigned    | No                 |
     When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -780,6 +781,43 @@ Feature: Driver Strength
     Examples:
       | Resigned | FileName                                 |
       | No       | update_driver_details_blank_template.csv |
+
+  @DeleteDriverV2
+  Scenario: Verify Driver Contacts When Updating Drivers if Number has Never Been Verified
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Strength
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | {KEY_CREATED_DRIVER.displayName}                                 |
+      | firstName            | {KEY_CREATED_DRIVER.firstName}                                   |
+      | lastName             | {KEY_CREATED_DRIVER.lastName}                                    |
+      | licenseNumber        | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | codLimit             | {KEY_CREATED_DRIVER.codLimit}                                    |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | vehicleCapacity      | {KEY_CREATED_DRIVER.vehicles[1].capacity}                        |
+      | contact              | GENERATED                                                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 5                                                                |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+    Then Operator verifies that success notification displayed in Driver Strength:
+      | title | Driver Updated                 |
+      | desc  | Driver {KEY_CREATED_DRIVER_ID} |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name-2}      |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    And Operator wait until table loaded
+    Then Operator verify contact details of created driver on Driver Strength page
+    And Operator verify contact details already verified on Driver Strength page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

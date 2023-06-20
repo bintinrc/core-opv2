@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.NVDriversInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
@@ -131,7 +132,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   public void operatorEditCreatedDriver(Map<String, String> mapOfData) {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     String username = driverInfo.getUsername();
-    driverInfo.fromMap(mapOfData);
+    driverInfo.fromMap(resolveKeyValues(mapOfData));
     dsPage.inFrame(() -> {
       doWithRetry(() -> {
             dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
@@ -681,6 +682,14 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       String notificationTitle = data.get("title");
       String notificationDesc = data.get("desc");
       dsPage.verifyNotificationAppear(notificationTitle, notificationDesc);
+    });
+  }
+
+  @And("Operator verify contact details already verified on Driver Strength page")
+  public void operatorVerifyContactDetailsAlreadyVerifiedOnDriverStrengthPage() {
+    dsPage.inFrame(() -> {
+      DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+      dsPage.verifyContactDetailsAlreadyVerified(driverInfo);
     });
   }
 }
