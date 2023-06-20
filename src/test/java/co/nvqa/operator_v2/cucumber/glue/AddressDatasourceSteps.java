@@ -376,6 +376,12 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @When("^Operator search the existing address datasource:$")
   public void operatorSearchExistingAddressDatasource(Map<String, String> data) {
+    doWithRetry(() -> {
+      if (!addressDatasourcePage.findMatch.isDisplayed()) {
+        addressDatasourcePage.refreshPage();
+      }
+    }, "refresh the page until element is displayed");
+
     addressDatasourcePage.waitUntilPageLoaded();
     addressDatasourcePage.switchTo();
     data = resolveKeyValues(data);
@@ -567,7 +573,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String hub = data.get("hub");
     String zone = data.get("zone");
     doWithRetry(() -> {
-      if (StringUtils.isNotBlank(latlong)){
+      if (StringUtils.isNotBlank(latlong)) {
         Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
             .as("latlong")
             .isEqualToIgnoringCase(latlong);
@@ -577,7 +583,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
             .as("hub")
             .isEqualToIgnoringCase(hub);
       }
-      if (StringUtils.isNotBlank(zone) ){
+      if (StringUtils.isNotBlank(zone)) {
         Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
             .as("zone")
             .isEqualToIgnoringCase(zone);
