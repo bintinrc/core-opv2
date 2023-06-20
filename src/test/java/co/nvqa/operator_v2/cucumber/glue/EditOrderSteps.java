@@ -1776,9 +1776,9 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
   public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    editOrderPage.waitUntilVisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
-    editOrderPage.waitUntilInvisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+    editOrderPage.switchToOtherWindowUrlContains("https://operatorv2-qa.ninjavan.co/#/my/order");
+    editOrderPage.waitUntilVisibilityOfToast("Attempting to print waybill(s)");
+    editOrderPage.waitUntilInvisibilityOfToast("Print waybill(s) successfully");
   }
 
   @When("Operator opens and verifies the downloaded airway bill pdf")

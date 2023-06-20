@@ -70,7 +70,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
     private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead//span[contains(@data-testid,'column-title-middle-mile-driver')]";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
-    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
+    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()=\"%s\"]";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
@@ -109,6 +109,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String USERNAME_TABLE_FILTER_ID = "username";
     private static final String HUB_TABLE_FILTER_ID = "hub";
     private static final String COMMENTS_TABLE_FILTER_ID = "comments";
+    private static final String VENDOR_TABLE_FILTER_ID = "vendor";
 
     private static final Integer NEW_NAME_TABLE_FILTER_ID = 1;
     private static final Integer NEW_ID_TABLE_FILTER_ID = 2;
@@ -165,6 +166,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     public TextBox hubFilter;
     @FindBy(xpath = "//th[div[.='Comments']]//input")
     public TextBox commentsFilter;
+    @FindBy(xpath = "//input[@aria-label='input-vendor_name']")
+    public TextBox vendorFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Status']]")
     public StatusFilter employmentStatusFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Type']]")
@@ -423,6 +426,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 commentsFilter.setValue(driver.getComments());
                 break;
 
+            case VENDOR_TABLE_FILTER_ID:
+                displayNameFilter.setValue(driver.getDisplayName());
+                vendorFilter.scrollIntoView();
+                vendorFilter.setValue(Objects.nonNull(driver.getVendorId()) ? driver.getVendorName() : "-");
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown filter given.");
         }
@@ -610,7 +619,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void tableFilterCombobox(MiddleMileDriver driver, String filterBy) {
         pause3s();
-        displayNameFilter.setValue(driver.getFirstName());
+        displayNameFilter.setValue(driver.getDisplayName());
         waitUntilVisibilityOfElementLocated(
             f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
@@ -835,6 +844,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 break;
             case "Comments":
                 body_class_name ="comments";
+                break;
+            case "Vendor's Name":
+                body_class_name ="vendor-name";
                 break;
         }
 

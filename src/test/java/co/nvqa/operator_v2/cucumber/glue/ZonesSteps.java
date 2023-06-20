@@ -477,6 +477,7 @@ public class ZonesSteps extends AbstractSteps {
         .isTrue();
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.waitUntilClickable();
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.loadingIcon.waitUntilInvisible();
   }
 
   @Then("Operator make sure error popup on zones page shows up: {string}")

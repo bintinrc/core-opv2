@@ -240,7 +240,7 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   }
 
   public void validateDisabledButton() {
-    Assertions.assertThat(disabledValidateButton.getText().isEmpty())
+    Assertions.assertThat(disabledValidateButton.isDisplayed())
         .as("Validation for disabled button")
         .isTrue();
   }
@@ -420,12 +420,27 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     Assertions.assertThat(getWebDriver().findElement(By.xpath(errorMessageXpath)).isDisplayed())
         .as(f("Validation for error message : %s", message))
         .isTrue();
-
   }
 
-  public void validate404StatusCode() {
-    Assertions.assertThat(statusCode404message.isDisplayed())
-        .as("Validation for Code Text : statusCode 404 message")
+  public void validateDataInErrorMessage(String dataText) {
+    String errorMessageDataXpath = f("//span[text()='%s']", dataText);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(errorMessageDataXpath)).isDisplayed())
+        .as(f("Validation for error message Data: %s", dataText))
+        .isTrue();
+  }
+
+  public void validate404StatusCode(String statusCode) {
+    String requestStatusCodeXpath = f("//div[text()='%s']", statusCode);
+    Assertions.assertThat(
+            getWebDriver().findElement(By.xpath(requestStatusCodeXpath)).isDisplayed())
+        .as(f("Validation for Status code Text : %s", statusCode))
+        .isTrue();
+  }
+
+  public void validateURL(String url) {
+    String requestURLXpath = f("//span[text()='%s']", url);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(requestURLXpath)).isDisplayed())
+        .as(f("Validation for URL Text : %s", url))
         .isTrue();
   }
 
