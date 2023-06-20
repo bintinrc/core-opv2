@@ -42,18 +42,18 @@ Feature: Force Fail Single Pickup Job
       | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     Then Operator verifies the Table on Pickup Jobs Page
-    And Operator click on button to view job details
+    And Operator click on button to view job details on Pickup Appointment Job page
     Then QA verify values on Pickup Jobs Details page are shown
       | shipperId  | {normal-shipper-pickup-appointment-1-global-id}  |
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |
       | waypointId | {KEY_WAYPOINT_ID}                                |
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
       | status     | SUCCESS                                          |
-    And Operator click on button to view image
-    And QA verify signature image
-    And Operator click on button to cancel image
-    And Operator click on button to download parcel list
-    And Verify that csv file is downloaded in pick up job page with filename for Job Id
+    And Operator click on button to view image on Pickup Appointment Job page
+    And QA verify signature image on Pickup Appointment Job page
+    And Operator click on button to cancel image on Pickup Appointment Job page
+    And Operator click on button to download parcel list on Pickup Appointment Job page
+    And Verify that csv file is downloaded on pick up job page with filename for Job Id
       |  Job Id     |  {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}             |
 
 
@@ -95,7 +95,7 @@ Feature: Force Fail Single Pickup Job
       | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     Then Operator verifies the Table on Pickup Jobs Page
-    And Operator click on button to view job details
+    And Operator click on button to view job details on Pickup Appointment Job page
     Then QA verify values on Pickup Jobs Details page are shown
       | shipperId  | {normal-shipper-pickup-appointment-1-global-id}  |
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |
@@ -103,7 +103,7 @@ Feature: Force Fail Single Pickup Job
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
       | status     | FAIL                                             |
     And Operator waits for 10 seconds
-    And Operator click on button to download image signature
+    And Operator click on button to download image signature on Pickup Appointment Job page
 
   @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario: Proof of pickup - Multiple proof - PA Job
@@ -151,7 +151,7 @@ Feature: Force Fail Single Pickup Job
       | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     Then Operator verifies the Table on Pickup Jobs Page
-    And Operator click on button to view job details
+    And Operator click on button to view job details on Pickup Appointment Job page
     Then QA verify values on Pickup Jobs Details page are shown
       | shipperId  | {normal-shipper-pickup-appointment-1-global-id}  |
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |
@@ -159,8 +159,8 @@ Feature: Force Fail Single Pickup Job
       | time       | {date: 0 days ago, yyyy-MM-dd}                   |
       | status     | FAIL                                             |
     And Operator waits for 10 seconds
-    And Operator click on button to download image signature
-    And Operator click on button to view second pick up proof
+    And Operator click on button to download image signature on Pickup Appointment Job page
+    And Operator click on button to view second pick up proof on Pickup Appointment Job page
     Then QA verify values on Pickup Jobs Details page are shown
       | shipperId  | {normal-shipper-pickup-appointment-1-global-id}  |
       | jobId      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}              |

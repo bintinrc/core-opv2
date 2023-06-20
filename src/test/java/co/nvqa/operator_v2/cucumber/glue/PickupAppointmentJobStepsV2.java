@@ -231,7 +231,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @And("Operator click on button to view job details")
+  @And("Operator click on button to view job details on Pickup Appointment Job page")
   public void clickOnJobDetailsButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame(() -> {
@@ -241,7 +241,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator click on button to view second pick up proof")
+  @And("Operator click on button to view second pick up proof on Pickup Appointment Job page")
   public void clickOnPickUpProofButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
@@ -251,7 +251,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator click on button to view image")
+  @And("Operator click on button to view image on Pickup Appointment Job page")
   public void clickOnJobToViewImageButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
@@ -261,7 +261,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator click on button to cancel image")
+  @And("Operator click on button to cancel image on Pickup Appointment Job page" )
   public void clickOnJobToCancelImageButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
@@ -297,14 +297,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @Then("QA verify signature image")
+  @Then("QA verify signature image on Pickup Appointment Job page")
   public void verifySignatureImage() {
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
     });
   }
 
-  @And("Operator click on button to download parcel list")
+  @And("Operator click on button to download parcel list on Pickup Appointment Job page")
   public void clickDownloadParcelList() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
@@ -315,7 +315,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator click on button to download image signature")
+  @And("Operator click on button to download image signature on Pickup Appointment Job page")
   public void clickDownloadSignature() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
@@ -326,7 +326,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Verify that csv file is downloaded in pick up job page with filename for Job Id")
+  @Then("Verify that csv file is downloaded on pick up job page with filename for Job Id")
   public void verifyThatCsvFileIsDownloadedWithFilename(Map<String, String> dataTable) {
     Map<String, String> data = resolveKeyValues(dataTable);
     String newFilename = "pop-file-id-%s.csv";
