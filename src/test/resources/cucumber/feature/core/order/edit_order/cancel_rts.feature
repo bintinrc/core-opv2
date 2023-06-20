@@ -1,13 +1,12 @@
 @OperatorV2 @Core @EditOrder @CancelRTS @EditOrder4
 Feature: Cancel RTS
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Cancel RTS from Edit Order Page (uid:d4419364-fa79-41db-8b2f-2367864463fb)
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -32,6 +31,7 @@ Feature: Cancel RTS
     Then Operator verifies that info toast displayed:
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
+    Then Operator refresh page
     And API Operator get order details
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -84,7 +84,3 @@ Feature: Cancel RTS
       | latitude      | 1.3184395712682                    |
       | longitude     | 103.925311276846                   |
       | routingZoneId | 22861                              |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
