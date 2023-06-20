@@ -62,7 +62,7 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   public FileInput selectKmlFile;
   public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
 
-  public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//span[contains(text(),'%s')]";
+  public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//button[@data-testid='edit-driver-zones-button']";
 
 
   public ZonesTable zonesTable;
@@ -81,12 +81,10 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/first-mile-zones");
   }
 
-  public void clickButton(String buttonText) {
+  public void clickButton() {
     waitUntilLoaded();
     String elementXpath = null;
-    if(buttonText.contains("Edit Driver Zones")){
-      elementXpath = f(FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH, buttonText);
-    }
+      elementXpath = FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH;
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
     buttonXpath.click();
   }

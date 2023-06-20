@@ -54,7 +54,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
     Runnable clickButton = () -> {
-      firstMileZonesPage.clickButton(buttonText);
+      firstMileZonesPage.clickButton();
     };
     doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
