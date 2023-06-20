@@ -2,18 +2,23 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.ViewJobDetailModal;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHORT_NAME;
@@ -50,9 +55,15 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   @FindBy(xpath = "//input[@accept='.kml']")
   public FileInput uploadKmlFileInput;
 
+  @FindBy(css = "div.ant-modal-content")
+  public EditDriverZoneModal editDriverZoneModal;
+
   @FindBy(xpath = "//button[@data-testid='select-button']")
   public FileInput selectKmlFile;
   public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
+
+  public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//span[contains(text(),'%s')]";
+
 
   public ZonesTable zonesTable;
 
@@ -63,6 +74,21 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   public FirstMileZonesPage(WebDriver webDriver) {
     super(webDriver);
     zonesTable = new ZonesTable(webDriver);
+  }
+
+  public void loadFirstMileZonePage() {
+    getWebDriver().manage().window().maximize();
+    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/first-mile-zones");
+  }
+
+  public void clickButton(String buttonText) {
+    waitUntilLoaded();
+    String elementXpath = null;
+    if(buttonText.contains("Edit Driver Zones")){
+      elementXpath = f(FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH, buttonText);
+    }
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
+    buttonXpath.click();
   }
 
   public void waitUntilPageLoaded() {
@@ -114,6 +140,35 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     waitUntilVisibilityOfToastReact(message);
 
     return true;
+  }
+
+  public static class EditDriverZoneModal extends AntModal {
+
+    public static final String EDIT_DRIVER_ZONE_ITEMS_XPATH = "//span[contains(text(),'%s')]";
+    public static final String EDIT_DRIVER_ZONE_HUBS_XPATH = "//label[contains(text(),'%s')]";
+    public static final String EDIT_DRIVER_ZONE_BUTTONS_XPATH = "//button[@data-testid='%s']";
+
+    public EditDriverZoneModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public String getEditDriverZoneItemsXpath(String itemName) {
+      return findElementByXpath(f(EDIT_DRIVER_ZONE_ITEMS_XPATH, itemName)).getText();
+    }
+
+    public String getModalTitle(String itemName) {
+      return findElementByXpath(f(EDIT_DRIVER_ZONE_HUBS_XPATH, itemName)).getText();
+    }
+
+    public String getHubText(String itemName) {
+      return findElementByXpath(f(EDIT_DRIVER_ZONE_ITEMS_XPATH, itemName)).getText();
+    }
+
+    public Boolean getButton(String itemName) {
+      return findElementByXpath(f(EDIT_DRIVER_ZONE_BUTTONS_XPATH, itemName)).isDisplayed();
+    }
+
   }
 
   public static class AddZoneDialog extends ZoneParamsDialog {

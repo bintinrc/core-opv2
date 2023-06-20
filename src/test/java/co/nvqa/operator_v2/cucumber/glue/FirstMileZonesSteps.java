@@ -45,6 +45,35 @@ public class FirstMileZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage = new ZonesSelectedPolygonsPage(getWebDriver());
   }
 
+  @When("Operator loads First Mile Zone Page")
+  public void operator_loads_first_mile_zone_page() {
+    firstMileZonesPage.loadFirstMileZonePage();
+  }
+
+  @And("Operator clicks on the {string} button on First Mile Zone Page")
+  @SuppressWarnings("unchecked")
+  public void Operator_clicks_on_the_button(String buttonText) {
+    Runnable clickButton = () -> {
+      firstMileZonesPage.clickButton(buttonText);
+    };
+    doWithRetry(clickButton, "Click on Button");
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies the Table on Edit Driver Zone Modal")
+  public void operatorVerifiesTableOnEditDriverZoneModalPage() {
+      firstMileZonesPage.inFrame(page -> {
+        Assertions.assertThat(page.editDriverZoneModal.getModalTitle("Edit Driver Zones")).
+            as("Title is correct").isEqualToIgnoringCase("Edit Driver Zones");
+        Assertions.assertThat(page.editDriverZoneModal.getHubText("Hubs")).
+            as("Hubs is correct").isEqualToIgnoringCase("Hubs");
+        Assertions.assertThat(page.editDriverZoneModal.getButton("close-modal-button")).
+            as("Close button is Displayed").isTrue();
+        Assertions.assertThat(page.editDriverZoneModal.getButton("save-changes-button")).
+            as("Save Changes button is correct").isTrue();
+      });
+    }
+
   @When("Operator creates first mile zone using {string} hub")
   public void operatorCreatesFirstMileZoneUsingHub(String hubName) {
     firstMileZonesPage.waitUntilPageLoaded();
