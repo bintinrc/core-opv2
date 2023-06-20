@@ -115,6 +115,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   @FindBy(css = "div.ant-modal-content")
   public PresetModal presetModal;
 
+  @FindBy(css = ".ant-modal")
+  public JobDetailsModal jobDetailsModal;
+
   @FindBy(css = "#presetFilters")
   public PageElement presetFilters;
 
@@ -1072,6 +1075,33 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     } catch (IOException e) {
       LOGGER.warn("Can not create random image file: {}", e);
     }
+  }
+
+  public static class JobDetailsModal extends AntModal {
+
+    @FindBy(xpath = ".//div[./span[.='Status']]/span[2]")
+    public PageElement status;
+
+    @FindBy(xpath = ".//div[./span[.='Removed TID']]/span[2]")
+    public PageElement removedTid;
+
+    @FindBy(xpath = ".//div[./span[.='Scanned at Shipper Count']]/span[2]")
+    public PageElement scannedAtShipperCount;
+
+    @FindBy(xpath = ".//span[.='No details yet']")
+    public PageElement noDetailsYet;
+
+    @FindBy(xpath = ".//div[./span[.=\"Scanned at Shipper's\"]]/span[position()>1]")
+    public List<PageElement> scannedAtShippers;
+
+    @FindBy(xpath = ".//button[.='Download Parcel List']")
+    public Button downloadParcelList;
+
+    public JobDetailsModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
   }
 
 }

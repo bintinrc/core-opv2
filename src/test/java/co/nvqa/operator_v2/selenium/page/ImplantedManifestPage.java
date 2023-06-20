@@ -1,23 +1,20 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -59,6 +56,12 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
 
   @FindBy(css = "[data-testid='alert-dialog.confirm-button']")
   public Button confirmRemoveAll;
+
+  @FindBy(css = "div.rack-sector-card h2")
+  public PageElement rackSector;
+
+  @FindBy(css = "div.rack-sector-card h2 + div")
+  public PageElement rackSectorStamp;
 
   @FindBy(css = ".ant-modal")
   public CreateManifestDialog createManifestDialog;
@@ -122,27 +125,9 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
     verifyFileDownloadedSuccessfully(csvFileName, expectedText);
   }
 
-  public void removeOrderByScan(String barcode) {
-    sendKeysAndEnterByAriaLabel("remove_scan_barcode", barcode);
-    String xpathToBarCode = "//input[@aria-label='remove_scan_barcode' and contains(@class,'ng-empty')]";
-    waitUntilVisibilityOfElementLocated(xpathToBarCode);
-  }
-
-  public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime,
-      String barcode) {
-    scanBarcodeInput.setValue(barcode + Keys.ENTER);
-    barcodeToScannedAtTime.put(barcode,
-        DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
-    pause2s();
-  }
-
   public void selectHub(String destinationHub) {
     pause2s();
     selectValueFromMdSelectWithSearch("model", destinationHub);
-  }
-
-  public void scrollToBottom() {
-    scrollIntoView("//button[@aria-label='Create Manifest']");
   }
 
   public static class CreateManifestDialog extends AntModal {

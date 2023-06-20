@@ -2,7 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
+import com.beust.jcommander.Strings;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,18 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT;
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
-import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.COLUMN_ROUTE;
-import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.COLUMN_ROUTE_POS;
 
 public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
@@ -371,6 +374,82 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           pickupAppointmentJobPage.bulkSelect.failJob.click();
           break;
       }
+    });
+  }
+
+  @Then("Operator open Job Details for {value} job on Pickup Jobs page")
+  public void openJobDetails(String jobId) {
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.bulkSelect.filterTableUsing("pickupAppointmentJobId", jobId);
+      pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_DETAILS);
+    });
+  }
+
+  @Then("Operator verify Job Details values on Pickup Jobs page:")
+  public void vetifyJobDetails(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.jobDetailsModal.waitUntilVisible();
+      SoftAssertions assertions = new SoftAssertions();
+      if (finalData.containsKey("status")) {
+        assertions.assertThat(pickupAppointmentJobPage.jobDetailsModal.status.getNormalizedText())
+            .as("Status")
+            .isEqualTo(finalData.get("status"));
+      }
+      if (finalData.containsKey("removedTid")) {
+        assertions.assertThat(
+                pickupAppointmentJobPage.jobDetailsModal.removedTid.getNormalizedText())
+            .as("Removed TID")
+            .isEqualTo(finalData.get("removedTid"));
+      }
+      if (finalData.containsKey("scannedAtShipperCount")) {
+        assertions.assertThat(
+                pickupAppointmentJobPage.jobDetailsModal.scannedAtShipperCount.getNormalizedText())
+            .as("Scanned at Shipper Count")
+            .isEqualTo(finalData.get("scannedAtShipperCount"));
+      }
+      if (finalData.containsKey("scannedAtShippers")) {
+        String value = finalData.get("scannedAtShippers");
+        if (value == null) {
+          assertions.assertThat(pickupAppointmentJobPage.jobDetailsModal.scannedAtShippers)
+              .withFailMessage("Scanned at Shipper's list is not empty")
+              .isEmpty();
+        } else {
+          var actual = pickupAppointmentJobPage.jobDetailsModal.scannedAtShippers.stream().map(
+                  PageElement::getNormalizedText)
+              .collect(Collectors.toList());
+          assertions.assertThat(actual)
+              .as("Scanned at Shipper's")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(value));
+        }
+      }
+    });
+  }
+
+  @Then("Operator verify no Proof of Pickup details in Job Details modal on Pickup Jobs page")
+  public void vetifyNoJobDetails() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.jobDetailsModal.waitUntilVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.jobDetailsModal.noDetailsYet.isDisplayed())
+          .withFailMessage("'No details yet' message is not displayed")
+          .isTrue();
+    });
+  }
+
+  @Then("Operator click Download Parcel List button in Job Details modal on Pickup Jobs page")
+  public void clickDownloadParcelList() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.jobDetailsModal.waitUntilVisible();
+      pickupAppointmentJobPage.jobDetailsModal.downloadParcelList.click();
+    });
+  }
+
+  @Then("Operator verify downloaded parcel list contains TIDs on Pickup Jobs page:")
+  public void verifyDownloadedParcelList(List<String> tids) {
+    pickupAppointmentJobPage.inFrame(() -> {
+      String fileanme = pickupAppointmentJobPage.getLatestDownloadedFilename("pop-file-id-");
+      String content = "Scanned at Shipper (POP)\n" + Strings.join("\n", resolveValues(tids));
+      pickupAppointmentJobPage.verifyFileDownloadedSuccessfully(fileanme, content);
     });
   }
 
@@ -836,6 +915,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void operatorCLicksEditPAJob() {
     pickupAppointmentJobPage.inFrame(() -> {
       pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_EDIT);
+      pickupAppointmentJobPage.editPAJob.close.waitUntilVisible();
+    });
+  }
+
+  @Given("Operator clicks Job details on Pickup Jobs Page")
+  public void operatorCLicksJobDetails() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_DETAILS);
       pickupAppointmentJobPage.editPAJob.close.waitUntilVisible();
     });
   }
