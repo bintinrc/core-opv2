@@ -33,6 +33,8 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.dp.constants.DpScenarioStorageKeys.KEY_DP_GENERATED_PREFIX;
+
 /**
  * @author Sergey Mishanin
  */
@@ -564,7 +566,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator fill the partner filter by {string} with value {string}")
+  @Then("Operator fill the partner filter by {value} with value {value}")
   public void operatorFillThePartnerFilterWithValue(String element, String value) {
     String fillInValue = resolveValue(value);
     dpAdminReactPage.inFrame(() -> {
@@ -1655,4 +1657,70 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpUserOld.setContactNo(dpUser.getContactNo());
     return dpUserOld;
   }
+
+  @Given("Operator generate prefix for dp creation")
+  public void operatorGeneratePrefixForDpCreation()
+  {
+    put(KEY_DP_GENERATED_PREFIX, co.nvqa.common.utils.RandomUtil.randomString(5));
+  }
+
+  @When("Operator fill the Dp User filter by {value} with value {value}")
+  public void operatorFillTheDpUserFilterByValue(String element, String value) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpUserFilter.get(element).waitUntilVisible();
+      dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(value);
+    });
+  }
+
+  @When("Operator Edit Dp User Details with the data below :")
+  public void operatorEditDpUserDetails(DataTable dt) {
+    List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.formDpUserFirstName.forceClear();
+      dpAdminReactPage.formDpUserFirstName.setValue(dpUsers.get(0).getFirstName());
+
+      dpAdminReactPage.formDpUserLastName.forceClear();
+      dpAdminReactPage.formDpUserLastName.setValue(dpUsers.get(0).getLastName());
+
+      dpAdminReactPage.formDpUserContact.forceClear();
+      dpAdminReactPage.formDpUserContact.setValue(dpUsers.get(0).getContactNo());
+
+      dpAdminReactPage.formDpUserEmail.forceClear();
+      dpAdminReactPage.formDpUserEmail.setValue(dpUsers.get(0).getEmailId());
+
+      put(KEY_DP_USER, dpUsers.get(0));
+    });
+  }
+
+  @Then("Operator verify data on dp user creation same with data of dp user on table :")
+  public void newOperatorVerifyDpUserDetails(Map<String, String> searchDetailsAsMap) {
+    DpUser dpUser = resolveValue(searchDetailsAsMap.get("dpUser"));
+
+    searchDetailsAsMap = resolveKeyValues(searchDetailsAsMap);
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpUserElementByMap(extractDetail, dpUser);
+        dpAdminReactPage.fillFilterDpUser(extractDetail, valueDetails);
+        pause2s();
+        dpAdminReactPage.readDpUserEntity(dpUser);
+        dpAdminReactPage.clearDpUserFilter(extractDetail);
+      }
+    });
+  }
+
+  @Then("Operator verify values on dp user table updated")
+  public void operatorVerifyValuesOnDpUserTableUpdated()
+  {
+    doWithRetry(() -> {
+      DpUser dpUser = get(KEY_DP_USER);
+      dpAdminReactPage.refreshPage();
+      dpAdminReactPage.inFrame(() -> dpAdminReactPage.readDpUserEntity(dpUser));
+    }, "verify values on dp user table");
+  }
+
 }
