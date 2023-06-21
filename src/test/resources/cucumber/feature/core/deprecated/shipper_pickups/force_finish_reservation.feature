@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperPickups @ShipperPickups1
+#@OperatorV2 @Core @ShipperPickups @ShipperPickups1 @Deprecated
 Feature: Shipper Pickups - Force Finish Reservation
 
   @LaunchBrowser @ShouldAlwaysRun
