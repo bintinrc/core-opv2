@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OutboundMonitoringPart1 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -312,7 +312,3 @@ Feature: Outbound Monitoring
     Then Operator verify that Orders in Route table is empty
     And Operator verify that Outbound Scans table is empty
     And Operator verify that Parcels not in Outbound Scans table is empty
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @UploadCsvOnStationRoute
 Feature: Upload CSV on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - CSV file from Downloaded CSV
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-12}
     And API Shipper create V4 order using data below:
@@ -230,7 +230,3 @@ Feature: Upload CSV on Station Route
       | top    | Upload failed              |
       | bottom | Max rows of 10000 exceeded |
     Then Operator verify Assign Drivers button is disabled on Station Route page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
