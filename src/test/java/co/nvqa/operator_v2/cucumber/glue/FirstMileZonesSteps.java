@@ -79,7 +79,9 @@ public class FirstMileZonesSteps extends AbstractSteps {
     firstMileZonesPage.inFrame(page -> {
       Zone hubName = get(KEY_CREATED_ZONE);
 //      page.editDriverZoneModal.searchForHub(hubName.getHubName());
-      page.addFmZoneDialog.hub.selectValue(hubName.getHubName());
+//      page.addFmZoneDialog.hub.selectValue(hubName.getHubName());
+      page.editDriverZoneModal.hub.selectValue(hubName.getHubName());
+
       takesScreenshot();
     });
   }

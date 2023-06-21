@@ -133,7 +133,7 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     return true;
   }
 
-  public static class EditDriverZoneModal extends AntModal {
+  public static class EditDriverZoneModal extends ZoneParamsDialog {
 
     public static final String EDIT_DRIVER_ZONE_HUBS_XPATH = "//div[contains(text(),'%s')]";
 
