@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1
 Feature: Route Inbound Expected Scans
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -483,7 +483,3 @@ Feature: Route Inbound Expected Scans
       | shipperName   | {lodge-in-shipper-name}                    |
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}   |
     And Operator scan a tracking ID of created order on Route Inbound page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
