@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @EditArea
 Feature: Edit Area
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage
@@ -353,7 +353,3 @@ Feature: Edit Area
       | hubId          | {hub-id-6}                                          |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].id}                 |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].id}                 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

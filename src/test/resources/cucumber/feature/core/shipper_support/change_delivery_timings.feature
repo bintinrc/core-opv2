@@ -1,8 +1,8 @@
 @OperatorV2 @Core @ShipperSupport @ChangeDeliveryTimings
 Feature: Change Delivery Timings
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Download and Verify CSV file of Change Delivery Timings' Sample (uid:d62b8c4f-43a0-44c9-a880-48e9cbecd14c)
@@ -233,7 +233,3 @@ Feature: Change Delivery Timings
       | 09:00-22:00 | -1           | 09:00:00 | 22:00:00 |
       | 09:00-18:00 | -2           | 09:00:00 | 18:00:00 |
       | 18:00-22:00 | -3           | 18:00:00 | 22:00:00 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart5
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage @DeleteShipment
@@ -454,7 +454,3 @@ Feature: Search Tracking IDs on Station Route
       | driverId   | Unassigned                               |
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

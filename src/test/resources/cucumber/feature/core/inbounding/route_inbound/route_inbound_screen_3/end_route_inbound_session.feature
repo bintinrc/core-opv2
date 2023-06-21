@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @EndRouteInboundSession
 Feature: End Route Inbound Session
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -102,7 +102,3 @@ Feature: End Route Inbound Session
     Examples:
       | cashCollected | cashOnDelivery |
       | 23.57         | 23.57          |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

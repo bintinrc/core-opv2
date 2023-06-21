@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart4
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage @DeleteShipment
@@ -475,7 +475,3 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Payoh" is displayed on 1 position on Station Route page
     And Operator verify area match "Payoh" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Payoh" is displayed in row 1 on Station Route page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

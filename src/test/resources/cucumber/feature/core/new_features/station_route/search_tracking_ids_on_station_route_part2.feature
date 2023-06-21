@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart2
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage @DeleteShipment
@@ -437,7 +437,3 @@ Feature: Search Tracking IDs on Station Route
     And Operator click Assign drivers button on Station Route page
     Then Operator verifies that error react notification displayed:
       | top | No orders found |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @AssignDriverListOnStationRoute
 Feature: Assign Drivers List on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage @DeleteShipment
@@ -635,7 +635,3 @@ Feature: Assign Drivers List on Station Route
       | action | Removed |
     Then Operator verify parcels table row 1 marked as removed on Station Route page
     Then Operator verify parcels table row 2 marked as removed on Station Route page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

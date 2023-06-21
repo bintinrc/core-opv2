@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob1 @TagManagement
 Feature: Tag Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteTags
@@ -57,7 +57,3 @@ Feature: Tag Management
     Then Operator verifies search result on Tag Management page:
       | name        | {KEY_CREATED_ROUTE_TAG.name}        |
       | description | {KEY_CREATED_ROUTE_TAG.description} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

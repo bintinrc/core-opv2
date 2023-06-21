@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @CreateNewCoveragePart1
 Feature: Create New Coverage
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage
@@ -470,7 +470,3 @@ Feature: Create New Coverage
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Route - verify that sr_keywords record is not created for "{KEY_COVERAGE_ID}" area
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

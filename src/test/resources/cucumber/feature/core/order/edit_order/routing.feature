@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @EditOrderRouting @EditOrder2 @RoutingModules
 Feature: Routing
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
@@ -207,7 +207,3 @@ Feature: Routing
     Then Operator verify order status is "Cancelled" on Edit Order page
     And Operator verify order granular status is "Cancelled" on Edit Order page
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit order page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

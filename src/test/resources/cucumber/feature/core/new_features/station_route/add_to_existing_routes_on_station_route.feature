@@ -1,10 +1,6 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @AddExistingRoutesOnStationRoute
 Feature: Add To Existing Routes on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
   @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To Existing Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -186,7 +182,3 @@ Feature: Add To Existing Routes on Station Route
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
-    
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

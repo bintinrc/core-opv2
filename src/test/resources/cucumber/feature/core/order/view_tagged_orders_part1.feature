@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @ViewTaggedOrders @ViewTaggedOrdersPart1
 Feature: View Tagged Orders
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days
@@ -160,7 +160,3 @@ Feature: View Tagged Orders
       | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.* |
       | daysFromFirstInbound | 1                                   |
       | granularStatus       | Arrived at Distribution Point       |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @RemoveKeywords
 Feature: Remove Keywords
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverage
@@ -113,6 +113,3 @@ Feature: Remove Keywords
       | top    | Status 400: Unknown                                                                                                                                                                            |
       | bottom | ^.*Error Message: cannot delete all keywords of current coverage. \[area: AREA {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no keyword.* |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

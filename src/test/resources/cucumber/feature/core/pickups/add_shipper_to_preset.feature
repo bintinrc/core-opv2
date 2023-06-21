@@ -1,8 +1,8 @@
 @OperatorV2 @Core @PickUps @AddShipperToPreset
 Feature: Add Shipper To Preset
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
@@ -502,7 +502,3 @@ Feature: Add Shipper To Preset
     And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

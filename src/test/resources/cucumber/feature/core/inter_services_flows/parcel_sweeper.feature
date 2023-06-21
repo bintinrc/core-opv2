@@ -1,8 +1,8 @@
 @OperatorV2 @Core @InterServicesFlows @ParcelSweeperLive
 Feature: Parcel Sweeper Live
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -88,7 +88,3 @@ Feature: Parcel Sweeper Live
     And DB Core - verify orders record:
       | id                     | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | latestWarehouseSweepId | {KEY_CORE_WAREHOUSE_SWEEPS[1].id}  |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
