@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @BatchOrder @NewFeatures2
 Feature: Batch Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Rollback Order - Valid Batch Id, Status = Pending Pickup
@@ -278,7 +278,3 @@ Feature: Batch Order
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
       | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

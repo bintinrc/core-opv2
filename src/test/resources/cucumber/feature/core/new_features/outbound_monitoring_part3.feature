@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OutboundMonitoringPart3 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -245,7 +245,3 @@ Feature: Outbound Monitoring
     And DB Operator verifies route_logs record:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | isOk | 0                      |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
