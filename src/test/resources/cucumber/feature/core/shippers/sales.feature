@@ -1,6 +1,10 @@
 @OperatorV2 @Core @Shippers @Sales
 Feature: Sales
 
+  Background:
+    Given Launch browser
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+
   Scenario: Operator Download Sample CSV File for Sales Person Creation on Sales Page (uid:3af61552-4ca9-4246-ba7a-1be3dc528dbc)
     Given Operator go to menu Shipper -> Sales
     When Operator download sample CSV file for "Sales Person Creation" on Sales page
