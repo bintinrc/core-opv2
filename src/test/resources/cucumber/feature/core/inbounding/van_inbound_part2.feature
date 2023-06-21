@@ -183,7 +183,7 @@ Feature: Van Inbound
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
       | parcelGranularStatus | Van en-route to pickup          |
 
-   @wip
+  @DeleteOrArchiveRoute
   Scenario: Publish Reservation Event on Start Route
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
