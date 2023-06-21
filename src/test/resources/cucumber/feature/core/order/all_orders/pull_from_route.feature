@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @PullfromRoute
 Feature: All Orders - Pull From Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -70,7 +70,3 @@ Feature: All Orders - Pull From Route
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator apply "Pull From Route" action and expect to see "Selection Error"
     Then Operator verify Selection Error dialog for invalid Pull From Order action
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
