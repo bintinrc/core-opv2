@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @PresetFilters
 Feature: All Orders - Preset Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 #    TODO DISABLED
@@ -143,6 +143,3 @@ Feature: All Orders - Preset Filters
 #      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
 #      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
