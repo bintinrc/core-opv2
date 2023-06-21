@@ -53,11 +53,10 @@ public class FirstMileZonesSteps extends AbstractSteps {
   @And("Operator clicks on the {string} button on First Mile Zone Page")
   @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
-    Runnable clickButton = () -> {
+    firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.clickButton();
-    };
-    doWithRetry(clickButton, "Click on Button");
-    takesScreenshot();
+      takesScreenshot();
+    });
   }
 
   @Then("Operator verifies the Table on Edit Driver Zone Modal")
@@ -74,10 +73,22 @@ public class FirstMileZonesSteps extends AbstractSteps {
       });
     }
 
+  @And("Operator search for hub on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_serach_for_hub() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone hubName = get(KEY_CREATED_ZONE);
+//      page.editDriverZoneModal.searchForHub(hubName.getHubName());
+      page.addFmZoneDialog.hub.selectValue(hubName.getHubName());
+      takesScreenshot();
+    });
+  }
+
   @When("Operator creates first mile zone using {string} hub")
   public void operatorCreatesFirstMileZoneUsingHub(String hubName) {
     firstMileZonesPage.waitUntilPageLoaded();
     operatorCreateFirstMileZone(hubName);
+    pause5s();
   }
 
   @When("Operator creates first mile zone with empty field in one of the mandatory field")

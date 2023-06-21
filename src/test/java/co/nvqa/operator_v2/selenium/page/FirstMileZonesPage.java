@@ -9,18 +9,14 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
-import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.ViewJobDetailModal;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
-import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHORT_NAME;
 
 public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
@@ -60,10 +56,8 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
 
   @FindBy(xpath = "//button[@data-testid='select-button']")
   public FileInput selectKmlFile;
-  public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
-
   public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//button[@data-testid='edit-driver-zones-button']";
-
+  public static final String FIRST_MILE_ZONE_PAGE_HUB_MENU_XPATH = "//span[@class='ant-select-selection-placeholder']";
 
   public ZonesTable zonesTable;
 
@@ -82,9 +76,8 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   }
 
   public void clickButton() {
-    waitUntilLoaded();
     String elementXpath = null;
-      elementXpath = FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH;
+    elementXpath = FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH;
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
     buttonXpath.click();
   }
@@ -142,8 +135,10 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
 
   public static class EditDriverZoneModal extends AntModal {
 
-    public static final String EDIT_DRIVER_ZONE_ITEMS_XPATH = "//span[contains(text(),'%s')]";
-    public static final String EDIT_DRIVER_ZONE_HUBS_XPATH = "//label[contains(text(),'%s')]";
+    public static final String EDIT_DRIVER_ZONE_HUBS_XPATH = "//div[contains(text(),'%s')]";
+
+    public static final String EDIT_DRIVER_HUBS_XPATH = "//label[contains(text(),'%s')]";
+
     public static final String EDIT_DRIVER_ZONE_BUTTONS_XPATH = "//button[@data-testid='%s']";
 
     public EditDriverZoneModal(WebDriver webDriver, WebElement webElement) {
@@ -151,22 +146,25 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public String getEditDriverZoneItemsXpath(String itemName) {
-      return findElementByXpath(f(EDIT_DRIVER_ZONE_ITEMS_XPATH, itemName)).getText();
-    }
-
     public String getModalTitle(String itemName) {
       return findElementByXpath(f(EDIT_DRIVER_ZONE_HUBS_XPATH, itemName)).getText();
     }
 
     public String getHubText(String itemName) {
-      return findElementByXpath(f(EDIT_DRIVER_ZONE_ITEMS_XPATH, itemName)).getText();
+      return findElementByXpath(f(EDIT_DRIVER_HUBS_XPATH, itemName)).getText();
     }
 
     public Boolean getButton(String itemName) {
       return findElementByXpath(f(EDIT_DRIVER_ZONE_BUTTONS_XPATH, itemName)).isDisplayed();
     }
 
+    public void searchForHub(String hubName) {
+      String elementXpath = null;
+      elementXpath = FIRST_MILE_ZONE_PAGE_HUB_MENU_XPATH;
+      WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
+      buttonXpath.sendKeys(hubName);
+      buttonXpath.click();
+    }
   }
 
   public static class AddZoneDialog extends ZoneParamsDialog {
