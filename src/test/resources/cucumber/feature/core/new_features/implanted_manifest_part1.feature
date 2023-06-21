@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @ImplantedManifestPart1 @NewFeatures1
 Feature: Implanted Manifest
 
-  Background:
-    Given Launch browser
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
@@ -147,3 +147,7 @@ Feature: Implanted Manifest
       | shipperName | {filter-shipper-name}            |
     And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
     Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
