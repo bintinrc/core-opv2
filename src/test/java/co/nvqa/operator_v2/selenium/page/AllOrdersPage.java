@@ -52,7 +52,7 @@ import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.PU
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
-public class AllOrdersPage extends OperatorV2SimplePage {
+public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
   public static final String SELECTION_ERROR_CSV_FILENAME = "selection-error.csv";

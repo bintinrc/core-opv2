@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @RoutingModules @RoutingModulesAllOrders
 Feature: All Orders - Add To Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
@@ -135,8 +135,3 @@ Feature: All Orders - Add To Route
     Then Operator verifies that info toast displayed:
       | top    | 1 order(s) updated |
       | bottom | add to route       |
-
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

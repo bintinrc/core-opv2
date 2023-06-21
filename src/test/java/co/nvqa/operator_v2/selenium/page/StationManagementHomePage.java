@@ -581,6 +581,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         waitWhilePageIsLoading();
         filterFields.get(0).click();
         filterFields.get(0).sendKeys(filter.getValue());
+        pause1s();
       }
     }
     waitWhilePageIsLoading();
