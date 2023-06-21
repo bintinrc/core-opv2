@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @SuggestRouteAllOrders
+#@OperatorV2 @Core @AllOrders @SuggestRouteAllOrders @Deprected
 Feature: All Orders - Suggest Route
 
   @LaunchBrowser @ShouldAlwaysRun
