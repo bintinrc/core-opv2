@@ -245,3 +245,4 @@ Feature: Outbound Monitoring
     And DB Operator verifies route_logs record:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | isOk | 0                      |
+
