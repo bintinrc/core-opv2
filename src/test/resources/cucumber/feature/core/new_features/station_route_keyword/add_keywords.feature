@@ -179,9 +179,9 @@ Feature: Add Keywords
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
-#    Then Operator verifies that success react notification displayed:
-#      | top    | Keywords added |
-#      | bottom | 0 keywords     |
+    Then Operator verifies that success react notification displayed:
+      | top    | Keywords added |
+      | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |

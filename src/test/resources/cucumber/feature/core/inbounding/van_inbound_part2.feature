@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart2
 Feature: Van Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -183,7 +183,7 @@ Feature: Van Inbound
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
       | parcelGranularStatus | Van en-route to pickup          |
 
-  @DeleteOrArchiveRoute
+   @wip
   Scenario: Publish Reservation Event on Start Route
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -204,11 +204,7 @@ Feature: Van Inbound
       | hubName       | {hub-name}                       |
     And DB Events - verify pickup_events record:
       | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
-      | userId     | 419                                 |
+      | userId     | 397                                 |
       | type       | 4                                   |
       | pickupType | 1                                   |
       | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

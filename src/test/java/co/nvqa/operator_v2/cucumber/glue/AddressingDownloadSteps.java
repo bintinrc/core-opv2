@@ -127,6 +127,12 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator verifies that the created preset is deleted")
   public void operatorVerifiesThatTheCreatedPresetIsDeleted() {
     String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+    doWithRetry(() -> {
+      if (!addressingDownloadPage.loadAddresses.isDisplayed()) {
+        addressingDownloadPage.refreshPage();
+      }
+    }, "refresh page until element is shown");
+
     addressingDownloadPage.verifiesPresetIsNotExisted(presetName);
   }
 
