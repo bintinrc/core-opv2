@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Analytics @Reports
 Feature: Order Creation V4
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Generate/Send Driver CODs for A Day Report
@@ -85,6 +85,3 @@ Feature: Order Creation V4
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @ViewTaggedOrders @ViewTaggedOrdersPart2
 Feature: View Tagged Orders
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -146,7 +146,3 @@ Feature: View Tagged Orders
       | lastAttempt          | No Attempt                      |
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Van en-route to pickup          |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

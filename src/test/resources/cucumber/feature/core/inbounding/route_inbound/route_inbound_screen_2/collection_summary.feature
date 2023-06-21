@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @CollectionSummary
 Feature: Collection Summary
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -226,7 +226,3 @@ Feature: Collection Summary
       | trackingId                                 | stampId | location                                               | type                  | status  | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | {KEY_CREATED_ADDRESS.to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Success | 0        | Inbounded          |
     And Operator close Reservations dialog on Route Inbound page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

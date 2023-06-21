@@ -1,8 +1,8 @@
 @OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyShippers
 Feature: Third Party Shippers
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteThirdPartyShippers
@@ -45,7 +45,3 @@ Feature: Third Party Shippers
     And API Operator gets data of created Third Party shipper
     When Operator download Third Party Shippers CSV file
     Then Operator verify Third Party Shippers CSV file downloaded successfully
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

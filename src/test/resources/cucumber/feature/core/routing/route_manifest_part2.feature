@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart2
 Feature: Route Manifest
 
-  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @CloseNewWindows
@@ -374,7 +374,3 @@ Feature: Route Manifest
       | UPDATE STATUS  |
     And Operator verify Delivery details on Edit order page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

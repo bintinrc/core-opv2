@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules
 Feature: Tag & Untag DP
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -221,7 +221,3 @@ Feature: Tag & Untag DP
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
     Then DB Operator verifies all waypoints status is "PENDING"
     And DB Operator verifies all waypoints.route_id & seq_no is NULL
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

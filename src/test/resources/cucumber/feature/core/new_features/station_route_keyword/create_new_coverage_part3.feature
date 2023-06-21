@@ -382,3 +382,4 @@ Feature: Create New Coverage
     And DB Route - verify that sr_area_variations record is created:
       | area          | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}   |
       | variationName | AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss} |
+

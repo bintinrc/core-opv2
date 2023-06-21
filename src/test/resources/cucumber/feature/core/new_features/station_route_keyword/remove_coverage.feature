@@ -86,3 +86,4 @@ Feature: Remove Coverage
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_LIST_OF_COVERAGE_ID[2]}                    |
       | value      | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
+

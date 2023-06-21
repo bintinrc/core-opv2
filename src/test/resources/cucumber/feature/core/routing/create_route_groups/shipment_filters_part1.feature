@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ShipmentFiltersPart1 @CRG5
 Feature: Create Route Groups - Shipment Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment
@@ -241,7 +241,3 @@ Feature: Create Route Groups - Shipment Filters
       | trackingId                     | type                 | shipper                      | address                                         | status         |
       | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
       | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

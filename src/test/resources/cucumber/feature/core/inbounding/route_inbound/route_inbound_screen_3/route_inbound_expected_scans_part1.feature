@@ -483,3 +483,4 @@ Feature: Route Inbound Expected Scans
       | shipperName   | {lodge-in-shipper-name}                    |
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}   |
     And Operator scan a tracking ID of created order on Route Inbound page
+

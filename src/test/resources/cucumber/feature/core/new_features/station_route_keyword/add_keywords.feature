@@ -337,3 +337,4 @@ Feature: Add Keywords
     Then DB Operator verifies that route_qa_gl/sr_keywords records were deleted:
       | coverageId                   | value                                         |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+

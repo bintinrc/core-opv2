@@ -365,3 +365,4 @@ Feature: Create New Routes on Station Route
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+

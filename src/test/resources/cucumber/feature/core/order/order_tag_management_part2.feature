@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @OrderTagManagement @OrderTagManagementPart2
 Feature: Order Tag Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders
@@ -127,7 +127,3 @@ Feature: Order Tag Management
       | orderTagIds | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
       | routeId     | {KEY_CREATED_ROUTE_ID}                           |
       | driverId    | {KEY_NINJA_DRIVER_ID}                            |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

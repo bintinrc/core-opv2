@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PresetFiltersCRG @CRG2
 Feature: Create Route Groups - Preset Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteFilterTemplate
@@ -549,7 +549,3 @@ Feature: Create Route Groups - Preset Filters
     And Operator verifies selected Transactions Filters on Create Route Groups page:
       | orderServiceType | Parcel Delivery |
       | deliveryType     | Sameday         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
