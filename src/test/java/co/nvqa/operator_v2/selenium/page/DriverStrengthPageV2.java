@@ -48,6 +48,11 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   private static final String UPDATE_DRIVER_MODAL_UI_XPATH = "//div[@class='ant-modal-body']//span[normalize-space(.)=\"%s\"]";
   private static final String ALERT_MESSAGE_XPATH = "//*[@class='ant-message-notice' or @class='ant-alert-message'][normalize-space(.)=\"%s\"]";
 
+  @FindBy(xpath = "//button[contains(@class,'ant-btn') and span[text()='Verify Number']]")
+  public Button btnVerifyNumber;
+
+  @FindBy(xpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]")
+  public Button btnConfirmVerify;
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public AddDriverDialog addDriverDialog;
 

@@ -19,6 +19,7 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE_ID;
@@ -706,6 +707,24 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     String username = resolveValue(usernameRaw);
     dsPage.inFrame(() -> {
       dsPage.filterBy(COLUMN_USERNAME, username);
+    });
+  }
+
+  @And("Operator verify driver contact detail in Driver Strength")
+  public void operatorVerifyDriverContactDetailInDriverStrength(Map<String, String> datatable) {
+    Long driverId = Long.parseLong(resolveValue(datatable.get("driverId")));
+    dsPage.inFrame(() -> {
+      dsPage.loadSelection();
+      dsPage.waitUntilTableLoaded();
+
+      dsPage.driversTable.filterByColumn(COLUMN_ID, driverId);
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.btnVerifyNumber.waitUntilVisible();
+      dsPage.btnVerifyNumber.click();
+
+      dsPage.btnConfirmVerify.waitUntilVisible();
+      dsPage.btnConfirmVerify.click();
+      dsPage.editDriverDialog.submitForm();
     });
   }
 }
