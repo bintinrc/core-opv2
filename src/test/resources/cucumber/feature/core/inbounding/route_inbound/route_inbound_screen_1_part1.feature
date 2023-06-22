@@ -1,6 +1,10 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part1
 Feature: Route Inbound Screen 1
 
+  Background:
+    Given Launch browser
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+
   @DeleteOrArchiveRoute
   Scenario Outline: Operator get route details by - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
