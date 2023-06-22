@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.collect.ImmutableMap;
+import io.restassured.internal.common.assertion.Assertion;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.assertj.core.api.Assertions;
@@ -83,8 +84,7 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   }
 
   public void validateInvalidFileErrorMessageIsShown() {
-    Assertions.assertThat(message.isDisplayed())
-        .as("Validation for success message passed").isTrue();
+    Assertions.assertThat(message.getText().equals("FM zones updated!"));
   }
 
   private static class ZoneParamsDialog extends AntModal {
