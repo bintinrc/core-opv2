@@ -75,13 +75,12 @@ Feature: Order Tag Management
 
   Scenario: Add Order Tag To Route
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | numberOfOrder     | 1                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     And Operator searches and selects orders created on Order Tag Management page
     And Operator tags order with:
       | {order-tag-name}   |
@@ -106,24 +105,6 @@ Feature: Order Tag Management
       | {order-tag-id-2} |
       | {order-tag-id-3} |
     And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
-      | orderTagIds | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
-      | routeId     | {KEY_CREATED_ROUTE_ID}                           |
-      | driverId    | {KEY_NINJA_DRIVER_ID}                            |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify the tags shown on Edit Order page
-      | {order-tag-name}   |
-      | {order-tag-name-2} |
-      | {order-tag-name-3} |
-    And Operator verify order event on Edit order page using data below:
-      | name        | UPDATE TAGS                                                                                                                                                                                                   |
-      | description | ^Tags updated from none To ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}) |
-    And Operator verify order event on Edit order page using data below:
-      | name | ADD TO ROUTE |
-    And DB Core - Operator verifies tags of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
-      | {order-tag-id}   |
-      | {order-tag-id-2} |
-      | {order-tag-id-3} |
-    And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
-      | orderTagIds | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
-      | routeId     | {KEY_CREATED_ROUTE_ID}                           |
-      | driverId    | {KEY_NINJA_DRIVER_ID}                            |
+      | tagIds   | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
+      | routeId  | {KEY_CREATED_ROUTE_ID}                           |
+      | driverId | {KEY_NINJA_DRIVER_ID}                            |

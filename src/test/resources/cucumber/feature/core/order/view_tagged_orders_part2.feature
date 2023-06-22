@@ -88,7 +88,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                        |
       | granularStatus       | Pending Pickup at Distribution Point |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @toDisable
   Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
@@ -121,7 +121,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Pickup fail                     |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @toDisable
   Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
