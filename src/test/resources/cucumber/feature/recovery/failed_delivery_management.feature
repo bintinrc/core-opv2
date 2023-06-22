@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @FailedDeliveryManagementV2
+@OperatorV2 @Recovery @FailedDeliveryManagementV2 @ClearCache @ClearCookies
 Feature: Failed Delivery Management Page - Action Feature
 
   Background:
