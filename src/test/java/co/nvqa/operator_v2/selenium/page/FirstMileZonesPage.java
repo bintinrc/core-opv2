@@ -83,7 +83,6 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   }
 
   public void validateInvalidFileErrorMessageIsShown() {
-    pause5s();
     Assertions.assertThat(message.isDisplayed())
         .as("Validation for success message passed").isTrue();
   }
