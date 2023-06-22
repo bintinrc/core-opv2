@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @CancelOrder @CancelOrderPart2 @EditOrder1 @RoutingModules
 Feature: Cancel Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -211,7 +211,3 @@ Feature: Cancel Order
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |
       | routeId | {KEY_CREATED_ROUTE_ID}             |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

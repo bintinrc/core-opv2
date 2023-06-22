@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart7
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Start Date < End Date
@@ -13,7 +13,3 @@ Feature: Search Tracking IDs on Station Route
       | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
     Then Operator verify Assign drivers button is enabled on Station Route Page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

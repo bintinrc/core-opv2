@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RouteLogs @EditRouteDetails
 Feature: Route Logs - Edit Route Details
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -122,8 +122,3 @@ Feature: Route Logs - Edit Route Details
       | date                             | id                                 | driverName          | zone        | hub        |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
-
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

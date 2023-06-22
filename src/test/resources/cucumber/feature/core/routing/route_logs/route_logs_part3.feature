@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart3
 Feature: Route Logs
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @CloseNewWindows
@@ -181,7 +181,3 @@ Feature: Route Logs
       | type       | 3                                   |
       | pickupType | 1                                   |
       | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

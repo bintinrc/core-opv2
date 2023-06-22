@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @ForceSuccess @ForceSuccessPart2 @EditOrder2
 Feature: Force Success
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - Resolved PETS Ticket
@@ -206,7 +206,3 @@ Feature: Force Success
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE STATUS |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

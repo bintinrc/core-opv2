@@ -18,15 +18,15 @@ Feature: Update Template
     Then Operator waits for 1 seconds
     Then Operator edits SSB Template with Name "{KEY_TEMPLATE.getName}"
     Then Operator updates SSB template with below data successfully
-      | selectHeaders | Legacy Shipper ID |
+      | selectHeaders | Legacy Shipper ID,L1 ID (To-address L1 ID),L2 ID (To-address L2 ID),L3 ID (To-address L3 ID) |
     Then DB Operator gets the template details using template name
     Then Operator verifies below details in billing_qa_gl.templates table
-      | column                | expected_value                   |
-      | system_id             | {KEY_COUNTRY}                    |
-      | description           | {KEY_TEMPLATE.description}       |
-      | report_type           | {KEY_TEMPLATE.reportType}        |
-      | configuration         | notNull                          |
-      | configuration.headers | Legacy Shipper ID,Shipper Name   |
-      | created_at            | {gradle-current-date-yyyy-MM-dd} |
-      | updated_at            | {gradle-current-date-yyyy-MM-dd} |
-      | deleted_at            | null                             |
+      | column                | expected_value                                   |
+      | system_id             | {KEY_COUNTRY}                                    |
+      | description           | {KEY_TEMPLATE.description}                       |
+      | report_type           | {KEY_TEMPLATE.reportType}                        |
+      | configuration         | notNull                                          |
+      | configuration.headers | Shipper Name,Legacy Shipper ID,L1 ID,L2 ID,L3 ID |
+      | created_at            | {gradle-current-date-yyyy-MM-dd}                 |
+      | updated_at            | {gradle-current-date-yyyy-MM-dd}                 |
+      | deleted_at            | null                                             |

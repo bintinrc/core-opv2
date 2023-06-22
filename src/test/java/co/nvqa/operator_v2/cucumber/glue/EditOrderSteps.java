@@ -1073,6 +1073,11 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("Operator verify transaction on Edit order page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(Map<String, String> data) {
     final TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
+    if (data.containsKey("destinationAddress")) {
+      //    to click unmask before verify address details
+      List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+      editOrderPage.operatorClickMaskingText(masks);
+    }
     final List<TransactionInfo> transactions = editOrderPage.transactionsTable.readAllEntities();
     takesScreenshot();
     transactions.stream()

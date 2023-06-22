@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart1 @CRG6
 Feature: Create Route Groups - Transaction Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters
@@ -212,7 +212,3 @@ Feature: Create Route Groups - Transaction Filters
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
