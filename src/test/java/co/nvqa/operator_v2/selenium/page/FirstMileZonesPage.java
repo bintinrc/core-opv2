@@ -31,36 +31,29 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
 
   @FindBy(tagName = "iframe")
   public PageElement pageFrame;
-
   @FindBy(css = "[data-testid='add-zone-button']")
   public Button addFmZone;
-
   @FindBy(xpath = "//div[@class='ant-modal first-mile-zone-form-dialog']")
   public AddZoneDialog addFmZoneDialog;
-
   @FindBy(xpath = "//div[@class='ant-modal first-mile-zone-form-dialog']")
   public EditZoneDialog editFmZoneDialog;
-
   @FindBy(className = "ant-modal-wrap")
   public ConfirmDeleteModal confirmDeleteDialog;
-
   @FindBy(xpath = "//button[.='View Selected Polygons']")
   public Button viewSelectedPolygons;
-
   @FindBy(xpath = "//button[@data-testid='bulk-edit-polygons-button']")
   public Button bulkEditPolygons;
-
   @FindBy(xpath = "//input[@accept='.kml']")
   public FileInput uploadKmlFileInput;
-
   @FindBy(css = "div.ant-modal-content")
   public EditDriverZoneModal editDriverZoneModal;
-
   @FindBy(xpath = "//button[@data-testid='select-button']")
   public FileInput selectKmlFile;
   public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//button[@data-testid='edit-driver-zones-button']";
   public static final String SAVE_CHANGES_BUTTON_XPATH = "//button[@data-testid='save-changes-button']";
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement message;
   public ZonesTable zonesTable;
 
   public void switchTo() {
@@ -87,6 +80,12 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
     halfCircleSpinner.waitUntilInvisible();
+  }
+
+  public void validateInvalidFileErrorMessageIsShown() {
+    pause5s();
+    Assertions.assertThat(message.isDisplayed())
+        .as("Validation for success message passed").isTrue();
   }
 
   private static class ZoneParamsDialog extends AntModal {
@@ -147,9 +146,6 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     public static final String EDIT_DRIVER_ZONE_TABLE_XPATH = "//td[@class='%s']";
     public static final String EDIT_DRIVER_ZONE_DRIVER_TABLE_XPATH = "//span[text()='Select a driver']";
 
-    @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
-    public PageElement message;
-
     public EditDriverZoneModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -186,12 +182,6 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
       elementXpath = SAVE_CHANGES_BUTTON_XPATH;
       WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
       buttonXpath.click();
-    }
-
-    public void validateInvalidFileErrorMessageIsShown() {
-      pause5s();
-      Assertions.assertThat(message.isDisplayed())
-          .as("Validation for success message passed").isTrue();
     }
   }
 

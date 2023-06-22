@@ -65,7 +65,6 @@ public class FirstMileZonesSteps extends AbstractSteps {
   public void Operator_clicks_on_save_changes_button() {
     firstMileZonesPage.inFrame(page -> {
       page.editDriverZoneModal.clickOnSaveChangesButton();
-      pause5s();
       takesScreenshot();
     });
   }
@@ -74,7 +73,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   public void Operator_verify_success_message() {
     firstMileZonesPage.inFrame(page -> {
-      page.editDriverZoneModal.validateInvalidFileErrorMessageIsShown();
+      firstMileZonesPage.validateInvalidFileErrorMessageIsShown();
       takesScreenshot();
     });
   }
