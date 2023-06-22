@@ -12,7 +12,9 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -57,7 +59,7 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   @FindBy(xpath = "//button[@data-testid='select-button']")
   public FileInput selectKmlFile;
   public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//button[@data-testid='edit-driver-zones-button']";
-  public static final String FIRST_MILE_ZONE_PAGE_HUB_MENU_XPATH = "//span[@class='ant-select-selection-placeholder']";
+  public static final String SAVE_CHANGES_BUTTON_XPATH = "//button[@data-testid='save-changes-button']";
 
   public ZonesTable zonesTable;
 
@@ -102,6 +104,9 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
     @FindBy(css = "div.ant-select")
     public AntSelect hub;
 
+    @FindBy(xpath = "//div[@class='driver-select-wrapper']")
+    public AntSelect driver;
+
     @FindBy(xpath = "//div[./input[@data-testid='latitude-input']]")
     public AntTextBox latitude;
 
@@ -136,10 +141,14 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   public static class EditDriverZoneModal extends ZoneParamsDialog {
 
     public static final String EDIT_DRIVER_ZONE_HUBS_XPATH = "//div[contains(text(),'%s')]";
-
     public static final String EDIT_DRIVER_HUBS_XPATH = "//label[contains(text(),'%s')]";
-
     public static final String EDIT_DRIVER_ZONE_BUTTONS_XPATH = "//button[@data-testid='%s']";
+    public static final String EDIT_DRIVER_ZONE_NAME_XPATH = "//input[@data-testid='table-column-filter-editDriver-name']";
+    public static final String EDIT_DRIVER_ZONE_TABLE_XPATH = "//td[@class='%s']";
+    public static final String EDIT_DRIVER_ZONE_DRIVER_TABLE_XPATH = "//span[text()='Select a driver']";
+
+    @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+    public PageElement message;
 
     public EditDriverZoneModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -158,12 +167,31 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
       return findElementByXpath(f(EDIT_DRIVER_ZONE_BUTTONS_XPATH, itemName)).isDisplayed();
     }
 
-    public void searchForHub(String hubName) {
+    public void getZoneByName(String zoneName){
+      findElementByXpath(EDIT_DRIVER_ZONE_NAME_XPATH).sendKeys(zoneName);
+    }
+
+    public String verifyZoneTableValues(String itemName) {
+      return findElementByXpath(f(EDIT_DRIVER_ZONE_TABLE_XPATH, itemName)).getText();
+    }
+
+    public void searchForDriver(String zoneName) {
+      findElementByXpath(EDIT_DRIVER_ZONE_DRIVER_TABLE_XPATH).click();
+      findElementByXpath(EDIT_DRIVER_ZONE_DRIVER_TABLE_XPATH).sendKeys(zoneName);
+      findElementByXpath(EDIT_DRIVER_ZONE_DRIVER_TABLE_XPATH).sendKeys(Keys.ENTER);
+    }
+
+    public void clickOnSaveChangesButton() {
       String elementXpath = null;
-      elementXpath = FIRST_MILE_ZONE_PAGE_HUB_MENU_XPATH;
+      elementXpath = SAVE_CHANGES_BUTTON_XPATH;
       WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
-      buttonXpath.sendKeys(hubName);
       buttonXpath.click();
+    }
+
+    public void validateInvalidFileErrorMessageIsShown() {
+      pause5s();
+      Assertions.assertThat(message.isDisplayed())
+          .as("Validation for success message passed").isTrue();
     }
   }
 

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.swing.text.html.parser.Parser;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -59,6 +60,25 @@ public class FirstMileZonesSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator clicks on the save changes button on First Mile Zone Page")
+  @SuppressWarnings("unchecked")
+  public void Operator_clicks_on_save_changes_button() {
+    firstMileZonesPage.inFrame(page -> {
+      page.editDriverZoneModal.clickOnSaveChangesButton();
+      pause5s();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator verify success message toast is displayed")
+  @SuppressWarnings("unchecked")
+  public void Operator_verify_success_message() {
+    firstMileZonesPage.inFrame(page -> {
+      page.editDriverZoneModal.validateInvalidFileErrorMessageIsShown();
+      takesScreenshot();
+    });
+  }
+
   @Then("Operator verifies the Table on Edit Driver Zone Modal")
   public void operatorVerifiesTableOnEditDriverZoneModalPage() {
       firstMileZonesPage.inFrame(page -> {
@@ -73,15 +93,47 @@ public class FirstMileZonesSteps extends AbstractSteps {
       });
     }
 
+  @Then("Operator verifies the Table of Zone on Edit Driver Zone Modal")
+  public void operatorVerifiesTableOfZoneOnEditDriverZoneModalPage() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone zone = get(KEY_CREATED_ZONE);
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-name")).
+          as("Zone Name is correct").isEqualToIgnoringCase(zone.getName());
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-shortName")).
+          as("Zone Short Name is correct").isEqualToIgnoringCase(zone.getShortName());
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-hubName")).
+          as("Zone Hub is correct").isEqualToIgnoringCase(zone.getHubName());
+    });
+  }
+
   @And("Operator search for hub on Edit Driver Zone Modal")
   @SuppressWarnings("unchecked")
-  public void Operator_serach_for_hub() {
+  public void Operator_search_for_hub() {
     firstMileZonesPage.inFrame(page -> {
       Zone hubName = get(KEY_CREATED_ZONE);
-//      page.editDriverZoneModal.searchForHub(hubName.getHubName());
-//      page.addFmZoneDialog.hub.selectValue(hubName.getHubName());
       page.editDriverZoneModal.hub.selectValue(hubName.getHubName());
+      page.editDriverZoneModal.hub.click();
+      pause5s();
+      takesScreenshot();
+    });
+  }
 
+  @And("Operator search for zone on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_search_for_zone() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone zone = get(KEY_CREATED_ZONE);
+      page.editDriverZoneModal.getZoneByName(zone.getName());
+      pause5s();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator search for driver on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_search_for_driver() {
+    firstMileZonesPage.inFrame(page -> {
+      page.editDriverZoneModal.driver.selectValue("AUTO-STATION-DRIVER");
       takesScreenshot();
     });
   }
