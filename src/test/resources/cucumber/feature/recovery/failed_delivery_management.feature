@@ -1,8 +1,8 @@
-@OperatorV2 @Recovery @FailedDeliveryManagementV2 @test
+@OperatorV2 @Recovery @FailedDeliveryManagementV2
 Feature: Failed Delivery Management Page - Action Feature
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ForceSuccessOrder @ActionFeature
