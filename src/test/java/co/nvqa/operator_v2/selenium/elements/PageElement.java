@@ -331,4 +331,11 @@ public class PageElement extends SimpleWebPage {
     pause300ms();
   }
 
+  public void setValueByTyping(CharSequence... keysToSend) {
+
+    WebElement element = this.webElement;
+    Actions actions = new Actions(getWebDriver());
+    actions.moveToElement(element).click().sendKeys(keysToSend).build().perform();
+  }
+
 }
