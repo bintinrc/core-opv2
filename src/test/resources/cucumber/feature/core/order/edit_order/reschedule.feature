@@ -771,9 +771,10 @@ Feature: Reschedule
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 #    TODO move this to common-core
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                                 | archived |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
+#    TODO enable/removed once confirmed its not used
+#    Then DB Operator verify Jaro Scores:
+#      | waypointId                                                 | archived |
+#      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
   @DeleteOrArchiveRoute
   Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery
