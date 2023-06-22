@@ -1444,7 +1444,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void readDpUserEntity(DpUser dpUser) {
-    try {
       if(dpUser.getUsername()!=null)
       {
         Assertions.assertThat(dpUser.getUsername()).as(f("username Is %s", dpUser.getUsername()))
@@ -1476,9 +1475,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
             .isEqualTo(labelUserContact.getText());
         LOGGER.info("getContactNo compare is success");
       }
-    } catch (Exception e) {
-      LOGGER.info(f("Issue when comparing value %s", e.getMessage()));
-    }
   }
 
   public void checkingIdAndDpmsId(Partner partner) {

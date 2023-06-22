@@ -33,8 +33,6 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.common.dp.constants.DpScenarioStorageKeys.KEY_DP_GENERATED_PREFIX;
-
 /**
  * @author Sergey Mishanin
  */
