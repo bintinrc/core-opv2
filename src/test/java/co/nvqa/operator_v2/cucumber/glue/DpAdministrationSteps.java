@@ -59,6 +59,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
   public static final String SINGLE = "SINGLE";
   public static final String NEXT = "NEXT";
+  public static final String COPY_PASTE = "COPY_PASTE";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -1719,6 +1720,33 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpAdminReactPage.refreshPage();
       dpAdminReactPage.inFrame(() -> dpAdminReactPage.readDpUserEntity(dpUser));
     }, "verify values on dp user table");
+  }
+
+  @Then("Operator verify dp user username value trimmed to only 100 characters")
+  public void operatorVerifyDpUserUsernameValueTrimmedToOnlyHundred()
+  {
+    dpAdminReactPage.inFrame(() -> {
+      String valueOfUsername = dpAdminReactPage.formDpUserUsername.getValue();
+      Assertions.assertThat(valueOfUsername.length())
+          .as("Username trimmed to 100 chars")
+          .isEqualTo(100);
+    });
+  }
+
+  @When("Operator fill dp user username field with more than 100 characters by {string}")
+  public void operatorFillDpUserUsernameMoreThanHundredByTypingIn(String inputMethod)
+  {
+    String username = co.nvqa.common.utils.RandomUtil.randomString(102);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.formDpUserUsername.forceClear();
+      if(COPY_PASTE.equals(inputMethod))
+      {
+        dpAdminReactPage.formDpUserUsername.setValue(username);
+      }
+      else {
+        dpAdminReactPage.formDpUserUsername.setValueByTyping(username);
+      }
+    });
   }
 
 }
