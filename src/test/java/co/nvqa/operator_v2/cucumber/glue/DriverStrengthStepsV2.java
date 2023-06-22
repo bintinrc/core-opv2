@@ -133,13 +133,16 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     String username = driverInfo.getUsername();
     driverInfo.fromMap(resolveKeyValues(mapOfData));
+    Boolean isVerified = Objects.isNull(mapOfData.get("isVerified")) || Boolean.parseBoolean(
+        mapOfData.get("isVerified"));
     dsPage.inFrame(() -> {
       doWithRetry(() -> {
             dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
+            dsPage.waitUntilTableLoaded();
           }, f("Filter table by %s", COLUMN_USERNAME), DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS,
           DEFAULT_MAX_RETRY_ON_EXCEPTION);
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
-      dsPage.editDriverDialog.fillForm(driverInfo);
+      dsPage.editDriverDialog.fillForm(driverInfo, isVerified);
       dsPage.editDriverDialog.submitForm();
     });
   }
@@ -286,8 +289,13 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @Then("Operator verify contact details of created driver on Driver Strength page")
   public void dbOperatorVerifyContactDetailsOfCreatedDriver() {
     DriverInfo expectedDriverInfo = get(KEY_CREATED_DRIVER_INFO);
+    dsPage.refreshPage();
+    dsPage.waitUntilPageLoaded();
+
     dsPage.inFrame(() -> {
-      dsPage.verifyContactDetails(expectedDriverInfo.getUsername(), expectedDriverInfo);
+      dsPage.loadSelection.click();
+      dsPage.waitUntilTableLoaded();
+      dsPage.verifyContactDetails(String.valueOf(expectedDriverInfo.getId()), expectedDriverInfo);
     });
     takesScreenshot();
   }
@@ -690,6 +698,14 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.inFrame(() -> {
       DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
       dsPage.verifyContactDetailsAlreadyVerified(driverInfo);
+    });
+  }
+
+  @And("Operator filter driver strength by {string} username")
+  public void operatorFilterDriverStrengthByUsername(String usernameRaw) {
+    String username = resolveValue(usernameRaw);
+    dsPage.inFrame(() -> {
+      dsPage.filterBy(COLUMN_USERNAME, username);
     });
   }
 }

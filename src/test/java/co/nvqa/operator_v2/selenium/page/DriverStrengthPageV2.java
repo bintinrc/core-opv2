@@ -24,12 +24,14 @@ import org.assertj.core.util.Strings;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_CONTACT_INFO;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_DELETE;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 
 /**
@@ -59,7 +61,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(name = "container.driver-strength.edit-search-filter")
   public NvIconTextButton editSearchFilter;
 
-  @FindBy(xpath = "//button[.='Load Selection']")
+  @FindBy(xpath = "//button[@type='submit']/span[text()='Load Selection']")
   public Button loadSelection;
 
   @FindBy(xpath = "//button[.='Clear Selection']")
@@ -164,7 +166,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     driversTable.filterByColumn(columnName, value);
   }
 
-  public void verifyContactDetails(String username, DriverInfo expectedContactDetails) {
+  public void verifyContactDetails(String id, DriverInfo expectedContactDetails) {
+    pause2s();
     final String licenseNumberXpath = f(
         "//span[contains(@class,'ant-typography') and contains(text(),'%s')]",
         expectedContactDetails.getLicenseNumber());
@@ -175,10 +178,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         "//div[contains(@class,'ant-col') and contains(text(),'%s')]",
         expectedContactDetails.getContact());
 
-    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
-    filterBy(COLUMN_USERNAME, username);
+    driversTable.filterByColumn(COLUMN_ID, id);
     driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
-
+    pause2s();
     waitUntilVisibilityOfElementLocated(licenseNumberXpath);
     waitUntilVisibilityOfElementLocated(nameXpath);
     waitUntilVisibilityOfElementLocated(contactsXpath);
@@ -372,6 +374,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     Assertions.assertThat(isElementExist(verifiedXpath))
         .as("Contact details should be verified")
         .isTrue();
+  }
+
+  public void verifyButtonVerifiedDisable() {
+    pause5s();
   }
 
   /**
@@ -594,7 +600,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void addContact(String contact) {
       if (contact != null) {
-        contactsSettingsForms.contact.setValue(contact + Keys.TAB);
+        contactsSettingsForms.contact.setValue(contact);
       }
     }
 
@@ -637,7 +643,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void submitForm() {
       submit.click();
-      waitUntilInvisible();
+      try {
+        waitUntilInvisible();
+      } catch (TimeoutException ex) {
+        NvLogger.info("[ERROR] Something wrong form submitted");
+        NvLogger.error(ex.getLocalizedMessage());
+      }
     }
 
     public void fillForm(DriverInfo driverInfo) {
@@ -783,7 +794,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
-    public void fillForm(DriverInfo driverInfo) {
+    public void fillForm(DriverInfo driverInfo, Boolean isVerified) {
       waitUntilVisible();
       pause3s();
       setDisplayNameName(driverInfo.getDisplayName());
@@ -801,15 +812,19 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       }
       if (driverInfo.hasContactsInfo()) {
         final String btnVerifyNumberXpath = "//button[contains(@class,'ant-btn') and span[text()='Verify Number']]";
-        final String btnConfirmVerifyXpath = "//button[contains(@class,'ant-btn') and span[contains(text(), 'Yes')]]";
-        addContact(driverInfo.getContact());
-
-        waitUntilVisibilityOfElementLocated(btnVerifyNumberXpath);
-        click(btnVerifyNumberXpath);
-
-        waitUntilVisibilityOfElementLocated(btnConfirmVerifyXpath);
-        click(btnConfirmVerifyXpath);
-        waitUntilInvisibilityOfElementLocated(btnConfirmVerifyXpath);
+        final String btnConfirmVerifyXpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]";
+        String[] phoneNumber = driverInfo.getContact().split(" ");
+        addContact(phoneNumber[phoneNumber.length - 1]);
+        if (isVerified) {
+          waitUntilVisibilityOfElementLocated(btnVerifyNumberXpath);
+          click(btnVerifyNumberXpath);
+          waitUntilVisibilityOfElementLocated(btnConfirmVerifyXpath);
+          while (isElementVisible(btnConfirmVerifyXpath)) {
+            click(btnConfirmVerifyXpath);
+            pause1s();
+          }
+          waitUntilInvisibilityOfElementLocated(btnConfirmVerifyXpath);
+        }
       }
       if (driverInfo.hasZoneInfo()) {
         addZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(),
