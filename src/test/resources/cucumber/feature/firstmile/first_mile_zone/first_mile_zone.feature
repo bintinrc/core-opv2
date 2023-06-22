@@ -17,6 +17,7 @@ Feature: First Mile Zone
     And  Operator search for driver on Edit Driver Zone Modal
     And  Operator clicks on the save changes button on First Mile Zone Page
     And  Operator verify success message toast is displayed
+    And  Operator delete first mile zone
 
 
   @KillBrowser @ShouldAlwaysRun
