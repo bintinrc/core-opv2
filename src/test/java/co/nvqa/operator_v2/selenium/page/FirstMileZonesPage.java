@@ -52,7 +52,7 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   public static final String FIRST_MILE_ZONE_PAGE_ELEMENT_XPATH = "//button[@data-testid='edit-driver-zones-button']";
   public static final String SAVE_CHANGES_BUTTON_XPATH = "//button[@data-testid='save-changes-button']";
 
-  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement message;
   public ZonesTable zonesTable;
 
