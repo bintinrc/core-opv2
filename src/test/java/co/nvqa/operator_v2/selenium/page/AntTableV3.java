@@ -86,12 +86,20 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
         : "//div[contains(@class,'ant-table') or contains(@class,'table-container')]//table";
   }
 
+  public void clearFilterColumn(String columnId) {
+    String xpath = f(
+        "//div[@class='ant-space-item']/input[@dataindex='%s' and contains(@class,'ant-input')]",
+        columnId);
+    while (!(getValue(xpath).isEmpty() || getText(xpath).isEmpty())) {
+      sendKeys(xpath, Keys.BACK_SPACE);
+    }
+  }
+
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath =
-        getTableLocator() + f(
-            "//thead//th[contains(@class,'%1$s')]//input|//thead//th[%1$s]//input",
-            columnLocators.get(columnId));
+    String xpath = f(
+        "//div[@class='ant-space-item']/input[@dataindex='%s' and contains(@class,'ant-input')]",
+        columnId);
     String currentValue = getValue(xpath);
     if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
       StringBuilder sb = new StringBuilder();
@@ -103,6 +111,7 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
     } else if (StringUtils.isEmpty(currentValue)) {
       sendKeys(xpath, value);
     }
+    pause3s();
     return this;
   }
 
