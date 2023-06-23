@@ -51,7 +51,6 @@ Feature: First Mile Zone
     And  Operator verify success message toast is displayed
     And  Operator delete first mile zone
 
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
