@@ -65,6 +65,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
   public void Operator_clicks_on_save_changes_button() {
     firstMileZonesPage.inFrame(page -> {
       page.editDriverZoneModal.clickOnSaveChangesButton();
+      pause5s();
       takesScreenshot();
     });
   }
@@ -128,11 +129,11 @@ public class FirstMileZonesSteps extends AbstractSteps {
     });
   }
 
-  @And("Operator search for driver on Edit Driver Zone Modal")
+  @And("Operator search for driver {string} on Edit Driver Zone Modal")
   @SuppressWarnings("unchecked")
-  public void Operator_search_for_driver() {
+  public void Operator_search_for_driver(String driver) {
     firstMileZonesPage.inFrame(page -> {
-      page.editDriverZoneModal.driver.selectValue("AUTO-STATION-DRIVER");
+      page.editDriverZoneModal.driver.selectValue(driver);
       takesScreenshot();
     });
   }
