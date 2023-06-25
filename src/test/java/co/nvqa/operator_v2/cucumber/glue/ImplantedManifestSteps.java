@@ -10,12 +10,11 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Keys;
 
 import static co.nvqa.operator_v2.selenium.page.ImplantedManifestPage.ImplantedManifestOrderTable.ACTION_REMOVE;
@@ -75,8 +74,27 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verify rack sector details on Implanted Manifest page:")
+  public void operatorVerifiesRackSector(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      SoftAssertions assertions = new SoftAssertions();
+      if (finalData.containsKey("rackSector")) {
+        assertions.assertThat(page.rackSector.getNormalizedText())
+            .as("Rack sector")
+            .isEqualTo(finalData.get("rackSector"));
+      }
+      if (finalData.containsKey("stamp")) {
+        assertions.assertThat(page.rackSectorStamp.getNormalizedText())
+            .as("Stamp")
+            .isEqualTo(finalData.get("stamp"));
+      }
+      assertions.assertAll();
+    });
+  }
 
   @Then("Operator verifies orders are removed on Implanted Manifest page:")
+  @Then("Operator verifies orders are not presented on Implanted Manifest page:")
   public void operatorVerifiesAllScannedOrdersIsRemovedFromTheManifestTable(
       List<String> trackingIds) {
     page.inFrame(() -> {
@@ -131,12 +149,17 @@ public class ImplantedManifestSteps extends AbstractSteps {
       List<String> trackingIds) {
     operatorSelectsHubOnImplantedManifestPage(hubName);
     operatorClicksCreateManifestOnImplantedManifestPage();
+    scanBarcodes(trackingIds);
+  }
 
-    Map<String, ZonedDateTime> barcodeToScannedAtTime = new HashMap<>();
-
+  @When("Operator scan barcodes on Implanted Manifest page:")
+  public void scanBarcodes(List<String> trackingIds) {
     page.inFrame(() ->
         resolveValues(trackingIds).forEach(
-            trackingId -> page.scanBarCodeAndSaveTime(barcodeToScannedAtTime, trackingId))
+            trackingId -> {
+              page.scanBarcodeInput.setValue(trackingId + Keys.ENTER);
+              pause2s();
+            })
     );
   }
 
@@ -186,7 +209,6 @@ public class ImplantedManifestSteps extends AbstractSteps {
       page.createManifestDialog.waitUntilVisible();
       page.createManifestDialog.reservationId.setValue(reservationId);
       page.createManifestDialog.createManifestButton.click();
-      pause5s();
     });
   }
 
