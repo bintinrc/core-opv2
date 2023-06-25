@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @CreateNewRoutesOnStationRoute
 Feature: Create New Routes on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
@@ -91,7 +91,7 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
@@ -177,7 +177,7 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone Different To Zone Selected
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
@@ -264,7 +264,7 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Partial Success Assign Unrouted Order To new Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-5}
     And API Shipper create V4 order using data below:
@@ -366,6 +366,3 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderv2 @PriorityLevel
+@OperatorV2 @Core @EditOrderV2 @PriorityLevel
 Feature: Priority Level
 
   @LaunchBrowser @ShouldAlwaysRun

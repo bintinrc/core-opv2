@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob1 @RouteGroupManagement @RouteGroupManagementPart2
 Feature: Route Group Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
@@ -152,7 +152,3 @@ Feature: Route Group Management
       | routeGroupId | {KEY_CREATED_ROUTE_GROUP.id} |
       | referenceId  | {KEY_TRANSACTION.id}         |
       | deletedAt    | not null                     |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,12 +1,12 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverType
-  Scenario: Create New Driver Account (uid:7b2078bd-589f-4c9a-a06e-156098e34cf2)
+  Scenario: Create New Driver Account
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
       | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
@@ -37,7 +37,7 @@ Feature: Driver Strength
     When Operator delete created driver on Driver Strength page
 
   @DeleteDriverV2
-  Scenario: Update Driver Account (uid:6ddb814e-8b32-4097-9a5f-0900d0d8a3ca)
+  Scenario: Update Driver Account
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
@@ -47,16 +47,18 @@ Feature: Driver Strength
       | driverTypes | {driver-type-name} |
       | resigned    | No                 |
     When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
       | codLimit             | 200                                                              |
+      | vehicleType          | Car                                                              |
       | vehicleLicenseNumber | GENERATED                                                        |
       | vehicleCapacity      | 200                                                              |
       | contact              | GENERATED                                                        |
       | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 2                                                                |
-      | zoneMax              | 2                                                                |
+      | zoneMax              | 3                                                                |
       | zoneCost             | 2                                                                |
       | password             | GENERATED                                                        |
       | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
@@ -70,8 +72,156 @@ Feature: Driver Strength
     And Operator wait until table loaded
     And Operator verify driver strength params of created driver on Driver Strength page
 
+  Scenario Outline: Create New Driver Account with DPMS ID
+    Given Operator loads Operator portal home page
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator create new Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
+      | firstName            | GENERATED                                                        |
+      | lastName             | GENERATED                                                        |
+      | licenseNumber        | GENERATED                                                        |
+      | type                 | <DriverType>                                                     |
+      | dpmsId               | <DpmsId>                                                         |
+      | codLimit             | 100                                                              |
+      | hub                  | {hub-name}                                                       |
+      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
+      | vehicleLicenseNumber | GENERATED                                                        |
+      | vehicleType          | <VehicleType>                                                    |
+      | vehicleCapacity      | 100                                                              |
+      | contactType          | {contact-type-name}                                              |
+      | contact              | GENERATED                                                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 1                                                                |
+      | username             | GENERATED                                                        |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is created by "Automation Test" for testing purpose. |
+    And DB Operator get data of created driver
+    And Operator load all data for driver on Driver Strength Page
+    Then Operator verify driver strength params of created driver on Driver Strength page
+    And DB Operator verifies that 1 row is added for the change type: "<ChangeType1>" in account_audit_logs table in driver db
+    And DB Operator verifies that 1 row is added for the change type: "<ChangeType2>" in account_audit_logs table in driver db
+    And Operator delete created driver on Driver Strength page
+
+    Examples:
+      | DriverType    | VehicleType | DpmsId    | ChangeType1 | ChangeType2 |
+      | Mitra - Fleet | Car         | GENERATED | CREATE      | UPDATE      |
+
+  @DeleteDriverType
+  Scenario: Can Not Create New Driver Account Without Active Vehicle
+    Given Operator loads Operator portal home page
+    And API Operator create new driver type with the following attributes:
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator opens Add Driver dialog on Driver Strength
+    And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName         | GENERATED                                                        |
+      | firstName           | GENERATED                                                        |
+      | lastName            | GENERATED                                                        |
+      | licenseNumber       | GENERATED                                                        |
+      | codLimit            | 100                                                              |
+      | hub                 | {hub-name}                                                       |
+      | employmentStartDate | {gradle-current-date-yyyy-MM-dd}                                 |
+      | contactType         | {contact-type-name}                                              |
+      | contact             | GENERATED                                                        |
+      | zoneId              | {zone-name}                                                      |
+      | zoneMin             | 1                                                                |
+      | zoneMax             | 1                                                                |
+      | zoneCost            | 1                                                                |
+      | username            | GENERATED                                                        |
+      | password            | GENERATED                                                        |
+      | comments            | This driver is created by "Automation Test" for testing purpose. |
+    Then Operator click Submit button in Add Driver dialog
+    And Operator verifies error message "Vehicle Type is required" is displayed in Driver dialog
+    And Operator verifies error message "Vehicle No. is required." is displayed in Driver dialog
+    And Operator verifies error message "Capacity is required." is displayed in Driver dialog
+
+  @DeleteDriverType
+  Scenario: Can Not Create New Driver Account Without Preferred Zone and Capacity
+    Given Operator loads Operator portal home page
+    And API Operator create new driver type with the following attributes:
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator opens Add Driver dialog on Driver Strength
+    And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
+      | firstName            | GENERATED                                                        |
+      | lastName             | GENERATED                                                        |
+      | licenseNumber        | GENERATED                                                        |
+      | codLimit             | 100                                                              |
+      | hub                  | {hub-name}                                                       |
+      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | GENERATED                                                        |
+      | vehicleCapacity      | 100                                                              |
+      | contactType          | {contact-type-name}                                              |
+      | contact              | GENERATED                                                        |
+      | username             | GENERATED                                                        |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is created by "Automation Test" for testing purpose. |
+    Then Operator click Submit button in Add Driver dialog
+    And Operator verifies error message "Zone is required." is displayed in Driver dialog
+    And Operator verifies error message "Min is required." is displayed in Driver dialog
+    And Operator verifies error message "Max is required." is displayed in Driver dialog
+    And Operator verifies error message "Cost is required." is displayed in Driver dialog
+
   @DeleteDriverV2
-  Scenario: Create New Driver Account and Verify Contact Detail is Correct (uid:fadb6a2a-6f2a-4c6f-94a9-e9f41c8795cc)
+  Scenario: Can Not Update Driver Account Without Active Vehicle
+    Given Operator loads Operator portal home page
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator load all data for driver on Driver Strength Page
+    And Operator opens Edit Driver dialog for created driver on Driver Strength page
+    And  Operator removes vehicle details on Edit Driver dialog on Driver Strength page
+    And Operator click Submit button in Add Driver dialog
+    And Operator verifies error message "Vehicle No. is required." is displayed in Driver dialog
+
+  @DeleteDriverV2
+  Scenario: Can Not Update Driver Account Without Preferred Zone and Capacity
+    Given Operator loads Operator portal home page
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator load all data for driver on Driver Strength Page
+    And Operator opens Edit Driver dialog for created driver on Driver Strength page
+    And Operator removes zone preferences on Edit Driver dialog on Driver Strength page
+    And Operator click Submit button in Add Driver dialog
+    And Operator verifies error message "zonePreferences.minWaypoints" is displayed in Driver dialog
+    And Operator verifies error message "zonePreferences.maxWaypoints" is displayed in Driver dialog
+    And Operator verifies error message "zonePreferences.cost" is displayed in Driver dialog
+
+  @DeleteDriverType
+  Scenario: Can Not Create New Driver Account Without Active Contact
+    Given Operator loads Operator portal home page
+    And API Operator create new driver type with the following attributes:
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
+    When Operator go to menu Fleet -> Driver Strength
+    And Operator opens Add Driver dialog on Driver Strength
+    And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
+      | firstName            | GENERATED                                                        |
+      | lastName             | GENERATED                                                        |
+      | licenseNumber        | GENERATED                                                        |
+      | codLimit             | 100                                                              |
+      | hub                  | {hub-name}                                                       |
+      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | GENERATED                                                        |
+      | vehicleCapacity      | 100                                                              |
+      | zoneId               | {zone-name}                                                      |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 1                                                                |
+      | zoneCost             | 1                                                                |
+      | username             | GENERATED                                                        |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is created by "Automation Test" for testing purpose. |
+    And Operator click Submit button in Add Driver dialog
+    And Operator verifies error message "Mobile Phone is required." is displayed in Driver dialog
+
+  @DeleteDriverV2
+  Scenario: Create New Driver Account and Verify Contact Detail is Correct
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
     When API Operator create new Driver using data below:
@@ -210,85 +360,6 @@ Feature: Driver Strength
         #To be unlocked when slide/horizontal scroll action is solved on react page
     And Operator verify driver strength is filtered by "No" resigned
 
-  @DeleteDriverType
-  Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
-    Given Operator loads Operator portal home page
-    And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator opens Add Driver dialog on Driver Strength
-    And Operator fill Add Driver form on Driver Strength page using data below:
-      | firstName            | GENERATED                                                        |
-      | lastName             | GENERATED                                                        |
-      | licenseNumber        | GENERATED                                                        |
-      | codLimit             | 100                                                              |
-      | hub                  | {hub-name}                                                       |
-      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
-      | vehicleType          | Car                                                              |
-      | vehicleLicenseNumber | GENERATED                                                        |
-      | vehicleCapacity      | 100                                                              |
-      | zoneId               | {zone-name}                                                      |
-      | zoneMin              | 1                                                                |
-      | zoneMax              | 1                                                                |
-      | zoneCost             | 1                                                                |
-      | username             | GENERATED                                                        |
-      | password             | GENERATED                                                        |
-      | comments             | This driver is created by "Automation Test" for testing purpose. |
-    And Operator click Submit button in Add Driver dialog
-    Then Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
-
-  @DeleteDriverType
-  Scenario: Can Not Create New Driver Account Without Active Vehicle (uid:faf2e60a-730e-4d7a-b67e-7a17fba22f6e)
-    Given Operator loads Operator portal home page
-    And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator opens Add Driver dialog on Driver Strength
-    And Operator fill Add Driver form on Driver Strength page using data below:
-      | displayName         | GENERATED                                                        |
-      | firstName           | GENERATED                                                        |
-      | lastName            | GENERATED                                                        |
-      | licenseNumber       | GENERATED                                                        |
-      | codLimit            | 100                                                              |
-      | hub                 | {hub-name}                                                       |
-      | employmentStartDate | {gradle-current-date-yyyy-MM-dd}                                 |
-      | contactType         | {contact-type-name}                                              |
-      | contact             | GENERATED                                                        |
-      | zoneId              | {zone-name}                                                      |
-      | zoneMin             | 1                                                                |
-      | zoneMax             | 1                                                                |
-      | zoneCost            | 1                                                                |
-      | username            | GENERATED                                                        |
-      | password            | GENERATED                                                        |
-      | comments            | This driver is created by "Automation Test" for testing purpose. |
-    Then Operator click Submit button in Add Driver dialog
-    And Operator verifies hint "At least one vehicle required." is displayed in Add Driver dialog
-
-  @DeleteDriverType
-  Scenario: Can Not Create New Driver Account Without Preferred Zone and Capacity (uid:a7f36604-0398-4d3d-ab5f-b4fb554bb8a7)
-    Given Operator loads Operator portal home page
-    And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator opens Add Driver dialog on Driver Strength
-    And Operator fill Add Driver form on Driver Strength page using data below:
-      | firstName            | GENERATED                                                        |
-      | lastName             | GENERATED                                                        |
-      | licenseNumber        | GENERATED                                                        |
-      | codLimit             | 100                                                              |
-      | hub                  | {hub-name}                                                       |
-      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
-      | vehicleType          | Car                                                              |
-      | vehicleLicenseNumber | GENERATED                                                        |
-      | vehicleCapacity      | 100                                                              |
-      | contactType          | {contact-type-name}                                              |
-      | contact              | GENERATED                                                        |
-      | username             | GENERATED                                                        |
-      | password             | GENERATED                                                        |
-      | comments             | This driver is created by "Automation Test" for testing purpose. |
-    Then Operator click Submit button in Add Driver dialog
-    And Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
-
   @DeleteDriverV2
   Scenario: Can Not Update Driver Account Without Active Contact (uid:d2db97f9-190d-4b03-8bb5-249fd1bf60c5)
     Given Operator loads Operator portal home page
@@ -300,66 +371,6 @@ Feature: Driver Strength
     And  Operator removes contact details on Edit Driver dialog on Driver Strength page
     And  Operator click Submit button in Update Driver dialog
     Then Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
-
-  @DeleteDriverV2
-  Scenario: Can Not Update Driver Account Without Active Vehicle (uid:9d7f097d-2f46-4fda-b171-9c90723b8b57)
-    Given Operator loads Operator portal home page
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator load all data for driver on Driver Strength Page
-    And Operator opens Edit Driver dialog for created driver on Driver Strength page
-    And  Operator removes vehicle details on Edit Driver dialog on Driver Strength page
-    And Operator click Submit button in Add Driver dialog
-    Then Operator verifies hint "At least one vehicle required." is displayed in Add Driver dialog
-
-  @DeleteDriverV2
-  Scenario: Can Not Update Driver Account Without Preferred Zone and Capacity (uid:113be9c8-1f19-4765-a94e-b98a2fb25c0f)
-    Given Operator loads Operator portal home page
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator load all data for driver on Driver Strength Page
-    And Operator opens Edit Driver dialog for created driver on Driver Strength page
-    And Operator removes zone preferences on Edit Driver dialog on Driver Strength page
-    And Operator click Submit button in Add Driver dialog
-    Then Operator verifies hint "At least one preferred zone required." is displayed in Add Driver dialog
-
-  Scenario Outline: Create New Driver Account with DPMS ID (uid:4a5a3ef2-2200-44e5-bc83-86348d528cd3)
-    Given Operator loads Operator portal home page
-    When Operator go to menu Fleet -> Driver Strength
-    And Operator create new Driver on Driver Strength page using data below:
-      | displayName          | GENERATED                                                        |
-      | firstName            | GENERATED                                                        |
-      | lastName             | GENERATED                                                        |
-      | licenseNumber        | GENERATED                                                        |
-      | type                 | <DriverType>                                                     |
-      | dpmsId               | <DpmsId>                                                         |
-      | codLimit             | 100                                                              |
-      | hub                  | {hub-name}                                                       |
-      | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
-      | vehicleLicenseNumber | GENERATED                                                        |
-      | vehicleType          | <VehicleType>                                                    |
-      | vehicleCapacity      | 100                                                              |
-      | contactType          | {contact-type-name}                                              |
-      | contact              | GENERATED                                                        |
-      | zoneId               | {zone-name-2}                                                    |
-      | zoneMin              | 1                                                                |
-      | zoneMax              | 2                                                                |
-      | zoneCost             | 1                                                                |
-      | username             | GENERATED                                                        |
-      | password             | GENERATED                                                        |
-      | comments             | This driver is created by "Automation Test" for testing purpose. |
-    And DB Operator get data of created driver
-    And Operator load all data for driver on Driver Strength Page
-    Then Operator verify driver strength params of created driver on Driver Strength page
-    And DB Operator verifies that 1 row is added for the change type: "<ChangeType1>" in account_audit_logs table in driver db
-    And DB Operator verifies that 1 row is added for the change type: "<ChangeType2>" in account_audit_logs table in driver db
-    And Operator delete created driver on Driver Strength page
-
-    Examples:
-      | DriverType    | VehicleType | DpmsId    | ChangeType1 | ChangeType2 |
-      | Mitra - Fleet | Car         | GENERATED | CREATE      | UPDATE      |
 
   Scenario Outline: Update DPMS ID of Driver Account with DPMS ID (uid:6efb7bbd-58b8-4218-9a92-48804bb3a43a)
     Given Operator loads Operator portal home page
@@ -770,6 +781,131 @@ Feature: Driver Strength
     Examples:
       | Resigned | FileName                                 |
       | No       | update_driver_details_blank_template.csv |
+
+  @DeleteDriverV2
+  Scenario: Verify Driver Contacts When Updating Drivers if Number has Never Been Verified
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Strength
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | {KEY_CREATED_DRIVER.displayName}                                 |
+      | firstName            | {KEY_CREATED_DRIVER.firstName}                                   |
+      | lastName             | {KEY_CREATED_DRIVER.lastName}                                    |
+      | licenseNumber        | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | codLimit             | {KEY_CREATED_DRIVER.codLimit}                                    |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | vehicleCapacity      | {KEY_CREATED_DRIVER.vehicles[1].capacity}                        |
+      | contact              | GENERATED                                                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 5                                                                |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+    Then Operator verifies that success notification displayed in Driver Strength:
+      | title | Driver Updated                 |
+      | desc  | Driver {KEY_CREATED_DRIVER_ID} |
+    Then Operator verify contact details of created driver on Driver Strength page
+    And Operator verify contact details already verified on Driver Strength page
+
+  @DeleteDriverV2
+  Scenario: Verify Driver Contacts When Updating Drivers Phone Number if Previous Number has been Verified
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Strength
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    And Operator verify driver contact detail in Driver Strength
+      | driverId | {KEY_CREATED_DRIVER_ID} |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | {KEY_CREATED_DRIVER.displayName}                                 |
+      | firstName            | {KEY_CREATED_DRIVER.firstName}                                   |
+      | lastName             | {KEY_CREATED_DRIVER.lastName}                                    |
+      | licenseNumber        | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | codLimit             | {KEY_CREATED_DRIVER.codLimit}                                    |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | vehicleCapacity      | {KEY_CREATED_DRIVER.vehicles[1].capacity}                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 5                                                                |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+    Then Operator verifies that success notification displayed in Driver Strength:
+      | title | Driver Updated                 |
+      | desc  | Driver {KEY_CREATED_DRIVER_ID} |
+    Then Operator verify contact details of created driver on Driver Strength page
+    And Operator verify contact details already verified on Driver Strength page
+
+  @DeleteDriverV2
+  Scenario: Update Drivers Details without Verify the Phone Number
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Strength
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | {KEY_CREATED_DRIVER.displayName}                                 |
+      | firstName            | {KEY_CREATED_DRIVER.firstName}                                   |
+      | lastName             | {KEY_CREATED_DRIVER.lastName}                                    |
+      | licenseNumber        | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | codLimit             | {KEY_CREATED_DRIVER.codLimit}                                    |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | vehicleCapacity      | {KEY_CREATED_DRIVER.vehicles[1].capacity}                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 5                                                                |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+      | contact              | GENERATED                                                        |
+      | isVerified           | false                                                            |
+    And Operator verifies error message "Please verify the mobile phone number." is displayed in Driver dialog
+
+  @DeleteDriverV2
+  Scenario: Can Not Update Driver Contacts Without Verify the Phone Number if Previous Number has been Verified
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Strength
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
+    And Operator verify driver contact detail in Driver Strength
+      | driverId | {KEY_CREATED_DRIVER_ID} |
+    And Operator filter driver strength using data below:
+      | zones       | {zone-name}        |
+      | driverTypes | {driver-type-name} |
+      | resigned    | No                 |
+    When Operator edit created Driver on Driver Strength page using data below:
+      | displayName          | {KEY_CREATED_DRIVER.displayName}                                 |
+      | firstName            | {KEY_CREATED_DRIVER.firstName}                                   |
+      | lastName             | {KEY_CREATED_DRIVER.lastName}                                    |
+      | licenseNumber        | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | codLimit             | {KEY_CREATED_DRIVER.codLimit}                                    |
+      | vehicleType          | Car                                                              |
+      | vehicleLicenseNumber | {KEY_CREATED_DRIVER.licenseNumber}                               |
+      | vehicleCapacity      | {KEY_CREATED_DRIVER.vehicles[1].capacity}                        |
+      | zoneId               | {zone-name-2}                                                    |
+      | zoneMin              | 1                                                                |
+      | zoneMax              | 2                                                                |
+      | zoneCost             | 5                                                                |
+      | password             | GENERATED                                                        |
+      | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+      | contact              | GENERATED                                                        |
+      | isVerified           | false                                                            |
+    And Operator verifies error message "Please verify the mobile phone number." is displayed in Driver dialog
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

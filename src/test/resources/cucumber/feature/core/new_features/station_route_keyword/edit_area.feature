@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @EditArea
 Feature: Edit Area
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC6{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -35,7 +35,7 @@ Feature: Edit Area
       | top    | Status 400: Unknown                                                                                                                                              |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area Variation
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -66,7 +66,7 @@ Feature: Edit Area
       | top    | Status 400: Unknown                                                                                                                                            |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area and Duplicate Area Variation
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -114,7 +114,7 @@ Feature: Edit Area
       | variationName | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Route - verify that sr_area_variations record is not created for "AREA 2 {gradle-current-date-yyyyMMddHHmmsss}" area
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword -  Duplicate Area and Duplicate Area Variation Do Not Match
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -153,7 +153,7 @@ Feature: Edit Area
       | top    | Status 400: Unknown                                                                                                                                              |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - New Area
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -183,7 +183,7 @@ Feature: Edit Area
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}          |
     And DB Operator verifies that sr_area_variations record is not created for "AREA 2 {gradle-current-date-yyyyMMddHHmmsss}" area
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - New Area Variation
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -213,7 +213,7 @@ Feature: Edit Area
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}            |
       | variationName | AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - New Area and New Area Variation
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -253,7 +253,7 @@ Feature: Edit Area
       | area          | AREA 2 {gradle-current-date-yyyyMMddHHmmsss}          |
       | variationName | AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area Variation with Exist Area
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC6{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -283,7 +283,7 @@ Feature: Edit Area
       | top    | Status 400: Unknown                                                                                                                                   |
       | bottom | ^.*Error Message: \[duplicatedNames: AREA {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area, Duplicate Area Variation, and Duplicate Empty Keyword
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
@@ -313,7 +313,7 @@ Feature: Edit Area
       | top    | Status 400: Unknown                                                                                                                                                           |
       | bottom | ^.*Error Message: Current coverage has no keyword, and there is another existing coverage with the area to be updated without keyword. Cannot update current coverage\.\.\..* |
 
-  @DeleteDriverV2 @DeleteCoverage
+  @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area with Exist Area Variation in Different Hub
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-5}, "hub": { "displayName": "{hub-name-5}", "value": {hub-id-5} } } |
@@ -353,7 +353,3 @@ Feature: Edit Area
       | hubId          | {hub-id-6}                                          |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].id}                 |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].id}                 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
