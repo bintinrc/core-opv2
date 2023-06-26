@@ -307,17 +307,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @And("Operator click on button to download parcel list on Pickup Appointment Job page")
-  public void clickDownloadParcelList() {
-    Runnable clickButton = () -> {
-      pickupAppointmentJobPage.inFrame(page -> {
-        page.viewJobDetailModal.clickOnButtons("Download Parcel List");
-      });
-    };
-    doWithRetry(clickButton, "Click on Download Parcel List Button");
-    takesScreenshot();
-  }
-
   @And("Operator click on button to download image signature on Pickup Appointment Job page")
   public void clickDownloadSignature() {
     Runnable clickButton = () -> {

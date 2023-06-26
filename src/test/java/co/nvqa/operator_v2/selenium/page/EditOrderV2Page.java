@@ -781,8 +781,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       setEntityClass(TransactionInfo.class);
     }
 
-    public void unmaskColumn(int index, String columnId){
-      String xpath = f("(//div[contains(@class,'virtual-table')]//div[@data-datakey='%s'])[%d]//span[contains(.,'Click')]",
+    public void unmaskColumn(int index, String columnId) {
+      String xpath = f(
+          "(//div[contains(@class,'virtual-table')]//div[@data-datakey='%s'])[%d]//span[contains(.,'Click')]",
           getColumnLocators().get(columnId), index);
       click(xpath);
     }
@@ -999,7 +1000,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(xpath = "./div/span[2]")
     public PageElement status;
-    @FindBy(xpath = "./div[2]/div[1]")
+    @FindBy(xpath = "./div[2]/div[1]/div")
     public PageElement to;
     @FindBy(xpath = "./div[2]/div[2]")
     public PageElement toEmail;

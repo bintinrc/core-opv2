@@ -325,21 +325,21 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.inFrame(() -> {
       page.editInstructionsDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(pickupInstruction)) {
-        if ("empty".equalsIgnoreCase(pickupInstruction)) {
+        if ("empty" .equalsIgnoreCase(pickupInstruction)) {
           page.editInstructionsDialog.pickupInstruction.forceClear();
         } else {
           page.editInstructionsDialog.pickupInstruction.setValue(pickupInstruction);
         }
       }
       if (StringUtils.isNotBlank(deliveryInstruction)) {
-        if ("empty".equalsIgnoreCase(deliveryInstruction)) {
+        if ("empty" .equalsIgnoreCase(deliveryInstruction)) {
           page.editInstructionsDialog.deliveryInstruction.forceClear();
         } else {
           page.editInstructionsDialog.deliveryInstruction.setValue(deliveryInstruction);
         }
       }
       if (StringUtils.isNotBlank(orderInstruction)) {
-        if ("empty".equalsIgnoreCase(orderInstruction)) {
+        if ("empty" .equalsIgnoreCase(orderInstruction)) {
           page.editInstructionsDialog.orderInstruction.forceClear();
         } else {
           page.editInstructionsDialog.orderInstruction.setValue(orderInstruction);
@@ -1605,7 +1605,7 @@ public class EditOrderV2Steps extends AbstractSteps {
     }
     if (data.containsKey("newInstructions")) {
       String instruction = data.get("newInstructions");
-      if ("GENERATED".equals(instruction)) {
+      if ("GENERATED" .equals(instruction)) {
         instruction = f("This damage description is created by automation at %s.",
             DTF_CREATED_DATE.format(ZonedDateTime.now()));
       }
@@ -1639,27 +1639,27 @@ public class EditOrderV2Steps extends AbstractSteps {
     String issueDescription = mapOfData.get("issueDescription");
     String rtsReason = mapOfData.get("rtsReason");
 
-    if ("GENERATED".equals(damageDescription)) {
+    if ("GENERATED" .equals(damageDescription)) {
       damageDescription = f("This damage description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED".equals(ticketNotes)) {
+    if ("GENERATED" .equals(ticketNotes)) {
       ticketNotes = f("This ticket notes is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED".equals(parcelDescription)) {
+    if ("GENERATED" .equals(parcelDescription)) {
       parcelDescription = f("This parcel description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED".equals(exceptionReason)) {
+    if ("GENERATED" .equals(exceptionReason)) {
       exceptionReason = f("This exception reason is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED".equals(issueDescription)) {
+    if ("GENERATED" .equals(issueDescription)) {
       issueDescription = f("This issue description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
