@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.commonsort.model.addressing.Waypoint;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
