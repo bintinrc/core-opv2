@@ -89,19 +89,14 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
     {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-        String task = finalMapOfData.get("task");
-        if (task != null) {
-          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
-        } else {
-          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
-        }
+        parcelSweeperLivePage.selectHub(finalMapOfData.get("hubName"));
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         parcelSweeperLivePage.refreshPage();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, "Operator Parcel Sweeping");
+    }, "Operator Parcel Sweeping, selecting hub");
   }
 
   private String getExpectedZoneName(String zoneNameFromDataTable) {

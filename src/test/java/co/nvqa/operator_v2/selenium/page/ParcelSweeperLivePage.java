@@ -134,6 +134,15 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
+  public void selectHub(String hubName) {
+    pause2s();
+    // Select Hub
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+    click(HUB_DROPDOWN_XPATH);
+    waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
+    sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
+  }
+
   public void selectHubToBeginWithTask(String hubName, String task) {
     pause2s();
 
