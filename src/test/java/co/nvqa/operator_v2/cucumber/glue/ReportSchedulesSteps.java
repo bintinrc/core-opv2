@@ -34,22 +34,28 @@ public class ReportSchedulesSteps extends AbstractSteps {
 
   @And("Operator clicks create new schedule button")
   public void operatorClicksCreateNewScheduleButton() {
-    reportSchedulesPage.clickCreateTemplateBtn();
+    reportSchedulesPage.inFrame(() ->
+        reportSchedulesPage.clickCreateTemplateBtn()
+    );
   }
 
   @And("Create report scheduling page is loaded")
   public void createReportSchedulingPageIsLoaded() {
-    reportSchedulesPage.waitUntilLoaded();
-    Assertions.assertThat(reportSchedulesPage.createReportSchedulingHeader.isDisplayed())
-        .as("Available Headers is visible").isTrue();
+    reportSchedulesPage.inFrame(page -> {
+      reportSchedulesPage.waitUntilLoaded();
+      Assertions.assertThat(reportSchedulesPage.createReportSchedulingHeader.isDisplayed())
+          .as("Available Headers is visible").isTrue();
+    });
 
   }
 
   @And("Operator creates report scheduling with below data")
   public void operatorFillReportSchedulingWithBelowData(Map<String, String> mapOfData) {
-    setReportSchedulingData(mapOfData);
-    reportSchedulesPage.clickSaveScheduleReportButton();
-    takesScreenshot();
+    reportSchedulesPage.inFrame(page -> {
+      setReportSchedulingData(mapOfData);
+      reportSchedulesPage.clickSaveScheduleReportButton();
+      takesScreenshot();
+    });
   }
 
   private void setReportSchedulingData(Map<String, String> mapOfData) {
@@ -181,108 +187,114 @@ public class ReportSchedulesSteps extends AbstractSteps {
 
   @And("Operator verify create report schedule success message")
   public void verifySuccessMessageReportScheduleCreation() {
-    SoftAssertions softAssertions = new SoftAssertions();
-    String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
-    softAssertions.assertThat(actualMessage).as("Successful message is correct")
-        .isEqualTo("Created Schedule Successfully.");
-    softAssertions.assertAll();
+    reportSchedulesPage.inFrame(page -> {
+      SoftAssertions softAssertions = new SoftAssertions();
+      String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
+      softAssertions.assertThat(actualMessage).as("Successful message is correct")
+          .isEqualTo("Created Schedule Successfully.");
+      softAssertions.assertAll();
+    });
   }
 
   @And("Operator verify report schedule is created successfully")
   public void verifyReportScheduleIsCreatedSuccessfully() {
     ReportScheduleTemplate template = get(KEY_REPORT_SCHEDULE_TEMPLATE);
     reportSchedulesPage.refreshPage();
-    reportSchedulesPage.switchToIframe();
-    reportSchedulesPage.waitUntilLoaded();
-    reportSchedulesPage.searchAndEditByReportScheduleName(template.getName());
-    SoftAssertions softAssertion = new SoftAssertions();
-    softAssertion.assertThat(reportSchedulesPage.nameInput.getValue()).as("Report name is correct")
-        .isEqualTo(template.getName());
-    softAssertion.assertThat(reportSchedulesPage.descriptionInput.getValue())
-        .as("Description is correct").isEqualTo(template.getDescription());
-    switch (template.getFrequency()) {
-      case "Weekly":
-        softAssertion.assertThat(reportSchedulesPage.weeklyFrequency.isChecked())
-            .as("Weekly Frequency is selected").isTrue();
-        softAssertion.assertThat(reportSchedulesPage.dateOfTheWeek.getValue())
-            .as("Selected day is correct").isEqualTo(template.getDay());
-        break;
-      case "Monthly":
-        softAssertion.assertThat(reportSchedulesPage.monthlyFrequency.isChecked())
-            .as("Monthly Frequency is selected").isTrue();
-    }
-    switch (template.getReportFor()) {
-      case "All Shippers":
-        softAssertion.assertThat(reportSchedulesPage.allShippers.isChecked())
-            .as("All Shippers is selected").isTrue();
-        break;
-      case "Select One Shipper":
-        softAssertion.assertThat(reportSchedulesPage.selectOneShipper.isChecked())
-            .as("Select One Shipper is selected").isTrue();
-        softAssertion.assertThat(reportSchedulesPage.forSearch.getValue())
-            .as("Selected Shipper is Correct").isEqualTo(template.getShipper());
-        break;
-      case "Select By Parent Shipper":
-        softAssertion.assertThat(reportSchedulesPage.selectParentShipper.isChecked())
-            .as("Select By Parent Shipper is selected").isTrue();
-        softAssertion.assertThat(reportSchedulesPage.forSearch.getValue())
-            .as("Selected Parent Shipper is Correct").isEqualTo(template.getParentShipper());
-        break;
-      case "Select By Script IDs":
-        pause(10000);
-        softAssertion.assertThat(reportSchedulesPage.selectScriptIds.isChecked())
-            .as("Select By Script IDs is selected").isTrue();
-        softAssertion.assertThat(reportSchedulesPage.forSearch.getValues())
-            .as("Selected Script IDs are Correct").isEqualTo(template.getScriptIds());
-        break;
-    }
-    switch (template.getFileGrouping()) {
-      case "AGGREGATED":
-        softAssertion.assertThat(reportSchedulesPage.orderAggregation.isChecked())
-            .as("order aggregation is selected correctly").isTrue();
-        break;
-      case "SHIPPER":
-        softAssertion.assertThat(reportSchedulesPage.fileGroupByShipper.isChecked())
-            .as("File grouping is selected as shipper correctly").isTrue();
-        break;
-      case "ALL":
-        softAssertion.assertThat(reportSchedulesPage.fileGroupByAllOrders.isChecked())
-            .as("File grouping is selected as All orders correctly").isTrue();
-        break;
-      case "SCRIPT":
-        softAssertion.assertThat(reportSchedulesPage.fileGroupByScriptIds.isChecked())
-            .as("File grouping is selected as Script correctly").isTrue();
-    }
-    if (!template.getFileGrouping().equals("AGGREGATED")) {
-      softAssertion.assertThat(reportSchedulesPage.reportTemplate.getValue())
-          .as("Report Template is correct").isEqualTo(template.getReportTemplate());
-    }
-    softAssertion.assertThat(reportSchedulesPage.email.getValues()).as("Emails are correct")
-        .isEqualTo(template.getEmails());
-    softAssertion.assertAll();
+    reportSchedulesPage.inFrame(page -> {
+      reportSchedulesPage.waitUntilLoaded();
+      reportSchedulesPage.searchAndEditByReportScheduleName(template.getName());
+      SoftAssertions softAssertion = new SoftAssertions();
+      softAssertion.assertThat(reportSchedulesPage.nameInput.getValue())
+          .as("Report name is correct")
+          .isEqualTo(template.getName());
+      softAssertion.assertThat(reportSchedulesPage.descriptionInput.getValue())
+          .as("Description is correct").isEqualTo(template.getDescription());
+      switch (template.getFrequency()) {
+        case "Weekly":
+          softAssertion.assertThat(reportSchedulesPage.weeklyFrequency.isChecked())
+              .as("Weekly Frequency is selected").isTrue();
+          softAssertion.assertThat(reportSchedulesPage.dateOfTheWeek.getValue())
+              .as("Selected day is correct").isEqualTo(template.getDay());
+          break;
+        case "Monthly":
+          softAssertion.assertThat(reportSchedulesPage.monthlyFrequency.isChecked())
+              .as("Monthly Frequency is selected").isTrue();
+      }
+      switch (template.getReportFor()) {
+        case "All Shippers":
+          softAssertion.assertThat(reportSchedulesPage.allShippers.isChecked())
+              .as("All Shippers is selected").isTrue();
+          break;
+        case "Select One Shipper":
+          softAssertion.assertThat(reportSchedulesPage.selectOneShipper.isChecked())
+              .as("Select One Shipper is selected").isTrue();
+          softAssertion.assertThat(reportSchedulesPage.forSearch.getValue())
+              .as("Selected Shipper is Correct").isEqualTo(template.getShipper());
+          break;
+        case "Select By Parent Shipper":
+          softAssertion.assertThat(reportSchedulesPage.selectParentShipper.isChecked())
+              .as("Select By Parent Shipper is selected").isTrue();
+          softAssertion.assertThat(reportSchedulesPage.forSearch.getValue())
+              .as("Selected Parent Shipper is Correct").isEqualTo(template.getParentShipper());
+          break;
+        case "Select By Script IDs":
+          pause(10000);
+          softAssertion.assertThat(reportSchedulesPage.selectScriptIds.isChecked())
+              .as("Select By Script IDs is selected").isTrue();
+          softAssertion.assertThat(reportSchedulesPage.forSearch.getValues())
+              .as("Selected Script IDs are Correct").isEqualTo(template.getScriptIds());
+          break;
+      }
+      switch (template.getFileGrouping()) {
+        case "AGGREGATED":
+          softAssertion.assertThat(reportSchedulesPage.orderAggregation.isChecked())
+              .as("order aggregation is selected correctly").isTrue();
+          break;
+        case "SHIPPER":
+          softAssertion.assertThat(reportSchedulesPage.fileGroupByShipper.isChecked())
+              .as("File grouping is selected as shipper correctly").isTrue();
+          break;
+        case "ALL":
+          softAssertion.assertThat(reportSchedulesPage.fileGroupByAllOrders.isChecked())
+              .as("File grouping is selected as All orders correctly").isTrue();
+          break;
+        case "SCRIPT":
+          softAssertion.assertThat(reportSchedulesPage.fileGroupByScriptIds.isChecked())
+              .as("File grouping is selected as Script correctly").isTrue();
+      }
+      if (!template.getFileGrouping().equals("AGGREGATED")) {
+        softAssertion.assertThat(reportSchedulesPage.reportTemplate.getValue())
+            .as("Report Template is correct").isEqualTo(template.getReportTemplate());
+      }
+      softAssertion.assertThat(reportSchedulesPage.email.getValues()).as("Emails are correct")
+          .isEqualTo(template.getEmails());
+      softAssertion.assertAll();
+    });
   }
 
   @Then("Operator verifies that error toast is displayed on Report Schedules page as below:")
   public void operatorVerifiesThatErrorToastDisplayedOnOrderBillingPage(
       Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    String errorMessage = mapOfData.get("errorMessage");
-    String top = mapOfData.get("top");
-    String bottom = mapOfData.get("bottom");
-
+    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    String errorMessage = finalMapOfData.get("errorMessage");
+    String top = finalMapOfData.get("top");
+    String bottom = finalMapOfData.get("bottom");
     SoftAssertions softAssertions = new SoftAssertions();
-    if (mapOfData.containsKey("errorMessage")) {
-      String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
-      softAssertions.assertThat(actualMessage).as("Error message is correct")
-          .isEqualTo(errorMessage);
+    if (finalMapOfData.containsKey("errorMessage")) {
+      reportSchedulesPage.inFrame(page -> {
+        String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
+        softAssertions.assertThat(actualMessage).as("Error message is correct")
+            .isEqualTo(errorMessage);
+      });
+
     }
-    if (mapOfData.containsKey("top")) {
+    if (finalMapOfData.containsKey("top")) {
       Boolean isTitleDisplayed = reportSchedulesPage.toastErrors.stream().anyMatch(toastError ->
           StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), top));
       softAssertions.assertThat(isTitleDisplayed).as("Error Top Title is correct")
           .isTrue();
     }
-    if (mapOfData.containsKey("bottom")) {
+    if (finalMapOfData.containsKey("bottom")) {
       Boolean isMessageDisplayed = reportSchedulesPage.toastErrors.stream().anyMatch(toastError ->
           StringUtils.containsIgnoreCase(toastError.toastBottom.getText(), bottom));
       softAssertions.assertThat(isMessageDisplayed).as("Error Bottom Message is correct")

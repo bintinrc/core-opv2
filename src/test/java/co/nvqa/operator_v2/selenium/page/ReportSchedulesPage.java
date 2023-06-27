@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ReportSchedulesPage extends SimpleReactPage {
+public class ReportSchedulesPage extends SimpleReactPage<ReportSchedulesPage> {
 
   public ReportSchedulesPage(WebDriver webDriver) {
     super(webDriver);
