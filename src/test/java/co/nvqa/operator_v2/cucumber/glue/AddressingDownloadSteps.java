@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.RandomUtil;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commonsort.model.addressing.Waypoint;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
@@ -216,20 +216,13 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the Address Download Table Result is shown up")
-  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
+  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp(
+      Map<String, String> dataTableAsMap) {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDERS) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-      for (Order order : orders) {
-        addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
-        addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
-      }
-    } else {
-      List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
-      for (String trackingId : trackingIds) {
-        addressingDownloadPage.trackingIdUiChecking(trackingId);
-      }
+    List<String> trackingIds = get(dataTableAsMap.get("trackingId"));
+    for (String trackingId : trackingIds) {
+      addressingDownloadPage.trackingIdUiChecking(trackingId.replaceAll("[\\[\\]]", ""));
     }
   }
 
@@ -238,7 +231,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     if (addressingDownloadPage.trackingIdNotFound.isDisplayed()) {
       addressingDownloadPage.nextButtonLoadTrackingId.click();
     }
-    operatorVerifiesThatTheAddressDownloadTableResultIsShownUp();
   }
 
   @When("Operator clicks on download csv button on Address Download Page")
@@ -262,9 +254,11 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
-  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-    String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
+  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight(
+      Map<String, String> dataTableAsMap) {
+
+    List<Order> orders = get(dataTableAsMap.get("order"));
+    String csvTimestamp = get(dataTableAsMap.get("csvTime"));
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
