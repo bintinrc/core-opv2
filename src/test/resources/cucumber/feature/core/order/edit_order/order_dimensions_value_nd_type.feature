@@ -46,6 +46,7 @@ Feature: Order Dimensions Value and Type
       | length | <oldLength> |
       | width  | <oldWidth>  |
       | size   | <oldSize>   |
+    And Operator refresh page
     And Operator verify order event on Edit order page using data below:
       | name        | HUB INBOUND SCAN                                                                                                                                                                                                                                                                                                                                                                                          |
       | hubName     | {hub-name}                                                                                                                                                                                                                                                                                                                                                                                                |

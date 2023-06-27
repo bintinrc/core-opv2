@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSVPart2 @NewFeatures2
 Feature: Update Delivery Address with CSV
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues and Valid Orders
@@ -159,7 +159,3 @@ Feature: Update Delivery Address with CSV
     And API Operator get Addressing Zone from a lat long with type "RTS"
     Then Operator verifies Zone is correct after RTS on Edit Order page
     And Operator verifies waypoints.routing_zone_id is correct
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

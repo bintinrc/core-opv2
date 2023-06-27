@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperPickups @ShipperPickups2
+#@OperatorV2 @Core @ShipperPickups @ShipperPickups2 @Deprecated
 Feature: Shipper Pickups - Preset Filters Shipper Pickup
 
   @LaunchBrowser @ShouldAlwaysRun

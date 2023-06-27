@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part2
 Feature: Route Inbound Screen 1
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -188,7 +188,3 @@ Feature: Route Inbound Screen 1
       | wpFailed    | 0                                 |
       | wpCompleted | 0                                 |
       | wpTotal     | 1                                 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

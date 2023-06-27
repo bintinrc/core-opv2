@@ -756,24 +756,24 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator verify order event on Edit order page using data below:$")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
-    OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
-    OrderEvent actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
-        .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-        .findFirst()
-        .orElse(null);
-    if (actualEvent == null) {
-      pause5s();
-      editOrderPage.refreshPage();
-      actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+    doWithRetry(()->{OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
+      OrderEvent actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
           .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
           .findFirst()
           .orElse(null);
-    }
-    Assertions.assertThat(actualEvent)
-        .withFailMessage("There is no [%s] event on Edit Order page", expectedEvent.getName())
-        .isNotNull();
+      if (actualEvent == null) {
+        pause5s();
+        editOrderPage.refreshPage();
+        actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .findFirst()
+            .orElse(null);
+      }
+      Assertions.assertThat(actualEvent)
+          .withFailMessage("There is no [%s] event on Edit Order page", expectedEvent.getName())
+          .isNotNull();
 
-    expectedEvent.compareWithActual(actualEvent);
+      expectedEvent.compareWithActual(actualEvent);},"Verify order event");
   }
 
   @Then("^Operator verify order events on Edit order page using data below:$")
@@ -1073,6 +1073,11 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("Operator verify transaction on Edit order page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(Map<String, String> data) {
     final TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
+    if (data.containsKey("destinationAddress")) {
+      //    to click unmask before verify address details
+      List<WebElement> masks = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+      editOrderPage.operatorClickMaskingText(masks);
+    }
     final List<TransactionInfo> transactions = editOrderPage.transactionsTable.readAllEntities();
     takesScreenshot();
     transactions.stream()
@@ -1776,9 +1781,9 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
   public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    editOrderPage.waitUntilVisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
-    editOrderPage.waitUntilInvisibilityOfToast(f("Downloading awb_%s.pdf", trackingId));
+    editOrderPage.switchToOtherWindowUrlContains("https://operatorv2-qa.ninjavan.co/#/my/order");
+    editOrderPage.waitUntilVisibilityOfToast("Attempting to print waybill(s)");
+    editOrderPage.waitUntilInvisibilityOfToast("Print waybill(s) successfully");
   }
 
   @When("Operator opens and verifies the downloaded airway bill pdf")

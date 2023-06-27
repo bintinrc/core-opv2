@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderv2 @EditOrder3 @ViewPOD @ReverifyAddress @EditOrderPage
+@OperatorV2 @Core @EditOrderV2 @ReverifyAddress @EditOrderPage
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun

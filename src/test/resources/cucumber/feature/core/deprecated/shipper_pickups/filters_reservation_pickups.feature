@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperPickups @ShipperPickups2 @FilterReservation
+#@OperatorV2 @Core @ShipperPickups @ShipperPickups2 @FilterReservation @Deprecated
 Feature: Shipper Pickups - Filter Reservation Pickup
 
   @LaunchBrowser @ShouldAlwaysRun

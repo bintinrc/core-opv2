@@ -1,8 +1,8 @@
 @OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart1
 Feature: Reservation Preset Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteReservationGroup
@@ -353,7 +353,3 @@ Feature: Reservation Preset Management
       | address.1.milkrun.1.startTime | 3PM           |
       | address.1.milkrun.1.endTime   | 6PM           |
       | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

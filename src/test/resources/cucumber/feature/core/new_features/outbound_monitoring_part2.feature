@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OutboundMonitoringPart2 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -546,7 +546,3 @@ Feature: Outbound Monitoring
     Then Operator verify order event on Edit order page using data below:
       | name    | PULL OUT OF ROUTE                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -14,20 +14,20 @@ Feature: Update Template
     Then Operator creates SSB template with below data successfully
       | templateName        | Dummy-Template-1-{gradle-current-date-yyyyMMddHHmmsss}             |
       | templateDescription | Dummy-Template-1-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | selectHeaders       | Shipper Name                                                       |
+      | selectHeaders       | Legacy Shipper ID                                                  |
     Then Operator waits for 1 seconds
     Then Operator edits SSB Template with Name "{KEY_TEMPLATE.getName}"
     Then Operator updates SSB template with below data successfully
-      | selectHeaders | Legacy Shipper ID |
+      | selectHeaders | Total (Sum of All Fees),L1 Name (to address l1 name),L2 Name (to address l2 name),L3 Name (to address l3 name),Source (source of order creation),Dispro Campaign Name,Dispro Discount Value,Dispro(%),Nett Delivery Fee (Delivery fee including all discounts) |
     Then DB Operator gets the template details using template name
     Then Operator verifies below details in billing_qa_gl.templates table
       | column                | expected_value                   |
       | system_id             | {KEY_COUNTRY}                    |
       | description           | {KEY_TEMPLATE.description}       |
       | report_type           | {KEY_TEMPLATE.reportType}        |
-      | configuration         | notNull                          |
-      | configuration.headers | Legacy Shipper ID,Shipper Name   |
-      | created_at            | {gradle-current-date-yyyy-MM-dd} |
+      | configuration         | notNull                                                                                                                       |
+      | configuration.headers | Legacy Shipper ID,Total,L1 Name,L2 Name,L3 Name,Nett Delivery Fee,Dispro(%),Dispro Discount Value,Dispro Campaign Name,Source |
+      | created_at            | {gradle-current-date-yyyy-MM-dd}                                                                                              |
       | updated_at            | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at            | null                             |
 
