@@ -6,7 +6,7 @@ Feature: Parcel Sweeper Live User Access
     Given no-op
 
   @CloseNewWindows
-  Scenario: User Not Found - Hub Feature Switch Inactive
+  Scenario: User Not Found - Hub Feature Switch Activated
     Given Operator login with client id = "{sort-hub-no-hub-access-user-client-id}" and client secret = "{sort-hub-no-hub-access-user-client-secret}"
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
