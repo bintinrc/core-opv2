@@ -41,9 +41,9 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province}                 |
-      | municipality | {municipality}             |
-      | barangay     | {barangay}                 |
+      | province     | {auto-province-ph-1}       |
+      | municipality | {auto-municipality-ph-1}   |
+      | barangay     | {auto-barangay-ph-1}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -71,16 +71,15 @@ Feature: Address Datasource
       | longitude    | {KEY_SORT_CREATED_ADDRESS.longitude} |
       | whitelisted  | True                               |
 
-  @DeleteAddressDatasourceCommonV2
   Scenario: PH Address Datasource - Add a Row with Valid Input Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province}                 |
-      | municipality | {municipality}             |
-      | barangay     | {barangay}                 |
+      | province     | {auto-province-ph-2}       |
+      | municipality | {auto-municipality-ph-2}   |
+      | barangay     | {auto-barangay-ph-2}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -99,11 +98,11 @@ Feature: Address Datasource
     When Operator refresh page
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong      | {latitude-2},{longitude-2} |
-      | province     | {province}                 |
-      | municipality | {municipality}             |
-      | barangay     | {barangay}                 |
-      | whitelisted  | True                       |
+      | latlong      | {latitude-2},{longitude-2}       |
+      | province     | {auto-province-ph-duplicate}     |
+      | municipality | {auto-municipality-ph-duplicate} |
+      | barangay     | {auto-barangay-ph-duplicate}     |
+      | whitelisted  | True                             |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
@@ -128,7 +127,7 @@ Feature: Address Datasource
       | barangay     | {KEY_SORT_CREATED_ADDRESS.district}  |
       | latitude     | {KEY_SORT_CREATED_ADDRESS.latitude}  |
       | longitude    | {KEY_SORT_CREATED_ADDRESS.longitude} |
-      | whitelisted  | True                               |
+      | whitelisted  | True                                 |
 
   Scenario: PH Address Datasource Landing Page
     Given Operator go to menu Utilities -> QRCode Printing
