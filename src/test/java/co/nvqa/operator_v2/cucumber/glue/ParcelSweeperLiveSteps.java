@@ -83,6 +83,27 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
     }, "Operator Parcel Sweeping");
   }
 
+  @Then("^Operator selects hub on Parcel Sweeper Live page:$")
+  public void operatorSelectedHubOnParcelSweeperLivePage(Map<String, String> mapOfData) {
+    doWithRetry(() ->
+    {
+      try {
+        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        String task = finalMapOfData.get("task");
+        if (task != null) {
+          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
+        } else {
+          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        parcelSweeperLivePage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "Operator Parcel Sweeping");
+  }
+
   private String getExpectedZoneName(String zoneNameFromDataTable) {
     if (StringUtils.equalsIgnoreCase(zoneNameFromDataTable, "FROM CREATED ORDER")) {
       Order order = get(KEY_CREATED_ORDER);
@@ -125,6 +146,11 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
   @Then("^Operator verify Prior tag on Parcel Sweeper Live page$")
   public void operatorVerifyPriorTagOnParcelSweeperByHubPage() {
     parcelSweeperLivePage.verifyPriorTag();
+  }
+
+  @Then("^Operator verify access denied modal on Parcel Sweeper Live page with the data below:$")
+  public void operatorVerifyAccessDeniedModalOnParcelSweeperByHubPage(Map<String, String> mapOfData) {
+    parcelSweeperLivePage.verifyAccessDeniedModal(mapOfData);
   }
 
 }
