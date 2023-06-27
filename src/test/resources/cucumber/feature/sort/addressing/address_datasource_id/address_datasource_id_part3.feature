@@ -263,7 +263,6 @@ Feature: Address Datasource
       | kecamatan | {auto-kecamatan-id-8} |
     Then Operator verifies no result found on Address Datasource page
 
-  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Edit Row Form Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
