@@ -25,8 +25,11 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
 
   @ForceSuccessCommonV2
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Commas (uid:420276d9-29d3-43ab-a440-e72cb03d0ee8)
@@ -48,8 +51,11 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
 
   @ForceSuccessCommonV2
   Scenario: Load Multiple Invalid and Valid Tracking IDs Successfully (uid:3194cdf4-7627-45fd-b10d-e8ad17e0bd66)
@@ -72,8 +78,11 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     And Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
 
   @ForceSuccessCommonV2
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By Space (uid:1c7830b6-56ae-4e99-b679-5a6bfd8b68a4)
@@ -95,8 +104,11 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
 
   @ForceSuccessCommonV2
   Scenario: Succesfully Load Multiple Valid Tracking IDs Separated By New Lines (uid:fb00a761-c7e7-46c3-a51d-64514c8527f1)
@@ -118,8 +130,11 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
 
   # For specific this Scenario, ideally, please create orders with number of 2n + 1
   @ForceSuccessCommonV2
@@ -146,8 +161,12 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file details of Address Download is right
+      | order   | KEY_LIST_OF_CREATED_ORDERS   |
+      | csvTime | KEY_DOWNLOADED_CSV_TIMESTAMP |
+
 
   @ForceSuccessCommonV2
   Scenario: Successfully Load RTS and Non RTS Tracking IDs (uid:5e838353-f1a5-4f12-9711-818207d62d48)
@@ -175,12 +194,10 @@ Feature: Address Download
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     And Operator clicks on Next Button on Address Download Load Tracking ID modal
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
     And Operator verifies that the RTS order is identified
+
 
   Scenario: Successfully Load 100 Valid Tracking IDs (uid:ff4e6e2f-0c5f-42dc-a5f4-f6d740115fd1)
     Given Operator go to menu Addressing -> Address Download
@@ -191,7 +208,9 @@ Feature: Address Download
     And Operator fills the "valid" Tracking ID textbox with "new_line" separation
       | KEY_LIST_OF_CREATED_TRACKING_IDS |
     And Operator clicks on Next Button on Address Download Load Tracking ID modal
-    Then Operator verifies that the Address Download Table Result for bulk tracking ids is shown up
+    Then Operator verifies that the Address Download Table Result is shown up
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS |
+
 
   Scenario: Entering More Than 100 Tracking IDs will be restricted (uid:bbabea60-61aa-4e43-9d43-26a741895bdf)
     Given Operator go to menu Addressing -> Address Download
