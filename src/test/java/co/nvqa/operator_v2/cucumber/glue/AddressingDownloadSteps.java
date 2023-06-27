@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Waypoint;
-import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.RandomUtil;
+import co.nvqa.commonsort.model.addressing.Waypoint;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -166,7 +166,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator fills the {string} Tracking ID textbox with {string} separation")
   public void operatorFillsTheTrackingIDTextboxWithSeparation(String trackingIdType,
-      String separation) {
+      String separation,List<String>trackingIds) {
+  List<String> trackingId =resolveValues(trackingIds);
     // Tracking ID type
     final String VALID = "valid";
     final String HALF = "half";
@@ -179,23 +180,21 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     pause5s();
 
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-
     if (VALID.equalsIgnoreCase(trackingIdType)) {
       if (COMMA.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (SPACE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (NEW_LINE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n",trackingId).replaceAll("[\\[\\]]", ""));
       } else if (MIXED.equalsIgnoreCase(separation)) {
         for (int i = 0; i < trackingIds.size(); i++) {
           if (i == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + ",");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + ",");
           } else if (i > 0 && i % 2 == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + " ");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + " ");
           } else {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + "\n");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "")+ "\n");
           }
         }
       } else {
@@ -203,8 +202,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
       }
     } else if (HALF.equalsIgnoreCase(trackingIdType)) {
       final String invalidTrackingId = "AUTOTEST" + RandomUtil.randomString(5);
-      trackingIds.add(invalidTrackingId);
-      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+      trackingId.add(invalidTrackingId);
+      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
     } else {
       LOGGER.warn("Automation only covered VALID and HALF VALID HALF INVALID types");
     }
@@ -220,14 +219,14 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+    if (get(KEY_LIST_OF_CREATED_ORDERS) != null) {
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
       for (Order order : orders) {
         addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
         addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
       }
     } else {
-      List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+      List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
       for (String trackingId : trackingIds) {
         addressingDownloadPage.trackingIdUiChecking(trackingId);
       }
@@ -283,8 +282,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that newly created order is not written in the textbox")
-  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox(Map<String, String> data) {
+    String trackingId = data.get("trackingId");
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
     Assertions.assertThat(!(trackingIdsListed.contains("," + trackingId))).isTrue();

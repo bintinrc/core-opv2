@@ -319,9 +319,9 @@ Feature: Resolve Recovery Ticket
     When Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                                                                                |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail\nNew Delivery Status: Pending\n\n Old Granular Status: Pending Reschedule\nNew Granular Status: On Hold\n\nOld Order Status: Delivery fail\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    And Operator verify order events with description on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: On Hold Old Order Status: Delivery fail New Order Status: On Hold Reason: TICKET_CREATION |
     And Operator verify order events on Edit order page using data below:
       | name       |
       | RESCHEDULE |
@@ -357,9 +357,9 @@ Feature: Resolve Recovery Ticket
     And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                    |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold\nNew Order Status: Transit\n\nReason: TICKET_RESOLUTION |
+    And Operator verify order events with description on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit order page using data below:
       | name            |
 #  need to enable once issue is fixed
