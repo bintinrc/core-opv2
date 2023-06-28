@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.NvCountry;
-import co.nvqa.commonsort.model.addressing.Waypoint;
+import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -649,7 +649,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     return getAddressDownloadResultCount() > 0;
   }
 
-  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
+  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(
+      co.nvqa.commons.model.core.Order order, co.nvqa.commons.model.core.Waypoint waypoint) {
     int resultsCount = getAddressDownloadResultCount();
     LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(),
         "Asia/Singapore");
@@ -768,7 +769,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         : stringifiedLatLong;
   }
 
-  public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint,
+  public void csvDownloadSuccessfullyAndContainsBasicData(co.nvqa.commons.model.core.Order order, Waypoint waypoint,
       String preset) {
     LOGGER.debug("Looking for CSV with Name containing {}", preset);
     String csvFileName = doWithRetry(() ->
