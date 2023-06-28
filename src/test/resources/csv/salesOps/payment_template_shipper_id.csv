@@ -1,0 +1,3 @@
+shipper_id,remittance_date,amount,transaction_number,transaction_type,payment_method,payer_name,payer_account_number,payer_bank,payee_name,payee_account_number,payee_bank
+1361,2021-12-31,147772.86,ANX18809,Credit,Banking,Ninjavan,100203 Bank : IDR-BNI-2909000164 (OPS),Bank BNI,United Florist,100203 Bank : IDR-BNI-2909000164 (OPS),Bank BNI
+1361,2021-12-03,565.12,ANX18815,Debit,Cheque,United Florist,100203 Bank : IDR-BNI-2909000164 (OPS),Bank BNI,Ninjavan,100203 Bank : IDR-BNI-2909000164 (OPS),Bank BNI
