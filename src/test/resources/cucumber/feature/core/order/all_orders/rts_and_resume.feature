@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @RtsandResume
 Feature: All Orders - RTS & Resume
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -218,7 +218,3 @@ Feature: All Orders - RTS & Resume
     Then API Operator verifies order state:
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
       | granularStatus | RETURNED_TO_SENDER                         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

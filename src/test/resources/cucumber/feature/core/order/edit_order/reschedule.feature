@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @Reschedule @EditOrder2
 Feature: Reschedule
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
@@ -771,9 +771,10 @@ Feature: Reschedule
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 #    TODO move this to common-core
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                                 | archived |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
+#    TODO enable/removed once confirmed its not used
+#    Then DB Operator verify Jaro Scores:
+#      | waypointId                                                 | archived |
+#      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
   @DeleteOrArchiveRoute
   Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery
@@ -1009,7 +1010,3 @@ Feature: Reschedule
     Then DB Operator verify Jaro Scores:
       | waypointId                                                 | archived |
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

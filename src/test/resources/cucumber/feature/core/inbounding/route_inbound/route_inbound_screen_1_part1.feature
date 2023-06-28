@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part1
 Feature: Route Inbound Screen 1
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -168,7 +168,3 @@ Feature: Route Inbound Screen 1
       | status       | 400 Unknown                        |
       | errorCode    | 103088                             |
       | errorMessage | Route is not assigned to a driver! |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

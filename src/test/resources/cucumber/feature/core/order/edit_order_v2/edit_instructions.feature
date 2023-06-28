@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderv2 @EditInstructions
+@OperatorV2 @Core @EditOrderV2 @EditInstructions
 Feature: Edit Instructions
 
   @LaunchBrowser @ShouldAlwaysRun

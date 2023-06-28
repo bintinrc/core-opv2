@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.Addressing;
+
+import co.nvqa.commonsort.model.addressing.Addressing;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart1
 Feature: Van Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -247,7 +247,3 @@ Feature: Van Inbound
     And Operator verify route details on Route Logs page using data below:
       | id     | {KEY_CREATED_ROUTE_ID} |
       | status | IN_PROGRESS            |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @AllOrdersPage
 Feature: All Orders
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -134,7 +134,3 @@ Feature: All Orders
     Then Operator verifies manually complete errors CSV file on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
