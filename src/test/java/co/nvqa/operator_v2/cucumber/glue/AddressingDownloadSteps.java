@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commonsort.model.addressing.Waypoint;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -296,6 +295,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator selects preset {string}")
   public void operatorSelectsPresetName(String preset) {
+    pause5s();
     String presetName = "";
 
     if (preset.equals("DEFAULT")) {
@@ -321,7 +321,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
     doWithRetry(() -> {
-      Order createdOrder = get(KEY_ORDER_DETAILS);
+      co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
 
       if (createdOrder == null) {
         LOGGER.error("Order hasn't been created", new NullPointerException());
@@ -348,8 +348,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
     addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
 
-    Order createdOrder = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
+    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
 
     boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(
         createdOrder, waypoint);
@@ -370,8 +370,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @Then("Operator verifies that the downloaded csv file contains all correct data")
   public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
-    Order order = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    co.nvqa.commons.model.core.Order order = get(KEY_ORDER_DETAILS);
+    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
     String preset = get(KEY_SELECTED_PRESET_NAME);
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);
