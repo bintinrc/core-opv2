@@ -5,23 +5,21 @@ import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
-import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
@@ -36,8 +34,6 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
-import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ManuallyCompleteOrderDialog;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.CreateTicketDialog;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -169,7 +165,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public EditInstructionsDialog editInstructionsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
 
   @FindBy(css = ".ant-modal")
@@ -247,6 +243,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   public DpDropOffSettingDialog dpDropOffSettingDialog;
 
   public EventsTable eventsTable;
+
+  @FindBy(css = ".ant-modal")
   public EditDeliveryDetailsDialog editDeliveryDetailsDialog;
   @FindBy(css = ".ant-modal")
   public DeleteOrderDialog deleteOrderDialog;
@@ -259,7 +257,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     transactionsTable = new TransactionsTable(webDriver);
     eventsTable = new EventsTable(webDriver);
     deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
-    editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
     chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
     podDetailsDialog = new PodDetailsDialog(webDriver);
@@ -432,27 +429,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     TransactionInfo actual = transactionsTable.readEntity(1);
     Assertions.assertThat(actual.getPriorityLevel()).as(txnType + " Priority Level")
         .isEqualTo(String.valueOf(priorityLevel));
-  }
-
-  public String confirmCompleteOrder() {
-    String changeReason = f("This reason is created by automation at %s.",
-        DTF_CREATED_DATE.format(ZonedDateTime.now()));
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
-    manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("The order has been completed", true);
-    return changeReason;
-  }
-
-  public void confirmCompleteOrder(String reason, String reasonDescr) {
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue(reason);
-    if (StringUtils.isNotBlank(reasonDescr)) {
-      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
-    }
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
@@ -686,80 +662,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT_TABLE_EVENT);
   }
 
-  public void verifiesOrderIsTaggedToTheRecommendedRouteId() {
-    TransactionInfo actual = transactionsTable.readEntity(2);
-    Assertions.assertThat(StringUtils.isNotBlank(actual.getRouteId()))
-        .as("Order is not tagged to any route: ").isTrue();
-  }
-
-  public void updatePickupDetails(Map<String, String> mapOfData) {
-    String senderName = mapOfData.get("senderName");
-    String senderContact = mapOfData.get("senderContact");
-    String senderEmail = mapOfData.get("senderEmail");
-    String internalNotes = mapOfData.get("internalNotes");
-    String pickupDate = mapOfData.get("pickupDate");
-    String pickupTimeslot = mapOfData.get("pickupTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
-
-    editPickupDetailsDialog.senderName.setValue(senderName);
-    editPickupDetailsDialog.senderContact.setValue(senderContact);
-    editPickupDetailsDialog.senderEmail.setValue(senderEmail);
-    editPickupDetailsDialog.internalNotes.setValue(internalNotes);
-    if (StringUtils.isNotBlank(pickupDate)) {
-      editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
-    }
-    if (StringUtils.isNotBlank(pickupTimeslot)) {
-      editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
-    }
-    editPickupDetailsDialog.shipperRequestedToChange.setValue(
-        Boolean.parseBoolean(mapOfData.getOrDefault("shipperRequestedToChange", "false")));
-    editPickupDetailsDialog.assignPickupLocation.setValue(
-        Boolean.parseBoolean(mapOfData.getOrDefault("assignPickupLocation", "false")));
-    editPickupDetailsDialog.changeAddress.click();
-    editPickupDetailsDialog.country.setValue(country);
-    editPickupDetailsDialog.city.setValue(city);
-    editPickupDetailsDialog.address1.setValue(address1);
-    editPickupDetailsDialog.address2.setValue(address2);
-    editPickupDetailsDialog.postcode.setValue(postalCode);
-    editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
-  }
-
-  public void updateDeliveryDetails(Map<String, String> mapOfData) {
-    String recipientName = mapOfData.get("recipientName");
-    String recipientContact = mapOfData.get("recipientContact");
-    String recipientEmail = mapOfData.get("recipientEmail");
-    String internalNotes = mapOfData.get("internalNotes");
-    String changeSchedule = mapOfData.get("changeSchedule");
-    String deliveryDate = mapOfData.get("deliveryDate");
-    String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
-
-    editDeliveryDetailsDialog
-        .updateRecipientName(recipientName)
-        .updateRecipientContact(recipientContact)
-        .updateRecipientEmail(recipientEmail)
-        .updateInternalNotes(internalNotes)
-        .clickChangeSchedule()
-        .updateDeliveryDate(deliveryDate)
-        .updateDeliveryTimeslot(deliveryTimeslot)
-        .clickChangeAddress()
-        .updateCountry(country)
-        .updateCity(city)
-        .updateAddress1(address1)
-        .updateAddress2(address2)
-        .updatePostalCode(postalCode)
-        .clickSaveChanges();
-    editDeliveryDetailsDialog.confirmPickupDetailsUpdated();
-  }
-
   public void reschedulePickup(Map<String, String> mapOfData) {
     String senderName = mapOfData.get("senderName");
     String senderContact = mapOfData.get("senderContact");
@@ -878,6 +780,12 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
           .build());
       setEntityClass(TransactionInfo.class);
     }
+
+    public void unmaskColumn(int index, String columnId){
+      String xpath = f("(//div[contains(@class,'virtual-table')]//div[@data-datakey='%s'])[%d]//span[contains(.,'Click')]",
+          getColumnLocators().get(columnId), index);
+      click(xpath);
+    }
   }
 
   /**
@@ -899,7 +807,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       setTableLocator("//div[./div/span[.='Events']]/div[contains(@class,'VirtualTable')]");
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(DATE_TIME, "_time")
-          .put(EVENT_TAGS, "_tags")
+          .put(EVENT_TAGS, "_tagsString")
           .put(EVENT_NAME, "_name")
           .put(USER_TYPE, "_userType")
           .put(USER_ID, "_user")
@@ -1091,13 +999,13 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(xpath = "./div/span[2]")
     public PageElement status;
-    @FindBy(xpath = ".//div[@class='layout-row']//h5")
+    @FindBy(xpath = "./div[2]/div[1]")
     public PageElement to;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
+    @FindBy(xpath = "./div[2]/div[2]")
     public PageElement toEmail;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[2]/span")
+    @FindBy(xpath = "./div[2]/div[3]")
     public PageElement toContact;
-    @FindBy(xpath = "./div[2]/div/div/div[2]/div[3]/span")
+    @FindBy(css = "[data-testid='delivery-info.to-address.mask.testid']")
     public PageElement toAddress;
     @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
     public PageElement startDateTime;
@@ -1280,139 +1188,28 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for Edit Delivery Details dialog
    */
-  public static class EditDeliveryDetailsDialog extends OperatorV2SimplePage {
+  public static class EditDeliveryDetailsDialog extends AntModal {
 
-    private static final String DIALOG_TITLE = "Edit Delivery Details";
-    private static final String RECIPIENT_NAME_ARIA_LABEL = "Recipient Name";
-    private static final String RECIPIENT_CONTACT_ARIA_LABEL = "Recipient Contact";
-    private static final String RECIPIENT_EMAIL_ARIA_LABEL = "Recipient Email";
-    private static final String INTERNAL_NOTES_ARIA_LABEL = "Internal Notes";
-    private static final String CHANGE_SCHEDULE_CHECKBOX_ARIA_LABEL = "//md-checkbox[@aria-label='Change Schedule']";
-    private static final String DELIVERY_DATE_ID = "commons.model.delivery-date";
-    private static final String DELIVERY_TIMESLOT_ARIA_LABEL = "Delivery Timeslot";
-    private static final String COUNTRY_ARIA_LABEL = "Country";
-    private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
-    private static final String CITY_ARIA_LABEL = "City";
-    private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
-    private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
-    private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
-    private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
-    private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
-    private static final String UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE = "Delivery Details Updated";
+    @FindBy(css = "[data-testid='edit-order-testid.edit-delivery-details.name.input']")
+    public ForceClearTextBox recipientName;
 
-    public EditDeliveryDetailsDialog(WebDriver webDriver) {
-      super(webDriver);
-    }
+    @FindBy(css = "[data-testid='edit-order-testid.edit-delivery-details.contact.input']")
+    public ForceClearTextBox recipientContact;
 
-    public EditDeliveryDetailsDialog waitUntilVisibility() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
+    @FindBy(css = "[data-testid='edit-order-testid.edit-delivery-details.email.input']")
+    public ForceClearTextBox recipientEmail;
 
-    public EditDeliveryDetailsDialog waitUntilAddressCanBeChanged() {
-      waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
-      return this;
-    }
+    @FindBy(xpath = ".//div[./label[.='Recipient contact']]/span")
+    public PageElement recipientContactText;
 
-    public EditDeliveryDetailsDialog updateRecipientName(String text) {
-      if (Objects.nonNull(text)) {
-        sendKeysByAriaLabel(RECIPIENT_NAME_ARIA_LABEL, text);
-      }
-      return this;
-    }
+    @FindBy(xpath = ".//div[./label[.='Recipient contact']]//span[contains(text(),'Click')]")
+    public PageElement recipientContactCtr;
 
-    public EditDeliveryDetailsDialog updateRecipientContact(String text) {
-      if (Objects.nonNull(text)) {
-        sendKeysByAriaLabel(RECIPIENT_CONTACT_ARIA_LABEL, text);
-      }
-      return this;
-    }
+    @FindBy(css = "[data-testid='edit-order-testid.edit-delivery-details.save-changes.button']")
+    public Button saveChanges;
 
-    public EditDeliveryDetailsDialog updateRecipientEmail(String text) {
-      if (Objects.nonNull(text)) {
-        sendKeysByAriaLabel(RECIPIENT_EMAIL_ARIA_LABEL, text);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateInternalNotes(String text) {
-      if (Objects.nonNull(text)) {
-        sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog clickChangeSchedule() {
-      click(CHANGE_SCHEDULE_CHECKBOX_ARIA_LABEL);
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateDeliveryDate(String textDate) {
-      if (Objects.nonNull(textDate)) {
-        try {
-          setMdDatepickerById(DELIVERY_DATE_ID,
-              StandardTestUtils.convertToZonedDateTime(textDate, DTF_NORMAL_DATE));
-        } catch (DateTimeParseException e) {
-          throw new NvTestRuntimeException("Failed to parse date.", e);
-        }
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateDeliveryTimeslot(String value) {
-      if (Objects.nonNull(value)) {
-        selectValueFromMdSelectByAriaLabel(DELIVERY_TIMESLOT_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog clickChangeAddress() {
-      clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
-      waitUntilAddressCanBeChanged();
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateCountry(String value) {
-      if (Objects.nonNull(value)) {
-        sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateCity(String value) {
-      if (Objects.nonNull(value)) {
-        sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateAddress1(String value) {
-      if (Objects.nonNull(value)) {
-        sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updateAddress2(String value) {
-      if (Objects.nonNull(value)) {
-        sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public EditDeliveryDetailsDialog updatePostalCode(String value) {
-      if (Objects.nonNull(value)) {
-        sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
-      }
-      return this;
-    }
-
-    public void clickSaveChanges() {
-      clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
-    }
-
-    public void confirmPickupDetailsUpdated() {
-      waitUntilVisibilityOfToast(UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
+    public EditDeliveryDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 
@@ -1897,6 +1694,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
     @FindBy(css = "[text='container.order.edit.rts-hint'] p")
     public PageElement hint;
 
@@ -1942,6 +1740,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.new-address-form.postal-code.input']")
     public ForceClearTextBox postcode;
   }
+
   public static class ResumeOrderDialog extends AntModal {
 
     public ResumeOrderDialog(WebDriver webDriver, WebElement webElement) {
@@ -2304,6 +2103,34 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
     String eventTime = eventRow.getEventTime();
     return eventTime;
+  }
+
+  public static class ManuallyCompleteOrderDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.complete-order.button']")
+    public Button completeOrder;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.mark-all.button']")
+    public Button markAll;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.unmark-all.button']")
+    public Button unmarkAll;
+
+    @FindBy(xpath = ".//tbody/tr[not(contains(.,'Tracking ID'))]/td[1]")
+    public List<PageElement> trackingIds;
+
+    @FindBy(xpath = ".//tbody/tr[not(contains(.,'Tracking ID'))]/td[2]//input")
+    public List<CheckBox> codCheckboxes;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.reason.single-select']")
+    public AntSelect3 changeReason;
+
+    @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.custom-reason.input']")
+    public ForceClearTextBox reasonForChange;
+
+    public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 
 }

@@ -372,47 +372,58 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @When("^Operator confirm manually complete order on Edit Order V2 page$")
-  public void operatorManuallyCompleteOrderOnEditOrderPage() {
-    String changeReason = page.confirmCompleteOrder();
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
-
-  @When("^Operator confirm manually complete order on Edit Order V2 page:$")
+  @When("Operator confirm manually complete order on Edit Order V2 page:")
   public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    page.confirmCompleteOrder(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      page.manuallyCompleteOrderDialog.changeReason.selectValue(finalData.get("reason"));
+      if (finalData.containsKey("reasonForChange")) {
+        page.manuallyCompleteOrderDialog.reasonForChange.setValue(finalData.get("reasonForChange"));
+      }
+      if (finalData.containsKey("markAll")) {
+        page.manuallyCompleteOrderDialog.markAll.click();
+      }
+      page.manuallyCompleteOrderDialog.completeOrder.click();
+    });
   }
 
-  @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order V2 page")
+  @When("Operator verify 'COD Collected' checkbox is disabled in Manually complete order dialog on Edit Order V2 page")
   public void verifyCodCollectedIsDisabled() {
-    page.manuallyCompleteOrderDialog.waitUntilVisible();
-    Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
-        .as("COD Collected checkbox is enabled").isFalse();
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
+          .as("COD Collected checkbox is enabled").isFalse();
+    });
+  }
 
+  @When("Operator verify Complete order button is disabled in Manually complete order dialog on Edit Order V2 page")
+  public void verifyCompleteOrderIsDisabled() {
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.completeOrder.isEnabled())
+          .as("Complete order button is enabled").isFalse();
+    });
   }
 
   @When("Operator confirm manually complete order with COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.markAll.click();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   @When("Operator confirm manually complete order without collecting COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
@@ -1038,24 +1049,32 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("^Operator verify (.+) transaction on Edit Order V2 page using data below:$")
+  @Then("Operator verify {word} transaction on Edit Order V2 page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(String transactionType,
-      Map<String, String> mapOfData) {
+      Map<String, String> data) {
     int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
 
-    Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    var expected = new TransactionInfo(resolveKeyValues(data));
     page.inFrame(() -> {
-      String value = finalMapOfData.get("status");
-      if (StringUtils.isNotBlank(value)) {
-        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-        Assertions.assertThat(actual.getStatus()).as(f("%s transaction status", transactionType))
-            .isEqualTo(value);
-      }
-      if (finalMapOfData.containsKey("routeId")) {
-        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-        Assertions.assertThat(actual.getRouteId()).as(f("%s transaction Route Id", transactionType))
-            .isEqualTo(StringUtils.trimToNull(finalMapOfData.get("routeId")));
-      }
+      TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
+      expected.compareWithActual(actual);
+    });
+  }
+
+  @Then("Operator unmask contact number of {word} transaction on Edit Order V2 page")
+  public void operatorUnmastTransactionContact(String transactionType) {
+    int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
+    page.inFrame(() -> {
+      page.transactionsTable.unmaskColumn(rowIndex, "contact");
+      page.waitUntilLoaded();
+    });
+  }
+
+  @Then("Operator unmask destination address of {word} transaction on Edit Order V2 page")
+  public void operatorUnmastTransactionAddress(String transactionType) {
+    int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
+    page.inFrame(() -> {
+      page.transactionsTable.unmaskColumn(rowIndex, "destinationAddress");
     });
   }
 
@@ -1134,72 +1153,63 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @Then("Operator update Delivery Details on Edit Order V2 page")
-  public void operatorUpdateDeliveryDetailsOnEditOrderPage(Map<String, String> mapOfData) {
-    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
-    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
-    page.updateDeliveryDetails(mapOfData);
-    takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
-    String recipientName = mapOfData.get("recipientName");
-    String recipientContact = mapOfData.get("recipientContact");
-    String recipientEmail = mapOfData.get("recipientEmail");
-    String internalNotes = mapOfData.get("internalNotes");
-    String changeSchedule = mapOfData.get("changeSchedule");
-    String deliveryDate = mapOfData.get("deliveryDate");
-    String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
-
-    if (Objects.nonNull(recipientName)) {
-      order.setToName(recipientName);
-    }
-    if (Objects.nonNull(recipientContact)) {
-      order.setToContact(recipientContact);
-    }
-    if (Objects.nonNull(recipientEmail)) {
-      order.setToEmail(recipientEmail);
-    }
-//        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
-    if (Objects.nonNull(deliveryDate)) {
-      order.setDeliveryDate(deliveryDate);
-    }
-    if (Objects.nonNull(deliveryTimeslot)) {
-      order.setDeliveryTimeslot(deliveryTimeslot);
-    }
-    if (Objects.nonNull(address1)) {
-      order.setToAddress1(address1);
-    }
-    if (Objects.nonNull(address2)) {
-      order.setToAddress2(address2);
-    }
-    if (Objects.nonNull(postalCode)) {
-      order.setToPostcode(postalCode);
-    }
-    if (Objects.nonNull(city)) {
-      order.setToCity(city);
-    }
-    if (Objects.nonNull(country)) {
-      order.setToCountry(country);
-    }
-    put(KEY_CREATED_ORDER, order);
-  }
-
   @Then("Operator verifies Pickup Details are updated on Edit Order V2 page")
   public void operatorVerifiesPickupDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     page.verifyPickupInfo(order);
-    takesScreenshot();
   }
 
   @Then("Operator verifies Delivery Details are updated on Edit Order V2 page")
   public void operatorVerifiesDeliveryDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     page.verifyDeliveryInfo(order);
-    takesScreenshot();
+  }
+
+  @Then("Operator edit delivery details on Edit Order V2 page:")
+  public void editDeliveryDetails(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.editDeliveryDetailsDialog.waitUntilVisible();
+      if (finalData.containsKey("recipientName")) {
+        page.editDeliveryDetailsDialog.recipientName.setValue(finalData.get("recipientName"));
+      }
+      if (finalData.containsKey("recipientContact")) {
+        if (page.editDeliveryDetailsDialog.recipientContactCtr.isDisplayedFast()) {
+          page.editDeliveryDetailsDialog.recipientContactCtr.click();
+          page.waitUntilLoaded();
+        }
+        page.editDeliveryDetailsDialog.recipientContact.setValue(finalData.get("recipientContact"));
+      }
+      if (finalData.containsKey("recipientEmail")) {
+        page.editDeliveryDetailsDialog.recipientEmail.setValue(finalData.get("recipientEmail"));
+      }
+      page.editDeliveryDetailsDialog.saveChanges.click();
+    });
+  }
+
+  @Then("Operator verify values in Edit delivery details dialog on Edit Order V2 page:")
+  public void verifyDeliveryDetailsDialog(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      SoftAssertions assertions = new SoftAssertions();
+      page.editDeliveryDetailsDialog.waitUntilVisible();
+      if (finalData.containsKey("recipientName")) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.recipientName.getValue())
+            .as("Recipient name").isEqualTo(finalData.get("recipientName"));
+      }
+      if (finalData.containsKey("recipientContact")) {
+        String actual = page.editDeliveryDetailsDialog.recipientContactText.isDisplayedFast()
+            ? page.editDeliveryDetailsDialog.recipientContactText.getNormalizedText()
+            : page.editDeliveryDetailsDialog.recipientContact.getValue();
+        assertions.assertThat(actual).as("Recipient contact")
+            .isEqualTo(finalData.get("recipientContact"));
+      }
+      if (finalData.containsKey("recipientEmail")) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.recipientEmail.getValue())
+            .as("Recipient email").isEqualTo(finalData.get("recipientEmail"));
+      }
+      assertions.assertAll();
+    });
   }
 
   @Then("Operator verifies Delivery Details on Edit Order V2 page:")

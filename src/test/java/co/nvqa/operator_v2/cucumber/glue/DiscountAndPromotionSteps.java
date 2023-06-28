@@ -110,6 +110,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     campaignDetail.setServiceType(campaignCreateEditPage.getServiceType());
     campaignDetail.setServiceLevel(campaignCreateEditPage.getServiceLevel());
     campaignDetail.setDiscountValue(campaignCreateEditPage.getDiscountValue());
+    campaignDetail.setDiscountOperator(campaignCreateEditPage.getDiscountOperator());
     put(KEY_OBJECT_OF_GET_CAMPAIGN, campaignDetail);
   }
 
