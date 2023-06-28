@@ -284,6 +284,11 @@ public class AddressDatasourceSteps extends AbstractSteps {
           .as("Created District " + addressDatasourcePage.createdKota.getText())
           .isEqualToIgnoringCase(data.get(KEY_DISTRICT));
     }
+    if (StringUtils.isNotBlank(data.get(KEY_WARD))) {
+      Assertions.assertThat(addressDatasourcePage.createdKecamatan.getText())
+          .as("Created Ward " + addressDatasourcePage.createdKecamatan.getText())
+          .isEqualToIgnoringCase(data.get(KEY_WARD));
+    }
     if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
       Assertions.assertThat(addressDatasourcePage.createdKecamatan.getText())
           .as("Created subdistrict " + addressDatasourcePage.createdKecamatan.getText())
@@ -316,6 +321,10 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
       addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_KOTA));
       addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_KECAMATAN));
+    } else if (data.containsKey(KEY_WARD)) {
+      addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
+      addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_DISTRICT));
+      addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_WARD));
     } else if (data.containsKey(KEY_BARANGAY)) {
       addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
       addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_MUNICIPALITY));
@@ -404,6 +413,9 @@ public class AddressDatasourceSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
       addressDatasourcePage.districtTextBox.sendKeys(data.get(KEY_DISTRICT));
     }
+    if (StringUtils.isNotBlank(data.get(KEY_WARD))) {
+      addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_WARD));
+    }
     if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
       addressDatasourcePage.subdistrictTextBox.sendKeys(data.get(KEY_SUBDISTRICT));
     }
@@ -456,6 +468,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String province = data.get(KEY_PROVINCE);
     String kota = data.get(KEY_KOTA);
     String kecamatan = data.get(KEY_KECAMATAN);
+    String ward = data.get(KEY_WARD);
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
     String district = data.get(KEY_DISTRICT);
@@ -497,6 +510,15 @@ public class AddressDatasourceSteps extends AbstractSteps {
       } else {
         addressDatasourcePage.kecamatan.forceClear();
         addressDatasourcePage.kecamatan.sendKeys(kecamatan);
+      }
+      addressing.setDistrict(kecamatan);
+    }
+    if (StringUtils.isNotBlank(ward)) {
+      if (ward.contains("EMPTY")) {
+        addressDatasourcePage.kecamatan.forceClear();
+      } else {
+        addressDatasourcePage.kecamatan.forceClear();
+        addressDatasourcePage.kecamatan.sendKeys(ward);
       }
       addressing.setDistrict(kecamatan);
     }

@@ -12,9 +12,9 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-2},{longitude-2} |
-      | province    | {province-2}               |
-      | district    | {district-2}               |
-      | subdistrict | {subdistrict-2}            |
+      | province    | {auto-province-th-1}       |
+      | district    | {auto-district-th-1}       |
+      | subdistrict | {auto-subdistrict-th-1}    |
       | postcode    | {postcode-2}               |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
@@ -22,12 +22,12 @@ Feature: Address Datasource
       | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | postcode    | {postcode-2}              |
-      | province    | {province-2}              |
-      | district    | {district-2}              |
-      | subdistrict | {subdistrict-2}           |
+      | postcode    | {postcode-2}                   |
+      | province    | {auto-province-th-1}           |
+      | district    | {auto-district-th-1}           |
+      | subdistrict | {auto-subdistrict-th-1}        |
       | zone        | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub         | {KEY_HUB_DETAILS.name}       |
+      | hub         | {KEY_HUB_DETAILS.name}         |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -145,9 +145,9 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-2},{longitude-2} |
-      | province    | {province-2}               |
-      | district    | {district-2}               |
-      | subdistrict | {subdistrict-2}            |
+      | province    | {auto-province-th-2}       |
+      | district    | {auto-district-th-2}       |
+      | subdistrict | {auto-subdistrict-th-2}    |
       | postcode    | {postcode-2}               |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
@@ -171,9 +171,9 @@ Feature: Address Datasource
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province    | {province-2}              |
-      | district    | {district-2}              |
-      | subdistrict | {subdistrict-2}           |
+      | province    | {auto-province-th-2}       |
+      | district    | {auto-district-th-2}       |
+      | subdistrict | {auto-subdistrict-th-2}    |
       | postcode    | {postcode-2}              |
       | zone        | {KEY_SORT_ZONE_INFO.shortName} |
       | hub         | {KEY_HUB_DETAILS.name}       |
@@ -185,9 +185,9 @@ Feature: Address Datasource
     When Operator search the existing address datasource:
       | postcode | {postcode-2} |
     Then Operator verifies new address datasource is added:
-      | province    | {province-2}    |
-      | district    | {district-2}    |
-      | subdistrict | {subdistrict-2} |
+      | province    | {auto-province-th-2}       |
+      | district    | {auto-district-th-2}       |
+      | subdistrict | {auto-subdistrict-th-2}    |
       | postcode    | {postcode-2}    |
       | latitude    | {latitude-3}    |
       | longitude   | {longitude-3}   |
