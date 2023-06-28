@@ -153,8 +153,8 @@ Feature: Route Group Management
       | referenceId  | {KEY_TRANSACTION.id}         |
       | deletedAt    | not null                     |
 
-  @DeleteRouteGroupsV2
-  Scenario: Operator Creates Route Group
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
+  Scenario: Operator View Route Group with PA Job Tag
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
@@ -211,7 +211,7 @@ Feature: Route Group Management
       | {tag-name-1} |
       | {tag-name-2} |
 
-  @DeleteRouteGroupsV2
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
   Scenario: Operator Filters Total PA Job of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
@@ -238,8 +238,8 @@ Feature: Route Group Management
       | noPaJobs |
       | ^\d*2\d* |
 
-  @DeleteRouteGroupsV2 @DeleteRoutes
-  Scenario: Operator Filters Total PA Job of Route Groups
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @DeleteRoutes
+  Scenario: Operator Filters Total Routed PAJ of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

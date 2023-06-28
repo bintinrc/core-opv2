@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page;
+import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.PodDetailsDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -165,6 +166,15 @@ public class EditOrderV2Steps extends AbstractSteps {
       expected = finalData.get("zone");
       if (StringUtils.isNotBlank(expected)) {
         softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("zone");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("latestRouteId");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.latestRouteId.getText()).as("Latest Route ID")
+            .isEqualTo(expected);
       }
     });
     softAssertions.assertAll();
@@ -325,21 +335,21 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.inFrame(() -> {
       page.editInstructionsDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(pickupInstruction)) {
-        if ("empty" .equalsIgnoreCase(pickupInstruction)) {
+        if ("empty".equalsIgnoreCase(pickupInstruction)) {
           page.editInstructionsDialog.pickupInstruction.forceClear();
         } else {
           page.editInstructionsDialog.pickupInstruction.setValue(pickupInstruction);
         }
       }
       if (StringUtils.isNotBlank(deliveryInstruction)) {
-        if ("empty" .equalsIgnoreCase(deliveryInstruction)) {
+        if ("empty".equalsIgnoreCase(deliveryInstruction)) {
           page.editInstructionsDialog.deliveryInstruction.forceClear();
         } else {
           page.editInstructionsDialog.deliveryInstruction.setValue(deliveryInstruction);
         }
       }
       if (StringUtils.isNotBlank(orderInstruction)) {
-        if ("empty" .equalsIgnoreCase(orderInstruction)) {
+        if ("empty".equalsIgnoreCase(orderInstruction)) {
           page.editInstructionsDialog.orderInstruction.forceClear();
         } else {
           page.editInstructionsDialog.orderInstruction.setValue(orderInstruction);
@@ -480,23 +490,17 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.verifyAirwayBillContentsIsCorrect(order);
   }
 
-  @When("^Operator add created order to the (.+) route on Edit Order V2 page$")
-  public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(String type) {
-    page.addToRoute(get(KEY_CREATED_ROUTE_ID), type);
-  }
-
   @When("Operator add created order route on Edit Order V2 page using data below:")
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String type = data.getOrDefault("type", "Delivery");
-    String menu = data.getOrDefault("menu", type);
     String routeId = data.get("routeId");
-    page.clickMenu(menu, "Add To Route");
-    page.addToRouteDialog.waitUntilVisible();
-    page.addToRouteDialog.route.setValue(routeId);
-    page.addToRouteDialog.type.selectValue(type);
-    takesScreenshot();
-    page.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    page.inFrame(() -> {
+      page.addToRouteDialog.waitUntilVisible();
+      page.addToRouteDialog.route.setValue(routeId);
+      page.addToRouteDialog.type.selectValue(type);
+      page.addToRouteDialog.addToRoute.click();
+    });
   }
 
   @Then("Operator verify the order is added to the {string} route on Edit Order V2 page")
@@ -743,7 +747,7 @@ public class EditOrderV2Steps extends AbstractSteps {
       Assertions.fail(f("Error on attempt to suggest routes: %s",
           page.toastErrors.get(0).toastBottom.getText()));
     }
-    page.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    page.addToRouteDialog.addToRoute.click();
     page.addToRouteDialog.waitUntilInvisible();
     page.waitUntilInvisibilityOfToast(true);
   }
@@ -817,6 +821,16 @@ public class EditOrderV2Steps extends AbstractSteps {
         .as("%s event was found").isFalse());
     assertions.assertAll();
     takesScreenshot();
+  }
+
+  @Then("Operator unmask Delivery details on Edit Order V2 page")
+  public void unmaskDeliveryDetails() {
+    page.inFrame(() -> {
+      while (page.deliveryDetailsBox.mask.isDisplayedFast()) {
+        page.deliveryDetailsBox.mask.click();
+        page.waitUntilLoaded();
+      }
+    });
   }
 
   @Then("^Operator verify Delivery details on Edit Order V2 page using data below:$")
@@ -909,6 +923,17 @@ public class EditOrderV2Steps extends AbstractSteps {
             .isInSameSecondAs(expectedDateTime);
       }
       assertions.assertAll();
+    });
+  }
+
+  @Then("Operator unmask Edit Order V2 page")
+  public void unmaskPage() {
+    page.inFrame(() -> {
+      while (page.mask.existsFast()) {
+        page.mask.scrollIntoView();
+        page.mask.jsClick();
+        page.waitUntilLoaded(1);
+      }
     });
   }
 
@@ -1075,6 +1100,18 @@ public class EditOrderV2Steps extends AbstractSteps {
     int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
     page.inFrame(() -> {
       page.transactionsTable.unmaskColumn(rowIndex, "destinationAddress");
+    });
+  }
+
+  @Then("Operator unmask description of {value} event on Edit Order V2 page")
+  public void operatorUnmaskEventDescription(String event) {
+    page.inFrame(() -> {
+      int index = page.eventsTable.findEventRow(event);
+      Assertions.assertThat(index)
+          .withFailMessage("Event %s is not displayed", event)
+          .isPositive();
+      page.eventsTable.unmaskColumn(index, EventsTable.DESCRIPTION);
+      page.waitUntilLoaded();
     });
   }
 
@@ -1398,9 +1435,10 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator cancel RTS on Edit Order V2 page$")
   public void operatorCancelRtsOnEditOrderPage() {
-    page.clickMenu("Return to Sender", "Cancel RTS");
-    page.cancelRtsDialog.waitUntilVisible();
-    page.cancelRtsDialog.cancelRts.click();
+    page.inFrame(() -> {
+      page.cancelRtsDialog.waitUntilVisible();
+      page.cancelRtsDialog.cancelRts.click();
+    });
   }
 
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order V2 page$")
@@ -1605,7 +1643,7 @@ public class EditOrderV2Steps extends AbstractSteps {
     }
     if (data.containsKey("newInstructions")) {
       String instruction = data.get("newInstructions");
-      if ("GENERATED" .equals(instruction)) {
+      if ("GENERATED".equals(instruction)) {
         instruction = f("This damage description is created by automation at %s.",
             DTF_CREATED_DATE.format(ZonedDateTime.now()));
       }
@@ -1639,27 +1677,27 @@ public class EditOrderV2Steps extends AbstractSteps {
     String issueDescription = mapOfData.get("issueDescription");
     String rtsReason = mapOfData.get("rtsReason");
 
-    if ("GENERATED" .equals(damageDescription)) {
+    if ("GENERATED".equals(damageDescription)) {
       damageDescription = f("This damage description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED" .equals(ticketNotes)) {
+    if ("GENERATED".equals(ticketNotes)) {
       ticketNotes = f("This ticket notes is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED" .equals(parcelDescription)) {
+    if ("GENERATED".equals(parcelDescription)) {
       parcelDescription = f("This parcel description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED" .equals(exceptionReason)) {
+    if ("GENERATED".equals(exceptionReason)) {
       exceptionReason = f("This exception reason is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
-    if ("GENERATED" .equals(issueDescription)) {
+    if ("GENERATED".equals(issueDescription)) {
       issueDescription = f("This issue description is created by automation at %s.",
           DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }

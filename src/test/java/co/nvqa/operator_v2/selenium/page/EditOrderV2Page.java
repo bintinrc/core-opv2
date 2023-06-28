@@ -67,6 +67,9 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 @SuppressWarnings("WeakerAccess")
 public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
+  @FindBy(css = "span.nv-mask")
+  public PageElement mask;
+
   @FindBy(id = "header")
   public PageElement header;
 
@@ -97,7 +100,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[./label[.='Comments']]//div")
   public PageElement comments;
 
-  @FindBy(xpath = "//div[label[.='Latest Route ID']]/h3")
+  @FindBy(xpath = "//div[./label[.='Latest Route ID']]//div")
   public PageElement latestRouteId;
 
   @FindBy(xpath = "//div[label[.='Shipper ID']]/p")
@@ -156,7 +159,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public EditPriorityLevelDialog editPriorityLevelDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public AddToRouteDialog addToRouteDialog;
 
   @FindBy(css = ".ant-modal")
@@ -189,7 +192,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public EditDeliveryVerificationRequiredDialog editDeliveryVerificationRequiredDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public CancelRtsDialog cancelRtsDialog;
 
   @FindBy(css = ".ant-modal")
@@ -318,28 +321,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     waitUntilInvisibilityOfToast("The order has been completed");
   }
 
-  public void addToRoute(long routeId, String type) {
-    clickMenu("Pickup", "Add To Route");
-    addToRouteDialog.waitUntilVisible();
-    addToRouteDialog.route.setValue(routeId);
-    addToRouteDialog.type.selectValue(type);
-    addToRouteDialog.addToRoute.clickAndWaitUntilDone();
-    addToRouteDialog.waitUntilInvisible();
-  }
-
-  public void verifyDeliveryStartDateTime(String expectedDate) {
-    Assertions.assertThat(deliveryDetailsBox.getStartDateTime()).as("Delivery Start Date/Time")
-        .isEqualTo(expectedDate);
-  }
-
   public void verifyOrderHeaderColor(String color) {
     Assertions.assertThat(header.getCssValue("background-color")).as("Order Header Color")
         .isEqualTo(color);
-  }
-
-  public void verifyDeliveryEndDateTime(String expectedDate) {
-    Assertions.assertThat(deliveryDetailsBox.getEndDateTime()).as("Delivery End Date/Time")
-        .isEqualTo(expectedDate);
   }
 
   public void verifyDeliveryRouteInfo(Route route) {
@@ -817,6 +801,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
           .put(DESCRIPTION, "_description")
           .build());
       setEntityClass(OrderEvent.class);
+
     }
 
     public void verifyUpdatePickupAddressEventDescription(Order order, String eventDescription) {
@@ -962,6 +947,27 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       assertTrue(f("'%s' pattern is not present in the '%s' event description", deviceIdPattern,
           eventDescription), eventDescription.matches(deviceIdPattern));
     }
+
+    public void unmaskColumn(int index, String columnId) {
+      String xpath = f(
+          "(//div[contains(@class,'virtual-table')]//div[@data-datakey='%s'])[%d]//span[contains(text(),'Click')]",
+          getColumnLocators().get(columnId), index);
+      if (isElementExistFast(xpath)) {
+        var element = new PageElement(getWebDriver(), xpath);
+        element.scrollIntoView();
+        element.jsClick();
+      }
+    }
+
+    public int findEventRow(String name) {
+      int count = getRowsCount();
+      for (int i = 1; i <= count; i++) {
+        if (StringUtils.equalsAnyIgnoreCase(name, getColumnText(i, EVENT_NAME))) {
+          return i;
+        }
+      }
+      return 0;
+    }
   }
 
   public void tagOrderToDP(String dpId) {
@@ -1000,13 +1006,15 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(xpath = "./div/span[2]")
     public PageElement status;
-    @FindBy(xpath = "./div[2]/div[1]/div")
+    @FindBy(css = "span.nv-mask")
+    public PageElement mask;
+    @FindBy(xpath = "./div/div[1]/div")
     public PageElement to;
-    @FindBy(xpath = "./div[2]/div[2]")
+    @FindBy(xpath = "./div/div[2]")
     public PageElement toEmail;
-    @FindBy(xpath = "./div[2]/div[3]")
+    @FindBy(xpath = "./div/div[3]")
     public PageElement toContact;
-    @FindBy(css = "[data-testid='delivery-info.to-address.mask.testid']")
+    @FindBy(xpath = "./div/div[4]")
     public PageElement toAddress;
     @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
     public PageElement startDateTime;
@@ -1538,17 +1546,17 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public Button saveChanges;
   }
 
-  public static class AddToRouteDialog extends MdDialog {
+  public static class AddToRouteDialog extends AntModal {
 
     public AddToRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='container.order.edit.route']")
-    public TextBox route;
+    @FindBy(css = "input.ant-input-number-input")
+    public ForceClearTextBox route;
 
-    @FindBy(css = "[id^='commons.type']")
-    public MdSelect type;
+    @FindBy(css = "div.ant-select")
+    public AntSelect3 type;
 
     @FindBy(css = "[id^='container.order.edit.route-tags']")
     public MdSelect routeTags;
@@ -1556,8 +1564,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(name = "container.order.edit.suggest-route")
     public NvApiTextButton suggestRoute;
 
-    @FindBy(name = "container.order.edit.add-to-route")
-    public NvApiTextButton addToRoute;
+    @FindBy(css = "[data-testid='edit-order-testid.add-to-route.add-to-route.button']")
+    public Button addToRoute;
   }
 
   public static class EditOrderDetailsDialog extends AntModal {
@@ -1680,14 +1688,14 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for Cancel RTS
    */
-  public static class CancelRtsDialog extends MdDialog {
+  public static class CancelRtsDialog extends AntModal {
 
     public CancelRtsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "container.order.edit.cancel-rts")
-    public NvApiTextButton cancelRts;
+    @FindBy(css = "[data-testid='edit-order-testid.cancel-rts.cancel-rts.button']")
+    public Button cancelRts;
   }
 
   public static class EditRtsDetailsDialog extends AntModal {

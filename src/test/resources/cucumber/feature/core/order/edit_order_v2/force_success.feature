@@ -559,7 +559,7 @@ Feature: Force Success
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
-      | ticketId         | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | status           | RESOLVED                         |
       | orderOutcomeName | ORDER OUTCOME (DAMAGED)          |
       | customFieldId    | 24292071                         |
@@ -609,7 +609,7 @@ Feature: Force Success
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
-      | ticketId         | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | status           | RESOLVED                         |
       | orderOutcomeName | ORDER OUTCOME (SHIPPER_REQUEST)  |
       | customFieldId    | 24292291                         |

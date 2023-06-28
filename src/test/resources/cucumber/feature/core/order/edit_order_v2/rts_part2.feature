@@ -290,7 +290,7 @@ Feature: RTS
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
-      | ticketId         | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | status           | RESOLVED                         |
       | orderOutcomeName | <orderOutcomeName>               |
       | customFieldId    | <resolveCustomFieldId>           |
@@ -377,7 +377,7 @@ Feature: RTS
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
-      | ticketId         | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | status           | RESOLVED                         |
       | orderOutcomeName | <orderOutcomeName>               |
       | customFieldId    | <resolveCustomFieldId>           |
