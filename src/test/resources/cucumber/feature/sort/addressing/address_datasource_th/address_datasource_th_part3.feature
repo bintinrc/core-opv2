@@ -230,9 +230,12 @@ Feature: Address Datasource
       | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator search the existing address datasource:
+      | province    | {province-1}    |
+      | district    | {district-1}    |
+      | subdistrict | {subdistrict-1} |
       | postcode | {postcode-1} |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
-    Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
+    Then Operator verifies the zone and hub details in View Zone and Hub Match modal:\
       | latlong | {latitude-1}, {longitude-1} |
       | zone    | {KEY_SORT_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_DETAILS.name}         |
