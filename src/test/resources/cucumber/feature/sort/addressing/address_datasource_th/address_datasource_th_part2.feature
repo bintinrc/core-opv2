@@ -127,7 +127,10 @@ Feature: Address Datasource
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
-      | postcode | {postcode-1} |
+      | province    | {province-1}    |
+      | district    | {district-1}    |
+      | subdistrict | {subdistrict-1} |
+      | postcode    | {postcode-1}    |
     When Operator clicks on Edit Button on Address Datasource Page
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
