@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.utils.DateUtil;
+import co.nvqa.common.utils.NvCountry;
 import co.nvqa.commons.model.core.Waypoint;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvCountry;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -244,7 +243,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
 
       default:
-        NvLogger.warn("Invalid Address Download Filter Type");
+        LOGGER.warn("Invalid Address Download Filter Type");
     }
   }
 
@@ -313,14 +312,14 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
 
       default:
-        NvLogger.warn("Invalid Address Download Filter Type");
+        LOGGER.warn("Invalid Address Download Filter Type");
     }
     click(RANDOM_CLICK_XPATH);
     pause1s();
   }
 
   public void verifiesPresetIsExisted(String presetName) {
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       getWebDriver().navigate().refresh();
       switchToIframe();
       verifiesPageIsFullyLoaded();
@@ -349,7 +348,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       String csvTimestamp) {
     String csvContainedFileName = CSV_FILENAME_FORMAT + csvTimestamp;
     LOGGER.debug("Looking for CSV with Name contained {}", csvContainedFileName);
-    String csvFileName = retryIfAssertionErrorOccurred(() ->
+    String csvFileName = doWithRetry(() ->
             getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
         "Getting Exact File Name");
 
@@ -650,7 +649,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     return getAddressDownloadResultCount() > 0;
   }
 
-  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
+  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(
+      co.nvqa.commons.model.core.Order order, co.nvqa.commons.model.core.Waypoint waypoint) {
     int resultsCount = getAddressDownloadResultCount();
     LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(),
         "Asia/Singapore");
@@ -769,10 +769,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         : stringifiedLatLong;
   }
 
-  public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint,
+  public void csvDownloadSuccessfullyAndContainsBasicData(co.nvqa.commons.model.core.Order order, Waypoint waypoint,
       String preset) {
     LOGGER.debug("Looking for CSV with Name containing {}", preset);
-    String csvFileName = retryIfAssertionErrorOccurred(() ->
+    String csvFileName = doWithRetry(() ->
             getContainedFileNameDownloadedSuccessfully(preset),
         "Getting Exact File Name");
 

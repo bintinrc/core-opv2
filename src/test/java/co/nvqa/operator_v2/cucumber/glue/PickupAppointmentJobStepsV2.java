@@ -46,13 +46,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
-      getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
-      if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
-        pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
-      }
-      getWebDriver().switchTo().frame(0);
-      pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
-          pickupAppointmentJobPage.getLoadSelection().getWebElement());
+    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
+    if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
+      pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+    }
+    getWebDriver().switchTo().frame(0);
+    pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
+        pickupAppointmentJobPage.getLoadSelection().getWebElement());
   }
 
   @When("Operator click on Create or edit job button on this top right corner of the page")
@@ -239,7 +239,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame(() -> {
         pickupAppointmentJobPage.clickOnJobDetailsButton();
-      });    };
+      });
+    };
     doWithRetry(clickButton, "Click on View Job Detail Button");
     takesScreenshot();
   }
@@ -249,7 +250,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
         page.viewJobDetailModal.clickOnSecondPickUpProofButton();
-      });    };
+      });
+    };
     doWithRetry(clickButton, "Click on View Job Detail Button");
     takesScreenshot();
   }
@@ -258,13 +260,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void clickOnJobToViewImageButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
-       page.viewJobDetailModal.clickOnSignatureImage();
-      });    };
+        page.viewJobDetailModal.clickOnSignatureImage();
+      });
+    };
     doWithRetry(clickButton, "Click On Button To View Image");
     takesScreenshot();
   }
 
-  @And("Operator click on button to cancel image on Pickup Appointment Job page" )
+  @And("Operator click on button to cancel image on Pickup Appointment Job page")
   public void clickOnJobToCancelImageButton() {
     Runnable clickButton = () -> {
       pickupAppointmentJobPage.inFrame((page) -> {
@@ -281,21 +284,28 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String resolvedDate = resolvedData.get("time");
     String formattedDate = "[" + resolvedDate + "]";
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
-      as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
+      Assertions.assertThat(
+              page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
+          as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Pickup Address")).
           as("Pick Up Address Title is correct").isEqualToIgnoringCase("Pickup Address");
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("waypointId"))).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("waypointId"))).
           as("Waypoint Id is correct").isEqualToIgnoringCase(resolvedData.get("waypointId"));
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("shipperId"))).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("shipperId"))).
           as("Shipper Id is correct").isEqualToIgnoringCase(resolvedData.get("shipperId"));
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
           as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
-      Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("status"))).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("status"))).
           as("Status is correct").isEqualToIgnoringCase(resolvedData.get("status"));
-      Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
           as("Download Parcel List Button is Clickable").isTrue();
-      Assertions.assertThat(page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
+      Assertions.assertThat(
+              page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
           as("Download Signature Button is Click").isTrue();
     });
   }
@@ -305,6 +315,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.viewJobDetailModal.getImagesOnJobDetailsPage()).isTrue();
     });
+  }
+
+  @And("Operator click on button to download parcel list on Pickup Appointment Job page")
+  public void clickDownloadParcelListv2() {
+    Runnable clickButton = () -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.viewJobDetailModal.clickOnButtons("Download Parcel List");
+      });
+    };
+    doWithRetry(clickButton, "Click on Download Parcel List Button");
+    takesScreenshot();
   }
 
   @And("Operator click on button to download image signature on Pickup Appointment Job page")
@@ -323,7 +344,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     Map<String, String> data = resolveKeyValues(dataTable);
     String newFilename = "pop-file-id-%s.csv";
     System.out.println(data.get("Job Id"));
-    String formattedFilename = newFilename.replace("%s",data.get("Job Id"));
+    String formattedFilename = newFilename.replace("%s", data.get("Job Id"));
     Runnable verifyDownloadedFilename = () -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.viewJobDetailModal.verifyThatCsvFileIsDownloadedWithFilename(formattedFilename);

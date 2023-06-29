@@ -83,6 +83,7 @@ Feature: Bulk Address Verification
     Then sample CSV file on Bulk Address Verification page is downloaded successfully
 
   Scenario Outline: SG - Populate Pricing Info with Address Billing Zone L1-L3 upon Bulk Address Verification
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator get Billing Zone info:
       | latitude       | longitude       |
       | <fromLatitude> | <fromLongitude> |
@@ -119,7 +120,7 @@ Feature: Bulk Address Verification
       | toBillingZone.l3_name       | null                                          |
     Examples:
       | fromLatitude | fromLongitude | toLatitude | toLongitude |
-      | 1.2853069    | 103.8061058   | 1.3880089  | 103.8946339 |
+      | 1.31238520693375    | 103.88610372481  | 1.3880089  | 103.8946339 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

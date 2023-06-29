@@ -56,7 +56,7 @@ Feature: Upload Invoiced Orders
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies below details in billing_qa_gl.priced_orders table
       | column       | expected_value |
-      | payment_tags | ["INVOICED"]   |
+      | payment_tags | INVOICED       |
     Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
       | column               | expected_value                   |
@@ -224,7 +224,7 @@ Feature: Upload Invoiced Orders
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator verifies below details in billing_qa_gl.priced_orders table
       | column       | expected_value |
-      | payment_tags | ["INVOICED"]   |
+      | payment_tags | INVOICED       |
     Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
       | column               | expected_value                      |

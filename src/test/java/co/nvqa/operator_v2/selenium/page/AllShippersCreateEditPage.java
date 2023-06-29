@@ -1839,6 +1839,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[aria-label='Close']")
     public Button close;
 
+    @FindBy(css = "div[ng-repeat*='ctrl.payload.errors']")
+    public List<PageElement> errors;
+
     public ErrorSaveDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -2032,6 +2035,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public TextBox billingAddress;
     @FindBy(id = "Billing Postcode")
     public TextBox billingPostcode;
+
+    @FindBy(css = "[model='ctrl.data.more.are_rates_displayed']")
+    public MdBooleanSwitch showPricingEstimate;
 
     public PricingAndBillingForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

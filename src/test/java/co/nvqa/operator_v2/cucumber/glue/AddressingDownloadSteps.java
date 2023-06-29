@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Waypoint;
-import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
@@ -166,7 +165,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator fills the {string} Tracking ID textbox with {string} separation")
   public void operatorFillsTheTrackingIDTextboxWithSeparation(String trackingIdType,
-      String separation) {
+      String separation,List<String>trackingIds) {
+  List<String> trackingId =resolveValues(trackingIds);
     // Tracking ID type
     final String VALID = "valid";
     final String HALF = "half";
@@ -179,23 +179,21 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     pause5s();
 
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-
     if (VALID.equalsIgnoreCase(trackingIdType)) {
       if (COMMA.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (SPACE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (NEW_LINE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n",trackingId).replaceAll("[\\[\\]]", ""));
       } else if (MIXED.equalsIgnoreCase(separation)) {
         for (int i = 0; i < trackingIds.size(); i++) {
           if (i == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + ",");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + ",");
           } else if (i > 0 && i % 2 == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + " ");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + " ");
           } else {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + "\n");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "")+ "\n");
           }
         }
       } else {
@@ -203,8 +201,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
       }
     } else if (HALF.equalsIgnoreCase(trackingIdType)) {
       final String invalidTrackingId = "AUTOTEST" + RandomUtil.randomString(5);
-      trackingIds.add(invalidTrackingId);
-      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+      trackingId.add(invalidTrackingId);
+      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
     } else {
       LOGGER.warn("Automation only covered VALID and HALF VALID HALF INVALID types");
     }
@@ -217,20 +215,13 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the Address Download Table Result is shown up")
-  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
+  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp(
+      Map<String, String> dataTableAsMap) {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-      for (Order order : orders) {
-        addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
-        addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
-      }
-    } else {
-      List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-      for (String trackingId : trackingIds) {
-        addressingDownloadPage.trackingIdUiChecking(trackingId);
-      }
+    List<String> trackingIds = get(dataTableAsMap.get("trackingId"));
+    for (String trackingId : trackingIds) {
+      addressingDownloadPage.trackingIdUiChecking(trackingId.replaceAll("[\\[\\]]", ""));
     }
   }
 
@@ -239,7 +230,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     if (addressingDownloadPage.trackingIdNotFound.isDisplayed()) {
       addressingDownloadPage.nextButtonLoadTrackingId.click();
     }
-    operatorVerifiesThatTheAddressDownloadTableResultIsShownUp();
   }
 
   @When("Operator clicks on download csv button on Address Download Page")
@@ -263,9 +253,11 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
-  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-    String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
+  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight(
+      Map<String, String> dataTableAsMap) {
+
+    List<Order> orders = get(dataTableAsMap.get("order"));
+    String csvTimestamp = get(dataTableAsMap.get("csvTime"));
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
@@ -283,8 +275,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that newly created order is not written in the textbox")
-  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox(Map<String, String> data) {
+    String trackingId = data.get("trackingId");
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
     Assertions.assertThat(!(trackingIdsListed.contains("," + trackingId))).isTrue();
@@ -303,6 +295,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator selects preset {string}")
   public void operatorSelectsPresetName(String preset) {
+    pause5s();
     String presetName = "";
 
     if (preset.equals("DEFAULT")) {
@@ -328,7 +321,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
     doWithRetry(() -> {
-      Order createdOrder = get(KEY_ORDER_DETAILS);
+      co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
 
       if (createdOrder == null) {
         LOGGER.error("Order hasn't been created", new NullPointerException());
@@ -355,8 +348,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
     addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
 
-    Order createdOrder = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
+    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
 
     boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(
         createdOrder, waypoint);
@@ -377,8 +370,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @Then("Operator verifies that the downloaded csv file contains all correct data")
   public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
-    Order order = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    co.nvqa.commons.model.core.Order order = get(KEY_ORDER_DETAILS);
+    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
     String preset = get(KEY_SELECTED_PRESET_NAME);
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);

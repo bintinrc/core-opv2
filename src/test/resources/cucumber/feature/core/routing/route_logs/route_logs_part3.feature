@@ -163,8 +163,8 @@ Feature: Route Logs
       | waitUntilInvisible | true               |
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    And DB Core - verify route_logs record:
-      | id        | {KEY_CREATED_ROUTE_ID} |
+    And DB Route - verify route_logs record:
+      | legacyId  | {KEY_CREATED_ROUTE_ID} |
       | deletedAt | not null               |
     And DB Core - verify waypoints record:
       | id      | {KEY_WAYPOINT_ID} |
