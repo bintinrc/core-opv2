@@ -49,6 +49,7 @@ public class ReportSchedulesSteps extends AbstractSteps {
 
   }
 
+  @And("Operator updates report scheduling with below data")
   @And("Operator creates report scheduling with below data")
   public void operatorFillReportSchedulingWithBelowData(Map<String, String> mapOfData) {
     reportSchedulesPage.inFrame(page -> {
@@ -163,15 +164,19 @@ public class ReportSchedulesSteps extends AbstractSteps {
           reportSchedulesPage.fileGroupByScriptIds.check();
       }
     }
-    if (Objects.nonNull(reportTemplate) & !fileGroup.equals("AGGREGATED")) {
-      reportSchedulesPage.scrollAndSelectReportTemplate(reportTemplate);
-      template.setReportTemplate(reportTemplate);
-    }
-    if (fileGroup.equals("AGGREGATED")) {
-      softAssertion.assertThat(
-              reportSchedulesPage.textBoxForReportTemplateForAggregatedOrders.getText())
-          .as("Text is correct for aggregated report")
-          .isEqualTo("* Template is not applicable for aggreagted report");
+    if (Objects.nonNull(reportTemplate)) {
+      if (Objects.nonNull(fileGroup)) {
+        if (!fileGroup.equals("AGGREGATED")) {
+          reportSchedulesPage.scrollAndSelectReportTemplate(reportTemplate);
+          template.setReportTemplate(reportTemplate);
+        } else {
+          softAssertion.assertThat(
+                  reportSchedulesPage.textBoxForReportTemplateForAggregatedOrders.getText())
+              .as("Text is correct for aggregated report")
+              .isEqualTo("* Template is not applicable for aggreagted report");
+        }
+      }
+
     }
     if (Objects.nonNull(emails)) {
       List<String> reportSendingEmails = Arrays.stream(emails.split(","))
@@ -190,12 +195,35 @@ public class ReportSchedulesSteps extends AbstractSteps {
     reportSchedulesPage.inFrame(page -> {
       SoftAssertions softAssertions = new SoftAssertions();
       String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
-      softAssertions.assertThat(actualMessage).as("Successful message is correct")
+      softAssertions.assertThat(actualMessage).as("Create successful message is correct")
           .isEqualTo("Created Schedule Successfully.");
       softAssertions.assertAll();
     });
   }
 
+  @And("Operator verify update report schedule success message")
+  public void verifySuccessMessageReportScheduleUpdate() {
+    reportSchedulesPage.inFrame(page -> {
+      SoftAssertions softAssertions = new SoftAssertions();
+      String actualMessage = reportSchedulesPage.getReportScheduleToastMessage();
+      softAssertions.assertThat(actualMessage).as("Update successful message is correct")
+          .isEqualTo("Updated Schedule Successfully.");
+      softAssertions.assertAll();
+    });
+  }
+
+  @And("Operator search report schedule and got to edit page")
+  public void verifySearchReportScheduleAndGoToEditPage() {
+    ReportScheduleTemplate template = get(KEY_REPORT_SCHEDULE_TEMPLATE);
+    reportSchedulesPage.refreshPage();
+    reportSchedulesPage.inFrame(page -> {
+      reportSchedulesPage.waitUntilLoaded();
+      reportSchedulesPage.searchAndEditByReportScheduleName(template.getName());
+    });
+
+  }
+
+  @And("Operator verify report schedule is updated successfully")
   @And("Operator verify report schedule is created successfully")
   public void verifyReportScheduleIsCreatedSuccessfully() {
     ReportScheduleTemplate template = get(KEY_REPORT_SCHEDULE_TEMPLATE);
