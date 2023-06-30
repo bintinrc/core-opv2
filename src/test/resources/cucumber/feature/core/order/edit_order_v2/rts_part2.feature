@@ -291,13 +291,13 @@ Feature: RTS
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
       | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
-      | status           | RESOLVED                         |
-      | orderOutcomeName | <orderOutcomeName>               |
-      | customFieldId    | <resolveCustomFieldId>           |
-      | outcome          | <resolveOutcome>                 |
-      | reporterId       | {ticketing-creator-user-id}      |
-      | reporterName     | {ticketing-creator-user-name}    |
-      | reporterEmail    | {ticketing-creator-user-email}   |
+      | status           | RESOLVED                                |
+      | orderOutcomeName | <orderOutcomeName>                      |
+      | customFieldId    | <resolveCustomFieldId>                  |
+      | outcome          | <resolveOutcome>                        |
+      | reporterId       | {ticketing-creator-user-id}             |
+      | reporterName     | {ticketing-creator-user-name}           |
+      | reporterEmail    | {ticketing-creator-user-email}          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -378,13 +378,13 @@ Feature: RTS
       | creatorUserEmail   | {ticketing-creator-user-email}        |
     And  API Recovery - Operator update recovery ticket:
       | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
-      | status           | RESOLVED                         |
-      | orderOutcomeName | <orderOutcomeName>               |
-      | customFieldId    | <resolveCustomFieldId>           |
-      | outcome          | <resolveOutcome>                 |
-      | reporterId       | {ticketing-creator-user-id}      |
-      | reporterName     | {ticketing-creator-user-name}    |
-      | reporterEmail    | {ticketing-creator-user-email}   |
+      | status           | RESOLVED                                |
+      | orderOutcomeName | <orderOutcomeName>                      |
+      | customFieldId    | <resolveCustomFieldId>                  |
+      | outcome          | <resolveOutcome>                        |
+      | reporterId       | {ticketing-creator-user-id}             |
+      | reporterName     | {ticketing-creator-user-name}           |
+      | reporterEmail    | {ticketing-creator-user-email}          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -520,3 +520,143 @@ Feature: RTS
     Examples:
       | ticketType      | orderOutcomeName                |
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) |
+
+  @DeleteRoutes
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address - New Address Belongs To Standard Zone
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
+      | status | PENDING |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_BEFORE"
+    And Operator RTS order on Edit Order V2 page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+      | country      | Singapore                      |
+      | city         | Singapore                      |
+      | address1     | 50 Amber Rd                    |
+      | postalCode   | 439888                         |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
+    Then Operator verify order events on Edit Order V2 page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | UPDATE AV                  |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_AFTER"
+    Then DB Core - verify transactions record:
+      | id         | {KEY_TRANSACTION_BEFORE.id}         |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}  |
+      | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
+      | type       | DD                                  |
+      | status     | Fail                                |
+    Then DB Core - verify transactions record:
+      | id         | {KEY_TRANSACTION_AFTER.id}         |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | type       | DD                                 |
+      | status     | Pending                            |
+      | routeId    | null                               |
+      | address1   | 50 Amber Rd                        |
+      | postcode   | 439888                             |
+      | city       | Singapore                          |
+      | country    | Singapore                          |
+    Then DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
+      | seqNo   | null                               |
+      | routeId | null                               |
+      | status  | Pending                            |
+    When DB Core - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+    Then Operator verifies order details on Edit Order V2 page:
+      | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+    And DB Core - verify waypoints record:
+      | id            | {KEY_TRANSACTION_AFTER.waypointId}    |
+      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
+
+  @DeleteRoutes
+  Scenario: Operator RTS an Order on Edit Order Page - PPNT Tied To DP
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator lodge in order at dp:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                              |
+      | request | {"dp_id":{dp-id}, "reservations":[{"tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","shipper_id":{shipper-v4-legacy-id}}]} |
+    And Operator waits for 10 seconds
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending                              |
+      | granularStatus | Pending Pickup at Distribution Point |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And Operator click Delivery -> Return to Sender on Edit Order V2 page
+    And Operator verify "Order have DP attached to Pickup Transactions, contact and address details disabled" RTS hint is displayed on Edit Order V2 page
+    And Operator RTS order on Edit Order V2 page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 order(s) RTS-ed                           |
+      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | waitUntilInvisible | true                                        |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
+    Then Operator verify order events on Edit Order V2 page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | UPDATE AV                  |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    Then DB Core - verify transactions record:
+      | id         | {KEY_TRANSACTION.id}         |
+      | orderId    | {KEY_CREATED_ORDER_ID}       |
+      | waypointId | {KEY_TRANSACTION.waypointId} |
+      | type       | DD                           |
+      | status     | Pending                      |
+      | routeId    | null                         |
+      | address1   | asd                          |
+      | address2   | ad                           |
+      | postcode   | asd                          |
+      | country    | asd                          |
+    And DB Core - verify waypoints record:
+      | id       | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
+      | address1 | asd                          |
+      | address2 | asd                          |
+      | postcode | asd                          |
+      | country  | asd                          |

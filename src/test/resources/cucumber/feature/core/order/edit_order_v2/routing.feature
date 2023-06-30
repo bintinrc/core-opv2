@@ -213,6 +213,115 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
+  @DeleteRoutes
+  Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <orderType>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator click Delivery -> Add to route on Edit Order V2 page
+    And Operator add created order route on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies that success react notification displayed:
+      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+      | waitUntilInvisible | true                                                                                                          |
+    Then Operator verifies order details on Edit Order V2 page:
+      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id}               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_TRANSACTION.waypointId}       |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Examples:
+      | orderType |
+      | Normal    |
+      | Return    |
+
+  @DeleteRoutes
+  Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <orderType> - <routeType>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator click Pickup -> Add to route on Edit Order V2 page
+    And Operator add created order route on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies that success react notification displayed:
+      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+      | waitUntilInvisible | true                                                                                                          |
+    Then Operator verifies order details on Edit Order V2 page:
+      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last <routeType> transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id}               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_TRANSACTION.waypointId}       |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Examples:
+      | orderType | routeType |
+      | Return    | Pickup    |
+
+  Scenario: Block Add to Route for Cancelled Order on Edit Order Page
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Cancelled |
+      | granularStatus | Cancelled |
+    And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
