@@ -829,7 +829,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator update basic settings of shipper {string}:")
   public void operatorUpdateShipperBasicSettings(String shipperName, Map<String, String> data) {
-    operatorOpenEditShipperPageOfShipper(shipperName);
+    if(!allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperType.isDisplayed())
+      operatorOpenEditShipperPageOfShipper(shipperName);
     ShipperBasicSettings settings = new ShipperBasicSettings(resolveKeyValues(data));
     allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
@@ -2110,4 +2111,18 @@ public class AllShippersSteps extends AbstractSteps {
     Assertions.assertThat(actual).as("Assert that all errors appear as expected")
         .containsAll(data);
   }
+
+  @Given("Operator verifies that following shipper personal details are correct in db:")
+  public void operatorVerifiesThatFollowingShipperPersonalDetailsAreCorrect(Map<String, String> personalInfo) {
+    Shipper shipperPersonalDetails = get(KEY_SHIPPER_SHIPPER_DB_DATA);
+    personalInfo.forEach((fieldName, fieldValue) -> {
+      if(fieldName.equalsIgnoreCase("email")){
+        Assertions.assertThat(fieldValue).isEqualToIgnoringCase(shipperPersonalDetails.getEmail());
+      }
+      if(fieldName.equalsIgnoreCase("contact")){
+        Assertions.assertThat(fieldValue).isEqualToIgnoringCase(shipperPersonalDetails.getContact());
+      }
+    });
+  }
+
 }
