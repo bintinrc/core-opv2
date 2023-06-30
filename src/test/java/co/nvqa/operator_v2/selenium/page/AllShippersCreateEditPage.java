@@ -756,6 +756,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
+    settings.setShipperPhoneNumber(basicSettingsForm.shipperPhoneNumber.getValue());
+    settings.setShipperEmail(basicSettingsForm.shipperEmail.getValue());
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
     settings.setCorporate(basicSettingsForm.corporate.isOn());
     settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
