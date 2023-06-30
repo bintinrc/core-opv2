@@ -185,7 +185,7 @@ Feature: Parcel Sweeper Live User Access
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
 
-  @CloseNewWindows
+  @CloseNewWindows @SortE2E
   Scenario: ROLE_HUB_MANAGER - Assigned To Hub - Hub Feature Switch Activated - Select Assigned Hub
     Given Operator login with client id = "{sort-role-hub-manager-assigned-user-client-id}" and client secret = "{sort-role-hub-manager-assigned-user-client-secret}"
     Given API Shipper create V4 order using data below:
@@ -208,7 +208,7 @@ Feature: Parcel Sweeper Live User Access
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
 
-  @CloseNewWindows
+  @CloseNewWindows @SortE2E
   Scenario: ROLE_HUB_MANAGER - Assigned To Hub - Hub Feature Switch Inactive - Select Assigned Hub
     Given Operator login with client id = "{sort-role-hub-manager-assigned-user-client-id}" and client secret = "{sort-role-hub-manager-assigned-user-client-secret}"
     Given API Shipper create V4 order using data below:
@@ -231,7 +231,7 @@ Feature: Parcel Sweeper Live User Access
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
 
-  @CloseNewWindows
+  @CloseNewWindows @SortE2E
   Scenario: ROLE_HUB_STAFF - Assigned To Hub - Hub Feature Switch Activated - Select Assigned Hub
     Given Operator login with client id = "{sort-role-hub-staff-assigned-user-client-id}" and client secret = "{sort-role-hub-staff-assigned-user-client-secret}"
     Given API Shipper create V4 order using data below:
@@ -254,7 +254,7 @@ Feature: Parcel Sweeper Live User Access
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
 
-  @CloseNewWindows
+  @CloseNewWindows @SortE2E
   Scenario: ROLE_HUB_STAFF - Assigned To Hub - Hub Feature Switch Inactive - Select Assigned Hub
     Given Operator login with client id = "{sort-role-hub-staff-assigned-user-client-id}" and client secret = "{sort-role-hub-staff-assigned-user-client-secret}"
     Given API Shipper create V4 order using data below:

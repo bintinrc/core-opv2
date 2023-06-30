@@ -171,6 +171,24 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     }
   }
 
+  public void selectTaskToBegin(String task) {
+    pause2s();
+    //Select Sort Task
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+
+    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+      click(SORT_TASK_DROPDOWN_XPATH);
+      if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+        waitUntilVisibilityOfElementLocated(SORT_TASK_DROPDOWN_XPATH);
+        sendKeys(SORT_TASK_DROPDOWN_XPATH, task.replaceAll("\\s+", "").toUpperCase() + Keys.RETURN);
+      }
+    }
+
+    if (proceedButton.waitUntilVisible(5)) {
+      proceedButton.click();
+    }
+  }
+
   public void verifyAccessDeniedModal(Map<String, String> mapOfData) {
     pause2s();
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
