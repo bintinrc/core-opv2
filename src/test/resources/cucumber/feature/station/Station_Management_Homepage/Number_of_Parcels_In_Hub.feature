@@ -37,7 +37,7 @@ Feature: Number of Parcels In Hub
       | Count |
 
     Examples:
-      | HubName      | HubId      | TileName                 | ModalName      | TableName1     | TableName2 |
+      | HubName       | HubId       | TileName                 | ModalName      | TableName1     | TableName2 |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | Parcels in Hub | By Parcel Size | By Zones   |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost-Declared (uid:136f000f-9deb-44b2-9e92-f2195932a3cc)
@@ -61,16 +61,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -84,7 +85,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - DECLARED | Cancelled   |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost-Undeclared (uid:70f81b81-e530-4a34-b520-ff5b0347977e)
@@ -108,16 +109,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -131,7 +133,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - UNDECLARED | Transit     |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Customer Received (uid:9c5beef9-79df-4423-9a2d-42b9d37e228d)
@@ -157,16 +159,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -180,7 +183,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | CUSTOMER RECEIVED | Completed   |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Found-Inbounded (uid:a1767cec-1039-4743-8f8a-210e8cab9255)
@@ -204,16 +207,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     When Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -227,7 +231,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | FOUND - INBOUND | Transit     |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Undeclared (uid:d26b7fca-7087-4fd1-af2b-15e4a7c6f7e6)
@@ -251,16 +255,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -274,7 +279,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                         | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                         | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - UNDECLARED | Transit     |
 
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Declared (uid:e1957051-c693-420f-8650-073a9bcb023b)
@@ -298,16 +303,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -321,7 +327,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                       | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                       | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - DECLARED | Cancelled   |
 
   Scenario Outline: View Parcel of Cancelled Missing Ticket Type (uid:0c3ca8da-7671-4e3c-bd28-8adb6bfb07f5)
@@ -345,16 +351,17 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator updates recovery ticket on Edit Order page:
       | status                  | <Status>                  |
@@ -368,7 +375,7 @@ Feature: Number of Parcels In Hub
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed
 
     Examples:
-      | HubName      | HubId      | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome                        | OrderStatus |
+      | HubName       | HubId       | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome            | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | CANCELLED | No                      | NV DID NOT RECEIVE | Transit     |
 
   Scenario Outline: View Parcel of Pending Missing Ticket Type
@@ -392,22 +399,23 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | LOST - DECLARED    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | MISSING                                    |
+      | orderOutcomeMissing     | LOST - DECLARED                            |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName      | HubId      | TileName                 |
+      | HubName       | HubId       | TileName                 |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub |
 
   Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
@@ -442,7 +450,7 @@ Feature: Number of Parcels In Hub
     And verifies that the size is also updated as "<UpperSize>" in station database
 
     Examples:
-      | HubName      | HubId      | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
+      | HubName       | HubId       | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | Parcels in Hub | By Parcel Size | S         | XXL       |
 
   Scenario Outline: View Parcel in Hub after Update to Lower Size in Edit Order (uid:11e13743-5c66-4f81-abf8-9605d55de470)
@@ -477,7 +485,7 @@ Feature: Number of Parcels In Hub
     And verifies that the size is also updated as "<LowerSize>" in station database
 
     Examples:
-      | HubName      | HubId      | TileName                 | ModalName      | TableName      | UpperSize | LowerSize |
+      | HubName       | HubId       | TileName                 | ModalName      | TableName      | UpperSize | LowerSize |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | Parcels in Hub | By Parcel Size | XXL       | S         |
 
   @KillBrowser @ShouldAlwaysRun
