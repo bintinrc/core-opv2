@@ -383,10 +383,12 @@ Feature: POD Validation
     Then Operator validate "Enter Reason for invalid attempt" Modal is displayed
     When Operator selects the Invalid Attempt Reason "No Photo"
     Then DB Station - Operator verifies the following details for the tracking ID "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" in the assignments table
-      | validity        | FAILURE |
-      | invalidReasonId | 29      |
-      | type            | type    |
+      | validity        | FAILURE    |
+      | invalidReasonId | 29         |
+      | type            | VALIDATION |
     Then DB Station - Operator verifies that the validator count "1" is updated in the tasks table for the tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -443,6 +445,8 @@ Feature: POD Validation
       | invalidReasonId | NULL    |
       | type            | type    |
     Then DB Station - Operator verifies that the validator count "1" is updated in the tasks table for the tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -483,33 +487,33 @@ Feature: POD Validation
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 11                                                                                                                     |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on trackingIds
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     Then Operator verifies the following details in the POD validate details page
-      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason     | Delay due to unexpected traffic conditions |
-      | transactionStatus | FAIL                                       |
-      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}            |
-      | cod               | No                                         |
-      | shipperName       | {shipper-v4-name}                          |
-      | latitude          | <latitude>                                 |
-      | longitude         | <longitude>                                |
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}            |
+      | failureReason     | I had insufficient time to complete all my deliveries |
+      | transactionStatus | FAIL                                                  |
+      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}                       |
+      | cod               | No                                                    |
+      | shipperName       | {shipper-v4-name}                                     |
+      | latitude          | <latitude>                                            |
+      | longitude         | <longitude>                                           |
 #      | distanceFromWaypoint | type                                       |
-      | address1          | <address1>                                 |
-      | address2          | <address2>                                 |
-      | postcode          | <postcode>                                 |
-      | phone             | <phone>                                    |
-      | relationship      | -                                          |
-      | code              | -                                          |
+      | address1          | <address1>                                            |
+      | address2          | <address2>                                            |
+      | postcode          | <postcode>                                            |
+      | phone             | <phone>                                               |
+      | relationship      | -                                                     |
+      | code              | -                                                     |
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     When Operator click "Valid" button
     Then DB Station - Operator verifies the following details for the tracking ID "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" in the assignments table
-      | validity        | SUCCESS |
-      | invalidReasonId | NULL    |
-      | type            | type    |
+      | validity        | SUCCESS    |
+      | invalidReasonId | NULL       |
+      | type            | VALIDATION |
     Then DB Station - Operator verifies that the validator count "1" is updated in the tasks table for the tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
@@ -786,15 +790,15 @@ Feature: POD Validation
       | driverName       | <driverName>                             |
       | masterShipperIds | 2121222                                  |
     Then Operator validate the error code and error details
-      | statusCode | Status 404: Not Found                                        |
-      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments |
-      | message    | There are no matching tasks for the selected filters.        |
+      | statusCode | Status 404: Not Found                                                   |
+      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments/validation |
+      | message    | There are no matching tasks for the selected filters.                   |
     When Operator closes the notification message
     When Operator filters the PODs based on trackingIds
       | trackingIds | SDGSDG7676S78DG |
     Then Operator validate the error code and error details
       | statusCode | Status 404: Not Found                                                                  |
-      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments                           |
+      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments/validation                |
       | message    | There are no matching tasks for the given list of TIDs [TrackingIDs:[SDGSDG7676S78DG]] |
 
     Examples:
@@ -1286,34 +1290,34 @@ Feature: POD Validation
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 11                                                                                                                     |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on below criteria
-      | job           | Delivery Job                               |
-      | status        | Fail                                       |
-      | failureReason | Delay due to unexpected traffic conditions |
-      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
-      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
-      | hub           | <HubName>                                  |
-      | driverName    | <driverName>                               |
+      | job           | Delivery Job                                          |
+      | status        | Fail                                                  |
+      | failureReason | I had insufficient time to complete all my deliveries |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00              |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07              |
+      | hub           | <HubName>                                             |
+      | driverName    | <driverName>                                          |
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
-      | transactionStatus    | FAIL                                       |
-      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
-      | cod                  | No                                         |
-      | shipperName          | {shipper-v4-name}                          |
-      | latitude             | <latitude>                                 |
-      | longitude            | <longitude>                                |
-      | distanceFromWaypoint | Displayed                                  |
-      | address1             | <address1>                                 |
-      | address2             | <address2>                                 |
-      | postcode             | <postcode>                                 |
-      | phone                | <phone>                                    |
-      | relationship         | -                                          |
-      | code                 | -                                          |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}            |
+      | failureReason        | I had insufficient time to complete all my deliveries |
+      | transactionStatus    | FAIL                                                  |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}                       |
+      | cod                  | No                                                    |
+      | shipperName          | {shipper-v4-name}                                     |
+      | latitude             | <latitude>                                            |
+      | longitude            | <longitude>                                           |
+      | distanceFromWaypoint | Displayed                                             |
+      | address1             | <address1>                                            |
+      | address2             | <address2>                                            |
+      | postcode             | <postcode>                                            |
+      | phone                | <phone>                                               |
+      | relationship         | -                                                     |
+      | code                 | -                                                     |
 
     Examples:
       | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
@@ -1417,21 +1421,21 @@ Feature: POD Validation
       | jobType         | RESERVATION                                                                                                            |
       | jobMode         | PICK_UP                                                                                                                |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 63                                                                                                                     |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on below criteria
-      | job           | Pickup Job                                 |
-      | status        | Fail                                       |
-      | failureReason | Delay due to unexpected traffic conditions |
-      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
-      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
-      | hub           | <HubName>                                  |
-      | driverName    | <driverName>                               |
+      | job           | Pickup Job                               |
+      | status        | Fail                                     |
+      | failureReason | Normal - Cannot Make It (CMI)            |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub           | <HubName>                                |
+      | driverName    | <driverName>                             |
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -1534,21 +1538,21 @@ Feature: POD Validation
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
       | jobMode         | PICK_UP                                                                                                                |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 131                                                                                                                    |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
     When Operator filters the PODs based on below criteria
-      | job           | Return Pickup                              |
-      | status        | Fail                                       |
-      | failureReason | Delay due to unexpected traffic conditions |
-      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
-      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
-      | hub           | <HubName>                                  |
-      | driverName    | <driverName>                               |
+      | job           | Return Pickup                            |
+      | status        | Fail                                     |
+      | failureReason | Return - Cannot Make It (CMI)            |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub           | <HubName>                                |
+      | driverName    | <driverName>                             |
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -1763,9 +1767,9 @@ Feature: POD Validation
     When Operator click "Invalid" button
     When Operator selects the Invalid Attempt Reason "No Photo"
     Then DB Station - Operator verifies the following details for the tracking ID "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" in the assignments table
-      | validity        | FAILURE |
-      | invalidReasonId | 29      |
-      | type            | type    |
+      | validity        | FAILURE    |
+      | invalidReasonId | 29         |
+      | type            | VALIDATION |
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -1799,7 +1803,7 @@ Feature: POD Validation
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobMode         | PICK_UP                                                                                                                |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 131                                                                                                                    |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
@@ -1812,7 +1816,7 @@ Feature: POD Validation
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -1863,7 +1867,7 @@ Feature: POD Validation
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
       | jobMode         | PICK_UP                                                                                                                |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 131                                                                                                                    |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
@@ -1876,7 +1880,7 @@ Feature: POD Validation
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -2467,7 +2471,7 @@ Feature: POD Validation
       | jobType         | RESERVATION                                                                                                            |
       | jobMode         | PICK_UP                                                                                                                |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 63                                                                                                                     |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
@@ -2480,7 +2484,7 @@ Feature: POD Validation
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -2538,7 +2542,7 @@ Feature: POD Validation
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
       | jobMode         | PICK_UP                                                                                                                |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 131                                                                                                                    |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
@@ -2551,7 +2555,7 @@ Feature: POD Validation
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
+      | failureReason        | Cannot Make It (CMI)                       |
       | transactionStatus    | FAIL                                       |
       | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
       | cod                  | No                                         |
@@ -2615,7 +2619,7 @@ Feature: POD Validation
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 11                                                                                                                     |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
@@ -2626,23 +2630,23 @@ Feature: POD Validation
     When Operator filters the PODs based on trackingIds
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     Then Operator verifies the following details in the POD validate details page
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
-      | transactionStatus    | FAIL                                       |
-      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
-      | cod                  | No                                         |
-      | shipperName          | {shipper-v4-name}                          |
-      | podPhoto             | validate                                   |
-      | podSignature         | validate                                   |
-      | latitude             | <latitude>                                 |
-      | longitude            | <longitude>                                |
-      | distanceFromWaypoint | validate                                   |
-      | address1             | <address1>                                 |
-      | address2             | <address2>                                 |
-      | postcode             | <postcode>                                 |
-      | phone                | <phone>                                    |
-      | relationship         | -                                          |
-      | code                 | -                                          |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}            |
+      | failureReason        | I had insufficient time to complete all my deliveries |
+      | transactionStatus    | FAIL                                                  |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}                       |
+      | cod                  | No                                                    |
+      | shipperName          | {shipper-v4-name}                                     |
+      | podPhoto             | validate                                              |
+      | podSignature         | validate                                              |
+      | latitude             | <latitude>                                            |
+      | longitude            | <longitude>                                           |
+      | distanceFromWaypoint | validate                                              |
+      | address1             | <address1>                                            |
+      | address2             | <address2>                                            |
+      | postcode             | <postcode>                                            |
+      | phone                | <phone>                                               |
+      | relationship         | -                                                     |
+      | code                 | -                                                     |
     When Operator click "Invalid" button
     Then Operator validate "Enter Reason for invalid attempt" Modal is displayed
     Then Operator validate Enter Reason for invalid attempt modal "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
@@ -2691,7 +2695,7 @@ Feature: POD Validation
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
       | routes          | KEY_DRIVER_ROUTES                                                                                                      |
       | jobAction       | FAIL                                                                                                                   |
-      | failureReasonId | 13                                                                                                                     |
+      | failureReasonId | 11                                                                                                                     |
       | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When API Driver - Driver add photo to created route waypoint
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
@@ -2703,23 +2707,23 @@ Feature: POD Validation
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     Then Operator validates current URL ends with "validate-attempt/validate?role=validator"
     Then Operator verifies the following details in the POD validate details page
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | failureReason        | Delay due to unexpected traffic conditions |
-      | transactionStatus    | FAIL                                       |
-      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
-      | cod                  | No                                         |
-      | shipperName          | {shipper-v4-name}                          |
-      | podPhoto             | validate                                   |
-      | podSignature         | validate                                   |
-      | latitude             | <latitude>                                 |
-      | longitude            | <longitude>                                |
-      | distanceFromWaypoint | -                                          |
-      | address1             | <address1>                                 |
-      | address2             | <address2>                                 |
-      | postcode             | <postcode>                                 |
-      | phone                | <phone>                                    |
-      | relationship         | -                                          |
-      | code                 | -                                          |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}            |
+      | failureReason        | I had insufficient time to complete all my deliveries |
+      | transactionStatus    | FAIL                                                  |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}                       |
+      | cod                  | No                                                    |
+      | shipperName          | {shipper-v4-name}                                     |
+      | podPhoto             | validate                                              |
+      | podSignature         | validate                                              |
+      | latitude             | <latitude>                                            |
+      | longitude            | <longitude>                                           |
+      | distanceFromWaypoint | -                                                     |
+      | address1             | <address1>                                            |
+      | address2             | <address2>                                            |
+      | postcode             | <postcode>                                            |
+      | phone                | <phone>                                               |
+      | relationship         | -                                                     |
+      | code                 | -                                                     |
     When Operator click "Invalid" button
     Then Operator validate "Enter Reason for invalid attempt" Modal is displayed
     Then Operator validate Enter Reason for invalid attempt modal "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
@@ -2802,6 +2806,8 @@ Feature: POD Validation
     Then Operator verifies the following details in the POD validate details page
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     When Operator click "Valid" button
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
 
@@ -2884,6 +2890,8 @@ Feature: POD Validation
       | validity        | FAILURE |
       | invalidReasonId | 29      |
       | type            | type    |
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
 
@@ -3030,6 +3038,8 @@ Feature: POD Validation
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | cod        | Yes                                        |
     When Operator click "Valid" button
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -3204,6 +3214,8 @@ Feature: POD Validation
     Then Operator verifies the following details in the POD validate details page
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     When Operator click "Valid" button
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -3260,6 +3272,8 @@ Feature: POD Validation
     Then Operator verifies the following details in the POD validate details page
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator click "Valid" button
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -3313,6 +3327,8 @@ Feature: POD Validation
       | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | transactionStatus | SUCCESS                                    |
     When Operator click "Valid" button
+    Then Operator validates current URL ends with "validate-attempt/completed"
+    When Operator click "Back to filter" button
     Then Operator is redirected to Validate Delivery or Pickup Attempt page and URL ends with "validate-attempt?role=validator"
 
     Examples:
@@ -3586,6 +3602,7 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
 
+
   Scenario Outline: Filter Invalid Tracking IDs
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
@@ -3597,7 +3614,7 @@ Feature: POD Validation
       | trackingIds | 2212121212 |
     Then Operator validate the error code and error details
       | statusCode | Status 404: Not Found                                                             |
-      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments                      |
+      | url        | https://api-qa.ninjavan.co/sg/pod-validation/1.0/assignments/validation           |
       | message    | There are no matching tasks for the given list of TIDs [TrackingIDs:[2212121212]] |
       | data       | {"tracking_ids":["2212121212"],"num_tasks_requested":5}                           |
     When Operator closes the notification message
