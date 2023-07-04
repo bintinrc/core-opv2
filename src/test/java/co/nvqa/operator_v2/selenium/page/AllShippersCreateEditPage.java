@@ -1933,6 +1933,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public TextBox shipperPhoneNumber;
     @FindBy(id = "shipper-email")
     public TextBox shipperEmail;
+    @FindBy(css ="button[aria-label='Create dash account']")
+    public Button createDashAccount;
     @FindBy(id = "dashUsername")
     public TextBox dashUsername;
     @FindBy(css = "[id*='shipper-dashboard-password']")
