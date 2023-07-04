@@ -2125,4 +2125,10 @@ public class AllShippersSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator creates dash account with 'Create Dash Account'")
+  public void operatorCreatesDashAccountWith() {
+    pause3s();
+    allShippersPage.allShippersCreateEditPage.basicSettingsForm.createDashAccount.click();
+  }
+
 }
