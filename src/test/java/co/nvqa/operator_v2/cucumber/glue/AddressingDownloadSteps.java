@@ -468,4 +468,12 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     Assertions.assertThat(isTimeMatch).as("The creation time value is updated.").isTrue();
   }
+
+  @Then("Operator verifies that the Address Download Table Result contains {string}")
+  public void operatorVerifiesThatTheAddressDownloadTableResultContainsString(String tracking) {
+    String trackingId = resolveValue(tracking);
+    String xpath = "//td[@class='tracking_number']//span[contains(text(),'%s')]";
+    String tableTrackingId = String.format(xpath, trackingId);
+    Assertions.assertThat(addressingDownloadPage.isElementExist(tableTrackingId)).isTrue();
+  }
 }

@@ -105,6 +105,7 @@ Feature: Address Download
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}     |
       | createdAt  | {KEY_LIST_OF_CREATED_ORDERS[1].createdAt} |
     And Operator clicks on Load Address button
+    Then Operator verifies that the Address Download Table Result contains "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator clicks on download csv button on Address Download Page
     Then Operator verifies that the downloaded csv file contains all correct data
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
