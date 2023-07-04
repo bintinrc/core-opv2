@@ -163,6 +163,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
 
   @When("operator click {string} filter button")
   public void operatorClickFilterButton(String buttonText) {
+    stationPendingPickupJobsPage.switchToFrame();
     stationPendingPickupJobsPage.clickFilterButton(buttonText);
   }
 

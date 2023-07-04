@@ -179,7 +179,7 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
           .as("Validation for presence of Assign to Route button").isTrue();
     }
     if (buttontext.equalsIgnoreCase("Reassign to Route")) {
-      Assertions.assertThat(assignToRouteButton.get(0).isDisplayed())
+      Assertions.assertThat(reAssignToRouteButton.get(0).isDisplayed())
           .as("Validation for presence of Assign to Route button").isTrue();
     }
   }
