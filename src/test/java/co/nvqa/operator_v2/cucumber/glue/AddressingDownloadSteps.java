@@ -472,8 +472,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @Then("Operator verifies that the Address Download Table Result contains {string}")
   public void operatorVerifiesThatTheAddressDownloadTableResultContainsString(String tracking) {
     String trackingId = resolveValue(tracking);
-    String xpath = "//td[@class='tracking_number']//span[contains(text(),'%s')]";
-    String tableTrackingId = String.format(xpath, trackingId);
+    String tableTrackingId = String.format(addressingDownloadPage.TRACKING_NUMBER_TABLE_XPATH, trackingId);
     Assertions.assertThat(addressingDownloadPage.isElementExist(tableTrackingId)).isTrue();
   }
 }

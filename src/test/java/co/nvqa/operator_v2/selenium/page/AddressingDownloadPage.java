@@ -114,6 +114,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='select-preset-holder']/button[contains(@class, 'ant-btn-primary')]")
   public Button loadAddresses;
 
+  public  String TRACKING_NUMBER_TABLE_XPATH="//td[@class='tracking_number']//span[contains(text(),'%s')]";
   private static final String EXISTED_PRESET_SELECTION_XPATH = "//div[contains(@class,'select-preset')]//input[contains(@id,'rc_select')]";
   private static final String DROP_DOWN_PRESET_XPATH = "//ul[contains(@class,'dropdown-menu-root')]";
   private static final String DIALOG_XPATH = "//div[@class='ant-modal-title' and contains(@id,'rc_unique')]";
