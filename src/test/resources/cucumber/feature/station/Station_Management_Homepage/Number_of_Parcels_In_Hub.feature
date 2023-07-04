@@ -25,6 +25,7 @@ Feature: Number of Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
