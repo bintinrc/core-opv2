@@ -574,11 +574,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
     Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(
         tableName, columnName, columnValue);
-    Dimension.Size parcelSize = Dimension.Size.fromString(size);
-    String regularSize = parcelSize.getRegular();
     tableAfterChange.forEach((key, value) -> {
-      String formattedKey = key.replace("-", "").toUpperCase();
-      if (formattedKey.contentEquals(regularSize)) {
+      if (key.contentEquals(size)) {
         int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",", ""));
         int sizeAfterChange = Integer.parseInt(value.replaceAll(",", ""));
         Assert.assertTrue(
@@ -601,11 +598,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
     Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(
         tableName, columnName, columnValue);
-    Dimension.Size parcelSize = Dimension.Size.fromString(size);
-    String regularSize = parcelSize.getRegular();
     tableAfterChange.forEach((key, value) -> {
-      String formattedKey = key.replace("-", "").toUpperCase();
-      if (formattedKey.contentEquals(regularSize)) {
+      if (key.contentEquals(size)) {
         int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",", ""));
         int sizeAfterChange = Integer.parseInt(value.replaceAll(",", ""));
         Assert.assertTrue(
