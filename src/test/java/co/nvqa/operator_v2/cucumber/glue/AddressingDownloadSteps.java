@@ -349,7 +349,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     String toAddress1 = resolveValue(data.get("toAddress1"));
     String toAddress2 = resolveValue(data.get("toAddress2"));
     String preset = resolveValue(data.get("preset"));
-    System.out.print("dyodebugorder"+trackingId+latitude+longitude+preset);
     LOGGER.debug("Looking for CSV with Name containing {}", preset);
     String csvFileName = doWithRetry(() ->
             addressingDownloadPage.getContainedFileNameDownloadedSuccessfully(preset),
