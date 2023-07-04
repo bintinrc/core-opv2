@@ -9,19 +9,16 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,14 +96,14 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator verifies that the created preset is existed")
-  public void operatorVerifiesThatTheCreatedPresetIsExisted() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorVerifiesThatTheCreatedPresetIsExisted(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
     addressingDownloadPage.verifiesPresetIsExisted(presetName);
   }
 
   @When("Operator deletes the created preset")
-  public void operatorDeletesTheCreatedPreset() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorDeletesTheCreatedPreset(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
     addressingDownloadPage.ellipses.click();
     addressingDownloadPage.verifiesOptionIsShown();
     addressingDownloadPage.editPreset.click();
@@ -124,8 +121,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator verifies that the created preset is deleted")
-  public void operatorVerifiesThatTheCreatedPresetIsDeleted() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorVerifiesThatTheCreatedPresetIsDeleted(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
     doWithRetry(() -> {
       if (!addressingDownloadPage.loadAddresses.isDisplayed()) {
         addressingDownloadPage.refreshPage();
@@ -319,22 +316,21 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator input the created order's creation time")
-  public void operatorInputTheCreatedOrderSCreationTime() {
+  public void operatorInputTheCreatedOrderSCreationTime(Map<String, String> dataTableAsMap) {
     doWithRetry(() -> {
-      co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
+      String trackingId = resolveValue(dataTableAsMap.get("trackingId"));
+      String createdAt =resolveValue(dataTableAsMap.get("createdAt")).toString() ;
+      // Define the format of the input string
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
 
-      if (createdOrder == null) {
-        LOGGER.error("Order hasn't been created", new NullPointerException());
-        return;
-      }
-
-      LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
-          createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
+      // Parse the string to ZonedDateTime using the formatter and set the time zone to SGT
+      ZonedDateTime zoneDateTime = ZonedDateTime.parse(createdAt, formatter.withZone(ZoneId.of(addressingDownloadPage.SYS_ID)));
+      // Convert to local date and time
+      LocalDateTime localDateTime = zoneDateTime.withZoneSameInstant(ZoneId.of(addressingDownloadPage.SYS_ID)).toLocalDateTime();
       Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
-          orderCreationTimestamp, 30);
+          localDateTime, 30);
 
-      LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
-      LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
+      LOGGER.debug("Order Tracking ID: {}",trackingId);
       LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
       addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
@@ -343,38 +339,28 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   }
 
-  @Then("Operator verifies that the Address Download Table Result contains all basic data")
-  public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
-    WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
-    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
-
-    co.nvqa.commons.model.core.Order createdOrder = get(KEY_ORDER_DETAILS);
-    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
-
-    boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(
-        createdOrder, waypoint);
-
-    if (latencyExists) {
-      LocalDateTime adjustedOCCreatedAt = addressingDownloadPage.resolveLocalDateTime(
-          createdOrder.getCreatedAt(), "UTC").plus(Duration.of(1, ChronoUnit.MINUTES));
-      Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
-
-      LOGGER.debug("!! There had been creation time latency !!");
-      LOGGER.debug("Creation time is sets from {} to {}", createdOrder.getCreatedAt().toString(),
-          newCreatedAt);
-
-      createdOrder.setCreatedAt(newCreatedAt);
-      put(KEY_ORDER_DETAILS, createdOrder);
-    }
-  }
-
   @Then("Operator verifies that the downloaded csv file contains all correct data")
-  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
-    co.nvqa.commons.model.core.Order order = get(KEY_ORDER_DETAILS);
-    co.nvqa.commons.model.core.Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
-    String preset = get(KEY_SELECTED_PRESET_NAME);
-
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);
+  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData(
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> data = resolveKeyValues(dataTableAsMap);
+    String trackingId = resolveValue(data.get("trackingId"));
+    Double latitude = Double.parseDouble(resolveValue(data.get("latitude")));
+    Double longitude = Double.parseDouble(resolveValue(data.get("latitude")));
+    String toAddress1 = resolveValue(data.get("toAddress1"));
+    String toAddress2 = resolveValue(data.get("toAddress2"));
+    String preset = resolveValue(data.get("preset"));
+    System.out.print("dyodebugorder"+trackingId+latitude+longitude+preset);
+    LOGGER.debug("Looking for CSV with Name containing {}", preset);
+    String csvFileName = doWithRetry(() ->
+            addressingDownloadPage.getContainedFileNameDownloadedSuccessfully(preset),
+        "Getting Exact File Name");
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName, trackingId);
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,toAddress1 );
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName, toAddress2);
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,
+        addressingDownloadPage.resolveLatLongStringValue(longitude));
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,
+        addressingDownloadPage.resolveLatLongStringValue(longitude));
   }
 
   @And("Operator edits selected preset")
