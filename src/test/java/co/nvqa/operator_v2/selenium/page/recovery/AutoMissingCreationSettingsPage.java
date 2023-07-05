@@ -39,12 +39,6 @@ public class AutoMissingCreationSettingsPage extends
         @FindBy(css = "[data-datakey='hubName']")
         public PageElement name;
 
-        @FindBy(css = "[data-datakey='region']")
-        public PageElement region;
-
-        @FindBy(css = "[data-datakey='isDisabled']")
-        public PageElement status;
-
         public final String XPATH_HUB_ID_FILTER_INPUT = "//input[@data-testid='virtual-table.id.header.filter']";
 
         public static final String ACTION_EDIT = "Edit";
@@ -55,8 +49,6 @@ public class AutoMissingCreationSettingsPage extends
             setColumnLocators(ImmutableMap.<String, String>builder()
                     .put("id", "id")
                     .put("name", "name")
-                    .put("region", "region")
-                    .put("status", "status")
                     .put("investigatingDept", "investigatingDept")
                     .put("assignee", "assignee")
                     .build()
