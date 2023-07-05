@@ -188,8 +188,6 @@ Feature: Movement Trip - Cancel Trip
       | hubId        | {KEY_SORT_LIST_OF_CREATED_HUBS[1].id}    |
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     And API MM - Operator "force complete" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
-#    And API Operator updates movement trip status to transit
-#    And API Operator updates movement trip status to completed
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
@@ -258,7 +256,6 @@ Feature: Movement Trip - Cancel Trip
       | from         | {date: 0 days next, yyyy-MM-dd} 00:00:00 |
       | to           | {date: 0 days next, yyyy-MM-dd} 23:59:59 |
       | hubId        | {KEY_SORT_LIST_OF_CREATED_HUBS[1].id}    |
-#    And DB Operator change first trip to yesterday date
     And DB Hub - Shift Movement Trip with Id "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" Expected Start Time to -24 Hours Relative to Now
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
