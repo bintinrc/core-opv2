@@ -86,6 +86,23 @@ Feature: Auto Missing Creation Settings
       | id   | 0               |
       | name | Default mapping |
 
+  @DeleteHubsViaAPI @SG
+  Scenario: Disabled Hub is not shown in Auto Missing Creation Settings page
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When API Operator disable hub with ID "{KEY_CREATED_HUB.id}"
+    And API Operator reloads hubs cache
+    When Operator go to menu Recovery -> Auto Missing Creation Settings
+    When Operator Search created hub by hub id = "{KEY_CREATED_HUB.id}" in Auto Missing Creation Settings page
+    Then Operator verifies the disabled hub not found
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
