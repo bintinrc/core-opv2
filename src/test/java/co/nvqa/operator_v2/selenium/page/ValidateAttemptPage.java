@@ -234,12 +234,14 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   }
 
   public void validatetrackingIDtextboxIsEmpty() {
+    waitUntilVisibilityOfElementLocated(trackingIdTextArea.getWebElement());
     Assertions.assertThat(trackingIdTextArea.getText().isEmpty())
         .as("Validation for TrackingID textbox is empty")
         .isTrue();
   }
 
   public void validateDisabledButton() {
+    waitUntilVisibilityOfElementLocated(disabledValidateButton.getWebElement());
     Assertions.assertThat(disabledValidateButton.isDisplayed())
         .as("Validation for disabled button")
         .isTrue();
@@ -474,7 +476,6 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   }
 
 }
-
 
 
 
