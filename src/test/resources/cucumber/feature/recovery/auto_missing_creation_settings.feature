@@ -56,9 +56,9 @@ Feature: Auto Missing Creation Settings
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
-      | region       | JKB       |
+      | region       | WEST JAVA |
       | city         | GENERATED |
-      | country      | GENERATED |
+      | country      | ID        |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When Operator go to menu Recovery -> Auto Missing Creation Settings
