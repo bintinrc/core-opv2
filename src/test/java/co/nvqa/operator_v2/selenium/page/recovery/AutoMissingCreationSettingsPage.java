@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,9 +27,16 @@ public class AutoMissingCreationSettingsPage extends
     @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
     public PageElement notificationMessage;
 
+    public final String XPATH_RESULT_NOT_FOUND = "//div[@class='BaseTable__empty-layer']";
+
     public AutoMissingCreationSettingsPage(WebDriver webDriver) {
         super(webDriver);
         hubTable = new HubMissingInvestigationMappingTable(webDriver);
+    }
+
+    public void noResultFound() {
+        Assertions.assertThat(isElementExist(XPATH_RESULT_NOT_FOUND)).as("Hub ID is Not Found")
+            .isTrue();
     }
 
     public static class HubMissingInvestigationMappingTable extends AntTableV2<Hub> {
@@ -38,7 +46,6 @@ public class AutoMissingCreationSettingsPage extends
 
         @FindBy(css = "[data-datakey='hubName']")
         public PageElement name;
-
         public final String XPATH_HUB_ID_FILTER_INPUT = "//input[@data-testid='virtual-table.id.header.filter']";
 
         public static final String ACTION_EDIT = "Edit";

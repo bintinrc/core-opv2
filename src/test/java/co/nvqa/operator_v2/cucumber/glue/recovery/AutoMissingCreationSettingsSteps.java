@@ -38,6 +38,11 @@ public class AutoMissingCreationSettingsSteps extends AbstractSteps {
         });
     }
 
+    @Then("Operator verifies the disabled hub not found")
+    public void verifyHubIsNotFound() {
+        autoMissingCreationSettingsPage.inFrame(AutoMissingCreationSettingsPage::noResultFound);
+    }
+
     @When("Operator edit Hub Missing Investigation for specific hub")
     public void editSpecificHub() {
         autoMissingCreationSettingsPage.inFrame((page) -> {
