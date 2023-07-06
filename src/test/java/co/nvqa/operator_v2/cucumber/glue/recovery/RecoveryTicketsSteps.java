@@ -31,7 +31,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/recovery-tickets-new");
   }
 
-  @When("Operator creat ticket by csv in Recovery Tickets page")
+  @When("Operator create ticket by csv in Recovery Tickets page")
   public void createTicketByCsv() {
     recoveryTicketsPage.inFrame(() -> {
       recoveryTicketsPage.waitUntilPageLoaded();
@@ -71,7 +71,6 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       Assertions.assertThat(
               recoveryTicketsPage.creatByCSVDialog.displayedUploadedFileName.getText())
           .as("correct file name").contains(finalData.get("fileName"));
-//      recoveryTicketsPage.creatByCSVDialog.done.click();
     });
   }
 
