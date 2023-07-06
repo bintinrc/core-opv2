@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -166,6 +167,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH = "//input[@id = 'createAdhocTripForm_departureDate']";
   private static final String CREATE_TRIP_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
   private static final List<String> LIST_OF_CANCELLATION_MESSAGE = Arrays.asList("Natural disasters / Force majeure", "Cancellation of flight", "Change of schedule", "Low parcel volume", "Not onboard on MMDA yet", "System Issues");
+  private static final String TRIP_ASSIGNED_DRIVERS_XPATH = "//td[text()='Loading drivers...']";
 
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
@@ -347,6 +349,26 @@ public class TripManagementPage extends OperatorV2SimplePage {
     Long actualTripManagementSum = (long) tripManagementList.size();
     Assertions.assertThat(actualTripManagementSum)
         .as("Sum of Trip Management")
+        .isEqualTo(tripManagementCount);
+  }
+
+  public void verifiesSumOfTripManagement(String tabName, int tripManagementCount) {
+    List<WebElement> tripManagementList = new ArrayList<>();
+
+    switch (tabName) {
+      case "departure":
+        tripManagementList = findElementsByXpath(DESTINATION_HUB_XPATH);
+        break;
+      case "arrival":
+        tripManagementList = findElementsByXpath(ORIGIN_HUB_XPATH);
+        break;
+      default:
+        NvLogger.warn("No Tab Name Found!");
+    }
+
+    int actualTripManagementSum = tripManagementList.size();
+    Assertions.assertThat(actualTripManagementSum)
+        .as("Sum of Trip Management is correct: %d", actualTripManagementSum)
         .isEqualTo(tripManagementCount);
   }
 
@@ -768,17 +790,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
     switchToNewWindow();
     this.switchTo();
-//    TODO: WIP by MM Dev team
-//    waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
-//    String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
-//   Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
-//    getWebDriver().close();
-//    getWebDriver().switchTo().window(windowHandle);
-//    switchTo();
+
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH);
-    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH, 60);
-    String actualTripId = getText(DETAIL_PAGE_TRIP_ID_XPATH);
-    Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH, 90);
+    Assertions.assertThat(isElementVisible(DETAIL_PAGE_DRIVERS_XPATH, 5))
+        .as("Assigned Driver appear in Trip Details page").isTrue();
+    Assertions.assertThat(getText(DETAIL_PAGE_TRIP_ID_XPATH)).as("Trip ID is correct").contains(tripId);
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_STATUS_XPATH, 5))
         .as("Trip Status appear in Trip Details page").isTrue();
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_ORIGIN_HUB_XPATH, 5))
@@ -801,13 +818,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
         .as("Parcels appear in Trip Details page").isTrue();
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_TRIP_PASSWORD_XPATH, 5))
         .as("Trip Password appear in Trip Details page").isTrue();
-    Assertions.assertThat(isElementVisible(DETAIL_PAGE_DRIVERS_XPATH, 5))
-        .as("Assigned Driver appear in Trip Details page").isTrue();
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_SHIPMENTS_TAB_XPATH, 5))
         .as("Shipments tab in Trip Details page").isTrue();
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH, 5))
         .as("Trip Events appear in Trip Details page").isTrue();
-    // Assertions.assertThat(departTripButton.isDisplayed()).as("Depart button appear in Trip Details page").isTrue();
   }
 
   public void clickButtonOnCancelDialog(String buttonValue) {
@@ -844,7 +858,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
       actualToastMessageContent = toast.getText();
       waitUntilElementIsClickable("//a[@class='ant-notification-notice-close']");
       findElementByXpath("//a[@class='ant-notification-notice-close']").click();
-    }, "Retrying until toast shown", 1000, 3);
+    }, "Retrying until toast shown", 1000, 10);
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
@@ -853,12 +867,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
         readTheToastMessage();
       }
       Assertions.assertThat(actualToastMessageContent)
-          .as("Trip Management toast message is shown").contains(expectedToastMessage);
-    }, "Retrying until toast shown", 1000, 3);
+          .as("Trip Management toast message is shown: %s", actualToastMessageContent).contains(expectedToastMessage);
+    }, "Retrying until toast shown...", 1000, 10);
   }
 
   public void verifyToastContainingMessageIsShownWithoutClosing(String expectedToastMessage) {
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       try {
         waitUntilVisibilityOfElementLocated(
             "//div[contains(@class,'notification-notice-message')]");
@@ -877,6 +891,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
     forceTripCompletion.waitUntilClickable();
     forceTripCompletion.click();
     pause5s();
+  }
+
+  public void departTripWithDrivers() {
+    doWithRetry(() -> {
+      waitUntilInvisibilityOfElementLocated(TRIP_ASSIGNED_DRIVERS_XPATH, 5);
+      departTrip();
+    }, "Waiting for drivers loaded, and then depart trip...", 1000,10);
   }
 
   public void departTrip() {
@@ -1748,17 +1769,32 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Unassign All']")
     public Button unassignAllDrivers;
 
+    public void assignDriver(String driverName, int inputIndex) {
+      String inputXpath = f("//input[@id='%s']", f(assignDriverInput, inputIndex));
+      WebElement input = findElementByXpath(inputXpath);
+      waitUntilVisibilityOfElementLocated(input, 5);
+      doWithRetry(() -> {
+        sendKeys(input, driverName);
+        waitUntilVisibilityOfElementLocated(f("//div[contains(@title,'%s')]", driverName), 1);
+        input.sendKeys(Keys.ENTER);
+      }, "Retrying until driver list is showing...", 1000, 5);
+    }
+
     public void assignDriver(String driverName) {
-      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
+      assignDriver(driverName, 0);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
-      sendKeysAndEnterById(f(assignDriverInput, 0), primaryDriver);
-      pause1s();
-      addDriver.waitUntilClickable();
-      addDriver.click();
-      pause1s();
-      sendKeysAndEnterById(f(assignDriverInput, 1), additionalDriver);
+      List<String> usernames = Arrays.asList(primaryDriver, additionalDriver);
+
+      for (int i=0; i<usernames.size(); i++) {
+        assignDriver(usernames.get(i), i);
+
+        if (i< usernames.size()-1) {
+          addDriver.waitUntilClickable();
+          addDriver.click();
+        }
+      }
     }
 
     public void clearAssignedDriver() {
@@ -1800,7 +1836,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public Button unassignAllDrivers;
 
     public void assignDriver(String driverName) {
-      sendKeysAndEnterById(f(assignDriverInput, 0), driverName);
+      String inputXpath = f("//input[@id='%s']", f(assignDriverInput, 0));
+      WebElement input = findElementByXpath(inputXpath);
+      waitUntilVisibilityOfElementLocated(input, 5);
+      doWithRetry(() -> {
+        sendKeys(input, driverName);
+        waitUntilVisibilityOfElementLocated(f("//div[contains(@title,'%s')]", driverName), 1);
+        input.sendKeys(Keys.ENTER);
+      }, "Retrying until driver list is showing...", 1000, 5);
     }
 
     public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {

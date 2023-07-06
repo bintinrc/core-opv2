@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.MovementTrip;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
@@ -13,22 +14,20 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tristania Siagian
@@ -117,6 +116,11 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.departTrip();
   }
 
+  @When("Operator departs trip with driver")
+  public void operatorClickDepartTripButtonWithDriver() {
+    tripManagementPage.departTripWithDrivers();
+  }
+
   @When("Operator arrive trip")
   public void operatorClickArriveTripButton() {
     tripManagementPage.arriveTrip();
@@ -141,7 +145,7 @@ public class TripManagementSteps extends AbstractSteps {
   public void operatorSearchesAndSelectsWithValue(final String filterName,
       final String filterValue) {
     final Map<String, String> filterMap = new HashMap<>();
-    retryIfRuntimeExceptionOccurred(() ->
+    doWithRetry(() ->
     {
       try {
         filterMap.put("filterValue", resolveValue(filterValue));
@@ -149,11 +153,9 @@ public class TripManagementSteps extends AbstractSteps {
           case "origin hub":
             filterMap.put("filterName", "originHub");
             break;
-
           case "destination hub":
             filterMap.put("filterName", "destinationHub");
             break;
-
           case "movement type":
             filterMap.put("filterName", "movementType");
             put(KEY_MOVEMENT_TYPE_INCLUDED, true);
@@ -178,7 +180,7 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.switchTo();
         throw new NvTestRuntimeException(ex);
       }
-    }, 10);
+    }, "Searching trip...", 1000, 10);
   }
 
   @And("Operator verifies a trip to destination hub {string} exist")
@@ -200,6 +202,18 @@ public class TripManagementSteps extends AbstractSteps {
     MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
     if (tripManagementCount != null && tripManagementCount != 0) {
       tripManagementPage.verifiesSumOfTripManagement(tabNameAsEnum, tripManagementCount);
+      return;
+    }
+
+    tripManagementPage.verifiesNoResult();
+  }
+
+  @Then("Operator verifies trips shown on {string} tab of Movement Trip page are the same as {string}")
+  public void operatorVerifiesTripsShownOnMovementTripPageAreTheSameAs(String tab, String storageKey) {
+    List<MovementTrip> trips = resolveValueAsList(storageKey, MovementTrip.class);
+
+    if (!trips.isEmpty()) {
+      tripManagementPage.verifiesSumOfTripManagement(tab, trips.size());
       return;
     }
 
@@ -576,7 +590,7 @@ public class TripManagementSteps extends AbstractSteps {
   public void operatorSetsMovementTripsFilterWithDataBelow(Map<String, String> dataTableAsMap) {
     final Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
 
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       tripManagementPage.refreshPage_v1();
       tripManagementPage.switchTo();
 
@@ -585,7 +599,7 @@ public class TripManagementSteps extends AbstractSteps {
           Collectors.toList())) {
         tripManagementPage.selectValueFromFilterDropDownDirectly(key, inputMap.get(key));
       }
-    }, "Retrying until field value is shown...");
+    }, "Retrying until field value is shown...", 1000, 10);
   }
 
   @Then("Operator verifies one of toast with message is shown on movement page without closing")
@@ -604,8 +618,22 @@ public class TripManagementSteps extends AbstractSteps {
 
   @When("Operator clicks Force Completion button on Movement Trips page")
   public void operatorClicksForceCompletionButtonOnMovementTripsPage() {
+    tripManagementPage.forceTripCompletion.waitUntilVisible();
     tripManagementPage.forceTripCompletion.click();
-    pause2s();
+    tripManagementPage.forceTripCompletion.waitUntilInvisible();
+  }
+
+  @When("Operator departs trip and force complete when showing warning for driver in another trip")
+  public void operatorDepartsTripAndForceCompleteWhenShowingWarningForDriverInAnotherTrip() {
+    doWithRetry(() -> {
+      tripManagementPage.departTripWithDrivers();
+      pause2s();
+      if (tripManagementPage.forceTripCompletion.isDisplayed()) {
+        tripManagementPage.forceTripCompletion.click();
+        tripManagementPage.forceTripCompletion.waitUntilInvisible();
+        tripManagementPage.verifyToastContainingMessageIsShown("has completed");
+      }
+    }, "Departing trip...", 5000, 5);
   }
 
   @And("Operator verifies trip message {string} display on Movement Trip details page")
