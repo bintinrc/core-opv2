@@ -300,7 +300,6 @@ Feature: Movement Trip - Assign Driver
     And Operator click on Unassign All driver button on Assign Driver page
     Then Operator verifies toast with message "0 driver(s) successfully assigned to the trip" is shown on movement page
 
-# need to fix this scenario to cater for common v2
   @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cannot Assign Driver via Trip Details (uid:c4f15381-7b15-469a-80ec-27aae044ca87)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -311,19 +310,9 @@ Feature: Movement Trip - Assign Driver
       | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration | 00:00:10 |
       | drivers  | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1] |
-#    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_SORT_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_SORT_LIST_OF_CREATED_HUBS[2].id}"
-#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     And API MM - Operator "arrive" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
-#    And API Operator depart trip with data below:
-#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
-#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
-#    And API Operator arrival trip with data below:
-#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
-#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
-#    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_SORT_LIST_OF_CREATED_HUBS[1].id}"
     And DB Hub - Shift Movement Trip with Id "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" Expected Start Time to -24 Hours Relative to Now
-#    And DB Operator change first trip to yesterday date
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page

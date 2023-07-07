@@ -17,7 +17,7 @@ Feature: Movement Trip - Update Trip 2
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[3].id}" to "{KEY_SORT_LIST_OF_CREATED_HUBS[4].id}" with data below:
-      | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
+      | startTime | {date: 15 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -51,7 +51,7 @@ Feature: Movement Trip - Update Trip 2
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     And API MM - Operator "arrive" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[3].id}" to "{KEY_SORT_LIST_OF_CREATED_HUBS[4].id}" with data below:
-      | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
+      | startTime | {date: 15 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -84,7 +84,7 @@ Feature: Movement Trip - Update Trip 2
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[3].id}" to "{KEY_SORT_LIST_OF_CREATED_HUBS[4].id}" with data below:
-      | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
+      | startTime | {date: 15 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     Given Operator go to menu Inter-Hub -> Movement Trips
@@ -116,7 +116,7 @@ Feature: Movement Trip - Update Trip 2
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     And API MM - Operator "arrive" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[3].id}" to "{KEY_SORT_LIST_OF_CREATED_HUBS[4].id}" with data below:
-      | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
+      | startTime | {date: 15 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
       | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     Given Operator go to menu Inter-Hub -> Movement Trips
