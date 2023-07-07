@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.common.mm.model.MovementTrip;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
@@ -19,6 +20,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,10 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS;
+import static co.nvqa.common.mm.utils.MiddleMileUtils.isCommaSeparated;
+import static co.nvqa.common.mm.utils.MiddleMileUtils.isSingleKeyObject;
 
 /**
  * @author Tristania Siagian
@@ -49,6 +55,15 @@ public class TripManagementSteps extends AbstractSteps {
   public void init() {
     tripManagementPage = new TripManagementPage(getWebDriver());
     mainPage = new MainPage(getWebDriver());
+  }
+
+  private <T> List<T> resolveListOfKeys(String str, Class<T> clazz) {
+    if (isCommaSeparated(str)) {
+      return Arrays.stream(str.split(",")).map(key -> resolveValue(key, clazz)).collect(Collectors.toList());
+    } else if (isSingleKeyObject(str)) {
+      return Collections.singletonList(resolveValue(str));
+    }
+    return resolveValue(str);
   }
 
   @And("Operator verifies that the Trip Management Page is opened")
@@ -526,6 +541,27 @@ public class TripManagementSteps extends AbstractSteps {
       resolvedMapOfData.putIfAbsent("durationHours", "0");
       resolvedMapOfData.putIfAbsent("durationMinutes", "15");
     }
+//    tripManagementPage.createOneTimeTrip(resolvedMapOfData, middleMileDriver);
+  }
+
+  @When("Operator create One Time Trip with drivers on Movement Trips page using data below:")
+  public void OperatorCreateOneTimeTripWithDrivers(Map<String, String> mapOfData) {
+    List<MiddleMileDriver> middleMileDriver = resolveListOfKeys(mapOfData.get("drivers"), MiddleMileDriver.class);
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+    if (resolvedMapOfData.get("departureTime").equalsIgnoreCase("GENERATED")) {
+      LocalTime time = LocalTime.now().plusHours(1L);
+      String departTime = time.format(DateTimeFormatter.ofPattern("HH:mm"));
+      resolvedMapOfData.put("departureTime", departTime);
+    }
+    if (resolvedMapOfData.get("departureDate").equalsIgnoreCase("GENERATED")) {
+      String departureDay = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+      resolvedMapOfData.put("departureDate", departureDay);
+    }
+    if (resolvedMapOfData.get("duration").equalsIgnoreCase("GENERATED")) {
+      resolvedMapOfData.putIfAbsent("durationDays", "0");
+      resolvedMapOfData.putIfAbsent("durationHours", "0");
+      resolvedMapOfData.putIfAbsent("durationMinutes", "15");
+    }
     tripManagementPage.createOneTimeTrip(resolvedMapOfData, middleMileDriver);
   }
 
@@ -561,8 +597,12 @@ public class TripManagementSteps extends AbstractSteps {
   public void operatorVerifiesToastMessageOnCreateOneTimeTrip() {
     tripManagementPage.readAndVerifyTheToastMessageOfOneTimeTrip();
     //Get the trip ID, using for cancelling trip after test
-    String currentTripId = tripManagementPage.actualToastMessageContent.replaceAll("[^\\d]", "");
+    String currentTripId = TripManagementPage.actualToastMessageContent.replaceAll("[^\\d]", "");
+    MovementTrip trip = new MovementTrip();
+    trip.setId(Long.parseLong(currentTripId));
+    trip.setStatus("Pending");
     putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS, currentTripId);
+    putInList(KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS, trip);
   }
 
   @When("Operator create One Time Trip on Movement Trips page using same hub:")

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Driver;
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
@@ -1125,7 +1125,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     this.switchTo();
     waitUntilVisibilityOfElementLocated(
         "//input[@id ='createAdhocTripForm_originHub']/parent::span/following-sibling::span[text()='Search or Select']",
-        10);
+        30);
     //pause5s();
   }
 
@@ -1149,7 +1149,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void createOneTimeTrip(Map<String, String> resolvedMapOfData,
-      List<Driver> middleMileDrivers) {
+      List<MiddleMileDriver> middleMileDrivers) {
     TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
     sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, resolvedMapOfData.get("originHub"));
 
@@ -1176,19 +1176,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
     click(CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH);
     waitUntilVisibilityOfElementLocated(DATE_PICKER_MODAL_XPATH);
     click(f(CALENDAR_SELECTED_XPATH, resolvedMapOfData.get("departureDate")));
-    int numberOfDrivers = Integer.parseInt(resolvedMapOfData.get("assignDrivers"));
-    int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
+    int numberOfDrivers = middleMileDrivers.size();
+    int maxAssignDrivers = Math.min(numberOfDrivers, 4);
     for (int i = 0; i < maxAssignDrivers; i++) {
-      TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
-      //sendKeysAndEnter(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
+      doWithRetry(() -> {
+        TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
+        waitUntilVisibilityOfElementLocated("//div[@data-testid='assign-drivers-select' and contains(@class,'ant-select-open')]", 1);
+      }, "Click until dropdown shows up...", 1000, 20);
       sendKeys(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, middleMileDrivers.get(i).getUsername());
       click(f(CREATE_TRIP_PAGE_DROPDOWN_LIST_XPATH, middleMileDrivers.get(i).getUsername()));
     }
     if (numberOfDrivers > 4) {
       verifyCanNotAssignMoreThan4Drivers(middleMileDrivers);
     }
-    //pause5s();
-
   }
 
   public void createOneTimeTripWithoutDriver(Map<String, String> resolvedMapOfData){
@@ -1223,7 +1223,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     TestUtils.findElementAndClick(CREATE_TRIP_PAGE_SUBMIT_BUTTON_XPATH, "xpath", getWebDriver());
   }
 
-  public void verifyCanNotAssignMoreThan4Drivers(List<Driver> middleMileDrivers) {
+  public void verifyCanNotAssignMoreThan4Drivers(List<MiddleMileDriver> middleMileDrivers) {
     TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH, "xpath", getWebDriver());
     sendKeys(CREATE_TRIP_PAGE_ASSIGN_DRIVER_XPATH,
         middleMileDrivers.get(middleMileDrivers.size() - 1).getUsername());
