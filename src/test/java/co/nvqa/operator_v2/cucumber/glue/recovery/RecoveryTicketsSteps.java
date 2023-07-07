@@ -3,12 +3,14 @@ package co.nvqa.operator_v2.cucumber.glue.recovery;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.RecoveryTicket;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.recovery.RecoveryTicketsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 
 public class RecoveryTicketsSteps extends AbstractSteps {
 
@@ -164,11 +167,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
           String.format("find-tickets-by-csv_%s.csv", StandardTestUtils.generateDateUniqueString()),
           csvContents);
       recoveryTicketsPage.findTicketsByCSVDialog.uploadComponent.setValue(csvFile);
+      Assertions.assertThat(recoveryTicketsPage.findTicketsByCSVDialog.uploadedFileName.getText())
+          .contains("find-tickets-by-csv_");
       recoveryTicketsPage.findTicketsByCSVDialog.search.click();
     });
   }
 
-  @Then("Operator verifies invalid search result message is shown")
+  @Then("Operator verifies invalid search result message is shown on Find Tickets by CSV dialog")
   public void verifySearchResultMessageIsShown(Map<String, String> data) {
     recoveryTicketsPage.inFrame(() -> {
       Map<String, String> finalData = resolveKeyValues(data);
@@ -177,18 +182,30 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         Assertions.assertThat(actualTop).as("correct result message").isEqualTo(value);
       }
-      value = finalData.get("trackingId");
-      if (StringUtils.isNotBlank(value)) {
-        String actual = recoveryTicketsPage.findTicketsByCSVDialog.invalidTrackingId.getText();
-        Assertions.assertThat(actual).as("correct invalid tracking id").isEqualTo(value);
+      List<String> trackingIdsValues = Arrays.stream(finalData.get("trackingIds").split(","))
+          .map(String::trim)
+          .collect(Collectors.toList());
+      List<String> actualTrackingIds = new ArrayList<>();
+      for (PageElement element : recoveryTicketsPage.findTicketsByCSVDialog.invalidTrackingId) {
+        actualTrackingIds.add(element.getText());
       }
+      if (trackingIdsValues.size() != actualTrackingIds.size()) {
+        return;
+      }
+      Assert.assertTrue("correct Invalid tracking Ids",
+          trackingIdsValues.equals(actualTrackingIds));
+    });
+  }
+
+  @When("Operator click Load Selection button on Find Tickets by CSV dialog")
+  public void clickLoadSelection() {
+    recoveryTicketsPage.inFrame(() -> {
       recoveryTicketsPage.findTicketsByCSVDialog.loadSelection.click();
     });
   }
 
   @Then("Operator verifies correct ticket details as following:")
   public void verifyTicketDetails(Map<String, String> data) {
-    // add assertions for all the details of the ticket
     recoveryTicketsPage.inFrame(() -> {
       Map<String, String> finalData = resolveKeyValues(data);
       String actualTop = recoveryTicketsPage.resultsTable.trackingId.getText();
@@ -204,7 +221,47 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       value = finalData.get("orderGranularStatus");
       if (StringUtils.isNotBlank(value)) {
         String actual = recoveryTicketsPage.resultsTable.orderGranularStatus.getText();
-        Assertions.assertThat(actual).as("Order Granular Status").isEqualTo(value);
+        Assertions.assertThat(actual).as("order granular status").isEqualTo(value);
+      }
+      value = finalData.get("ticketCreator");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.ticketCreator.getText();
+        Assertions.assertThat(actual).as("ticket creator").isEqualTo(value);
+      }
+      value = finalData.get("shipper");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.shipper.getText();
+        Assertions.assertThat(actual).as("shipper").isEqualTo(value);
+      }
+      value = finalData.get("redTickets");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.redTickets.getText();
+        Assertions.assertThat(actual).as("red tickets").isEqualTo(value);
+      }
+      value = finalData.get("investigatingHub");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.investigatingHub.getText();
+        Assertions.assertThat(actual).as("investigating Hub").isEqualTo(value);
+      }
+      value = finalData.get("InvestigatingDept");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.InvestigatingDept.getText();
+        Assertions.assertThat(actual).as("Investigating Dept").isEqualTo(value);
+      }
+      value = finalData.get("status");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.status.getText();
+        Assertions.assertThat(actual).as("status").isEqualTo(value);
+      }
+      value = finalData.get("daysSince");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.daysSince.getText();
+        Assertions.assertThat(actual).as("days since").isEqualTo(value);
+      }
+      value = finalData.get("created");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.created.getText();
+        Assertions.assertThat(actual).as("created").contains(value);
       }
     });
   }
@@ -246,6 +303,16 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       final String fileName = page.getLatestDownloadedFilename(
           page.creatByCSVDialog.ERROR_DATA_CSV_FILE_NAME);
       recoveryTicketsPage.verifyFileDownloadedSuccessfully(fileName, expectedText, true);
+    });
+  }
+
+  @When("Operator downloads search csv sample file on Find Tickets by CSV modal")
+  public void downloadAndVerifySearchSampleFile() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.findTicketsByCSVDialog.downloadSample.click();
+      final String fileName = page.getLatestDownloadedFilename(
+          page.findTicketsByCSVDialog.SEARCH_SAMPLE_CSV_FILENAME_PATTERN);
+      page.verifyFileDownloadedSuccessfully(fileName);
     });
   }
 }
