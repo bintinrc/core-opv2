@@ -63,7 +63,7 @@ Feature: Movement Trip - Update Trip
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[1].id}" to "{hub-relation-destination-hub-id}" with data below:
       | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
-      | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]   |
+      | drivers   | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS   |
     When API MM - Create "LAND_HAUL" Movement Schedule from "{KEY_SORT_LIST_OF_CREATED_HUBS[2].id}" to "{hub-relation-destination-hub-id}" with data below:
       | startTime | {date: 10 minutes next, yyyy-MM-dd HH:mm:ss} |
       | duration  | 00:00:10                                     |
@@ -76,6 +76,7 @@ Feature: Movement Trip - Update Trip
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
     And Operator assign driver "({KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username})" to created movement trip
+    Then Operator verifies toast with message "1 driver(s) successfully assigned to the trip" is shown on movement page
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[2].id} departed" is shown on movement page
 
