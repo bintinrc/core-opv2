@@ -792,7 +792,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     this.switchTo();
 
     waitUntilPageLoaded(30);
-    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH);
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH, 90);
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH, 90);
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_DRIVERS_XPATH, 5))
         .as("Assigned Driver appear in Trip Details page").isTrue();
