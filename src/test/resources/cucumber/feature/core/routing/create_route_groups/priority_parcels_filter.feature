@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @CRG3
 Feature: Create Route Groups - Priority Parcel Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Service Level on Create Route Groups - <serviceLevel>
@@ -210,7 +210,3 @@ Feature: Create Route Groups - Priority Parcel Filters
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Arrived at Sorting Hub                                   |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

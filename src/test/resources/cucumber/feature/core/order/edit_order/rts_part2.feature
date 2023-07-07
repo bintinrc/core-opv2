@@ -297,7 +297,7 @@ Feature: RTS
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     When DB Operator gets waypoint record
-    And API Operator get Addressing Zone from a lat long with type "STANDARD"
+    And API Operator get Addressing Zone from a lat long with type "RTS"
     Then Operator verifies Zone is correct after RTS on Edit Order page
     And Operator verifies waypoints.routing_zone_id is correct
 

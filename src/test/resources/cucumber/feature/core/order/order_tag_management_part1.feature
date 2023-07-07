@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @OrderTagManagement @OrderTagManagementPart1
 Feature: Order Tag Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -115,7 +115,3 @@ Feature: Order Tag Management
     Then Operator verifies orders are not displayed on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

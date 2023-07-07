@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob1 @TagManagement
 Feature: Tag Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteTags
@@ -23,7 +23,7 @@ Feature: Tag Management
   Scenario: Operator Update Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
-      | name        | AAA                                                                               |
+      | name        | ABC                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
@@ -34,14 +34,14 @@ Feature: Tag Management
       | top                | Tag successfully edited |
       | waitUntilInvisible | true                    |
     Then Operator verifies tag on Tag Management page:
-      | name        | {KEY_CREATED_ROUTE_TAG.name}        |
-      | description | {KEY_CREATED_ROUTE_TAG.description} |
+      | name        | AAC                                                                                        |
+      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. [EDITED] |
 
   @DeleteRouteTags
   Scenario: Operator Search Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
-      | name        | AAA                                                                               |
+      | name        | ABE                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
@@ -57,7 +57,3 @@ Feature: Tag Management
     Then Operator verifies search result on Tag Management page:
       | name        | {KEY_CREATED_ROUTE_TAG.name}        |
       | description | {KEY_CREATED_ROUTE_TAG.description} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

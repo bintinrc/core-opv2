@@ -1,8 +1,8 @@
-@OperatorV2 @Core @AllOrders @SuggestRouteAllOrders
+#@OperatorV2 @Core @AllOrders @SuggestRouteAllOrders @Deprected
 Feature: All Orders - Suggest Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @DeleteRouteTags @BulkSuggestRoute
@@ -150,7 +150,3 @@ Feature: All Orders - Suggest Route
       | trackingId                                 | routeId |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

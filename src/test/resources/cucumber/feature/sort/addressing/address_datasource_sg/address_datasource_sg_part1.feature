@@ -41,14 +41,14 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | postcode    | {datasource-postcode}      |
+      | postcode    | {auto-postcode-sg-1}       |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type":"STANDARD","latitude":{latitude-1},"longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | postcode | {datasource-postcode}                      |
+      | postcode | {auto-postcode-sg-1}           |
       | zone     | {KEY_SORT_ZONE_INFO.shortName} |
       | hub      | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -56,7 +56,7 @@ Feature: Address Datasource
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | postcode | {datasource-postcode}  |
+      | postcode | {auto-postcode-sg-1}           |
     Then Operator verifies new address datasource is added:
       | postcode    | {KEY_SORT_CREATED_ADDRESS.postcode}  |
       | latitude    | {KEY_SORT_CREATED_ADDRESS.latitude}  |
@@ -74,9 +74,9 @@ Feature: Address Datasource
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong     | 1.1,1.11              |
-      | postcode    | {datasource-postcode} |
-      | whitelisted | True                  |
+      | latlong     | 1.1,1.11                |
+      | postcode    | {datasource-postcode-1} |
+      | whitelisted | True                    |
     Then Operator verifies Add Button is Disabled
     And Operator verifies invalid latlong message
 

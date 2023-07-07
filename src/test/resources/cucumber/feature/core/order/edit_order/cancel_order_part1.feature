@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @CancelOrder @CancelOrderPart1 @EditOrder1 @RoutingModules
 Feature: Cancel Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Cancel Order - On Hold
@@ -265,7 +265,3 @@ Feature: Cancel Order
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

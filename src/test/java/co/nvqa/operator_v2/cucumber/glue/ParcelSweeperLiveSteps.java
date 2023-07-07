@@ -63,11 +63,16 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         String task = finalMapOfData.get("task");
-        if (task != null) {
-          parcelSweeperLivePage.selectHubToBeginWithTask(finalMapOfData.get("hubName"), task);
-        } else {
-          parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
-        }
+        String hubName = finalMapOfData.get("hubName");
+          if (hubName != null && task != null) {
+            parcelSweeperLivePage.selectHubToBeginWithTask(hubName, task);
+          } else if (hubName != null && task == null) {
+            parcelSweeperLivePage.selectHubToBegin(hubName);
+          } else if (hubName == null && task != null) {
+            parcelSweeperLivePage.selectTaskToBegin(task);
+          } else if (hubName == null && task == null) {
+            parcelSweeperLivePage.switchTo();
+          }
 
         String trackingId = finalMapOfData.get("trackingId");
         if (StringUtils.equalsIgnoreCase(trackingId, "CREATED")) {
@@ -83,6 +88,22 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
     }, "Operator Parcel Sweeping");
   }
 
+  @Then("^Operator selects hub on Parcel Sweeper Live page:$")
+  public void operatorSelectedHubOnParcelSweeperLivePage(Map<String, String> mapOfData) {
+    doWithRetry(() ->
+    {
+      try {
+        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        parcelSweeperLivePage.selectHub(finalMapOfData.get("hubName"));
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        parcelSweeperLivePage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, "Operator Parcel Sweeping, selecting hub");
+  }
+
   private String getExpectedZoneName(String zoneNameFromDataTable) {
     if (StringUtils.equalsIgnoreCase(zoneNameFromDataTable, "FROM CREATED ORDER")) {
       Order order = get(KEY_CREATED_ORDER);
@@ -93,7 +114,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
               "Could not find DELIVERY transaction for order [" + order.getId() + "]"));
       List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
       Zone routingZone = zones.stream().filter(
-              zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
+          zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
           .findFirst()
           .orElseThrow(() -> new RuntimeException(
               "Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
@@ -125,6 +146,12 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
   @Then("^Operator verify Prior tag on Parcel Sweeper Live page$")
   public void operatorVerifyPriorTagOnParcelSweeperByHubPage() {
     parcelSweeperLivePage.verifyPriorTag();
+  }
+
+  @Then("^Operator verify access denied modal on Parcel Sweeper Live page with the data below:$")
+  public void operatorVerifyAccessDeniedModalOnParcelSweeperByHubPage(
+      Map<String, String> mapOfData) {
+    parcelSweeperLivePage.verifyAccessDeniedModal(mapOfData);
   }
 
 }

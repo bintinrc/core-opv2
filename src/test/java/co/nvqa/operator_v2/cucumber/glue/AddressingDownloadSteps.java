@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Waypoint;
-import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
@@ -10,19 +9,16 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,14 +96,14 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator verifies that the created preset is existed")
-  public void operatorVerifiesThatTheCreatedPresetIsExisted() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorVerifiesThatTheCreatedPresetIsExisted(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
     addressingDownloadPage.verifiesPresetIsExisted(presetName);
   }
 
   @When("Operator deletes the created preset")
-  public void operatorDeletesTheCreatedPreset() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorDeletesTheCreatedPreset(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
     addressingDownloadPage.ellipses.click();
     addressingDownloadPage.verifiesOptionIsShown();
     addressingDownloadPage.editPreset.click();
@@ -125,8 +121,14 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator verifies that the created preset is deleted")
-  public void operatorVerifiesThatTheCreatedPresetIsDeleted() {
-    String presetName = get(KEY_CREATED_ADDRESS_PRESET_NAME);
+  public void operatorVerifiesThatTheCreatedPresetIsDeleted(Map<String,String>dataTableAsMap) {
+    String presetName = resolveValue(dataTableAsMap.get("preset"));
+    doWithRetry(() -> {
+      if (!addressingDownloadPage.loadAddresses.isDisplayed()) {
+        addressingDownloadPage.refreshPage();
+      }
+    }, "refresh page until element is shown");
+
     addressingDownloadPage.verifiesPresetIsNotExisted(presetName);
   }
 
@@ -160,7 +162,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator fills the {string} Tracking ID textbox with {string} separation")
   public void operatorFillsTheTrackingIDTextboxWithSeparation(String trackingIdType,
-      String separation) {
+      String separation,List<String>trackingIds) {
+  List<String> trackingId =resolveValues(trackingIds);
     // Tracking ID type
     final String VALID = "valid";
     final String HALF = "half";
@@ -173,23 +176,21 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     pause5s();
 
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-
     if (VALID.equalsIgnoreCase(trackingIdType)) {
       if (COMMA.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (SPACE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(" ", trackingId).replaceAll("[\\[\\]]", ""));
       } else if (NEW_LINE.equalsIgnoreCase(separation)) {
-        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n", trackingIds));
+        addressingDownloadPage.trackingIdtextArea.sendKeys(String.join("\n",trackingId).replaceAll("[\\[\\]]", ""));
       } else if (MIXED.equalsIgnoreCase(separation)) {
         for (int i = 0; i < trackingIds.size(); i++) {
           if (i == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + ",");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + ",");
           } else if (i > 0 && i % 2 == 0) {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + " ");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "") + " ");
           } else {
-            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingIds.get(i) + "\n");
+            addressingDownloadPage.trackingIdtextArea.sendKeys(trackingId.get(i).replaceAll("[\\[\\]]", "")+ "\n");
           }
         }
       } else {
@@ -197,8 +198,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
       }
     } else if (HALF.equalsIgnoreCase(trackingIdType)) {
       final String invalidTrackingId = "AUTOTEST" + RandomUtil.randomString(5);
-      trackingIds.add(invalidTrackingId);
-      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingIds));
+      trackingId.add(invalidTrackingId);
+      addressingDownloadPage.trackingIdtextArea.sendKeys(String.join(",", trackingId).replaceAll("[\\[\\]]", ""));
     } else {
       LOGGER.warn("Automation only covered VALID and HALF VALID HALF INVALID types");
     }
@@ -211,20 +212,13 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the Address Download Table Result is shown up")
-  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
+  public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp(
+      Map<String, String> dataTableAsMap) {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-      for (Order order : orders) {
-        addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
-        addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
-      }
-    } else {
-      List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-      for (String trackingId : trackingIds) {
-        addressingDownloadPage.trackingIdUiChecking(trackingId);
-      }
+    List<String> trackingIds = get(dataTableAsMap.get("trackingId"));
+    for (String trackingId : trackingIds) {
+      addressingDownloadPage.trackingIdUiChecking(trackingId.replaceAll("[\\[\\]]", ""));
     }
   }
 
@@ -233,7 +227,6 @@ public class AddressingDownloadSteps extends AbstractSteps {
     if (addressingDownloadPage.trackingIdNotFound.isDisplayed()) {
       addressingDownloadPage.nextButtonLoadTrackingId.click();
     }
-    operatorVerifiesThatTheAddressDownloadTableResultIsShownUp();
   }
 
   @When("Operator clicks on download csv button on Address Download Page")
@@ -257,9 +250,11 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
-  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-    String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
+  public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight(
+      Map<String, String> dataTableAsMap) {
+
+    List<Order> orders = get(dataTableAsMap.get("order"));
+    String csvTimestamp = get(dataTableAsMap.get("csvTime"));
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
   }
@@ -277,8 +272,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that newly created order is not written in the textbox")
-  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  public void operatorVerifiesThatNewlyCreatedOrderIsNotWrittenInTheTextbox(Map<String, String> data) {
+    String trackingId = data.get("trackingId");
     addressingDownloadPage.trackingIdtextArea.sendKeys("," + trackingId);
     String trackingIdsListed = addressingDownloadPage.trackingIdtextArea.getText();
     Assertions.assertThat(!(trackingIdsListed.contains("," + trackingId))).isTrue();
@@ -297,6 +292,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator selects preset {string}")
   public void operatorSelectsPresetName(String preset) {
+    pause5s();
     String presetName = "";
 
     if (preset.equals("DEFAULT")) {
@@ -320,22 +316,21 @@ public class AddressingDownloadSteps extends AbstractSteps {
   }
 
   @And("Operator input the created order's creation time")
-  public void operatorInputTheCreatedOrderSCreationTime() {
+  public void operatorInputTheCreatedOrderSCreationTime(Map<String, String> dataTableAsMap) {
     doWithRetry(() -> {
-      Order createdOrder = get(KEY_ORDER_DETAILS);
+      String trackingId = resolveValue(dataTableAsMap.get("trackingId"));
+      String createdAt =resolveValue(dataTableAsMap.get("createdAt")).toString() ;
+      // Define the format of the input string
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
 
-      if (createdOrder == null) {
-        LOGGER.error("Order hasn't been created", new NullPointerException());
-        return;
-      }
-
-      LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
-          createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
+      // Parse the string to ZonedDateTime using the formatter and set the time zone to SGT
+      ZonedDateTime zoneDateTime = ZonedDateTime.parse(createdAt, formatter.withZone(ZoneId.of(addressingDownloadPage.SYS_ID)));
+      // Convert to local date and time
+      LocalDateTime localDateTime = zoneDateTime.withZoneSameInstant(ZoneId.of(addressingDownloadPage.SYS_ID)).toLocalDateTime();
       Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
-          orderCreationTimestamp, 30);
+          localDateTime, 30);
 
-      LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
-      LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
+      LOGGER.debug("Order Tracking ID: {}",trackingId);
       LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
       addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
@@ -344,38 +339,27 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   }
 
-  @Then("Operator verifies that the Address Download Table Result contains all basic data")
-  public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
-    WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
-    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
-
-    Order createdOrder = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
-
-    boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(
-        createdOrder, waypoint);
-
-    if (latencyExists) {
-      LocalDateTime adjustedOCCreatedAt = addressingDownloadPage.resolveLocalDateTime(
-          createdOrder.getCreatedAt(), "UTC").plus(Duration.of(1, ChronoUnit.MINUTES));
-      Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
-
-      LOGGER.debug("!! There had been creation time latency !!");
-      LOGGER.debug("Creation time is sets from {} to {}", createdOrder.getCreatedAt().toString(),
-          newCreatedAt);
-
-      createdOrder.setCreatedAt(newCreatedAt);
-      put(KEY_ORDER_DETAILS, createdOrder);
-    }
-  }
-
   @Then("Operator verifies that the downloaded csv file contains all correct data")
-  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData() {
-    Order order = get(KEY_ORDER_DETAILS);
-    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
-    String preset = get(KEY_SELECTED_PRESET_NAME);
-
-    addressingDownloadPage.csvDownloadSuccessfullyAndContainsBasicData(order, waypoint, preset);
+  public void operatorVerifiesThatTheDownloadedCsvFileContainsAllCorrectData(
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> data = resolveKeyValues(dataTableAsMap);
+    String trackingId = resolveValue(data.get("trackingId"));
+    Double latitude = Double.parseDouble(resolveValue(data.get("latitude")));
+    Double longitude = Double.parseDouble(resolveValue(data.get("latitude")));
+    String toAddress1 = resolveValue(data.get("toAddress1"));
+    String toAddress2 = resolveValue(data.get("toAddress2"));
+    String preset = resolveValue(data.get("preset"));
+    LOGGER.debug("Looking for CSV with Name containing {}", preset);
+    String csvFileName = doWithRetry(() ->
+            addressingDownloadPage.getContainedFileNameDownloadedSuccessfully(preset),
+        "Getting Exact File Name");
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName, trackingId);
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,toAddress1 );
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName, toAddress2);
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,
+        addressingDownloadPage.resolveLatLongStringValue(longitude));
+    addressingDownloadPage.verifyFileDownloadedSuccessfully(csvFileName,
+        addressingDownloadPage.resolveLatLongStringValue(longitude));
   }
 
   @And("Operator edits selected preset")
@@ -482,5 +466,12 @@ public class AddressingDownloadSteps extends AbstractSteps {
     boolean isTimeMatch = addressingDownloadPage.compareUpdatedCreationTimeValue(newCreationTime);
 
     Assertions.assertThat(isTimeMatch).as("The creation time value is updated.").isTrue();
+  }
+
+  @Then("Operator verifies that the Address Download Table Result contains {string}")
+  public void operatorVerifiesThatTheAddressDownloadTableResultContainsString(String tracking) {
+    String trackingId = resolveValue(tracking);
+    String tableTrackingId = String.format(addressingDownloadPage.TRACKING_NUMBER_TABLE_XPATH, trackingId);
+    Assertions.assertThat(addressingDownloadPage.isElementExist(tableTrackingId)).isTrue();
   }
 }

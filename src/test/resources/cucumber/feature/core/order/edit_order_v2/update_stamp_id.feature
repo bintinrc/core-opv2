@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderv2 @UpdateStampId
+@OperatorV2 @Core @EditOrderV2 @UpdateStampId
 Feature: Update Stamp ID
 
   @LaunchBrowser @ShouldAlwaysRun

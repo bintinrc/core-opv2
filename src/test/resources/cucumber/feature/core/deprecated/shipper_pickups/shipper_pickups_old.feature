@@ -1,4 +1,4 @@
-#@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules
+#@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules @Deprecated
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun

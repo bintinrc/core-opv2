@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,6 +21,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public static final String SERVICE_DISCOUNT_XPATH = "services_%s_discount_value";
   public static final String SERVICE_TYPE_XPATH_LIST = "//input[contains(@id,'serviceType')]//parent::span//following-sibling::span";
   public static final String SERVICE_LEVEL_XPATH_LIST = "//input[contains(@id,'serviceLevel')]//parent::span//following-sibling::span";
+  public static final String DISCOUNT_OPERATOR_LIST = "//input[contains(@id,'discount_operator')]//parent::span//following-sibling::span";
   public static final String SERVICE_DISCOUNT_XPATH_LIST = "//input[contains(@id,'discount_value')]";
   private static final String CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
 
@@ -188,6 +190,13 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
       serviceLevelList.add(element.getText());
     }
     return serviceLevelList;
+  }
+
+  public String getDiscountOperator() {
+    List<WebElement> elements = findElementsBy(By.xpath(DISCOUNT_OPERATOR_LIST));
+    Assertions.assertThat(elements.size()).as("Assert that discount operator displays")
+        .isGreaterThan(0);
+    return elements.get(0).getText().trim();
   }
 
   public List<String> getDiscountValue() {

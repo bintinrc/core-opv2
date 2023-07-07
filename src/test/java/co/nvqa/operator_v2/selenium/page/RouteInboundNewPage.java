@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 
@@ -36,6 +37,9 @@ public class RouteInboundNewPage extends OperatorV2SimplePage {
 
   @FindBy(id = "route-inbound_scan-trackingId-continue-button")
   public PageElement trackingIdContinueButton;
+
+  @FindAll(@FindBy(xpath = "//div[text()='Choose a route']"))
+  public List<PageElement> chooseRouteModal;
 
   @FindBy(id = "round-inbound_search-driver-continue-button")
   public PageElement driverContinueButton;
@@ -171,6 +175,12 @@ public class RouteInboundNewPage extends OperatorV2SimplePage {
     selectHub(hubName);
     trackingIdInput.setValue(trackingId);
     trackingIdContinueButton.click();
+  }
+
+  public void chooseRoute(String routeId) {
+    String xpath = f("//td[text()='%s']//parent::tr//button", routeId);
+    waitUntilVisibilityOfElementLocated(xpath);
+    getWebDriver().findElement(By.xpath(xpath)).click();
   }
 
   public void fetchRouteByDriver(String hubName, String routeId) {
