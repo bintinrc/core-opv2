@@ -16,6 +16,23 @@ Feature: Edit Shipper
     And Operator go to "Pricing and Billing" tab on Edit Shipper page
     And Operator verify that the toggle: 'Show Pricing Estimate' is set as "No" under 'Pricing and Billing' tab
 
+  @DeleteNewlyCreatedShipper
+  Scenario: Change Email and phone number (uid:643c75e1-0cc1-4876-9441-d65b31486471)
+    Given API Operator create new 'normal' shipper
+    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator update basic settings of shipper "{KEY_CREATED_SHIPPER.name}":
+      | shipperEmail       | {prepaid-no-order-username}      |
+      | shipperPhoneNumber | {prepaid-no-order-address-phone} |
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    Then Operator verifies Basic Settings on Edit Shipper page:
+      | shipperEmail       | {prepaid-no-order-username}      |
+      | shipperPhoneNumber | {prepaid-no-order-address-phone} |
+    And DB Shipper get shipper data
+      | shipperId | {KEY_CREATED_SHIPPER.legacyId} |
+    And Operator verifies that following shipper personal details are correct in db:
+      | email   | {prepaid-no-order-username}      |
+      | contact | {prepaid-no-order-address-phone} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

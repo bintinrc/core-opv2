@@ -1,7 +1,7 @@
 @Sort @AddressDataSourceIdPart1
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -34,7 +34,7 @@ Feature: Address Datasource
       | whitelisted | True                |
     Then Operator verifies Add Button is Disabled
     And Operator verifies invalid latlong message
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: ID Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -70,7 +70,7 @@ Feature: Address Datasource
       | latitude  | {KEY_SORT_CREATED_ADDRESS.latitude}  |
       | longitude | {KEY_SORT_CREATED_ADDRESS.longitude} |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: ID Address Datasource - Add a Row with Valid Input Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

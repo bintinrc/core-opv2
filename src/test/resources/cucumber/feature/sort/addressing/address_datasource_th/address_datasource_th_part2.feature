@@ -1,11 +1,11 @@
 @Sort @AddressDataSourceThPart2
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: TH Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -78,7 +78,7 @@ Feature: Address Datasource
       | whitelisted | True         |
     Then Operator verifies Add Button is Disabled
 
-#  @DeleteAddressDatasourceCommonV2
+#
 #  Scenario: TH Address Datasource - Add a Row with Valid Input Duplicate Entry
 #    Given Operator go to menu Utilities -> QRCode Printing
 #    Given Operator go to menu Addressing -> Address Datasource
@@ -141,7 +141,7 @@ Feature: Address Datasource
       | subdistrict | {subdistrict-1} |
       | postcode    | {postcode-1}    |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: TH Address Datasource - Edit Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

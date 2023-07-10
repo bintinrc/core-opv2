@@ -756,6 +756,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
+    settings.setShipperPhoneNumber(basicSettingsForm.shipperPhoneNumber.getValue());
+    settings.setShipperEmail(basicSettingsForm.shipperEmail.getValue());
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
     settings.setCorporate(basicSettingsForm.corporate.isOn());
     settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
@@ -1931,6 +1933,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public TextBox shipperPhoneNumber;
     @FindBy(id = "shipper-email")
     public TextBox shipperEmail;
+    @FindBy(css ="button[aria-label='Create dash account']")
+    public Button createDashAccount;
     @FindBy(id = "dashUsername")
     public TextBox dashUsername;
     @FindBy(css = "[id*='shipper-dashboard-password']")
