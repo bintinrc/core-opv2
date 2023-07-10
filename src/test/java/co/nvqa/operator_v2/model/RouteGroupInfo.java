@@ -15,8 +15,11 @@ public class RouteGroupInfo extends DataEntity<RouteGroupInfo> {
   private String createDateTime;
   private Integer noTransactions;
   private Integer noRoutedTransactions;
-  private Integer noReservations;
-  private Integer noRoutedReservations;
+  private String noReservations;
+  private String noRoutedReservations;
+
+  private String noPaJobs;
+  private String noRoutedPaJobs;
   private String hubName;
 
   public RouteGroupInfo() {
@@ -86,28 +89,20 @@ public class RouteGroupInfo extends DataEntity<RouteGroupInfo> {
     setNoRoutedTransactions(Integer.valueOf(noRoutedTransactions));
   }
 
-  public Integer getNoReservations() {
+  public String getNoReservations() {
     return noReservations;
   }
 
-  public void setNoReservations(Integer noReservations) {
+  public void setNoReservations(String noReservations) {
     this.noReservations = noReservations;
   }
 
-  public void setNoReservations(String noReservations) {
-    setNoReservations(Integer.valueOf(noReservations));
-  }
-
-  public Integer getNoRoutedReservations() {
+  public String getNoRoutedReservations() {
     return noRoutedReservations;
   }
 
-  public void setNoRoutedReservations(Integer noRoutedReservations) {
-    this.noRoutedReservations = noRoutedReservations;
-  }
-
   public void setNoRoutedReservations(String noRoutedReservations) {
-    setNoRoutedReservations(Integer.valueOf(noRoutedReservations));
+    this.noRoutedReservations = noRoutedReservations;
   }
 
   public String getHubName() {
@@ -116,5 +111,21 @@ public class RouteGroupInfo extends DataEntity<RouteGroupInfo> {
 
   public void setHubName(String hubName) {
     this.hubName = hubName;
+  }
+
+  public String getNoPaJobs() {
+    return noPaJobs;
+  }
+
+  public void setNoPaJobs(String noPaJobs) {
+    this.noPaJobs = noPaJobs;
+  }
+
+  public String getNoRoutedPaJobs() {
+    return noRoutedPaJobs;
+  }
+
+  public void setNoRoutedPaJobs(String noRoutedPaJobs) {
+    this.noRoutedPaJobs = noRoutedPaJobs;
   }
 }

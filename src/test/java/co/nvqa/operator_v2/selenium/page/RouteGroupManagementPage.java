@@ -11,8 +11,10 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import com.beust.jcommander.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -88,6 +90,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
      */
     public static class JobDetailsTable extends AntTableV2<RouteGroupJobDetails> {
 
+      private static final String TAG_LOCATOR = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='jobTags']//*[contains(@class,'ant-tag')]";
       public static final String COLUMN_TRACKING_ID = "trackingId";
       public static final String COLUMN_ID = "id";
       public static final String COLUMN_TYPE = "type";
@@ -104,6 +107,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
             .put("address", "address")
             .put("routeId", "routeId")
             .put("status", "status")
+            .put("jobTags", "jobTags")
             .put("priorityLevel", "priorityLevel")
             .put("startDateTime", "startDateTime")
             .put("endDateTime", "endDateTime")
@@ -114,6 +118,12 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
         );
         setEntityClass(RouteGroupJobDetails.class);
         setTableLocator("//div[contains(@class,'edit-route-group-table')]");
+        setColumnReaders(Map.of("jobTags", this::readJobTags));
+      }
+
+      public String readJobTags(int index) {
+        var xpath = f(TAG_LOCATOR, index);
+        return Strings.join(",", getTextOfElements(xpath));
       }
     }
   }
@@ -205,6 +215,8 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
           .put("noRoutedTransactions", "noRoutedTransactions")
           .put("noReservations", "noReservations")
           .put("noRoutedReservations", "noRoutedReservations")
+          .put("noPaJobs", "noPaJobs")
+          .put("noRoutedPaJobs", "noRoutedPaJobs")
           .put("hubName", "hubName")
           .build()
       );
