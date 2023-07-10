@@ -2179,7 +2179,7 @@ Feature: Pending Pickup Jobs
       | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn @Debugg
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
   Scenario Outline: View Addresses with No Jobs Created
     Given Operator loads Operator portal home page
     When DB Station - Operator delete Station Pending Pickup records for the hub "<HubId>"
@@ -2257,7 +2257,7 @@ Feature: Pending Pickup Jobs
       | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn @Debugg
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
   Scenario Outline: View Addresses with only Late Parcel and No Jobs Created
     Given Operator loads Operator portal home page
     When DB Station - Operator delete Station Pending Pickup records for the hub "<HubId>"
@@ -2292,7 +2292,7 @@ Feature: Pending Pickup Jobs
       | HubName      | HubId      | latitude | longitude | start_time | end_time | Country | ModalName        | TileName1                      | TileName2                    |
       | {hub-name-3} | {hub-id-3} | 2.22222  | 2.22222   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn @Debugg
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
   Scenario Outline: View Addresses with only Late Parcel and Unrouted Job
     Given Operator loads Operator portal home page
     When DB Station - Operator delete Station Pending Pickup records for the hub "<HubId>"
