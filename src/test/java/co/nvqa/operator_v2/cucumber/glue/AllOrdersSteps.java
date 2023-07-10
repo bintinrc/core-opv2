@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.commons.model.pdf.AirwayBill;
@@ -179,7 +180,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
     List<Order> listOfCreatedOrder =
         containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS)
-            : get(KEY_LIST_OF_CREATED_ORDERS);
+            : get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS);
     allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
   }
 
@@ -1111,5 +1112,11 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage(List<String> listOfOrder) {
     List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
+  }
+
+  @Given("Operator unmask all orders page")
+  public void unmaskEditOrder() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    allOrdersPage.operatorClickMaskingText(elements);
   }
 }
