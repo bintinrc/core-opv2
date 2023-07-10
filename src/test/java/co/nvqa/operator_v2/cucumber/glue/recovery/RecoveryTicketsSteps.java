@@ -10,7 +10,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -185,15 +184,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       List<String> trackingIdsValues = Arrays.stream(finalData.get("trackingIds").split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      List<String> actualTrackingIds = new ArrayList<>();
-      for (PageElement element : recoveryTicketsPage.findTicketsByCSVDialog.invalidTrackingId) {
-        actualTrackingIds.add(element.getText());
-      }
+      List<String> actualTrackingIds = recoveryTicketsPage.findTicketsByCSVDialog.invalidTrackingId.stream()
+          .map(PageElement::getText)
+          .collect(Collectors.toList());
       if (trackingIdsValues.size() != actualTrackingIds.size()) {
         return;
       }
-      Assert.assertTrue("correct Invalid tracking Ids",
-          trackingIdsValues.equals(actualTrackingIds));
+      Assert.assertEquals("Correct invalid tracking IDs", trackingIdsValues, actualTrackingIds);
     });
   }
 
