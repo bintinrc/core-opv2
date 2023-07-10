@@ -1,7 +1,7 @@
 @Sort @AddressDataSourceSgPart1
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -34,7 +34,6 @@ Feature: Address Datasource
       | longitude   | {longitude-1}           |
       | whitelisted | True                    |
 
-  @DeleteAddressDatasourceCommonV2CommonV2
   Scenario: SG Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

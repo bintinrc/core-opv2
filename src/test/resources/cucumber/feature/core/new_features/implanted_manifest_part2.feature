@@ -1,7 +1,7 @@
 @OperatorV2 @Core @NewFeatures @ImplantedManifestPart2 @NewFeatures1
 Feature: Implanted Manifest
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -568,7 +568,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShippers     |         |
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute @Debug
+  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup - PA Job POD More Than 7 Days Ago
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

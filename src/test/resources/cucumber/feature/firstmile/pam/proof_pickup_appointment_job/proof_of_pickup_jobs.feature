@@ -52,7 +52,7 @@ Feature: Force Fail Single Pickup Job
     And Operator click on button to view image on Pickup Appointment Job page
     And QA verify signature image on Pickup Appointment Job page
     And Operator click on button to cancel image on Pickup Appointment Job page
-    And Operator click on button to download parcel list on Pickup Appointment Job page
+    And Operator click Download Parcel List button in Job Details modal on Pickup Jobs page
     And Verify that csv file is downloaded on pick up job page with filename for Job Id
       |  Job Id     |  {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}             |
 
