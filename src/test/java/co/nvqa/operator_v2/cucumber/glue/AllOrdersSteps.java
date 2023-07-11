@@ -150,7 +150,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage() {
     List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
-    
+
     //handle masking
     List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
     allOrdersPage.operatorClickMaskingText(elements);
@@ -525,13 +525,15 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
     allOrdersPage.verifyItsCurrentPage();
   }
-
-  @When("^Operator RTS multiple orders on next day on All Orders page$")
-  public void operatorRtsMultipleOrdersOnNextDayOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    allOrdersPage.rtsMultipleOrderNextDay(listOfTrackingIds);
+  
+  @When("Operator RTS multiple orders on next day on All Orders Page:")
+  public void operatorRtsOrdersOnNextDayOnAllOrdersPage(List<String> listOfTrackingIds) {
+    List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
+    if (CollectionUtils.isEmpty(resolveListOfTrackingIds)) {
+      throw new IllegalArgumentException(
+          "List of created Tracking Id should not be null or empty.");
+    }
+    allOrdersPage.rtsMultipleOrderNextDay(resolveListOfTrackingIds);
   }
 
   @When("^Operator select 'Set RTS to Selected' action for found orders on All Orders page$")
