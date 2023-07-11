@@ -202,4 +202,11 @@ public class OrderBillingSteps extends AbstractSteps {
     Assertions.assertThat(orderBillingPage.csvFileTemplate.hasItem(template))
         .as(f(" Template with name : %s is not available in the dropdown ", template)).isTrue();
   }
+
+  @Then("Operator verifies error msg {string} in Order Billing Page")
+  public void operatorVerifiesErrorMsgInOrderBillingPage(String errorMsg) {
+    Assertions.assertThat(orderBillingPage.verifyErrorMsgIsVisible(errorMsg))
+        .as("Error message is visible").isTrue();
+
+  }
 }
