@@ -47,15 +47,15 @@ Feature: All Orders - Preset Filters
 #      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate
-  Scenario: Operator Apply Filter Preset on All Orders Page (uid:c75cbb19-213b-4f6c-b7d0-42eec03cd916)
+  Scenario: Operator Apply Filter Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And  API Operator creates new Orders Filter Template using data below:
+    And API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.statusIds  | 2                                            |
       | value.shipperIds | {shipper-v4-legacy-id}                       |
       | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
     When Operator go to menu Order -> All Orders
-    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit                                                          |
       | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
@@ -64,7 +64,7 @@ Feature: All Orders - Preset Filters
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator creates new Orders Filter Template using data below:
+    And API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.statusIds  | 2                                            |
       | value.shipperIds | {shipper-v4-legacy-id}                       |
@@ -73,13 +73,13 @@ Feature: All Orders - Preset Filters
     And Operator selects "Delete Preset" preset action on All Orders page
     Then Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled
     And Operator verifies Delete button in Delete Preset dialog on All Orders page is disabled
-    When Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" preset in Delete Preset dialog on All Orders page
-    Then Operator verifies "Preset \"{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}\" will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on All Orders page
+    When Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" preset in Delete Preset dialog on All Orders page
+    Then Operator verifies "Preset \"{KEY_ALL_ORDERS_FILTERS_PRESET.name}\" will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on All Orders page
     When Operator clicks Delete button in Delete Preset dialog on All Orders page
     Then Operator verifies that warning toast displayed:
       | top    | 1 filter preset deleted                |
-      | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET_ID} |
-    And DB Lighthouse - verify preset_filters id "{KEY_ALL_ORDERS_FILTERS_PRESET_ID}" record is deleted:
+      | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET.id} |
+    And DB Lighthouse - verify preset_filters id "{KEY_ALL_ORDERS_FILTERS_PRESET.id}" record is deleted:
 
 #    TODO DISABLED
 #  @DeleteFilterTemplate
