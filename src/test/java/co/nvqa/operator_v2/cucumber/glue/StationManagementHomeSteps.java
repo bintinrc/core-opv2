@@ -854,13 +854,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
     put(KEY_STATION_HOME_PAGE_TABLE_DETAILS, actualResults);
   }
 
-  @Then("Station Operator verifies that Last Scan time for TrackingId {string} is +{int} hours in station parcels table")
+  @Then("Station Operator verifies that Last Scan time for TrackingId {value} is +{int} hours in station parcels table")
   public void dbOperatorVerifiesThatLastScanTimeForTrackingIdIsHoursInStationParcelsTable(
-      String trackindId, int timeDiff) {
+      String trackingId, int timeDiff) {
     Map<String, String> details = get(KEY_STATION_HOME_PAGE_TABLE_DETAILS);
     String actualLastScanTime = details.get("Last Scan Time");
     ParcelsDao parcels = new ParcelsDao();
-    List<Parcel> dbResults = parcels.getParcelDetails(trackindId);
+    List<Parcel> dbResults = parcels.getParcelDetails(trackingId);
     String expectedAdjustedTimeEndDateInUTC = DateUtil.getAdjustedLocalTimeFromUTC(
         dbResults.get(0).getLastScanTime(), timeDiff);
     Assertions.assertThat(expectedAdjustedTimeEndDateInUTC)
