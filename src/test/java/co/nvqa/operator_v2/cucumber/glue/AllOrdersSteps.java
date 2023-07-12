@@ -440,16 +440,16 @@ public class AllOrdersSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator resume order on All Orders page$")
-  public void operatorResumeOrderOnAllOrdersPage() {
-    List<String> trackingIds = Collections.singletonList(get(KEY_CREATED_ORDER_TRACKING_ID));
-    resumeOrders(trackingIds);
+  @When("Operator resume this order {string} on All Orders page")
+  public void operatorResumeOrderOnAllOrdersPage(String trackingId) {
+    String resolveTrackingId = resolveValue(trackingId);
+    resumeOrders(Collections.singletonList(resolveTrackingId));
   }
 
-  @When("^Operator resume multiple orders on All Orders page$")
-  public void operatorResumeOrdersOnAllOrdersPage() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    resumeOrders(trackingIds);
+  @When("Operator resume multiple orders on All Orders page below:")
+  public void operatorResumeOrdersOnAllOrdersPage(List<String> trackingIds) {
+    List<String> resolveTrackingIds = resolveValues(trackingIds);
+    resumeOrders(resolveTrackingIds);
   }
 
   private void resumeOrders(List<String> trackingIds) {
