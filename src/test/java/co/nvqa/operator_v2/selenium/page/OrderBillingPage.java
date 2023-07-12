@@ -39,8 +39,12 @@ public class OrderBillingPage extends SimpleReactPage {
   public AntSelect parentShippersInput;
   @FindBy(css = "[data-testid='selectionMode.scriptId']")
   public AntSelect3 scriptId;
+  @FindBy(css = "[data-testid='orderBilling.scriptId'] div.ant-select-selector")
+  public AntSelect3 scriptIdInput;
   @FindBy(css = "[data-testid='orderBilling.emails']")
   public AntSelect3 emailAddressInput;
+  @FindBy(xpath = "//*[text()='No Data']")
+  public PageElement noDataFound;
   private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//div[@data-testid = 'orderBilling.template']//div//span[2]";
   private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//span[text() = '%s']/preceding-sibling::span/input";
 
@@ -91,6 +95,12 @@ public class OrderBillingPage extends SimpleReactPage {
     parentShippersInput.click();
   }
 
+  public void setScriptId(String scriptIdAndName) {
+    scriptId.click();
+    scriptIdInput.selectValue(scriptIdAndName);
+    scriptIdInput.click();
+  }
+
   public void setInvalidParentShipper(String parentShipper) {
     parentShippers.click();
     parentShippersInput.selectValue(parentShipper);
@@ -106,6 +116,12 @@ public class OrderBillingPage extends SimpleReactPage {
     selectedShippers.click();
     selectedShippersInput.click();
     selectedShippers.click();
+  }
+
+  public void setEmptyScriptId() {
+    scriptId.click();
+    scriptIdInput.click();
+    scriptId.click();
   }
 
   public void uploadCsvShippersAndVerifyToastMsg(File file, String toastTop, String toastBottom) {
