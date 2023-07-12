@@ -771,30 +771,13 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
     MiddleMileDriver driver = getList(keyIdx.get("key"), MiddleMileDriver.class).get(Integer.parseInt(keyIdx.get("idx")));
     middleMileDriversPage.tableFilterById(driver, driver.getId());
-  }
-
-  public void operatorSsearchesAsAndVerifiesTheCreatedMiddleMileDriverExists(String filterBy, String storageKey) {
-    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
-    MiddleMileDriver driver = getList(keyIdx.get("key"), MiddleMileDriver.class).get(Integer.parseInt(keyIdx.get("idx")));
-    switch (filterBy.toLowerCase()) {
-      case NAME_FILTER:
-      case USERNAME_FILTER:
-      case HUB_FILTER:
-      case COMMENTS_FILTER:
-      case VENDOR_FILTER:
-        middleMileDriversPage.tableFilter(driver, filterBy.toLowerCase());
-        break;
-      case EMPLOYMENT_TYPE_FILTER:
-      case EMPLOYMENT_STATUS_FILTER:
-      case LICENSE_TYPE_FILTER:
-      case LICENSE_STATUS_FILTER:
-        middleMileDriversPage.tableFilterCombobox(driver, filterBy.toLowerCase());
-        break;
-      case ID_FILTER:
-        middleMileDriversPage.tableFilterById(driver, driver.getId());
-        break;
-      default:
-        throw new IllegalArgumentException(f("Unknown filter given: ", filterBy.toLowerCase()));
-    }
+    middleMileDriversPage.clickLicenseTypeFilterInColumn.click();
+    middleMileDriversPage.chooseLicenseTypeFilter("B");
+    middleMileDriversPage.chooseLicenseTypeFilter("B1");
+    middleMileDriversPage.chooseLicenseTypeFilter("B2");
+    middleMileDriversPage.chooseLicenseTypeFilter("C");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 1");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 2");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 3");
   }
 }
