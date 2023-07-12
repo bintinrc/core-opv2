@@ -12,10 +12,18 @@ import lombok.Setter;
 public class InvoiceDisputeDetails extends DataEntity<InvoiceDisputeDetails> {
 
   private String caseNumber;
-  private String numberOfTids;
+  private String numberOfTIDs;
+  private String numberOfInvalidTIDs;
+  private String numberOfValidTIDs;
+  private String numberOfPendingTIDs;
+  private String numberOfAcceptedTIDs;
+  private String numberOfRejectedTIDs;
+  private String numberOfErrorTIDs;
   private String buildingName;
   private String disputeFiledDate;
   private String shipperId;
+  private String shipperName;
+  private String disputePersonName;
   private String invoiceId;
   private String caseStatus;
 }
