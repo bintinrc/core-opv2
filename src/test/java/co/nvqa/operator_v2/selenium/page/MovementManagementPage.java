@@ -192,7 +192,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public PageElement assignDriverButton;
 
   @FindBy(className = "ant-modal-wrap")
-  public TripManagementPage.AssignTripModalOld assignDriverModal;
+  public TripManagementPage.AssignTripModal assignDriverModal;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
@@ -327,12 +327,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     assignDriverButton.click();
   }
 
-  public void assignDriver(String driverId) {
+  public void assignDriver(String username) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignDriverModal.addDriver.click();
-    pause3s();
-    assignDriverModal.assignDriver(driverId);
-    pause2s();
+    assignDriverModal.assignDriver(username);
     assignDriverModal.saveButton.click();
     assignDriverModal.waitUntilInvisible();
   }

@@ -12,7 +12,8 @@ Feature: Zones Polygon
     When Operator clicks Bulk Edit Polygons button
     Then Operator make sure Bulk Edit Polygons dialog shows up
     When Operator upload a KML file "invalid-structure.kml"
-    Then Operator make sure error popup on zones page shows up: "The kml file has invalid format."
+    Then Operator make sure dialog shows error: "Zone IDs with invalid latlong"
+    And Operator make sure error on Zone is : "Error parsing the KML"
 
   Scenario: Bulk Edit Polygons - Unfinished Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
@@ -49,7 +50,7 @@ Feature: Zones Polygon
     Then Operator make sure Bulk Edit Polygons dialog shows up
     When Operator upload a KML file "zone-multi-poly-with-empty-polygon.kml"
     Then Operator make sure dialog shows error: "Zone IDs with invalid latlong"
-    And Operator make sure error on Zone is : "There is no coordinates in the polygon data"
+    And Operator make sure error on Zone is : "Each polygon must have at least 4 points declared"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

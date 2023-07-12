@@ -121,10 +121,18 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     public PageElement errorMessage;
 
     @FindBy(xpath = "//div[@class='ant-row']/ul/li")
-    public PageElement invalidTrackingId;
+    public List<PageElement> invalidTrackingId;
 
     @FindBy(xpath = "//button[@class='ant-btn ant-btn-default']")
     public Button loadSelection;
+
+    @FindBy(css = "[data-testid='download-sample']")
+    public PageElement downloadSample;
+
+    @FindBy(xpath = "//span[@class='ant-upload-list-item-name']")
+    public PageElement uploadedFileName;
+
+    public static final String SEARCH_SAMPLE_CSV_FILENAME_PATTERN = "search-sample.csv";
 
     public FindTicketsByCSVDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -141,6 +149,30 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(css = "[data-datakey='ticketTypeSubType']")
     public PageElement ticketType;
+
+    @FindBy(css = "[data-datakey='ticketCreator']")
+    public PageElement ticketCreator;
+
+    @FindBy(css = "[data-datakey='shipper']")
+    public PageElement shipper;
+
+    @FindBy(css = "[data-datakey='isRedTicket']")
+    public PageElement redTickets;
+
+    @FindBy(css = "[data-datakey='_investigatingHubName']")
+    public PageElement investigatingHub;
+
+    @FindBy(css = "[data-datakey='investigatingParty']")
+    public PageElement InvestigatingDept;
+
+    @FindBy(css = "[data-datakey='status']")
+    public PageElement status;
+
+    @FindBy(css = "[data-datakey='daysDue']")
+    public PageElement daysSince;
+
+    @FindBy(css = "[data-datakey='createdAt']")
+    public PageElement created;
 
     public static final String ACTION_EDIT = "Edit";
 
