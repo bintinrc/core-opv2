@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.InvoiceDisputeDetails;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
@@ -32,8 +33,8 @@ public class InvoiceDisputesPage extends SimpleReactPage<InvoiceDisputesPage> {
   @FindBy(xpath = "//iframe[contains(@src,'invoice-disputes')]")
   private PageElement pageFrame;
 
-//  @FindAll(@FindBy(xpath = "//tbody[@class='ant-table-tbody']//tr[@class='ant-table-row ant-table-row-level-0']"))
-//  public List<PageElement> noOfResultsInTable;
+  @FindBy(xpath = "//tr[@class='ant-table-row ant-table-row-level-0']//descendant::button")
+  private Button actionButton;
 
   private static final String XPATH_CASE_ROW = "//td[text()='%s']//parent::tr/td";
 
@@ -66,7 +67,7 @@ public class InvoiceDisputesPage extends SimpleReactPage<InvoiceDisputesPage> {
     InvoiceDisputeDetails invoiceDisputeDetails = new InvoiceDisputeDetails();
     List<WebElement> elements = webDriver.findElements(By.xpath(f(XPATH_CASE_ROW, caseId)));
     invoiceDisputeDetails.setCaseNumber(elements.get(0).getText());
-    invoiceDisputeDetails.setNumberOfTids(elements.get(1).getText());
+    invoiceDisputeDetails.setNumberOfTIDs(elements.get(1).getText());
     invoiceDisputeDetails.setDisputeFiledDate(elements.get(2).getText());
     invoiceDisputeDetails.setShipperId(elements.get(3).getText());
     invoiceDisputeDetails.setInvoiceId(elements.get(4).getText());
@@ -76,7 +77,10 @@ public class InvoiceDisputesPage extends SimpleReactPage<InvoiceDisputesPage> {
 
   public String getInvoiceDisputesCount() {
     return resultCount.getText().split("of")[1].split("results")[0].trim();
+  }
 
+  public void clickActionButton() {
+    actionButton.click();
   }
 
 }
