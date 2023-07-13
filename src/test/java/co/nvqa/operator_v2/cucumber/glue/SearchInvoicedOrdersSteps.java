@@ -68,7 +68,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
         .startsWith(DateUtil.getTodayDate_YYYY_MM_DD());
   }
 
-  @And("Operator verifies No Data is displayed")
+  @And("Operator verifies No Data is displayed in the invoiced orders search page")
   public void operatorVerifiesNoResultsFoundIsDisplayed() {
     invoicedOrdersSearchPage.noDataFound.waitUntilVisible(3);
     Assertions.assertThat(invoicedOrdersSearchPage.noDataFound.isDisplayed())

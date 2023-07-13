@@ -765,4 +765,19 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     String resolvedValue = resolveValue(value);
     middleMileDriversPage.editDriverByWithInvalidValue(fieldName, resolvedValue);
   }
+
+  @And("Operator searches all types of the license type of {string}")
+  public void operatorSearchesAllTypesOfTheLicenseTypeOf(String storageKey) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+    MiddleMileDriver driver = getList(keyIdx.get("key"), MiddleMileDriver.class).get(Integer.parseInt(keyIdx.get("idx")));
+    middleMileDriversPage.tableFilterById(driver, driver.getId());
+    middleMileDriversPage.clickLicenseTypeFilterInColumn.click();
+    middleMileDriversPage.chooseLicenseTypeFilter("B");
+    middleMileDriversPage.chooseLicenseTypeFilter("B1");
+    middleMileDriversPage.chooseLicenseTypeFilter("B2");
+    middleMileDriversPage.chooseLicenseTypeFilter("C");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 1");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 2");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 3");
+  }
 }

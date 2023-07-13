@@ -133,67 +133,81 @@ Feature: All Orders - RTS & Resume
 
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator cancel created order
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator go to menu Order -> All Orders
-    When Operator resume order on All Orders page
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator resume this order "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" on All Orders page
+    And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
   @happy-path
-  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders (uid:07ae3956-3711-4994-8de4-94d43ca93edf)
+  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator cancel created orders
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator go to menu Order -> All Orders
-    When Operator resume multiple orders on All Orders page
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator resume multiple orders on All Orders page below:
+    |{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}|
+    |{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}|
+    And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
 
   Scenario: Operator RTS Multiple Orders with Invalid Granular Status
