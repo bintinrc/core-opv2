@@ -8,8 +8,8 @@ import co.nvqa.operator_v2.selenium.page.recovery.RecoveryTicketsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +93,10 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       List<String> ticketType = Arrays.stream(dataTable.get("type").split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      List<String> ticketSubType = Arrays.stream(dataTable.get("subType").split(","))
-          .map(String::trim)
-          .collect(Collectors.toList());
+      List<String> ticketSubType =
+          dataTable.containsKey("subType") ? Arrays.stream(dataTable.get("subType").split(","))
+              .map(String::trim)
+              .collect(Collectors.toList()) : new ArrayList<>();
       String investigationGroup = dataTable.get("investigationGroup");
       String assigneeEmail = dataTable.get("assigneeEmail");
       String investigationHubId = dataTable.get("investigationHubId");
@@ -110,9 +111,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
       trackingIds.forEach(trackingId -> {
         int index = trackingIds.indexOf(trackingId);
+        String currentTicketSubType = "";
+        if (index < ticketSubType.size()) {
+          currentTicketSubType = ticketSubType.get(index);
+        }
         String csvRow = trackingId + "," +
             ticketType.get(index) + "," +
-            ticketSubType.get(index) + "," +
+            currentTicketSubType + "," +
             investigationGroup + "," +
             assigneeEmail + "," +
             investigationHubId + "," +
@@ -126,19 +131,21 @@ public class RecoveryTicketsSteps extends AbstractSteps {
           content.toString());
       recoveryTicketsPage.creatByCSVDialog.fileUpload.setValue(file);
 
-      RecoveryTicket recoveryTicket = new RecoveryTicket();
-      trackingIds.forEach(trackingId -> {
+      for (String trackingId : trackingIds) {
         int index = trackingIds.indexOf(trackingId);
+        RecoveryTicket recoveryTicket = new RecoveryTicket();
         recoveryTicket.setTrackingId(trackingId);
         recoveryTicket.setAssignTo(assigneeEmail);
         recoveryTicket.setTicketType(ticketType.get(index));
-        recoveryTicket.setTicketSubType(ticketSubType.get(index));
+        if (index < ticketSubType.size()) {
+          recoveryTicket.setTicketSubType(ticketSubType.get(index));
+        }
         recoveryTicket.setInvestigatingDepartment(investigationGroup);
         recoveryTicket.setInvestigatingHub(investigationHubId);
         recoveryTicket.setTicketNotes(ticketNotes);
         recoveryTicket.setEntrySource(entrySource);
         put("recoveryTicket", recoveryTicket);
-      });
+      }
       recoveryTicketsPage.creatByCSVDialog.uploadFile.click();
     });
   }
@@ -250,6 +257,11 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         String actual = recoveryTicketsPage.resultsTable.status.getText();
         Assertions.assertThat(actual).as("status").isEqualTo(value);
       }
+      value = finalData.get("assignee");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.assignee.getText();
+        Assertions.assertThat(actual).as("assignee").isEqualTo(value);
+      }
       value = finalData.get("daysSince");
       if (StringUtils.isNotBlank(value)) {
         String actual = recoveryTicketsPage.resultsTable.daysSince.getText();
@@ -310,6 +322,21 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       final String fileName = page.getLatestDownloadedFilename(
           page.findTicketsByCSVDialog.SEARCH_SAMPLE_CSV_FILENAME_PATTERN);
       page.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+  @When("Operator filter search result by field {string} with value {string}")
+  public void filterSearchResultByTrackingId(String field, String value) {
+    recoveryTicketsPage.inFrame((page) -> {
+      final String finalValue = resolveValue(value);
+      page.resultsTable.filterByField(field, finalValue);
+    });
+  }
+
+  @When("Operator clear the filter search")
+  public void clearFilterSearch() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.resultsTable.clearFilterButton.click();
     });
   }
 }
