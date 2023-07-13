@@ -2,13 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.DriverType;
 import co.nvqa.operator_v2.model.DriverTypeParams;
-import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage.DriverTypesTable;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -165,8 +164,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
   public void operatorDeleteNewDriverTypeOnOnDriverTypeManagementPage() {
     dtmPage.inFrame(() -> {
       dtmPage.clickActionButtonOnTable(1, DriverTypesTable.ACTION_DELETE);
-      dtmPage.confirmDeleteDialog.delete.waitUntilClickable();
-      dtmPage.confirmDeleteDialog.delete.click();
+      dtmPage.confirmDeleteDialog.getActionButton("Delete").click();
     });
   }
 
@@ -200,5 +198,10 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_FILTER_PARAMS);
     dtmPage.verifyFilterResults(driverTypeParams);
     takesScreenshot();
+  }
+
+  @Then("Operator verify toast error message {string} displayed")
+  public void operatorVerifyToastErrorMessageDisplayed(String message) {
+    dtmPage.verifyToastErrorMessage(message);
   }
 }
