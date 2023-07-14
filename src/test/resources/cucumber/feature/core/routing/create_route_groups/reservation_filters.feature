@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ReservationFilters @CRG4
 Feature: Create Route Groups - Reservation Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Pickup Size Create Route Groups - Reservation Filters - Pickup Size = <pickupSize>
@@ -170,7 +170,3 @@ Feature: Create Route Groups - Reservation Filters
       | Note                                 | rsvn_type         | pickup_service_level |
       | Reservation Type : Normal            | Normal            | Standard             |
       | Reservation Type : Premium Scheduled | Premium Scheduled | Premium              |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

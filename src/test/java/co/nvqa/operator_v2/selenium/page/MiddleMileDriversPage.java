@@ -84,6 +84,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='%s']";
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
 
+    private static final String LICENSE_TYPE_FILTER_XPATH = "//span[@class='ant-dropdown-menu-title-content']/span[contains(text(),'%s')]";
+
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
     private static final String FIRST_NAME_INPUT_CREATE_DRIVER_ID = "first_name";
     private static final String LAST_NAME_INPUT_CREATE_DRIVER_ID = "last_name";
@@ -241,6 +243,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//button[@data-testid='driver-dialog-save-button']/span")
     public Button saveCreateDriver;
+
+    @FindBy(xpath = "//button[@data-testid='column-filter-icon-middle-mile-driver-license-type']")
+    public Button clickLicenseTypeFilterInColumn;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -1447,5 +1452,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 break;
         }
         editDriverDialog.save.click();
+    }
+
+    public void chooseLicenseTypeFilter(String licenseType) {
+        click(f(LICENSE_TYPE_FILTER_XPATH, licenseType));
     }
 }

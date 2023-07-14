@@ -112,7 +112,8 @@ Feature: Order Billing Parent Shipper
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
     Then Operator chooses 'Select by Parent Shipper' option and does not input a shipper ID
-    Then Operator verifies Generate Success Billings button is disabled
+    Then Operator clicks Generate Success Billing Button
+    Then Operator verifies error msg "At least 1 shippers must be selected." in Order Billing Page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

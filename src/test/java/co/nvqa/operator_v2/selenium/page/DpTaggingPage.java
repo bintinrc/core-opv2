@@ -47,6 +47,8 @@ public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
 
   private static final String LOCATOR_DROP_OFF_MENU = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'') or contains(./div/text(),'')]";
 
+  @FindBy(css = "[data-testid='button_download_sample_csv']")
+  public Button downloadSampleCsv;
   @FindBy(xpath = "//iframe[contains(@src,'dp-tagging')]")
   private PageElement pageFrame;
 
