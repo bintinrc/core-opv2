@@ -187,9 +187,9 @@ Feature: All Orders - RTS & Resume
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -197,8 +197,8 @@ Feature: All Orders - RTS & Resume
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator go to menu Order -> All Orders
     When Operator resume multiple orders on All Orders page below:
-    |{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}|
-    |{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}|
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
@@ -233,38 +233,47 @@ Feature: All Orders - RTS & Resume
 
   Scenario: Operator RTS Multiple Orders with Invalid Granular Status
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                                          |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
-      | granularStatus | Completed                         |
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
-      | granularStatus | Cancelled                         |
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
-      | granularStatus | Returned To Sender                |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
+      | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                                          |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | granularStatus | Completed                                  |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | granularStatus | Cancelled                                  |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
+      | granularStatus | Returned To Sender                         |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders by uploading CSV on All Orders page
+    And Operator find orders by uploading CSV on All Orders page:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId} |
     And Operator select 'Set RTS to Selected' action for found orders on All Orders page
     Then Operator verify "Return to Sender" process in Selection Error dialog on All Orders page
     And Operator verify orders info in Selection Error dialog on All Orders page:
       | trackingId                                 | reason                   |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Invalid status to change |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Invalid status to change |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Invalid status to change |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Invalid status to change |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Invalid status to change |
+      | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId} | Invalid status to change |
     When Operator clicks Continue button in Selection Error dialog on All Orders page
     Then Operator verifies that error toast displayed:
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
-    Then API Operator verifies order state:
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then API Core - Verifies order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | COMPLETED                                  |
-    Then API Operator verifies order state:
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    Then API Core - Verifies order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | granularStatus | CANCELLED                                  |
-    Then API Operator verifies order state:
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+    Then API Core - Verifies order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId} |
       | granularStatus | RETURNED_TO_SENDER                         |
