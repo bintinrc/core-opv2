@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.commons.model.pdf.AirwayBill;
@@ -175,11 +176,11 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
-  @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
+  @Then("Operator verify all orders in CSV is found on All Orders page with correct info")
   public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
     List<Order> listOfCreatedOrder =
         containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS)
-            : get(KEY_LIST_OF_CREATED_ORDERS);
+            : get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS);
     allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
   }
 
@@ -303,12 +304,10 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.rtsSingleOrderNextDay(trackingId);
   }
 
-  @When("^Operator cancel multiple orders on All Orders page$")
-  public void operatorCancelMultipleOrdersOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    allOrdersPage.cancelSelected(listOfTrackingIds);
+  @When("Operator cancel multiple orders below on All Orders page:")
+  public void operatorCancelMultipleOrdersOnAllOrdersPage(List<String> listOfOrder) {
+    List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
+    allOrdersPage.cancelSelected(listOfCreatedTrackingId);
   }
 
   @When("^Operator cancel order on All Orders page$")
@@ -317,11 +316,9 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.cancelSelected(Collections.singletonList(trackingID));
   }
 
-  @When("^Operator pull out multiple orders from route on All Orders page$")
-  public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
+  @When("Operator pull out multiple orders below from route on All Orders page:")
+  public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage(
+      List<String> listOfTrackingIds) {
     allOrdersPage.pullOutFromRoute(listOfTrackingIds);
   }
 
@@ -473,14 +470,14 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @When("^Operator apply \"Pull From Route\" action and expect to see \"Selection Error\"$")
-  public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.pullOutFromRouteWithExpectedSelectionError(trackingIds);
+  public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError(
+      List<String> trackingIds) {
+    allOrdersPage.pullOutFromRouteWithExpectedSelectionError(resolveValues(trackingIds));
   }
 
   @Then("^Operator verify Selection Error dialog for invalid Pull From Order action$")
-  public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction(
+      List<String> trackingIds) {
     List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
     Collections.fill(expectedFailureReasons, "No route found to unroute");
     allOrdersPage.verifySelectionErrorDialog(trackingIds, AllOrdersAction.PULL_FROM_ROUTE,
@@ -1113,5 +1110,11 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage(List<String> listOfOrder) {
     List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
+  }
+
+  @Given("Operator unmask all orders page")
+  public void unmaskEditOrder() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    allOrdersPage.operatorClickMaskingText(elements);
   }
 }

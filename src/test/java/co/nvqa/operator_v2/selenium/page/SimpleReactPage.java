@@ -322,4 +322,13 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     }
   }
 
+  public void operatorClickMaskingText(List<WebElement> masking) {
+    masking.forEach(m -> {
+      try {
+        m.click();
+      } catch (Exception ex) {
+        LOGGER.debug("mask element not found");
+      }
+    });
+  }
 }
