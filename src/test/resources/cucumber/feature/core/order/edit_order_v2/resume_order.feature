@@ -1,11 +1,12 @@
 @OperatorV2 @Core @EditOrderV2 @ResumeOrder
 Feature: Resume Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Pickup Cancelled, Delivery Cancelled
+  @happy-path
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -52,7 +53,7 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
-  Scenario: Operator Resume an Order on Edit Order V2 page - Non-Cancelled Order
+  Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
@@ -83,8 +84,8 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Return Pickup Fail With Waypoint
+  @ArchiveRouteCommonV2
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -153,8 +154,8 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Delivery is Not Cancelled
+  @ArchiveRouteCommonV2
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -214,7 +215,7 @@ Feature: Resume Order
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
 
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Return Pickup Fail With NO Waypoint
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With NO Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -260,7 +261,3 @@ Feature: Resume Order
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

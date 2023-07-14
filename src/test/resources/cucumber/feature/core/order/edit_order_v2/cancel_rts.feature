@@ -1,10 +1,11 @@
-@OperatorV2 @Core @EditOrder @CancelRTS @EditOrder4
+@OperatorV2 @Core @EditOrderV2 @CancelRTS
 Feature: Cancel RTS
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Operator Cancel RTS from Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |

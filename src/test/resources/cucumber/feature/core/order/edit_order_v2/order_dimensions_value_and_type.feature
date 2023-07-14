@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrderV2 @OrderDimension
 Feature: Order Dimensions Value and Type
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Publish Dimension Value and Device Source on Hub Inbound Event with Updated Dimension and Size Value - Device Type = Manual
@@ -162,7 +162,3 @@ Feature: Order Dimensions Value and Type
     Examples:
       | oldWeight | oldHeight | oldLength | oldWidth | oldSize | oldSizeShort | oldSizeId |
       | 1         | 1         | 1         | 1        | SMALL   | S            | 0         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

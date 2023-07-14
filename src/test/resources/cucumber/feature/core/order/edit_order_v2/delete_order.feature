@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrderV2 @DeleteOrder
 Feature: Delete Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Disallow Delete Order - Status = Completed
@@ -82,6 +82,7 @@ Feature: Delete Order
     Then Operator verifies that error react notification displayed:
       | top | Invalid Password |
 
+  @happy-path
   Scenario: Operator Delete Order - Status = Pending Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -247,7 +248,3 @@ Feature: Delete Order
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
       | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
