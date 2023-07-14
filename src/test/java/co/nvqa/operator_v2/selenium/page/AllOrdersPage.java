@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.operator_v2.model.AddToRouteData;

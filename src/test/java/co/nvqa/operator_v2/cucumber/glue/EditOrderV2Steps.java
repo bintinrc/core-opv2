@@ -11,11 +11,14 @@ import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable;
+import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.PodDetailsDialog;
+import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
@@ -33,6 +36,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1877,6 +1882,11 @@ public class EditOrderV2Steps extends AbstractSteps {
       }
       page.editCashCollectionDetailsDialog.saveChanges.click();
     });
+  }
 
+  @Given("Operator unmask edit order V2 page")
+  public void unmaskEditOrder() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    page.operatorClickMaskingText(elements);
   }
 }
