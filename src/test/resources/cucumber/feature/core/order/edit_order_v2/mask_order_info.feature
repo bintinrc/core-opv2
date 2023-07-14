@@ -1,8 +1,8 @@
-@OperatorV2 @Core @Order @MaskOrderInfo
+@OperatorV2 @Core @EditOrderV2 @MaskOrderInfo
 Feature: Mask Order Info
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Edit Delivery Details Once Contact Has Less Than 5 Chars - Order is Masked
@@ -40,7 +40,3 @@ Feature: Mask Order Info
     When Operator unmask destination address of Delivery transaction on Edit Order V2 page
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | destinationAddress | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG 159363 |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
