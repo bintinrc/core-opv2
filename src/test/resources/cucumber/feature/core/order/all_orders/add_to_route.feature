@@ -34,17 +34,17 @@ Feature: All Orders - Add To Route
       | top    | 3 order(s) updated |
       | bottom | add to route       |
     And DB Route - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Route - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Route - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
@@ -117,12 +117,12 @@ Feature: All Orders - Add To Route
       | status  | PENDING                           |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And DB Route - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Route - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | status  | Routed                                                     |
