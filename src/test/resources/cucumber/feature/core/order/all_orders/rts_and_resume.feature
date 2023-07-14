@@ -5,57 +5,78 @@ Feature: All Orders - RTS & Resume
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS Failed Delivery Order on All Orders Page
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
-      | failureReasonIndexMode | FIRST       |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-      | expectedStatus       | DELIVERY_FAIL        |
-    When API Operator get order details
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    Given API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                         |
+      | routes          | KEY_DRIVER_ROUTES                                                                                  |
+      | jobType         | TRANSACTION                                                                                        |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":5}] |
+      | jobAction       | FAIL                                                                                               |
+      | jobMode         | DELIVERY                                                                                           |
+      | failureReasonId | 5                                                                                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                       |
+      | hubId                | {hub-id}                                                                                    |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
-    When Operator find multiple orders by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders page
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And Operator unmask all orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
-    When Operator RTS single order on next day on All Orders page
-    Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                                |
-      | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-working-day-yyyy-MM-dd} |
-    And Operator verify order event on Edit order page using data below:
+    And Operator RTS multiple orders on next day on All Orders Page:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator unmask edit order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RTS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE ADDRESS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE CONTACT INFORMATION |
-    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
-    And API Operator get order details
-    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
-    And DB Operator verifies orders record using data below:
-      | rts | 1 |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
+      | status | FAIL |
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
+      | status | FAIL |
+    And DB Core - verify orders record:
+      | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | rts | 1                                  |
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator RTS Multiple Orders on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
