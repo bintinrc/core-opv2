@@ -48,7 +48,7 @@ Feature: All Orders - RTS & Resume
     When Operator go to menu Order -> All Orders
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     And Operator RTS multiple orders on next day on All Orders Page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |

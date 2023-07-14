@@ -25,7 +25,7 @@ Feature: All Orders - Add To Route
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator add multiple orders to route on All Orders page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                |
@@ -86,7 +86,7 @@ Feature: All Orders - Add To Route
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator add multiple orders to route on All Orders page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                           |
@@ -153,7 +153,7 @@ Feature: All Orders - Add To Route
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     When Operator add multiple orders to route on All Orders page:

@@ -33,7 +33,7 @@ Feature: All Orders - Pull From Route
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     When API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -77,7 +77,7 @@ Feature: All Orders - Pull From Route
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator apply "Pull From Route" action and expect to see "Selection Error"
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
