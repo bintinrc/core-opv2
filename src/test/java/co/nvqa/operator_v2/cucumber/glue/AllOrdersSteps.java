@@ -11,13 +11,13 @@ import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.OrdersTable.OrderInfo;
 import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
@@ -528,7 +528,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
     allOrdersPage.verifyItsCurrentPage();
   }
-  
+
   @When("Operator RTS multiple orders on next day on All Orders Page:")
   public void operatorRtsOrdersOnNextDayOnAllOrdersPage(List<String> listOfTrackingIds) {
     List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
@@ -1114,4 +1114,23 @@ public class AllOrdersSteps extends AbstractSteps {
     List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
   }
+
+  @When("Operator verify order record on All Orders page:")
+  public void verifyOrderRecord(Map<String, String> data) {
+    var expected = new OrderInfo(resolveKeyValues(data));
+    allOrdersPage.ordersTable.filterByColumn("trackingId", expected.getTrackingId());
+    var actual = allOrdersPage.ordersTable.readEntity(1);
+    expected.compareWithActual(actual);
+  }
+
+  @Then("Operator unmask All Orders page")
+  public void unmaskPage() {
+    while (allOrdersPage.mask.existsFast()) {
+      allOrdersPage.mask.scrollIntoView();
+      allOrdersPage.mask.jsClick();
+      pause1s();
+    }
+  }
+
+
 }
