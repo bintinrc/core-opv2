@@ -28,7 +28,7 @@ Feature: All Orders - Add To Route
     And Operator unmask all orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator add multiple orders to route on All Orders page:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                                                                                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]},{KEY_LIST_OF_CREATED_TRACKING_IDS[3]} |
     Then Operator verifies that info toast displayed:
       | top    | 3 order(s) updated |
@@ -36,26 +36,26 @@ Feature: All Orders - Add To Route
     And DB Core - verify waypoints record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Core - verify waypoints record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Core - verify waypoints record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
@@ -89,10 +89,10 @@ Feature: All Orders - Add To Route
     And Operator unmask all orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator add multiple orders to route on All Orders page:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]}                                            |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                           |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}, {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that warning toast displayed:
       | top    | 1 order(s) failed to update |
@@ -104,34 +104,34 @@ Feature: All Orders - Add To Route
     And Operator unmask edit order V2 page
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | PENDING                           |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | PENDING                           |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And DB Core - verify waypoints record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status  | Routed                                                     |
     And DB Core - verify waypoints record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]}                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | status  | Routed                                                     |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[2]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
 
   @DeleteOrArchiveRoute
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
@@ -157,7 +157,7 @@ Feature: All Orders - Add To Route
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     When Operator add multiple orders to route on All Orders page:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                                            |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                           |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}, {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Order is Cancelled and cannot be added to route |
