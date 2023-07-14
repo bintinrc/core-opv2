@@ -1,4 +1,4 @@
-@Sort @Utilities @BulkAddressVerificationID
+@Sort @Utilities @BulkAddressVerificationSG
 Feature: Bulk Address Verification
 
   @LaunchBrowser @ShouldAlwaysRun
