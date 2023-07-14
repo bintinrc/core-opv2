@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.addressing.JaroScore;
+
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commonsort.model.addressing.JaroScore;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -92,7 +93,6 @@ public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVeri
     uploadCsv(file);
 
     int actualSuccessfulMatches = getSuccessfulMatches();
-
     if (actualSuccessfulMatches <= 0) {
       Assertions.assertThat(actualSuccessfulMatches)
           .as("No successful match")
@@ -115,18 +115,6 @@ public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVeri
       JaroScore actual = mapJaroScoreBySuccessfulRowIndex(rowIndex);
       JaroScore expected = jsMapByWaypointId.get(actual.getWaypointId());
       expected.compareWithActual(actual, "verifiedAddressId");
-    }
-  }
-
-  public void verifyWaypointsRackSector(List<JaroScore> jaroScores, boolean isRts) {
-    for (int i = 1; i <= jaroScores.size(); i++) {
-      String rackSector = webDriver.findElement(By.xpath(
-          String.format(SUCCESS_COLUMN_XPATH + "/span/span", SUCCESS_TABLE_XPATH, i,
-              "zone_short_name"))).getAttribute("innerHTML");
-      Assertions.assertThat(rackSector.startsWith("RTS"))
-          .as(String.format("Waypoint %d is %sASSIGNED to RTS zone",
-              jaroScores.get(i - 1).getWaypointId(), !isRts ? "NOT " : ""))
-          .isEqualTo(isRts);
     }
   }
 
@@ -160,9 +148,9 @@ public class BulkAddressVerificationPage extends SimpleReactPage<BulkAddressVeri
 
     JaroScore jaroScore = new JaroScore();
     jaroScore.setAddress1(address);
-    jaroScore.setWaypointId(waypointId);
-    jaroScore.setLatitude(latitude);
-    jaroScore.setLongitude(longitude);
+    jaroScore.setWaypointId(Long.valueOf(waypointId));
+    jaroScore.setLatitude(Double.valueOf(latitude));
+    jaroScore.setLongitude(Double.valueOf(longitude));
 
     return jaroScore;
   }
