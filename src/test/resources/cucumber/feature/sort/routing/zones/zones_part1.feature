@@ -31,6 +31,24 @@ Feature: Zones
       | name | {KEY_SORT_CREATED_ZONE.name} |
 
   @DeleteCreatedZoneCommonV2
+  Scenario: Create Zone - With Negative Lat Long
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
+    When Operator creates "Negative" zone using "{hub-name}" hub
+    Then Operator verifies that success react notification displayed:
+      | top | Zone created successfully |
+    Then Operator verifies zone details on Zones page:
+      | shortName   | {KEY_SORT_CREATED_ZONE.shortName}   |
+      | name        | {KEY_SORT_CREATED_ZONE.name}        |
+      | hubName     | {KEY_SORT_CREATED_ZONE.hubName}     |
+      | latitude    | {KEY_SORT_CREATED_ZONE.latitude}    |
+      | longitude   | {KEY_SORT_CREATED_ZONE.longitude}   |
+      | description | {KEY_SORT_CREATED_ZONE.description} |
+      | type        | STANDARD                            |
+    Then Operator verifies that the newly created "Normal" zone's details are right
+      | name | {KEY_SORT_CREATED_ZONE.name} |
+
+  @DeleteCreatedZoneCommonV2
   Scenario: Update Zone - Normal Type to RTS Type (uid:d60632a4-27d5-4f98-8d20-caf835a00474)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Last Mile and RTS Zones
