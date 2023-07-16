@@ -16,6 +16,16 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
   public static final String CAMPAIGN_ROWS = "//div[@role='rowgroup']//div[@role='row']";
   public static final String CAMPAIGN_NAME = "//span[@class = 'campaign-link-text']";
 
+  public static final String CAMPAIGN_STATUS = "//div[@content = '%s']";
+
+  public static final String CAMPAIGN_FIELD_NAME = "(//label[text()='%s']/ancestor::div[contains(@class,'item-row')]//*[(name()='input' or name()='textarea') and %s])[last()]";
+
+  public static final String CAMPAIGN_SELECT_FIELD_NAME = "(//label[text()='%s']/ancestor::div[contains(@class,'item-row')]//div[%s])[last()]";
+
+  public static final String CAMPAIGN_HEADER_STATUS = "//h4[text()='Campaign']/ancestor::div[contains(@class,'space-item')]/following-sibling::div";
+
+  public static final String CAMPAIGN_BUTTON = "//button[span[text()='%s'] and %s] | //a[text()='%s' and %s]";
+
   public DiscountAndPromotionPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -37,5 +47,82 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
       }
     }
     return isDisplayed;
+  }
+
+  public void selectCampaignWithStatus(String status) {
+    String xpathExpression = f("%s/ancestor::div[@class='tr']/div/button",
+        f(CAMPAIGN_STATUS, status));
+    doubleClick(xpathExpression);
+  }
+
+  public boolean verifyCampaignField(String fieldName, String isClickable) {
+    String xpathExpression;
+    if (isClickable.equalsIgnoreCase("not clickable")) {
+      xpathExpression = f(CAMPAIGN_FIELD_NAME, fieldName, "@disabled");
+      return waitUntilVisibilityOfElementLocated(xpathExpression).isDisplayed();
+    } else if (isClickable.equalsIgnoreCase("clickable")) {
+      xpathExpression = f(CAMPAIGN_FIELD_NAME, fieldName, "not(@disabled)");
+      return waitUntilVisibilityOfElementLocated(xpathExpression).isDisplayed();
+    }
+    return false;
+  }
+
+  public boolean verifySelectCampaignField(String fieldName, String isClickable) {
+    String xpathExpression;
+    if (isClickable.equalsIgnoreCase("not clickable")) {
+      xpathExpression = f(CAMPAIGN_SELECT_FIELD_NAME, fieldName, "contains(@class,'disabled')");
+      return waitUntilVisibilityOfElementLocated(xpathExpression).isDisplayed();
+    } else if (isClickable.equalsIgnoreCase("clickable")) {
+      xpathExpression = f(CAMPAIGN_SELECT_FIELD_NAME, fieldName,
+          "not(contains(@class,'disabled'))");
+      return waitUntilVisibilityOfElementLocated(xpathExpression).isDisplayed();
+    }
+    return false;
+  }
+
+  public String getCampaignFieldValue(String fieldName, String isClickable) {
+    String xpathExpression;
+    if (isClickable.equalsIgnoreCase("not clickable")) {
+      xpathExpression = f(CAMPAIGN_FIELD_NAME, fieldName, "@disabled");
+      return getAttribute(xpathExpression, "value");
+    } else if (isClickable.equalsIgnoreCase("clickable")) {
+      xpathExpression = f(CAMPAIGN_FIELD_NAME, fieldName, "not(@disabled)");
+      return getAttribute(xpathExpression, "value");
+    }
+    return null;
+  }
+
+  public String getCampaignSelectFieldValue(String fieldName, String isClickable) {
+    String xpathExpression;
+    if (isClickable.equalsIgnoreCase("not clickable")) {
+      xpathExpression = f(CAMPAIGN_SELECT_FIELD_NAME, fieldName, "contains(@class,'disabled')");
+      return getText(xpathExpression);
+    } else if (isClickable.equalsIgnoreCase("clickable")) {
+      xpathExpression = f(CAMPAIGN_SELECT_FIELD_NAME, fieldName,
+          "not(contains(@class,'disabled'))");
+      return getText(xpathExpression);
+    }
+    return null;
+  }
+
+  public String getCampaignStatus() {
+    return getText(CAMPAIGN_HEADER_STATUS);
+  }
+
+  public boolean verifyButtonStatus(String buttonName, String status) {
+    if (status.equalsIgnoreCase("not disabled")) {
+      return waitUntilVisibilityOfElementLocated(
+          f(CAMPAIGN_BUTTON, buttonName, "not(@disabled)", buttonName,
+              "not(@disabled)")).isDisplayed();
+    } else if (status.equalsIgnoreCase("disabled")) {
+      return waitUntilVisibilityOfElementLocated(
+          f(CAMPAIGN_BUTTON, buttonName, "@disabled", buttonName, "@disabled")).isDisplayed();
+    }
+    return false;
+  }
+
+  public boolean verifyShippersCount() {
+    return waitUntilVisibilityOfElementLocated(
+        "(//div[contains(@class,'row-middle')]/span)[2]").isDisplayed();
   }
 }
