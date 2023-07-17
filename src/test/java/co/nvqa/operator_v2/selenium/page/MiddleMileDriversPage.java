@@ -136,7 +136,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String YES = "yes";
     private static final String NO = "no";
 
-    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), '%s')]";
+    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), \"%s\")]";
 
     private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
 
@@ -694,7 +694,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         antDotSpinner.waitUntilInvisible();
     }
 
-    public void editDriverByWithValue(String column, String value) {
+    public void editDriverByWithValue(String column, String value, boolean withSave) {
         switch (column) {
             case "firstName":
                 editDriverDialog.name.forceClear();
@@ -708,11 +708,11 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.displayName.forceClear();
                 editDriverDialog.displayName.sendKeys(value);
                 break;
-            case "contactNumber":
+            case "contactDetails":
                 editDriverDialog.contactNumber.forceClear();
                 editDriverDialog.contactNumber.sendKeys(value);
                 break;
-            case "hub":
+            case "hubName":
                 editDriverDialog.hub.selectValue(value);
                 break;
             case "licenseNumber":
@@ -720,7 +720,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.licenseNumber.sendKeys(value);
                 break;
             case "licenseExpiryDate":
-              editDriverDialog.licenseExpiryDate.setDate(value);
+                editDriverDialog.licenseExpiryDate.setDate(value);
                 break;
             case "licenseType":
                 editDriverDialog.selectLicenseType(value);
@@ -731,14 +731,21 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
-              editDriverDialog.employmentStartDate.setDate(value);
+                editDriverDialog.employmentStartDate.setDate(value);
                 break;
             case "employmentEndDate":
-              editDriverDialog.employmentEndDate.setDate(value);
+                editDriverDialog.employmentEndDate.setDate(value);
                 break;
         }
-        editDriverDialog.save.click();
-        editDriverDialog.waitUntilInvisible();
+
+        if (withSave) {
+            editDriverDialog.save.click();
+            editDriverDialog.waitUntilInvisible();
+        }
+    }
+
+    public void editDriverByWithValue(String column, String value) {
+        editDriverByWithValue(column, value, true);
     }
 
     public void verifiesDriverIsUpdatedByWithValue(String column, String value) {
@@ -1381,25 +1388,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifyMandatoryFieldErrorMessageMiddlemileDriverPage(String fieldName) {
-        String actualMessage = "";
+        String actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, fieldName)).getText();
         String expectedMessage = "Please enter " + fieldName;
-        switch (fieldName) {
-            case "First Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "First Name")).getText();
-                break;
-            case "Display Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Display Name")).getText();
-                break;
-            case "Contact Number":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Contact Number")).getText();
-                break;
-            case "License Type":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "License Type")).getText();
-                break;
-            case "Employment Type":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Employment Type")).getText();
-                break;
-        }
         Assertions.assertThat(actualMessage).as("Mandatory field error message is same")
                 .isEqualTo(expectedMessage);
     }
@@ -1417,15 +1407,18 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void editDriverByWithVendorValue(String employmentType, String vendorName) {
-        if (employmentType.equalsIgnoreCase("Outsourced - Vendors")) {
-            chooseEmploymentType(employmentType);
-            chooseVendorName(vendorName);
-        } else if (employmentType.equalsIgnoreCase("Outsourced - Manpower Agency")) {
-            chooseEmploymentType(employmentType);
-            chooseVendorName(vendorName);
+        editDriverByWithVendorValue(employmentType, vendorName, true);
+    }
+
+    public void editDriverByWithVendorValue(String employmentType, String vendorName, boolean withSave) {
+        chooseEmploymentType(employmentType);
+        if (vendorName.equals("-")) return;
+        chooseVendorName(vendorName);
+
+        if (withSave) {
+            editDriverDialog.save.click();
+            editDriverDialog.waitUntilInvisible();
         }
-        editDriverDialog.save.click();
-        editDriverDialog.waitUntilInvisible();
     }
 
     public void verifiesToastWithMessage(String errorMessage) {

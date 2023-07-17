@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.text.RandomStringGenerator;
 import org.slf4j.Logger;
@@ -399,6 +400,36 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     middleMileDriversPage.editDriverByWithValue(column, resolvedValue);
   }
 
+  public boolean isValidInput(String field, String value) {
+    if (field.matches("(firstName|lastName)") && value.matches("^[a-zA-Z]+$")) {
+      return true;
+    } else if (!field.matches("(firstName|lastName)")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  @When("Operator edit {string} of Middle Mile Driver {string} on edit driver dialog with value {string}")
+  public void operatorEditDriverOnEditDriverDialogWithValue(String column, String storageKey, String value) {
+    String resolvedValue = resolveValue(value);
+    MiddleMileDriver driver = resolveValue(storageKey);
+    Map<String, String> driverMap = convertValueToMap(driver, String.class, String.class);
+
+    if (value.contains("Outsourced - Vendors") || value.contains("Outsourced - Manpower Agency")) {
+      String[] values = value.split("\\|");
+      middleMileDriversPage.editDriverByWithVendorValue(values[0], values[1], !values[1].equals("-"));
+      resolvedValue = values[0];
+      driverMap.put("vendorName", values[1]);
+    } else {
+      middleMileDriversPage.editDriverByWithValue(column, resolvedValue, isValidInput(column, value));
+    }
+
+    driverMap.replace(column, resolvedValue);
+    putInList(KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS, fromMapCamelCase(driverMap, MiddleMileDriver.class), (a, b) -> Objects.equals(
+        a.getId(), b.getId()));
+  }
+
   @Then("Operator verifies {string} is updated with value {string}")
   public void operatorVerifiesDriverIsUpdatedWithValue(String column, String value) {
     String resolvedValue = resolveValue(value);
@@ -690,6 +721,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.clickCreateDriversButton();
         break;
       case "Save to Create":
+      case "Save":
         middleMileDriversPage.saveCreateDriver.click();
         break;
       case "Load Drivers":
