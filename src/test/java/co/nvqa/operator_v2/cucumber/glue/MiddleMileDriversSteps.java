@@ -767,6 +767,19 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     middleMileDriversPage.verifiesToastWithMessage(errorMessage);
   }
 
+  @And("Operator updates License Type of PH Middle Mile Driver {string} to {string} on the middle mile driver page")
+  public void operatorUpdatesLicenseTypeOfPhMiddleMileDriverToValueOnMiddleMileDriverPage(String storageKey, String updateValue) {
+    MiddleMileDriver driver = resolveValue(storageKey);
+    String value = resolveValue(updateValue);
+    if (value.equalsIgnoreCase("all types")) {
+      value = "B,B1,B2,C,Restriction 1,Restriction 2,Restriction 3";
+    }
+    middleMileDriversPage.updatePhLicenseTypes(value);
+
+    driver.setLicenseType(value);
+    putInList(KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS, driver, (a, b) -> Objects.equals(a.getId(), b.getId()));
+  }
+
   @And("Operator edit License Type with uncheck {string} value and update with {string} on the middle mile driver page")
   public void operatorEditWithUncheckValueAndUpdateWithOnTheMiddleMileDriverPage(String prevValue, String updatedValue) {
     middleMileDriversPage.chooseLicenseType(prevValue);

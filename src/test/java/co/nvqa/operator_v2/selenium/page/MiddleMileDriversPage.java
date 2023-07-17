@@ -142,6 +142,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String TOAST_ERROR_400_MESSAGE_XPATH = "//div[contains(@class,'ant-notification-notice-message')]";
 
+    private static final String LICENSE_TYPE_PH_CHECKED_XPATH = "//span[contains(@class,'ant-checkbox-checked')]";
+
     public static String actualToastMessageContent = "";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
@@ -354,6 +356,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             click(NEXT_MONTH_XPATH);
         }
         click(f(CALENDAR_DATE_XPATH, licenseExpiryDate));
+    }
+
+    public void uncheckAllCheckbox() {
+        List<WebElement> checkedCheckbox = findElementsByXpath(LICENSE_TYPE_PH_CHECKED_XPATH);
+        checkedCheckbox.forEach(WebElement::click);
+    }
+
+    public void updatePhLicenseTypes(String value) {
+        uncheckAllCheckbox();
+        for (String val : value.split(",")) {
+            chooseLicenseType(val);
+        }
+        editDriverDialog.save.click();
+        editDriverDialog.waitUntilInvisible();
     }
 
     public void chooseLicenseType(String licenseType) {
