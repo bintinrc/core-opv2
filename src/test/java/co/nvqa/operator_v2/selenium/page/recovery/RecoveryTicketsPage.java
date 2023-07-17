@@ -168,11 +168,35 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(css = "[data-datakey='status']")
     public PageElement status;
 
+    @FindBy(css = "[data-datakey='assigneeName']")
+    public PageElement assignee;
+
     @FindBy(css = "[data-datakey='daysDue']")
     public PageElement daysSince;
 
     @FindBy(css = "[data-datakey='createdAt']")
     public PageElement created;
+
+    @FindBy(css = "[data-testid='virtual-table.ticketTypeSubType.header.filter']")
+    public PageElement ticketTypeSubtypeFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.status.header.filter']")
+    public PageElement statusFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.assigneeName.header.filter']")
+    public PageElement assigneeNameFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.investigatingParty.header.filter']")
+    public PageElement investigatingPartyFilter;
+
+    @FindBy(css = "[data-testid='virtual-table._investigatingHubName.header.filter']")
+    public PageElement investigatingHubFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.trackingId.header.filter']")
+    public PageElement trackingIdFilter;
+
+    @FindBy(xpath = "//span[@class='anticon anticon-close-circle ant-input-clear-icon']")
+    public PageElement clearFilterButton;
 
     public static final String ACTION_EDIT = "Edit";
 
@@ -199,6 +223,30 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_EDIT, "//button[@data-pa-action='Edit Hub Missing Investigation']"
       ));
+    }
+
+    public void filterByField(String field, String value) {
+      switch (field) {
+        case "Ticket Type":
+          ticketTypeSubtypeFilter.sendKeys(value);
+          break;
+        case "Status":
+          statusFilter.sendKeys(value);
+          break;
+        case "Assignee":
+          assigneeNameFilter.sendKeys(value);
+          break;
+        case "Investigating Party":
+          investigatingPartyFilter.sendKeys(value);
+          break;
+        case "Investigating Hub":
+          investigatingHubFilter.sendKeys(value);
+          break;
+        case "Tracking ID":
+          trackingIdFilter.scrollIntoView();
+          trackingIdFilter.sendKeys(value);
+          break;
+      }
     }
   }
 }
