@@ -22,7 +22,7 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
   public DriverAnnouncementTable driverAnnouncementTable;
 
   private final String announcementSubjectXpath = "//div[@class='ant-drawer-body']/span[contains(@class,'ant-typography')]";
-  private final String announcementDrawerCloseXpath = "//div[contains(@class,'ant-drawer-header')]/button[@class='ant-drawer-close']";
+  private final String announcementDrawerCloseXpath = "//button[@class='ant-drawer-close']";
   private final String searchInputXpath = "//input[@data-testid='search-bar']";
   private final String uploadedCsvFileBtnXpath = "//div[contains(@class,'ant-space')][*[2][a] or *[1][svg]]";
   private final String btnNewAnnouncementXpath = "//button[contains(@class,'ant-btn')][span[text() = 'New announcement']]";
@@ -94,9 +94,8 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
   }
 
   public void closeAnnouncementDrawer() {
-    WebElement closeButton = findElementBy(By.xpath(announcementDrawerCloseXpath));
-    waitUntilVisibilityOfElementLocated(By.xpath(announcementDrawerCloseXpath));
-    closeButton.click();
+    waitUntilVisibilityOfElementLocated(announcementDrawerCloseXpath);
+    click(announcementDrawerCloseXpath);
   }
 
   public void searchDriverAnnouncement(String keyword) {

@@ -135,11 +135,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator removes contact details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveContactDetails() {
-    dsPage.inFrame(() -> {
-//      if (dsPage.editDriverDialog.contactsSettingsForms.size() > 0) {
-//        dsPage.editDriverDialog.contactsSettingsForms.forEach(form -> form.remove.click());
-//      }
-    });
+    dsPage.inFrame(() -> dsPage.editDriverDialog.contactsSettingsForms.contact.clearValue());
   }
 
   @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")

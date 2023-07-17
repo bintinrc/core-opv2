@@ -115,20 +115,20 @@ public class DriverTypeManagementSteps extends AbstractSteps {
   @Then("Operator search created Driver Type using ID")
   public void operatorSearchDriverTypeById() {
     DriverTypeParams driverTypeName = get(KEY_DRIVER_TYPE_PARAMS);
-    dtmPage.refreshPage();
-    dtmPage.waitUntilLoaded();
-    dtmPage.inFrame(() -> {
+    doWithRetry(() -> dtmPage.inFrame(() -> {
+      dtmPage.refreshPage();
+      dtmPage.waitUntilLoaded();
       dtmPage.searchDriverType.setValue(driverTypeName.getDriverTypeId());
       DriverTypeParams actual = dtmPage.driverTypesTable.readEntity(1);
 
       Assertions.assertThat(
-              actual.getDriverTypeName().equalsIgnoreCase(driverTypeName.getDriverTypeName()))
-          .as(f("Driver type: %s not found!", driverTypeName.getDriverTypeName())).isTrue();
+                      actual.getDriverTypeName().equalsIgnoreCase(driverTypeName.getDriverTypeName()))
+              .as(f("Driver type: %s not found!", driverTypeName.getDriverTypeName())).isTrue();
 
       Assertions.assertThat(
-              actual.getDriverTypeId().equals(driverTypeName.getDriverTypeId()))
-          .as(f("Driver id: %s not found!", driverTypeName.getDriverTypeId())).isTrue();
-    });
+                      actual.getDriverTypeId().equals(driverTypeName.getDriverTypeId()))
+              .as(f("Driver id: %s not found!", driverTypeName.getDriverTypeId())).isTrue();
+    }), "Search created Driver Type using ID");
   }
 
   @Then("Operator verify all driver types are displayed on Driver Type Management page")

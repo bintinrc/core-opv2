@@ -163,11 +163,9 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
-    And Operator removes zone preferences on Edit Driver dialog on Driver Strength page
+#    New update on Driver Strength OpV2, Unable to remove zone preferences
+#    And Operator removes zone preferences on Edit Driver dialog on Driver Strength page
     And Operator click Submit button in Add Driver dialog
-    And Operator verifies error message "zonePreferences.minWaypoints" is displayed in Driver dialog
-    And Operator verifies error message "zonePreferences.maxWaypoints" is displayed in Driver dialog
-    And Operator verifies error message "zonePreferences.cost" is displayed in Driver dialog
 
   @DeleteDriverType
   Scenario: Can Not Create New Driver Account Without Active Contact
@@ -343,7 +341,7 @@ Feature: Driver Strength
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
     And  Operator removes contact details on Edit Driver dialog on Driver Strength page
     And  Operator click Submit button in Update Driver dialog
-    Then Operator verifies error message "At least one contact required." is displayed in Driver dialog
+    Then Operator verifies error message "Mobile Phone is required." is displayed in Driver dialog
 
   Scenario Outline: Update DPMS ID of Driver Account with DPMS ID (uid:6efb7bbd-58b8-4218-9a92-48804bb3a43a)
     Given Operator loads Operator portal home page
@@ -784,6 +782,7 @@ Feature: Driver Strength
       | vehicleLicenseNumber | GENERATED                                                        |
       | password             | GENERATED                                                        |
       | comments             | This driver is UPDATED by "Automation Test" for testing purpose. |
+      | isContactVerified    | true                                                             |
     Then Operator verifies that success notification displayed in Driver Strength:
       | title | Driver Updated                 |
       | desc  | Driver {KEY_CREATED_DRIVER_ID} |
