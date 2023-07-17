@@ -170,9 +170,9 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   }
 
   public void verifyToastErrorMessage(String errorMessage) {
-    final String toastErrorMessageXpath = f("//div[@class='toast-bottom']/strong[text() = '%s']",
-        errorMessage);
-    boolean isToastErrorDisplayed = isElementVisible(toastErrorMessageXpath);
+    boolean isToastErrorDisplayed = isElementVisible(
+        f("//div[@class='toast-bottom']/strong[text() = '%s']",
+            errorMessage));
     Assertions.assertThat(isToastErrorDisplayed)
         .as(f("Error message: [%s] displayed", errorMessage))
         .isTrue();

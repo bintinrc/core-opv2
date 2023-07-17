@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.driver_strength.DriverStrengthAntCalendarPicker;
@@ -38,8 +37,9 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class DriverStrengthPageV2 extends SimpleReactPage {
+public class DriverStrengthPageV2 extends SimpleReactPage<DriverStrengthPageV2> {
 
+  public DriversTable driversTable;
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   public static final String LOCATOR_DELETE_BUTTON = "//button/span[.='Delete']";
   private static final String DRIVER_STRENGTH_COLUMN_NAME_XPATH = "//div[contains(@class,'th')]/*[1]";
@@ -53,13 +53,11 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   @FindBy(xpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]")
   public Button btnConfirmVerify;
-  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  @FindBy(xpath = "//div[@class='ant-modal-content'][*[contains(@class,'ant-modal-header')]/*[text()='Add Driver']]")
   public AddDriverDialog addDriverDialog;
 
   @FindBy(css = "div.ant-modal")
   public EditDriverDialog editDriverDialog;
-
-  public DriversTable driversTable;
 
   private ContactDetailsMenu contactDetailsMenu;
 
@@ -142,6 +140,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void loadSelection() {
+    loadSelection.waitUntilVisible();
     loadSelection.click();
     if (halfCircleSpinner.waitUntilVisible(2)) {
       halfCircleSpinner.waitUntilInvisible();
@@ -154,15 +153,16 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public void clickAddNewDriver() {
     final String xpathAddButton = "//button[.='Add New Driver']";
-    pause3s();
     waitUntilVisibilityOfElementLocated(xpathAddButton);
     click(xpathAddButton);
   }
 
   public void addNewDriver(DriverInfo driverInfo) {
     waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
-    clickAddNewDriver();
-    pause3s();
+    doWithRetry(() -> {
+      clickAddNewDriver();
+      addDriverDialog.waitUntilVisible();
+    }, "Open Add New Driver Dialog");
     addDriverDialog.fillForm(driverInfo);
     addDriverDialog.submitForm();
   }
@@ -245,20 +245,18 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public void deleteDriver(String username) {
     waitUntilTableLoaded();
-    pause2s();
 
     String xpath = f(
         "//div[@class='ant-space-item']/input[@dataindex='%s' and contains(@class,'ant-input')]",
         COLUMN_USERNAME);
 
-    if (Strings.isNullOrEmpty(getValue(xpath)) || !getValue(xpath).equalsIgnoreCase(username)) {
+    if (!Strings.isNullOrEmpty(getValue(xpath)) || !getValue(xpath).equalsIgnoreCase(username)) {
       clear(xpath);
       doWithRetry(() -> {
             driversTable.filterByColumn(COLUMN_USERNAME, username);
           }, f("Filter table by %s", COLUMN_USERNAME), DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS,
           DEFAULT_MAX_RETRY_ON_EXCEPTION);
       waitUntilTableLoaded();
-      pause2s();
     }
 
     driversTable.clickActionButton(1, ACTION_DELETE);
@@ -391,44 +389,31 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @SuppressWarnings("UnusedReturnValue")
   public static class AddDriverDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Submit']")
+    @FindBy(xpath = "//button[.='Submit']")
     public Button submit;
-
-    @FindBy(xpath = "//span[.='At least one contacts required.']")
-    public PageElement contactHints;
-
-    @FindBy(xpath = "//span[.='At least one vehicle required.']")
-    public PageElement vehicleHints;
-
-    @FindBy(xpath = "//span[.='At least one zone preference required.']")
-    public PageElement zoneHints;
-
-    @FindBy(xpath = "//span[.='Please input a valid mobile phone number (e.g. 8123 4567)']")
-    public PageElement validContactNumber;
-
-    @FindBy(id = "firstName")
-    public ForceClearTextBox firstName;
 
     @FindBy(id = "displayName")
     public ForceClearTextBox displayName;
 
+    @FindBy(id = "firstName")
+    public ForceClearTextBox firstName;
+
     @FindBy(id = "lastName")
     public ForceClearTextBox lastName;
-
     @FindBy(id = "licenseNumber")
     public ForceClearTextBox driverLicenseNumber;
 
     @FindBy(name = "type")
     public AntSelect type;
 
+    @FindBy(id = "codLimit")
+    public ForceClearTextBox codLimit;
+
     @FindBy(id = "maxOnDemandWaypoints")
-    public PageElement maximumOnDemandWaypoints;
+    public ForceClearTextBox maximumOnDemandWaypoints;
 
     @FindBy(id = "dpmsId")
-    public PageElement dpmsId;
-
-    @FindBy(id = "codLimit")
-    public TextBox codLimit;
+    public ForceClearTextBox dpmsId;
 
     @FindBy(name = "hub")
     public AntSelect hub;
@@ -445,22 +430,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "comment")
     public ForceClearTextBox comments;
 
-    @FindBy(xpath = ".//button[.='Add More Vehicle']")
-    public Button addMoreVehicles;
-
     @FindBy(xpath = "//div[contains(@class,'ant-space')][div[@class='ant-space-item'][span[text()='Vehicle']]]")
     public VehicleSettingsForm vehicleSettingsForm;
-
-    @FindBy(xpath = ".//button[.='Add More Contact']")
-    public Button addMoreContacts;
 
     @FindBy(xpath = "//div[contains(@class,'ant-space')][div[@class='ant-space-item'][span[text()='Contact']]]")
     public ContactsSettingsForm contactsSettingsForms;
 
-    @FindBy(xpath = ".//button[.='Add More Zones']")
-    public Button addMoreZones;
-
-    @FindBy(xpath = "//div[contains(@class,'ant-space')][div[@class='ant-space-item'][span[text()='Preferred Zone + Capacity']]]")
+    @FindBy(xpath = "//*[contains(@class,'ant-space')][*/*[contains(text(),'Preferred Zone')]]")
     public ZoneSettingsForm zoneSettingsForms;
 
     public static class VehicleSettingsForm extends PageElement {
@@ -575,26 +551,25 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public void setType(String driverType) {
-      type.selectValue(driverType);
-      waitUntilVisibilityOfElementLocated(f("//*[@*='%s']", driverType));
+      if (driverType != null) {
+        type.selectValue(driverType);
+      }
     }
 
-    public void setMaximumOnDemandWaypoint(long param) {
+    public void setMaximumOnDemandWaypoint(int param) {
+      maximumOnDemandWaypoints.clearValue();
       maximumOnDemandWaypoints.sendKeys(param);
     }
 
     public void setDpmsId(String dpmsIdValue) {
-      if (dpmsId.isDisplayed()) {
-        dpmsId.click();
-        for (char key : dpmsIdValue.toCharArray()) {
-          dpmsId.sendKeys(Keys.BACK_SPACE);
-        }
-        dpmsId.sendKeys(dpmsIdValue);
-      }
+      dpmsId.clearValue();
+      dpmsId.sendKeys(dpmsIdValue);
     }
 
     public void addVehicle(String vehicleType, String licenseNumber, Integer capacity) {
-      vehicleSettingsForm.vehicleType.selectValue(vehicleType);
+      if (vehicleType != null) {
+        vehicleSettingsForm.vehicleType.selectValue(vehicleType);
+      }
       if (licenseNumber != null) {
         vehicleSettingsForm.vehicleLicenseNumber.setValue(licenseNumber);
       }
@@ -610,7 +585,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public AddDriverDialog addZone(String zoneName, Integer min, Integer max, Integer cost) {
-      if (StringUtils.isNotBlank(zoneName)) {
+      if (StringUtils.isNotBlank(zoneName) || zoneName != null) {
         zoneSettingsForms.zoneName.selectValue(zoneName);
       }
       if (min != null) {
@@ -657,32 +632,38 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public void fillForm(DriverInfo driverInfo) {
-      waitUntilVisible();
-      pause3s();
       setDisplayNameName(driverInfo.getDisplayName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
       setType(driverInfo.getType());
-      setMaximumOnDemandWaypoint(10l);
       if (driverInfo.getType().equalsIgnoreCase("Mitra - Fleet") &&
           !Objects.isNull(driverInfo.getDpmsId())) {
         setDpmsId(driverInfo.getDpmsId());
       }
+
+      if (!Objects.isNull(driverInfo.getMaxOnDemandWaypoints())) {
+        setMaximumOnDemandWaypoint(driverInfo.getMaxOnDemandWaypoints());
+      }
+
       setCodLimit(driverInfo.getCodLimit());
       setHub(driverInfo.getHub());
       setEmploymentStartDate(driverInfo.getEmploymentStartDate());
+
       if (driverInfo.hasVehicleInfo()) {
         addVehicle(driverInfo.getVehicleType(), driverInfo.getVehicleLicenseNumber(),
             driverInfo.getVehicleCapacity());
       }
+
       if (driverInfo.hasContactsInfo()) {
         addContact(driverInfo.getContact());
       }
+
       if (driverInfo.hasZoneInfo()) {
         addZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(),
             driverInfo.getZoneCost());
       }
+
       setUsername(driverInfo.getUsername());
       setPassword(driverInfo.getPassword());
       setComments(driverInfo.getComments());
@@ -762,6 +743,11 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
    */
   public static class EditDriverDialog extends AddDriverDialog {
 
+    @FindBy(xpath = "//button[contains(@class,'ant-btn') and span[text()='Verify Number']]")
+    public Button btnVerifyNumber;
+    @FindBy(xpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]")
+    public Button btnConfirmVerificationNumber;
+
     public EditDriverDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -799,9 +785,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       return this;
     }
 
-    public void fillForm(DriverInfo driverInfo, Boolean isVerified) {
+    public void fillForm(DriverInfo driverInfo, Boolean isVerifiedContact) {
       waitUntilVisible();
-      pause3s();
       setDisplayNameName(driverInfo.getDisplayName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
@@ -816,19 +801,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
             driverInfo.getVehicleCapacity());
       }
       if (driverInfo.hasContactsInfo()) {
-        final String btnVerifyNumberXpath = "//button[contains(@class,'ant-btn') and span[text()='Verify Number']]";
-        final String btnConfirmVerifyXpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]";
-        String[] phoneNumber = driverInfo.getContact().split(" ");
-        addContact(phoneNumber[phoneNumber.length - 1]);
-        if (isVerified) {
-          waitUntilVisibilityOfElementLocated(btnVerifyNumberXpath);
-          click(btnVerifyNumberXpath);
-          waitUntilVisibilityOfElementLocated(btnConfirmVerifyXpath);
-          while (isElementVisible(btnConfirmVerifyXpath)) {
-            click(btnConfirmVerifyXpath);
-            pause1s();
-          }
-          waitUntilInvisibilityOfElementLocated(btnConfirmVerifyXpath);
+        addContact(driverInfo.getContact());
+        if (isVerifiedContact) {
+          btnVerifyNumber.waitUntilVisible();
+          btnVerifyNumber.click();
+          btnConfirmVerificationNumber.waitUntilVisible();
+          btnConfirmVerificationNumber.click();
+          btnConfirmVerificationNumber.waitUntilInvisible();
         }
       }
       if (driverInfo.hasZoneInfo()) {
@@ -882,12 +861,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
           .put(COLUMN_VEHICLE_TYPE, "10")
           .put(COLUMN_VEHICLE_OWN, "11")
           .put(COLUMN_ZONE_ID, "12")
-          .put(COLUMN_ZONE_MIN, "13")
-          .put(COLUMN_ZONE_MAX, "14")
-          .put(COLUMN_COMMENTS, "15")
-          .put(COLUMN_EMPLOYMENT_START_DATE, "16")
-          .put(COLUMN_EMPLOYMENT_END_DATE, "17")
-          .put(COLUMN_RESIGNED, "18")
+          .put(COLUMN_COMMENTS, "13")
+          .put(COLUMN_EMPLOYMENT_START_DATE, "14")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "15")
+          .put(COLUMN_RESIGNED, "16")
           .build()
       );
       setActionButtonsLocators(ImmutableMap
@@ -909,16 +886,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void waitUntilTableLoaded() {
-    String tableRowXpath = "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]";
-    Runnable verifyLoadedTable = () -> {
-      if (!findElementBy(By.xpath(tableRowXpath)).isDisplayed()) {
-        pause500ms();
-      }
-    };
-
     try {
-      doWithRetry(verifyLoadedTable, "Loaded table method", DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS,
-          DEFAULT_MAX_RETRY_ON_EXCEPTION);
+      String tableRowXpath = "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]";
+      doWithRetry(() -> {
+        if (!isElementVisible(tableRowXpath)) {
+          pause1s();
+        }
+      }, "Loaded table method");
     } catch (NoSuchElementException ignored) {
       NvLogger.error("===== Table isn't loaded =====");
       NvLogger.error(ignored.getMessage());
@@ -983,8 +957,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public boolean verifyNoticeDisplayed(String notice) {
-    String noticeXpath = f(ALERT_MESSAGE_XPATH, notice);
-    Boolean isExist = isElementExist(noticeXpath);
+    Boolean isExist = isElementExist(f(ALERT_MESSAGE_XPATH, notice));
     Assertions.assertThat(isExist)
         .as(f("Assert that notice : %s  is displayed as expected!", notice))
         .isTrue();
