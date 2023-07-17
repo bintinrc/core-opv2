@@ -1,4 +1,4 @@
-@MileZero @B2B
+@MileZero @CorporateHQ @WithSg
 Feature: B2B Corporate Return
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,18 +6,17 @@ Feature: B2B Corporate Return
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Toggled on corporate return service type for existing non corporate shipper (uid:e9a2a143-77d6-4ed6-82c1-c9cab7cd8c9b)
-    When Operator edits shipper "{shipper-v4-prepaid-legacy-id}"
+    Given Operator edits shipper "{prepaid-legacy-id}"
     And Operator set service type "Corporate Return" to "Yes" on edit shipper page
     Then Operator verifies toast "Only corporate shippers are allowed to have Corporate Return as their service type" displayed on edit shipper page
-    And DB Shipper verifies available service types for shipper id "{shipper-v4-prepaid-id}" not contains "Corporate Return"
+    And DB Shipper verifies available service types for shipper id "{prepaid-id}" not contains "Corporate Return"
 
   Scenario: Modify corporate return service type for corporate shipper (uid:fa7cf145-2a6b-4b56-959e-13ef1c9fd794)
-    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
-    And Operator set service type "Corporate Return" to "No" on edit shipper page
-    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" not contains "Corporate Return"
-
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
+    When Operator set service type "Corporate Return" to "No" on edit shipper page
+    Then DB Shipper verifies available service types for shipper id "{postpaid-corporate-hq-id}" not contains "Corporate Return"
     And Operator set service type "Corporate Return" to "Yes" on edit shipper page
-    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" contains "Corporate Return"
+    And DB Shipper verifies available service types for shipper id "{postpaid-corporate-hq-id}" contains "Corporate Return"
 
   @CloseNewWindows
   Scenario: Create non corporate shipper with corporate return service type toggled on (uid:b91633f4-a580-44d2-a425-bfec890190f8)
@@ -84,36 +83,34 @@ Feature: B2B Corporate Return
 
   @CloseNewWindows
   Scenario: Inheritance corporate return service - parent toggled off (uid:c39cd56e-7151-4fbb-970f-8e45927b387c)
-    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     And Operator set service type "Corporate Return" to "Yes" on edit shipper page
-    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" contains "Corporate Return"
-
+    And DB Shipper verifies available service types for shipper id "{postpaid-corporate-hq-id}" contains "Corporate Return"
     When Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
       | branchId | generated |
       | name     | generated |
       | email    | generated |
     Then Operator verifies corporate sub shipper is created
-    When Operator click edit action button for newly created corporate sub shipper
-    Then Operator verifies corporate sub shipper details page is displayed
-    When Operator set shipper on this page as newly created shipper
+    And Operator click edit action button for newly created corporate sub shipper
+    And Operator verifies corporate sub shipper details page is displayed
+    And Operator set shipper on this page as newly created shipper
     And DB Shipper verifies available service types for created shipper not contains "Corporate Return"
 
   @CloseNewWindows
   Scenario: Inheritance corporate return service - parent toggled on (uid:ddcbb6b2-2ca0-4566-a742-b39e81eddf75)
-    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     And Operator set service type "Corporate Return" to "No" on edit shipper page
-    And DB Shipper verifies available service types for shipper id "{operator-b2b-master-shipper-id}" contains "Corporate Return"
-
+    And DB Shipper verifies available service types for shipper id "{postpaid-corporate-hq-id}" contains "Corporate Return"
     When Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
       | branchId | generated |
       | name     | generated |
       | email    | generated |
-    Then Operator verifies corporate sub shipper is created
-    When Operator click edit action button for newly created corporate sub shipper
+    And Operator verifies corporate sub shipper is created
+    And Operator click edit action button for newly created corporate sub shipper
     Then Operator verifies corporate sub shipper details page is displayed
-    When Operator set shipper on this page as newly created shipper
+    And Operator set shipper on this page as newly created shipper
     And DB Shipper verifies available service types for created shipper not contains "Corporate Return"
 
   @KillBrowser @ShouldAlwaysRun
