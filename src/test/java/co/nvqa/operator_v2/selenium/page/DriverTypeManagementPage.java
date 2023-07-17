@@ -4,6 +4,7 @@ import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -40,8 +41,8 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   private AddDriverTypeDialog addDriverTypeDialog;
   public EditDriverTypeDialog editDriverTypeDialog;
   private FiltersForm filtersForm;
-  @FindBy(xpath = "//input[@placeholder='Search']")
-  public TextBox searchDriverType;
+  @FindBy(xpath = "//input[@data-testid='search-bar']")
+  public ForceClearTextBox searchDriverType;
 
   @FindBy(xpath = "//h3[contains(text(),'out of')]/strong")
   public PageElement rowsCount;

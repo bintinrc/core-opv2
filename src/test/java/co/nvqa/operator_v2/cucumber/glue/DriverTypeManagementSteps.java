@@ -115,10 +115,10 @@ public class DriverTypeManagementSteps extends AbstractSteps {
   @Then("Operator search created Driver Type using ID")
   public void operatorSearchDriverTypeById() {
     DriverTypeParams driverTypeName = get(KEY_DRIVER_TYPE_PARAMS);
+    dtmPage.refreshPage();
     doWithRetry(() -> dtmPage.inFrame(() -> {
-      dtmPage.refreshPage();
       dtmPage.waitUntilLoaded();
-      dtmPage.searchDriverType.setValue(driverTypeName.getDriverTypeId());
+      dtmPage.searchDriverType.sendKeys(driverTypeName.getDriverTypeId());
       DriverTypeParams actual = dtmPage.driverTypesTable.readEntity(1);
 
       Assertions.assertThat(

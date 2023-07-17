@@ -89,7 +89,7 @@ Feature: Driver Type Management
 #      | Timeslot: 3PM to 6PM                   | uid:f10f162d-1a52-4889-ba33-da950d324327 | timeslot        | 3PM To 6PM           |
 #      | Timeslot: 6PM to 10PM                  | uid:867017c2-566a-465f-b253-b78b52367824 | timeslot        | 6PM To 10PM          |
 
-  @DeleteDriverType
+  @RunThis @DeleteDriverType
   Scenario: Search Driver Type by ID
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
