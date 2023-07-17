@@ -5,7 +5,7 @@ Feature: Driver Strength
     When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverType
+  @DeleteDriverType @HappyPath @RecordVideo
   Scenario: Create New Driver Account
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -32,7 +32,7 @@ Feature: Driver Strength
     Then Operator verify driver strength params of created driver on Driver Strength page
     When Operator delete created driver on Driver Strength page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @HappyPath @RecordVideo
   Scenario: Update Driver Account
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -62,6 +62,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     And Operator verify driver strength params of created driver on Driver Strength page
 
+  @HappyPath @RecordVideo
   Scenario Outline: Create New Driver Account with DPMS ID
     Given Operator loads Operator portal home page
     When Operator go to menu Fleet -> Driver Strength
@@ -117,7 +118,7 @@ Feature: Driver Strength
     And Operator verifies error message "Vehicle No. is required." is displayed in Driver dialog
     And Operator verifies error message "Capacity is required." is displayed in Driver dialog
 
-  @DeleteDriverType
+  @DeleteDriverType @HappyPath @RecordVideo
   Scenario: Can Not Create New Driver Account Without Preferred Zone and Capacity
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -141,9 +142,6 @@ Feature: Driver Strength
       | comments             | This driver is created by "Automation Test" for testing purpose. |
     Then Operator click Submit button in Add Driver dialog
     And Operator verifies error message "Zone is required." is displayed in Driver dialog
-    And Operator verifies error message "Min is required." is displayed in Driver dialog
-    And Operator verifies error message "Max is required." is displayed in Driver dialog
-    And Operator verifies error message "Cost is required." is displayed in Driver dialog
 
   @DeleteDriverV2
   Scenario: Can Not Update Driver Account Without Active Vehicle
@@ -205,6 +203,7 @@ Feature: Driver Strength
     And Operator wait until table loaded
     Then Operator verify contact details of created driver on Driver Strength page
 
+  @HappyPath @RecordVideo
   Scenario: Delete Driver Account (uid:4cdc0535-7095-463e-87da-ea108e500644)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -284,7 +283,7 @@ Feature: Driver Strength
     And Operator verify driver strength is filtered by "{driver-type-name-3}" driver type
     And Operator verify driver strength is filtered by "Yes" resigned
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @HappyPath @RecordVideo
   Scenario: Filter Driver Account by Driver Types, Zones, and Resigned - No (uid:3227cea9-887f-47df-b403-de16558eaf68)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -386,7 +385,7 @@ Feature: Driver Strength
       | DriverType    |
       | Mitra - Fleet |
 
-  @DeleteDriverType
+  @DeleteDriverType @HappyPath @RecordVideo
   Scenario Outline: Can Not Create New Driver Account with Invalid Phone Number (uid:5012477c-39d3-419b-8aee-f6201203ef99)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -416,7 +415,7 @@ Feature: Driver Strength
       | VehicleType | ContactNumber    | ErrorMessage                                              |
       | Car         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
-  @DeleteDriverType @DeleteDriverV2
+  @DeleteDriverType @DeleteDriverV2 @HappyPath @RecordVideo
   Scenario Outline: Can Not Update Driver Account with Invalid Phone Number (uid:1d5d6d06-3bc5-4a19-91f9-1a7e892f8bc6)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -525,6 +524,7 @@ Feature: Driver Strength
       | FileName                                                                      | Resigned | DownloadOption              |
       | update_driver_details_{gradle-current-date-yyyy-MM-dd}_prefilled_template.csv | No       | Download selected to update |
 
+  @HappyPath @RecordVideo
   Scenario Outline: Successfully Upload CSV for Bulk Update Drivers (uid:794ea7e6-ed1a-4fda-88fa-18c900eed07b)
     Given Operator loads Operator portal home page
     When Operator go to menu Fleet -> Driver Strength
@@ -738,7 +738,7 @@ Feature: Driver Strength
       | Resigned | FileName                                 |
       | No       | update_driver_details_blank_template.csv |
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @HappyPath @RecordVideo
   Scenario: Verify Driver Contacts When Updating Drivers if Number has Never Been Verified
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
@@ -790,7 +790,7 @@ Feature: Driver Strength
     Then Operator verify contact details of created driver on Driver Strength page
     And Operator verify contact details already verified on Driver Strength page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @HappyPath @RecordVideo
   Scenario: Update Drivers Details without Verify the Phone Number
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength

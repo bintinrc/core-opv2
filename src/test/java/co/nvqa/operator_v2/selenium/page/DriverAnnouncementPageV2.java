@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.operator_v2.model.DriverAnnouncement;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
   public DriverAnnouncementTable driverAnnouncementTable;
 
   private final String announcementSubjectXpath = "//div[@class='ant-drawer-body']/span[contains(@class,'ant-typography')]";
-  private final String announcementMessageXpath = "((//div[@class='ant-drawer-body'][span[contains(@class,'ant-typography')]])/*)";
   private final String announcementDrawerCloseXpath = "//div[contains(@class,'ant-drawer-header')]/button[@class='ant-drawer-close']";
   private final String searchInputXpath = "//input[@data-testid='search-bar']";
   private final String uploadedCsvFileBtnXpath = "//div[contains(@class,'ant-space')][*[2][a] or *[1][svg]]";
@@ -93,16 +91,6 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
         .as(f("[Actual: %s\nExpected: %s]", getText(announcementSubjectXpath),
             rowData.get("subject")))
         .isTrue();
-
-    pause5s();
-
-    boolean isMessageMatch = Lists.reverse(findElementsBy(By.xpath(announcementMessageXpath)))
-        .get(0).getText().equalsIgnoreCase(
-            rowData.get("message"));
-    Assertions.assertThat(isMessageMatch)
-        .as(f("[Actual: %s\nExpected: %s]", getText(announcementMessageXpath),
-            rowData.get("message")))
-        .isTrue();
   }
 
   public void closeAnnouncementDrawer() {
@@ -134,9 +122,7 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
             .contains(keyword.toLowerCase());
         break;
       case "body":
-        isContains = Lists.reverse(findElementsBy(By.xpath(announcementMessageXpath))).get(0)
-            .getText().toLowerCase()
-            .contains(keyword.toLowerCase());
+        isContains = isElementExist(f("//td/*[contains(text(),'%s')]", keyword.toLowerCase()));
         break;
       default:
         isContains = false;

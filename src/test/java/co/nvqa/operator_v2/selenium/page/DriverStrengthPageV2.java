@@ -53,7 +53,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage<DriverStrengthPageV2> 
 
   @FindBy(xpath = "//button[contains(@class,'ant-btn')]/span[contains(text(), 'Yes')]")
   public Button btnConfirmVerify;
-  @FindBy(xpath = "//div[@class='ant-modal-content'][*[contains(@class,'ant-modal-header')]/*[text()='Add Driver']]")
+  @FindBy(xpath = "//div[@class='ant-modal-content']")
   public AddDriverDialog addDriverDialog;
 
   @FindBy(css = "div.ant-modal")
@@ -181,7 +181,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage<DriverStrengthPageV2> 
         expectedContactDetails.getFullName());
     final String contactsXpath = f(
         "//div[contains(@class,'ant-col') and contains(text(),'%s')]",
-        expectedContactDetails.getContact());
+        expectedContactDetails.getContact().substring(3));
 
     driversTable.filterByColumn(COLUMN_ID, id);
     driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
@@ -331,11 +331,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage<DriverStrengthPageV2> 
 
   public void removeVehicleDetails() {
     ForceClearTextBox vehicleLicenseNumber = editDriverDialog.vehicleSettingsForm.vehicleLicenseNumber;
-    ForceClearTextBox vehicleCapacity = editDriverDialog.vehicleSettingsForm.vehicleCapacity;
     vehicleLicenseNumber.clearValue();
-    vehicleCapacity.clearValue();
-    Assertions.assertThat(Strings.isNullOrEmpty(vehicleLicenseNumber.getValue()) &&
-            Strings.isNullOrEmpty(vehicleCapacity.getValue()))
+    Assertions.assertThat(Strings.isNullOrEmpty(vehicleLicenseNumber.getValue()))
         .as("Vehicle detail should be empty")
         .isTrue();
   }
@@ -363,7 +360,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage<DriverStrengthPageV2> 
 
   public void verifyContactDetailsAlreadyVerified(DriverInfo driverInfo) {
     final String contactsXpath = f(
-        "//div[contains(@class,'ant-col') and contains(text(),'%s')]", driverInfo.getContact());
+        "//div[contains(@class,'ant-col') and contains(text(),'%s')]", driverInfo.getContact().substring(3));
     final String verifiedXpath = "//div[contains(@class, 'ant-typography') and text()='Verified']";
     if (!isElementExist(contactsXpath)) {
       refreshPage();

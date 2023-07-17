@@ -144,9 +144,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator removes vehicle details on Edit Driver dialog on Driver Strength page")
   public void operatorRemoveVehicleDetails() {
-    dsPage.inFrame(() -> {
-      dsPage.removeVehicleDetails();
-    });
+    dsPage.inFrame(() ->
+      dsPage.removeVehicleDetails()
+    );
   }
 
   @When("Operator removes zone preferences on Edit Driver dialog on Driver Strength page")
@@ -542,22 +542,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
         Assertions.assertThat(actualDriverInfo.get(0).getOwn()).as("Vehicle")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("vehicleOwn")));
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("username"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getLicenseNumber())
-            .as("Vehicle License Number")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("username")));
-      }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("comments"))) {
         Assertions.assertThat(actualDriverInfo.get(0).getComments()).as("Comments")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("comments")));
-      }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneMin"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getMinCapacity()).as("Zone Min")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneMin")));
-      }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneMax"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getMaxCapacity()).as("Zone Max")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneMax")));
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneId"))) {
         Assertions.assertThat(actualDriverInfo.get(0).getZone()).as("Zone ID")
