@@ -17,7 +17,7 @@ Feature: Middle Mile Driver Management - View Driver
       | Hub | {hub-name}                                                                 |
       | Employment Status | Active                                                                                                  |
       | License Status    | Active                                                                                                  |
-    Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
+    Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].id}"
     When Operator clicks view button on the middle mile driver page
     Then Operator verifies details of driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
