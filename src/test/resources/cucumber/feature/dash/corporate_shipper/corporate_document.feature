@@ -1,14 +1,14 @@
-@MileZero @B2B
+@MileZero @CorporateHQ @WithSg
 Feature: B2B Management
 
   @LaunchBrowser @ShouldAlwaysRun @DeleteCorporateSubShipper
   Scenario: Go to master shipper details page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Given API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
 
   @CloseNewWindows
   Scenario: Toggled on corporate document service type for existing non corporate shipper (uid:a3d3b780-8ba9-4986-b7b4-df18058bf687)
-    Given Operator edits shipper "{operator-postpaid-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     When Operator go to "Basic Settings" tab on Edit Shipper page
     And Operator set service type "Corporate Document" to "Yes" on edit shipper page
     Then Operator verifies toast "Only corporate shippers are allowed to have Corporate Document as their service type" displayed on edit shipper page
@@ -16,14 +16,14 @@ Feature: B2B Management
 
   @CloseNewWindows
   Scenario: Modify corporate document service type for existing corporate shipper (uid:d9ed9844-bf0d-48fe-b413-0bb466350c64)
-    Given Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     When Operator go to "Basic Settings" tab on Edit Shipper page
     And Operator set service type "Corporate Document" to "Yes" on edit shipper page
     Then DB Shipper verifies available service types for created shipper contains "Corporate Document"
 
   @DeleteCorporateSubShipper @CloseNewWindows
   Scenario: Create subshippers with corporate document toggle off in subshipper default settings (uid:4f1c30a2-a098-4052-a566-eceb420268c6)
-    Given Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     When Operator go to "Basic Settings" tab on Edit Shipper page
     And Operator set service type "Corporate Document" to "Yes" on edit shipper page
     And Operator go to "Sub shippers Default Setting" tab on Edit Shipper page
@@ -34,14 +34,14 @@ Feature: B2B Management
       | name     | generated |
       | email    | generated |
     Then Operator verifies corporate sub shipper is created
-    When API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    When API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
     And Operator Edit Shipper Page of created b2b sub shipper
     Then Operator verifies Basic Settings on Edit Shipper page:
       | corporateDocument | false |
 
   @DeleteCorporateSubShipper @CloseNewWindows
   Scenario: Create subshippers with corporate document toggle on in subshipper default settings (uid:37171044-0ff6-4f2c-971a-be047be99931)
-    Given Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
+    Given Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
     When Operator go to "Basic Settings" tab on Edit Shipper page
     And Operator set service type "Corporate Document" to "Yes" on edit shipper page
     When Operator go to "Sub shippers Default Setting" tab on Edit Shipper page
@@ -52,7 +52,7 @@ Feature: B2B Management
       | name     | generated |
       | email    | generated |
     Then Operator verifies corporate sub shipper is created
-    When API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    When API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
     And Operator Edit Shipper Page of created b2b sub shipper
     Then Operator verifies Basic Settings on Edit Shipper page:
       | corporateDocument | true |
