@@ -281,7 +281,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@role='alert']")
   public PageElement validationAlert;
 
-  @FindBy(xpath = "//button//strong[.='Back']")
+  @FindBy(xpath = "//button[@data-testid='back-to-filter-button']")
   public PageElement backButton;
 
   @FindBy(xpath = "//input[@id='createToFromAirportForm_originFacility']")

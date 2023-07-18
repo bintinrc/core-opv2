@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -549,7 +550,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator load schedules on Movement Management page with retry using data below:")
   public void operatorLoadSchedulesOnMovementManagementPageWithRetryUsingDataBelow(
       Map<String, String> inputData) {
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       try {
         final Map<String, String> data = resolveKeyValues(inputData);
         String crossdockHub = data.get("crossdockHub");
@@ -564,7 +565,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPageIsLoaded();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, "Loading movement schedule...", 1000, 10);
   }
 
   @And("Operator load schedules and verifies on Movement Management page with retry using data below:")
@@ -616,8 +617,8 @@ public class MovementManagementSteps extends AbstractSteps {
       MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(i + 1);
       movementSchedule.getSchedule(i).compareWithActual(actual);
     }
-    if (movementManagementPage.middleMileDrivers != null) {
-      movementManagementPage.verifyListDriver(movementManagementPage.middleMileDrivers);
+    if (MovementManagementPage.middleMileDrivers != null) {
+      movementManagementPage.verifyListDriver(MovementManagementPage.middleMileDrivers);
     }
   }
 
@@ -696,29 +697,35 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator fills in Add Movement Schedule form using data below:")
   public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> dataTableAsMap) {
     Map<String, String> data = resolveKeyValues(dataTableAsMap);
-    if (data.containsKey("drivers")) {
-      String driversJoined = getList(data.get("drivers"), MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
-          Collectors.joining(","));
-      data.put("drivers", driversJoined);
+    if (dataTableAsMap.containsKey("drivers")) {
+      List<MiddleMileDriver> drivers;
+      if (MiddleMileUtils.isCommaSeparated(dataTableAsMap.get("drivers"))) {
+        drivers = Arrays.stream(dataTableAsMap.get("drivers").split(","))
+            .map((Function<String, MiddleMileDriver>) this::resolveValue)
+            .collect(Collectors.toList());
+      } else if (MiddleMileUtils.isSingleKeyObject(dataTableAsMap.get("drivers"))) {
+        drivers = Collections.singletonList(resolveValue(dataTableAsMap.get("drivers")));
+      } else {
+        drivers = resolveValue(dataTableAsMap.get("drivers"));
+      }
+      data.put("drivers", drivers.stream().map(MiddleMileDriver::getUsername).collect(Collectors.joining(",")));
     }
 
-    Map<String, String> origKeyIdx = MiddleMileUtils.getKeyIndex(dataTableAsMap.get("originHub"));
-    Map<String, String> destKeyIdx = MiddleMileUtils.getKeyIndex(dataTableAsMap.get("destinationHub"));
+    co.nvqa.commonsort.model.sort.Hub originHub = resolveValue(dataTableAsMap.get("originHub"));
+    co.nvqa.commonsort.model.sort.Hub destinationHub = resolveValue(dataTableAsMap.get("destinationHub"));
 
-    data.put("originHub", getList(origKeyIdx.get("key"),
-        co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(origKeyIdx.get("idx"))).getName());
-    data.put("destinationHub", getList(destKeyIdx.get("key"),
-        co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(destKeyIdx.get("idx"))).getName());
+    data.put("originHub", originHub.getName());
+    data.put("destinationHub", destinationHub.getName());
 
     doWithRetry(() -> {
       try {
         movementManagementPage.addMovementScheduleModal.fill(resolveKeyValues(data));
 
         co.nvqa.common.mm.model.HubRelation hubRelation = new co.nvqa.common.mm.model.HubRelation();
-        hubRelation.setOriginHubIds(Collections.singletonList(getList(origKeyIdx.get("key"),
-            co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(origKeyIdx.get("idx"))).getId()));
-        hubRelation.setDestinationHubIds(Collections.singletonList(getList(destKeyIdx.get("key"),
-            co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(destKeyIdx.get("idx"))).getId()));
+        hubRelation.setOriginHubId(originHub.getId());
+        hubRelation.setDestinationHubId(destinationHub.getId());
+        hubRelation.setOriginHubIds(Collections.singletonList(originHub.getId()));
+        hubRelation.setDestinationHubIds(Collections.singletonList(destinationHub.getId()));
         hubRelation.setFacilityType("CROSSDOCK");
         hubRelation.setIncludeSchedules(true);
         putInList(KEY_MM_LIST_OF_CREATED_HUB_RELATIONS, hubRelation);
