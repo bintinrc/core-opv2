@@ -1089,11 +1089,7 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @Then("Operator unmask All Orders page")
   public void unmaskPage() {
-    while (allOrdersPage.mask.existsFast()) {
-      allOrdersPage.mask.scrollIntoView();
-      allOrdersPage.mask.jsClick();
-      pause1s();
-    }
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    allOrdersPage.operatorClickMaskingText(elements);
   }
-
 }
