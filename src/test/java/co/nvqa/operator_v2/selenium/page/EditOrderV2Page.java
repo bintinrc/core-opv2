@@ -523,7 +523,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   public List<String> getTags() {
     List<String> tags = new ArrayList<>();
     List<WebElement> listOfTags = findElementsByXpath(
-        "//div[@id='order-tags-container']/nv-tag/span");
+        "//span[contains(@class, \"ant-tag\")]");
     for (WebElement we : listOfTags) {
       tags.add(we.getText());
     }
