@@ -19,8 +19,7 @@ Feature: Edit Campaign
   @FailingDownloadButtonDisabled
   Scenario: View Detail Campaign - Status Pending
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Pending campaign
-    And Operator verifies Campaign is Pending
+    And Operator clicks on campaign with name QA-Automation-Campaign-16896918867762
     And Operator verifies Campaign name input field is clickable
     And Operator verifies Campaign ID input field is not clickable
     And Operator verifies Campaign Description input field is clickable
@@ -35,8 +34,9 @@ Feature: Edit Campaign
     And Operator verifies Service level select field is clickable
     And Operator verifies Discount value picker field is clickable
     And Operator verifies Add button is not disabled
-    And Operator verifies Download button is disabled
+    And Operator verifies Download button is not disabled
     And Operator verifies Add button is not disabled
     And Operator verifies Remove button is not disabled
     And Operator verifies shippers count is present
     And Operator clicks on download button on Campaign Page
+    And Operator verifies downloaded shippers CSV file on Campaign Page

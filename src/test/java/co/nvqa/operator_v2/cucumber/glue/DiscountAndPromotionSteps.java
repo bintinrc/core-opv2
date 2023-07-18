@@ -399,6 +399,18 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     return csvFile;
   }
 
+  @And("^Operator clicks on campaign with name (.+)$")
+  public void operatorClicksOnCampaignWithName(String name) {
+    discountAndPromotionsPage.inFrame(page -> {
+      doWithRetry(() ->
+      {
+        pause10s();
+        pause10s();
+        discountAndPromotionsPage.selectCampaignWithName(name);
+      }, getCurrentMethodName(), 500, 5);
+    });
+  }
+
   @And("^Operator clicks on first (.+) campaign$")
   public void operatorClicksOnFirstCampaign(String status) {
     discountAndPromotionsPage.inFrame(page -> {
@@ -541,8 +553,14 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @When("Operator clicks on download button on Campaign Page")
   public void operatorClickOnDownloadButtonOnCampaignPage() {
     campaignCreateEditPage.inFrame(page -> {
-      campaignCreateEditPage.clickCampaignRuleAddButton();
+      campaignCreateEditPage.clickDownloadButton();
     });
   }
 
+  @And("Operator verifies downloaded shippers CSV file on Campaign Page")
+  public void operatorVerifiesDownloadedShippersCSVFileOnCapaignPage() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.verifyFileDownloadedSuccessfully("shippers.csv");
+    });
+  }
 }

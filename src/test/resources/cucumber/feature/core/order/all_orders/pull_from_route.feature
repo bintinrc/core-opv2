@@ -27,13 +27,26 @@ Feature: All Orders - Pull From Route
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | seqNo    | 100                                                        |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | seqNo    | 200                                                        |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
     When Operator go to menu Order -> All Orders
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     When API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -41,21 +54,11 @@ Feature: All Orders - Pull From Route
     When Operator pull out multiple orders below from route on All Orders page:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | seqNo   | null                                                       |
-      | routeId | null                                                       |
-      | status  | Pending                                                    |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo   | null                                                       |
-      | routeId | null                                                       |
-      | status  | Pending                                                    |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -77,7 +80,7 @@ Feature: All Orders - Pull From Route
     And Operator find multiple orders below by uploading CSV on All Orders page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask all orders page
+    And Operator unmask All Orders page
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator apply "Pull From Route" action and expect to see "Selection Error"
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |

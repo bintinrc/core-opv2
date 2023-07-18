@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaign @CWF
+@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaign
 
 Feature: Edit Campaign
 
