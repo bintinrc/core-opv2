@@ -201,20 +201,27 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
   }
 
-  @When("^Operator Force Success single order on All Orders page$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+  @When("Operator Force Success single order on All Orders page {string}")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(String trackingId) {
     allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
     String reason = allOrdersPage.forceSuccessOrders();
     put(KEY_ORDER_CHANGE_REASON, reason);
   }
 
-  @When("^Operator Force Success single order on All Orders page:$")
+  @When("Operator Force Success multiple orders on All Orders page:")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(List<String> listOfTrackingIds) {
+    List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
+    allOrdersPage.findOrdersWithCsv(resolveListOfTrackingIds);
+    String reason = allOrdersPage.forceSuccessOrders();
+    put(KEY_ORDER_CHANGE_REASON, reason);
+  }
+
+  @When("Operator Force Success single order on All Orders page:")
   public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String changeReason = data.get("changeReason");
     String reasonForChange = data.get("reasonForChange");
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String trackingId = data.get("trackingId");
     allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
     allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
     put(KEY_ORDER_CHANGE_REASON, changeReason);
@@ -283,13 +290,6 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorCloseErrorsDialog() {
     allOrdersPage.errorsDialog.waitUntilVisible();
     allOrdersPage.errorsDialog.close.click();
-  }
-
-  @When("Operator Force Success multiple orders on All Orders page")
-  public void operatorForceSuccessOrders() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(trackingIds);
-    allOrdersPage.forceSuccessOrders();
   }
 
   @Then("^Operator verify the order is Force Successed successfully$")
@@ -525,7 +525,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
     allOrdersPage.verifyItsCurrentPage();
   }
-  
+
   @When("Operator RTS multiple orders on next day on All Orders Page:")
   public void operatorRtsOrdersOnNextDayOnAllOrdersPage(List<String> listOfTrackingIds) {
     List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
