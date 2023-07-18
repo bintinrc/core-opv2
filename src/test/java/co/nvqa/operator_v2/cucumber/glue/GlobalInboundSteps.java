@@ -167,6 +167,18 @@ public class GlobalInboundSteps extends AbstractSteps {
       actual = StringUtils.normalizeSpace(actual);
       Assertions.assertThat(actual).as("Rack Info").isEqualToIgnoringCase(expected);
     }
+    if (data.containsKey("rtsTag")) {
+      String expected = data.get("rtsTag");
+      String actual = globalInboundPage.rtsTag.getText();
+      actual = StringUtils.normalizeSpace(actual);
+      Assertions.assertThat(actual).as("RTS Info").isEqualToIgnoringCase(expected);
+    }
+    if (data.containsKey("priorTag")) {
+      String expected = data.get("priorTag");
+      String actual = globalInboundPage.priorTag.getText();
+      actual = StringUtils.normalizeSpace(actual);
+      Assertions.assertThat(actual).as("Prior Info").isEqualToIgnoringCase(expected);
+    }
 
     if (data.containsKey("setAsideGroup")) {
       String expected = data.get("setAsideGroup");
@@ -189,6 +201,7 @@ public class GlobalInboundSteps extends AbstractSteps {
       Assertions.assertThat(actualColor.asHex())
           .as("Expected another color for Route ID background").isEqualTo(expected);
     }
+
     takesScreenshot();
     pause3s();
   }
