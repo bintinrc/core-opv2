@@ -1637,7 +1637,6 @@ public class EditOrderSteps extends AbstractSteps {
   @And("^Operator verify the tags shown on Edit Order page$")
   public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
     expectedOrderTags = resolveValues(expectedOrderTags);
-    Order order = get(KEY_CREATED_ORDER);
 
     List<String> actualOrderTags = editOrderPage.getTags();
 
@@ -1647,8 +1646,8 @@ public class EditOrderSteps extends AbstractSteps {
         .sorted().collect(Collectors.toList());
 
     Assertions.assertThat(normalizedActualList)
-        .as("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
-            order.getId()).containsExactlyElementsOf(normalizedExpectedList);
+        .as("Order tags is not equal to tags set on Order Tag Management page")
+        .containsExactlyElementsOf(normalizedExpectedList);
   }
 
   @And("Operator verifies no tags shown on Edit Order page")
