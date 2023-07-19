@@ -891,7 +891,7 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name         | ticketSubtype
+      | Dataset Name         | ticketSubtype               |
       | cancelled order      | CANCELLED ORDER             |
       | completed order      | COMPLETED ORDER             |
       | customer rejected    | CUSTOMER REJECTED           |
