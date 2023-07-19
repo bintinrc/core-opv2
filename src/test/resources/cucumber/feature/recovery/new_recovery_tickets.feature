@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
+@NewRecoveryTicketsPage @OperatorV2 @CWF @ClearCache @ClearCookies @test
 Feature: New Recovery Tickets
 
   Background:
@@ -782,6 +782,356 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  @RT
+  Scenario Outline: Operator Create Single Ticket - Recovery Ticket - PARCEL ON HOLD - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | ROUTE INBOUNDING                      |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL ON HOLD                        |
+      | ticketSubType           | <ticketSubtype>                       |
+      | orderOutcome            | RESUME DELIVERY                       |
+      | exceptionReason         | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | PARCEL ON HOLD : <ticketSubtype>             |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+    Examples:
+      | Dataset Name                                    | ticketSubtype                  |
+      | ticket_subtype = SHIPPER REQUEST                | SHIPPER REQUEST                |
+      | ticket_subtype = CUSTOMER REQUEST               | CUSTOMER REQUEST               |
+      | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) | PAYMENT PENDING (NINJA DIRECT) |
+
+  Scenario Outline: Operator Create Single Ticket - Recovery Ticket - PARCEL EXCEPTION - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                   | ROUTE INBOUNDING                      |
+      | investigatingDepartment       | Fleet (First Mile)                    |
+      | investigatingHub              | {hub-name}                            |
+      | ticketType                    | PARCEL EXCEPTION                      |
+      | ticketSubType                 | <ticketSubtype>                       |
+      | orderOutcomeInaccurateAddress | RTS                                   |
+      | rtsReason                     | Nobody at address                     |
+      | exceptionReason               | GENERATED                             |
+      | custZendeskId                 | 1                                     |
+      | shipperZendeskId              | 1                                     |
+      | ticketNotes                   | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | PARCEL EXCEPTION : <ticketSubtype>           |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+    Examples:
+      | Dataset Name         | ticketSubtype
+      | cancelled order      | CANCELLED ORDER             |
+      | completed order      | COMPLETED ORDER             |
+      | customer rejected    | CUSTOMER REJECTED           |
+      | disputed order info  | DISPUTED ORDER INFO         |
+      | dp oversized         | DP OVERSIZED                |
+      | inaccurate address   | INACCURATE ADDRESS          |
+      | max attempt delivery | MAXIMUM ATTEMPTS (DELIVERY) |
+      | max attempt rts      | MAXIMUM ATTEMPTS (RTS)      |
+      | restricted zones     | RESTRICTED ZONES            |
+
+  Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                 | ROUTE INBOUNDING                      |
+      | investigatingDepartment     | Fleet (First Mile)                    |
+      | investigatingHub            | {hub-name}                            |
+      | ticketType                  | SHIPPER ISSUE                         |
+      | ticketSubType               | <ticketSubtype>                       |
+      | orderOutcomeDuplicateParcel | RTS                                   |
+      | rtsReason                   | Nobody at address                     |
+      | issueDescription            | GENERATED                             |
+      | custZendeskId               | 1                                     |
+      | shipperZendeskId            | 1                                     |
+      | ticketNotes                 | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | SHIPPER ISSUE : <ticketSubtype>              |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+    Examples:
+      | Dataset Name         | ticketSubtype        |
+      | duplicate parcel     | DUPLICATE PARCEL     |
+      | no order             | NO ORDER             |
+      | overweight oversized | OVERWEIGHT/OVERSIZED |
+      | poor packaging label | POOR PACKAGING/LABEL |
+      | rejected return      | REJECTED RETURN      |
+      | restricted goods     | RESTRICTED GOODS     |
+
+  Scenario: Operator Create Single Ticket - Recovery Ticket - DAMAGED
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | orderOutcomeDamaged     | NV LIABLE - PARTIAL - RESUME DELIVERY |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | DAMAGED                                      |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  Scenario: Operator Create Single Ticket - Recovery Ticket - MISSING
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | MISSING                               |
+      | orderOutcomeMissing     | LOST - DECLARED                       |
+      | parcelDescription       | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | MISSING                                      |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  Scenario: Operator Create Single Ticket - Recovery Ticket - SELF COLLECTION
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                 | DRIVER TURN                           |
+      | investigatingDepartment     | Fleet (First Mile)                    |
+      | investigatingHub            | {hub-name}                            |
+      | ticketType                  | SELF COLLECTION                       |
+      | orderOutcomeDuplicateParcel | COLLECTED BY SHIPPER                  |
+      | custZendeskId               | 1                                     |
+      | shipperZendeskId            | 1                                     |
+      | ticketNotes                 | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | SELF COLLECTION                              |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  Scenario: Operator Create Single Ticket - Recovery Ticket - SLA BREACH
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | DRIVER TURN                           |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | SLA BREACH                            |
+      | orderOutcome            | RESUME DELIVERY                       |
+      | breachReason            | Auto breach reason                    |
+      | breachLeg               | Forward                               |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | SLA BREACH                                   |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | -1                                           |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "On Hold" on Edit Order V2 page
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
