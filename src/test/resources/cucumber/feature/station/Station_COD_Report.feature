@@ -333,7 +333,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -368,8 +368,8 @@ Feature: Station COD Report
       | Collected At                | <CollectedAt>                    |
       | COD Amount                  | <CODAmount>                      |
       | Shipper Name                | {shipper-v4-name}                |
-      | Driver Name                 | {ninja-driver-name-1}            |
-      | Driver ID                   | {ninja-driver-id-1}              |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
     And Operator verifies that the COD amount: "<CODAmount>" is separated by dot for thousands and by comma for decimals
 
     Examples:
@@ -441,7 +441,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -465,11 +465,11 @@ Feature: Station COD Report
       | <HubName> | <TransStatus>      |
     And Operator navigates to summary tab in the result grid
     And Operator searches for the details in result grid using the following search criteria:
-      | Driver Name | {ninja-driver-name-1} |
+      | Driver Name | {ninja-driver-name} |
       | Hub         | <HubName>             |
     And Operator gets the order details from summary tab of station cod report
     And Operator verifies that the following details are displayed in summary tab:
-      | Driver Name | {ninja-driver-name-1}  |
+      | Driver Name | {ninja-driver-name}    |
       | Hub         | <HubName>              |
       | Route ID    | {KEY_CREATED_ROUTE_ID} |
       | COD Amount  | <CODAmount>            |
@@ -549,7 +549,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -584,8 +584,8 @@ Feature: Station COD Report
       | Collected At                | <CollectedAt>                    |
       | COD Amount                  | <CODAmount>                      |
       | Shipper Name                | {shipper-v4-name}                |
-      | Driver Name                 | {ninja-driver-name-1}            |
-      | Driver ID                   | {ninja-driver-id-1}              |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
     And DB Operator verifies that transaction end datetime is +7 hours from job_service_end_datetime_utc in station database
 
     Examples:
