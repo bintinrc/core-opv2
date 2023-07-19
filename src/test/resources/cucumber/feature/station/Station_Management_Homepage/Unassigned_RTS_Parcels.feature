@@ -248,7 +248,7 @@ Feature: Unassigned RTS Parcels
       | HubName      | HubId      | DestinationHubId | TileName  | ModalName                      | Country   |
       | {hub-name-1} | {hub-id-1} | {hub-id-1}       | For Route | RTS parcels not added to route | Indonesia |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: [SG, MY, PH] Last Scan Time Parcels For Route Should Match Country's Timezone UTC +8
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -339,7 +339,7 @@ Feature: Unassigned RTS Parcels
       | HubName      | HubId      | DestinationHubId | TileName     | ModalName                           | Country   |
       | {hub-name-1} | {hub-id-1} | {hub-id-2}       | For Shipment | Unassigned RTS parcels for shipment | Indonesia |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: [SG, MY, PH] Last Scan Time Parcels For Route Should Match Country's Timezone UTC +8
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
