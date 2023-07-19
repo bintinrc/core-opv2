@@ -98,7 +98,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//span[text()='Search by shipper']//parent::li")
   public PageElement searchByShipperTab;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_14']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[contains(@id,'rc_select_')]]")
   public AntSelect searchByShipper;
 
   @FindBy(xpath = "//span[text()='Upload']//parent::button")
@@ -113,7 +113,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//input[@id='id']")
   public PageElement campaignId;
 
-  @FindBy(xpath = "//span[contains(text(),'Shippers')]")
+  @FindBy(xpath = "(//div[contains(@class,'row-middle')]/span)[2]")
   public PageElement shipperCount;
 
   @FindBy(xpath = "//span[text()='Publish']/parent::button")
@@ -125,6 +125,17 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//label[text()='Service type']//ancestor::div[contains(@class,'row-middle')]//button[@disabled]")
   public PageElement campaignRuleRowOne;
 
+  @FindBy(xpath = "//div[@class='ant-modal-header'][div[text() = 'Add shipper']]")
+  public PageElement addShipperModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-header'][div[text() = 'Remove shipper']]")
+  public PageElement removeShipperModal;
+
+  @FindBy(xpath = "//span[contains(@class,'blue')]/span[@aria-label='close']")
+  public PageElement removeShipperCloseButton;
+
+  @FindBy(xpath = "//div[contains(@class,'toast-bottom')]")
+  public PageElement toastErrorMessage;
   private static final String CAMPAIGN_FIELD_ERROR_MESSAGE = "//label[text()='%s']/ancestor::div[contains(@class,'item-row')]//div[@role='alert']";
 
   public CampaignCreateEditPage(WebDriver webDriver) {
@@ -294,8 +305,24 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     shippersAddButton.click();
   }
 
+  public void clickShippersRemoveButton() {
+    shippersRemoveButton.click();
+  }
+
   public void clickCampaignRuleAddButton() {
     campaignRuleAddButton.click();
+  }
+
+  public void shipperModalDisplayed(String modalName) {
+    if(modalName.equalsIgnoreCase("Add shipper")){
+    addShipperModal.waitUntilVisible();}
+    else if(modalName.equalsIgnoreCase("Remove shipper")){
+      removeShipperModal.waitUntilVisible();}
+  }
+
+  public void addShipperSelectedTab(String tab) {
+    waitUntilVisibilityOfElementLocated(
+        f("//li[contains(@class,'selected')]/span[text()='%s']", tab));
   }
 
   public void clickDownloadButton() {
@@ -307,7 +334,11 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public void searchForTheShipper(String shipperName) {
-    searchByShipper.selectValue(shipperName);
+    if (shipperName.equalsIgnoreCase("Invalid Shipper ID")) {
+      searchByShipper.enterSearchTerm(shipperName);
+    } else {
+      searchByShipper.selectValue(shipperName);
+    }
   }
 
   public void clickUploadButton() {
@@ -367,5 +398,13 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
 
   public void waitUntilCampaignPageIsLoaded() {
     campaignPublishButton.waitUntilClickable(30);
+  }
+
+  public String getShipperCount() {
+    return shipperCount.getText();
+  }
+
+  public void removeSelectedShipper(){
+    removeShipperCloseButton.click();
   }
 }
