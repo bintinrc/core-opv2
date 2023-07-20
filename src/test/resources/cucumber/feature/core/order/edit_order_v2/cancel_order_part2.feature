@@ -12,7 +12,7 @@ Feature: Cancel Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Returned to Sender                 |
     When API Core - cancel order and check error:
@@ -31,7 +31,7 @@ Feature: Cancel Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Arrived at Distribution Point      |
     When API Core - cancel order and check error:
@@ -50,7 +50,7 @@ Feature: Cancel Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
     When API Core - cancel order and check error:
@@ -143,13 +143,21 @@ Feature: Cancel Order
       | TICKET RESOLVED |
       | TICKET UPDATED  |
       | CANCEL          |
-    When API Operator get order details
-    And DB Operator verify Delivery waypoint of the created order using data below:
-      | status | Pending |
-    And DB Operator verify Pickup waypoint of the created order using data below:
-      | status | Pending |
-    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived
-    And DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived
+    And DB Core - verify waypoints record:
+      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | status | Pending                                                    |
+    And DB Core - verify waypoints record:
+      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status | Pending                                                    |
+    And DB Core - verify number of records in order_jaro_scores_v2:
+      | waypointId | {KEY_TRANSACTION.waypointId} |
+      | number     | 2                            |
+    And DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
+    And DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Merged Delivery Waypoints
@@ -176,7 +184,7 @@ Feature: Cancel Order
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     And API Core - Operator merge routed waypoints:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And API Operator verifies Delivery transactions of following orders have same waypoint id:
+    And API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"

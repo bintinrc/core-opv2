@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @CancelOrder @CancelOrderPart1 @EditOrder1 @RoutingModules
+#@OperatorV2 @Core @EditOrder @CancelOrder @CancelOrderPart1 @EditOrder1 @RoutingModules
 Feature: Cancel Order
 
   Background:
