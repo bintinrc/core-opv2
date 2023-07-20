@@ -1,8 +1,8 @@
 @OperatorV2 @Driver @Fleet @DriverTypeManagement
 Feature: Driver Type Management
 
-   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Download CSV File of Driver Type (uid:76f6ba04-4f9c-46f7-b450-8b73f67a7b7b)
@@ -42,7 +42,7 @@ Feature: Driver Type Management
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
 
-   @DeleteDriverType @DeleteDriverV2
+  @DeleteDriverType @DeleteDriverV2
   Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
@@ -52,9 +52,7 @@ Feature: Driver Type Management
     And API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{KEY_CREATED_DRIVER_TYPE_NAME}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
     When Operator delete new Driver Type on on Driver Type Management page
-    Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                           |
-      | bottom | Driver type is still being used by some drivers |
+    Then Operator verify toast error message "Driver type is still being used by some drivers" displayed
     And Operator verify new Driver Type params
 
 #  @DeleteDriverType Commented as this scenario is no longer applicable as these columns are removed from the Driver Type
