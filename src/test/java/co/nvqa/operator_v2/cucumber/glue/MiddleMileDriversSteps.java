@@ -11,6 +11,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -89,7 +90,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String MALAYSIA = "malaysia";
   private static final String PHILIPPINES = "philippines";
 
-  private static final String MIDDLE_MILE_DRIVERS_URL = "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers";
+  private static final String MIDDLE_MILE_DRIVERS_URL = TestConstants.OPERATOR_PORTAL_BASE_URL + "/sg/middle-mile-drivers";
 
   private static Boolean IS_FIRST_TIME_SETUP_DRIVER = true;
 
@@ -489,11 +490,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Then("Make sure URL show is {string}")
   public void VerifyURLinMiddleDriverPage(String URL){
-    if (URL.contains("<id>")){
-      Hub hub = get(KEY_HUB_INFO);
-      String hubID = hub.getId().toString();
-      URL = URL.replaceAll("<id>",hubID);
-    }
     middleMileDriversPage.verifyURLofPage(URL);
   }
 
