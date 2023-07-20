@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules
+@OperatorV2 @Core @EditOrderV2 @TagAndUntagDP @RoutingModules
 Feature: Tag & Untag DP
 
   Background:
