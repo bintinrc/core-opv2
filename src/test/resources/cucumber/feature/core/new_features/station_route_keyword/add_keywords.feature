@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @AddKeywords
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @AddKeywords
 Feature: Add Keywords
 
   Background:
