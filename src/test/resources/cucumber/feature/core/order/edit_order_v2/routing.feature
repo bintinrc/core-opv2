@@ -1,11 +1,11 @@
 @OperatorV2 @Core @EditOrderV2 @EditOrderRouting @RoutingModules
 Feature: Routing
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Pull Out Parcel from a Route - PICKUP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -48,7 +48,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -91,7 +91,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Pull Out Parcel from a Route - RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -138,7 +138,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Unable Pull Out Parcel from a Route - Completed RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -165,7 +165,7 @@ Feature: Routing
     And Operator click Return to sender -> Pull from route on Edit Order V2 page
     Then Operator verify order cannot be pulled from route on Edit Order V2 page
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Add to Route for RTS Order on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -213,7 +213,7 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2 @happy-path
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <orderType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
@@ -261,7 +261,7 @@ Feature: Routing
       | Normal    |
       | Return    |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2 @happy-path
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <orderType> - <routeType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
@@ -321,7 +321,3 @@ Feature: Routing
       | status         | Cancelled |
       | granularStatus | Cancelled |
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

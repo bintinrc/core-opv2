@@ -23,7 +23,7 @@ Feature: Shipment Management - Search Shipment 2
       | destHubName  | {hub-name-2}                             |
       | mawb         | {KEY_MM_LIST_OF_CREATED_MAWBS[1]}        |
 
-  @wip @DeleteCreatedShipments
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
     Given Operator go to menu Utilities -> QRCode Printing
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -63,7 +63,7 @@ Feature: Shipment Management - Search Shipment 2
       | currHubName  | {hub-name-2}                             |
       | destHubName  | {hub-name-2}                             |
 
-  @wip @DeleteCreatedShipments
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Transit Date Time (uid:d78f101e-c251-46ec-9b14-0eef64804627)
     Given Operator go to menu Utilities -> QRCode Printing
     And Operator go to menu Inter-Hub -> Shipment Management

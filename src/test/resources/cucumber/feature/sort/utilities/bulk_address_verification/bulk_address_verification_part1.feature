@@ -6,147 +6,271 @@ Feature: Bulk Address Verification
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Bulk AV RTS orders - RTS zone exist
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    And API Operator get order details
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[5].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG_RTS            |
-      | longitude | FROM_CONFIG_RTS            |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude        | longitude       |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
     And Operator verifies waypoints are assigned to "RTS" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   Scenario: Bulk AV RTS orders - RTS zone doesn't exist
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
+   And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    And API Operator get order details
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[5].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG                |
-      | longitude | FROM_CONFIG                |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude    | longitude   |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG | FROM_CONFIG |
     And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   Scenario: Bulk AV RTS orders - Zone is NULL
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
+   And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    And API Operator get order details
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[5].id}                                                                         |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG_OOZ            |
-      | longitude | FROM_CONFIG_OOZ            |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude        | longitude       |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
     And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   Scenario: Bulk AV Non RTS orders - RTS zone exist
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator get order details
+   And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG_RTS            |
-      | longitude | FROM_CONFIG_RTS            |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude        | longitude       |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG_RTS | FROM_CONFIG_RTS |
     And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   Scenario: Bulk AV Non RTS orders - RTS zone doesn't exist
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator get order details
+   And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG                |
-      | longitude | FROM_CONFIG                |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude    | longitude   |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG | FROM_CONFIG |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG | FROM_CONFIG |
     And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   Scenario: Bulk AV Non RTS orders - Zone is NULL
-    Given API Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator get order details
+   And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[5] |
     When Operator go to menu Utilities -> Bulk Address Verification
     And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_ORDER_DETAILS |
-      | latitude  | FROM_CONFIG_OOZ            |
-      | longitude | FROM_CONFIG_OOZ            |
+    And Operator upload bulk multiple address CSV using data below:
+      | method                     | waypoint                                                   | toAddress1                                 | latitude        | longitude       |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[3].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[4].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
+      | FROM_CREATED_ORDER_DETAILS | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[2].waypointId} | {KEY_LIST_OF_CREATED_ORDERS[5].toAddress1} | FROM_CONFIG_OOZ | FROM_CONFIG_OOZ |
     And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
-
-  Scenario: Bulk AV Reservation - RTS zone doesn't exist
-    Given API Operator create multiple shipper addresses V2 using data below:
-      | numberOfAddresses | 5               |
-      | shipperId         | {shipper-v4-id} |
-      | generateAddress   | RANDOM          |
-    And API Operator create multiple V2 reservations based on number of created addresses using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    When Operator go to menu Utilities -> Bulk Address Verification
-    And Operator refresh page v1
-    And Operator upload bulk address CSV using data below:
-      | waypoint  | FROM_CREATED_RESERVATION_DETAILS |
-      | latitude  | FROM_CONFIG                      |
-      | longitude | FROM_CONFIG                      |
-    And Operator verifies waypoints are assigned to "STANDARD" rack sector upon bulk address verification
-    Then Operator update successfully matched waypoints upon bulk address verification
-    Then Operator verify Jaro Scores are created successfully
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                      | archived | score | sourceId |
-      | {KEY_LIST_OF_CREATED_JARO_SCORES[1].waypointId} | 1        | 1     | 4        |
-      | {KEY_LIST_OF_CREATED_JARO_SCORES[2].waypointId} | 1        | 1     | 4        |
-    And DB Operator verifies waypoints record:
-      | id        | {KEY_LIST_OF_CREATED_JARO_SCORES[1].waypointId} |
-      | latitude  | {KEY_LIST_OF_CREATED_JARO_SCORES[1].latitude}   |
-      | longitude | {KEY_LIST_OF_CREATED_JARO_SCORES[1].longitude}  |
-    And DB Operator verifies waypoints record:
-      | id        | {KEY_LIST_OF_CREATED_JARO_SCORES[2].waypointId} |
-      | latitude  | {KEY_LIST_OF_CREATED_JARO_SCORES[2].latitude}   |
-      | longitude | {KEY_LIST_OF_CREATED_JARO_SCORES[2].longitude}  |
+    Then Operator clicks Update successful matched on Bulk Address Verification page
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    Then API Core - Operator verify that "VERIFY_ADDRESS" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[5].id}"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

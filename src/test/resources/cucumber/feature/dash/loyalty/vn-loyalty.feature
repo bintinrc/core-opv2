@@ -1,4 +1,4 @@
-@MileZero @VnOnly @LoyaltyVn
+@MileZero @VnOnly @LoyaltyVn @Deprecated @ToBeUpdated
 Feature: Loyalty
 
   @DeleteOrArchiveRoute
