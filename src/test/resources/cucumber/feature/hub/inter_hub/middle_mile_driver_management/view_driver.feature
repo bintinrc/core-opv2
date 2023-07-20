@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @ViewDriver @runAll
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @ViewDriver
 Feature: Middle Mile Driver Management - View Driver
 
   @LaunchBrowser @ShouldAlwaysRun
