@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CancelRTS
+@OperatorV2 @Core @EditOrderV2 @CancelRTS @EditOrder4
 Feature: Cancel RTS
 
   Background:
