@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart1
+@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart2
 Feature: Manual Update Order Status
 
   Background:
