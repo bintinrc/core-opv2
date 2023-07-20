@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @ForceSuccess @ManualCompletedSelectedPart2
 Feature: All Orders - Manually Completed Selected
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD
@@ -291,7 +291,3 @@ Feature: All Orders - Manually Completed Selected
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE STATUS |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

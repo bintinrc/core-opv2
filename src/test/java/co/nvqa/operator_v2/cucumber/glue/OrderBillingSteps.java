@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -89,7 +90,12 @@ public class OrderBillingSteps extends AbstractSteps {
         orderBillingPage.setParentShipper(parentShipper);
         put(KEY_ORDER_BILLING_SHIPPER, Long.valueOf(parentShipper));
       }
+      if (Objects.nonNull(mapOfData.get("scriptId"))) {
+        String scriptId = mapOfData.get("scriptId");
+        orderBillingPage.setScriptId(scriptId);
+      }
       String generateFile = mapOfData.get("generateFile");
+      pause(10);
       if (Objects.nonNull(generateFile)) {
         orderBillingPage.tickGenerateTheseFilesOption(generateFile);
         if (generateFile.contains("Orders consolidated by shipper")) {
@@ -192,8 +198,12 @@ public class OrderBillingSteps extends AbstractSteps {
   public void operatorChoosesSelectByParentShippersOptionAndDoesNotInputAShipperID(String option) {
     if (option.equalsIgnoreCase("Select by Parent Shipper")) {
       orderBillingPage.setEmptyParentShipper();
-    } else {
+    } else if (option.equalsIgnoreCase("Selected Shipper")) {
       orderBillingPage.setEmptySelectedShipper();
+    } else if (option.equalsIgnoreCase("Select by script ID")) {
+      orderBillingPage.setEmptyScriptId();
+    } else {
+      throw new NvTestRuntimeException("Please input correct option");
     }
   }
 
@@ -201,5 +211,29 @@ public class OrderBillingSteps extends AbstractSteps {
   public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
     Assertions.assertThat(orderBillingPage.csvFileTemplate.hasItem(template))
         .as(f(" Template with name : %s is not available in the dropdown ", template)).isTrue();
+  }
+
+  @Then("Operator verifies error msg {string} in Order Billing Page")
+  public void operatorVerifiesErrorMsgInOrderBillingPage(String errorMsg) {
+    Assertions.assertThat(orderBillingPage.verifyErrorMsgIsVisible(errorMsg))
+        .as("Error message is visible").isTrue();
+
+  }
+
+  @When("Operator searches for script id {string} using Select by Script Id")
+  public void operatorSearchesForScriptIdUsingSelectByScriptId(String scriptIdAndName) {
+    try {
+      orderBillingPage.scriptId.click();
+      orderBillingPage.scriptIdInput.selectValue(scriptIdAndName);
+    } catch (Exception ex) {
+      LOGGER.info("Element not found");
+    }
+  }
+
+  @And("Operator verifies No Data is displayed in the order billing page")
+  public void operatorVerifiesNoResultsFoundIsDisplayed() {
+    orderBillingPage.noDataFound.waitUntilVisible(3);
+    Assertions.assertThat(orderBillingPage.noDataFound.isDisplayed())
+        .as("No Results Found Message is not displayed").isTrue();
   }
 }

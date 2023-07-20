@@ -234,11 +234,27 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator validate the error code and error message {string}")
-  public void operatorValidateTheErrorCodeAndErrorMessage(String message) {
+  @Then("Operator validate the error code and error details")
+  public void operatorValidateTheErrorCodeAndErrorMessage(
+      Map<String, String> mapOfData) {
+    String statusCode = mapOfData.get("statusCode");
+    String url = mapOfData.get("url");
+    mapOfData = resolveKeyValues(mapOfData);
+    String message = mapOfData.get("message");
+    String data = mapOfData.get("data");
     pause3s();
-    validateAttemptPage.validate404StatusCode();
-    validateAttemptPage.validateErrorMessage(message);
+    if (StringUtils.isNotBlank(statusCode)) {
+      validateAttemptPage.validate404StatusCode(statusCode);
+    }
+    if (StringUtils.isNotBlank(message)) {
+      validateAttemptPage.validateErrorMessage(message);
+    }
+    if (StringUtils.isNotBlank(url)) {
+      validateAttemptPage.validateURL(url);
+    }
+    if (StringUtils.isNotBlank(data)) {
+      validateAttemptPage.validateDataInErrorMessage(data);
+    }
     takesScreenshot();
   }
 

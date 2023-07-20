@@ -42,7 +42,7 @@ public class SsbTemplateSteps extends AbstractSteps {
     ssbTemplatePage.waitUntilLoaded();
     Assertions.assertThat(ssbTemplatePage.createTemplateHeader.isDisplayed())
         .as("Available Headers (scroll down to see more) is visible").isTrue();
-    if (ssbTemplatePage.isLegacyIdHeaderColumnAvailable()) {
+    if (!ssbTemplatePage.isLegacyIdHeaderColumnAvailable()) {
       ssbTemplatePage.clickGoBackBtn();
       ssbTemplatePage.clickCreateTemplateBtn();
       ssbTemplatePage.waitUntilLoaded();

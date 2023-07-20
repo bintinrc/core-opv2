@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part2
 Feature: Route Monitoring V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -465,7 +465,3 @@ Feature: Route Monitoring V2
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | driverName | {ninja-driver-2-name}  |
       | routeId    | {KEY_CREATED_ROUTE_ID} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

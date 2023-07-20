@@ -1,12 +1,13 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.Driver;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Map;
 import java.util.Random;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -191,7 +192,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
       final String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
       switch (country) {
         case "SG":
-          contact = "31594329";
+          contact = "8123" + RandomStringUtils.randomNumeric(4);
           break;
         case "ID":
           contact = "+6282188881593";

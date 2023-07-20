@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Fleet @RouteCashInbound
 Feature: Route Cash Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -207,7 +207,3 @@ Feature: Route Cash Inbound
     Then Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

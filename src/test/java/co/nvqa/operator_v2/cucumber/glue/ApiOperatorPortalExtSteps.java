@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.JsonUtils;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.BatchOrderInfo;
@@ -19,9 +21,6 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.model.sort.nodes.Node;
 import co.nvqa.commons.model.sort.nodes.Node.NodeType;
-import co.nvqa.common.utils.JsonUtils;
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.model.Dp;
@@ -33,17 +32,18 @@ import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
@@ -270,8 +270,10 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
-    mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-" + dateUniqueString);
-    mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-" + dateUniqueString);
+    mapOfDynamicVariable.put("RANDOM_FIRST_NAME",
+        "Driver" + RandomStringUtils.random(8, true, false).toUpperCase());
+    mapOfDynamicVariable.put("RANDOM_LAST_NAME",
+        "Auto" + RandomStringUtils.random(8, true, false).toUpperCase());
     mapOfDynamicVariable.put("TIMESTAMP", dateUniqueString);
     mapOfDynamicVariable
         .put("RANDOM_LATITUDE", String.valueOf(StandardTestUtils.generateLatitude()));

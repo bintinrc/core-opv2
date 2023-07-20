@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @AddCommentSession
 Feature: Add Comment Session
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -28,7 +28,3 @@ Feature: Add Comment Session
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator add route inbound comment "Test route inbound comment {gradle-current-date-yyyyMMddHHmmsss}"  on Route Inbound page
     Then Operator verify route inbound comment on Route Inbound page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

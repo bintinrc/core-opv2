@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part3
 Feature: Route Monitoring V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -334,7 +334,3 @@ Feature: Route Monitoring V2
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint | 0                      |
       | pendingCount  | 0                      |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

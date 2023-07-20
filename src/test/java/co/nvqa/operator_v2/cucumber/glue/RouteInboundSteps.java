@@ -684,6 +684,11 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.scanTrackingId(trackingId);
   }
 
+  @And("Operator scan a tracking ID {value} on Route Inbound page")
+  public void operatorScanATrackingIDOnRouteInboundPage(String trackingId) {
+    routeInboundPage.scanTrackingId(trackingId);
+  }
+
   @When("^Operator click 'Go Back' button on Route Inbound page$")
   public void operatorClickGoBackButtonOnRouteInboundPage() {
     routeInboundPage.goBack.click();

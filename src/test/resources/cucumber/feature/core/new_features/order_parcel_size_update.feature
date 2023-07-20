@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
 Feature: Order Parcel Size Update
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator download sample CSV file for Order Parcel Size Update
@@ -34,7 +34,3 @@ Feature: Order Parcel Size Update
     Then Operator verifies dimensions information on Edit Order page:
       | size | LARGE |
     And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

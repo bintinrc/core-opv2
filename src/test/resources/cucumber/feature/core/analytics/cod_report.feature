@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Analytics @CodReport
 Feature: COD Report
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator is Able to Load CODs For A Day and Verify the Created Order is Exist and Contains Correct Info
@@ -91,7 +91,3 @@ Feature: COD Report
     And Operator download COD Report
     Then Operator verify the downloaded COD Report data is correct
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

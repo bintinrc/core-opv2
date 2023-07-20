@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart2
 Feature: Van Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -86,7 +86,8 @@ Feature: Van Inbound
     Given Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator searches and selects orders created on Order Tag Management page
+    And Operator searches and selects orders created on Order Tag Management page:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -131,7 +132,7 @@ Feature: Van Inbound
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Vehicle for Delivery\n\n\nReason: START_ROUTE |
     And DB Operator verifies inbound_scans record with type "4" and correct route_id
     And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
-      | orderTagIds          | {order-tag-id},{order-tag-id-2} |
+      | tagIds               | {order-tag-id},{order-tag-id-2} |
       | routeId              | {KEY_CREATED_ROUTE_ID}          |
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
       | parcelGranularStatus | On Vehicle for Delivery         |
@@ -143,7 +144,8 @@ Feature: Van Inbound
     Given Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator searches and selects orders created on Order Tag Management page
+    And Operator searches and selects orders created on Order Tag Management page:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -178,7 +180,7 @@ Feature: Van Inbound
       | id     | {KEY_CREATED_ROUTE_ID} |
       | status | IN_PROGRESS            |
     And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
-      | orderTagIds          | {order-tag-id},{order-tag-id-2} |
+      | tagIds               | {order-tag-id},{order-tag-id-2} |
       | routeId              | {KEY_CREATED_ROUTE_ID}          |
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
       | parcelGranularStatus | Van en-route to pickup          |
@@ -204,11 +206,7 @@ Feature: Van Inbound
       | hubName       | {hub-name}                       |
     And DB Events - verify pickup_events record:
       | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
-      | userId     | 419                                 |
+      | userId     | 397                                 |
       | type       | 4                                   |
       | pickupType | 1                                   |
       | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

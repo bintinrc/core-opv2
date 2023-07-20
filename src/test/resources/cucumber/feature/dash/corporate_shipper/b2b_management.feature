@@ -1,12 +1,12 @@
-@MileZero @B2B
+@MileZero @CorporateHQ @WithSg
 Feature: B2B Management
 
   @LaunchBrowser @ShouldAlwaysRun @DeleteCorporateSubShipper
   Scenario: Go to master shipper details page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Given API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
     When Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{operator-b2b-master-shipper-legacy-id}-"
+    And Operator open Edit Shipper Page of shipper "{postpaid-corporate-hq-legacy-id}-"
 
   Scenario Outline: Create sub shipper with empty branch id field on shipper settings (<hiptest-uid>)
     When Operator go to tab corporate sub shipper
@@ -91,8 +91,8 @@ Feature: B2B Management
     Then Operator verifies corporate sub shipper is correct
 
     Examples:
-      | masterShipperId                  | hiptest-uid                              |
-      | {operator-b2b-master-shipper-id} | uid:ed3c11a3-2c61-42c0-8ef4-e892bf6065ab |
+      | masterShipperId            | hiptest-uid                              |
+      | {postpaid-corporate-hq-id} | uid:ed3c11a3-2c61-42c0-8ef4-e892bf6065ab |
 
   Scenario Outline: Search sub shippers by name (<hiptest-uid>)
     When Operator go to tab corporate sub shipper

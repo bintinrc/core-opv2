@@ -174,6 +174,18 @@ public class PageElement extends SimpleWebPage {
     }
   }
 
+  public boolean existsFast() {
+    try {
+      setImplicitTimeout(0);
+      getWebElement().getTagName();
+      return true;
+    } catch (Exception ex) {
+      return false;
+    } finally {
+      resetImplicitTimeout();
+    }
+  }
+
   public void scrollIntoView() {
     scrollIntoView(false);
   }
@@ -249,6 +261,15 @@ public class PageElement extends SimpleWebPage {
 
   public boolean isSelected() {
     return getWebElement().isSelected();
+  }
+
+  public void refreshElement() {
+    try {
+      var we = refreshWebElement(webDriver, webElement);
+      webElement = we;
+    } catch (Exception ex) {
+    }
+    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
   }
 
   private WebElement refreshWebElement(WebDriver webDriver, WebElement webEl) {
@@ -329,6 +350,13 @@ public class PageElement extends SimpleWebPage {
     we.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
     we.sendKeys(keysToSend);
     pause300ms();
+  }
+
+  public void setValueByTyping(CharSequence... keysToSend) {
+
+    WebElement element = this.webElement;
+    Actions actions = new Actions(getWebDriver());
+    actions.moveToElement(element).click().sendKeys(keysToSend).build().perform();
   }
 
 }

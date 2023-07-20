@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OutboundMonitoringPart3 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -68,7 +68,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {KEY_DESTINATION_HUB_ID}                   |
@@ -103,7 +102,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {hub-id}                                   |
@@ -143,7 +141,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     Given Operator go to menu New Features -> Outbound Load Monitoring
     Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
@@ -182,7 +179,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {hub-id}                                   |
@@ -226,7 +222,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator go to menu New Features -> Outbound Load Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
@@ -246,6 +241,3 @@ Feature: Outbound Monitoring
       | id   | {KEY_CREATED_ROUTE_ID} |
       | isOk | 0                      |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

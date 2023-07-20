@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
@@ -69,7 +70,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
     private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead//span[contains(@data-testid,'column-title-middle-mile-driver')]";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
-    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
+    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()=\"%s\"]";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
@@ -82,6 +83,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='%s']";
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
+
+    private static final String LICENSE_TYPE_FILTER_XPATH = "//span[@class='ant-dropdown-menu-title-content']/span[contains(text(),'%s')]";
 
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
     private static final String FIRST_NAME_INPUT_CREATE_DRIVER_ID = "first_name";
@@ -108,12 +111,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String USERNAME_TABLE_FILTER_ID = "username";
     private static final String HUB_TABLE_FILTER_ID = "hub";
     private static final String COMMENTS_TABLE_FILTER_ID = "comments";
+    private static final String VENDOR_TABLE_FILTER_ID = "vendor";
 
     private static final Integer NEW_NAME_TABLE_FILTER_ID = 1;
     private static final Integer NEW_ID_TABLE_FILTER_ID = 2;
     private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 3;
     private static final Integer NEW_HUB_TABLE_FILTER_ID = 4;
     private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 5;
+    private static final Integer NEW_VENDOR_FILTER_ID = 6;
     private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
     private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
     private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
@@ -136,6 +141,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
 
     private static final String TOAST_ERROR_400_MESSAGE_XPATH = "//div[contains(@class,'ant-notification-notice-message')]";
+
+    public static String actualToastMessageContent = "";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -161,6 +168,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     public TextBox hubFilter;
     @FindBy(xpath = "//th[div[.='Comments']]//input")
     public TextBox commentsFilter;
+    @FindBy(xpath = "//input[@aria-label='input-vendor_name']")
+    public TextBox vendorFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Status']]")
     public StatusFilter employmentStatusFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Type']]")
@@ -234,6 +243,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//button[@data-testid='driver-dialog-save-button']/span")
     public Button saveCreateDriver;
+
+    @FindBy(xpath = "//button[@data-testid='column-filter-icon-middle-mile-driver-license-type']")
+    public Button clickLicenseTypeFilterInColumn;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -419,6 +431,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 commentsFilter.setValue(driver.getComments());
                 break;
 
+            case VENDOR_TABLE_FILTER_ID:
+                displayNameFilter.setValue(driver.getDisplayName());
+                vendorFilter.scrollIntoView();
+                vendorFilter.setValue(Objects.nonNull(driver.getVendorId()) ? driver.getVendorName() : "-");
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown filter given.");
         }
@@ -568,6 +586,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
         String actualEmploymentType = getText(
             f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+        String actualVendor = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_VENDOR_FILTER_ID));
         String actualEmpStatus = getText(f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID));
         String actualLicenseType = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
@@ -583,6 +603,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             .isEqualTo(middleMileDriver.getHubName());
         Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same")
             .isEqualTo(middleMileDriver.getEmploymentType());
+        Assertions.assertThat(actualVendor).as("The Vendor Name is the same")
+            .isEqualTo(Objects.nonNull(middleMileDriver.getVendorId()) ? middleMileDriver.getVendorName() : "-");
         Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same")
             .isEqualTo(middleMileDriver.getIsEmploymentActive() ? "Active" : "Inactive");
         Assertions.assertThat(actualLicenseType).as("The License Type is the same")
@@ -602,7 +624,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void tableFilterCombobox(MiddleMileDriver driver, String filterBy) {
         pause3s();
-        displayNameFilter.setValue(driver.getFirstName());
+        displayNameFilter.setValue(driver.getDisplayName());
         waitUntilVisibilityOfElementLocated(
             f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
@@ -827,6 +849,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 break;
             case "Comments":
                 body_class_name ="comments";
+                break;
+            case "Vendor's Name":
+                body_class_name ="vendor-name";
                 break;
         }
 
@@ -1409,5 +1434,27 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                     .as("Toast Error Request 400")
                     .isTrue();
         }
+    }
+
+    public void editDriverByWithInvalidValue(String fieldName, String value) {
+        switch (fieldName) {
+            case "firstName":
+                editDriverDialog.name.forceClear();
+                editDriverDialog.name.sendKeys(value);
+                break;
+            case "lastName":
+                editDriverDialog.lastName.forceClear();
+                editDriverDialog.lastName.sendKeys(value);
+                break;
+            case "displayName":
+                editDriverDialog.displayName.forceClear();
+                editDriverDialog.displayName.sendKeys(value);
+                break;
+        }
+        editDriverDialog.save.click();
+    }
+
+    public void chooseLicenseTypeFilter(String licenseType) {
+        click(f(LICENSE_TYPE_FILTER_XPATH, licenseType));
     }
 }

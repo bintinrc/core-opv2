@@ -82,11 +82,13 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
     MAP_OF_END_URL.put("Route Inbound (New)", "station-route-inbound");
     MAP_OF_END_URL.put("Validate Delivery or Pickup Attempt", "validate-attempt");
     MAP_OF_END_URL.put("Download Validation Reports", "download-validation-reports");
+    MAP_OF_END_URL.put("Pickup Jobs", "pickup-appointment");
 
 
     // for all page with masked, add this to the url
     LIST_OF_MASKED_PAGE_URL.add("\\/order\\/\\d*");
     LIST_OF_MASKED_PAGE_URL.add("\\/order$");
+    LIST_OF_MASKED_PAGE_URL.add("\\/route-manifest\\/\\d*");
   }
 
   public MainPage(WebDriver webDriver) {

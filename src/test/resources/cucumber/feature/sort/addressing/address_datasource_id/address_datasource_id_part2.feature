@@ -1,7 +1,7 @@
 @Sort @AddressDataSourceIdPart2
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -60,16 +60,15 @@ Feature: Address Datasource
       | province | {province} |
     Then Operator verifies search box not affected by the scroll
 
-  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Edit Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | province    | {province-part-2}          |
-      | kota        | {kota-part-2}              |
-      | kecamatan   | {kecamatan-part-2}         |
+      | province    | {auto-province-id-3}       |
+      | kota        | {auto-kota-id-3}           |
+      | kecamatan   | {auto-kecamatan-id-3}      |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -97,9 +96,9 @@ Feature: Address Datasource
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {province-part-2}              |
-      | kota      | {kota-part-2}                  |
-      | kecamatan | {kecamatan-part-2}             |
+      | province  | {auto-province-id-3}           |
+      | kota      | {auto-kota-id-3}               |
+      | kecamatan | {auto-kecamatan-id-3}          |
       | zone      | {KEY_SORT_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -107,11 +106,11 @@ Feature: Address Datasource
       | top  | Datasource Updated |
       | body | 1 match edited     |
     Then Operator verifies new address datasource is added:
-      | province  | {province-part-2}  |
-      | kota      | {kota-part-2}      |
-      | kecamatan | {kecamatan-part-2} |
-      | latitude  | {latitude-2}       |
-      | longitude | {longitude-2}      |
+      | province  | {auto-province-id-3}  |
+      | kota      | {auto-kota-id-3}      |
+      | kecamatan | {auto-kecamatan-id-3} |
+      | latitude  | {latitude-2}          |
+      | longitude | {longitude-2}         |
 
   Scenario: ID Address Datasource  - View Zone and Hub match - Existing Row
     Given Operator go to menu Utilities -> QRCode Printing

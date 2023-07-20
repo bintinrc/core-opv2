@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @ProblematicWaypoints
 Feature: Problematic Waypoints/Parcels
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -123,7 +123,3 @@ Feature: Problematic Waypoints/Parcels
       | shipperName       | location                                                            | type                  | issue                |
       | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Cannot Make It (CMI) |
       | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Pending              |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

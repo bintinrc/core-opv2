@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @UpdateStampId @EditOrder4
 Feature: Update Stamp ID
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
@@ -47,7 +47,3 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | KEY_STAMP_ID        |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

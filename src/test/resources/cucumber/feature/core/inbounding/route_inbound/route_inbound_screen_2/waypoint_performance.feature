@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @WaypointPerformance
 Feature: Waypoint Performance
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -327,7 +327,3 @@ Feature: Waypoint Performance
       | trackingId                                 | stampId | location                 | type              | status  | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Normal) | Failed  | 0        | Inbounded          |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Success | 0        |                    |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

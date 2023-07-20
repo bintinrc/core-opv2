@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @RTS @RTSPart2 @EditOrder4
 Feature: RTS
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor
@@ -100,6 +100,7 @@ Feature: RTS
     Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
+    And Operator unmask edit order page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                    |
@@ -164,6 +165,7 @@ Feature: RTS
     Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
+    When Operator unmask edit order page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                    |
@@ -204,7 +206,6 @@ Feature: RTS
       | PARCEL ON HOLD   | SHIPPER REQUEST   | RESUME DELIVERY             |
 
   Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <ticketType>
-    Given Operator refresh page
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -296,7 +297,7 @@ Feature: RTS
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     When DB Operator gets waypoint record
-    And API Operator get Addressing Zone from a lat long with type "STANDARD"
+    And API Operator get Addressing Zone from a lat long with type "RTS"
     Then Operator verifies Zone is correct after RTS on Edit Order page
     And Operator verifies waypoints.routing_zone_id is correct
 
@@ -353,7 +354,3 @@ Feature: RTS
       | address2 | {KEY_CREATED_ORDER_ORIGINAL.fromAddress2} |
       | postcode | {KEY_CREATED_ORDER_ORIGINAL.fromPostcode} |
       | country  | {KEY_CREATED_ORDER_ORIGINAL.fromCountry}  |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

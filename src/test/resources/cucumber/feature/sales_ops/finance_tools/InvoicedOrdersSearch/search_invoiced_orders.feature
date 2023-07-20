@@ -41,7 +41,7 @@ Feature: Upload Invoiced Orders
     When Search Invoiced Orders page is loaded
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Then Operator verifies No Data is displayed
+    Then Operator verifies No Data is displayed in the invoiced orders search page
 
   Scenario: Search by Uploading Invalid File Type (uid:daf938d9-983d-477b-950b-1f9c8f3577ca)
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
@@ -93,7 +93,7 @@ Feature: Upload Invoiced Orders
     And Operator clicks in Enter Tracking ID(s) tab
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
-    Then Operator verifies No Data is displayed
+    Then Operator verifies No Data is displayed in the invoiced orders search page
 
   Scenario: Search invoiced orders without upload file or input manually (uid:1ea16236-000e-4ac2-872a-9fde775261f0)
     Given Operator go to menu Finance Tools -> Invoiced Orders Search

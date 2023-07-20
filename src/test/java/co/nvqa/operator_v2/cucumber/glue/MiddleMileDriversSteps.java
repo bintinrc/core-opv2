@@ -70,6 +70,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String LICENSE_TYPE_FILTER = "license type";
   private static final String LICENSE_STATUS_FILTER = "license status";
   private static final String COMMENTS_FILTER = "comments";
+  private static final String VENDOR_FILTER = "vendor";
 
   private static final String IN_HOUSE_FULL_TIME_CONTRACT = "In-House - Full-Time";
   private static final String IN_HOUSE_PART_TIME_CONTRACT = "In-House - Part-Time";
@@ -354,6 +355,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       case USERNAME_FILTER:
       case HUB_FILTER:
       case COMMENTS_FILTER:
+      case VENDOR_FILTER:
         middleMileDriversPage.tableFilter(driver, filterBy.toLowerCase());
         break;
       case EMPLOYMENT_TYPE_FILTER:
@@ -731,5 +733,51 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @Then("Operator verifies toast with message {string} is shown on edit Middle Mile Driver popup")
   public void operatorVerifiesToastWithMessageIsShownOnEditMiddleMileDriverPopup(String errorMessage) {
     middleMileDriversPage.verifiesToastWithMessage(errorMessage);
+  }
+
+  @And("Operator edit License Type with uncheck {string} value and update with {string} on the middle mile driver page")
+  public void operatorEditWithUncheckValueAndUpdateWithOnTheMiddleMileDriverPage(String prevValue, String updatedValue) {
+    middleMileDriversPage.chooseLicenseType(prevValue);
+
+    if (updatedValue.equalsIgnoreCase("all types")) {
+      middleMileDriversPage.chooseLicenseType("B");
+      middleMileDriversPage.chooseLicenseType("B1");
+      middleMileDriversPage.chooseLicenseType("B2");
+      middleMileDriversPage.chooseLicenseType("C");
+      middleMileDriversPage.chooseLicenseType("Restriction 1");
+      middleMileDriversPage.chooseLicenseType("Restriction 2");
+      middleMileDriversPage.chooseLicenseType("Restriction 3");
+    } else {
+      middleMileDriversPage.chooseLicenseType(updatedValue);
+    }
+
+    middleMileDriversPage.editDriverDialog.save.click();
+    middleMileDriversPage.editDriverDialog.waitUntilInvisible();
+  }
+
+  @And("Operator edit License Type with uncheck {string} value on the middle mile driver page")
+  public void operatorEditLicenseTypeWithUncheckValueOnTheMiddleMileDriverPage(String value) {
+    middleMileDriversPage.chooseLicenseType(value);
+  }
+
+  @When("Operator edits {string} on edit driver dialog with invalid value {string}")
+  public void operatorEditsOnEditDriverDialogWithInvalidValue(String fieldName, String value) {
+    String resolvedValue = resolveValue(value);
+    middleMileDriversPage.editDriverByWithInvalidValue(fieldName, resolvedValue);
+  }
+
+  @And("Operator searches all types of the license type of {string}")
+  public void operatorSearchesAllTypesOfTheLicenseTypeOf(String storageKey) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+    MiddleMileDriver driver = getList(keyIdx.get("key"), MiddleMileDriver.class).get(Integer.parseInt(keyIdx.get("idx")));
+    middleMileDriversPage.tableFilterById(driver, driver.getId());
+    middleMileDriversPage.clickLicenseTypeFilterInColumn.click();
+    middleMileDriversPage.chooseLicenseTypeFilter("B");
+    middleMileDriversPage.chooseLicenseTypeFilter("B1");
+    middleMileDriversPage.chooseLicenseTypeFilter("B2");
+    middleMileDriversPage.chooseLicenseTypeFilter("C");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 1");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 2");
+    middleMileDriversPage.chooseLicenseTypeFilter("Restriction 3");
   }
 }

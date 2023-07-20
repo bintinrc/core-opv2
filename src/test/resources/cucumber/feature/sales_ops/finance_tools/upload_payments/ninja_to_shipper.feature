@@ -66,6 +66,16 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | source          | <source>      |
       | overall_balance | 0.0           |
       | logs            | -<amount>,0.0 |
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value        |
+      | payment_tags | COD_REMITTED,FEE_PAID |
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+      | column            | expected_value         |
+      | order_id          | {KEY_CREATED_ORDER_ID} |
+      | shipper_id        | {KEY_SHIPPER_ID}       |
+      | parent_shipper_id | null                   |
     Examples:
       | source   | account_id                                           | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 81.64  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
@@ -359,12 +369,17 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | source          | <source>      |
       | overall_balance | -71.64        |
       | logs            | -81.64,-71.64 |
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value |
+      | payment_tags | null           |
+    Then DB Billing - Operator verifies there is no entry in the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Examples:
       | source   | account_id                                           | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-TC2-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
-  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info (uid:4ef31ab4-b028-405e-bcc2-f4c665d9476d)
+  Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info - Check Payment Tags
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -424,6 +439,16 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | source          | <source>     |
       | overall_balance | 18.36        |
       | logs            | -81.64,18.36 |
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value        |
+      | payment_tags | COD_REMITTED,FEE_PAID |
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+      | column            | expected_value         |
+      | order_id          | {KEY_CREATED_ORDER_ID} |
+      | shipper_id        | {KEY_SHIPPER_ID}       |
+      | parent_shipper_id | null                   |
     Examples:
       | source   | account_id                                           | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-TC3-{gradle-current-date-yyyyMMddHHmmsss} | 100.0  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |

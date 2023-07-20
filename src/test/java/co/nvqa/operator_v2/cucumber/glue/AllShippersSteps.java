@@ -829,7 +829,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator update basic settings of shipper {string}:")
   public void operatorUpdateShipperBasicSettings(String shipperName, Map<String, String> data) {
-    operatorOpenEditShipperPageOfShipper(shipperName);
+    if(!allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperType.isDisplayed())
+      operatorOpenEditShipperPageOfShipper(shipperName);
     ShipperBasicSettings settings = new ShipperBasicSettings(resolveKeyValues(data));
     allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
@@ -1496,6 +1497,19 @@ public class AllShippersSteps extends AbstractSteps {
   public void setServiceTypeOnShipperEditOrCreatePage(String serviceType, String value) {
     allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
+    allShippersPage.waitUntilInvisibilityOfToast("All changes saved successfully");
+  }
+
+  @Then("Operator verify that the toggle: {string} is set as {string} under 'Pricing and Billing' tab")
+  public void operatorVerifyThatTheToggleIsSetAsUnderTab(String toggle, String expectedValue) {
+    if (toggle.equalsIgnoreCase("Show Pricing Estimate")) {
+      String selectedValue = allShippersPage.allShippersCreateEditPage.pricingAndBillingForm.showPricingEstimate.getValue()
+          .trim();
+      Assertions.assertThat(selectedValue).as(f("Assert that Show Pricing Estimate has a toggle value: %s", expectedValue))
+          .isEqualTo(expectedValue);
+      return;
+    }
+    Assertions.fail("No matches for the given toggle name");
   }
 
   @When("Operator set service type {string} to {string} on Sub shippers Default Setting tab edit shipper page")
@@ -2085,4 +2099,36 @@ public class AllShippersSteps extends AbstractSteps {
   public void allShipperPickupServicesdeleted() {
     allShippersPage.allShippersCreateEditPage.verifyPickupServicesIsEmpty();
   }
+
+  @Given("Operator verifies that the following error appears on creating new shipper:")
+  public void operatorVerifiesThatTheFollowingErrorAppearsOnCreatingNewShipper(List<String> data) {
+    data = resolveValues(data);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    pause2s();
+    ErrorSaveDialog errorDialog = allShippersPage.allShippersCreateEditPage.errorSaveDialog;
+    List<String> actual = errorDialog.errors.stream().map(PageElement::getNormalizedText)
+        .collect(Collectors.toList());
+    Assertions.assertThat(actual).as("Assert that all errors appear as expected")
+        .containsAll(data);
+  }
+
+  @Given("Operator verifies that following shipper personal details are correct in db:")
+  public void operatorVerifiesThatFollowingShipperPersonalDetailsAreCorrect(Map<String, String> personalInfo) {
+    Shipper shipperPersonalDetails = get(KEY_SHIPPER_SHIPPER_DB_DATA);
+    personalInfo.forEach((fieldName, fieldValue) -> {
+      if(fieldName.equalsIgnoreCase("email")){
+        Assertions.assertThat(fieldValue).isEqualToIgnoringCase(shipperPersonalDetails.getEmail());
+      }
+      if(fieldName.equalsIgnoreCase("contact")){
+        Assertions.assertThat(fieldValue).isEqualToIgnoringCase(shipperPersonalDetails.getContact());
+      }
+    });
+  }
+
+  @Then("Operator creates dash account with 'Create Dash Account'")
+  public void operatorCreatesDashAccountWith() {
+    pause3s();
+    allShippersPage.allShippersCreateEditPage.basicSettingsForm.createDashAccount.click();
+  }
+
 }

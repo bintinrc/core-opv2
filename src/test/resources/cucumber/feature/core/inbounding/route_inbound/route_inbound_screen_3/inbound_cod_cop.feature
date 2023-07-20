@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @InboundCOD
 Feature: Inbound COD & COP
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -105,7 +105,3 @@ Feature: Inbound COD & COP
       | Inbound Cash Only                | uid:efdbd93c-1bdb-4b3c-870c-5241bdc4ac48 | 23.57         |                 |           | 23.57        |
       | Inbound Credit Only              | uid:aa78036d-10ca-43c2-add2-5ed08faea2b0 |               | 23.57           | 123       | 23.57        |
       | Inbound Split Into Cash & Credit | uid:f153b865-3093-43cd-82ed-4d17bec13cdd | 10.0          | 13.57           | 123       | 23.57        |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

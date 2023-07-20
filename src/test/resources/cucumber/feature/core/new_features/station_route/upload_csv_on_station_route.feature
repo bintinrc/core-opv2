@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @UploadCsvOnStationRoute
 Feature: Upload CSV on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - CSV file from Downloaded CSV
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-12}
     And API Shipper create V4 order using data below:
@@ -23,7 +23,7 @@ Feature: Upload CSV on Station Route
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DSR8{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id-12}, "hub": { "displayName": "{hub-name-12}", "value": {hub-id-12} } } |
     And API Route - Operator create new coverage:
-      | hubId            | {hub-id-12}                                  |
+      | hubId            | {hub-id-12}                                 |
       | area             | 998 Toa Payoh                               |
       | areaVariations   | North {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | home {gradle-current-date-yyyyMMddHHmmsss}  |
@@ -31,7 +31,7 @@ Feature: Upload CSV on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}         |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub                        | {hub-name-12}                   |
+      | hub                        | {hub-name-12}                  |
       | shipmentType               | AIR_HAUL                       |
       | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
@@ -231,6 +231,3 @@ Feature: Upload CSV on Station Route
       | bottom | Max rows of 10000 exceeded |
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

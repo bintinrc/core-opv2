@@ -1,8 +1,8 @@
-@OperatorV2 @Core @EditOrder @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart2 @EditOrder1
+@OperatorV2 @Core @EditOrder @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart2
 Feature: Manual Update Order Status
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup at Distribution Point
@@ -243,7 +243,3 @@ Feature: Manual Update Order Status
       | id      | {KEY_TRANSACTION.waypointId} |
       | status  | Routed                       |
       | routeId | {KEY_CREATED_ROUTE_ID}       |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

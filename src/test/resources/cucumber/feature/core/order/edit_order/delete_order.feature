@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @DeleteOrder @EditOrder4
 Feature: Delete Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
@@ -169,7 +169,3 @@ Feature: Delete Order
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
       | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

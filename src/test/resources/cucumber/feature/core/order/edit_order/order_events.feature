@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @OrderEvents @EditOrder1
 Feature: Order Events
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Hub Inbound Scan (uid:bc007800-0866-45e1-9b51-c80ab9a7fa88)
@@ -300,7 +300,3 @@ Feature: Order Events
     Then Operator verify order events on Edit order page using data below:
       | tags | name           |
       | DP   | ASSIGNED TO DP |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

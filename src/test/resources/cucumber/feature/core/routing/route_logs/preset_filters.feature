@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RouteLogs @PresetFiltersRouteLogs
 Feature: Route Logs - Preset Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteFilterTemplate
@@ -162,7 +162,3 @@ Feature: Route Logs - Preset Filters
       | top    | 1 filter preset deleted            |
       | bottom | ID: {KEY_ROUTES_FILTERS_PRESET_ID} |
     And DB Lighthouse - verify preset_filters id "{KEY_ROUTES_FILTERS_PRESET_ID}" record is deleted:
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

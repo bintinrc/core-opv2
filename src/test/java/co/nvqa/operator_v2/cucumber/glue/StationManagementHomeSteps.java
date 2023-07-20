@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Dimension;
+import co.nvqa.common.station.hibernate.ParcelsDao;
+import co.nvqa.common.station.model.persisted_class.Parcel;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
 import io.cucumber.datatable.DataTable;
@@ -14,13 +16,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.openqa.selenium.ElementNotInteractableException;
-import org.openqa.selenium.InvalidArgumentException;
-import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,13 +47,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_selects_the_hub_as_and_proceed(String hubName) {
     hubName = resolveValue(hubName);
     final String hub = hubName;
-    retryIfExpectedExceptionOccurred(() -> {
-          String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-          stationManagementHomePage.selectHubAndProceed(hub);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class);
+    doWithRetry(() -> {
+      stationManagementHomePage.selectHubAndProceed(hub);
+    }, "Operator selects the hub and proceed", 10000, 3);
   }
 
   @When("Operator chooses the hub as {string} displayed in {string} and proceed")
@@ -98,10 +89,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
     int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
-    takesScreenshot();
-    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
-    stationManagementHomePage.closeIfModalDisplay();
-    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    doWithRetry(() -> {
+          takesScreenshot();
+          getWebDriver().navigate().refresh();
+          stationManagementHomePage.closeIfModalDisplay();
+          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+        }, f("Operator verifies that the count in tile: %s has increased by %d", tileName, totOrder),
+        10000, 3);
   }
 
   @Then("Operator verifies that the Total Completion Rate:{string} is equal to {int}")
@@ -120,20 +114,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
   @Then("Operator verifies that the tile:{string} is equal to {string}")
   public void operator_verifies_that_the_tile_is_equal_to(String tileName,
       String expectedTilevalue) {
-    retryIfExpectedExceptionOccurred(() -> {
-          navigateRefresh();
-          stationManagementHomePage.closeIfModalDisplay();
-          String actualTileValue = String.valueOf(
-              stationManagementHomePage.getNumberFromPendingPickupTile(tileName));
-          takesScreenshot();
-          Assertions.assertThat(actualTileValue)
-              .as("expected Value is not matching for %s", tileName)
-              .isEqualTo(expectedTilevalue);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+    doWithRetry(() -> {
+      navigateRefresh();
+      stationManagementHomePage.closeIfModalDisplay();
+      String actualTileValue = String.valueOf(
+          stationManagementHomePage.getNumberFromPendingPickupTile(tileName));
+      takesScreenshot();
+      Assertions.assertThat(actualTileValue)
+          .as("expected Value is not matching for %s", tileName)
+          .isEqualTo(expectedTilevalue);
+    }, "Operator verifies that the tile value is equal to expected {string}", 10000, 3);
     takesScreenshot();
   }
 
@@ -233,10 +223,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   @Then("Operator verifies that the count in tile: {string} has remained un-changed")
   public void operator_verifies_that_the_count_in_tile_has_remained_un_changed(String tileName) {
     int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
-    int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
-    takesScreenshot();
-    stationManagementHomePage.waitUntilTileValueMatches(tileName, beforeOrder);
-    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+    doWithRetry(() -> {
+          getWebDriver().navigate().refresh();
+          int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+          takesScreenshot();
+          stationManagementHomePage.closeIfModalDisplay();
+          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+        }, f("Operator verifies that the count in tile: %s has remained un-changed", tileName), 1000,
+        5);
   }
 
   @Then("Operator verifies that the count in tile: {string} has decreased by {int}")
@@ -244,10 +238,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     totOrder = -totOrder;
     int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
-    int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
-    takesScreenshot();
-    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
-    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    Integer finalTotOrder = totOrder;
+    doWithRetry(() -> {
+          getWebDriver().navigate().refresh();
+          int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+          takesScreenshot();
+          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
+        }, f("Operator verifies that the count in tile: %s has decreased by %d", tileName, totOrder),
+        10000, 3);
   }
 
   @When("Operator get the count from the tile: {string}")
@@ -262,16 +260,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_verifies_that_the_count_in_pending_pickup_tile_has_increased_by(
       String tileName,
       Integer totOrder) {
-    retryIfExpectedExceptionOccurred(() -> {
-          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
-          navigateRefresh();
-          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+    doWithRetry(() -> {
+      int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+      navigateRefresh();
+      int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+      stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }, f("Operator verifies that the count in the pending pickup tile: %s has increased by %d",
+        tileName, totOrder), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -282,16 +278,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     totOrder = -totOrder;
     Integer finalTotOrder = totOrder;
-    retryIfExpectedExceptionOccurred(() -> {
-          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
-          navigateRefresh();
-          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+    doWithRetry(() -> {
+      int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+      navigateRefresh();
+      int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+      stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
+    }, f("Operator verifies that the count in the pending pickup tile: %s has decreased by %d",
+        tileName, totOrder), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -300,16 +294,15 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_has_increased_by(
       String tileName,
       Integer totOrder) {
-    retryIfExpectedExceptionOccurred(() -> {
+    doWithRetry(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        },
+        f("Operator verifies that the count in the second pending pickup tile: %s has increased by %d",
+            tileName, totOrder), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -320,16 +313,15 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     totOrder = -totOrder;
     Integer finalTotOrder = totOrder;
-    retryIfExpectedExceptionOccurred(() -> {
+    doWithRetry(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        },
+        f("Operator verifies that the count in the second pending pickup tile: %s has decreased by %d",
+            tileName, totOrder), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -337,16 +329,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   @Then("Operator verifies that the count in the pending pickup tile: {string} remains unchanged")
   public void operator_verifies_that_the_count_in_pending_pickup_tile_remains_unchanged(
       String tileName) {
-    retryIfExpectedExceptionOccurred(() -> {
-          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
-          navigateRefresh();
-          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+    doWithRetry(() -> {
+      int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+      navigateRefresh();
+      int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+      stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+    }, f("Operator verifies that the count in the pending pickup tile: %s remains unchanged",
+        tileName), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -354,16 +344,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   @Then("Operator verifies that the count in the second in the pending pick up tile: {string} remains unchanged")
   public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_remains_unchanged(
       String tileName) {
-    retryIfExpectedExceptionOccurred(() -> {
-          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
-          navigateRefresh();
-          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+    doWithRetry(() -> {
+      int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+      navigateRefresh();
+      int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+      stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+    }, f("Operator verifies that the count in the second pending pickup tile: %s remains unchanged",
+        tileName), 10000, 3);
+
     takesScreenshot();
   }
 
@@ -398,15 +386,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   @When("Operator clicks on the hamburger button for the pending pickup tile: {string}")
   public void operator_clicks_hamburger_button_for_the_pending_pickup_tile(String tileName) {
-    retryIfExpectedExceptionOccurred(() -> {
+    doWithRetry(() -> {
           String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
           stationManagementHomePage.clickPendingPickupHamburgerIcon(tileName);
-          ;
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class);
+        }, f("Operator clicks on the hamburger button for the pending pickup tile:%s", tileName), 1000,
+        5);
+
   }
 
   @And("Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: {string}")
@@ -574,11 +559,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
     Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(
         tableName, columnName, columnValue);
-    Dimension.Size parcelSize = Dimension.Size.fromString(size);
-    String regularSize = parcelSize.getRegular();
     tableAfterChange.forEach((key, value) -> {
-      String formattedKey = key.replace("-", "").toUpperCase();
-      if (formattedKey.contentEquals(regularSize)) {
+      if (key.contentEquals(size)) {
         int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",", ""));
         int sizeAfterChange = Integer.parseInt(value.replaceAll(",", ""));
         Assert.assertTrue(
@@ -601,11 +583,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Map<String, String> tableBeforeChange = get(KEY_NUMBER_OF_PARCELS_IN_HUB_BY_SIZE);
     Map<String, String> tableAfterChange = stationManagementHomePage.getColumnContentByTableName(
         tableName, columnName, columnValue);
-    Dimension.Size parcelSize = Dimension.Size.fromString(size);
-    String regularSize = parcelSize.getRegular();
     tableAfterChange.forEach((key, value) -> {
-      String formattedKey = key.replace("-", "").toUpperCase();
-      if (formattedKey.contentEquals(regularSize)) {
+      if (key.contentEquals(size)) {
         int sizeBeforeChange = Integer.parseInt(tableBeforeChange.get(key).replaceAll(",", ""));
         int sizeAfterChange = Integer.parseInt(value.replaceAll(",", ""));
         Assert.assertTrue(
@@ -874,4 +853,17 @@ public class StationManagementHomeSteps extends AbstractSteps {
     put(KEY_STATION_HOME_PAGE_TABLE_DETAILS, actualResults);
   }
 
+  @Then("Station Operator verifies that Last Scan time for TrackingId {value} is +{int} hours in station parcels table")
+  public void dbOperatorVerifiesThatLastScanTimeForTrackingIdIsHoursInStationParcelsTable(
+      String trackingId, int timeDiff) {
+    Map<String, String> details = get(KEY_STATION_HOME_PAGE_TABLE_DETAILS);
+    String actualLastScanTime = details.get("Last Scan Time");
+    ParcelsDao parcels = new ParcelsDao();
+    List<Parcel> dbResults = parcels.getParcelDetails(trackingId);
+    String expectedAdjustedTimeEndDateInUTC = DateUtil.getAdjustedLocalTimeFromUTC(
+        dbResults.get(0).getLastScanTime(), timeDiff);
+    Assertions.assertThat(expectedAdjustedTimeEndDateInUTC)
+        .as(f("Assert that last Scan Time is added with %d from utc time in database", timeDiff))
+        .isEqualTo(actualLastScanTime);
+  }
 }

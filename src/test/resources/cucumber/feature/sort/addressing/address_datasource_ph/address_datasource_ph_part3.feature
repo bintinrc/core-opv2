@@ -1,7 +1,7 @@
 @Sort @AddressDataSourcePhPart3
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -41,18 +41,18 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-2},{longitude-2} |
-      | province     | {province-3}               |
-      | municipality | {municipality-3}           |
-      | barangay     | {barangay-3}               |
+      | province     | {auto-province-ph-6}       |
+      | municipality | {auto-municipality-ph-6}   |
+      | barangay     | {auto-barangay-ph-6}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-3}                   |
-      | municipality | {municipality-3}               |
-      | barangay     | {barangay-3}                   |
+      | province     | {auto-province-ph-6}           |
+      | municipality | {auto-municipality-ph-6}       |
+      | barangay     | {auto-barangay-ph-6}           |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
       | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -60,9 +60,9 @@ Feature: Address Datasource
       | top  | Datasource Updated |
       | body | 1 match added      |
     When Operator search the created address datasource:
-      | province     | {province-3}     |
-      | municipality | {municipality-3} |
-      | barangay     | {barangay-3}     |
+      | province     | {auto-province-ph-6}     |
+      | municipality | {auto-municipality-ph-6} |
+      | barangay     | {auto-barangay-ph-6}     |
     When Operator clicks on Edit Button on Address Datasource Page
     When Operator clicks on Delete Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
@@ -75,18 +75,18 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-2},{longitude-2} |
-      | province     | {province-3}               |
-      | municipality | {municipality-3}           |
-      | barangay     | {barangay-3}               |
+      | province     | {auto-province-ph-7}       |
+      | municipality | {auto-municipality-ph-7}   |
+      | barangay     | {auto-barangay-ph-7}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-3}                   |
-      | municipality | {municipality-3}               |
-      | barangay     | {barangay-3}                   |
+      | province     | {auto-province-ph-7}           |
+      | municipality | {auto-municipality-ph-7}       |
+      | barangay     | {auto-barangay-ph-7}           |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
       | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -95,21 +95,21 @@ Feature: Address Datasource
       | body | 1 match added      |
     When Operator refresh page
     When Operator search the existing address datasource:
-      | province     | {province-3}     |
-      | municipality | {municipality-3} |
-      | barangay     | {barangay-3}     |
+      | province     | {auto-province-ph-7}     |
+      | municipality | {auto-municipality-ph-7} |
+      | barangay     | {auto-barangay-ph-7}     |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
-      | province     | {province-5}     |
-      | municipality | {municipality-5} |
-      | barangay     | {barangay-5}     |
+      | province     | {auto-province-ph-duplicate}     |
+      | municipality | {auto-municipality-ph-duplicate} |
+      | barangay     | {auto-barangay-ph-duplicate}     |
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-5}                   |
-      | municipality | {municipality-5}               |
-      | barangay     | {barangay-5}                   |
-      | zone         | {KEY_SORT_ZONE_INFO.shortName} |
-      | hub          | {KEY_HUB_DETAILS.shortName}    |
+      | province     | {auto-province-ph-duplicate}     |
+      | municipality | {auto-municipality-ph-duplicate} |
+      | barangay     | {auto-barangay-ph-duplicate}     |
+      | zone         | {KEY_SORT_ZONE_INFO.shortName}   |
+      | hub          | {KEY_HUB_DETAILS.shortName}      |
     When Operator clicks on Replace Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Deleted |
@@ -120,17 +120,17 @@ Feature: Address Datasource
       | body | 1 match edited     |
     When Operator refresh page
     When Operator search the existing address datasource:
-      | province     | {province-5}     |
-      | municipality | {municipality-5} |
-      | barangay     | {barangay-5}     |
+      | province     | {auto-province-ph-duplicate}     |
+      | municipality | {auto-municipality-ph-duplicate} |
+      | barangay     | {auto-barangay-ph-duplicate}     |
 
   Scenario: PH Address Datasource - Edit Row - with Empty Field
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
-      | province     | {province-5}     |
-      | municipality | {municipality-5} |
-      | barangay     | {barangay-5}     |
+      | province     | {created-province}     |
+      | municipality | {created-municipality} |
+      | barangay     | {created-barangay}     |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
       | province     | EMPTY |
@@ -154,16 +154,16 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName} |
       | hub     | {KEY_HUB_DETAILS.shortName}    |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: PH Address Datasource - View Zone and Hub Match - New Added Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province-3}               |
-      | municipality | {municipality-3}           |
-      | barangay     | {barangay-3}               |
+      | province     | {auto-province-ph-8}       |
+      | municipality | {auto-municipality-ph-8}   |
+      | barangay     | {auto-barangay-ph-8}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -196,16 +196,16 @@ Feature: Address Datasource
       | zone    | {KEY_SORT_ZONE_INFO.shortName} |
       | hub     | {KEY_HUB_DETAILS.shortName}    |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: PH Address Datasource - View Zone and Hub Match - Edited Row - LatLong
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province-3}               |
-      | municipality | {municipality-3}           |
-      | barangay     | {barangay-3}               |
+      | province     | {auto-province-ph-9}       |
+      | municipality | {auto-municipality-ph-9}   |
+      | barangay     | {auto-barangay-ph-9}       |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -227,9 +227,9 @@ Feature: Address Datasource
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-3}                   |
-      | municipality | {municipality-3}               |
-      | barangay     | {barangay-3}                   |
+      | province     | {auto-province-ph-9}           |
+      | municipality | {auto-municipality-ph-9}       |
+      | barangay     | {auto-barangay-ph-9}           |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
       | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -237,28 +237,28 @@ Feature: Address Datasource
       | top  | Datasource Updated |
       | body | 1 match edited     |
     Then Operator verifies new address datasource is added:
-      | province     | {province-3}     |
-      | municipality | {municipality-3} |
-      | barangay     | {barangay-3}     |
-      | latitude     | {latitude-2}     |
-      | longitude    | {longitude-2}    |
-      | whitelisted  | True             |
+      | province     | {auto-province-ph-9}     |
+      | municipality | {auto-municipality-ph-9} |
+      | barangay     | {auto-barangay-ph-9}     |
+      | latitude     | {latitude-2}             |
+      | longitude    | {longitude-2}            |
+      | whitelisted  | True                     |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-2}, {longitude-2}    |
       | zone    | {KEY_SORT_ZONE_INFO.shortName} |
       | hub     | {KEY_HUB_DETAILS.shortName}    |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: PH Address Datasource - Edit Row - Whitelisted
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong      | {latitude-1},{longitude-1} |
-      | province     | {province-3}               |
-      | municipality | {municipality-3}           |
-      | barangay     | {barangay-3}               |
+      | province     | {auto-province-ph-10}      |
+      | municipality | {auto-municipality-ph-10}  |
+      | barangay     | {auto-barangay-ph-10}      |
       | whitelisted  | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -293,9 +293,9 @@ Feature: Address Datasource
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province     | {province-3}                   |
-      | municipality | {municipality-3}               |
-      | barangay     | {barangay-3}                   |
+      | province     | {auto-province-ph-10}          |
+      | municipality | {auto-municipality-ph-10}      |
+      | barangay     | {auto-barangay-ph-10}          |
       | zone         | {KEY_SORT_ZONE_INFO.shortName} |
       | hub          | {KEY_HUB_DETAILS.shortName}    |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -304,16 +304,16 @@ Feature: Address Datasource
       | body | 1 match edited     |
     When Operator refresh page
     When Operator search the existing address datasource:
-      | province     | {province-3}     |
-      | municipality | {municipality-3} |
-      | barangay     | {barangay-3}     |
+      | province     | {auto-province-ph-10}     |
+      | municipality | {auto-municipality-ph-10} |
+      | barangay     | {auto-barangay-ph-10}     |
     Then Operator verifies new address datasource is added:
-      | province     | {province-3}     |
-      | municipality | {municipality-3} |
-      | barangay     | {barangay-3}     |
-      | latitude     | {latitude-1}     |
-      | longitude    | {longitude-1}    |
-      | whitelisted  | False            |
+      | province     | {auto-province-ph-10}     |
+      | municipality | {auto-municipality-ph-10} |
+      | barangay     | {auto-barangay-ph-10}     |
+      | latitude     | {latitude-1}              |
+      | longitude    | {longitude-1}             |
+      | whitelisted  | False                     |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

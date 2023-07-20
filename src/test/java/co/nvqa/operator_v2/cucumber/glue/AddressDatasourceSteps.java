@@ -284,6 +284,11 @@ public class AddressDatasourceSteps extends AbstractSteps {
           .as("Created District " + addressDatasourcePage.createdKota.getText())
           .isEqualToIgnoringCase(data.get(KEY_DISTRICT));
     }
+    if (StringUtils.isNotBlank(data.get(KEY_WARD))) {
+      Assertions.assertThat(addressDatasourcePage.createdKecamatan.getText())
+          .as("Created Ward " + addressDatasourcePage.createdKecamatan.getText())
+          .isEqualToIgnoringCase(data.get(KEY_WARD));
+    }
     if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
       Assertions.assertThat(addressDatasourcePage.createdKecamatan.getText())
           .as("Created subdistrict " + addressDatasourcePage.createdKecamatan.getText())
@@ -316,6 +321,10 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
       addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_KOTA));
       addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_KECAMATAN));
+    } else if (data.containsKey(KEY_WARD)) {
+      addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
+      addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_DISTRICT));
+      addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_WARD));
     } else if (data.containsKey(KEY_BARANGAY)) {
       addressDatasourcePage.provinceTextBox.sendKeys(data.get(KEY_PROVINCE));
       addressDatasourcePage.kotaTextBox.sendKeys(data.get(KEY_MUNICIPALITY));
@@ -376,6 +385,13 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @When("^Operator search the existing address datasource:$")
   public void operatorSearchExistingAddressDatasource(Map<String, String> data) {
+    doWithRetry(() -> {
+      if (!addressDatasourcePage.findMatch.isDisplayed()) {
+        addressDatasourcePage.refreshPage();
+      }
+    }, "refresh the page until element is displayed");
+
+    addressDatasourcePage.waitUntilPageLoaded();
     addressDatasourcePage.switchTo();
     data = resolveKeyValues(data);
 
@@ -396,6 +412,9 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
     if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
       addressDatasourcePage.districtTextBox.sendKeys(data.get(KEY_DISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_WARD))) {
+      addressDatasourcePage.kecamatanTextBox.sendKeys(data.get(KEY_WARD));
     }
     if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
       addressDatasourcePage.subdistrictTextBox.sendKeys(data.get(KEY_SUBDISTRICT));
@@ -449,6 +468,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String province = data.get(KEY_PROVINCE);
     String kota = data.get(KEY_KOTA);
     String kecamatan = data.get(KEY_KECAMATAN);
+    String ward = data.get(KEY_WARD);
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
     String district = data.get(KEY_DISTRICT);
@@ -490,6 +510,15 @@ public class AddressDatasourceSteps extends AbstractSteps {
       } else {
         addressDatasourcePage.kecamatan.forceClear();
         addressDatasourcePage.kecamatan.sendKeys(kecamatan);
+      }
+      addressing.setDistrict(kecamatan);
+    }
+    if (StringUtils.isNotBlank(ward)) {
+      if (ward.contains("EMPTY")) {
+        addressDatasourcePage.kecamatan.forceClear();
+      } else {
+        addressDatasourcePage.kecamatan.forceClear();
+        addressDatasourcePage.kecamatan.sendKeys(ward);
       }
       addressing.setDistrict(kecamatan);
     }
@@ -562,22 +591,27 @@ public class AddressDatasourceSteps extends AbstractSteps {
   @Then("^Operator verifies the zone and hub details in View Zone and Hub Match modal:")
   public void operatorVerifiesZoneAndHub(Map<String, String> data) {
     data = resolveKeyValues(data);
+    String latlong = data.get("latlong");
+    String hub = data.get("hub");
+    String zone = data.get("zone");
+    doWithRetry(() -> {
+      if (StringUtils.isNotBlank(latlong)) {
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
+            .as("latlong")
+            .isEqualToIgnoringCase(latlong);
+      }
+      if (StringUtils.isNotBlank(hub)) {
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneHub.getText())
+            .as("hub")
+            .isEqualToIgnoringCase(hub);
+      }
+      if (StringUtils.isNotBlank(zone)) {
+        Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
+            .as("zone")
+            .isEqualToIgnoringCase(zone);
+      }
+    }, "Verifying Zone and Hub Lat Long");
 
-    if (StringUtils.isNotBlank(data.get("latlong"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
-          .as("latlong")
-          .isEqualToIgnoringCase(data.get("latlong"));
-    }
-    if (StringUtils.isNotBlank(data.get("hub"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneHub.getText())
-          .as("hub")
-          .isEqualToIgnoringCase(data.get("hub"));
-    }
-    if (StringUtils.isNotBlank(data.get("zone"))) {
-      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
-          .as("zone")
-          .isEqualToIgnoringCase(data.get("zone"));
-    }
   }
 
   @And("Operator verify the latlong error alert:")

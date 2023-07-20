@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @PriorityLevels @NewFeatures2
 Feature: Priority Levels
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Update Reservation Priority Level by CSV upload
@@ -34,7 +34,3 @@ Feature: Priority Levels
     And DB Operator verifies reservation:
       | id            | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} |
       | priorityLevel | 10                                       |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

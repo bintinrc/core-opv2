@@ -1,8 +1,8 @@
 @OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2
 Feature: Reservation Preset Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
@@ -339,7 +339,3 @@ Feature: Reservation Preset Management
       | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-current-date-yyyy-MM-dd} .* | ^{gradle-current-date-yyyy-MM-dd} .* |
       | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-next-1-day-yyyy-MM-dd} .*   | ^{gradle-next-1-day-yyyy-MM-dd} .*   |
       | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | {KEY_CREATED_ROUTE_ID} | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} {KEY_LIST_OF_CREATED_DRIVERS[2].lastName} | ^{gradle-next-2-day-yyyy-MM-dd} .*   | ^{gradle-next-2-day-yyyy-MM-dd} .*   |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

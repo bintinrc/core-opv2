@@ -66,8 +66,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                                                                                                        |
       | description | ^Pickup Start Time changed from .* to {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 Pickup End Time changed from .* 15:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                    |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: Orchard Road central \|\|\|\|511200 Zone ID: 30688 Destination Hub ID: 25215 Lat, Long: 1.288147, 103.740233 Address Status: UNVERIFIED AV Mode (Manual/Auto): AUTO Source: DEFAULT_AV |
+      | name | UPDATE AV |
     And DB Operator verify zones record:
       | legacyZoneId | 55       |
       | systemId     | sg       |

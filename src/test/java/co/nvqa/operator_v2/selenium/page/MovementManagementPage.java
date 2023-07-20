@@ -192,7 +192,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public PageElement assignDriverButton;
 
   @FindBy(className = "ant-modal-wrap")
-  public TripManagementPage.AssignTripModalOld assignDriverModal;
+  public TripManagementPage.AssignTripModal assignDriverModal;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
@@ -211,6 +211,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   @FindBy(xpath = "//div[@class='ant-modal-confirm-btns']//button[contains(@class, 'ant-btn-primary')]")
   public Button modalUpdateButton;
+
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-btns']//button[contains(@class, 'ant-btn-primary')]")
+  public Button modalOkButton;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//div//span")
   public TextBox effectingPathText;
@@ -324,12 +327,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     assignDriverButton.click();
   }
 
-  public void assignDriver(String driverId) {
+  public void assignDriver(String username) {
     waitUntilVisibilityOfElementLocated("//div[.='Assign Driver']");
     assignDriverModal.addDriver.click();
-    pause3s();
-    assignDriverModal.assignDriver(driverId);
-    pause2s();
+    assignDriverModal.assignDriver(username);
     assignDriverModal.saveButton.click();
     assignDriverModal.waitUntilInvisible();
   }
@@ -451,7 +452,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     }
 
     public void fill(Map<String, String> schedule) {
-      int idx = Integer.parseInt(schedule.get("idx"));
+      int idx = Integer.parseInt(schedule.get("index"));
       if (idx > 1) addAnotherSchedule.click();
       ScheduleForm scheduleForm = getScheduleForm(idx);
       scheduleForm.fill(schedule, idx - 1);
@@ -525,6 +526,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       public String scheduleCommentId = "schedules_%s_comment";
       public String antpickerdropdownhidden = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]";
       public String daysOfWeekXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
+      public String hubValueXpath = "//span[contains(@class,'ant-select-selection-item') and contains(@title,'%s')]";
 
       public void callJavaScriptExecutor(String argument, WebElement element) {
         JavascriptExecutor jse = ((JavascriptExecutor) getWebDriver());
@@ -592,13 +594,21 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
       public void fill(Map<String, String> schedule, int scheduleNo) {
         scrollIntoView(findElement(By.id(f(scheduleCommentId, scheduleNo))));
-        if (StringUtils.isNotBlank(schedule.get("originHub"))) {
-          sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.get("originHub"));
-        }
-        if (StringUtils.isNotBlank(schedule.get("destinationHub"))) {
-          sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo),
-              schedule.get("destinationHub"));
-        }
+
+        doWithRetry(() -> {
+          if (StringUtils.isNotBlank(schedule.get("originHub"))) {
+            sendKeysAndEnterById(f(scheduleOriginHubId, scheduleNo), schedule.get("originHub"));
+          }
+          waitUntilVisibilityOfElementLocated(f(hubValueXpath, schedule.get("originHub")), 1);
+        }, "Selecting origin hub...", 1000, 5);
+
+        doWithRetry(() -> {
+          if (StringUtils.isNotBlank(schedule.get("destinationHub"))) {
+            sendKeysAndEnterById(f(scheduleDestinationHubId, scheduleNo), schedule.get("destinationHub"));
+          }
+          waitUntilVisibilityOfElementLocated(f(hubValueXpath, schedule.get("destinationHub")), 1);
+        }, "Selecting destination hub...", 1000, 5);
+
         if (StringUtils.isNotBlank(schedule.get("movementType"))) {
           sendKeysAndEnterById(f(scheduleMovementTypeId, scheduleNo), schedule.get("movementType"));
         }
@@ -649,10 +659,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         }
 
         if (schedule.containsKey("drivers")) {
-//          MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
-//          movementPage.assignDrivers(middleMileDrivers.size(), middleMileDrivers, scheduleNo);
           List<String> usernames = List.of(schedule.get("drivers").split(","));
           usernames.forEach(username -> {
+            doWithRetry(() -> {
+              Assertions.assertThat(isElementEnabled(f(MS_PAGE_ASSIGN_DRIVER_XPATH, scheduleNo))).as("Assign drivers dropdown is enabled.").isTrue();
+            }, "Waiting until drivers dropdown is enabled...", 5000, 10);
             TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH, scheduleNo), "xpath", getWebDriver());
             sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH, scheduleNo), username);
             click(f(MS_PAGE_DROPDOWN_LIST_XPATH, username));
@@ -1617,6 +1628,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     String actualMessage = findElementByXpath(MS_PAGE_CONFIRM_DIALOG_XPATH).getText();
     Assertions.assertThat(actualMessage).as(f("Message %s display", expectedMessage))
         .isEqualToIgnoringCase(expectedMessage);
+  }
+
+  public void closeIfConfirmDialogAppear() {
+    if (!isElementVisible(MS_PAGE_CONFIRM_DIALOG_XPATH, 2)) return;
+
+    modalOkButton.click();
+    waitUntilInvisibilityOfElementLocated(MS_PAGE_CONFIRM_DIALOG_XPATH);
   }
 
 }

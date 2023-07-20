@@ -1,8 +1,8 @@
 @OperatorV2 @Core @AllOrders @ForceSuccess @ManualCompletedSelectedPart1
 Feature: All Orders - Manually Completed Selected
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Force Success Order on All Orders Page - End State = Completed
@@ -244,7 +244,3 @@ Feature: All Orders - Manually Completed Selected
     Examples:
       | note               | cod_amount | collected_amount | collected |
       | Do not Collect COD | 23.57      | 0                | false     |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

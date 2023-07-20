@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
@@ -17,6 +19,7 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
   private String address;
   private String routeId;
   private String status;
+  private List<String> jobTags;
   private String startDateTime;
   private String endDateTime;
   private String dp;
@@ -25,6 +28,10 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
   private String priorityLevel;
 
   public RouteGroupJobDetails() {
+  }
+
+  public RouteGroupJobDetails(Map<String, ?> data) {
+    super(data);
   }
 
   public String getSn() {
@@ -145,6 +152,18 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
 
   public void setPriorityLevel(String priorityLevel) {
     this.priorityLevel = priorityLevel;
+  }
+
+  public List<String> getJobTags() {
+    return jobTags;
+  }
+
+  public void setJobTags(List<String> jobTags) {
+    this.jobTags = jobTags;
+  }
+
+  public void setJobTags(String jobTags) {
+    setJobTags(splitAndNormalize(jobTags));
   }
 
   @Override

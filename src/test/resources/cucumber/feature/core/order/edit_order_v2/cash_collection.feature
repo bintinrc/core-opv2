@@ -1,8 +1,8 @@
-@OperatorV2 @Core @EditOrderv2 @CashCollection
+@OperatorV2 @Core @EditOrderV2 @CashCollection
 Feature: Cash Collection
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Edit Cash Collection Details - Add Cash on Pickup
@@ -33,6 +33,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.01                                   |
       | collectionAt | PP                                     |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Add Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -89,6 +90,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.01                                   |
       | collectionAt | PP                                     |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Update Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -141,6 +143,7 @@ Feature: Cash Collection
       | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
       | deletedAt | not null                               |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -209,7 +212,3 @@ Feature: Cash Collection
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

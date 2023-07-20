@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -32,6 +33,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//div[@label='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//span[contains(text(),'Search or select task')]//preceding::input[@type='search'][1]";
   private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
+  private static final String MODAL_HEADER_TITLE_XPATH = "//div[@class='ant-modal-title']";
+  private static final String MODAL_BODY_CONTENT_XPATH = "//div[@class='ant-modal-body']";
 
   @FindBy(xpath = "//button[text()='Proceed']")
   public Button proceedButton;
@@ -47,8 +50,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void selectHubToBegin(String hubName,String parcelType) {
-    selectHubToBeginWithTask(hubName, hubName,parcelType);
+  public void selectHubToBegin(String hubName) {
+    selectHubToBeginWithTask(hubName, hubName);
   }
 
   public void scanTrackingId(String trackingId) {
@@ -131,7 +134,16 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
-  public void selectHubToBeginWithTask(String hubName, String task, String parcelType) {
+  public void selectHub(String hubName) {
+    pause2s();
+    // Select Hub
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+    click(HUB_DROPDOWN_XPATH);
+    waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
+    sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
+  }
+
+  public void selectHubToBeginWithTask(String hubName, String task) {
     pause2s();
 
     // Select Hub
@@ -157,5 +169,33 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     if (proceedButton.waitUntilVisible(5)) {
       proceedButton.click();
     }
+  }
+
+  public void selectTaskToBegin(String task) {
+    pause2s();
+    //Select Sort Task
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+
+    if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+      click(SORT_TASK_DROPDOWN_XPATH);
+      if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+        waitUntilVisibilityOfElementLocated(SORT_TASK_DROPDOWN_XPATH);
+        sendKeys(SORT_TASK_DROPDOWN_XPATH, task.replaceAll("\\s+", "").toUpperCase() + Keys.RETURN);
+      }
+    }
+
+    if (proceedButton.waitUntilVisible(5)) {
+      proceedButton.click();
+    }
+  }
+
+  public void verifyAccessDeniedModal(Map<String, String> mapOfData) {
+    pause2s();
+    getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+    boolean isAccessDeniedModal = getText(MODAL_HEADER_TITLE_XPATH).equalsIgnoreCase(mapOfData.get("title"));
+    boolean isMessageCorrect = getText(MODAL_BODY_CONTENT_XPATH).equalsIgnoreCase(mapOfData.get("message"));
+
+    Assertions.assertThat(isAccessDeniedModal).as("Modal heading").isTrue();
+    Assertions.assertThat(isMessageCorrect).as("Modal Body").isTrue();
   }
 }

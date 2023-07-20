@@ -363,6 +363,7 @@ Feature: Create Recovery Ticket
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    When Operator refresh page
     And Operator verify order event on Edit order page using data below:
       | name        | PARCEL ROUTING SCAN     |
       | hubName     | {hub-name}              |

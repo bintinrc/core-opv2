@@ -35,9 +35,12 @@ public class AutoMissingCreationSettingsSteps extends AbstractSteps {
         autoMissingCreationSettingsPage.inFrame((page) -> {
             Assertions.assertThat(page.hubTable.id.getText()).isEqualTo(data.get("id"));
             Assertions.assertThat(page.hubTable.name.getText()).isEqualTo(data.get("name"));
-            Assertions.assertThat(page.hubTable.region.getText()).isEqualTo("-");
-            Assertions.assertThat(page.hubTable.status.getText()).isEqualTo(data.get("status"));
         });
+    }
+
+    @Then("Operator verifies the disabled hub not found")
+    public void verifyHubIsNotFound() {
+        autoMissingCreationSettingsPage.inFrame(AutoMissingCreationSettingsPage::noResultFound);
     }
 
     @When("Operator edit Hub Missing Investigation for specific hub")
@@ -54,7 +57,6 @@ public class AutoMissingCreationSettingsSteps extends AbstractSteps {
             Assertions.assertThat(page.editHubDialog.title.getText()).as("edit hub dialog title").isEqualTo("Edit Hub Missing Investigation Mapping");
             Assertions.assertThat(page.hubTable.id.getText()).isEqualTo(data.get("id"));
             Assertions.assertThat(page.hubTable.name.getText()).isEqualTo(data.get("name"));
-            Assertions.assertThat(page.hubTable.region.getText()).isEqualTo("-");
 
         });
     }

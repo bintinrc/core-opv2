@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1
 Feature: Route Inbound Expected Scans
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -211,10 +211,27 @@ Feature: Route Inbound Expected Scans
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Driver pickup the created parcel successfully
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                           |
+      | routes     | KEY_DRIVER_ROUTES                                                                    |
+      | jobType    | TRANSACTION                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                              |
+      | jobMode    | PICK_UP                                                                              |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                           |
+      | routes     | KEY_DRIVER_ROUTES                                                                    |
+      | jobType    | TRANSACTION                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                              |
+      | jobMode    | PICK_UP                                                                              |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -484,6 +501,3 @@ Feature: Route Inbound Expected Scans
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}   |
     And Operator scan a tracking ID of created order on Route Inbound page
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

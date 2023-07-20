@@ -1,13 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.mm.model.MiddleMileDriver;
+import co.nvqa.common.mm.utils.MiddleMileUtils;
+import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.common.utils.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -22,6 +23,7 @@ import io.cucumber.java.en.When;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +39,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_HUB_RELATIONS;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
 
@@ -630,16 +633,19 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
-        pause5s();
+        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
-        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       default:
         throw new IllegalArgumentException(
             f("Unknown button name [%s] on 'Add Movement Schedule' dialog", buttonName));
     }
+
+    movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
+    movementManagementPage.closeIfConfirmDialogAppear();
+
   }
 
   @Deprecated
@@ -688,19 +694,35 @@ public class MovementManagementSteps extends AbstractSteps {
   }
 
   @And("Operator fills in Add Movement Schedule form using data below:")
-  public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
+  public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> dataTableAsMap) {
+    Map<String, String> data = resolveKeyValues(dataTableAsMap);
+    if (data.containsKey("drivers")) {
+      String driversJoined = getList(data.get("drivers"), MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
+          Collectors.joining(","));
+      data.put("drivers", driversJoined);
+    }
+
+    Map<String, String> origKeyIdx = MiddleMileUtils.getKeyIndex(dataTableAsMap.get("originHub"));
+    Map<String, String> destKeyIdx = MiddleMileUtils.getKeyIndex(dataTableAsMap.get("destinationHub"));
+
+    data.put("originHub", getList(origKeyIdx.get("key"),
+        co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(origKeyIdx.get("idx"))).getName());
+    data.put("destinationHub", getList(destKeyIdx.get("key"),
+        co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(destKeyIdx.get("idx"))).getName());
+
     doWithRetry(() -> {
       try {
-        if (data.containsKey("drivers")) {
-          String driversJoined = getList(data.get("drivers"), MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
-              Collectors.joining(","));
-          data.put("drivers", driversJoined);
-        }
+        movementManagementPage.addMovementScheduleModal.fill(resolveKeyValues(data));
 
-        movementManagementPage.addMovementScheduleModal.fill(data);
+        co.nvqa.common.mm.model.HubRelation hubRelation = new co.nvqa.common.mm.model.HubRelation();
+        hubRelation.setOriginHubIds(Collections.singletonList(getList(origKeyIdx.get("key"),
+            co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(origKeyIdx.get("idx"))).getId()));
+        hubRelation.setDestinationHubIds(Collections.singletonList(getList(destKeyIdx.get("key"),
+            co.nvqa.common.mm.model.Hub.class).get(Integer.parseInt(destKeyIdx.get("idx"))).getId()));
+        hubRelation.setFacilityType("CROSSDOCK");
+        hubRelation.setIncludeSchedules(true);
+        putInList(KEY_MM_LIST_OF_CREATED_HUB_RELATIONS, hubRelation);
       } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         LOGGER.info(ex.getMessage());
         navigateRefresh();
         movementManagementPage.switchTo();

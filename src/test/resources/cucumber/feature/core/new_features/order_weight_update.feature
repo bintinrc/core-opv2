@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OrderWeightUpdate @NewFeatures2
 Feature: Order Weight Update V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Download Sample CSV file for Order Weight Update
@@ -79,7 +79,3 @@ Feature: Order Weight Update V2
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                         |
       | type    | 16                                                                                                         |
       | data    | ^.*"weight":\{"old_value":5\.0,"new_value":3\.5\},"pricing_weight":\{"old_value":5\.0,"new_value":3\.5\}.* |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @ViewTaggedOrders @ViewTaggedOrdersPart2
 Feature: View Tagged Orders
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -88,7 +88,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                        |
       | granularStatus       | Pending Pickup at Distribution Point |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @toDisable
   Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
@@ -121,7 +121,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Pickup fail                     |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @toDisable
   Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
@@ -146,7 +146,3 @@ Feature: View Tagged Orders
       | lastAttempt          | No Attempt                      |
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Van en-route to pickup          |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

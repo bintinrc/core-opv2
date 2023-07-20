@@ -47,7 +47,7 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement notifDescription;
 
-  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  @FindBy(xpath = "//div[@class='ant-modal reschedule-selected-dialog']")
   public RescheduleDialog rescheduleDialog;
 
   @FindBy(xpath = "//button//span[contains(text(),'CSV Reschedule')]")
@@ -56,6 +56,7 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@class='ant-modal-title']")
   public UploadCSVDialog uploadCSVDialog;
 
+  @FindBy(css = "[data-testid='virtual-table']")
   public FailedDeliveryTable fdmTable;
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
@@ -64,9 +65,12 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public SetSelectedToRTSDialog selectedToRTSDialog;
 
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(.,'Updated')]")
+  public ErrorDialog errorDialog;
+
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
-  public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv.csv";
+  public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv";
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -216,6 +220,14 @@ public class FailedDeliveryManagementPage extends
           By.xpath(XPATH_UPLOAD_CSV));
       dragAndDrop(csvFile, upload);
     }
+
+    public void generateNoHeaderCSV() {
+      String csvContents = "NV012345,2019-01-01";
+      File csvFile = createFile("No Headers File.csv", csvContents);
+      WebElement upload = getWebDriver().findElement(
+          By.xpath(XPATH_UPLOAD_CSV));
+      dragAndDrop(csvFile, upload);
+    }
   }
 
   public static class EditRTSDetailsDialog extends AntModal {
@@ -342,6 +354,22 @@ public class FailedDeliveryManagementPage extends
         pickDate.sendKeys(value + Keys.ENTER);
       }
       return this;
+    }
+  }
+
+  public static class ErrorDialog extends AntModal {
+
+    @FindBy(xpath = "//div[@class='ant-alert-message']")
+    public PageElement alertMessage;
+
+    @FindBy(xpath = "//div[@class='ant-alert-description']//li")
+    public Button alertDescription;
+
+    @FindBy(xpath = "//button/span[.='Close']")
+    public Button close;
+
+    public ErrorDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }

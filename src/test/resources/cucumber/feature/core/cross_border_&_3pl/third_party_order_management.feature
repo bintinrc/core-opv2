@@ -1,8 +1,8 @@
 @OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyOrderManagement
 Feature: Third Party Order Management
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Upload Single Third Party Order (uid:8ab54ea3-9906-4873-9a92-cf36e8dafa0d)
@@ -117,7 +117,3 @@ Feature: Third Party Order Management
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator download CSV file on Third Party Order Management page
     Then 3pl-orders CSV file is downloaded successfully
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op
