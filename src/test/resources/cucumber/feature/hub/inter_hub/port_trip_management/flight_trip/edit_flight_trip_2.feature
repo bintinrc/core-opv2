@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Pending Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -45,7 +45,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | comment   | API automation update                      |
       | flight_no | NLI 4321 NV                                |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Transit Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -74,7 +74,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | Cancel       |
       | assignDriver |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Completed Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -118,7 +118,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | Cancel       |
       | assignDriver |
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Cancelled Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -155,7 +155,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
       | Cancel       |
       | assignDriver |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Flight Trip from Existing Flight Number to New Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -194,7 +194,7 @@ Feature: Airport Trip Management - Edit Flight Trip 2
     Then Operator verify parameters of air trip "KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1]" on Port Trip Management page:
       | flight_no | Edited Flight Number                       |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Flight Trip from Existing Flight Number to Empty Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

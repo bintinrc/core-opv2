@@ -164,6 +164,13 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.verifyNewlyCreatedPort(portDetails.get(portDetails.size() - 1));
     }
 
+    @And("Verify port {string} values in table")
+    public void verifyPortValuesInTable(String storageKey) {
+        Map<String, String> portDetails = convertValueToMapCamelCase(resolveValue(storageKey, Port.class), String.class, String.class);
+        portDetails.put("portType", portDetails.get("type"));
+        portTripManagementPage.verifyNewlyCreatedPort(portDetails);
+    }
+
     @And("Capture the error in Port Trip Management Page")
     public void captureTheErrorInPortCreation() {
         portTripManagementPage.captureErrorNotification();

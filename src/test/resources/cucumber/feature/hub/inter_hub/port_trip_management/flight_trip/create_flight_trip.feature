@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Create Flight Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -40,7 +40,7 @@ Feature: Airport Trip Management - Create Flight Trip
       | comments             | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} (Airport) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip with disabled Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -80,7 +80,7 @@ Feature: Airport Trip Management - Create Flight Trip
       | Error Message: Destination airport is invalid/inactive |
 
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip with zero flight duration time
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -104,7 +104,7 @@ Feature: Airport Trip Management - Create Flight Trip
     Then Operator verifies duration time error messages on "Create Flight Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip with Flight Departure Date before today
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -125,7 +125,7 @@ Feature: Airport Trip Management - Create Flight Trip
     Then Operator verifies past date picker "{date: 1 days ago, yyyy-MM-dd}" is disable on "Create Flight Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip with Same Origin and Destination Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -149,7 +149,7 @@ Feature: Airport Trip Management - Create Flight Trip
     Then Operator verifies same hub error messages on "Create Flight Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Flight Trip with Remove the filled value in the mandatory field
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

@@ -1,11 +1,11 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @TripDetails
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @TripDetails @cwfa
 Feature: Airport Trip Management - Trip Details
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelCreatedMovementTrips @DeleteCreatedPorts
+  @exclude @CancelCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Trip Details Warehouse To Airport - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -39,7 +39,7 @@ Feature: Airport Trip Management - Trip Details
       | tripType | ToFrom Airport Trip            |
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @CancelCreatedMovementTrips @DeleteCreatedPorts
+  @exclude @CancelCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Trip Details Warehouse To Airport - Shipments
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -73,7 +73,7 @@ Feature: Airport Trip Management - Trip Details
       | tripType | ToFrom Airport Trip            |
     And Operator verifies the element of "Shipments" tab on Port Trip details page are correct
 
-  @CancelCreatedMovementTrips @DeleteCreatedPorts
+  @CancelCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Trip Details Airport To Warehouse - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -107,7 +107,7 @@ Feature: Airport Trip Management - Trip Details
       | tripType | ToFrom Airport Trip            |
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @CancelCreatedMovementTrips @DeleteCreatedPorts
+  @CancelCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Trip Details Airport To Warehouse - Shipments
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -141,7 +141,7 @@ Feature: Airport Trip Management - Trip Details
       | tripType | ToFrom Airport Trip            |
     And Operator verifies the element of "Shipments" tab on Port Trip details page are correct
 
-  @CancelCreatedMovementTrips @DeleteCreatedPorts
+  @CancelCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Trip Details Flight Trip - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

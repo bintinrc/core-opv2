@@ -134,10 +134,10 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.='Reload Search']")
   public Button reloadSearch;
 
-  @FindBy(xpath = "//a[.='Create To/from Airport Trip']")
+  @FindBy(xpath = "//a/span[.='Create To/from Airport Trip']")
   public PageElement createToFromAirportTrip;
 
-  @FindBy(xpath = "//a[.='Create Flight Trip']")
+  @FindBy(xpath = "//a/span[.='Create Flight Trip']")
   public PageElement createFlightTrip;
 
   @FindBy(xpath = "//span[@role='img' and @aria-label='loading']")
@@ -283,6 +283,9 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[@data-testid='back-to-filter-button']")
   public PageElement backButton;
+
+  @FindBy(xpath = "//button[@data-testid='back-assign-mawb-button']")
+  public PageElement backAssignMawbButton;
 
   @FindBy(xpath = "//input[@id='createToFromAirportForm_originFacility']")
   public PageElement createToFromAirportForm_originFacility;
@@ -741,8 +744,8 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyNewlyCreatedPort(Map<String, String> map) {
-    String newLat = map.get("latitude");
-    String newLong = map.get("longitude");
+    String newLat = String.valueOf(map.get("latitude"));
+    String newLong = String.valueOf(map.get("longitude"));
     if (newLat.endsWith(".0")) {
       newLat = newLat.replace(".0", "");
     }
@@ -977,6 +980,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     switchToOtherWindow("create-to-from-airport");
     waitUntilPageLoaded();
     switchTo();
+    waitUntilVisibilityOfElementLocated("//h3[.='Create To/from Airport Trip']");
     Assertions.assertThat(
             findElementByXpath("//h3[.='Create To/from Airport Trip']", 30).isDisplayed())
         .as("Create To/from Airport Trip Title is displayed").isTrue();
@@ -1065,6 +1069,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     switchToOtherWindow("create-flight");
     waitUntilPageLoaded();
     switchTo();
+    waitUntilVisibilityOfElementLocated("//h3[.='Create Flight Trip']");
     Assertions.assertThat(findElementByXpath("//h3[.='Create Flight Trip']", 30).isDisplayed())
         .as("Create To/from Airport Trip Title is displayed").isTrue();
     Assertions.assertThat(createFlightTrip_originAirport.isDisplayed())
@@ -2259,13 +2264,13 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void assignMawb(String vendor, String mawb) {
-    backButton.waitUntilVisible();
+    backAssignMawbButton.waitUntilVisible();
     assignMawbModal.mawbVendor.sendKeys(vendor);
     assignMawbModal.mawbVendor.sendKeys(Keys.ENTER);
     assignMawbModal.findMAWB.waitUntilClickable();
     assignMawbModal.findMAWB.click();
     spinner.waitUntilInvisible();
-    findElementByXpath(f(assignMawbModal.MAWB_CHECKBOX_XPATH, mawb)).click();
+    findElementByXpath(f(AssignMawbModal.MAWB_CHECKBOX_XPATH, mawb)).click();
     assignMawbModal.assignToTrip.waitUntilClickable();
     Assertions.assertThat(assignMawbModal.warningMessage.isDisplayed())
         .as("Warning message is display").isTrue();

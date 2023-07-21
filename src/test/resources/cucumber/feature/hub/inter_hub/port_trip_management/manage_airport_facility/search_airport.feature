@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -16,7 +16,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "ID"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field Port Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -27,7 +27,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Code"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field Port Type
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -38,7 +38,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Type"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field Full Port Name
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -49,7 +49,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Name"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field City
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -60,7 +60,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "City"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field Region
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -71,7 +71,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Region"
     Then Operator verifies the search port on Port Facility page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Search Airport on Search Field Latitude, Longitude
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

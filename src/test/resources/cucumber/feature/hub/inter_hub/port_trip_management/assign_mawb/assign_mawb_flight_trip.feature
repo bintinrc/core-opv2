@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Assign MAWB to Flight Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelCreatedMovementTrips @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts
+  @CancelCreatedMovementTrips @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign MAWB to Pending Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -36,7 +36,7 @@ Feature: Airport Trip Management - Assign MAWB to Flight Trip
       | mawb   | {KEY_MM_LIST_OF_CREATED_MAWBS[1]}              |
     Then Operator verifies assigned MAWB success message on Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @ForceCompleteCreatedMovementTrips
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign MAWB to Transit Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -68,7 +68,7 @@ Feature: Airport Trip Management - Assign MAWB to Flight Trip
       | mawb   | {KEY_MM_LIST_OF_CREATED_MAWBS[1]}              |
     Then Operator verifies assigned MAWB success message on Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @ForceCompleteCreatedMovementTrips
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign MAWB to Arrived Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -101,7 +101,7 @@ Feature: Airport Trip Management - Assign MAWB to Flight Trip
       | mawb   | {KEY_MM_LIST_OF_CREATED_MAWBS[1]}              |
     Then Operator verifies assigned MAWB success message on Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts
+  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign MAWB to Completed Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -134,7 +134,7 @@ Feature: Airport Trip Management - Assign MAWB to Flight Trip
       | mawb   | {KEY_MM_LIST_OF_CREATED_MAWBS[1]}              |
     Then Operator verifies assigned MAWB success message on Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign MAWB to Cancelled Flight Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

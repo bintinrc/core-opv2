@@ -5,7 +5,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Pending Warehouse To/from Airport Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -30,7 +30,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     Then Operator verifies trip status is "PENDING" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: View Transit Warehouse To/from Airport Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -60,7 +60,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     Then Operator verifies trip status is "TRANSIT" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: View Arrived Warehouse To/from Airport Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -91,7 +91,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     Then Operator verifies trip status is "ARRIVED" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: View Completed Warehouse To/from Airport Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -123,7 +123,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     Then Operator verifies trip status is "COMPLETED" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: View Cancelled Warehouse To/from Airport Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -157,7 +157,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     Then Operator verifies trip status is "CANCELLED" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Warehouse To/from Airport Trip Details - Shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

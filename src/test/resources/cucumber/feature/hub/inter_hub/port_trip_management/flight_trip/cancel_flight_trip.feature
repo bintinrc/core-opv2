@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBs @DeleteCreatedPorts @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedMAWBs @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Cancel Pending Flight Trip with MAWB
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -54,7 +54,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
     Then Operator verifies mawb event on MAWB Details page:
       | source | FLIGHT_UNTAGGED |
 
-  @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: Cancel Pending Flight Trip without MAWB
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -86,7 +86,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
     Then Operator verifies action buttons below are disable on Port Trip Management page:
       | Cancel |
 
-  @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: Cancel Flight Trip with Other Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
