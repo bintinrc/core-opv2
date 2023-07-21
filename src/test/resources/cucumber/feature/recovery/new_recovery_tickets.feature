@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @CWF @ClearCache @ClearCookies
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
 Feature: New Recovery Tickets
 
   Background:
@@ -154,7 +154,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
   Scenario: Operator Find tickets By CSV - search results
@@ -190,7 +190,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
   @BulkCSV
@@ -790,7 +790,6 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
-  @RT
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - PARCEL ON HOLD - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -825,7 +824,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -878,7 +877,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -937,7 +936,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -993,7 +992,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1038,7 +1037,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1082,7 +1081,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1128,7 +1127,7 @@ Feature: New Recovery Tickets
       | investigatingHub    | {hub-name}                                   |
       | investigatingDept   | Recovery                                     |
       | status              | PENDING                                      |
-      | daysSince           | -1                                           |
+      | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1139,3 +1138,42 @@ Feature: New Recovery Tickets
     And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | TICKET CREATED |
+
+  Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - No Label/No Order - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator goes to new Recovery Tickets page
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
+      | entrySource             | DRIVER TURN                              |
+      | investigatingDepartment | Fleet (First Mile)                       |
+      | investigatingHub        | {hub-name}                               |
+      | ticketType              | SHIPPER ISSUE                            |
+      | ticketSubType           | <ticketSubtype>                          |
+      | orderOutcome            | XMAS CAGE                                |
+      | issueDescription        | GENERATED                                |
+      | custZendeskId           | 1                                        |
+      | shipperZendeskId        | 1                                        |
+      | ticketNotes             | GENERATED                                |
+        # search with CSV until the filter page is ready
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
+    Then Operator verifies correct ticket details as following:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
+      | ticketType/subType | SHIPPER ISSUE : <ticketSubtype>          |
+      | ticketCreator      | QA Ninja                                 |
+      | redTickets         | False                                    |
+      | investigatingHub   | {hub-name}                               |
+      | investigatingDept  | Recovery                                 |
+      | status             | PENDING                                  |
+      | daysSince          | 0                                        |
+      | created            | {date: 0 days next, yyyy-MM-dd}          |
+
+    Examples:
+      | Dataset Name | ticketSubtype |
+      | No label     | NO LABEL      |
+      | no order     | NO ORDER      |
