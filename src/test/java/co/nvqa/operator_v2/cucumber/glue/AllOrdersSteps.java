@@ -281,9 +281,9 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.errorsDialog.close.click();
   }
 
-  @When("Operator Force Success multiple orders on All Orders page")
-  public void operatorForceSuccessOrders() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  @When("Operator Force Success multiple orders on All Orders page:")
+  public void operatorForceSuccessOrders(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
     allOrdersPage.findOrdersWithCsv(trackingIds);
     allOrdersPage.forceSuccessOrders();
   }

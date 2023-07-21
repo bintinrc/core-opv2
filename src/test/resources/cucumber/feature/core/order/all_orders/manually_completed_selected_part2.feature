@@ -195,7 +195,8 @@ Feature: All Orders - Manually Completed Selected
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
-    And API Operator RTS created order:
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
