@@ -34,7 +34,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                                                                                                                                                                                             |
      And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @exclude @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Create To/from Airport Trip with Assign Active and Inactive Driver in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -56,7 +56,7 @@ Feature: Port Trip Management - Create To From Airport Trip 1
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @exclude @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Create To/from Airport Trip with Assign Expired Employment Driver in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
