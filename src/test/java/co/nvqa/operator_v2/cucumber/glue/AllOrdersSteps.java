@@ -209,7 +209,7 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, reason);
   }
 
-  @When("^Operator Force Success single order on All Orders page:$")
+  @When("Operator Force Success single order on All Orders page:")
   public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String changeReason = data.get("changeReason");
