@@ -214,7 +214,7 @@ public class AllOrdersSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String changeReason = data.get("changeReason");
     String reasonForChange = data.get("reasonForChange");
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String trackingId = data.get("trackingId");
     allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
     allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
     put(KEY_ORDER_CHANGE_REASON, changeReason);

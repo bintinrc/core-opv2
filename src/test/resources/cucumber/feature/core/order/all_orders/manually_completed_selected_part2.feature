@@ -201,7 +201,7 @@ Feature: All Orders - Manually Completed Selected
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[4].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Completed" on Edit Order V2 page
     And Operator verify order granular status is "Returned to Sender" on Edit Order V2 page
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
