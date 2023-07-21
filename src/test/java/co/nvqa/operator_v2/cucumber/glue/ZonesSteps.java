@@ -55,15 +55,20 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator create new Zone using Hub {string}")
   public void operatorCreateZone(String hubName) {
-    operatorCreateNewZone(hubName, false);
+    operatorCreateNewZone(hubName, false,true);
   }
 
   @When("Operator creates {string} zone using {string} hub")
   public void operatorCreatesZoneUsingHub(String zoneType, String hubName) {
     if (RTS.equalsIgnoreCase(zoneType)) {
-      operatorCreateNewZone(hubName, true);
+      operatorCreateNewZone(hubName, true,true);
     } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-      operatorCreateNewZone(hubName, false);
+      operatorCreateNewZone(hubName, false,true);
+    }
+    if(zoneType.equalsIgnoreCase("Negative")){
+      {
+        operatorCreateNewZone(hubName, false,false);
+      }
     }
   }
 
@@ -321,7 +326,7 @@ public class ZonesSteps extends AbstractSteps {
     );
   }
 
-  private void operatorCreateNewZone(String hubName, boolean isRts) {
+  private void operatorCreateNewZone(String hubName, boolean isRts,boolean positive) {
     String uniqueCode = StandardTestUtils.generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
 
@@ -329,8 +334,14 @@ public class ZonesSteps extends AbstractSteps {
     zone.setName("ZONE-" + uniqueCode);
     zone.setShortName("Z-" + uniqueCode);
     zone.setHubName(hubName);
-    zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
-    zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
+    double latitude = -Math.random() * (90);
+    double longitude = -Math.random()*(180);
+    if(positive){
+      latitude= Math.abs(latitude);
+      longitude=Math.abs(latitude);
+    }
+      zone.setLatitude(latitude);
+      zone.setLongitude(longitude);
     zone.setDescription(
         f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.",
             new Date()));

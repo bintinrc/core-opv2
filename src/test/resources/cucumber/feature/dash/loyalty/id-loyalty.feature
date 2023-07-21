@@ -1,4 +1,4 @@
-@MileZero @IdOnly @LoyaltyId
+@MileZero @IdOnly @LoyaltyId @Deprecated @ToBeUpdated
 Feature: Loyalty
 
   @DeleteOrArchiveRoute

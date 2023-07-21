@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @CreateNewCoveragePart2
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart2
 Feature: Create New Coverage
 
   Background:

@@ -1,4 +1,4 @@
-@MileZero @SgOnly @LoyaltySg
+@MileZero @SgOnly @LoyaltySg @Deprecated @ToBeUpdated
 Feature: Loyalty
 
   @DeleteOrArchiveRoute
