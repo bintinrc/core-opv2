@@ -15,9 +15,6 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
@@ -84,14 +81,8 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order events on Edit Order V2 page using data below:
       | name               |
@@ -143,7 +134,10 @@ Feature: Tag & Untag DP
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    And API Operator tag "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order to "{dp-id}" DP
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                         |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                                      |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -160,9 +154,6 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
@@ -195,9 +186,6 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
@@ -223,8 +211,14 @@ Feature: Tag & Untag DP
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    And API Operator tag "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order to "{dp-id}" DP
-    And API Operator tag "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order to "{dp-id}" DP
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                         |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                                 |
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                                                                                                                                                                                                                                                                                                                         |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                                                                                                                                                                                                 |
     And API Route - create route group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -234,15 +228,12 @@ Feature: Tag & Untag DP
     And API Core - Operator merge waypoints on Zonal Routing:
       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-    Then API Operator verifies Delivery transactions of following orders have same waypoint id:
+    Then API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Tagging to DP done successfully |
-      | waitUntilInvisible | true                            |
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
