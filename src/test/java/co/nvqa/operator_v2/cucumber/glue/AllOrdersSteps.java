@@ -279,14 +279,9 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorForceSuccessOrders(Map<String, String> data) {
     data = resolveKeyValues(data);
     List<String> trackingIds = splitAndNormalize(data.get("trackingIds"));
-    String reason = null;
-    String reasonDescription = null;
-    if (data.get("reason") == null) {
-      reason = "Others (fill in below)";
-    }
-    if (data.get("reasonDescription") == null) {
-      reasonDescription = "Force success from automated test";
-    }
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
     allOrdersPage.findOrdersWithCsv(trackingIds);
     allOrdersPage.forceSuccessOrders(reason, reasonDescription);
   }
