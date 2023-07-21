@@ -38,16 +38,6 @@ Feature: Global Inbound
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
 
-#    When Operator switch to edit order page using direct URL
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-#    And Operator verify Delivery details on Edit order page using data below:
-#      | status | PENDING |
-#    And API Operator get order details
-#    And Operator make sure size changed to "<size>"
-#    And Operator verify order event on Edit order page using data below:
-#      | name    | HUB INBOUND SCAN |
-#      | hubName | {hub-name-3}     |
     Examples:
       | size | hiptest-uid                              | dataset_name |
       | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b | S            |
@@ -88,13 +78,6 @@ Feature: Global Inbound
       | weight         | 7                      |
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
-#    When Operator switch to edit order page using direct URL
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-#    Then Operator verifies dimensions information on Edit Order page:
-#      | weight | 7 |
-#    And Operator verify Delivery details on Edit order page using data below:
-#      | status | PENDING |
 
   @CloseNewWindows @happy-path
   Scenario: Global inbounds override dimension (uid:8238be24-a3aa-438b-8403-1f8765373477)
@@ -168,11 +151,6 @@ Feature: Global Inbound
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
-#    When Operator switch to edit order page using direct URL
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-#    And Operator verify Delivery details on Edit order page using data below:
-#      | status | PENDING |
 
   @CloseNewWindows @happy-path
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
@@ -201,8 +179,6 @@ Feature: Global Inbound
     And DB Events - verify order_events record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | type    | 26                                 |
-#    And DB Operator verify order_events record for the created order:
-#      | type | 26 |
 
   @CloseNewWindows @happy-path
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
@@ -227,8 +203,6 @@ Feature: Global Inbound
     And DB Events - verify order_events record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | type    | 26                                 |
-#    And DB Operator verify order_events record for the created order:
-#      | type | 26 |
 
   @CloseNewWindows @happy-path
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed Order (uid:9316f5f0-1423-47eb-890d-3916654f545b)
@@ -250,8 +224,6 @@ Feature: Global Inbound
     And DB Events - verify order_events record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | type    | 26                                 |
-#    And DB Operator verify order_events record for the created order:
-#      | type | 26 |
 
   @CloseNewWindows @happy-path
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Cancelled Order (uid:de8f3cf0-9aee-4c53-aa7f-9b25f8bf3249)
@@ -274,8 +246,6 @@ Feature: Global Inbound
     And DB Events - verify order_events record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | type    | 26                                 |
-#    And DB Operator verify order_events record for the created order:
-#      | type | 26 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

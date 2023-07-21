@@ -163,9 +163,6 @@ Feature: Global Inbound
       | dpDetailsId | {KEY_DP_LIST_OF_DP_DETAILS[1].id}           |
       | dpStatus    | {KEY_DP_LIST_OF_DP_RESERVATIONS[1].status}  |
       | dpSource    | {KEY_DP_LIST_OF_DP_RESERVATIONS[1].source}  |
-#    When API DP get the DP Details by DP ID = "{dp-id}"
-#    And DB Operator gets all details for ninja collect confirmed status
-#    And Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
 
   @CloseNewWindows @happy-path
   Scenario: Inbound Parcel with Order Tags (uid:3f95f6e9-4e6a-4599-b438-7b1b74330c33)

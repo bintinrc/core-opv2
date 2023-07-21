@@ -209,9 +209,6 @@ public class GlobalInboundSteps extends AbstractSteps {
   public void ninjaCollectOperatorVerifiesThatAllTheDetailsForConfirmedStatusViaAreRightAndIsFollowedByStatus(
       String source, Map <String,String> dataTable) {
     dataTable = resolveKeyValues(dataTable);
-//    DatabaseCheckingNinjaCollectConfirmed dbCheckingResult = get(
-//        KEY_DATABASE_CHECKING_NINJA_COLLECT_CONFIRMED);
-//    DpDetailsResponse dpDetails = get(KEY_DP_LIST_OF_DP_DETAILS);
     String barcode = dataTable.get("barcode");
     String id = dataTable.get("id");
     String dpBarcode = dataTable.get("dpBarcode");

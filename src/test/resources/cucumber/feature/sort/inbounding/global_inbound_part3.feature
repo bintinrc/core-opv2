@@ -21,36 +21,6 @@ Feature: Global Inbound
       | creatorUserId      | 106307852128204474889                 |
       | creatorUserName    | Niko Susanto                          |
       | creatorUserEmail   | niko.susanto@ninjavan.co              |
-#    When API Operator create recovery ticket using data below:
-#      | ticketType              | 5                                |
-#      | subTicketType           | 9                                |
-#      | entrySource             | 1                                |
-#      | investigatingParty      | 448                              |
-#      | investigatingHubId      | 1                                |
-#      | outcomeName             | ORDER OUTCOME (DUPLICATE PARCEL) |
-#      | outComeValue            | REPACKED/RELABELLED TO SEND      |
-#      | comments                | Automation Testing.              |
-#      | shipperZendeskId        | 1                                |
-#      | ticketNotes             | Automation Testing.              |
-#      | issueDescription        | Automation Testing.              |
-#      | creatorUserId           | 106307852128204474889            |
-#      | creatorUserName         | Niko Susanto                     |
-#      | creatorUserEmail        | niko.susanto@ninjavan.co         |
-#      | TicketCreationSource    | TICKET_MANAGEMENT                |
-#      | ticketTypeId            | 17                               |
-#      | subTicketTypeId         | 17                               |
-#      | entrySourceId           | 13                               |
-#      | trackingIdFieldId       | 2                                |
-#      | investigatingPartyId    | 15                               |
-#      | investigatingHubFieldId | 67                               |
-#      | outcomeNameId           | 64                               |
-#      | commentsId              | 26                               |
-#      | shipperZendeskFieldId   | 36                               |
-#      | ticketNotesId           | 32                               |
-#      | issueDescriptionId      | 45                               |
-#      | creatorUserFieldId      | 30                               |
-#      | creatorUserNameId       | 39                               |
-#      | creatorUserEmailId      | 66                               |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name-3}                          |
@@ -93,11 +63,6 @@ Feature: Global Inbound
     Then Operator verify Delivery details on Edit Order V2 page using data below:
       | status  | PENDING                                              |
       | endDate | {date: 3 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
-#
-#    When Operator switch to edit order page using direct URL
-#    And Operator verify Delivery details on Edit order page using data below:
-#      | status  | PENDING                                              |
-#      | endDate | {date: 3 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Express Service (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
