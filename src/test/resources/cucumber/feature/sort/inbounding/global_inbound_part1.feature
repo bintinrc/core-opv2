@@ -36,14 +36,15 @@ Feature: Global Inbound
       | status | PENDING  |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
+      | size           | <sizeName>             |
       | granularStatus | Arrived at Sorting Hub |
 
     Examples:
-      | size | hiptest-uid                              | dataset_name |
-      | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b | S            |
-      | M    | uid:17d8ecb4-414c-4830-a0ee-a3dc9af9e376 | M            |
-      | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 | L            |
-      | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 | XL           |
+      | size | hiptest-uid                              | dataset_name | sizeName   |
+      | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b | S            | SMALL      |
+      | M    | uid:17d8ecb4-414c-4830-a0ee-a3dc9af9e376 | M            | MEDIUM     |
+      | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 | L            | LARGE      |
+      | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 | XL           | EXTRALARGE |
 
   @CloseNewWindows @happy-path
   Scenario: Inbound parcel with changes in weight - Inbound in SG (uid:60912e81-74bf-4d06-a823-909a40c6b9ce)
