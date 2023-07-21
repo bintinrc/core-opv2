@@ -199,8 +199,8 @@ Feature: All Orders - Manually Completed Selected
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Order -> All Orders
-    And Operator Force Success multiple orders on All Orders page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    And Operator Force Success single order on All Orders page:
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Completed" on Edit Order V2 page
     And Operator verify order granular status is "Returned to Sender" on Edit Order V2 page
@@ -209,8 +209,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | FORCED SUCCESS                                                                                                                                                                                                                                                       |
-      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                                                               |
+      | description | Reason: Others - Force success from automated test RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
@@ -225,7 +225,7 @@ Feature: All Orders - Manually Completed Selected
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Completed" on Edit Order V2 page
     And Operator verify order granular status is "Completed" on Edit Order V2 page
@@ -234,8 +234,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | FORCED SUCCESS                                                                                                                                                                                                                                       |
-      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                                               |
+      | description | Reason: Others - Force success from automated test RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
@@ -263,8 +263,8 @@ Feature: All Orders - Manually Completed Selected
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator Force Success single order on All Orders page:
-      | changeReason | <reason>                            |
-      | trackingId   | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | reason     | <reason>                            |
+      | trackingId | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Completed" on Edit Order V2 page
     And Operator verify order granular status is "Completed" on Edit Order V2 page
@@ -307,9 +307,9 @@ Feature: All Orders - Manually Completed Selected
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator Force Success single order on All Orders page:
-      | changeReason    | Others (fill in below)              |
-      | reasonForChange | Force success by TA                 |
-      | trackingId      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | reason            | Others (fill in below)              |
+      | reasonDescription | Force success by TA                 |
+      | trackingId        | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Completed" on Edit Order V2 page
     And Operator verify order granular status is "Completed" on Edit Order V2 page

@@ -201,24 +201,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
   }
 
-  @When("^Operator Force Success single order on All Orders page$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    String reason = allOrdersPage.forceSuccessOrders();
-    put(KEY_ORDER_CHANGE_REASON, reason);
-  }
 
-  @When("Operator Force Success single order on All Orders page:")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    String trackingId = data.get("trackingId");
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
 
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
@@ -281,11 +264,31 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.errorsDialog.close.click();
   }
 
+  @When("Operator Force Success single order on All Orders page:")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String trackingId = data.get("trackingId");
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
+  }
+
   @When("Operator Force Success multiple orders on All Orders page:")
-  public void operatorForceSuccessOrders(List<String> trackingIds) {
-    trackingIds = resolveValues(trackingIds);
+  public void operatorForceSuccessOrders(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    List<String> trackingIds = splitAndNormalize(data.get("trackingIds"));
+    String reason = null;
+    String reasonDescription = null;
+    if (data.get("reason") == null) {
+      reason = "Others (fill in below)";
+    }
+    if (data.get("reasonDescription") == null) {
+      reasonDescription = "Force success from automated test";
+    }
     allOrdersPage.findOrdersWithCsv(trackingIds);
-    allOrdersPage.forceSuccessOrders();
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
   }
 
   @Then("^Operator verify the order is Force Successed successfully$")
