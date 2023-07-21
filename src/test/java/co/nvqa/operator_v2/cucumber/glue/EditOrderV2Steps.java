@@ -11,7 +11,6 @@ import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable;
-import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.PodDetailsDialog;
 import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -1676,11 +1675,9 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @And("^Operator verify the tags shown on Edit Order V2 page$")
+  @And("Operator verify the tags shown on Edit Order V2 page")
   public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
     expectedOrderTags = resolveValues(expectedOrderTags);
-    Order order = get(KEY_CREATED_ORDER);
-
     List<String> actualOrderTags = page.getTags();
 
     final List<String> normalizedExpectedList = expectedOrderTags.stream().map(String::toLowerCase)
@@ -1689,8 +1686,8 @@ public class EditOrderV2Steps extends AbstractSteps {
         .sorted().collect(Collectors.toList());
 
     Assertions.assertThat(normalizedActualList)
-        .as("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
-            order.getId()).containsExactlyElementsOf(normalizedExpectedList);
+        .as("Actual tags is not equal to expected tags set on Order Tag Management page")
+        .containsExactlyElementsOf(normalizedExpectedList);
   }
 
   @And("Operator verifies no tags shown on Edit Order V2 page")

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @BulkCreateCoverage
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @BulkCreateCoverage
 Feature: Bulk Create Coverage
 
   Background:
