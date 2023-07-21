@@ -1,10 +1,10 @@
-@OperatorV2 @Core @AllOrders @ForceSuccess @ManualCompletedSelectedPart1 @wipFeature
+@OperatorV2 @Core @AllOrders @ForceSuccess @ManualCompletedSelectedPart1
 Feature: All Orders - Manually Completed Selected
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    
+
   Scenario: Operator Force Success Order on All Orders Page - End State = Completed
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -114,7 +114,6 @@ Feature: All Orders - Manually Completed Selected
       | name        | UPDATE STATUS                                                                                                                                          |
       | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -122,8 +121,7 @@ Feature: All Orders - Manually Completed Selected
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
@@ -145,7 +143,6 @@ Feature: All Orders - Manually Completed Selected
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
 
-
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -153,8 +150,7 @@ Feature: All Orders - Manually Completed Selected
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
@@ -186,7 +182,6 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -194,8 +189,7 @@ Feature: All Orders - Manually Completed Selected
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
@@ -229,13 +223,12 @@ Feature: All Orders - Manually Completed Selected
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Core - Operator get multiple order details for tracking ids:
@@ -277,13 +270,12 @@ Feature: All Orders - Manually Completed Selected
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Core - Operator get multiple order details for tracking ids:
