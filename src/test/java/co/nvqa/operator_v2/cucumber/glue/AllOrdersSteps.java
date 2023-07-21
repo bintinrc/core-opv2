@@ -57,7 +57,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage = new AllOrdersPage(getWebDriver());
   }
 
-  @When("^Operator switch to Edit Order's window$")
+  @When("Operator switch to Edit Order's window")
   public void operatorSwitchToEditOrderWindow() {
     Long orderId = get(KEY_CREATED_ORDER_ID);
     if (orderId == null) {
@@ -72,17 +72,17 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
   }
 
-  @When("^Operator download sample CSV file for \"Find Orders with CSV\" on All Orders page$")
+  @When("Operator download sample CSV file for \"Find Orders with CSV\" on All Orders page")
   public void operatorDownloadSampleCsvFileForFindOrdersWithCsvOnAllOrdersPage() {
     allOrdersPage.downloadSampleCsvFile();
   }
 
-  @Then("^Operator verify sample CSV file for \"Find Orders with CSV\" on All Orders page is downloaded successfully$")
+  @Then("Operator verify sample CSV file for \"Find Orders with CSV\" on All Orders page is downloaded successfully")
   public void operatorVerifySampleCsvFileForFindOrdersWithCsvOnAllOrdersPageIsDownloadedSuccessfully() {
     allOrdersPage.verifySampleCsvFileDownloadedSuccessfully();
   }
 
-  @When("^Operator find order on All Orders page using this criteria below:$")
+  @When("Operator find order on All Orders page using this criteria below:")
   public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(
       Map<String, String> dataTableAsMap) {
     dataTableAsMap = resolveKeyValues(dataTableAsMap);
@@ -110,7 +110,7 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
   }
 
-  @When("^Operator can't find order on All Orders page using this criteria below:$")
+  @When("Operator can't find order on All Orders page using this criteria below:")
   public void operatorCantFindOrderOnAllOrdersPageUsingThisCriteriaBelow(
       Map<String, String> dataTableAsMap) {
     AllOrdersPage.Category category = AllOrdersPage.Category
@@ -134,19 +134,19 @@ public class AllOrdersSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")
+  @When("Operator filter the result table by Tracking ID on All Orders page and verify order info is correct")
   public void operatorFilterTheResultTableByTrackingIdOnAllOrdersPageAndVerifyOrderInfoIsCorrect() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyOrderInfoOnTableOrderIsCorrect(order);
   }
 
-  @Then("^Operator verify the new pending pickup order is found on All Orders page with correct info$")
+  @Then("Operator verify the new pending pickup order is found on All Orders page with correct info")
   public void operatorVerifyTheNewPendingPickupOrderIsFoundOnAllOrdersPageWithCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyOrderInfoIsCorrect(order);
   }
 
-  @When("^Operator find multiple orders by uploading CSV on All Orders page$")
+  @When("Operator find multiple orders by uploading CSV on All Orders page")
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage() {
     List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
@@ -156,7 +156,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.operatorClickMaskingText(elements);
   }
 
-  @When("^Operator find orders by uploading CSV on All Orders page:$")
+  @When("Operator find orders by uploading CSV on All Orders page:")
   public void operatorFindOrdersByUploadingCsvOnAllOrderPage(List<String> listOfCreatedTrackingId) {
     if (CollectionUtils.isEmpty(listOfCreatedTrackingId)) {
       throw new IllegalArgumentException(
@@ -165,7 +165,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.findOrdersWithCsv(resolveValues(listOfCreatedTrackingId));
   }
 
-  @When("^Operator find order by uploading CSV on All Orders page$")
+  @When("Operator find order by uploading CSV on All Orders page")
   public void operatorFindOrderByUploadingCsvOnAllOrderPage() {
     String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
@@ -184,7 +184,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
   }
 
-  @When("^Operator uploads CSV that contains invalid Tracking ID on All Orders page$")
+  @When("Operator uploads CSV that contains invalid Tracking ID on All Orders page")
   public void operatorUploadsCsvThatContainsInvalidTrackingIdOnAllOrdersPage() {
     List<String> listOfInvalidTrackingId = new ArrayList<>();
     listOfInvalidTrackingId.add("DUMMY" + StandardTestUtils.generateDateUniqueString() + 'N');
@@ -195,7 +195,7 @@ public class AllOrdersSteps extends AbstractSteps {
     put("listOfInvalidTrackingId", listOfInvalidTrackingId);
   }
 
-  @Then("^Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page$")
+  @Then("Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page")
   public void operatorVerifyThatThePageFailedToFindTheOrdersInsideTheCsvThatContainsInvalidTrackingIdsOnAllOrdersPage() {
     List<String> listOfInvalidTrackingId = get("listOfInvalidTrackingId");
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
@@ -227,7 +227,7 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
-  @When("^Operator Force Success orders with COD collection on All Orders page:$")
+  @When("Operator Force Success orders with COD collection on All Orders page:")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
       List<Map<String, String>> data) {
     Map<String, Boolean> resolvedData = data.stream()
@@ -272,33 +272,33 @@ public class AllOrdersSteps extends AbstractSteps {
     pause2s();
   }
 
-  @When("^Operator verifies error messages in dialog on All Orders page:$")
+  @When("Operator verifies error messages in dialog on All Orders page:")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);
     Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5))
         .as("Errors dialog is displayed").isTrue();
     List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
         .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
-            .replaceAll("^\\d{1,2}\\.", ""))
+            .replaceAll("\\d{1,2}\\.", ""))
         .collect(Collectors.toList());
     Assertions.assertThat(actual)
         .as("List of error messages")
         .containsExactlyInAnyOrderElementsOf(data);
   }
 
-  @When("^Operator close Errors dialog on All Orders page$")
+  @When("Operator close Errors dialog on All Orders page")
   public void operatorCloseErrorsDialog() {
     allOrdersPage.errorsDialog.waitUntilVisible();
     allOrdersPage.errorsDialog.close.click();
   }
 
-  @Then("^Operator verify the order is Force Successed successfully$")
+  @Then("Operator verify the order is Force Successed successfully")
   public void operatorVerifyTheOrderIsForceSucceedSuccessfully() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(order);
   }
 
-  @When("^Operator RTS single order on next day on All Orders page$")
+  @When("Operator RTS single order on next day on All Orders page")
   public void operatorRtsSingleOrderOnNextDayOnAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.rtsSingleOrderNextDay(trackingId);
@@ -310,7 +310,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.cancelSelected(listOfCreatedTrackingId);
   }
 
-  @When("^Operator cancel order on All Orders page$")
+  @When("Operator cancel order on All Orders page")
   public void operatorCancelOrderOnAllOrdersPage() {
     String trackingID = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.cancelSelected(Collections.singletonList(trackingID));
@@ -382,13 +382,13 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
   }
 
-  @When("^Operator print Waybill for single order on All Orders page$")
+  @When("Operator print Waybill for single order on All Orders page")
   public void operatorPrintWaybillForSingleOrderOnAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.printWaybill(trackingId);
   }
 
-  @When("^Operator print Waybill for multiple orders on All Orders page$")
+  @When("Operator print Waybill for multiple orders on All Orders page")
   public void operatorPrintWaybillForMultipleOrdersOnAllOrdersPage() {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption("Print Waybills");
@@ -398,13 +398,13 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.printWaybillsDialog.forceClose();
   }
 
-  @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
+  @Then("Operator verify the printed waybill for single order on All Orders page contains correct info")
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyWaybillContentsIsCorrect(order);
   }
 
-  @Then("^Operator verify waybill for single order on All Orders page:$")
+  @Then("Operator verify waybill for single order on All Orders page:")
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo(
       Map<String, String> data) {
     AirwayBill expected = new AirwayBill(resolveKeyValues(data));
@@ -416,7 +416,7 @@ public class AllOrdersSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")
+  @Then("Operator verify the printed waybill for multiple orders on All Orders page contains correct info")
   public void operatorVerifyThePrintedWaybillForMultipleOrderOnAllOrdersPageContainsCorrectInfo() {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     for (int i = 0; i < orders.size(); i++) {
@@ -454,14 +454,14 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.resumeSelected(trackingIds);
   }
 
-  @Then("^Operator verify order status is \"(.+)\"$")
+  @Then("Operator verify order status is \"(.+)\"")
   public void operatorVerifyOrderStatusIs(String expectedOrderStatus) {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(trackingId));
     allOrdersPage.verifyOrderStatus(trackingId, expectedOrderStatus);
   }
 
-  @When("^Operator apply \"(.+)\" action to created orders$")
+  @When("Operator apply \"(.+)\" action to created orders")
   public void operatorApplyActionToCreatedOrders(String actionName) {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     AllOrdersAction action = AllOrdersAction
@@ -469,13 +469,13 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.applyActionToOrdersByTrackingId(trackingIds, action);
   }
 
-  @When("^Operator apply \"Pull From Route\" action and expect to see \"Selection Error\"$")
+  @When("Operator apply \"Pull From Route\" action and expect to see \"Selection Error\"")
   public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError(
       List<String> trackingIds) {
     allOrdersPage.pullOutFromRouteWithExpectedSelectionError(resolveValues(trackingIds));
   }
 
-  @Then("^Operator verify Selection Error dialog for invalid Pull From Order action$")
+  @Then("Operator verify Selection Error dialog for invalid Pull From Order action")
   public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction(
       List<String> trackingIds) {
     List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
@@ -484,7 +484,7 @@ public class AllOrdersSteps extends AbstractSteps {
         expectedFailureReasons);
   }
 
-  @When("^Operator open page of the created order from All Orders page$")
+  @When("Operator open page of the created order from All Orders page")
   public void operatorOpenPageOfTheCreatedOrderFromAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     Long orderId = get(KEY_CREATED_ORDER_ID);
@@ -494,7 +494,7 @@ public class AllOrdersSteps extends AbstractSteps {
     ));
   }
 
-  @When("^Operator open page of an order from All Orders page using data below:$")
+  @When("Operator open page of an order from All Orders page using data below:")
   public void operatorOpenPageOfOrderFromAllOrdersPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String trackingId = data.get("trackingId");
@@ -521,7 +521,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifiesTrackingIdIsCorrect(trackingId);
   }
 
-  @Then("^Operator verifies All Orders Page is displayed$")
+  @Then("Operator verifies All Orders Page is displayed")
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
     allOrdersPage.verifyItsCurrentPage();
   }
@@ -536,7 +536,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.rtsMultipleOrderNextDay(resolveListOfTrackingIds);
   }
 
-  @When("^Operator select 'Set RTS to Selected' action for found orders on All Orders page$")
+  @When("Operator select 'Set RTS to Selected' action for found orders on All Orders page")
   public void operatorSelectRtsActionForMultipleOrdersOnAllOrdersPage() {
     allOrdersPage.clearFilterTableOrderByTrackingId();
     allOrdersPage.selectAllShown();
@@ -612,7 +612,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyLatestEvent(createdOrder, latestEvent);
   }
 
-  @When("^Operator selects filters on All Orders page:$")
+  @When("Operator selects filters on All Orders page:")
   public void operatorSelectsFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -698,7 +698,7 @@ public class AllOrdersSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator updates filters on All Orders page:$")
+  @When("Operator updates filters on All Orders page:")
   public void operatorUpdatesFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -756,7 +756,7 @@ public class AllOrdersSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator verifies selected filters on All Orders page:$")
+  @When("Operator verifies selected filters on All Orders page:")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
 
