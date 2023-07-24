@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2
+@OperatorV2 @Core @EditOrderV2 @Reschedule
 Feature: Reschedule
 
   Background:
@@ -646,9 +646,9 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                                 | archived |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | 1        |
+    Then DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | archived   | 1                                                          |
 
   @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address

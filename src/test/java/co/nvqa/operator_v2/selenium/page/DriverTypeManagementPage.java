@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -40,8 +41,8 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   private AddDriverTypeDialog addDriverTypeDialog;
   public EditDriverTypeDialog editDriverTypeDialog;
   private FiltersForm filtersForm;
-  @FindBy(xpath = "//input[@placeholder='Search']")
-  public TextBox searchDriverType;
+  @FindBy(xpath = "//input[@data-testid='search-bar']")
+  public ForceClearTextBox searchDriverType;
 
   @FindBy(xpath = "//h3[contains(text(),'out of')]/strong")
   public PageElement rowsCount;
@@ -169,6 +170,15 @@ public class DriverTypeManagementPage extends SimpleReactPage {
     pause2s();
   }
 
+  public void verifyToastErrorMessage(String errorMessage) {
+    boolean isToastErrorDisplayed = isElementVisible(
+        f("//div[@class='toast-bottom']/strong[text() = '%s']",
+            errorMessage));
+    Assertions.assertThat(isToastErrorDisplayed)
+        .as(f("Error message: [%s] displayed", errorMessage))
+        .isTrue();
+  }
+
   public static class ConfirmDeleteDialog extends MdDialog {
 
     public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement) {
@@ -180,8 +190,12 @@ public class DriverTypeManagementPage extends SimpleReactPage {
       super(webDriver, searchContext, webElement);
     }
 
-    @FindBy(xpath = "//button[contains(@class, 'ant-btn')][span[text() = 'Delete']]")
-    public Button delete;
+    public WebElement getActionButton(String type) {
+      WebElement btnAction = findElementBy(
+          By.xpath(f("//button[@type='button']/span[text() = '%s']", type)));
+      waitUntilVisibilityOfElementLocated(btnAction);
+      return btnAction;
+    }
   }
 
   public String getTextOnTable(int rowNumber, String columnDataClass) {
@@ -189,11 +203,10 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   }
 
   public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
-    List<WebElement> buttons = findElementsByXpath(
-        f("//button[contains(@class, 'ant-btn') and @data-testid='%s-button']",
-            actionButtonName.toLowerCase()));
-    WebElement selectedButton = buttons.get(rowNumber - 1);
-    selectedButton.click();
+    WebElement actionButtonEl = findElementByXpath(
+        f("(//button[@data-testid='%s-button' and @type='button'])[%s]",
+            actionButtonName.toLowerCase(), rowNumber));
+    actionButtonEl.click();
   }
 
   public static class DriverTypesTable extends AntTableV3<DriverTypeParams> {

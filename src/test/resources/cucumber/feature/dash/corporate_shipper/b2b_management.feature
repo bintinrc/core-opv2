@@ -91,8 +91,8 @@ Feature: B2B Management
     Then Operator verifies corporate sub shipper is correct
 
     Examples:
-      | masterShipperId                  | hiptest-uid                              |
-      | {operator-b2b-master-shipper-id} | uid:ed3c11a3-2c61-42c0-8ef4-e892bf6065ab |
+      | masterShipperId            | hiptest-uid                              |
+      | {postpaid-corporate-hq-id} | uid:ed3c11a3-2c61-42c0-8ef4-e892bf6065ab |
 
   Scenario Outline: Search sub shippers by name (<hiptest-uid>)
     When Operator go to tab corporate sub shipper

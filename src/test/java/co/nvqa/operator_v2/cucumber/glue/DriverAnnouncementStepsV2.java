@@ -26,12 +26,14 @@ public class DriverAnnouncementStepsV2 extends AbstractSteps {
 
   @When("Operator select the first row on Driver Announcement page")
   public void operatorSelectTheFirstRowOnDriverAnnouncementPage() {
-    daPage.inFrame(() -> daPage.verifyRowOnDriverAnnouncementPage(1));
+    doWithRetry(() -> daPage.inFrame(() -> daPage.verifyRowOnDriverAnnouncementPage(1)),
+        "Select and verify first row data");
   }
 
   @And("Operator close announcement drawer on Driver Announcement page")
   public void operatorCloseAnnouncementDrawerOnDriverAnnouncementPage() {
-    daPage.inFrame(() -> daPage.closeAnnouncementDrawer());
+    doWithRetry(() -> daPage.inFrame(() -> daPage.closeAnnouncementDrawer()),
+        "Close Announcement Drawer");
   }
 
   @And("Operator search {string} on Driver Announcement page")

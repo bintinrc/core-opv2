@@ -2,13 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.DriverType;
 import co.nvqa.operator_v2.model.DriverTypeParams;
-import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage.DriverTypesTable;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -117,19 +116,19 @@ public class DriverTypeManagementSteps extends AbstractSteps {
   public void operatorSearchDriverTypeById() {
     DriverTypeParams driverTypeName = get(KEY_DRIVER_TYPE_PARAMS);
     dtmPage.refreshPage();
-    dtmPage.waitUntilLoaded();
-    dtmPage.inFrame(() -> {
-      dtmPage.searchDriverType.setValue(driverTypeName.getDriverTypeId());
+    doWithRetry(() -> dtmPage.inFrame(() -> {
+      dtmPage.waitUntilLoaded();
+      dtmPage.searchDriverType.sendKeys(driverTypeName.getDriverTypeId());
       DriverTypeParams actual = dtmPage.driverTypesTable.readEntity(1);
 
       Assertions.assertThat(
-              actual.getDriverTypeName().equalsIgnoreCase(driverTypeName.getDriverTypeName()))
-          .as(f("Driver type: %s not found!", driverTypeName.getDriverTypeName())).isTrue();
+                      actual.getDriverTypeName().equalsIgnoreCase(driverTypeName.getDriverTypeName()))
+              .as(f("Driver type: %s not found!", driverTypeName.getDriverTypeName())).isTrue();
 
       Assertions.assertThat(
-              actual.getDriverTypeId().equals(driverTypeName.getDriverTypeId()))
-          .as(f("Driver id: %s not found!", driverTypeName.getDriverTypeId())).isTrue();
-    });
+                      actual.getDriverTypeId().equals(driverTypeName.getDriverTypeId()))
+              .as(f("Driver id: %s not found!", driverTypeName.getDriverTypeId())).isTrue();
+    }), "Search created Driver Type using ID");
   }
 
   @Then("Operator verify all driver types are displayed on Driver Type Management page")
@@ -165,8 +164,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
   public void operatorDeleteNewDriverTypeOnOnDriverTypeManagementPage() {
     dtmPage.inFrame(() -> {
       dtmPage.clickActionButtonOnTable(1, DriverTypesTable.ACTION_DELETE);
-      dtmPage.confirmDeleteDialog.delete.waitUntilClickable();
-      dtmPage.confirmDeleteDialog.delete.click();
+      dtmPage.confirmDeleteDialog.getActionButton("Delete").click();
     });
   }
 
@@ -200,5 +198,10 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_FILTER_PARAMS);
     dtmPage.verifyFilterResults(driverTypeParams);
     takesScreenshot();
+  }
+
+  @Then("Operator verify toast error message {string} displayed")
+  public void operatorVerifyToastErrorMessageDisplayed(String message) {
+    dtmPage.verifyToastErrorMessage(message);
   }
 }

@@ -347,8 +347,7 @@ Feature: Corporate Shipper
       | salesPerson                  | {sales-person}        |
     And DB Shipper verifies available service types for created shipper contains "Corporate AWB"
     When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-    And Operator update Sub Shippers Default settings:
-      | isCorporateManualAWB | false |
+    And Operator set service type "Corporate Manual AWB" to "No" on edit shipper page
     And DB Shipper verifies available marketplace service types for created shipper not contains "Corporate AWB"
     And Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
@@ -381,9 +380,8 @@ Feature: Corporate Shipper
       | salesPerson                  | {sales-person}        |
     And DB Shipper verifies available service types for created shipper not contains "Corporate AWB"
     When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-    And Operator update Sub Shippers Default settings:
-      | isCorporateManualAWB | true |
-    And DB Shipper verifies available marketplace service types for created shipper contains "Corporate AWB"
+    And Operator set service type "Corporate Manual AWB" to "Yes" on edit shipper page
+    Then DB Shipper verifies available service types for created shipper contains "Corporate AWB"
     And Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
       | branchId | generated |
