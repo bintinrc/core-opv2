@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.dp.DpDetailsResponse;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -292,19 +290,18 @@ public class GlobalInboundPage extends SimpleReactPage {
         .as("Warning Text is not the same : ").isEqualTo(actualWarningText);
   }
 
-  public void verifiesDetailsAreRightForGlobalInbound(DatabaseCheckingNinjaCollectConfirmed result,
-      DpDetailsResponse dpDetails, String barcode, String source) {
-    Assertions.assertThat(barcode).as("Barcode is not the same : ").isEqualTo(result.getBarcode());
-    Assertions.assertThat(dpDetails.getId()).as("DP ID is not the same : ")
-        .isEqualTo(result.getDpId());
-    Assertions.assertThat("CONFIRMED").as("Status is not the same : ")
-        .isEqualTo(result.getStatus());
+  public void verifiesDetailsAreRightForGlobalInbound(String barcode, String dpBarcode, String id, String dpDetailsId,String dpSource,String source,String dpStatus) {
+    Assertions.assertThat(barcode).isEqualTo(dpBarcode);
+    Assertions.assertThat(id)
+        .isEqualTo(dpDetailsId);
+    Assertions.assertThat("CONFIRMED")
+        .isEqualTo(dpStatus);
     if (source.equalsIgnoreCase("Fully Integrated")) {
-      Assertions.assertThat("FULLY_INTEGRATED_NINJA_COLLECT").as("Source is not the same : ")
-          .isEqualTo(result.getSource());
+      Assertions.assertThat("FULLY_INTEGRATED_NINJA_COLLECT")
+          .isEqualTo(dpSource);
     } else if (source.equalsIgnoreCase("Semi Integrated")) {
-      Assertions.assertThat("SEMI_INTEGRATED_NINJA_COLLECT").as("Source is not the same : ")
-          .isEqualTo(result.getSource());
+      Assertions.assertThat("SEMI_INTEGRATED_NINJA_COLLECT")
+          .isEqualTo(dpSource);
     }
   }
 
