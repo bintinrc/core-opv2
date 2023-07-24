@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part2
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part2 @current
 Feature: Route Inbound Screen 1
 
   Background:
@@ -6,92 +6,110 @@ Feature: Route Inbound Screen 1
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver deliver the created parcel successfully
-    Given Operator go to menu Inbounding -> Route Inbound
-    When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                      |
-      | fetchBy      | FETCH_BY_TRACKING_ID            |
-      | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID}           |
-      | driverName  | {ninja-driver-name}              |
-      | hubName     | {hub-name}                       |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
-      | wpPending   | 0                                |
-      | wpPartial   | 0                                |
-      | wpFailed    | 0                                |
-      | wpCompleted | 1                                |
-      | wpTotal     | 1                                |
-
-  @DeleteOrArchiveRoute
   Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: Only 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver deliver the created parcel successfully
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | DELIVERY                                                                        |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                        |
-      | fetchBy      | FETCH_BY_TRACKING_ID              |
-      | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID}   |
-      | routeId      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | hubName      | {hub-name}                            |
+      | fetchBy      | FETCH_BY_TRACKING_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | driverName  | {ninja-driver-name}               |
-      | hubName     | {hub-name}                        |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}  |
-      | wpPending   | 1                                 |
-      | wpPartial   | 0                                 |
-      | wpFailed    | 0                                 |
-      | wpCompleted | 0                                 |
-      | wpTotal     | 1                                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverName  | {ninja-driver-name}                |
+      | hubName     | {hub-name}                         |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
+      | wpPending   | 0                                  |
+      | wpPartial   | 0                                  |
+      | wpFailed    | 0                                  |
+      | wpCompleted | 1                                  |
+      | wpTotal     | 1                                  |
+
+  @DeleteOrArchiveRoute @wip
+  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                              |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                        |
-      | fetchBy      | FETCH_BY_TRACKING_ID              |
-      | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID}   |
-      | routeId      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | hubName      | {hub-name}                            |
+      | fetchBy      | FETCH_BY_TRACKING_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | routeId      | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-      | driverName  | {ninja-driver-name}               |
-      | hubName     | {hub-name}                        |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}  |
-      | wpPending   | 0                                 |
-      | wpPartial   | 0                                 |
-      | wpFailed    | 0                                 |
-      | wpCompleted | 1                                 |
-      | wpTotal     | 1                                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverName  | {ninja-driver-name}                |
+      | hubName     | {hub-name}                         |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
+      | wpPending   | 1                                  |
+      | wpPartial   | 0                                  |
+      | wpFailed    | 0                                  |
+      | wpCompleted | 0                                  |
+      | wpTotal     | 1                                  |
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                            |
+      | fetchBy      | FETCH_BY_TRACKING_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | routeId      | {KEY_LIST_OF_CREATED_ROUTES[2].id}    |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+      | driverName  | {ninja-driver-name}                |
+      | hubName     | {hub-name}                         |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
+      | wpPending   | 1                                  |
+      | wpPartial   | 0                                  |
+      | wpFailed    | 0                                  |
+      | wpCompleted | 0                                  |
+      | wpTotal     | 1                                  |
 
   @DeleteOrArchiveRoute
   Scenario: Get Route Details by Tracking ID - Order is Not Routed

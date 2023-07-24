@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.route.RouteResponse;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
@@ -25,6 +27,7 @@ import io.cucumber.java.en.When;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,7 @@ public class RouteInboundSteps extends AbstractSteps {
   private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";
   private static final String FETCH_BY_TRACKING_ID = "FETCH_BY_TRACKING_ID";
   private static final String FETCH_BY_DRIVER = "FETCH_BY_DRIVER";
+  private static final String FETCH_BY_INVALID_ROUTE = "FETCH_BY_INVALID_ROUTE";
   private static final String KEY_ROUTE_INBOUND_COMMENT = "KEY_ROUTE_INBOUND_COMMENT";
 
   private RouteInboundPage routeInboundPage;
@@ -55,7 +59,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage = new RouteInboundPage(getWebDriver());
   }
 
-  @When("^Operator get Route Summary Details on Route Inbound page using data below:$")
+  @When("Operator get Route Summary Details on Route Inbound page using data below:")
   public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -71,20 +75,33 @@ public class RouteInboundSteps extends AbstractSteps {
         routeInboundPage.fetchRouteByRouteId(hubName, routeId);
         break;
       case FETCH_BY_TRACKING_ID:
-        String trackingId =
-            "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ORDER_TRACKING_ID)
-                : fetchByValue;
-        routeInboundPage.fetchRouteByTrackingId(hubName, trackingId, routeId);
+        routeInboundPage.fetchRouteByTrackingId(hubName, fetchByValue, routeId);
         break;
       case FETCH_BY_DRIVER:
         routeInboundPage.fetchRouteByDriver(hubName, fetchByValue, routeId);
         break;
+      case FETCH_BY_INVALID_ROUTE:
+
     }
   }
 
+  @When("Operator get Route Summary Details of Invalid Route on Route Inbound page using data below:")
+  public void operatorGetInvalidRouteDetailsOnRouteInboundPageUsingDataBelow(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String hubName = mapOfData.get("hubName");
+    Long routeId = Long.valueOf(mapOfData.get("routeId"));
+    routeInboundPage.fetchRouteByRouteId(hubName, routeId);
+  }
+
   private Long getRouteId(String value) {
+    List<Long> routeIds = new ArrayList<>();
+    List<RouteResponse> createdRoutes = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
+    if (createdRoutes != null) {
+      createdRoutes.forEach(e -> routeIds.add(e.getId()));
+    }
     if (StringUtils.isBlank(value)) {
-      return get(KEY_CREATED_ROUTE_ID);
+      return routeIds.get(routeIds.size() - 1);
     }
     if (StringUtils.isNumeric(value)) {
       return Long.valueOf(value);
@@ -92,10 +109,9 @@ public class RouteInboundSteps extends AbstractSteps {
     Pattern p = Pattern.compile("(GET_FROM_CREATED_ROUTE)(\\[\\s*)(\\d+)(\\s*])");
     Matcher m = p.matcher(value);
     if (m.matches()) {
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
       return routeIds.get(Integer.parseInt(m.group(3)) - 1);
     } else if (StringUtils.equals(value, "GET_FROM_CREATED_ROUTE")) {
-      return get(KEY_CREATED_ROUTE_ID);
+      return routeIds.get(routeIds.size() - 1);
     } else {
       return null;
     }
@@ -127,7 +143,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
     try {
       if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
-        Route route = get(KEY_CREATED_ROUTE);
+        List<RouteResponse> routes = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
+        RouteResponse route = routes.get(routes.size() - 1);
         routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
             DTF_ISO_8601_LITE);
       } else {
