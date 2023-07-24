@@ -126,7 +126,7 @@ public class AntSelect3 extends PageElement {
   public void clearValue() {
     if (StringUtils.isNotBlank(getValue())) {
       openMenu();
-      if (clearIcon.isDisplayedFast()) {
+      if (clearIcon.isDisplayedFast() || clearIcon.isDisplayed()) {
         clearIcon.click();
       } else {
         searchInput.forceClear();

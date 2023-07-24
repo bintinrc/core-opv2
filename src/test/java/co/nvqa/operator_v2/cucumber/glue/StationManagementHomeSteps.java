@@ -48,7 +48,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
     hubName = resolveValue(hubName);
     final String hub = hubName;
     doWithRetry(() -> {
-      String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
       stationManagementHomePage.selectHubAndProceed(hub);
     }, "Operator selects the hub and proceed", 10000, 3);
   }

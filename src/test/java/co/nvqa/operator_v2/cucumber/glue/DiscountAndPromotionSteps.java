@@ -383,7 +383,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator (search|search using (.+)) and select the created shipper$")
+  @Then("Operator search using {string} and select the created shipper")
   public void operatorSearchAndSelectShipper(String searchOption) {
     campaignCreateEditPage.inFrame(page -> {
       Shipper createdShipper = resolveValue(KEY_CREATED_SHIPPER);
@@ -398,9 +398,11 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
           searchValue = "Invalid Shipper ID";
           break;
         case "Name":
-        default:
           LOGGER.info("Using Name to search Shipper");
           searchValue = createdShipper.getName();
+        default:
+          LOGGER.info("Using user defined value to search Shipper");
+          searchValue = searchOption;
       }
 
       page.searchForTheShipper(searchValue);
@@ -420,6 +422,18 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     File csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
     LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());
     return csvFile;
+  }
+
+  @And("^Operator clicks on campaign with name (.+)$")
+  public void operatorClicksOnCampaignWithName(String name) {
+    discountAndPromotionsPage.inFrame(page -> {
+      doWithRetry(() ->
+      {
+        pause10s();
+        pause10s();
+        discountAndPromotionsPage.selectCampaignWithName(name);
+      }, getCurrentMethodName(), 500, 5);
+    });
   }
 
   @And("^Operator clicks on first (.+) campaign$")
@@ -564,10 +578,16 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @When("Operator clicks on download button on Campaign Page")
   public void operatorClickOnDownloadButtonOnCampaignPage() {
     campaignCreateEditPage.inFrame(page -> {
-      campaignCreateEditPage.clickCampaignRuleAddButton();
+      campaignCreateEditPage.clickDownloadButton();
     });
   }
 
+  @And("Operator verifies downloaded shippers CSV file on Campaign Page")
+  public void operatorVerifiesDownloadedShippersCSVFileOnCapaignPage() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.verifyFileDownloadedSuccessfully("shippers.csv");
+    });
+  }
   @Then("Operator verifies {string} modal is displayed")
   public void operatorVerifiesModalIsDisplayed(String modalName) {
     campaignCreateEditPage.inFrame(page -> {

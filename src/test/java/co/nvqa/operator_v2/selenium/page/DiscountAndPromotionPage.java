@@ -55,6 +55,11 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
     doubleClick(xpathExpression);
   }
 
+  public void selectCampaignWithName(String name) {
+    String xpathExpression = f("//span[text() = '%s']", name);
+    doubleClick(xpathExpression);
+  }
+
   public boolean verifyCampaignField(String fieldName, String isClickable) {
     String xpathExpression;
     if (isClickable.equalsIgnoreCase("not clickable")) {

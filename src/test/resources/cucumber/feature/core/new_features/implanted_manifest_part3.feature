@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @ImplantedManifestPart3
+@OperatorV2 @Core @NewFeatures @ImplantedManifest @ImplantedManifestPart3
 Feature: Implanted Manifest
 
   Background:

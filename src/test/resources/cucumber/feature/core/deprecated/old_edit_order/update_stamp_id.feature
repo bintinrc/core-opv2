@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @UpdateStampId @EditOrder4
+#@OperatorV2 @Core @EditOrder @UpdateStampId @EditOrder4
 Feature: Update Stamp ID
 
   Background:

@@ -336,7 +336,10 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public void searchForTheShipper(String shipperName) {
     if (shipperName.equalsIgnoreCase("Invalid Shipper ID")) {
       searchByShipper.enterSearchTerm(shipperName);
-    } else {
+    }else if (shipperName.contains("id-")) {
+      searchByShipper.enterSearchTerm(shipperName.substring(3));
+    }
+    else {
       searchByShipper.selectValue(shipperName);
     }
   }

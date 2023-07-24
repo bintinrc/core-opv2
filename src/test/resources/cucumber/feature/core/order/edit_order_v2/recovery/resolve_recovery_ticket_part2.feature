@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ResolveTicketPart2
+@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2
 Feature: Resolve Recovery Ticket
 
   Background:
