@@ -152,6 +152,10 @@ Feature: Global Inbound
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
+      | weight         | 7                      |
+      | height         | 2                      |
+      | width          | 3                      |
+      | length         | 5                      |
 
   @CloseNewWindows @happy-path
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
