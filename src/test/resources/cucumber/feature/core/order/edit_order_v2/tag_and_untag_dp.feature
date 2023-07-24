@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @TagAndUntagDP @RoutingModules @runnow
+@OperatorV2 @Core @EditOrderV2 @TagAndUntagDP @RoutingModules
 Feature: Tag & Untag DP
 
   Background:
@@ -123,7 +123,7 @@ Feature: Tag & Untag DP
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
 
-  @DeleteRoutes @mergeandunmergedp
+  @DeleteRoutes
   Scenario: Untag DP Order that is merged and routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -169,7 +169,7 @@ Feature: Tag & Untag DP
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
 
-  @DeleteRoutes @mergeandunmergedp
+  @DeleteRoutes
   Scenario: Untag DP Order that is not merged and routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                 |
@@ -201,7 +201,7 @@ Feature: Tag & Untag DP
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
 
-  @DeleteRouteGroupsV2 @mergeandunmergedp
+  @DeleteRouteGroupsV2
   Scenario: Untag DP Order that is merged and not routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
