@@ -16,9 +16,10 @@ Feature: Global Inbound
     And Operator save Inbound settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-3}                          |
-      | parcelType | {parcel-type-bulky}                   |
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubName        | {hub-name-3}                          |
+      | parcelType     | {parcel-type-bulky}                   |
+      | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | overrideWeight | 2                                     |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |

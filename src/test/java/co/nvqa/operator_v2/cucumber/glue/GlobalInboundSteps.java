@@ -266,6 +266,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     recoveryTicket = resolveValue(recoveryTicket);
     Assertions.assertThat(ticketStatus).isEqualToIgnoringCase(recoveryTicket);
   }
+
   @And("Operator verifies order weight is overridden based on the volumetric weight")
   public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight() {
     String countryCode = StandardTestConstants.NV_SYSTEM_ID;
