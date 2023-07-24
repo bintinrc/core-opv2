@@ -15,7 +15,7 @@ Feature: All Orders - Manually Completed Selected
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order status is "Completed" on Edit Order V2 page
@@ -58,8 +58,7 @@ Feature: All Orders - Manually Completed Selected
     # Verify 1st Order
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order status is "Completed" on Edit Order V2 page
@@ -199,7 +198,7 @@ Feature: All Orders - Manually Completed Selected
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order status is "Completed" on Edit Order V2 page

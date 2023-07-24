@@ -22,6 +22,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -278,7 +279,12 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("Operator Force Success multiple orders on All Orders page:")
   public void operatorForceSuccessOrders(Map<String, String> data) {
     data = resolveKeyValues(data);
-    List<String> trackingIds = splitAndNormalize(data.get("trackingIds"));
+    String trackingIdsString = data.get("trackingIds");
+    final List<String> trackingIds = Arrays
+        .stream(trackingIdsString.split(","))
+        .map(StringUtils::trim)
+        .map(tidKey -> (String) resolveValue(tidKey))
+        .collect(Collectors.toList());
     String reason = data.getOrDefault("reason", "Others (fill in below)");
     String reasonDescription = data.getOrDefault("reasonDescription",
         "Force success from automated test");
