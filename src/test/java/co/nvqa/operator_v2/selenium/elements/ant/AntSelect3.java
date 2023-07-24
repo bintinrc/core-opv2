@@ -113,7 +113,12 @@ public class AntSelect3 extends PageElement {
         click(xpath);
       } else {
         xpath = getItemContainsLocator(value);
-        click(xpath);
+        if (isElementVisible(xpath, 1)) {
+          click(xpath);
+        } else {
+          xpath = getItemValueLocator(value);
+          click(xpath);
+        }
       }
     }
   }
@@ -126,7 +131,7 @@ public class AntSelect3 extends PageElement {
   public void clearValue() {
     if (StringUtils.isNotBlank(getValue())) {
       openMenu();
-      if (clearIcon.isDisplayedFast()) {
+      if (clearIcon.isDisplayedFast() || clearIcon.isDisplayed()) {
         clearIcon.click();
       } else {
         searchInput.forceClear();
@@ -156,6 +161,9 @@ public class AntSelect3 extends PageElement {
     return getListBoxLocator()
         + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
         + normalizeSpace(value) + "')]";
+  }
+  private String getItemValueLocator(String value) {
+    return getListBoxLocator() + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"+ value +"')]]]";
   }
 
   private String getItemEqualsLocator(String value) {

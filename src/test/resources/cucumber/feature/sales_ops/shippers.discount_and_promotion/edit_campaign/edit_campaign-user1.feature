@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaign @User1
+@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaignUser1
 
 Feature: Edit Campaign
 
@@ -17,7 +17,7 @@ Feature: Edit Campaign
     Then Operator verifies toast message "Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ALL_ACCESS, CAMPAIGN_ADMIN)" in Campaign Page
 
   @FailingDownloadButtonDisabled
-  Scenario: View Detail Campaign - Status Pending
+  Scenario: Generate Shipper CSV - User Only Have View Access
     Given Operator go to menu Shipper -> Discount & Promotions
     And Operator clicks on campaign with name QA-Automation-Campaign-16896918867762
     And Operator verifies Campaign name input field is clickable

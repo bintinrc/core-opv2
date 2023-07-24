@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @EditArea
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @EditArea
 Feature: Edit Area
 
   Background:

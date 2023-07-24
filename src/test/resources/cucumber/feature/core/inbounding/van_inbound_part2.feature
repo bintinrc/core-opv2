@@ -86,7 +86,8 @@ Feature: Van Inbound
     Given Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator searches and selects orders created on Order Tag Management page
+    And Operator searches and selects orders created on Order Tag Management page:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -143,7 +144,8 @@ Feature: Van Inbound
     Given Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator searches and selects orders created on Order Tag Management page
+    And Operator searches and selects orders created on Order Tag Management page:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name}   |
       | {order-tag-name-2} |

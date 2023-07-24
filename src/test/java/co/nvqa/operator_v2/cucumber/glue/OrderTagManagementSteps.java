@@ -123,11 +123,11 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.waitWhilePageIsLoading();
   }
 
-  @And("^Operator searches and selects orders created on Order Tag Management page$")
-  public void operatorSearchesAndSelectsOrdersCreatedOnAddTagsToOrderPage() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    trackingIds.forEach(trackingId ->
-    {
+  @And("Operator searches and selects orders created on Order Tag Management page:")
+  public void operatorSearchesAndSelectsOrdersCreatedOnAddTagsToOrderPage(
+      List<String> trackingIds) {
+    List<String> listOfTrackingIds = resolveValues(trackingIds);
+    listOfTrackingIds.forEach(trackingId -> {
       orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
       if (orderTagManagementPage.ordersTable.getRowsCount() == 0) {
         orderTagManagementPage.loadingBar.waitUntilInvisible(60);
@@ -137,9 +137,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
   }
 
   @And("Operator searches and selects orders created first row on Add Tags to Order page")
-  public void operatorSearchesAndSelectsOrdersCreatedFirstRowOnAddTagsToOrderPage() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    trackingIds.forEach(trackingId ->
+  public void operatorSearchesAndSelectsOrdersCreatedFirstRowOnAddTagsToOrderPage(
+      List<String> trackingIds) {
+    List<String> listOfTrackingIds = resolveValues(trackingIds);
+    listOfTrackingIds.forEach(trackingId ->
     {
       orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
       orderTagManagementPage.ordersTable.selectFirstRowCheckBox();
@@ -243,7 +244,8 @@ public class OrderTagManagementSteps extends AbstractSteps {
     String csvContents = resolveValues(listOfTrackingId).stream()
         .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     File csvFile = orderTagManagementPage.createFile(
-        String.format("find-orders-with-csv_%s.csv", StandardTestUtils.generateDateUniqueString()), csvContents);
+        String.format("find-orders-with-csv_%s.csv", StandardTestUtils.generateDateUniqueString()),
+        csvContents);
 
     orderTagManagementPage.findOrdersWithCsv.click();
     orderTagManagementPage.findOrdersWithCsvDialog.waitUntilVisible();

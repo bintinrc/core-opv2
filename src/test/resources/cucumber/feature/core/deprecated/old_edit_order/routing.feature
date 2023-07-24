@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrderRouting @EditOrder2 @RoutingModules
+#@OperatorV2 @Core @EditOrder @EditOrderRouting @EditOrder2 @RoutingModules
 Feature: Routing
 
   Background:

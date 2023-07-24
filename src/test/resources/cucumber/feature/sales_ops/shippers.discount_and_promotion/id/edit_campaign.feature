@@ -5,7 +5,7 @@ Feature: Edit Campaign
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCampaign @PassRN
+  @DeleteCampaign
   Scenario: Edit Pending Campaign - Add Multiple Valid Rules to Campaign - Percentage Discount Value with 2 Decimal Places - ID
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page

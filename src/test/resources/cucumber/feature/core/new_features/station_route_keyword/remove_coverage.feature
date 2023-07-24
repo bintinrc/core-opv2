@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @RemoveCoverage
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @RemoveCoverage
 Feature: Remove Coverage
 
   Background:
