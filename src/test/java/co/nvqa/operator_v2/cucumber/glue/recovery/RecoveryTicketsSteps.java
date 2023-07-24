@@ -70,9 +70,17 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         String actual = recoveryTicketsPage.creatByCSVDialog.message.get(1).getText();
         Assertions.assertThat(actual).as("correct bottom").isEqualTo(value);
       }
+      if (finalData.containsKey("failureReason")) {
+        Assertions.assertThat(
+                recoveryTicketsPage.creatByCSVDialog.failureReason.
+                    stream().map(PageElement::getText)
+                    .collect(Collectors.toList())).as("correct failureReason")
+            .contains(finalData.get("failureReason"));
+      }
       Assertions.assertThat(
               recoveryTicketsPage.creatByCSVDialog.displayedUploadedFileName.getText())
           .as("correct file name").contains(finalData.get("fileName"));
+      takesScreenshot();
     });
   }
 

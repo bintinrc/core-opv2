@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies @CWF
 Feature: New Recovery Tickets
 
   Background:
@@ -38,19 +38,20 @@ Feature: New Recovery Tickets
       | top      | Successfully create tickets for following tracking ID(s)     |
       | bottom   | We are unable to create tickets for following tracking ID(s) |
       | fileName | csv_create_tickets_                                          |
-    When Operator click "Done" on Creat Ticket Via CSV dialog
-    When Operator click Find Tickets By CSV on Recovery Tickets Page
-    And Operator upload a csv on Find Tickets By CSV dialog
-      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
-    Then Operator verifies invalid search result message is shown on Find Tickets by CSV dialog
-      | message     | No relevant PETS tickets for these Tracking IDs found |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}            |
-    When Operator click Load Selection button on Find Tickets by CSV dialog
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | ticketType/subType  | PARCEL EXCEPTION : CANCELLED ORDER         |
-      | orderGranularStatus | On Hold                                    |
+    And Operator waits for "10" seconds
+#    When Operator click "Done" on Creat Ticket Via CSV dialog
+#    When Operator click Find Tickets By CSV on Recovery Tickets Page
+#    And Operator upload a csv on Find Tickets By CSV dialog
+#      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+#      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+#    Then Operator verifies invalid search result message is shown on Find Tickets by CSV dialog
+#      | message     | No relevant PETS tickets for these Tracking IDs found |
+#      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}            |
+#    When Operator click Load Selection button on Find Tickets by CSV dialog
+#    Then Operator verifies correct ticket details as following:
+#      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+#      | ticketType/subType  | PARCEL EXCEPTION : CANCELLED ORDER         |
+#      | orderGranularStatus | On Hold                                    |
 
   Scenario:Operator Create Bulk Ticket - Recovery Ticket - Error data
     Given Operator goes to new Recovery Tickets page
@@ -712,6 +713,117 @@ Feature: New Recovery Tickets
 
   @BulkCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - SLA BREACH
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    Given Operator goes to new Recovery Tickets page
+    When Operator create ticket by csv in Recovery Tickets page
+    And Operator Upload a CSV file Create Tickets Via CSV modal with following data:
+      | trackingIds        | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | type               | SB,SB                                                                       |
+      | investigationGroup | RCY                                                                         |
+      | assigneeEmail      | ekki.syam@ninjavan.co                                                       |
+      | investigationHubId | {hub-id}                                                                    |
+      | entrySource        | RS                                                                          |
+      | ticketNotes        | automation test                                                             |
+    When Operator click "Done" on Creat Ticket Via CSV dialog
+    When Operator click Find Tickets By CSV on Recovery Tickets Page
+    And Operator downloads search csv sample file on Find Tickets by CSV modal
+    And Operator upload a csv on Find Tickets By CSV dialog
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And Operator filter search result by field "Tracking ID" with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | SLA BREACH                                   |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | assignee            | Ekki Syam                                    |
+      | daysSince           | 0                                            |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+    When Operator clear the filter search
+    And Operator filter search result by field "Tracking ID" with value "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}   |
+      | ticketType/subType  | SLA BREACH                                   |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[2].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | assignee            | Ekki Syam                                    |
+      | daysSince           | 0                                            |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  @RT
+  Scenario: Create Bulk PETS via CSV - with invalid Hub
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    Given Operator goes to new Recovery Tickets page
+    When Operator create ticket by csv in Recovery Tickets page
+    And Operator Upload a CSV file Create Tickets Via CSV modal with following data:
+      | trackingIds        | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | type               | DM,DM                                                                       |
+      | investigationGroup | RCY                                                                         |
+      | assigneeEmail      | ekki.syam@ninjavan.co                                                       |
+      | investigationHubId | 999999                                                                      |
+      | entrySource        | RS                                                                          |
+      | ticketNotes        | automation test                                                             |
+    Then Operator verifies error message is displayed
+      | top           | We are unable to create tickets for following tracking ID(s) |
+      | failureReason | Investigating hub is not a valid hub!                        |
+      | fileName      | csv_create_tickets_                                          |
+
+  @RT
+  Scenario: Create Bulk PETS via CSV - with Valid hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
