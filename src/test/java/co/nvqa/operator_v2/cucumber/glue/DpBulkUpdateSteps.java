@@ -329,6 +329,22 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator edits the Max Capacity of pick DP via DP Bulk Update Page for {string} to {string}")
+  public void operatorEditsTheMaxCapacityOfPickDPViaDPBulkUpdatePageFor(String pickDp, String maxCapacity) {
+    if("XS".equalsIgnoreCase(pickDp)) {
+      dpBulkUpdatePage.maxPickCapacityXs.sendKeys(Integer.parseInt(maxCapacity));
+    } else if ("XL".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityXL.sendKeys(Integer.parseInt(maxCapacity));
+    }else if ("L".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityL.sendKeys(Integer.parseInt(maxCapacity));
+    }else if ("M".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityM.sendKeys(Integer.parseInt(maxCapacity));
+    }
+    else {
+      dpBulkUpdatePage.maxPickCapacityS.sendKeys(Integer.parseInt(maxCapacity));
+    }
+  }
+
   @And("Operator clicks on first checkbox")
   public void operatorClicksOnFirstCheckbox() {
     pause1s();

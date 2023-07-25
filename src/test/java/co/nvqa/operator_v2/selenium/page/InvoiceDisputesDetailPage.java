@@ -230,6 +230,9 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
     @FindBy(xpath = "//span[text() = 'Remarks (shown to shipper)']//parent::div//following-sibling::div//descendant::span[2]")
     public PageElement remarks;
 
+    @FindBy(xpath = "//input[@placeholder = 'Input here']")
+    public TextBox customRemarksInput;
+
     public ManualResolutionDisputedOrderModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }

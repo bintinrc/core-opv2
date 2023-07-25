@@ -234,17 +234,17 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
 
   public String operatorSendPayrollReport(File csvFile, Map<String, String> data) {
     String payrollSubject = null;
-
     driverAnnouncementTable.waitUntilTableLoaded();
-    while (!isElementExist(inputPayrollReport)) {
-      findElementBy(By.xpath(btnNewPayrollReportXpath)).click();
-    }
-    pause5s();
-    findElementBy(By.xpath(inputPayrollReport)).sendKeys(csvFile.getAbsolutePath());
-    if (!isElementExist(uploadErrorXpath)) {
-      waitUntilVisibilityOfElementLocated(btnSubmitPayrollReportXpath);
-      click(btnSubmitPayrollReportXpath);
-    }
+
+    doWithRetry(() -> {
+      click(btnNewPayrollReportXpath);
+      pause5s();
+      findElementBy(By.xpath(inputPayrollReport)).sendKeys(csvFile.getAbsolutePath());
+      if (!isElementExist(uploadErrorXpath)) {
+        waitUntilVisibilityOfElementLocated(btnSubmitPayrollReportXpath);
+        click(btnSubmitPayrollReportXpath);
+      }
+    }, "Submit payroll report");
     pause5s();
     if (data.get("subject") != null) {
       payrollSubject = data.get("subject").replaceAll("RANDOM_SUBJECT",
@@ -277,7 +277,6 @@ public class DriverAnnouncementPageV2 extends SimpleReactPage {
     if (isElementVisible(btnSendNewAnnouncement)) {
       click(btnSendNewAnnouncement);
     }
-
     return payrollSubject;
   }
 

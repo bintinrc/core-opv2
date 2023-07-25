@@ -576,6 +576,30 @@ Feature: DP Administration - DP Bulk Update
       | {imda-pick-bulk-update-opv2-dp-1-id} |
       | {imda-pick-bulk-update-opv2-dp-1-id} |
 
+  Scenario: Select DP IDs - DP Pick - Bulk Update DP Information - Enable Customer Collect - Add Max Capacity Pick for All Sizes costume values
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "pick_dp" condition into the textbox
+    When Operator clicks on Bulk Update on Apply Action Drop Down
+    And Operator enables "can_customer_collect" of DP via DP Bulk Update Page
+    And Operator edits the "Max Capacity" capacity to 25 of DP via DP Bulk Update Page
+    And Operator edits the "buffer Capacity" capacity to 25 of DP via DP Bulk Update Page
+    And Operator edits the Max Capacity of pick DP via DP Bulk Update Page for "M" to "15"
+    And Operator edits the Max Capacity of pick DP via DP Bulk Update Page for "L" to "10"
+    And Operator edits the Max Capacity of pick DP via DP Bulk Update Page for "XL" to "4"
+    And Operator edits the Max Capacity of pick DP via DP Bulk Update Page for "S" tp "20"
+    And Operator edits the Max Capacity of pick DP via DP Bulk Update Page for "XS" to "25"
+    Then Operator saves the updated settings via DP Bulk Update Page
+    Then Operator verifies that the toast of "Load Failure" will be shown
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
+    When DB Operator verifies dp details from bulk update for "Enable Customer Collect" and "Max Capacity" and "Buffer Capacity"
+      | dpId                                 |
+      | {imda-pick-bulk-update-opv2-dp-1-id} |
+      | {imda-pick-bulk-update-opv2-dp-1-id} |
+
   Scenario: Select DP IDs - DP Pick - Bulk Update DP Information - Enable Customer Collect - Add Max Capacity Pick for All Sizes
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Distribution Points -> DP Bulk Update
