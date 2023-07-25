@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -387,28 +388,14 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     selectionMenu.selectOption("Select All Shown");
   }
 
-  public String forceSuccessOrders() {
-    clearFilterTableOrderByTrackingId();
-    selectAllShown();
-    actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    String reason = "Force success from automated test";
-    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
-    manuallyCompleteOrderDialog.reasonForChange.setValue(reason);
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    manuallyCompleteOrderDialog.waitUntilInvisible();
-    waitUntilInvisibilityOfToast("Complete Order");
-    return reason;
-  }
-
-  public void forceSuccessOrders(String reason, String reasonDescr) {
+  public void forceSuccessOrders(String reason, String reasonDescription) {
     clearFilterTableOrderByTrackingId();
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
     manuallyCompleteOrderDialog.changeReason.setValue(reason);
-    if (StringUtils.isNotBlank(reasonDescr)) {
-      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    if (Objects.equals(reason, "Others (fill in below)")) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescription);
     }
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
