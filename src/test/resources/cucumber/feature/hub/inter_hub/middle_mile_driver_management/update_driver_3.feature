@@ -15,8 +15,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "firstName" on edit driver dialog with value "AutomationFirstName"
-	Then DB Operator verifies driver "firstName" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "AutomationFirstName" is updated
+	And Operator edit "firstName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "AutomationFirstName"
+	And API MM - Operator verifies "firstName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Driver Details - Last Name
@@ -28,8 +28,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "lastName" on edit driver dialog with value "AutomationLastName"
-	Then DB Operator verifies driver "lastName" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "AutomationLastName" is updated
+	And Operator edit "lastName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "AutomationLastName"
+	And API MM - Operator verifies "lastName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Driver Details - Display Name
@@ -41,8 +41,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "displayName" on edit driver dialog with value "Display Name Automation"
-	Then DB Operator verifies driver "displayName" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Display Name Automation" is updated
+	And Operator edit "displayName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Display Name Automation"
+	And API MM - Operator verifies "displayName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Driver Details - First Name with contains either Letters, Numbers, Hyphens, Underscores, and Parentheses
@@ -54,7 +54,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	When Operator edits "firstName" on edit driver dialog with invalid value "Automation_First_Name"
+	And Operator edit "firstName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Automation_First_Name"
+	Then Operator clicks "Save" button on Middle Mile Drivers Page
 	Then Operator verifies toast with message "Request failed with status code 400" is shown on edit Middle Mile Driver popup
 
   @DeleteMiddleMileDriver
@@ -67,7 +68,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	When Operator edits "lastName" on edit driver dialog with invalid value "Automation_First_Name"
+	And Operator edit "lastName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Automation_Last_Name"
+	Then Operator clicks "Save" button on Middle Mile Drivers Page
 	Then Operator verifies toast with message "Request failed with status code 400" is shown on edit Middle Mile Driver popup
 
   @DeleteMiddleMileDriver
@@ -80,8 +82,8 @@ Feature: Middle Mile Driver Management - Update Driver 3
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "displayName" on edit driver dialog with value "Display Name Automation"
-	Then DB Operator verifies driver "displayName" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Display Name Automation" is updated
+	And Operator edit "displayName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Automation_Display_Name"
+	And API MM - Operator verifies "displayName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

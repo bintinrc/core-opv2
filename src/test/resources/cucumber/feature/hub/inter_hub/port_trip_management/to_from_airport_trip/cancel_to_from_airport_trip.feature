@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Warehouse to Airport Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -27,12 +27,12 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Warehouse to Airport Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -57,12 +57,12 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -84,12 +84,12 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -114,12 +114,12 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Other Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -146,7 +146,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies action buttons below are disable on Port Trip Management page:
       | Cancel |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Cancelled Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -168,14 +168,14 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
     Then Operator verifies action buttons below are disable on Port Trip Management page:
       | Cancel |
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Cancel Airport to Airport Trip with Pending Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -200,7 +200,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Flight Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page

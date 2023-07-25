@@ -5,7 +5,7 @@ Feature: Airport Trip Management - View MAWB
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: View MAWB on Pending Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -38,7 +38,7 @@ Feature: Airport Trip Management - View MAWB
     When Operator clicks "View MAWB" button on Port Trip Management page
     Then Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: View MAWB on Transit Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -72,7 +72,7 @@ Feature: Airport Trip Management - View MAWB
     When Operator clicks "View MAWB" button on Port Trip Management page
     Then Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: View MAWB on Arrived Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -107,7 +107,7 @@ Feature: Airport Trip Management - View MAWB
     When Operator clicks "View MAWB" button on Port Trip Management page
     Then Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: View MAWB on Completed Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
@@ -142,7 +142,7 @@ Feature: Airport Trip Management - View MAWB
     When Operator clicks "View MAWB" button on Port Trip Management page
     Then Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page
 
-  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @CancelCreatedMovementTrips
+  @DeleteCreatedShipments @DeleteCreatedMAWBsV2 @DeleteCreatedPorts @DeleteCreatedHubs @CancelCreatedMovementTrips
   Scenario: View MAWB on Cancelled Flight Trip
     Given API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |

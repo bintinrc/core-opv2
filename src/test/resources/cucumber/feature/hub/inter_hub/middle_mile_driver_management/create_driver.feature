@@ -99,8 +99,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber             | licenseNumber | employmentType            | username |
-      | RANDOM | {mm-driver-hub-name-sg} | {default-phone-number} | RANDOM        | {default-employment-type} | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}   |
+      | name   | hub                     | contactNumber          | licenseNumber | employmentType            | username                                                 |
+      | RANDOM | {mm-driver-hub-name-sg} | {default-phone-number} | RANDOM        | {default-employment-type} | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} |
     Then Operator verifies "Username already registered" error notification is shown on Middle Mile Drivers Page
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded

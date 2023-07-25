@@ -11,6 +11,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.text.RandomStringGenerator;
 import org.slf4j.Logger;
@@ -88,7 +90,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String MALAYSIA = "malaysia";
   private static final String PHILIPPINES = "philippines";
 
-  private static final String MIDDLE_MILE_DRIVERS_URL = "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers";
+  private static final String MIDDLE_MILE_DRIVERS_URL = TestConstants.OPERATOR_PORTAL_BASE_URL + "/sg/middle-mile-drivers";
 
   private static Boolean IS_FIRST_TIME_SETUP_DRIVER = true;
 
@@ -399,6 +401,36 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     middleMileDriversPage.editDriverByWithValue(column, resolvedValue);
   }
 
+  public boolean isValidInput(String field, String value) {
+    if (field.matches("(firstName|lastName)") && value.matches("^[a-zA-Z]+$")) {
+      return true;
+    } else if (!field.matches("(firstName|lastName)")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  @When("Operator edit {string} of Middle Mile Driver {string} on edit driver dialog with value {string}")
+  public void operatorEditDriverOnEditDriverDialogWithValue(String column, String storageKey, String value) {
+    String resolvedValue = resolveValue(value);
+    MiddleMileDriver driver = resolveValue(storageKey);
+    Map<String, String> driverMap = convertValueToMap(driver, String.class, String.class);
+
+    if (value.contains("Outsourced - Vendors") || value.contains("Outsourced - Manpower Agency")) {
+      String[] values = value.split("\\|");
+      middleMileDriversPage.editDriverByWithVendorValue(values[0], values[1], !values[1].equals("-"));
+      resolvedValue = values[0];
+      driverMap.put("vendorName", values[1]);
+    } else {
+      middleMileDriversPage.editDriverByWithValue(column, resolvedValue, isValidInput(column, value));
+    }
+
+    driverMap.replace(column, resolvedValue);
+    putInList(KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS, fromMapCamelCase(driverMap, MiddleMileDriver.class), (a, b) -> Objects.equals(
+        a.getId(), b.getId()));
+  }
+
   @Then("Operator verifies {string} is updated with value {string}")
   public void operatorVerifiesDriverIsUpdatedWithValue(String column, String value) {
     String resolvedValue = resolveValue(value);
@@ -458,11 +490,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Then("Make sure URL show is {string}")
   public void VerifyURLinMiddleDriverPage(String URL){
-    if (URL.contains("<id>")){
-      Hub hub = get(KEY_HUB_INFO);
-      String hubID = hub.getId().toString();
-      URL = URL.replaceAll("<id>",hubID);
-    }
     middleMileDriversPage.verifyURLofPage(URL);
   }
 
@@ -690,6 +717,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.clickCreateDriversButton();
         break;
       case "Save to Create":
+      case "Save":
         middleMileDriversPage.saveCreateDriver.click();
         break;
       case "Load Drivers":
@@ -733,6 +761,19 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @Then("Operator verifies toast with message {string} is shown on edit Middle Mile Driver popup")
   public void operatorVerifiesToastWithMessageIsShownOnEditMiddleMileDriverPopup(String errorMessage) {
     middleMileDriversPage.verifiesToastWithMessage(errorMessage);
+  }
+
+  @And("Operator updates License Type of PH Middle Mile Driver {string} to {string} on the middle mile driver page")
+  public void operatorUpdatesLicenseTypeOfPhMiddleMileDriverToValueOnMiddleMileDriverPage(String storageKey, String updateValue) {
+    MiddleMileDriver driver = resolveValue(storageKey);
+    String value = resolveValue(updateValue);
+    if (value.equalsIgnoreCase("all types")) {
+      value = "B,B1,B2,C,Restriction 1,Restriction 2,Restriction 3";
+    }
+    middleMileDriversPage.updatePhLicenseTypes(value);
+
+    driver.setLicenseType(value);
+    putInList(KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS, driver, (a, b) -> Objects.equals(a.getId(), b.getId()));
   }
 
   @And("Operator edit License Type with uncheck {string} value and update with {string} on the middle mile driver page")
