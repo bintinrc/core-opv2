@@ -294,85 +294,85 @@ public class InvoiceDisputesSteps extends AbstractSteps {
 
   @And("Operator verifies Manual Resolution data in manual resolution modal using data below:")
   public void verifyManualResolution(Map<String, String> mapData) {
-    final Map<String, String> finaMapData = resolveKeyValues(mapData);
+    final Map<String, String> finalMapData = resolveKeyValues(mapData);
     invoiceDisputesDetailPage.inFrame(page -> {
       SoftAssertions softAssertions = new SoftAssertions();
-      if (finaMapData.containsKey("originalDeliveryFee")) {
+      if (finalMapData.containsKey("originalDeliveryFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.originalDeliveryFee.getValue())
             .as("Original Delivery fee is correct")
-            .isEqualTo(finaMapData.get("originalDeliveryFee"));
+            .isEqualTo(finalMapData.get("originalDeliveryFee"));
       }
-      if (finaMapData.containsKey("originalRTSFee")) {
+      if (finalMapData.containsKey("originalRTSFee")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.originalRTSFee.getValue())
-            .as("Original RTS fee is correct").isEqualTo(finaMapData.get("originalRTSFee"));
+            .as("Original RTS fee is correct").isEqualTo(finalMapData.get("originalRTSFee"));
       }
-      if (finaMapData.containsKey("originalCODFee")) {
+      if (finalMapData.containsKey("originalCODFee")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.originalCODFee.getValue())
-            .as("Original COD fee is correct").isEqualTo(finaMapData.get("originalCODFee"));
+            .as("Original COD fee is correct").isEqualTo(finalMapData.get("originalCODFee"));
       }
-      if (finaMapData.containsKey("originalInsuranceFee")) {
+      if (finalMapData.containsKey("originalInsuranceFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.originalInsuranceFee.getValue())
             .as("Original Insurance fee is correct")
-            .isEqualTo(finaMapData.get("originalInsuranceFee"));
+            .isEqualTo(finalMapData.get("originalInsuranceFee"));
       }
-      if (finaMapData.containsKey("originalTax")) {
+      if (finalMapData.containsKey("originalTax")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.originalTax.getValue())
-            .as("Original Tax is correct").isEqualTo(finaMapData.get("originalTax"));
+            .as("Original Tax is correct").isEqualTo(finalMapData.get("originalTax"));
       }
-      if (finaMapData.containsKey("originalBillAmount")) {
+      if (finalMapData.containsKey("originalBillAmount")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.originalBillingAmount.getValue())
-            .as("Original Bill amount is correct").isEqualTo(finaMapData.get("originalBillAmount"));
+            .as("Original Bill amount is correct").isEqualTo(finalMapData.get("originalBillAmount"));
       }
-      if (finaMapData.containsKey("revisedDeliveryFee")) {
+      if (finalMapData.containsKey("revisedDeliveryFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.revisedDeliveryFee.getValue())
-            .as("Revised Delivery fee is correct").isEqualTo(finaMapData.get("revisedDeliveryFee"));
+            .as("Revised Delivery fee is correct").isEqualTo(finalMapData.get("revisedDeliveryFee"));
       }
-      if (finaMapData.containsKey("revisedRTSFee")) {
+      if (finalMapData.containsKey("revisedRTSFee")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.revisedRTSFee.getValue())
-            .as("Revised RTS fee is correct").isEqualTo(finaMapData.get("revisedRTSFee"));
+            .as("Revised RTS fee is correct").isEqualTo(finalMapData.get("revisedRTSFee"));
       }
-      if (finaMapData.containsKey("revisedCODFee")) {
+      if (finalMapData.containsKey("revisedCODFee")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.revisedCODFee.getValue())
-            .as("Revised COD fee is correct").isEqualTo(finaMapData.get("revisedCODFee"));
+            .as("Revised COD fee is correct").isEqualTo(finalMapData.get("revisedCODFee"));
       }
-      if (finaMapData.containsKey("revisedInsuranceFee")) {
+      if (finalMapData.containsKey("revisedInsuranceFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.revisedInsuranceFee.getValue())
             .as("Revised Insurance fee is correct")
-            .isEqualTo(finaMapData.get("revisedInsuranceFee"));
+            .isEqualTo(finalMapData.get("revisedInsuranceFee"));
       }
-      if (finaMapData.containsKey("revisedTax")) {
+      if (finalMapData.containsKey("revisedTax")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.revisedTax.getValue())
-            .as("Revised tax is correct").isEqualTo(finaMapData.get("revisedTax"));
+            .as("Revised tax is correct").isEqualTo(finalMapData.get("revisedTax"));
       }
-      if (finaMapData.containsKey("revisedTotalBillAmount")) {
+      if (finalMapData.containsKey("revisedTotalBillAmount")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.revisedTotalBillAmount.getValue())
             .as("Revised Total Bill amount is correct")
-            .isEqualTo(finaMapData.get("revisedTotalBillAmount"));
+            .isEqualTo(finalMapData.get("revisedTotalBillAmount"));
       }
-      if (finaMapData.containsKey("deltaAmount")) {
+      if (finalMapData.containsKey("deltaAmount")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.deltaAmount.getValue())
             .as("Delta between original bill amount and revised amount is correct")
-            .isEqualTo(finaMapData.get("deltaAmount"));
+            .isEqualTo(finalMapData.get("deltaAmount"));
       }
-      if (finaMapData.containsKey("remarks")) {
+      if (finalMapData.containsKey("remarks")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.remarks.getText())
-            .as("Remarks are correct").isEqualTo(finaMapData.get("remarks"));
+            .as("Remarks are correct").isEqualTo(finalMapData.get("remarks"));
       }
-      if (finaMapData.containsKey("customRemarkInput")) {
+      if (finalMapData.containsKey("customRemarkInput")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.customRemarksInput.getValue())
-            .as("Custom remarks are correct").isEqualTo(finaMapData.get("customRemarkInput"));
+            .as("Custom remarks are correct").isEqualTo(finalMapData.get("customRemarkInput"));
       }
-      if (finaMapData.containsKey("internalCommentary")) {
+      if (finalMapData.containsKey("internalCommentary")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.internalCommentary.getValue())
-            .as("internal Commentary is correct").isEqualTo(finaMapData.get("internalCommentary"));
+            .as("internal Commentary is correct").isEqualTo(finalMapData.get("internalCommentary"));
       }
       softAssertions.assertAll();
     });
@@ -408,37 +408,37 @@ public class InvoiceDisputesSteps extends AbstractSteps {
 
   @And("Operator enters Manual Resolution data using data below:")
   public void enterRevisedResolutionData(Map<String, String> mapData) {
-    final Map<String, String> finMapData = resolveKeyValues(mapData);
+    final Map<String, String> finalMapData = resolveKeyValues(mapData);
     invoiceDisputesDetailPage.inFrame(page -> {
-      if (finMapData.containsKey("revisedDeliveryFee")) {
+      if (finalMapData.containsKey("revisedDeliveryFee")) {
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.setValue(
-            finMapData.get("revisedDeliveryFee"));
+            finalMapData.get("revisedDeliveryFee"));
       }
-      if (finMapData.containsKey("revisedRTSFee")) {
+      if (finalMapData.containsKey("revisedRTSFee")) {
         page.manualResolutionDisputedOrderModal.revisedRTSFee.setValue(
-            finMapData.get("revisedRTSFee"));
+            finalMapData.get("revisedRTSFee"));
       }
-      if (finMapData.containsKey("revisedCODFee")) {
+      if (finalMapData.containsKey("revisedCODFee")) {
         page.manualResolutionDisputedOrderModal.revisedCODFee.setValue(
-            finMapData.get("revisedCODFee"));
+            finalMapData.get("revisedCODFee"));
       }
-      if (finMapData.containsKey("revisedInsuranceFee")) {
+      if (finalMapData.containsKey("revisedInsuranceFee")) {
         page.manualResolutionDisputedOrderModal.revisedInsuranceFee.setValue(
-            finMapData.get("revisedInsuranceFee"));
+            finalMapData.get("revisedInsuranceFee"));
       }
-      if (finMapData.containsKey("revisedTax")) {
-        page.manualResolutionDisputedOrderModal.revisedTax.setValue(finMapData.get("revisedTax"));
+      if (finalMapData.containsKey("revisedTax")) {
+        page.manualResolutionDisputedOrderModal.revisedTax.setValue(finalMapData.get("revisedTax"));
       }
-      if (finMapData.containsKey("remarks")) {
-        page.manualResolutionDisputedOrderModal.remark.selectValue(finMapData.get("remarks"));
+      if (finalMapData.containsKey("remarks")) {
+        page.manualResolutionDisputedOrderModal.remark.selectValue(finalMapData.get("remarks"));
       }
-      if (finMapData.containsKey("customRemarkInput")) {
+      if (finalMapData.containsKey("customRemarkInput")) {
         page.manualResolutionDisputedOrderModal.customRemarksInput.setValue(
-            finMapData.get("customRemarkInput"));
+            finalMapData.get("customRemarkInput"));
       }
-      if (finMapData.containsKey("internalCommentary")) {
+      if (finalMapData.containsKey("internalCommentary")) {
         page.manualResolutionDisputedOrderModal.internalCommentary.setValue(
-            finMapData.get("internalCommentary"));
+            finalMapData.get("internalCommentary"));
       }
     });
   }
