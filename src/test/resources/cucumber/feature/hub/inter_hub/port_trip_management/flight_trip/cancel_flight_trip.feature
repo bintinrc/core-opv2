@@ -39,7 +39,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Flight Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
@@ -79,7 +79,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Flight Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     And Operator verifies "CANCELLED" button is shown on Port Trip Management page
