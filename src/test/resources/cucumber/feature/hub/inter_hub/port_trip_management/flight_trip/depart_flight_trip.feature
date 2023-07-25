@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Depart Flight Trip 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Depart Airport to Airport Trip with Pending Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

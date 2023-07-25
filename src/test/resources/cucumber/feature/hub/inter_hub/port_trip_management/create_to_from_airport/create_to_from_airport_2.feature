@@ -5,7 +5,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Create To/from Airport Trip with disabled Destination Hub in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -27,7 +27,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Create To/from Airport Trip with disabled Origin Hub in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -49,7 +49,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with Flight Departure Date before today in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -60,7 +60,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Then Operator verifies past date picker "{date: 1 days ago, yyyy-MM-dd}" is disable on "Create Airport Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip without Assign Driver in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -79,7 +79,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | comments            | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {local-hub-3-name} (Warehouse) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with Remove the filled value in the mandatory field in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -93,7 +93,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Then Operator verifies Mandatory require error message of "Origin Facility" field on "Create Airport Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with Same Origin and Destination in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -107,7 +107,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     Then Operator verifies same hub error messages on "Create Airport Trip" Port Trip Management page
     And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with zero duration time in Port Trip Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

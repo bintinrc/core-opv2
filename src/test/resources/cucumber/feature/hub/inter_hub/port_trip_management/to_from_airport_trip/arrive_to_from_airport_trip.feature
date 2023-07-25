@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -32,7 +32,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -59,7 +59,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Warehouse to Airport Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -87,7 +87,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Warehouse to Airport Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -115,7 +115,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Warehouse to Airport Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -144,7 +144,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Airport to Warehouse Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -172,7 +172,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Airport to Warehouse Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -200,7 +200,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} arrived" display on Port Trip Management page
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Arrive Airport to Warehouse Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

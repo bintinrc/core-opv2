@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Edit Flight Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Flight Trip - Comments
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -43,7 +43,7 @@ Feature: Airport Trip Management - Edit Flight Trip
     Then Operator verify parameters of air trip "KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1]" on Port Trip Management page:
       | comment | API automation update                      |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Flight Trip - Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -81,7 +81,7 @@ Feature: Airport Trip Management - Edit Flight Trip
     Then Operator verify parameters of air trip "KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1]" on Port Trip Management page:
       | flight_no | 23456       |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Edit Flight Trip - Unable to edit all mandatory field
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

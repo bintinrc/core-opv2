@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip - Comments
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -44,7 +44,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | tripID  | {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} |
       | comment | API automation update edit                     |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Single Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -88,7 +88,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Multiple Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -132,7 +132,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS |
       | comment | API automation update                                                               |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Multiple Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -180,7 +180,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS |
       | comment | API automation update                                                                                                                                                   |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign >4 Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -228,7 +228,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS;4 |
       | comment | API automation update                                                                                                                                                   |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Expired License Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -269,7 +269,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Expired Employment Date Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -310,7 +310,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Expired License Driver before Submit
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -351,7 +351,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
+  @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver @ForceCompleteCreatedMovementTrips
   Scenario: Edit To/from Airport Trip with Assign Expired Employment Date Driver before Submit
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
