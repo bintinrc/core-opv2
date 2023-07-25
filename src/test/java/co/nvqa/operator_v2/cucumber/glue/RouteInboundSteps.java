@@ -46,7 +46,6 @@ public class RouteInboundSteps extends AbstractSteps {
   private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";
   private static final String FETCH_BY_TRACKING_ID = "FETCH_BY_TRACKING_ID";
   private static final String FETCH_BY_DRIVER = "FETCH_BY_DRIVER";
-  private static final String FETCH_BY_INVALID_ROUTE = "FETCH_BY_INVALID_ROUTE";
   private static final String KEY_ROUTE_INBOUND_COMMENT = "KEY_ROUTE_INBOUND_COMMENT";
 
   private RouteInboundPage routeInboundPage;
@@ -80,18 +79,25 @@ public class RouteInboundSteps extends AbstractSteps {
       case FETCH_BY_DRIVER:
         routeInboundPage.fetchRouteByDriver(hubName, fetchByValue, routeId);
         break;
-      case FETCH_BY_INVALID_ROUTE:
 
     }
   }
 
-  @When("Operator get Route Summary Details of Invalid Route on Route Inbound page using data below:")
+  @When("Operator get Route Summary Details of Invalid Data on Route Inbound page using data below:")
   public void operatorGetInvalidRouteDetailsOnRouteInboundPageUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
-    String hubName = mapOfData.get("hubName");
-    Long routeId = Long.valueOf(mapOfData.get("routeId"));
-    routeInboundPage.fetchRouteByRouteId(hubName, routeId);
+    final String hubName = mapOfData.get("hubName");
+    final String fetchBy = mapOfData.get("fetchBy");
+    final String fetchByValue = mapOfData.get("fetchByValue");
+    switch (fetchBy.toUpperCase()) {
+      case FETCH_BY_ROUTE_ID:
+        final long routeId = Long.valueOf(mapOfData.get("routeId"));
+        routeInboundPage.fetchRouteByRouteId(hubName, routeId);
+        break;
+      case FETCH_BY_TRACKING_ID:
+        routeInboundPage.fetchRouteByTrackingId(hubName, fetchByValue, null);
+    }
   }
 
   private Long getRouteId(String value) {
@@ -145,8 +151,9 @@ public class RouteInboundSteps extends AbstractSteps {
       if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
         List<RouteResponse> routes = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
         RouteResponse route = routes.get(routes.size() - 1);
-        routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
-            DTF_ISO_8601_LITE);
+        routeDate = StandardTestUtils
+            .convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
+                DTF_ISO_8601_LITE);
       } else {
         routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
             DTF_NORMAL_DATE);
@@ -181,13 +188,15 @@ public class RouteInboundSteps extends AbstractSteps {
               val -> StringUtils.equalsIgnoreCase(expected.getTrackingId(), val.getTrackingId()))
           .findFirst()
           .orElseThrow(() -> new AssertionError(
-              "Order " + expected.getTrackingId() + " was not found in Problematic Orders table"));
+              "Order " + expected.getTrackingId()
+                  + " was not found in Problematic Orders table"));
       expected.compareWithActual(actual);
     });
   }
 
   @Then("Operator verifies that Problematic Waypoints table exactly contains records:")
-  public void operatorVerifyProblematicWaypointsRecordsExactly(List<Map<String, String>> data) {
+  public void operatorVerifyProblematicWaypointsRecordsExactly
+      (List<Map<String, String>> data) {
     Assertions.assertThat(routeInboundPage.problematicWaypointsTable.getRowsCount())
         .as("Number of problematic waypoints").isEqualTo(data.size());
 
@@ -228,8 +237,9 @@ public class RouteInboundSteps extends AbstractSteps {
           routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(),
               ZoneId.of("UTC"), DTF_ISO_8601_LITE);
         } else {
-          routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
-              DTF_ISO_8601_LITE);
+          routeDate = StandardTestUtils
+              .convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+                  DTF_ISO_8601_LITE);
         }
       } catch (DateTimeParseException ex) {
         throw new NvTestRuntimeException("Failed to parse route date.", ex);
@@ -306,7 +316,6 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openPendingWaypointsDialog();
   }
 
-
   @Then("^Operator verify Shippers Info in (.+) dialog using data below:$")
   public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
@@ -324,7 +333,8 @@ public class RouteInboundSteps extends AbstractSteps {
 
   @SuppressWarnings("unchecked")
   @Then("^Operator verify Reservations table in (.+) dialog using data below:$")
-  public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String status,
+  public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String
+      status,
       List<Map<String, String>> listOfData) {
     List<WaypointReservationInfo> expectedReservationsInfo = listOfData.stream().map(data ->
     {
@@ -353,7 +363,8 @@ public class RouteInboundSteps extends AbstractSteps {
         Reservation reservation = get(KEY_CREATED_RESERVATION);
         value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
       } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_")) {
-        int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
+        int index =
+            Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
         Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS))
             .get(index);
         value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
@@ -369,7 +380,8 @@ public class RouteInboundSteps extends AbstractSteps {
         Reservation reservation = get(KEY_CREATED_RESERVATION);
         value = reservation.getApproxVolume();
       } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_")) {
-        int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
+        int index =
+            Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
         Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS))
             .get(index);
         value = reservation.getApproxVolume();
@@ -421,7 +433,8 @@ public class RouteInboundSteps extends AbstractSteps {
         int index = Integer.parseInt(value.replace("CREATED_ORDER_FROM_", "").trim()) - 1;
         Order order = ((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).get(index);
         String address =
-            order.getFromAddress1() + " " + order.getFromAddress2() + " " + order.getFromPostcode()
+            order.getFromAddress1() + " " + order.getFromAddress2() + " " + order
+                .getFromPostcode()
                 + " " + order.getFromCountry();
         orderInfo.setLocation(address.trim());
       } else if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value)) {
@@ -599,7 +612,8 @@ public class RouteInboundSteps extends AbstractSteps {
       Assertions.assertThat(routeInboundPage.photoDetailsDialog.contact.getNormalizedText())
           .as("Waypoint contact").isEqualTo(value);
     }
-    String submissionDate = routeInboundPage.photoDetailsDialog.submissionDate.getNormalizedText();
+    String submissionDate = routeInboundPage.photoDetailsDialog.submissionDate
+        .getNormalizedText();
     Assertions.assertThat(submissionDate).as("Submission date").isNotEmpty();
     Assertions.assertThat(routeInboundPage.photoDetailsDialog.submissionDate2.getNormalizedText())
         .as("Submission date below the photo").isEqualTo(submissionDate);
@@ -664,7 +678,8 @@ public class RouteInboundSteps extends AbstractSteps {
           Map<String, String> actualWpParams = actualParams.stream()
               .filter(params -> StringUtils.equalsIgnoreCase(params.get("address"), finalValue))
               .findFirst().orElseThrow(
-                  () -> new AssertionError("Waypoint with address [" + finalValue + "] was not found"));
+                  () -> new AssertionError(
+                      "Waypoint with address [" + finalValue + "] was not found"));
           value = waypointParams.get("photo");
           if (StringUtils.isNotBlank(value)) {
             Assertions.assertThat(actualWpParams.get("photo")).as("Photo src").isEqualTo(value);
@@ -903,7 +918,6 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.endSession.clickAndWaitUntilDone();
     routeInboundPage.waitUntilVisibilityOfToast("Inbound completed for route " + routeId);
   }
-
 
   @Then("Operator ends session incompletely for route {string} with reason as {string}")
   public void operator_ends_session_incompletely_for_route_with_reason_as(String routeId,

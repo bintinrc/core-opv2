@@ -161,9 +161,10 @@ Feature: Route Inbound Screen 1
   Scenario: Get Route Details by Route ID - Route doesn't Exist
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inbounding -> Route Inbound
-    And Operator get Route Summary Details of Invalid Route on Route Inbound page using data below:
-      | hubName | {hub-name} |
-      | routeId | 123456     |
+    And Operator get Route Summary Details of Invalid Data on Route Inbound page using data below:
+      | hubName | {hub-name}        |
+      | fetchBy | FETCH_BY_ROUTE_ID |
+      | routeId | 123456            |
     Then Operator verify error message displayed on Route Inbound:
       | status       | 404 Unknown                   |
       | errorCode    | 103019                        |
