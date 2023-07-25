@@ -363,7 +363,7 @@ Feature: Add To Shipment 4
       | Sea Haul     | SEA_HAUL          |
       | Others       | OTHERS            |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Create New Shipment - with selected all mandatory fields
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -401,7 +401,7 @@ Feature: Add To Shipment 4
       | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | mawb            | null                                                |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Create New Shipment - without selected any fields
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -444,7 +444,7 @@ Feature: Add To Shipment 4
     Then Operator verifies same hubs alert in Create Shipment modal on Add to Shipment page
     And Operator verifies Create Shipment button is disabled in Create Shipment modal on Add to Shipment page
 
-  @DeleteCreatedShipments @DeleteHubsViaAPI @DeleteHubsViaDb
+  @HappyPath @DeleteCreatedShipments @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Can not create new shipment using virtual hubs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Hub using data below:

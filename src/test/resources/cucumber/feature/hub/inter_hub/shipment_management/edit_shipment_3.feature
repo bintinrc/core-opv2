@@ -90,7 +90,7 @@ Feature: Shipment Management - Edit Shipment 3
     When Operator clicks on reopen shipment button under the Apply Action
     Then Operator verifies that the Reopen Shipment Button is disabled
 
-  @DeleteShipment @CloseNewWindows
+  @HappyPath @DeleteShipment @CloseNewWindows
   Scenario: Upload Bulk Orders to Shipment with Valid Tracking ID Data (uid:db962525-cadb-4314-8e90-1a5d7bb3a3a4)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -122,7 +122,7 @@ Feature: Shipment Management - Edit Shipment 3
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
-  @DeleteShipment
+  @HappyPath @DeleteShipment
   Scenario: Upload Bulk Orders to Shipment with Invalid Tracking ID Data (uid:06c9f41b-780b-40f3-8c34-d422ded305f6)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management

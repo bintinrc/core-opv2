@@ -43,7 +43,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select All SID from Sum up Report and Update MAWB - Create New MAWB Number
     Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -79,7 +79,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Vendor
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -124,7 +124,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Origin Airport
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -169,7 +169,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Destination Airport
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -259,7 +259,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Invalid Format
     Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -376,7 +376,7 @@ Feature: Update MAWB
     And Operator click update button only on shipment weight update mawb page
     And Operator click cancel on the Shipment weight update confirm dialog
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Empty MAWB
     Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -412,7 +412,7 @@ Feature: Update MAWB
     Then Operator verify Shipment Weight Update MAWB page UI has error
       | message     |                                 |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Update MAWB without Download Sum Up Report - Create New MAWB Number
     Given API MM - Operator creates multiple 5 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -445,7 +445,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Update MAWB without Download Sum Up Report - Update Vendor
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -487,7 +487,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Update MAWB without Download Sum Up Report - Update Origin Airport
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -529,7 +529,7 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Update MAWB without Download Sum Up Report - Update Destination Airport
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

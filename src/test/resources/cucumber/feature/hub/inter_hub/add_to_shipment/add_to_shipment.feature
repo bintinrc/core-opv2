@@ -32,7 +32,7 @@ Feature: Add To Shipment
     And Operator verify order event on Edit order page using data below:
       | name | ADDED TO SHIPMENT |
 
-  @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder
   Scenario: Close Shipment (uid:1f5ea281-37d0-4f32-a5b7-52033eae0486)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -56,7 +56,7 @@ Feature: Add To Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Remove Field (uid:47720f77-304f-4aeb-a114-57695f24a050)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
