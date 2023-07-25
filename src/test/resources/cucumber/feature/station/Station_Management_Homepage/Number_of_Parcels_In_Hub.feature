@@ -81,7 +81,7 @@ Feature: Number of Parcels In Hub
       | reporterName     | {ticketing-creator-user-name}           |
       | reporterEmail    | {ticketing-creator-user-email}          |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    Then API Core - Verifies order state:
+    Then API Core -  Wait for following order state:
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -132,7 +132,7 @@ Feature: Number of Parcels In Hub
       | reporterName     | {ticketing-creator-user-name}           |
       | reporterEmail    | {ticketing-creator-user-email}          |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    Then API Core - Verifies order state:
+    Then API Core -  Wait for following order state:
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -165,34 +165,39 @@ Feature: Number of Parcels In Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <Outcome>                 |
-      | newInstructions         | GENERATED                 |
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | CUSTOMER RECEIVED | Completed   |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome      | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | CUSTOMER RECEIVED | RESOLVED     | COMPLETED   |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Found-Inbounded (uid:a1767cec-1039-4743-8f8a-210e8cab9255)
@@ -214,34 +219,39 @@ Feature: Number of Parcels In Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <Outcome>                 |
-      | newInstructions         | GENERATED                 |
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed
 
     Examples:
-      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | FOUND - INBOUND | Transit     |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | RESOLVED     | TRANSIT     |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Undeclared (uid:d26b7fca-7087-4fd1-af2b-15e4a7c6f7e6)
@@ -263,34 +273,39 @@ Feature: Number of Parcels In Hub
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <Outcome>                 |
-      | newInstructions         | GENERATED                 |
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                         | OrderStatus |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - UNDECLARED | Transit     |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome                    | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | LOST - NO RESPONSE - UNDECLARED | RESOLVED     | TRANSIT     |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Declared (uid:e1957051-c693-420f-8650-073a9bcb023b)
@@ -312,34 +327,39 @@ Feature: Number of Parcels In Hub
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <Outcome>                 |
-      | newInstructions         | GENERATED                 |
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome                       | OrderStatus |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - NO RESPONSE - DECLARED | Cancelled   |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome                  | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | LOST - NO RESPONSE - DECLARED | RESOLVED     | CANCELLED   |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel of Cancelled Missing Ticket Type (uid:0c3ca8da-7671-4e3c-bd28-8adb6bfb07f5)
@@ -361,34 +381,39 @@ Feature: Number of Parcels In Hub
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <Outcome>                 |
-      | newInstructions         | GENERATED                 |
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator verify order status is "<OrderStatus>" on Edit Order page
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | <OrderStatus>                              |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed
 
     Examples:
-      | HubName       | HubId       | TileName                 | Status    | KeepCurrentOrderOutcome | Outcome            | OrderStatus |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | CANCELLED | No                      | NV DID NOT RECEIVE | Transit     |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome       | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | NV DID NOT RECEIVE | CANCELLED    | TRANSIT     |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel of Pending Missing Ticket Type
@@ -410,26 +435,24 @@ Feature: Number of Parcels In Hub
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | entrySource             | CUSTOMER COMPLAINT                         |
-      | investigatingDepartment | Fleet (First Mile)                         |
-      | investigatingHub        | <HubName>                                  |
-      | ticketType              | MISSING                                    |
-      | orderOutcomeMissing     | LOST - DECLARED                            |
-      | parcelDescription       | GENERATED                                  |
-      | custZendeskId           | 1                                          |
-      | shipperZendeskId        | 1                                          |
-      | ticketNotes             | GENERATED                                  |
-    Then Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
 
     Examples:
-      | HubName       | HubId       | TileName                 |
-      | {hub-name-24} | {hub-id-24} | Number of parcels in hub |
+      | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome       | TicketStatus | OrderStatus |
+      | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | NV DID NOT RECEIVE | RESOLVED     | TRANSIT     |
+
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
