@@ -364,6 +364,11 @@ public class InvoiceDisputesSteps extends AbstractSteps {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.remarks.getText())
             .as("Remarks are correct").isEqualTo(finaMapData.get("remarks"));
       }
+      if (finaMapData.containsKey("customRemarkInput")) {
+        softAssertions.assertThat(
+                page.manualResolutionDisputedOrderModal.customRemarksInput.getValue())
+            .as("Custom remarks are correct").isEqualTo(finaMapData.get("customRemarkInput"));
+      }
       if (finaMapData.containsKey("internalCommentary")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.internalCommentary.getValue())
@@ -403,30 +408,37 @@ public class InvoiceDisputesSteps extends AbstractSteps {
 
   @And("Operator enters Manual Resolution data using data below:")
   public void enterRevisedResolutionData(Map<String, String> mapData) {
-    final Map<String, String> finaMapData = resolveKeyValues(mapData);
+    final Map<String, String> finMapData = resolveKeyValues(mapData);
     invoiceDisputesDetailPage.inFrame(page -> {
-      if (finaMapData.containsKey("revisedDeliveryFee")) {
+      if (finMapData.containsKey("revisedDeliveryFee")) {
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.setValue(
-            finaMapData.get("revisedDeliveryFee"));
+            finMapData.get("revisedDeliveryFee"));
       }
-      if (finaMapData.containsKey("revisedRTSFee")) {
+      if (finMapData.containsKey("revisedRTSFee")) {
         page.manualResolutionDisputedOrderModal.revisedRTSFee.setValue(
-            finaMapData.get("revisedRTSFee"));
+            finMapData.get("revisedRTSFee"));
       }
-      if (finaMapData.containsKey("revisedCODFee")) {
+      if (finMapData.containsKey("revisedCODFee")) {
         page.manualResolutionDisputedOrderModal.revisedCODFee.setValue(
-            finaMapData.get("revisedCODFee"));
+            finMapData.get("revisedCODFee"));
       }
-      if (finaMapData.containsKey("revisedInsuranceFee")) {
+      if (finMapData.containsKey("revisedInsuranceFee")) {
         page.manualResolutionDisputedOrderModal.revisedInsuranceFee.setValue(
-            finaMapData.get("revisedInsuranceFee"));
+            finMapData.get("revisedInsuranceFee"));
       }
-      if (finaMapData.containsKey("revisedTax")) {
-        page.manualResolutionDisputedOrderModal.revisedTax.setValue(finaMapData.get("revisedTax"));
+      if (finMapData.containsKey("revisedTax")) {
+        page.manualResolutionDisputedOrderModal.revisedTax.setValue(finMapData.get("revisedTax"));
       }
-      if (finaMapData.containsKey("internalCommentary")) {
+      if (finMapData.containsKey("remarks")) {
+        page.manualResolutionDisputedOrderModal.remark.selectValue(finMapData.get("remarks"));
+      }
+      if (finMapData.containsKey("customRemarkInput")) {
+        page.manualResolutionDisputedOrderModal.customRemarksInput.setValue(
+            finMapData.get("customRemarkInput"));
+      }
+      if (finMapData.containsKey("internalCommentary")) {
         page.manualResolutionDisputedOrderModal.internalCommentary.setValue(
-            finaMapData.get("internalCommentary"));
+            finMapData.get("internalCommentary"));
       }
     });
   }
