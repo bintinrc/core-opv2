@@ -1772,8 +1772,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @When("^Operator create new recovery ticket on Edit Order V2 page:$")
   public void createNewTicket(Map<String, String> mapOfData) {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-
+    mapOfData = resolveKeyValues(mapOfData);
+    String trackingId = mapOfData.get("trackingId");
     String entrySource = mapOfData.get("entrySource");
     String investigatingDepartment = mapOfData.get("investigatingDepartment");
     String investigatingHub = mapOfData.get("investigatingHub");
