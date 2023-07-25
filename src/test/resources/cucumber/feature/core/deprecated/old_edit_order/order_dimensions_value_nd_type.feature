@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrder3 @OrderDimension
+#@OperatorV2 @Core @EditOrder @EditOrder3 @OrderDimension
 Feature: Order Dimensions Value and Type
 
   Background:

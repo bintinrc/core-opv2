@@ -1,10 +1,11 @@
-@OperatorV2 @Core @EditOrderV2 @RTSPart1
+@OperatorV2 @Core @EditOrderV2 @RTS @RTSPart1
 Feature: RTS
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path @happy-path
   Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Unrouted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -113,7 +114,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -348,22 +349,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  Scenario: Operator not Allowed to RTS Order Tagged to a DP
-    Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Sort - Operator global inbound
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API DP - Operator tag order to DP:
-      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify menu item "Delivery" > "Return to Sender" is disabled on Edit Order V2 page
-
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -500,7 +486,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -641,7 +627,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -766,6 +752,87 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+  Scenario Outline: Operator RTS Order with Allowed Granular Status - <granular_status>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | granularStatus | <granular_status>                  |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit           |
+      | granularStatus | <granular_status> |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
+      | status | PENDING |
+    When Operator RTS order on Edit Order V2 page using data below:
+      | reason       | Nobody at address              |
+      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 order(s) RTS-ed                           |
+      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | waitUntilInvisible | true                                        |
+    Then Operator verify order events on Edit Order V2 page using data below:
+      | name                       |
+      | RTS                        |
+      | UPDATE ADDRESS             |
+      | UPDATE CONTACT INFORMATION |
+      | UPDATE AV                  |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
+      | status | PENDING                                        |
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
+      | status | PENDING |
+    And DB Core - verify orders record:
+      | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | rts | 1                                  |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                           |
+      | status   | Pending                                        |
+      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
+      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}      |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}    |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}   |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
+    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+    And DB Core - verify waypoints record:
+      | id            | {KEY_TRANSACTION.waypointId}                 |
+      | status        | Pending                                      |
+      | routeId       | null                                         |
+      | seqNo         | null                                         |
+      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
+      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}        |
+    And DB Core - verify number of records in order_jaro_scores_v2:
+      | waypointId | {KEY_TRANSACTION.waypointId} |
+      | number     | 1                            |
+    And DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_TRANSACTION.waypointId} |
+      | archived   | 1                            |
+    And DB Addressing - verify zones record:
+      | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
+      | type         | RTS                                   |
+    Examples:
+      | granular_status         |
+      | En-route to Sorting Hub |
+      | Transferred to 3PL      |

@@ -6,11 +6,13 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -31,11 +33,144 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
   public FindTicketsByCSVDialog findTicketsByCSVDialog;
+
   public ResultsTable resultsTable;
+
+  @FindBy(css = "[data-testid='btn-create-new-ticket']")
+  public Button createNewTicket;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']")
+  public CreateTicketDialog createTicketDialog;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and .='Create Ticket']")
+  public PageElement createTicketDialogBox;
+
+  public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
+  public static final String TICKET_TYPE_MISSING = "MISSING";
+  public static final String TICKET_TYPE_PARCEL_ON_HOLD = "PARCEL ON HOLD";
+  public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
+  public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
+  public static final String TICKET_TYPE_SELF_COLLECTION = "SELF COLLECTION";
+  public static final String TICKET_TYPE_SLA_BREACH = "SLA BREACH";
+
+  public static final String ORDER_OUTCOME_XPATH = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.order-outcome.custom-field']";
 
   public RecoveryTicketsPage(WebDriver webDriver) {
     super(webDriver);
     resultsTable = new ResultsTable(webDriver);
+  }
+
+  public void createTicket(RecoveryTicket recoveryTicket) {
+    waitUntilPageLoaded();
+    String trackingId = recoveryTicket.getTrackingId();
+    String ticketType = recoveryTicket.getTicketType();
+
+    createNewTicket.click();
+    waitUntilVisibilityOfElementLocated(createTicketDialogBox.getWebElement());
+    createTicketDialog.trackingId.sendKeys(trackingId);
+    createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
+    createTicketDialog.investigatingDept.selectValue(recoveryTicket.getInvestigatingDepartment());
+    createTicketDialog.investigatingHub.fillSearchTermAndEnter(
+        recoveryTicket.getInvestigatingHub());
+    createTicketDialog.ticketType.selectValue(ticketType);
+
+    switch (ticketType) {
+      case TICKET_TYPE_DAMAGED: {
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome
+            .selectValue(recoveryTicket.getOrderOutcomeDamaged());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.waitUntilVisible();
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
+        createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
+        createTicketDialog.damageDescription.sendKeys(recoveryTicket.getDamageDescription());
+        break;
+      }
+      case TICKET_TYPE_MISSING: {
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome
+            .selectValue(recoveryTicket.getOrderOutcomeMissing());
+        createTicketDialog.parcelDescription.waitUntilVisible();
+        createTicketDialog.parcelDescription.sendKeys(recoveryTicket.getParcelDescription());
+        break;
+      }
+      case TICKET_TYPE_PARCEL_EXCEPTION: {
+        createTicketDialog.ticketSubtype.waitUntilVisible();
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome
+            .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.waitUntilVisible();
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.exceptionReason.waitUntilVisible();
+        createTicketDialog.exceptionReason.sendKeys(recoveryTicket.getExceptionReason());
+        break;
+      }
+      case TICKET_TYPE_SHIPPER_ISSUE: {
+        createTicketDialog.ticketSubtype.waitUntilVisible();
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        String outcome = recoveryTicket.getOrderOutcome();
+        if (StringUtils.isEmpty(outcome)) {
+          outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
+        }
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome.selectValue(outcome);
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.waitUntilVisible();
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.issueDescription.waitUntilVisible();
+        createTicketDialog.issueDescription.sendKeys(recoveryTicket.getIssueDescription());
+        break;
+      }
+      case TICKET_TYPE_SELF_COLLECTION: {
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome
+            .selectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.waitUntilVisible();
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        break;
+      }
+      case TICKET_TYPE_SLA_BREACH: {
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getBreachReason())) {
+          createTicketDialog.breachReason.waitUntilVisible();
+          createTicketDialog.breachReason.sendKeys(recoveryTicket.getBreachReason());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getBreachLeg())) {
+          createTicketDialog.breachLeg.waitUntilVisible();
+          createTicketDialog.breachLeg.selectValue(recoveryTicket.getBreachLeg());
+        }
+        break;
+      }
+      case TICKET_TYPE_PARCEL_ON_HOLD: {
+        createTicketDialog.ticketSubtype.waitUntilVisible();
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.waitUntilVisible();
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
+        createTicketDialog.exceptionReason.waitUntilVisible();
+        createTicketDialog.exceptionReason.sendKeys(recoveryTicket.getExceptionReason());
+        pause3s();
+      }
+    }
+
+    createTicketDialog.customerZendeskId.sendKeys(recoveryTicket.getCustZendeskId());
+    createTicketDialog.shipperZendeskId.sendKeys(recoveryTicket.getShipperZendeskId());
+    createTicketDialog.ticketNotes.sendKeys(recoveryTicket.getTicketNotes());
+
+    createTicketDialog.createTicket.click();
+    waitUntilVisibilityOfNotification("Ticket has been created!");
   }
 
   public static class creatByCSVDialog extends AntModal {
@@ -54,6 +189,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//div[@class='ant-modal-body']/div[@class='ant-row']")
     public List<PageElement> message;
+
+    @FindBy(xpath = "//div[@data-testid='inner-element']//div[@role='gridcell']//span[@class]")
+    public List<PageElement> failureReason;
 
     @FindBy(xpath = "//div[@class='ant-modal-footer']//h4")
     public PageElement displayedUploadedFileName;
@@ -168,11 +306,35 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(css = "[data-datakey='status']")
     public PageElement status;
 
+    @FindBy(css = "[data-datakey='assigneeName']")
+    public PageElement assignee;
+
     @FindBy(css = "[data-datakey='daysDue']")
     public PageElement daysSince;
 
     @FindBy(css = "[data-datakey='createdAt']")
     public PageElement created;
+
+    @FindBy(css = "[data-testid='virtual-table.ticketTypeSubType.header.filter']")
+    public PageElement ticketTypeSubtypeFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.status.header.filter']")
+    public PageElement statusFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.assigneeName.header.filter']")
+    public PageElement assigneeNameFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.investigatingParty.header.filter']")
+    public PageElement investigatingPartyFilter;
+
+    @FindBy(css = "[data-testid='virtual-table._investigatingHubName.header.filter']")
+    public PageElement investigatingHubFilter;
+
+    @FindBy(css = "[data-testid='virtual-table.trackingId.header.filter']")
+    public PageElement trackingIdFilter;
+
+    @FindBy(xpath = "//span[@class='anticon anticon-close-circle ant-input-clear-icon']")
+    public PageElement clearFilterButton;
 
     public static final String ACTION_EDIT = "Edit";
 
@@ -200,5 +362,96 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
           ACTION_EDIT, "//button[@data-pa-action='Edit Hub Missing Investigation']"
       ));
     }
+
+    public void filterByField(String field, String value) {
+      switch (field) {
+        case "Ticket Type":
+          ticketTypeSubtypeFilter.sendKeys(value);
+          break;
+        case "Status":
+          statusFilter.sendKeys(value);
+          break;
+        case "Assignee":
+          assigneeNameFilter.sendKeys(value);
+          break;
+        case "Investigating Party":
+          investigatingPartyFilter.sendKeys(value);
+          break;
+        case "Investigating Hub":
+          investigatingHubFilter.sendKeys(value);
+          break;
+        case "Tracking ID":
+          trackingIdFilter.scrollIntoView();
+          trackingIdFilter.sendKeys(value);
+          break;
+      }
+    }
+  }
+
+  public static class CreateTicketDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.tracking-id.input']")
+    public PageElement trackingId;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.entry-source.single-select']")
+    public AntSelect3 entrySource;
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.inv-dept.single-select']")
+    public AntSelect3 investigatingDept;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.inv-hub.single-select']")
+    public AntSelect3 investigatingHub;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.ticket-type.single-select']")
+    public AntSelect3 ticketType;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.sub-type.single-select']")
+    public AntSelect3 ticketSubtype;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.order-outcome.custom-field']")
+    public AntSelect3 orderOutcome;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.rts-reason.single-select']")
+    public AntSelect3 rtsReason;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.parcel-location.custom-field']")
+    public AntSelect3 parcelLocation;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.liability.custom-field']")
+    public AntSelect3 liability;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.description.custom-field']")
+    public PageElement damageDescription;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.description.custom-field']")
+    public PageElement parcelDescription;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.exception-reason.custom-field']")
+    public PageElement exceptionReason;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.description.custom-field']")
+    public PageElement issueDescription;
+
+    @FindBy(css = "[id^='customer_zendesk_id']")
+    public PageElement customerZendeskId;
+
+    @FindBy(css = "[id^='shipper_zendesk_id']")
+    public PageElement shipperZendeskId;
+
+    @FindBy(id = "ticket_notes")
+    public PageElement ticketNotes;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.breach-reason.custom-field']")
+    public PageElement breachReason;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.breach-leg.custom-field']")
+    public AntSelect3 breachLeg;
+
+    @FindBy(css = "[data-testid='btn-create']")
+    public PageElement createTicket;
+
+    public CreateTicketDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }
+

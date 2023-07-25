@@ -24,10 +24,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
-import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
-import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -171,7 +168,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public EditOrderStampDialog editOrderStampDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public UpdateStatusDialog updateStatusDialog;
 
   @FindBy(css = ".ant-modal")
@@ -239,7 +236,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//label[text()='Source']/following-sibling::p")
   public PageElement source;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public DpDropOffSettingDialog dpDropOffSettingDialog;
 
   public EventsTable eventsTable;
@@ -250,7 +247,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   public DeleteOrderDialog deleteOrderDialog;
   private PickupRescheduleDialog pickupRescheduleDialog;
   private DeliveryRescheduleDialog deliveryRescheduleDialog;
-  private PodDetailsDialog podDetailsDialog;
+  @FindBy(css = ".ant-modal")
+  public PodDetailsDialog podDetailsDialog;
 
   public EditOrderV2Page(WebDriver webDriver) {
     super(webDriver);
@@ -259,15 +257,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
     chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
-    podDetailsDialog = new PodDetailsDialog(webDriver);
   }
 
   public EventsTable eventsTable() {
     return eventsTable;
-  }
-
-  public PodDetailsDialog podDetailsDialog() {
-    return podDetailsDialog;
   }
 
   public TransactionsTable transactionsTable() {
@@ -530,7 +523,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   public List<String> getTags() {
     List<String> tags = new ArrayList<>();
     List<WebElement> listOfTags = findElementsByXpath(
-        "//div[@id='order-tags-container']/nv-tag/span");
+        "//span[contains(@class, \"ant-tag\")]");
     for (WebElement we : listOfTags) {
       tags.add(we.getText());
     }
@@ -967,15 +960,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     }
   }
 
-  public void tagOrderToDP(String dpId) {
-    dpDropOffSettingDialog.dropOffDp.selectValue(dpId);
-    List<String> dpDropOffDates = dpDropOffSettingDialog.dropOffDate.getOptions();
-    dpDropOffSettingDialog.dropOffDate.selectValue(
-        dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
-    dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
-  }
-
   public boolean deliveryIsIndicatedWithIcon() {
     return deliveryDetailsBox.isNinjaCollectTagPresent();
   }
@@ -1013,9 +997,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public PageElement toContact;
     @FindBy(xpath = "./div/div[4]")
     public PageElement toAddress;
-    @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
+    @FindBy(xpath = ".//div[label[.='Start date/time']]/div[1]")
     public PageElement startDateTime;
-    @FindBy(xpath = ".//div[label[.='End Date / Time']]/p")
+    @FindBy(xpath = ".//div[label[.='End date/time']]/div[2]")
     public PageElement endDateTime;
 
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
@@ -1024,6 +1008,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public PageElement deliveryInstructions;
     @FindBy(xpath = ".//span[contains(@class,'ant-tag')][.='RTS']")
     public PageElement rtsTag;
+
+    @FindBy(xpath = ".//span[contains(@class,'ant-tag')][.='Ninja collect']")
+    public PageElement ninjaCollectTag;
 
     private static final String BOX_LOCATOR = "//div[h5[text()='Delivery Details']]";
     private static final String ROUTE_ID_LOCATOR =
@@ -1188,6 +1175,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.edit-pickup-details.save-changes.button']")
     public Button saveChanges;
 
+    @FindBy(css = "[data-testid='edit-order-testid.reschedule-order-dialogue.save-changes.button']")
+    public Button rescheduleSaveChanges;
+
     public EditPickupDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -1246,8 +1236,25 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.new-address-form.postal-code.input']")
     public ForceClearTextBox postcode;
 
+    @FindBy(xpath = ".//div[./label[.='Country']]/div")
+    public PageElement currentCountry;
+
+    @FindBy(xpath = ".//div[./label[.='City']]/div")
+    public PageElement currentCity;
+
+    @FindBy(xpath = ".//div[./label[.='Address 1']]/div")
+    public PageElement currentAddress1;
+
+    @FindBy(xpath = ".//div[./label[.='Address 2']]/div")
+    public PageElement currentAddress2;
+
+    @FindBy(xpath = ".//div[./label[.='Postal code']]/div")
+    public PageElement currentPostcode;
+
     @FindBy(css = "[data-testid='edit-order-testid.edit-delivery-details.save-changes.button']")
     public Button saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.reschedule-order-dialogue.save-changes.button']")
+    public Button rescheduleSaveChanges;
 
     public EditDeliveryDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -1257,19 +1264,16 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for DP Drop Off Setting dialog
    */
-  public static class DpDropOffSettingDialog extends MdDialog {
+  public static class DpDropOffSettingDialog extends AntModal {
 
-    @FindBy(css = "button md-icon[md-svg-icon='md-close']")
-    public Button clearSelected;
+    @FindBy(css = "[data-testid='edit-order-testid.dp-dropoff-setting.save-changes.button']")
+    public Button saveChanges;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.dp-dropoff-setting.date.single-select']")
+    public AntSelect3 dropOffDate;
 
-    @FindBy(css = "[id^='container.order.edit.edit-dp-management-dropoff-date']")
-    public MdSelect dropOffDate;
-
-    @FindBy(css = "md-autocomplete")
-    public MdAutocomplete dropOffDp;
+    @FindBy(css = "[data-testid='edit-order-testid.dp-dropoff-setting.dp.single-select']")
+    public AntSelect3 dropOffDp;
 
     public DpDropOffSettingDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -1666,20 +1670,20 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public Button remove;
   }
 
-  public static class UpdateStatusDialog extends MdDialog {
+  public static class UpdateStatusDialog extends AntModal {
 
     public UpdateStatusDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='commons.model.granular-status']")
-    public MdSelect granularStatus;
+    @FindBy(css = "[data-testid='edit-order-testid.update-status.granular-status.single-select']")
+    public AntSelect3 granularStatus;
 
-    @FindBy(css = "[id^='container.order.edit.input-reason-for-change']")
-    public TextBox changeReason;
+    @FindBy(css = "[data-testid='edit-order-testid.update-status.reason-for-change.input']")
+    public ForceClearTextBox changeReason;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.update-status.save-changes.button']")
+    public Button saveChanges;
   }
 
   public static class EditCashCollectionDetailsDialog extends AntModal {
@@ -1745,10 +1749,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.name.input']")
     public ForceClearTextBox recipientName;
 
-    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.contact.input']")
-    public AntTextBox recipientContact;
+    @FindBy(css = "[data-testid='edit-order-testid.recipient-details.contact.input']")
+    public ForceClearTextBox recipientContact;
 
-    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.email.input']")
+    @FindBy(css = "[data-testid='edit-order-testid.recipient-details.email.input']")
     public ForceClearTextBox recipientEmail;
 
     @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.internal-notes.input']")
@@ -1780,6 +1784,21 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(css = "[data-testid='edit-order-testid.new-address-form.postal-code.input']")
     public ForceClearTextBox postcode;
+
+    @FindBy(xpath = ".//div[./label[.='Country']]/div")
+    public PageElement currentCountry;
+
+    @FindBy(xpath = ".//div[./label[.='City']]/div")
+    public PageElement currentCity;
+
+    @FindBy(xpath = ".//div[./label[.='Address 1']]/div")
+    public PageElement currentAddress1;
+
+    @FindBy(xpath = ".//div[./label[.='Address 2']]/div")
+    public PageElement currentAddress2;
+
+    @FindBy(xpath = ".//div[./label[.='Postal code']]/div")
+    public PageElement currentPostcode;
   }
 
   public static class ResumeOrderDialog extends AntModal {
@@ -1880,140 +1899,36 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for Delete Order dialog
    */
-  public static class PodDetailsDialog extends OperatorV2SimplePage {
+  public static class PodDetailsDialog extends AntModal {
 
-    private static final String DIALOG_TITLE = "Proof of Delivery";
+    public final PodDetailTable podDetailTable;
 
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Status\")]/following-sibling::p")
-    public PageElement status;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"POD Time\")]/following-sibling::p")
-    public PageElement podTime;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Start Date / Time\")]/following-sibling::p")
-    public PageElement startDateTime;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"End Date / Time\")]/following-sibling::p")
-    public PageElement endDateTime;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Waypoint ID\")]/following-sibling::p")
-    public PageElement waypointId;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Route ID\")]/following-sibling::p")
-    public PageElement routeId;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Driver\")]/following-sibling::p")
-    public PageElement driver;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Verification Method\")]/following-sibling::p")
-    public PageElement verificationMethod;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Priority Level\")]/following-sibling::p")
-    public PageElement priorityLevel;
-
-    @FindBy(xpath = "//*[@id=\"information\"]//label[contains(string(), \"Location\")]/following-sibling::p")
-    public PageElement location;
-
-    @FindBy(xpath = "//*[@class=\"selected-pod-holder\"]/div[1]/div/h4")
-    public PageElement trackingId;
-
-    @FindBy(xpath = "//*[@class=\"selected-pod-holder\"]/div[2]/div/h4")
-    public PageElement transaction;
-
-    private final PodDetailTable podDetailTable;
-
-    public PodDetailsDialog(WebDriver webDriver) {
-      super(webDriver);
+    public PodDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
       podDetailTable = new PodDetailTable(webDriver);
-    }
-
-    public PodDetailsDialog waitUntilVisibility() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
-
-    public String getTrackingId() {
-      return trackingId.getText();
-    }
-
-    public String getTransaction() {
-      // format: TRANSACTION (21403)
-      return transaction.getText();
-    }
-
-    public String getStatus() {
-      return status.getText();
-    }
-
-    public String getPodTime() {
-      // format: 2021-05-13 14:06:59
-      return podTime.getText();
-    }
-
-    public String getStartDateTime() {
-      // format: 2021-05-14 09:00:00
-      return startDateTime.getText();
-    }
-
-    public String getEndDateTime() {
-      // format: 2021-05-18 22:00:00
-      return endDateTime.getText();
-    }
-
-    public String getWaypointId() {
-      return waypointId.getText();
-    }
-
-    public String getRouteId() {
-      return routeId.getText();
-    }
-
-    public String getDriver() {
-      return driver.getText();
-    }
-
-    public String getPriorityLevel() {
-      return priorityLevel.getText();
-    }
-
-    public String getLocation() {
-      return location.getText();
-    }
-
-    public String getVerificationMethod() {
-      return verificationMethod.getText();
-    }
-
-    public PodDetailTable getPodDetailTable() {
-      return podDetailTable;
-    }
-
-    public void scrollToBottom() {
-      this.scrollIntoView(
-          "//*[@id=\"information\"]//label[contains(string(), \"Verification Method\")]/following-sibling::p");
     }
 
   }
 
-  public static class PodDetailTable extends NgRepeatTable<PodDetail> {
+  public static class PodDetailTable extends AntTableV4<PodDetail> {
 
     private static final String ACTION_VIEW = "View";
 
     public PodDetailTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("waypointType", "_rsvnOrTxn")
           .put("podId", "id")
-          .put("waypointType", "_rsvn-or-txn")
           .put("type", "_type")
           .put("status", "_status")
           .put("distance", "_distance")
-          .put("podTime", "_pod-time")
-          .put("driver", "route-driver")
+          .put("podTime", "_podTimeFormatted")
+          .put("driver", "_driverName")
           .put("recipient", "_recipient")
           .put("address", "_address")
-          .put("verificationMethod", "_verification-method")
+          .put("verificationMethod", "_verificationMethod")
           .build());
-      setNgRepeat("pod in getTableData()");
+      setTableLocator("//div[contains(@class,'ant-modal-content')]");
       setActionButtonsLocators(ImmutableMap.of(ACTION_VIEW, "commons.view"));
       setEntityClass(PodDetail.class);
     }

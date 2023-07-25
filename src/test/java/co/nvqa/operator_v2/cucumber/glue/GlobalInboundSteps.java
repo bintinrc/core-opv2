@@ -1,16 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.dp.DpDetailsResponse;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -154,6 +152,7 @@ public class GlobalInboundSteps extends AbstractSteps {
   @Then("Operator verify info on Global Inbound page using data below:")
   public void operatorVerifyInfoOnGlobalInboundPageUsingDataBelow(Map<String, String> data) {
     data = resolveKeyValues(data);
+    pause3s();
     if (data.containsKey("destinationHub")) {
       String expected = data.get("destinationHub");
       String actual = globalInboundPage.destinationHub.getText();
@@ -166,6 +165,18 @@ public class GlobalInboundSteps extends AbstractSteps {
       String actual = globalInboundPage.rackInfo.getText();
       actual = StringUtils.normalizeSpace(actual);
       Assertions.assertThat(actual).as("Rack Info").isEqualToIgnoringCase(expected);
+    }
+    if (data.containsKey("rtsTag")) {
+      String expected = data.get("rtsTag");
+      String actual = globalInboundPage.rtsTag.getText();
+      actual = StringUtils.normalizeSpace(actual);
+      Assertions.assertThat(actual).as("RTS Info").isEqualToIgnoringCase(expected);
+    }
+    if (data.containsKey("priorTag")) {
+      String expected = data.get("priorTag");
+      String actual = globalInboundPage.priorTag.getText();
+      actual = StringUtils.normalizeSpace(actual);
+      Assertions.assertThat(actual).as("Prior Info").isEqualToIgnoringCase(expected);
     }
 
     if (data.containsKey("setAsideGroup")) {
@@ -189,19 +200,23 @@ public class GlobalInboundSteps extends AbstractSteps {
       Assertions.assertThat(actualColor.asHex())
           .as("Expected another color for Route ID background").isEqualTo(expected);
     }
+
     takesScreenshot();
     pause3s();
   }
 
   @Then("Ninja Collect Operator verifies that all the details for Confirmed Status via {string} are right")
   public void ninjaCollectOperatorVerifiesThatAllTheDetailsForConfirmedStatusViaAreRightAndIsFollowedByStatus(
-      String source) {
-    DatabaseCheckingNinjaCollectConfirmed dbCheckingResult = get(
-        KEY_DATABASE_CHECKING_NINJA_COLLECT_CONFIRMED);
-    DpDetailsResponse dpDetails = get(KEY_DP_DETAILS);
-    String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
+      String source, Map <String,String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String barcode = dataTable.get("barcode");
+    String id = dataTable.get("id");
+    String dpBarcode = dataTable.get("dpBarcode");
+    String dpDetailsId=dataTable.get("dpDetailsId");
+    String dpSource=dataTable.get("dpSource");
+    String dpStatus = dataTable.get("dpStatus");
     globalInboundPage
-        .verifiesDetailsAreRightForGlobalInbound(dbCheckingResult, dpDetails, barcode, source);
+        .verifiesDetailsAreRightForGlobalInbound(barcode, dpBarcode, id, dpDetailsId,dpSource,source,dpStatus);
   }
 
   @Then("Operator verifies tags on Global Inbound page")
@@ -244,6 +259,12 @@ public class GlobalInboundSteps extends AbstractSteps {
   @When("^Operator verifies RTS tag is displayed$")
   public void operatorVerifiesRtsTagIsDisplayed() {
     globalInboundPage.verifiesPriorTag();
+  }
+
+  @Then("Operator verifies Recovery Ticket status is {string} for {string}")
+  public void operatorVerifiesRecoveryTicketStatusIs(String ticketStatus , String recoveryTicket) {
+    recoveryTicket = resolveValue(recoveryTicket);
+    Assertions.assertThat(ticketStatus).isEqualToIgnoringCase(recoveryTicket);
   }
 
   @And("Operator verifies order weight is overridden based on the volumetric weight")

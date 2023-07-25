@@ -1,17 +1,17 @@
-@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2
+@OperatorV2 @Core @EditOrderV2 @Reschedule
 Feature: Reschedule
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @routing-refactor @happy-path
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | v4OrderRequest      | { "service_type":"Return","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest      | { "service_type":"Return","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -32,23 +32,27 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pickup Fail" on Edit Order page
-    And Operator verify order granular status is "Pickup Fail" on Edit Order page
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Pickup on Edit Order Page
-      | senderName     | test sender name          |
-      | senderContact  | +9727894434               |
-      | senderEmail    | test@mail.com             |
-      | internalNotes  | test internalNotes        |
-      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
-      | pickupTimeslot | 9AM - 12PM                |
-    Then Operator verify order events on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pickup fail |
+      | granularStatus | Pickup fail |
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Pickup on Edit Order V2 page:
+      | senderName    | test sender name               |
+      | senderContact | +9727894434                    |
+      | senderEmail   | test@mail.com                  |
+      | pickupDate    | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot      | 9AM - 12PM                     |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
-    And Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
@@ -108,13 +112,13 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
 
-  @DeleteOrArchiveRoute @routing-refactor @happy-path
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
@@ -142,34 +146,38 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-    Then Operator verify order events on Edit order page using data below:
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Delivery on Edit Order V2 page:
+      | recipientName    | test recipient name            |
+      | recipientContact | +9727894434                    |
+      | recipientEmail   | test@mail.com                  |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                     |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
@@ -233,18 +241,19 @@ Feature: Reschedule
     When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
+    Then Operator verifies order details on Edit Order V2 page:
+      | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
@@ -276,41 +285,45 @@ Feature: Reschedule
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
       | hubId                | {hub-id}                                                                                                      |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page with address changes
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
-    Then Operator verify order events on Edit order page using data below:
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Delivery on Edit Order V2 page:
+      | recipientName    | test recipient name            |
+      | recipientContact | +9727894434                    |
+      | recipientEmail   | test@mail.com                  |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                     |
+      | country          | Singapore                      |
+      | city             | Singapore                      |
+      | address1         | 116 Keng Lee Rd                |
+      | address2         | 15                             |
+      | postalCode       | 308402                         |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
       | UPDATE ADDRESS      |
       | DRIVER INBOUND SCAN |
       | UPDATE AV           |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status    | PENDING                        |
       | startDate | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -377,13 +390,13 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
@@ -411,41 +424,45 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page with address changes
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
-    Then Operator verify order events on Edit order page using data below:
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Delivery on Edit Order V2 page:
+      | recipientName    | test recipient name            |
+      | recipientContact | +9727894434                    |
+      | recipientEmail   | test@mail.com                  |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                     |
+      | country          | Singapore                      |
+      | city             | Singapore                      |
+      | address1         | 116 Keng Lee Rd                |
+      | address2         | 15                             |
+      | postalCode       | 308402                         |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
       | UPDATE ADDRESS      |
       | DRIVER INBOUND SCAN |
       | UPDATE AV           |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status    | PENDING                        |
       | startDate | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -512,13 +529,13 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Pickup - Edit Pickup Address
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | v4OrderRequest      | { "service_type":"Return","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest      | { "service_type":"Return","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -539,30 +556,34 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pickup Fail" on Edit Order page
-    And Operator verify order granular status is "Pickup Fail" on Edit Order page
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Pickup on Edit Order Page with address changes
-      | senderName     | test sender name          |
-      | senderContact  | +9727894434               |
-      | senderEmail    | test@mail.com             |
-      | internalNotes  | test internalNotes        |
-      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
-      | pickupTimeslot | 9AM - 12PM                |
-      | country        | Singapore                 |
-      | city           | Singapore                 |
-      | address1       | 116 Keng Lee Rd           |
-      | address2       | 15                        |
-      | postalCode     | 308402                    |
-    Then Operator verify order events on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pickup fail |
+      | granularStatus | Pickup fail |
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Pickup on Edit Order V2 page:
+      | senderName    | test sender name               |
+      | senderContact | +9727894434                    |
+      | senderEmail   | test@mail.com                  |
+      | pickupDate    | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot      | 9AM - 12PM                     |
+      | country       | Singapore                      |
+      | city          | Singapore                      |
+      | address1      | 116 Keng Lee Rd                |
+      | address2      | 15                             |
+      | postalCode    | 308402                         |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | RESCHEDULE     |
       | UPDATE ADDRESS |
       | UPDATE AV      |
-    And Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
@@ -625,17 +646,17 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                                 | archived |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | 1        |
+    Then DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | archived   | 1                                                          |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
@@ -663,42 +684,46 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page with address changes
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
-    Then Operator verify order events on Edit order page using data below:
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Delivery on Edit Order V2 page:
+      | recipientName    | test recipient name            |
+      | recipientContact | +9727894434                    |
+      | recipientEmail   | test@mail.com                  |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                     |
+      | country          | Singapore                      |
+      | city             | Singapore                      |
+      | address1         | 116 Keng Lee Rd                |
+      | address2         | 15                             |
+      | postalCode       | 308402                         |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
       | UPDATE ADDRESS      |
       | DRIVER INBOUND SCAN |
       | UPDATE AV           |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
@@ -766,124 +791,19 @@ Feature: Reschedule
     When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
+    Then Operator verifies order details on Edit Order V2 page:
+      | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
-#    TODO move this to common-core
-#    TODO enable/removed once confirmed its not used
-#    Then DB Operator verify Jaro Scores:
-#      | waypointId                                                 | archived |
-#      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
-  @DeleteOrArchiveRoute
-  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    And API Operator add reservation pick-up to the route
-    And API Driver collect all his routes
-    And API Operator start the route
-    And API Driver get Reservation Job using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-    And API Driver success Reservation using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Driver Starts the route
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status  | FAIL                   |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-    When Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name | RESCHEDULE |
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                        |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status  | FAIL                   |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-    And DB Operator verifies transactions after reschedule
-      | number_of_txn       | 3       |
-      | old_delivery_status | Fail    |
-      | new_delivery_status | Pending |
-      | new_delivery_type   | DD      |
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver deliver the created parcel successfully
-    When Operator refresh page
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags            | name                |
-      | #l#PICKUP, SCAN | DRIVER PICKUP SCAN  |
-      | PICKUP          | PICKUP SUCCESS      |
-      | SORT, SCAN      | HUB INBOUND SCAN    |
-      | MANUAL ACTION   | ADD TO ROUTE        |
-      | SCAN, DELIVERY  | DRIVER INBOUND SCAN |
-      | MANUAL ACTION   | DRIVER START ROUTE  |
-      | DELIVERY        | DELIVERY FAILURE    |
-      | MANUAL ACTION   | RESCHEDULE          |
-      | SYSTEM ACTION   | PRICING CHANGE      |
-      | DELIVERY        | DELIVERY SUCCESS    |
-
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteRoutes
   Scenario: Operator Reschedule Fail Delivery - Failure Reason Code Id 13
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
@@ -911,34 +831,38 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 10                                                                                                  |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page
-      | recipientName    | test recipient name       |
-      | recipientContact | +9727894434               |
-      | recipientEmail   | test@mail.com             |
-      | internalNotes    | test internalNotes        |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
-      | deliveryTimeslot | 9AM - 12PM                |
-    Then Operator verify order events on Edit order page using data below:
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Delivery on Edit Order V2 page:
+      | recipientName    | test recipient name            |
+      | recipientContact | +9727894434                    |
+      | recipientEmail   | test@mail.com                  |
+      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | deliveryTimeslot | 9AM - 12PM                     |
+    Then Operator verifies that success react notification displayed:
+      | top                | Order rescheduled successfully |
+      | waitUntilInvisible | true                           |
+    Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
@@ -1002,11 +926,11 @@ Feature: Reschedule
     When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
+    Then Operator verifies order details on Edit Order V2 page:
+      | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
-#    TODO move this to common-core
-    Then DB Operator verify Jaro Scores:
-      | waypointId                                                 | archived |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
+    And DB Core - verify order_jaro_scores_v2 record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | archived   | 1                                                          |

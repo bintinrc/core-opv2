@@ -1,8 +1,8 @@
-@OperatorV2 @Core @EditOrderV2 @ResolveTicketPart2
+@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2
 Feature: Resolve Recovery Ticket
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
@@ -155,7 +155,3 @@ Feature: Resolve Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                       |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Pickup\n\nOld Order Status: Transit\nNew Order Status: Pending\n\nReason: RESUME_PICKUP |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

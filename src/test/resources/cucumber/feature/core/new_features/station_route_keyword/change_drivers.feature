@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @ChangeDrivers
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @ChangeDrivers
 Feature: Change Drivers
 
   Background:

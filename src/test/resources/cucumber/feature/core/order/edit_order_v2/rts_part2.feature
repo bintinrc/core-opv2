@@ -1,96 +1,26 @@
-@OperatorV2 @Core @EditOrder @RTS @RTSPart2 @EditOrder4
+@OperatorV2 @Core @EditOrderV2 @RTS @RTSPart2
 Feature: RTS
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator RTS Order with Allowed Granular Status - <granular_status>
+  Scenario: Operator not Allowed to RTS Order Tagged to a DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | granularStatus | <granular_status>                  |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit           |
-      | granularStatus | <granular_status> |
-    And Operator verify Delivery details on Edit Order V2 page using data below:
-      | status | PENDING |
-    When Operator RTS order on Edit Order V2 page using data below:
-      | reason       | Nobody at address              |
-      | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | timeslot     | All Day (9AM - 10PM)           |
-    Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
-    Then Operator verify order events on Edit Order V2 page using data below:
-      | name                       |
-      | RTS                        |
-      | UPDATE ADDRESS             |
-      | UPDATE CONTACT INFORMATION |
-      | UPDATE AV                  |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                 |
-      | granularStatus | En-route to Sorting Hub |
-    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
-    And Operator verify Pickup details on Edit Order V2 page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
-      | status | PENDING                                        |
-    And Operator verify Pickup transaction on Edit Order V2 page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status | PENDING |
-    And DB Core - verify orders record:
-      | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | rts | 1                                  |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify transactions record:
-      | id       | {KEY_TRANSACTION.id}                           |
-      | status   | Pending                                        |
-      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
-      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}      |
-      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}   |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
-    And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}                 |
-      | status        | Pending                                      |
-      | routeId       | null                                         |
-      | seqNo         | null                                         |
-      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
-      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
-      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
-      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
-      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}        |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
-    And DB Addressing - verify zones record:
-      | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
-      | type         | RTS                                   |
-    Examples:
-      | granular_status         |
-      | En-route to Sorting Hub |
-      | Transferred to 3PL      |
+    Then Operator verify menu item "Delivery" > "Return to Sender" is disabled on Edit Order V2 page
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS Order with Allowed Granular Status - On Vehicle for Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -269,7 +199,7 @@ Feature: RTS
       | MISSING    | ORDER OUTCOME (MISSING)     |
       | DAMAGED    | ORDER OUTCOME (NEW_DAMAGED) |
 
-  Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - <ticketType>
+  Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -484,7 +414,7 @@ Feature: RTS
       | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) |
       | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   |
 
-  Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <ticketType>
+  Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -521,7 +451,7 @@ Feature: RTS
       | ticketType      | orderOutcomeName                |
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address - New Address Belongs To Standard Zone
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -599,16 +529,16 @@ Feature: RTS
       | id            | {KEY_TRANSACTION_AFTER.waypointId}    |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator RTS an Order on Edit Order Page - PPNT Tied To DP
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD", "address2":"addsrt", "postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator lodge in order at dp:
-      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                              |
-      | request | {"dp_id":{dp-id}, "reservations":[{"tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","shipper_id":{shipper-v4-legacy-id}}]} |
+    And API DP - DP user authenticate with username "{dp-user-username}" password "{dp-user-password}" and dp id "{lodge-in-dp-id}"
+    And API DP - DP lodge in order:
+      | lodgeInRequest | {"dp_id":{lodge-in-dp-id},"reservations":[{"shipper_id":{lodge-in-shipper-legacy-id},"tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"}]} |
     And Operator waits for 10 seconds
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
@@ -618,8 +548,9 @@ Feature: RTS
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
       | hubId                | {hub-id}                                                                                                      |
+    And Operator refresh page
     And Operator click Delivery -> Return to Sender on Edit Order V2 page
-    And Operator verify "Order have DP attached to Pickup Transactions, contact and address details disabled" RTS hint is displayed on Edit Order V2 page
+    And Operator verify "Order has DP attached to Pickup transactions. Contact and address details disabled" RTS hint is displayed on Edit Order V2 page
     And Operator RTS order on Edit Order V2 page using data below:
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
@@ -641,22 +572,22 @@ Feature: RTS
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify transactions record:
-      | id         | {KEY_TRANSACTION.id}         |
-      | orderId    | {KEY_CREATED_ORDER_ID}       |
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | type       | DD                           |
-      | status     | Pending                      |
-      | routeId    | null                         |
-      | address1   | asd                          |
-      | address2   | ad                           |
-      | postcode   | asd                          |
-      | country    | asd                          |
+      | id         | {KEY_TRANSACTION.id}               |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | waypointId | {KEY_TRANSACTION.waypointId}       |
+      | type       | DD                                 |
+      | status     | Pending                            |
+      | routeId    | null                               |
+      | address1   | 233E ST. JOHN'S ROAD               |
+      | address2   | addsrt                             |
+      | postcode   | 757995                             |
+      | country    | SG                                 |
     And DB Core - verify waypoints record:
       | id       | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | routeId  | null                         |
       | seqNo    | null                         |
-      | address1 | asd                          |
-      | address2 | asd                          |
-      | postcode | asd                          |
-      | country  | asd                          |
+      | address1 | 233E ST. JOHN'S ROAD         |
+      | address2 | addsrt                       |
+      | postcode | 757995                       |
+      | country  | SG                           |

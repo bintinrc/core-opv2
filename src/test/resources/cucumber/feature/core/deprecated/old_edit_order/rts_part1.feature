@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @RTS @RTSPart1 @EditOrder4
+#@OperatorV2 @Core @EditOrder @RTS @RTSPart1 @EditOrder4
 Feature: RTS
 
   Background:

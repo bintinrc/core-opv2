@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Depart Airport to Warehouse Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -30,7 +30,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | URL: put 1.0/movement-trips/{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}/departure?is_verify=false |
       | Error Message: Trip must have assigned drivers                                                   |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Depart Warehouse to Airport Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -55,7 +55,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | URL: put 1.0/movement-trips/{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}/departure?is_verify=false |
       | Error Message: Trip must have assigned drivers                                                   |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Warehouse to Airport Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -84,7 +84,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | Cancel       |
       | assignDriver |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Airport to Warehouse Trip with Pending Status and Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -113,7 +113,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
       | Cancel       |
       | assignDriver |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Airport to Warehouse Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -140,7 +140,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 2
     Then Operator verifies driver error messages below on Port Trip Management page:
       | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} employment is inactive |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Airport to Warehouse Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

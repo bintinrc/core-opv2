@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrderV2 @CashCollection
 Feature: Cash Collection
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Edit Cash Collection Details - Add Cash on Pickup
@@ -33,6 +33,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.01                                   |
       | collectionAt | PP                                     |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Add Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -89,6 +90,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.01                                   |
       | collectionAt | PP                                     |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Update Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -141,6 +143,7 @@ Feature: Cash Collection
       | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
       | deletedAt | not null                               |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -187,7 +190,7 @@ Feature: Cash Collection
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Returned To Sender                 |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -202,14 +205,10 @@ Feature: Cash Collection
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | On Vehicle for Delivery            |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

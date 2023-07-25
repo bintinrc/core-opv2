@@ -5,7 +5,7 @@ Feature: Test
     When API MM - Operator creates new Middle Mile Driver with data below:
       | requestBody | {"username":"GENERATED","password":"{default-password}","first_name":"GENERATED","last_name":"GENERATED","license_number":"GENERATED","license_type":"Class 3A","driver_type":"Middle-Mile-Driver","license_expiry_date":"{date: 3 days next, yyyy-MM-dd}","contacts":[{"active":true,"details":"{default-phone}","type":"Mobile Phone"}],"employment_type":"In-House - Full-Time","employment_start_date":"{date: 0 days next, yyyy-MM-dd}","employment_end_date":"{date: 3 days next, yyyy-MM-dd}","hub_id":"{hub-id}","comments":"Testing for automation","availability":true} |
 
-  @exclude @DeleteCreatedPorts
+  @exclude @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create Port
     When API MM - Operator creates new Port with data below:
       | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |

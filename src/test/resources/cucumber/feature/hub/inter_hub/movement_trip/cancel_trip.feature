@@ -30,10 +30,10 @@ Feature: Movement Trip - Cancel Trip
       | hubId        | {KEY_SORT_LIST_OF_CREATED_HUBS[1].id}    |
     Then Operator verifies trips shown on "departure" tab of Movement Trip page are the same as "KEY_MM_LIST_OF_SEARCHED_MOVEMENT_TRIPS"
     When Operator clicks on "cancel" icon on the action column
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies that there will be a movement trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" cancelled toast shown
     And Operator verifies movement trip shown has status value "cancelled"
@@ -69,10 +69,10 @@ Feature: Movement Trip - Cancel Trip
       | hubId        | {KEY_SORT_LIST_OF_CREATED_HUBS[1].id}    |
     And API MM - Operator "depart" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
     When Operator clicks on "cancel" icon on the action column
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies toast with message "Request failed with status code 400" is shown on movement page
     And Operator refresh page
@@ -103,10 +103,10 @@ Feature: Movement Trip - Cancel Trip
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_SORT_LIST_OF_CREATED_HUBS[2].name}" exist
     When Operator clicks on "cancel" icon on the action column
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "No" button on cancel trip dialog
     Then Operator verifies movement trip shown has status value "pending"
     When Operator clicks on "view" icon on the action column
@@ -161,10 +161,10 @@ Feature: Movement Trip - Cancel Trip
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_SORT_LIST_OF_CREATED_HUBS[2].name}" exist
     When Operator clicks on "cancel" icon on the action column
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     And Operator clicks "Cancel Trip" button on cancel trip dialog
     And Operator verifies that there will be a movement trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" cancelled toast shown
     And Operator searches for Movement Trip based on status "cancelled"
@@ -229,10 +229,10 @@ Feature: Movement Trip - Cancel Trip
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
     And Operator clicks Cancel Trip button on Department page
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks Cancel Trip button on Cancel page
     Then Operator verifies that there will be a movement trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" cancelled toast shown
     And API MM - Operator verifies Movement Trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]" has event below:
@@ -269,10 +269,10 @@ Feature: Movement Trip - Cancel Trip
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
     And Operator clicks Cancel Trip button on Department page
-    And Operator verifies the Cancel Trip button is "disable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks Cancel Trip button on Cancel page
     Then Operator verifies that there will be a movement trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" cancelled toast shown
     And API MM - Operator verifies Movement Trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]" has event below:

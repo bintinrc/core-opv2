@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @RemoveKeywords
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @RemoveKeywords
 Feature: Remove Keywords
 
   Background:

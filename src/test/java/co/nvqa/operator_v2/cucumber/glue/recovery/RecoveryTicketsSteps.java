@@ -8,8 +8,9 @@ import co.nvqa.operator_v2.selenium.page.recovery.RecoveryTicketsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import java.io.File;
+import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +71,17 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         String actual = recoveryTicketsPage.creatByCSVDialog.message.get(1).getText();
         Assertions.assertThat(actual).as("correct bottom").isEqualTo(value);
       }
+      if (finalData.containsKey("failureReason")) {
+        Assertions.assertThat(
+                recoveryTicketsPage.creatByCSVDialog.failureReason.
+                    stream().map(PageElement::getText)
+                    .collect(Collectors.toList())).as("correct failureReason")
+            .contains(finalData.get("failureReason"));
+      }
       Assertions.assertThat(
               recoveryTicketsPage.creatByCSVDialog.displayedUploadedFileName.getText())
           .as("correct file name").contains(finalData.get("fileName"));
+      takesScreenshot();
     });
   }
 
@@ -93,9 +102,10 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       List<String> ticketType = Arrays.stream(dataTable.get("type").split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      List<String> ticketSubType = Arrays.stream(dataTable.get("subType").split(","))
-          .map(String::trim)
-          .collect(Collectors.toList());
+      List<String> ticketSubType =
+          dataTable.containsKey("subType") ? Arrays.stream(dataTable.get("subType").split(","))
+              .map(String::trim)
+              .collect(Collectors.toList()) : new ArrayList<>();
       String investigationGroup = dataTable.get("investigationGroup");
       String assigneeEmail = dataTable.get("assigneeEmail");
       String investigationHubId = dataTable.get("investigationHubId");
@@ -110,9 +120,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
       trackingIds.forEach(trackingId -> {
         int index = trackingIds.indexOf(trackingId);
+        String currentTicketSubType = "";
+        if (index < ticketSubType.size()) {
+          currentTicketSubType = ticketSubType.get(index);
+        }
         String csvRow = trackingId + "," +
             ticketType.get(index) + "," +
-            ticketSubType.get(index) + "," +
+            currentTicketSubType + "," +
             investigationGroup + "," +
             assigneeEmail + "," +
             investigationHubId + "," +
@@ -126,19 +140,21 @@ public class RecoveryTicketsSteps extends AbstractSteps {
           content.toString());
       recoveryTicketsPage.creatByCSVDialog.fileUpload.setValue(file);
 
-      RecoveryTicket recoveryTicket = new RecoveryTicket();
-      trackingIds.forEach(trackingId -> {
+      for (String trackingId : trackingIds) {
         int index = trackingIds.indexOf(trackingId);
+        RecoveryTicket recoveryTicket = new RecoveryTicket();
         recoveryTicket.setTrackingId(trackingId);
         recoveryTicket.setAssignTo(assigneeEmail);
         recoveryTicket.setTicketType(ticketType.get(index));
-        recoveryTicket.setTicketSubType(ticketSubType.get(index));
+        if (index < ticketSubType.size()) {
+          recoveryTicket.setTicketSubType(ticketSubType.get(index));
+        }
         recoveryTicket.setInvestigatingDepartment(investigationGroup);
         recoveryTicket.setInvestigatingHub(investigationHubId);
         recoveryTicket.setTicketNotes(ticketNotes);
         recoveryTicket.setEntrySource(entrySource);
         put("recoveryTicket", recoveryTicket);
-      });
+      }
       recoveryTicketsPage.creatByCSVDialog.uploadFile.click();
     });
   }
@@ -250,6 +266,11 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         String actual = recoveryTicketsPage.resultsTable.status.getText();
         Assertions.assertThat(actual).as("status").isEqualTo(value);
       }
+      value = finalData.get("assignee");
+      if (StringUtils.isNotBlank(value)) {
+        String actual = recoveryTicketsPage.resultsTable.assignee.getText();
+        Assertions.assertThat(actual).as("assignee").isEqualTo(value);
+      }
       value = finalData.get("daysSince");
       if (StringUtils.isNotBlank(value)) {
         String actual = recoveryTicketsPage.resultsTable.daysSince.getText();
@@ -310,6 +331,107 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       final String fileName = page.getLatestDownloadedFilename(
           page.findTicketsByCSVDialog.SEARCH_SAMPLE_CSV_FILENAME_PATTERN);
       page.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+
+  @When("Operator create new ticket on new page Recovery Tickets using data below:")
+  public void createNewSingleTicket(Map<String, String> map) {
+    recoveryTicketsPage.inFrame(() -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      recoveryTicketsPage.waitUntilPageLoaded();
+      pause5s();
+      recoveryTicketsPage.createNewTicket.click();
+      String trackingId = mapOfData.get("trackingId");
+      String entrySource = mapOfData.get("entrySource");
+      String investigatingDepartment = mapOfData.get("investigatingDepartment");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String ticketType = mapOfData.get("ticketType");
+      String ticketSubType = mapOfData.get("ticketSubType");
+      String parcelLocation = mapOfData.get("parcelLocation");
+      String liability = mapOfData.get("liability");
+      String damageDescription = mapOfData.get("damageDescription");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
+      String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
+      String custZendeskId = mapOfData.get("custZendeskId");
+      String shipperZendeskId = mapOfData.get("shipperZendeskId");
+      String ticketNotes = mapOfData.get("ticketNotes");
+      String parcelDescription = mapOfData.get("parcelDescription");
+      String exceptionReason = mapOfData.get("exceptionReason");
+      String orderOutcomeInaccurateAddress = mapOfData.get("orderOutcomeInaccurateAddress");
+      String orderOutcomeDuplicateParcel = mapOfData.get("orderOutcomeDuplicateParcel");
+      String issueDescription = mapOfData.get("issueDescription");
+      String rtsReason = mapOfData.get("rtsReason");
+      String breachReason = mapOfData.get("breachReason");
+      String breachLeg = mapOfData.get("breachLeg");
+
+      if ("GENERATED".equals(damageDescription)) {
+        damageDescription = f("This damage description is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      if ("GENERATED".equals(ticketNotes)) {
+        ticketNotes = f("This ticket notes is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      if ("GENERATED".equals(parcelDescription)) {
+        parcelDescription = f("This parcel description is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      if ("GENERATED".equals(exceptionReason)) {
+        exceptionReason = f("This exception reason is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      if ("GENERATED".equals(issueDescription)) {
+        issueDescription = f("This issue description is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+      RecoveryTicket recoveryTicket = new RecoveryTicket();
+      recoveryTicket.setTrackingId(trackingId);
+      recoveryTicket.setEntrySource(entrySource);
+      recoveryTicket.setInvestigatingDepartment(investigatingDepartment);
+      recoveryTicket.setInvestigatingHub(investigatingHub);
+      recoveryTicket.setTicketType(ticketType);
+      recoveryTicket.setTicketSubType(ticketSubType);
+      recoveryTicket.setParcelLocation(parcelLocation);
+      recoveryTicket.setLiability(liability);
+      recoveryTicket.setDamageDescription(damageDescription);
+      recoveryTicket.setOrderOutcome(orderOutcome);
+      recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
+      recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
+      recoveryTicket.setCustZendeskId(custZendeskId);
+      recoveryTicket.setShipperZendeskId(shipperZendeskId);
+      recoveryTicket.setTicketNotes(ticketNotes);
+      recoveryTicket.setParcelDescription(parcelDescription);
+      recoveryTicket.setExceptionReason(exceptionReason);
+      recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
+      recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
+      recoveryTicket.setIssueDescription(issueDescription);
+      recoveryTicket.setRtsReason(rtsReason);
+      recoveryTicket.setBreachReason(breachReason);
+      recoveryTicket.setBreachLeg(breachLeg);
+
+      recoveryTicketsPage.createTicket(recoveryTicket);
+      put("recoveryTicket", recoveryTicket);
+    });
+  }
+
+  @When("Operator filter search result by field {string} with value {string}")
+  public void filterSearchResultByTrackingId(String field, String value) {
+    recoveryTicketsPage.inFrame((page) -> {
+      final String finalValue = resolveValue(value);
+      page.resultsTable.filterByField(field, finalValue);
+    });
+  }
+
+  @When("Operator clear the filter search")
+  public void clearFilterSearch() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.resultsTable.clearFilterButton.click();
     });
   }
 }

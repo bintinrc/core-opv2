@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @TransferKeywords
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @TransferKeywords
 Feature: Transfer Keywords
 
   Background:

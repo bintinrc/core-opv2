@@ -15,8 +15,8 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "employmentType" on edit driver dialog with value "In-House - Full-Time"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "In-House - Full-Time" is updated
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "In-House - Full-Time"
+	And API MM - Operator verifies "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : In-House - Part-Time
@@ -28,8 +28,8 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "employmentType" on edit driver dialog with value "In-House - Part-Time"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "In-House - Part-Time" is updated
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "In-House - Part-Time"
+	And API MM - Operator verifies "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : Outsourced - Subcon
@@ -41,8 +41,8 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit "employmentType" on edit driver dialog with value "Outsourced - Subcon"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Outsourced - Subcon" is updated
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Outsourced - Subcon"
+	And API MM - Operator verifies "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : Outsourced - Vendors
@@ -54,8 +54,9 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit Employment Type on edit driver dialog with value "Outsourced - Vendors" with vendor name is "{default-driver-vendor-name-sg}"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Outsourced - Vendors" is updated
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Outsourced - Vendors|{default-driver-vendor-name-sg}"
+	And API MM - Operator verifies "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
+	And API MM - Operator verifies "vendorName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : Outsourced - Vendors but No Vendor Selected
@@ -67,11 +68,9 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit Employment Type on edit driver dialog with value "Outsourced - Vendors" with vendor name is "{default-driver-vendor-name-sg}"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Outsourced - Vendors" is updated
-	When Operator clicks edit button on the middle mile driver page
-	When Operator clicks clear button on "Employment Type" field on the middle mile driver edit popup
-	Then Operator verifies error message on "Employment Type" field on the middle mile driver is shown
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Outsourced - Vendors|-"
+  	Then Operator clicks "Save" button on Middle Mile Drivers Page
+	Then Operator verifies error message on "Vendor's Name" field on the middle mile driver is shown
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : Outsourced - Manpower Agency
@@ -83,8 +82,9 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit Employment Type on edit driver dialog with value "Outsourced - Manpower Agency" with vendor name is "{default-driver-manpower-agency-sg}"
-	Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Outsourced - Manpower Agency" is updated
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Outsourced - Manpower Agency|{default-driver-manpower-agency-sg}"
+	And API MM - Operator verifies "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
+	And API MM - Operator verifies "vendorName" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @DeleteMiddleMileDriver
   Scenario: Update Employment Details - Employment Type : Outsourced - Manpower Agency but No Vendor Selected
@@ -96,10 +96,9 @@ Feature: Middle Mile Driver Management - Update Driver 2
 	When Operator clicks "Load Drivers" button on Middle Mile Drivers Page
 	Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
 	When Operator clicks edit button on the middle mile driver page
-	And Operator edit Employment Type on edit driver dialog with value "Outsourced - Manpower Agency" with vendor name is "{default-driver-manpower-agency-sg}"
-	When Operator clicks edit button on the middle mile driver page
-	When Operator clicks clear button on "Employment Type" field on the middle mile driver edit popup
-	Then Operator verifies error message on "Employment Type" field on the middle mile driver is shown
+	And Operator edit "employmentType" of Middle Mile Driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" on edit driver dialog with value "Outsourced - Manpower Agency|-"
+  	Then Operator clicks "Save" button on Middle Mile Drivers Page
+	Then Operator verifies error message on "Vendor's Name" field on the middle mile driver is shown
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

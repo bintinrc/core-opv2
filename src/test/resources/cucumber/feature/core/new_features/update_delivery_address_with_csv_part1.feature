@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSVPart1 @NewFeatures2
+@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV @UpdateDeliveryAddressWithCSVPart1 @NewFeatures2
 Feature: Update Delivery Address with CSV
 
   Background:
