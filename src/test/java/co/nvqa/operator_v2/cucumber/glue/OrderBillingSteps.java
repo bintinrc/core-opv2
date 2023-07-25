@@ -62,7 +62,7 @@ public class OrderBillingSteps extends AbstractSteps {
   private void setOrderBillingData(Map<String, String> mapOfData) {
     BillingReportsRequest billingReportsRequest = new BillingReportsRequest();
     try {
-      // todo: please remove these keys (except KEY_FINANCE_BILLING_REPORT_REQUEST)
+      // todo: please remove these keys (except KEY_ORDER_BILLING_GENERATED_CSV_FILE,KEY_FINANCE_BILLING_REPORT_REQUEST)
       //  once all the SSB scenarios are moved to commonv2
       if (Objects.nonNull(mapOfData.get("startDate"))) {
         String startDate = mapOfData.get("startDate");
@@ -86,6 +86,7 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("uploadCsv"))) {
         String shipperIds = mapOfData.get("uploadCsv");
         if (shipperIds.equalsIgnoreCase("generatedCsv")) {
+          orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_UPLOAD_CSV_FILE));
           orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_GENERATED_CSV_FILE));
         } else {
           File csvFile = createFile("shipper-id-upload.csv", shipperIds);
@@ -207,6 +208,9 @@ public class OrderBillingSteps extends AbstractSteps {
 
     final File csvFile = createFile("shipper-id-upload.csv", shipperIds);
     LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
+    // todo: please remove the key KEY_ORDER_BILLING_UPLOAD_CSV_FILE
+    //  once all the SSB scenarios are moved to commonv2
+    put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
     put(KEY_ORDER_BILLING_GENERATED_CSV_FILE, csvFile);
   }
 
