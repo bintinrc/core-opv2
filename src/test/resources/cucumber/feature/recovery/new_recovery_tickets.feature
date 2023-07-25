@@ -1177,3 +1177,33 @@ Feature: New Recovery Tickets
       | Dataset Name | ticketSubtype |
       | No label     | NO LABEL      |
       | no order     | NO ORDER      |
+
+  Scenario: Create Bulk PETS via CSV - with invalid Hub
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | { "hubId":{hub-id} }                       |
+    Given Operator goes to new Recovery Tickets page
+    When Operator create ticket by csv in Recovery Tickets page
+    And Operator Upload a CSV file Create Tickets Via CSV modal with following data:
+      | trackingIds        | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | type               | DM,DM                                                                       |
+      | investigationGroup | RCY                                                                         |
+      | assigneeEmail      | ekki.syam@ninjavan.co                                                       |
+      | investigationHubId | 999999                                                                      |
+      | entrySource        | RS                                                                          |
+      | ticketNotes        | automation test                                                             |
+    Then Operator verifies error message is displayed
+      | top           | We are unable to create tickets for following tracking ID(s) |
+      | failureReason | Investigating hub is not a valid hub!                        |
+      | fileName      | csv_create_tickets_                                          |
