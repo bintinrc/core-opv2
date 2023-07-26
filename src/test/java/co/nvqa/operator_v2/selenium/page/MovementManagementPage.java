@@ -1561,6 +1561,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
       case "driver":
         String driverUsername = value;
+        doWithRetry(() -> {
+          Assertions.assertThat(isElementEnabled(f(MS_PAGE_ASSIGN_DRIVER_XPATH, index))).as("Assign drivers dropdown is enabled.").isTrue();
+        }, "Waiting until drivers dropdown is enabled...", 5000, 10);
         TestUtils.findElementAndClick(f(MS_PAGE_ASSIGN_DRIVER_XPATH, index), "xpath",
             getWebDriver());
         sendKeys(f(MS_PAGE_ASSIGN_DRIVER_XPATH, index), driverUsername);

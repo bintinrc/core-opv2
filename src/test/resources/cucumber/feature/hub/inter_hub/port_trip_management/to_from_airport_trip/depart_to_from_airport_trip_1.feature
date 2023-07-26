@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Airport to Warehouse Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -34,7 +34,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
       | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} license is inactive    |
       | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} employment is inactive |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Warehouse to Airport Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -61,7 +61,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
     Then Operator verifies driver error messages below on Port Trip Management page:
       | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} employment is inactive |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Warehouse to Airport Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -88,7 +88,7 @@ Feature: Airport Trip Management - Depart To From Airport Trip 1
     Then Operator verifies driver error messages below on Port Trip Management page:
       | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username} license is inactive |
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Depart Warehouse to Airport Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:

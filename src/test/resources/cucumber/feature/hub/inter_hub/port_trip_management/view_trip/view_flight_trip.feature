@@ -5,7 +5,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Pending Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -33,7 +33,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "PENDING" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Transit Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -62,7 +62,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "TRANSIT" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Arrive Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -92,7 +92,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "COMPLETED" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @DeleteCreatedPorts
+  @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: View Cancel Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -117,7 +117,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     When Operator cancel trip "{KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId}" on Port Trip Management page
     And Operator select Cancellation Reason on Cancel Trip Page
     Then Operator verifies the Cancellation Reason are correct
-    And Operator verifies the Cancel Trip button is "enable"
+    And Operator verifies the Cancel Trip button in Trip Management page is "enable"
     When Operator clicks "Cancel Flight Trip" button on cancel trip dialog
     Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
     When Operator opens view Airport Trip on Port Trip Management page with data below:

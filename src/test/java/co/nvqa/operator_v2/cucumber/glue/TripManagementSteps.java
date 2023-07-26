@@ -498,7 +498,7 @@ public class TripManagementSteps extends AbstractSteps {
     tripManagementPage.verifyCancellationMessage();
   }
 
-  @Then("Operator verifies the Cancel Trip button is {string}")
+  @Then("Operator verifies the Cancel Trip button in Trip Management page is {string}")
   public void OperatorVerifiesCancelTripButtonStatus(String status) {
     tripManagementPage.CancelTripButtonStatus(status);
   }

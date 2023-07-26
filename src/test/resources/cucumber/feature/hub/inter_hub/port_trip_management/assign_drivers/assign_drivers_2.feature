@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Assign Drivers 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Assign Single Driver To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -35,7 +35,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Save button on Assign Driver popup on Port Trip Management page
     Then Operator successful message "%s driver(s) successfully assigned to the trip" display on Assigned Drivers "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS" popup on Port Trip Management
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Assign Multiple Driver To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -67,7 +67,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Save button on Assign Driver popup on Port Trip Management page
     Then Operator successful message "%s driver(s) successfully assigned to the trip" display on Assigned Drivers "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS" popup on Port Trip Management
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Assign Four Drivers To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -103,7 +103,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Save button on Assign Driver popup on Port Trip Management page
     Then Operator successful message "%s driver(s) successfully assigned to the trip" display on Assigned Drivers "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS" popup on Port Trip Management
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Assign more than Four Drivers To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -140,7 +140,7 @@ Feature: Airport Trip Management - Assign Drivers 2
       | assignDrivers | 5 |
     And Operator clicks Save button on Assign Driver popup on Port Trip Management page
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign Driver with Inactive License Status To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -165,7 +165,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Assign Driver button on Port Trip details page
     Then Operator verifies driver with value "{expired-driver-username}" is not shown on Port Trip Management page
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Assign Driver with Inactive Employment Status To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -190,7 +190,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Assign Driver button on Port Trip details page
     Then Operator verifies driver with value "{inactive-driver-username}" is not shown on Port Trip Management page
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteMiddleMileDriver
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Unassign All Drivers To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -229,7 +229,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Unassign All button on Assign Driver popup on Port Trip Management
     And Operator clicks Save button on Assign Driver popup on Port Trip Management page
 
-  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts
+  @ForceCompleteCreatedMovementTrips @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Cannot Assign Driver to Flight Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
