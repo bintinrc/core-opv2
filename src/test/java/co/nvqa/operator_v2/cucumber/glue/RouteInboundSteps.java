@@ -484,7 +484,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.validateOrdersTable(expectedOrdersInfo);
   }
 
-  @When("^Operator click 'Continue To Inbound' button on Route Inbound page$")
+  @When("Operator click 'Continue To Inbound' button on Route Inbound page")
   public void operatorClickContinueToInboundButtonOnRouteInboundPage() {
     routeInboundPage.continueToInbound.waitUntilVisible();
     routeInboundPage.continueToInbound.click();
@@ -495,7 +495,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.photoAudit.click();
   }
 
-  @When("^Operator click 'I have completed photo audit' button on Route Inbound page$")
+  @When("Operator click 'I have completed photo audit' button on Route Inbound page")
   public void operatorClickCompletePhotoAuditButtonOnRouteInboundPage() {
     routeInboundPage.photoAuditDialog.waitUntilVisible();
     pause5s();
@@ -698,13 +698,13 @@ public class RouteInboundSteps extends AbstractSteps {
     );
   }
 
-  @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
+  @When("Operator add route inbound comment {string}  on Route Inbound page")
   public void operatorAddRouteInboundCommentOnRouteInboundPage(String comment) {
     routeInboundPage.addRoutInboundComment(comment);
     put(KEY_ROUTE_INBOUND_COMMENT, comment);
   }
 
-  @When("^Operator verify route inbound comment on Route Inbound page$")
+  @When("Operator verify route inbound comment on Route Inbound page")
   public void operatorVerifyRouteInboundCommentOnRouteInboundPage() {
     String expectedComment = get(KEY_ROUTE_INBOUND_COMMENT);
     routeInboundPage.verifyRouteInboundComment(expectedComment);
@@ -802,12 +802,12 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.closeDialog();
   }
 
-  @When("^Operator open Money Collection dialog on Route Inbound page$")
+  @When("Operator open Money Collection dialog on Route Inbound page")
   public void operatorOpenMoneyCollectionDialogOnRouteInboundPage() {
     routeInboundPage.openMoneyCollectionDialog();
   }
 
-  @Then("^Operator verify 'Money to collect' value is \"(.+)\" on Route Inbound page$")
+  @Then("Operator verify 'Money to collect' value is {string} on Route Inbound page")
   public void operatorVerifyMoneyToCollectValueOnRouteInboundPage(String expectedValue) {
     String actualValue = routeInboundPage.getMoneyToCollectValue();
     if (StringUtils.isNumeric(expectedValue)) {
@@ -816,19 +816,19 @@ public class RouteInboundSteps extends AbstractSteps {
     Assertions.assertThat(actualValue).as("Money to collect value").isEqualTo(expectedValue);
   }
 
-  @Then("^Operator verify 'Expected Total' value is \"(.+)\" on Money Collection dialog$")
+  @Then("Operator verify 'Expected Total' value is {string} on Money Collection dialog")
   public void operatorVerifyExpectedTotalValueOnMoneyCollectionDialog(String expectedValue) {
     String actualValue = routeInboundPage.moneyCollectionDialog().getExpectedTotal();
     Assertions.assertThat(actualValue).as("Expected Total value").isEqualTo(expectedValue);
   }
 
-  @Then("^Operator verify 'Outstanding amount' value is \"(.+)\" on Money Collection dialog$")
+  @Then("Operator verify 'Outstanding amount' value is {string} on Money Collection dialog")
   public void operatorVerifyOutstandingAmountValueOnMoneyCollectionDialog(String expectedValue) {
     String actualValue = routeInboundPage.moneyCollectionDialog().getOutstandingAmount();
     Assertions.assertThat(actualValue).as("Outstanding Amount value").isEqualTo(expectedValue);
   }
 
-  @Then("^Operator submit following values on Money Collection dialog:$")
+  @Then("Operator submit following values on Money Collection dialog:")
   public void operatorSubmitValuesOnMoneyCollectionDialog(Map<String, String> mapOfData) {
     MoneyCollection moneyCollection = new MoneyCollection(mapOfData);
     routeInboundPage.moneyCollectionDialog().fillForm(moneyCollection).save();
@@ -906,13 +906,13 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator removes route from driver app on Route Inbound page$")
+  @Then("Operator removes route from driver app on Route Inbound page")
   public void operatorRemovesRouteFromDriverAppOnRouteInboundPage() {
     routeInboundPage.removeRouteFromDriverApp.check();
     routeInboundPage.waitUntilInvisibilityOfToast("Updated Successfully", true);
   }
 
-  @Then("^Operator ends Route Inbound session for route \"(.+)\" on Route Inbound page$")
+  @Then("Operator ends Route Inbound session for route {string} on Route Inbound page")
   public void operatorEndsRouteInboundSessionOnRouteInboundPage(String routeId) {
     routeId = resolveValue(routeId);
     routeInboundPage.endSession.clickAndWaitUntilDone();

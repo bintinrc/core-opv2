@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part2 @current
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundScreen1Part2
 Feature: Route Inbound Screen 1
 
   Background:
