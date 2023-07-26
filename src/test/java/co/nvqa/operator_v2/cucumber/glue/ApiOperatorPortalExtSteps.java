@@ -62,6 +62,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void init() {
   }
 
+//  TODO move to common-driver
   @After("@DeleteVehicleTypes")
   public void deleteVehicleTypes() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
@@ -79,6 +80,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-shipper
   @After("@DeleteAddress")
   public void deleteAddress() {
     Addressing addressing = get(KEY_CREATED_ADDRESSING);
@@ -96,6 +98,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-lighthouse
   @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
   public void deleteShipperPickupFilterTemplate() {
     try {
@@ -155,6 +158,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-core
   @After("@DeleteThirdPartyShippers")
   public void deleteThirdPartyShippers() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
@@ -172,6 +176,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-driver
   @After("@DeleteContactTypes")
   public void deleteContactTypes() {
     ContactType contactType = get(KEY_CONTACT_TYPE);
@@ -189,6 +194,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-dp
   @Given("API Operator create new DP Partner with the following attributes:")
   public void apiOperatorCreateNewDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
     DpPartner dpPartner = new DpPartner(data);
@@ -198,6 +204,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_DP_PARTNER, dpPartner);
   }
 
+  //  TODO move to common-dp
   @When("API Operator add new DP for the created DP Partner with the following attributes:")
   public void operatorAddNewDpForTheDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
     Partner dpPartner = get(KEY_DP_PARTNER);
@@ -214,6 +221,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_NEWLY_CREATED_DP_ID, dp.getId());
   }
 
+  //  TODO move to common-dp
   @When("API Operator add new DP User for the created DP with the following attributes:")
   public void operatorAddDpUserForTheCreatedDpWithTheFollowingAttributes(Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
@@ -230,6 +238,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_DP_USER, dpUser);
   }
 
+  //  TODO move to common-dp
   @Given("API DP gets DP Partner Details for Partner ID {string}")
   public void apiDpGetsDpPartnerDetailsForPartnerId(String partnerIdAsString) {
     long partnerId = Long.parseLong(partnerIdAsString);
@@ -243,6 +252,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-driver
   @When("API Operator create {int} new Driver using data below:")
   public void apiOperatorCreateMultiNewDriverUsingDataBelow(Integer numberOdDrivers,
       Map<String, String> mapOfData) {
@@ -251,6 +261,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+  //  TODO move to common-driver
   @When("API Operator create new Driver using data below:")
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
@@ -282,11 +293,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
   }
 
+
+  //  TODO move to common-driver
   @And("API Operator refresh drivers data")
   public void refreshDriversData() {
     getDriverClient().getAllDriver();
   }
 
+
+  //  TODO move to common-driver
   @And("API Operator verifies coordinates of created driver were updated")
   public void verifyChangedCoordinates() {
     Driver oldDriver = get(KEY_CREATED_DRIVER);
@@ -308,6 +323,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         newDriver.getZonePreferences().get(0).getLongitude()));
   }
 
+
+  //  TODO move to common-lighthouse
   @After("@DeleteFilersPreset")
   public void deleteFiltersPreset() {
     Long presetId = get(ShipmentManagementSteps.KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
@@ -316,6 +333,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
   }
 
+
+  //  TODO move to common-core
   @And("^API Operator get created Reservation Group params$")
   public void apiOperatorGetCreatedReservationGroupParams() {
     ReservationGroup reservationGroup = get(
@@ -331,6 +350,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_RESERVATION_GROUP_ID, reservationGroup.getId());
   }
 
+
+  //  TODO move to common-core
   @Given("^API Operator gets data of created Third Party shipper$")
   public void apiOperatorGetsDataOfCreatedThirdPartyShipper() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
@@ -343,6 +364,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     thirdPartyShipper.setId(apiData.getId());
   }
 
+
+  //  TODO move to common-driver
   @Given("^API Operator gets data of created Vehicle Type$")
   public void apiOperatorGetsDataOfCreatedVehicleType() {
     VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
@@ -356,12 +379,16 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     vehicleType.setId(apiData.getId());
   }
 
+
+  //  TODO to deprecate, not in use
   @Given("^API Operator retrieve information about Bulk Order with ID \"(.+)\"$")
   public void apiOperatorRetrieveBulkOrderIdInfo(long bulkId) {
     BulkOrderInfo bulkOrderInfo = getOrderClient().retrieveBulkOrderInfo(bulkId);
     put(KEY_CREATED_BULK_ORDER_INFO, bulkOrderInfo);
   }
 
+
+  //  TODO to deprecate, not in use
   @Given("API Operator enable Set Aside using data below:")
   public void apiOperatorEnableSetAside(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -370,6 +397,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     getSetAsideClient().enable(request);
   }
 
+  //  TODO to deprecate, not in use
   @Given("API Operator retrieve information about Bulk Order")
   public void apiOperatorRetrieveBatchOrderIdInfo() {
     BatchOrderInfo batchOrderInfo = getOrderClient()
@@ -377,6 +405,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_BATCH_ORDER_INFO, batchOrderInfo);
   }
 
+  // TODO move to common-lighthouse
   @Given("API Operator creates new Shipper Pickup Filter Template using data below:")
   public void apiOperatorCreatesShipperPickupFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -388,6 +417,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_SHIPPER_PICKUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
+  // TODO move to common-lighthouse
   @Given("API Operator creates new Orders Filter Template using data below:")
   public void apiOperatorCreatesOrdersFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -398,6 +428,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
+  // TODO move to common-lighthouse
   @Given("API Operator creates new Routes Filter Template using data below:")
   public void apiOperatorCreatesRoutesFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -408,6 +439,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_ROUTES_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
+  // TODO move to common-lighthouse
   @Given("API Operator creates new Route Groups Filter Template using data below:")
   public void apiOperatorCreatesRouteGroupsFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -418,6 +450,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
+  // TODO move to common-lighthouse
   @Given("API Operator creates new Shipments Filter Template using data below:")
   public void apiOperatorCreatesShipmentsFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -428,6 +461,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_SHIPMENTS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
+  // TODO to deprecate, already in common-core
   @When("API Operator create new COD for created order")
   public void operatorCreateNewCod() {
     Order order = get(KEY_CREATED_ORDER);
@@ -459,6 +493,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 
+  // TODO move to common-sort
   @Given("^API Operator create Middle Tier sort node:$")
   public void apiOperatorCreateSortNode(Map<String, String> data) {
     Node node = new Node(resolveKeyValues(data));
@@ -468,6 +503,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CREATED_MIDDLE_TIER_NODE, node);
   }
 
+  // TODO move to common-core
   @Given("API Operator create sales person:")
   public void apiOperatorCreateSalesPerson(Map<String, String> data) {
     SalesPerson salesPerson = new SalesPerson(resolveKeyValues(data));
@@ -482,8 +518,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
   }
 
-  //TODO
-//  move to common-driver
+  //TODO move to common-driver
   @Given("API Driver - Operator create new Driver using data below:")
   public void operatorCreateNewDriver(Map<String, String> mapOfData) {
     String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
