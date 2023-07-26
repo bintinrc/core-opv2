@@ -482,6 +482,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
   }
 
+  //TODO
+//  move to common-driver
   @Given("API Driver - Operator create new Driver using data below:")
   public void operatorCreateNewDriver(Map<String, String> mapOfData) {
     String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
