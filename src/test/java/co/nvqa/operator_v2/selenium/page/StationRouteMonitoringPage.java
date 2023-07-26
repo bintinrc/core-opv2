@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import java.util.HashMap;
@@ -26,14 +27,14 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   }
 
   public enum StationRouteMonitoring {
-    DRIVER_NAME("driver_name"),
+    DRIVER_NAME("driver_display_name"),
     ROUTE("route_id"),
     INBOUND_HUB("hub_name"),
     ZONE("zone_name"),
     TOTAL_PARCEL_COUNT("total_parcels"),
     COMPLETION_RATE("completion_percentage"),
     TOTAL_WAYPOINTS("total_waypoints"),
-    PENDING_PRIORITY_PARCELS("pending_priority_parcels"),
+    PENDING_PRIORITY_PARCELS("num_priority_parcels"),
     PENDING_WAYPOINTS("num_pending"),
     PENDING_AND_LATE_WAYPOINTS("num_late_and_pending"),
     SUCCESSFUL_WAYPOINTS("num_success"),
@@ -56,7 +57,8 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     public String getXpath() {
       return String.format(
           "(//div[@role='gridcell' and @class='BaseTable__row-cell' and @data-datakey='%s']"
-              + "/child::*//*[name()='a' or (name()='span')])[last()]", this.optionValue);
+              + "/child::*//*[name()='a' or name()='div' or (name()='span')])[last()]",
+          this.optionValue);
     }
   }
 
@@ -96,7 +98,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   private static final String TRACKINGID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link']";
   private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='reservation-link' and text()='%s']";
   private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//span[1]";
-  private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//h3[text()='%s']";
+  private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//div[text()='%s']";
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
@@ -140,7 +142,8 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
 
   // This method can be removed once redirection to Route Monitoring is fixed in station Management
   public void loadStationRouteMonitoringPage() {
-    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring");
+    getWebDriver().get(f("https://operatorv2-qa.ninjavan.co/#/%s/station-route-monitoring",
+        StandardTestConstants.NV_SYSTEM_ID));
   }
 
   public void selectHubAndZone(String hubName) {
@@ -280,6 +283,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
           waitWhilePageIsLoading();
           filterFields.get(0).click();
           filterFields.get(0).sendKeys(filter.getValue());
+          pause1s();
         }
       }
     }
@@ -329,6 +333,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     switchToNewWindow();
     waitWhilePageIsLoading();
     pause5s();
+    switchToStationRouteMonitoringFrame();
     Assertions.assertThat(
             getWebDriver().findElements(By.xpath(f(EDIT_ORDER_TRACKING_ID_XPATH, trackingID))))
         .as("Assertion for Navigation on clicking Tracking ID").isNotEmpty();
