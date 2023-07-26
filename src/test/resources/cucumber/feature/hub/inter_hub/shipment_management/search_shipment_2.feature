@@ -5,7 +5,7 @@ Feature: Shipment Management - Search Shipment 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - MAWB (uid:59cc8df2-47e0-46c4-9ca6-08179b099a02)
     When Operator go to menu Inter-Hub -> Shipment Management
     And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
@@ -142,7 +142,7 @@ Feature: Shipment Management - Search Shipment 2
       | currHubName  | {hub-name}                               |
       | destHubName  | {KEY_SORT_LIST_OF_CREATED_HUBS[1].name}  |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search Shipment by ID - Search <= 30 Shipments without Duplicate (uid:68b7217b-41a8-4259-9da8-e8ce68f0a7b0)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -169,7 +169,7 @@ Feature: Shipment Management - Search Shipment 2
       | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
       | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[2].id} |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search Shipment by ID - Search > 30 Shipments without Duplicate (uid:a4c69f51-6389-46b4-8348-db2b4fb4dfe5)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
