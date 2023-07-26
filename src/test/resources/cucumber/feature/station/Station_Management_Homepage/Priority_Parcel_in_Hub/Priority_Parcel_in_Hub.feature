@@ -11,16 +11,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -36,8 +43,8 @@ Feature: Priority Parcel in Hub
       | Recovery Ticket Type  |
       | Ticket Status         |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           | Order Tags |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | PRIOR      |
+      | Tracking ID/ Route ID                      | Order Tags |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PRIOR      |
     And Operator verifies that Edit Order page is opened on clicking tracking id
 
     Examples:
@@ -50,16 +57,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -76,10 +90,10 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               |
@@ -91,16 +105,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -130,20 +151,28 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -163,7 +192,7 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID  |
       | {KEY_CREATED_ROUTE_ID} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\nRoute ID: {KEY_CREATED_ROUTE_ID} |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\nRoute ID: {KEY_CREATED_ROUTE_ID} |
 
     Examples:
       | HubId      | HubName      | TileName                | ModalName               |
@@ -175,17 +204,24 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator saves to address used in the parcel in the key
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -202,11 +238,11 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           | Address                                |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS} |
+      | Tracking ID/ Route ID                      | Address                                |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n-     |
-      | Address               | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS} |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Address               | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS}        |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               |
@@ -218,17 +254,24 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator saves to address used in the parcel in the key
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -245,8 +288,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID/ Route ID           | Address   |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <Address> |
+      | Tracking ID/ Route ID                      | Address   |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | <Address> |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Address         |
@@ -258,17 +301,24 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator saves to address used in the parcel in the key
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -285,11 +335,11 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           | Granular Status  |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <GranularStatus> |
+      | Tracking ID/ Route ID                      | Granular Status  |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | <GranularStatus> |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
-      | Granular Status       | <GranularStatus>                   |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | <GranularStatus>                              |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | GranularStatus         |
@@ -301,16 +351,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -327,8 +384,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects the following values in the modal pop up
       | Size | <Size> |
     And Operator verifies that the following details are displayed on the modal
@@ -344,16 +401,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"<StartHour>:00", "end_time":"<EndHour>:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"<StartHour>:00", "end_time":"<EndHour>:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -370,8 +434,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects the following values in the modal pop up
       | Timeslot | <StartHour>00 - <EndHour>00 |
     And Operator verifies that the following details are displayed on the modal
@@ -388,16 +452,23 @@ Feature: Priority Parcel in Hub
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -412,8 +483,8 @@ Feature: Priority Parcel in Hub
       | ETA Calculated        |
       | Station Confirmed ETA |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID                                |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator confirms that station confirmed eta field is empty
     And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
     And Operators verifies that the toast message: "<ToastMessage>" has displayed
@@ -431,8 +502,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects the following values in the modal pop up
       | Committed ETA | {gradle-next-2-day-yyyy-MM-dd} |
     And Operator verifies that the following details are displayed on the modal
@@ -448,29 +519,34 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -487,46 +563,53 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects the following values in the modal pop up
       | Recovery Ticket Type | <TicketType> |
     And Operator verifies that the following details are displayed on the modal
       | Recovery Ticket Type | <TicketType> |
 
     Examples:
-      | TicketType    | TicketSubType    | HubName      | HubId      | TileName                | ModalName               |
-      | SHIPPER ISSUE | DUPLICATE PARCEL | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
+      | HubName      | HubId      | TileName                | ModalName               | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
 
-  @ForceSuccessOrder
+
+  @ForceSuccessOrder @Set1
+    @ForceSuccessOrder
   Scenario Outline: Search Priority Parcel in Hub by Ticket Status (uid:ee55364a-d65e-4655-b037-f7915e243edb)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"<SizeShortForm>", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -543,8 +626,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects the following values in the modal pop up
       | Recovery Ticket Type | <TicketType>   |
       | Ticket Status        | <TicketStatus> |
@@ -553,8 +636,11 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | TicketStatus | TileName                | ModalName               |
-      | {hub-name-8} | {hub-id-8} | SHIPPER ISSUE | DUPLICATE PARCEL | CREATED      | Priority parcels in hub | Priority Parcels in Hub |
+      | HubName      | HubId      | TileName                | ModalName               | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CREATED      |
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-19} | {hub-id-19} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
 
   @ForceSuccessOrder
   Scenario Outline: Sort Priority Parcel in Hub Based on Size (uid:ec1a8d72-07d5-4376-b2ab-286b240c5ba9)
@@ -562,16 +648,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions":{ "size":"S", "weight":"1.0" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -589,10 +682,10 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     And Operators sorts and verifies that the column:"<ColumnName>" is in ascending order
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | ColumnName |
@@ -604,16 +697,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | <TagId> |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | <TagId>                            |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -634,8 +734,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | - |
     When API Operator delete order tag with id: <TagId> from the created order
@@ -646,8 +746,8 @@ Feature: Priority Parcel in Hub
     And Operator verifies that the count in tile: "<TileName>" has decreased by 1
     And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
       | HubName      | HubId      | TileName                | TagId | ModalName1                                   | ModalName2              | SlackMessageContent |
@@ -659,16 +759,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -688,8 +795,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | - |
     And Operator verifies that Edit Order page is opened on clicking tracking id
@@ -704,16 +811,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -721,11 +835,11 @@ Feature: Priority Parcel in Hub
     And Operator closes the modal: "<ModalName1>" if it is displayed on the page
     And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID                                |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}  |
+      | Tracking ID    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}             |
     And Operator confirms that station confirmed eta field is empty
     And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
     And Operators verifies that the toast message: "<ToastMessage>" has displayed
@@ -742,8 +856,8 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | {gradle-next-2-day-yyyy-MM-dd} |
     And Operator verifies that Edit Order page is opened on clicking tracking id
@@ -758,29 +872,34 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -798,15 +917,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CREATED      |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Damaged (uid:3e196191-c4af-4184-a297-c05f0e05ac9b)
@@ -814,31 +933,33 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -856,15 +977,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | CREATED      |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Parcel Exception (uid:5b5e3a65-dfe2-4f30-b500-6ee5e8612f0a)
@@ -872,30 +993,34 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -913,15 +1038,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | CREATED      |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Parcel On Hold  (uid:df672d8b-ecc1-4fbc-99e9-34df243e8cc5)
@@ -929,29 +1054,34 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -969,15 +1099,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | CREATED      |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Shipper Issue (uid:9300f0ce-bdd6-4698-a794-3bddc5ee4a38)
@@ -985,34 +1115,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1030,15 +1172,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | PARCEL SCRAPPED | IN PROGRESS  |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Damaged (uid:0baddff7-c27b-4d03-890b-6b5399e906b0)
@@ -1046,36 +1188,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1093,15 +1244,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | IN PROGRESS  |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Parcel Exception (uid:fb8b1046-7853-4152-802b-955f518d9abf)
@@ -1109,35 +1260,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1155,15 +1316,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | IN PROGRESS  |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Parcel On Hold  (uid:f6916ba9-88ea-47e2-b5d3-ca7c409b4408)
@@ -1171,34 +1333,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1216,15 +1389,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | IN PROGRESS  |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Shipper Issue (uid:7e86bf11-0b25-42e1-baae-a875220d9fa5)
@@ -1232,35 +1405,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1278,15 +1461,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | PARCEL SCRAPPED | ON HOLD      |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Damaged (uid:dafb54ad-4ce5-45cb-b710-a54a321d3650)
@@ -1294,36 +1478,44 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1341,15 +1533,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType | OrderOutcomeName        | TicketSubType      | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | ORDER OUTCOME (DAMAGED) | IMPROPER PACKAGING | ON HOLD      |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Parcel Exception (uid:a9d9e242-63a6-47eb-b192-3ae51d688e12)
@@ -1357,35 +1550,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1403,15 +1606,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | ON HOLD      |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Parcel On Hold (uid:1593afbe-9627-4aa1-bcc3-774386d287c4)
@@ -1420,34 +1623,45 @@ Feature: Priority Parcel in Hub
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1465,15 +1679,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | ON HOLD      |
+
 
   @ForceSuccessOrder
   Scenario Outline: Filter Parcels by Committed ETA (uid:c3b04170-37eb-4f15-9597-41f22ef4521a)
@@ -1481,16 +1696,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_CREATED_ORDER_ID}, "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1498,11 +1720,11 @@ Feature: Priority Parcel in Hub
     And Operator closes the modal: "<ModalName1>" if it is displayed on the page
     And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID                                |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}  |
+      | Tracking ID    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ETA Calculated | {gradle-next-1-day-yyyy-MM-dd}             |
     And Operator confirms that station confirmed eta field is empty
     And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
     And Operators verifies that the toast message: "<ToastMessage>" has displayed
@@ -1520,11 +1742,11 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     When Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
-      | Committed ETA         | {gradle-next-2-day-yyyy-MM-dd}     |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Committed ETA         | {gradle-next-2-day-yyyy-MM-dd}                |
 
     Examples:
       | HubName      | HubId      | TileName                | Filter        | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
@@ -1536,20 +1758,28 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1571,7 +1801,7 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID  |
       | {KEY_CREATED_ROUTE_ID} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\nRoute ID: {KEY_CREATED_ROUTE_ID} |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\nRoute ID: {KEY_CREATED_ROUTE_ID} |
 
     Examples:
       | HubId      | HubName      | TileName                | ModalName               | Filter | FSRModalTitle                                |
@@ -1583,16 +1813,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1611,10 +1848,10 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     When Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
@@ -1626,34 +1863,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | <OrderOutcome>     |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1671,15 +1920,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus    |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | PENDING SHIPPER |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Damaged (uid:fb550ebc-d73f-4ad4-bc46-0983a23cc5c8)
@@ -1687,36 +1937,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1734,15 +1993,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus    |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | PENDING SHIPPER |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel Exception (uid:bdfbf21c-2c6f-4c4a-9e42-587ceb475233)
@@ -1750,35 +2010,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1796,15 +2067,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome    | TicketStatus    |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RESUME DELIVERY | PENDING SHIPPER |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel On Hold (uid:4b6d1c14-bef8-4df5-b6e6-620e83b776fe)
@@ -1812,34 +2084,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1857,15 +2141,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus    |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | PENDING SHIPPER |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Shipper Issue
@@ -1873,34 +2158,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | <OrderOutcome>     |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1918,15 +2215,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CANCELLED    |
 
 
   @ForceSuccessOrder @PriorityParcelSet1
@@ -1935,36 +2232,44 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | <HubId>                               |
+      | ticketType         | <TicketType>                          |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1982,15 +2287,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | CANCELLED    |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel On Hold
@@ -1998,34 +2304,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2043,15 +2361,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | CANCELLED    |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel Exception
@@ -2059,35 +2377,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2105,15 +2434,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RESUME DELIVERY | CANCELLED    |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Shipper Issue
@@ -2121,35 +2451,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                 | CUSTOMER COMPLAINT |
-      | investigatingDepartment     | Fleet (First Mile) |
-      | investigatingHub            | <HubName>          |
-      | ticketType                  | <TicketType>       |
-      | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | <OrderOutcome>     |
-      | issueDescription            | GENERATED          |
-      | custZendeskId               | 1                  |
-      | shipperZendeskId            | 1                  |
-      | ticketNotes                 | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | outcome                 | <OrderOutcome>            |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2167,15 +2508,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome                | Status   | KeepCurrentOrderOutcome | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | REPACKED/RELABELLED TO SEND | RESOLVED | No                      | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CANCELLED    |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Damaged
@@ -2184,37 +2525,45 @@ Feature: Priority Parcel in Hub
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | <OrderOutcome>     |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | outcome                 | <OrderOutcome>            |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2232,15 +2581,15 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome          | KeepCurrentOrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | No                      | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | RESOLVED     |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold
@@ -2248,34 +2597,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | <OrderOutcome>     |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2293,15 +2654,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | RESOLVED     |
+
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel Exception
@@ -2309,35 +2671,46 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | <OrderOutcome>     |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2355,15 +2728,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TileName                | ModalName               | FSRModalTitle                                | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome    | TicketStatus |
+      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RESUME DELIVERY | RESOLVED     |
+
 
   @Happypath @ForceSuccessOrder
   Scenario Outline: View Priority Parcel of Missing Ticket Type (uid:05e8d756-57f8-48bc-aa3a-f3b35c67d41d)
@@ -2371,34 +2745,45 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | orderOutcomeMissing     | <OrderOutcome>     |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator updates recovery ticket on Edit Order page:
-      | status                  | <Status>                  |
-      | outcome                 | <OrderOutcome>            |
-      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
-      | assignTo                | NikoSusanto               |
-      | newInstructions         | GENERATED                 |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Then DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
+    And  API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | status           | <TicketStatus>                           |
+      | outcome          | <OrderOutcome>                           |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2416,15 +2801,16 @@ Feature: Priority Parcel in Hub
       | Size                  |
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Recovery Ticket Type | <TicketType> |
-      | Ticket Status        | <Status>     |
+      | Recovery Ticket Type | <TicketType>   |
+      | Ticket Status        | <TicketStatus> |
 
     Examples:
-      | HubName      | HubId      | TicketType | OrderOutcome    | Status   | KeepCurrentOrderOutcome | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-8} | {hub-id-8} | MISSING    | FOUND - INBOUND | RESOLVED | No                      | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName      | HubId      | TileName                | ModalName               | FSRModalTitle                                | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome    | TicketStatus |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | MISSING    | IMPROPER PACKAGING | ORDER OUTCOME (MISSING) | FOUND - INBOUND | RESOLVED     |
+
 
   @ForceSuccessOrder
   Scenario Outline: [SG] Filter Parcels by Late If Inbound After Cut Off Time (uid:dcd4bf2f-37c5-4ea1-81f6-276ecf2ed1e0)
@@ -2432,16 +2818,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2458,13 +2851,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2478,13 +2871,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 172 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 172                                |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2501,13 +2900,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country   | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2521,13 +2920,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2544,13 +2949,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2564,14 +2969,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-th-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {station-th-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "11/1 Soi Samsen 3 Samsen Road, Wat Samphraya, Phranakhon","address2": "","country": "TH","postcode": "10200"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "10 Soi Siri Ammat, Boonsiri Road San Chao Pho Sua, Phanakon","address2": "","country": "TH","postcode": "10200"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2588,13 +2998,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2608,14 +3018,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-ph-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {station-ph-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "Quezon Ave, Santa Cruz, 4009 Laguna, Philippines","address2": "","country": "PH","postcode": "4009"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "Emilio Aguinaldo Highway, By Pass Road, Tubuan 2, Silang, 4118 Cavite, Philippines","address2": "","country": "PH","postcode": "4118"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2632,13 +3046,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country     | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2652,14 +3066,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"parcel_job":{"cash_on_delivery": 40000,"insured_value": 85000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 4 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 4                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2676,13 +3094,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2694,16 +3112,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2720,13 +3145,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2740,13 +3165,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 172 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 172                                |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2763,13 +3194,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country   | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2783,13 +3214,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2806,13 +3243,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2826,14 +3263,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-th-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {station-th-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "11/1 Soi Samsen 3 Samsen Road, Wat Samphraya, Phranakhon","address2": "","country": "TH","postcode": "10200"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "10 Soi Siri Ammat, Boonsiri Road San Chao Pho Sua, Phanakon","address2": "","country": "TH","postcode": "10200"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2850,13 +3291,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2870,14 +3311,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-ph-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {station-ph-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "Quezon Ave, Santa Cruz, 4009 Laguna, Philippines","address2": "","country": "PH","postcode": "4009"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "Emilio Aguinaldo Highway, By Pass Road, Tubuan 2, Silang, 4118 Cavite, Philippines","address2": "","country": "PH","postcode": "4118"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2894,13 +3339,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country     | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2914,14 +3359,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"parcel_job":{"cash_on_delivery": 40000,"insured_value": 85000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 4 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 4                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2938,13 +3387,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
@@ -2957,16 +3406,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2983,13 +3439,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
@@ -3003,13 +3459,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 172 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": 100,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 172                                |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3026,13 +3488,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country   | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
@@ -3046,13 +3508,19 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3069,13 +3537,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
@@ -3089,14 +3557,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-th-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {station-th-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "11/1 Soi Samsen 3 Samsen Road, Wat Samphraya, Phranakhon","address2": "","country": "TH","postcode": "10200"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "10 Soi Siri Ammat, Boonsiri Road San Chao Pho Sua, Phanakon","address2": "","country": "TH","postcode": "10200"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3113,13 +3585,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country  | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
@@ -3133,14 +3605,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-ph-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {station-ph-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "Quezon Ave, Santa Cruz, 4009 Laguna, Philippines","address2": "","country": "PH","postcode": "4009"}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "Emilio Aguinaldo Highway, By Pass Road, Tubuan 2, Silang, 4118 Cavite, Philippines","address2": "","country": "PH","postcode": "4118"}},"parcel_job":{"cash_on_delivery": 40,"insured_value": 85, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 2 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 2                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3157,13 +3633,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country     | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                              | FSRModalTitle                                |
@@ -3177,14 +3653,18 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "AUTO-STATION-FROM","phone_number": "+6087689827","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"to": {"name": "AUTO-STATION-TO","phone_number": "+60123456798","email": "recipientV4@nvqa.co","address": {"address1": "19 - 23 Lam Son Square, District 1, Ho Chi Minh City","address2": "","country": "VN","postcode": "1440","latitude": 21.01028637,"longitude": 105.81}},"parcel_job":{"cash_on_delivery": 40000,"insured_value": 85000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"weight": 0.4,"height": 2,"width": 2,"length": 5,"size": "S"},"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 4 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId>" } |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | 4                                  |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | <HubId>                                                                                                                                                                                                                                            |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3201,13 +3681,13 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
-    And DB Operators updates the column value: inbounded_into_hub_at as "<HubInboundedAt>" of parcel table in station db
+    When DB Station - Operator updates inboundedIntoHubAt "<HubInboundedAt>" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator applies filter as "<Filter>" from quick filters option
     Then Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | Country | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
@@ -3219,16 +3699,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3247,10 +3734,10 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | Filter      | FSRModalTitle                                |
@@ -3262,19 +3749,27 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId1>                        |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId2>                        |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId1>                                                                                     |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId2>                                                                                     |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3293,8 +3788,8 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
       | HubName1     | HubId1     | HubName2     | HubId2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
@@ -3306,27 +3801,40 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId1>                        |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId2>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId2>                        |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId1>                                                                                     |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId2>                                                                                     |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3345,8 +3853,8 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     Then Operator applies filter as "<Filter>" from quick filters option
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
       | HubName1     | HubId1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
@@ -3358,16 +3866,23 @@ Feature: Priority Parcel in Hub
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags multiple parcels as per the below tag
-      | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -3385,10 +3900,10 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     And Operators sorts and verifies that the column:"Time in Hub" is in descending order
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID/ Route ID           |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
-      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
 
     Examples:
       | HubId      | HubName      | TileName                | ModalName               |
