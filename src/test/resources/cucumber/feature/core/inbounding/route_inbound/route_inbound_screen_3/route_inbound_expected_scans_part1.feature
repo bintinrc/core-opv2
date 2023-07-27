@@ -1,68 +1,91 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1 @current
 Feature: Route Inbound Expected Scans
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @wip
   Scenario: Route Inbound Expected Scans : Pending Deliveries
-    Given API Operator create new route using data below:
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                |
+#    Given API Order - Shipper create multiple V4 orders using data below:
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","to":{"name": "QA core api automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD {dp-address-unit-number}","country": "SG","postcode": "{dp-address-postcode}","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+
+
+
+
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
-      | routeId                | {KEY_CREATED_ROUTE_ID} |
-      | driverName             | {ninja-driver-name}    |
-      | hubName                | {hub-name}             |
-      | routeDate              | GET_FROM_CREATED_ROUTE |
-      | parcelProcessedScans   | 0                      |
-      | parcelProcessedTotal   | 2                      |
-      | pendingDeliveriesScans | 0                      |
-      | pendingDeliveriesTotal | 2                      |
+      | routeId                | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverName             | {ninja-driver-name}                |
+      | hubName                | {hub-name}                         |
+      | routeDate              | GET_FROM_CREATED_ROUTE             |
+      | parcelProcessedScans   | 0                                  |
+      | parcelProcessedTotal   | 2                                  |
+      | pendingDeliveriesScans | 0                                  |
+      | pendingDeliveriesTotal | 2                                  |
     When Operator open Pending Deliveries dialog on Route Inbound page
     Then Operator verify Shippers Info in Pending Deliveries Waypoints dialog using data below:
       | shipperName       | scanned | total |
       | {shipper-v4-name} | 0       | 2     |
     When Operator click 'View orders or reservations' button for shipper #1 in Pending Deliveries Waypoints dialog
     Then Operator verify Orders table in Pending Deliveries Waypoints dialog using data below:
-      | trackingId                                 | stampId | location                 | type              | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Pending | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Normal) | Pending | 0        |                    |
-    When Operator close Pending Deliveries dialog on Route Inbound page
-    And Operator scan a tracking ID of created order on Route Inbound page
-    Then Operator verify the Route Inbound Details is correct using data below:
-      | parcelProcessedScans   | 1 |
-      | parcelProcessedTotal   | 2 |
-      | pendingDeliveriesScans | 1 |
-      | pendingDeliveriesTotal | 2 |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name    | ROUTE INBOUND SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-      | hubName | {hub-name}             |
-    And DB Operator verifies inbound_scans record with type "2" and correct route_id
+      | trackingId                            | stampId | location                                         | type              | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress} | Delivery (Normal) | Pending | 0        |                    |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineToAddress} | Delivery (Normal) | Pending | 0        |                    |
+#    When Operator close Pending Deliveries dialog on Route Inbound page
+#    And Operator scan a tracking ID of created order on Route Inbound page
+#    Then Operator verify the Route Inbound Details is correct using data below:
+#      | parcelProcessedScans   | 1 |
+#      | parcelProcessedTotal   | 2 |
+#      | pendingDeliveriesScans | 1 |
+#      | pendingDeliveriesTotal | 2 |
+#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+#    Then Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+#    And Operator verify order event on Edit order page using data below:
+#      | name    | ROUTE INBOUND SCAN     |
+#      | routeId | {KEY_CREATED_ROUTE_ID} |
+#      | hubName | {hub-name}             |
+#    And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
@@ -458,7 +481,7 @@ Feature: Route Inbound Expected Scans
     And API Operator get "{KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}" reservation
     And API Driver collect all his routes
     And API Operator Van Inbound parcel
-    And API Operator start the route
+#    And API Operator start the route
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |

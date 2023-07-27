@@ -216,7 +216,7 @@ public class RouteInboundSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify the Route Inbound Details is correct using data below:$")
+  @Then("Operator verify the Route Inbound Details is correct using data below:")
   public void operatorVerifyTheRouteInboundDetailsIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -316,7 +316,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openPendingWaypointsDialog();
   }
 
-  @Then("^Operator verify Shippers Info in (.+) dialog using data below:$")
+  @Then("Operator verify Shippers Info in (.+) dialog using data below:")
   public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream()
@@ -325,7 +325,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.validateShippersTable(expectedShippersInfo);
   }
 
-  @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) dialog$")
+  @When("Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) dialog")
   public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(
       int index, String status) {
     routeInboundPage.openViewOrdersOrReservationsDialog(index);
@@ -410,7 +410,7 @@ public class RouteInboundSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @Then("^Operator verify Orders table in (.+) dialog using data below:$")
+  @Then("Operator verify Orders table in (.+) dialog using data below:")
   public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointOrderInfo> expectedOrdersInfo = listOfData.stream().map(data ->
@@ -762,7 +762,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openPartialWaypointsDialog();
   }
 
-  @When("^Operator open Pending Deliveries dialog on Route Inbound page$")
+  @When("Operator open Pending Deliveries dialog on Route Inbound page")
   public void operatorOpenPendingDeliveriesInfoDialogOnRouteInboundPage() {
     routeInboundPage.openPendingDeliveriesDialog();
   }
