@@ -107,8 +107,12 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | type    | 49                                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+      | type      | 49                                    |
+      | userId    | 397                                   |
+      | userName  | AUTOMATION EDITED                     |
+      | userEmail | {operator-portal-uid}                 |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   Scenario: Operator Delete Order - Status = Staging
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -165,8 +169,12 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | type    | 49                                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+      | type      | 49                                    |
+      | userId    | 397                                   |
+      | userName  | AUTOMATION EDITED                     |
+      | userEmail | {operator-portal-uid}                 |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   Scenario: Operator Delete Order - Status = Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -197,9 +205,13 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | type    | 49                                 |
-
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+      | type      | 49                                    |
+      | userId    | 397                                   |
+      | userName  | AUTOMATION EDITED                     |
+      | userEmail | {operator-portal-uid}                 |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+    
   Scenario: Operator Delete Order with Invoiced Amount
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -225,5 +237,9 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | type    | 49                                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
+      | type      | 49                                                            |
+      | userId    | 397                                                           |
+      | userName  | AUTOMATION EDITED                                             |
+      | userEmail | {operator-portal-uid}                                         |
+      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
