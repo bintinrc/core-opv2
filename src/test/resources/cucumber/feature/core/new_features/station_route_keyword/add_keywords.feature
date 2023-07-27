@@ -37,12 +37,11 @@ Feature: Add Keywords
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
-      | coverageId        | value                                           |
-      | {KEY_COVERAGE_ID} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
-      | {KEY_COVERAGE_ID} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | {KEY_COVERAGE_ID} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
+      | coverageId                   | value                                           |
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword - Not Transfer Keyword
@@ -87,12 +86,12 @@ Feature: Add Keywords
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[1]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                           |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword - Transfer Keyword
@@ -141,12 +140,12 @@ Feature: Add Keywords
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that sr_keywords record is not created for "{KEY_LIST_OF_COVERAGE_ID[1]}" coverageId
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
+    And DB Route - verify that sr_keywords record is not created for "{KEY_LIST_OF_COVERAGE[1].id}" area
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                           |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD  {gradle-current-date-yyyyMMddHHmmsss}  |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD  {gradle-current-date-yyyyMMddHHmmsss}  |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Empty Area Variation and Duplicate Keyword - Not Transfer Keyword
@@ -190,9 +189,9 @@ Feature: Add Keywords
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records were deleted:
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Empty Area Variation and Duplicate Keyword - Transfer Keyword
@@ -226,7 +225,8 @@ Feature: Add Keywords
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
-      | top | Keywords added |
+      | top                | Keywords added |
+      | waitUntilInvisible | true           |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
@@ -236,12 +236,12 @@ Feature: Add Keywords
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records were deleted:
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[1]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword from Empty Coverage Keyword - Transfer Keyword
@@ -286,12 +286,12 @@ Feature: Add Keywords
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records were deleted:
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[1]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
+      | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword from Empty Coverage Keyword - Not Transfer Keyword
@@ -334,7 +334,7 @@ Feature: Add Keywords
       | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify there are no keywords on Add Keywords tab on Station Route Keyword page
-    Then DB Operator verifies that route_qa_gl/sr_keywords records were deleted:
+    Then DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                         |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 

@@ -5,7 +5,7 @@ Feature: Add To Shipment 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder
   Scenario: Add Multiple Parcels to Shipment (uid:2b1021d1-828f-437c-a095-baebbae1d8c7)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -19,7 +19,7 @@ Feature: Add To Shipment 2
     When Operator add order to shipment in hub "{hub-name}" to hub "{hub-name-2}"
     And Operator close the shipment which has been created
 
-  @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Action Toggle (uid:ffad1735-0cb1-43ac-a6f2-2fe32cfcfadf)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -62,7 +62,7 @@ Feature: Add To Shipment 2
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
 
-  @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel to Shipment with Alert (uid:21ff371d-e507-453a-9d4a-f37c18037aa7)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:

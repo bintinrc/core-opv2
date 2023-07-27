@@ -54,7 +54,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
       | Hub | {hub-name}                                                                 |
     Then Operator searches the "NAME" of "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" and verifies the value is correct
 
-  @DeleteMiddleMileDriver
+  @HappyPath @DeleteMiddleMileDriver
   Scenario: Search Driver on Search Field ID (uid:dcebd212-12c5-42e6-82fb-76e894f36d73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

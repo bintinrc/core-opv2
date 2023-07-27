@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.pricing.model.rest.BillingReportsRequest;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,6 +21,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_FINANCE_BILLING_REPORT_REQUEST;
+import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_ORDER_BILLING_GENERATED_CSV_FILE;
 import static co.nvqa.common.utils.StandardTestUtils.createFile;
 
 
@@ -56,20 +60,26 @@ public class OrderBillingSteps extends AbstractSteps {
 
 
   private void setOrderBillingData(Map<String, String> mapOfData) {
+    BillingReportsRequest billingReportsRequest = new BillingReportsRequest();
     try {
+      // todo: please remove these keys (except KEY_ORDER_BILLING_GENERATED_CSV_FILE,KEY_FINANCE_BILLING_REPORT_REQUEST)
+      //  once all the SSB scenarios are moved to commonv2
       if (Objects.nonNull(mapOfData.get("startDate"))) {
         String startDate = mapOfData.get("startDate");
         put(KEY_ORDER_BILLING_START_DATE, startDate);
         orderBillingPage.selectStartDate(startDate);
+        billingReportsRequest.setStartDate(startDate);
       }
       if (Objects.nonNull(mapOfData.get("endDate"))) {
         String endDate = mapOfData.get("endDate");
         put(KEY_ORDER_BILLING_END_DATE, endDate);
+        billingReportsRequest.setEndDate(endDate);
         orderBillingPage.selectEndDate(endDate);
       }
       if (Objects.nonNull(mapOfData.get("shipper"))) {
         String shipper = mapOfData.get("shipper");
         orderBillingPage.setSpecificShipper(shipper);
+        billingReportsRequest.setLegacyShipperIds(Collections.singletonList(Long.valueOf(shipper)));
         put(KEY_ORDER_BILLING_SHIPPER, Long.valueOf(shipper));
 
       }
@@ -77,6 +87,7 @@ public class OrderBillingSteps extends AbstractSteps {
         String shipperIds = mapOfData.get("uploadCsv");
         if (shipperIds.equalsIgnoreCase("generatedCsv")) {
           orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_UPLOAD_CSV_FILE));
+          orderBillingPage.uploadCsvShippers(get(KEY_ORDER_BILLING_GENERATED_CSV_FILE));
         } else {
           File csvFile = createFile("shipper-id-upload.csv", shipperIds);
           LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
@@ -88,11 +99,15 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("parentShipper"))) {
         String parentShipper = mapOfData.get("parentShipper");
         orderBillingPage.setParentShipper(parentShipper);
+        billingReportsRequest.setParentShipperIds(
+            Collections.singletonList(Long.valueOf(parentShipper)));
         put(KEY_ORDER_BILLING_SHIPPER, Long.valueOf(parentShipper));
       }
       if (Objects.nonNull(mapOfData.get("scriptId"))) {
-        String scriptId = mapOfData.get("scriptId");
-        orderBillingPage.setScriptId(scriptId);
+        String scriptIdAndName = mapOfData.get("scriptId");
+        orderBillingPage.setScriptId(scriptIdAndName);
+        String scriptId = scriptIdAndName.split(" - ")[0];
+        billingReportsRequest.setScriptIds(Collections.singletonList(Long.valueOf(scriptId)));
       }
       String generateFile = mapOfData.get("generateFile");
       pause(10);
@@ -100,9 +115,10 @@ public class OrderBillingSteps extends AbstractSteps {
         orderBillingPage.tickGenerateTheseFilesOption(generateFile);
         if (generateFile.contains("Orders consolidated by shipper")) {
           put(KEY_ORDER_BILLING_REPORT_TYPE, "SHIPPER");
+          billingReportsRequest.setType("SHIPPER");
         } else if (generateFile.contains("All orders grouped by shipper")) {
           Assertions.assertThat(orderBillingPage.getAggregatedInfoMsg())
-              .as("Aggregated Ino msg is available")
+              .as("Aggregated Info msg is available")
               .isEqualTo("* Customized Template is not supported for aggregated report type.");
         }
       }
@@ -115,6 +131,7 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(emailAddress)) {
         orderBillingPage.setEmailAddress(emailAddress);
       }
+      put(KEY_FINANCE_BILLING_REPORT_REQUEST, billingReportsRequest);
     } catch (DateTimeParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -191,7 +208,10 @@ public class OrderBillingSteps extends AbstractSteps {
 
     final File csvFile = createFile("shipper-id-upload.csv", shipperIds);
     LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
+    // todo: please remove the key KEY_ORDER_BILLING_UPLOAD_CSV_FILE
+    //  once all the SSB scenarios are moved to commonv2
     put(KEY_ORDER_BILLING_UPLOAD_CSV_FILE, csvFile);
+    put(KEY_ORDER_BILLING_GENERATED_CSV_FILE, csvFile);
   }
 
   @Then("Operator chooses {string} option and does not input a shipper ID")

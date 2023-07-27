@@ -57,7 +57,7 @@ Feature: Shipment Management - Search Shipment
     And Operator refresh page
     Then Operator verify filters preset was deleted
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario Outline: Search Shipment by Filter - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -149,7 +149,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                               |
       | destHubName  | {hub-name-2}                             |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Pending
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -409,7 +409,7 @@ Feature: Shipment Management - Search Shipment
       | top    | SERVER_ERROR_EXCEPTION                                                     |
       | bottom | ^.*Error Message: Cannot parse parameter id as Long: For input string: "," |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
