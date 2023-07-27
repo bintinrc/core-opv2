@@ -30,7 +30,10 @@ Feature: Shipper Address Configuration
       | title2          | Select the main address that will be shown as the waypoint on drivers app |
       | pickup_Address  | Pickup Address                                                            |
       | address1        | 36SenokoRd,Singapore, SG, 124100                                          |
-
+    When Operator select radio checkbox for address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    And Operator clicks on the "Confirm" button
+    Then Operator verify success message is displayed
+    Then Verify that the Group Address for Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}" is showing with text "36SenokoRd,Singapore, SG, 124100"
 
 
 
