@@ -14,7 +14,6 @@ Feature: Shipper Address Configuration
       | noOfAddress                 | 2                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"SG","latitude":1.3594786439016684,"longitude":103.83924902161432,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
     And Operator chooses start and end date on Address Creation date using the following data:
