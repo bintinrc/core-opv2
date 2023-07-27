@@ -35,9 +35,13 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
   public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
+  public static final String CHECKBOX_FOE_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='group-address-table-checkbox-%s']";
+
   public static final String BUTTON = "//span[text()='%s']/parent::button";
   public static final String CONFIGURE_PICKUP_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.pickupTypeButton']";
   public static final String SAVE_CHANGES_BUTTON = "//button[@data-testid='shipper-address.edit-pickup-type.save-changes']";
+  public static final String GROUP_ADDRESSES_BUTTON = "//button[@data-testid='shipper-address.menu.groupAddressesButton']";
+  public static final String GROUP_ADDRESS_BUTTON = "//button[@data-testid='shipper-address.group-addresses.group-address']";
   public static final String UPLOAD_CSV_BUTTON = "//button[@data-testid='shipper-address.results.upload-csv-button']";
   public static final String UPDATE_LAT_LONG_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.latLongButton']";
   public static final String UPLOAD_CVS_CONFIGURE_PICKUP_TYPE = "//button[@data-testid='shipper-address.results.upload-csv-button']";
@@ -295,6 +299,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     if(buttonText.contains("Save Changes")){
       elementXpath = f(SAVE_CHANGES_BUTTON, buttonText);
     }
+    if(buttonText.contains("Group Addresses")){
+      elementXpath = GROUP_ADDRESSES_BUTTON;
+    }
+    if(buttonText.contains("Group Address")){
+      elementXpath = GROUP_ADDRESS_BUTTON;
+    }
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
     buttonXpath.click();
   }
@@ -378,4 +388,10 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
         formatTedFilename);
     Assertions.assertThat(fileName.equals(downloadedCsvFile));
  }
+
+  public void clickOnAddressToGroup(String addressId) {
+    String checkBoxXpath = f(CHECKBOX_FOE_ADDRESS_TO_BE_GROUPED, addressId);
+    WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
+    checkBox.click();
+  }
 }

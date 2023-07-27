@@ -303,4 +303,15 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
+
+  @When("Operator select address from the list with Id {string}")
+  public void operatorSelectMultipleAddressesThatHasNoGroupUsingBelowData(String addressId) {
+    addressId = resolveValue(addressId);
+    String finalAddressId = addressId;
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.clickOnAddressToGroup(finalAddressId);
+    };
+    doWithRetry(clickButton, "Click on Button");
+    takesScreenshot();
+  }
 }
