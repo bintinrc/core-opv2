@@ -319,7 +319,6 @@ public class GlobalInboundSteps extends AbstractSteps {
   @And("Operator verify DP details {string} is {string}")
   public void operatorVerifyDPDetailsIs(String dpDetail, String expected) {
     String actual = resolveValue(dpDetail);
-    System.out.print("ACTUALLL"+actual);
     Assertions.assertThat(actual).isEqualToIgnoringCase(expected);
   }
 
