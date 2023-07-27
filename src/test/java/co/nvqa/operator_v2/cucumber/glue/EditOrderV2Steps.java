@@ -758,7 +758,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         .isEqualTo(resolveValue(expected));
   }
 
-  @Then("^Operator verify order event on Edit Order V2 page using data below:$")
+  @Then("Operator verify order event on Edit Order V2 page using data below:")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
     page.inFrame(() -> {
       page.waitUntilLoaded();
@@ -810,7 +810,7 @@ public class EditOrderV2Steps extends AbstractSteps {
     data = resolveValues(data);
     SoftAssertions assertions = new SoftAssertions();
     data.forEach(expected -> assertions.assertThat(
-            events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
+        events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
         .as("%s event was found").isFalse());
     assertions.assertAll();
     takesScreenshot();
@@ -1493,7 +1493,7 @@ public class EditOrderV2Steps extends AbstractSteps {
             order.getId()));
   }
 
-  @When("^Operator open Edit Order V2 page for order ID \"(.+)\"$")
+  @When("Operator open Edit Order V2 page for order ID {string}")
   public void operatorOpenEditOrderPage(String orderId) {
     orderId = resolveValue(orderId);
     page.openPage(Long.parseLong(orderId));

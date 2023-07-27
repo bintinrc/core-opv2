@@ -316,7 +316,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openPendingWaypointsDialog();
   }
 
-  @Then("Operator verify Shippers Info in (.+) dialog using data below:")
+  @Then("Operator verify Shippers Info in {} dialog using data below:")
   public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream()
@@ -325,7 +325,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.validateShippersTable(expectedShippersInfo);
   }
 
-  @When("Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) dialog")
+  @When("Operator click 'View orders or reservations' button for shipper #{int} in {} dialog")
   public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(
       int index, String status) {
     routeInboundPage.openViewOrdersOrReservationsDialog(index);
@@ -410,7 +410,7 @@ public class RouteInboundSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @Then("Operator verify Orders table in (.+) dialog using data below:")
+  @Then("Operator verify Orders table in {} dialog using data below:")
   public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointOrderInfo> expectedOrdersInfo = listOfData.stream().map(data ->
@@ -452,6 +452,8 @@ public class RouteInboundSteps extends AbstractSteps {
         orderInfo.setLocation(address);
       } else if (StringUtils.isNotBlank(value)) {
         orderInfo.setLocation(value);
+        System.out.println("masuk sini");
+        System.out.println("location" + orderInfo.getLocation());
       }
 
       value = data.get("type");
@@ -767,12 +769,12 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openPendingDeliveriesDialog();
   }
 
-  @When("^Operator open Failed Deliveries Valid dialog on Route Inbound page$")
+  @When("Operator open Failed Deliveries Valid dialog on Route Inbound page")
   public void operatorOpenFailedDeliveriesValidDialogOnRouteInboundPage() {
     routeInboundPage.openFailedDeliveriesValidDialog();
   }
 
-  @When("^Operator open Failed Deliveries Invalid dialog on Route Inbound page$")
+  @When("Operator open Failed Deliveries Invalid dialog on Route Inbound page")
   public void operatorOpenFailedDeliveriesInvalidDialogOnRouteInboundPage() {
     routeInboundPage.openFailedDeliveriesInvalidDialog();
   }
@@ -797,7 +799,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openReservationPickupsDialog();
   }
 
-  @When("^Operator close (.+) dialog on Route Inbound page$")
+  @When("Operator close {} dialog on Route Inbound page")
   public void operatorCloseDialogOnRouteInboundPage(String status) {
     routeInboundPage.closeDialog();
   }
