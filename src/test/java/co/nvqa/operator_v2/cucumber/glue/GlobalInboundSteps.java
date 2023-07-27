@@ -297,7 +297,6 @@ public class GlobalInboundSteps extends AbstractSteps {
 
     String orderWeightAsString = String.valueOf(orderWeight);
     String actualOrderWeightAsString = String.valueOf(dataAsMap.get("orderWeight"));
-//
     Assertions.assertThat(orderWeightAsString.contains(actualOrderWeightAsString))
         .as("Order weight is overridden").isTrue();
     takesScreenshot();
