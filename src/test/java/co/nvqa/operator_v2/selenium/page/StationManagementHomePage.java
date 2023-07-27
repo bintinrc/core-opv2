@@ -62,6 +62,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
   private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[normalize-space(text())='No Results Found']";
+
+  private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//div[text()='%s']";
+
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -658,11 +661,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     switchToNewWindow();
     waitWhilePageIsLoading();
     pause3s();
-    String actualTrackingId = editOrderTrackingId.getText().trim();
+    switchToStationHomeFrame();
+    Assertions.assertThat(
+            getWebDriver().findElements(By.xpath(f(EDIT_ORDER_TRACKING_ID_XPATH, expectedTrackingId))))
+        .as("Assertion for Navigation on clicking Tracking ID").isNotEmpty();
     closeAllWindows(windowHandle);
-    pause3s();
-    Assert.assertTrue("Assert that the search has results as expected after applying filters",
-        actualTrackingId.equalsIgnoreCase(expectedTrackingId));
   }
 
   public void verifyEditOrderScreenURL(String expectedTrackingId, String orderId) {

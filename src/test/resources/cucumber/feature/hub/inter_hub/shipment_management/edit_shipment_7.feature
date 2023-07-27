@@ -5,7 +5,7 @@ Feature: Shipment Management - Edit Shipment 7
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments @DeleteCreatedMAWBs
+  @HappyPath @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Edit Shipment with Edit MAWB
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management

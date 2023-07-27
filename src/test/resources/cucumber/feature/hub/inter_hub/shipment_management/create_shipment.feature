@@ -5,7 +5,7 @@ Feature: Shipment Management - Create Shipment
   Scenario: Login to Osperator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Create Shipment with Create Another Shipment (uid:3e44bd1b-5bbf-4eb3-b51c-300c21005f86)
     When Operator go to menu Inter-Hub -> Shipment Management
     Given Operator intends to create a new Shipment directly from the Shipment Toast
@@ -33,7 +33,7 @@ Feature: Shipment Management - Create Shipment
       | destHubName  | {hub-name-2}                         |
       | status       | Pending                              |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Create Shipment without Create Another Shipment (uid:20aadc4d-b1f8-4adf-9c45-6eb0b636c5bb)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management

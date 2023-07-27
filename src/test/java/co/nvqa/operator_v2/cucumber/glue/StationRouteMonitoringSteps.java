@@ -46,12 +46,7 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   @And("Operator selects hub {string} and click load selection")
   public void operatorSelectsHubAndClickLoadSelection(String hubName) {
-    retryIfExpectedExceptionOccurred(() -> stationRouteMonitoringPage.selectHub(hubName), null,
-        LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class, InvalidArgumentException.class);
+    doWithRetry(() -> stationRouteMonitoringPage.selectHub(hubName), "Select Hub and Click load");
     takesScreenshot();
   }
 
@@ -60,12 +55,8 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   public void operatorEntersRouteIDInTheRouteFilter(String routeID) {
     routeID = resolveValue(routeID);
     String finalRouteID = routeID;
-    retryIfExpectedExceptionOccurred(() -> stationRouteMonitoringPage.filterRoute(finalRouteID),
-        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
-        NoSuchElementException.class, NoSuchWindowException.class,
-        ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class);
+    doWithRetry(() -> stationRouteMonitoringPage.filterRoute(finalRouteID),
+        "Filter route Id");
     takesScreenshot();
 
   }

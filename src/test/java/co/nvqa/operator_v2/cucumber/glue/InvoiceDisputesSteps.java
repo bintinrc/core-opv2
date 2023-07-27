@@ -324,12 +324,14 @@ public class InvoiceDisputesSteps extends AbstractSteps {
       if (finalMapData.containsKey("originalBillAmount")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.originalBillingAmount.getValue())
-            .as("Original Bill amount is correct").isEqualTo(finalMapData.get("originalBillAmount"));
+            .as("Original Bill amount is correct")
+            .isEqualTo(finalMapData.get("originalBillAmount"));
       }
       if (finalMapData.containsKey("revisedDeliveryFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.revisedDeliveryFee.getValue())
-            .as("Revised Delivery fee is correct").isEqualTo(finalMapData.get("revisedDeliveryFee"));
+            .as("Revised Delivery fee is correct")
+            .isEqualTo(finalMapData.get("revisedDeliveryFee"));
       }
       if (finalMapData.containsKey("revisedRTSFee")) {
         softAssertions.assertThat(page.manualResolutionDisputedOrderModal.revisedRTSFee.getValue())
@@ -437,6 +439,7 @@ public class InvoiceDisputesSteps extends AbstractSteps {
             finalMapData.get("customRemarkInput"));
       }
       if (finalMapData.containsKey("internalCommentary")) {
+        page.manualResolutionDisputedOrderModal.internalCommentary.forceClear();
         page.manualResolutionDisputedOrderModal.internalCommentary.setValue(
             finalMapData.get("internalCommentary"));
       }

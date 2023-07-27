@@ -34,7 +34,7 @@ Feature: Shipment Management - Edit Shipment 2
       | status | Cancelled                 |
     Then Operator verify "Cancel" action button is disabled on shipment Management page
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Cancel Shipment with Completed Status (uid:bc7496b5-5719-480f-9205-b8604cebf3c9)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -49,7 +49,7 @@ Feature: Shipment Management - Edit Shipment 2
       | status | Completed                 |
     Then Operator verify "Cancel" action button is disabled on shipment Management page
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Cancel Shipment with Pending Status (uid:192240e7-3534-48f3-91ee-242e08ac4342)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -68,7 +68,7 @@ Feature: Shipment Management - Edit Shipment 2
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Cancelled                 |
 
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Re-open Single Shipment (uid:52a4379e-fbae-46a7-ba5c-0841aae75286)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -84,7 +84,7 @@ Feature: Shipment Management - Edit Shipment 2
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Pending                   |
 
-  @DeleteCreatedShipmentss
+  @HappyPath @DeleteCreatedShipments
   Scenario: Re-open Multiple Shipments (uid:a7e00285-e076-43c0-8987-38d2e33996f6)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
