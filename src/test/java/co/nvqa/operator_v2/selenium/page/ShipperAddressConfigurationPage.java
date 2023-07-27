@@ -299,10 +299,10 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     if(buttonText.contains("Save Changes")){
       elementXpath = f(SAVE_CHANGES_BUTTON, buttonText);
     }
-    if(buttonText.contains("Group Addresses")){
+    if(buttonText.equals("Group Addresses")){
       elementXpath = GROUP_ADDRESSES_BUTTON;
     }
-    if(buttonText.contains("Group Address")){
+    if(buttonText.equals("Group Address")){
       elementXpath = GROUP_ADDRESS_BUTTON;
     }
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
