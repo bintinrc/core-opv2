@@ -37,6 +37,8 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
   public static final String CHECKBOX_FOE_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='group-address-table-checkbox-%s']";
 
+  public static final String GROUP_ADDRESS_VERIFY_MODAL = "//span[contains(text(), '%s')]";
+
   public static final String BUTTON = "//span[text()='%s']/parent::button";
   public static final String CONFIGURE_PICKUP_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.pickupTypeButton']";
   public static final String SAVE_CHANGES_BUTTON = "//button[@data-testid='shipper-address.edit-pickup-type.save-changes']";
@@ -393,5 +395,22 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     String checkBoxXpath = f(CHECKBOX_FOE_ADDRESS_TO_BE_GROUPED, addressId);
     WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
     checkBox.click();
+  }
+
+  public void verifyGroupAddressModal(String title1, String title2, String pickup_Address, String address1) {
+    String title1Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String title2Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String pick_AddressXpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String address1Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+
+    WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
+    WebElement second_Title = getWebDriver().findElement(By.xpath(title2Xpath));
+    WebElement pickUp_Address = getWebDriver().findElement(By.xpath(pick_AddressXpath));
+    WebElement first_Address = getWebDriver().findElement(By.xpath(address1Xpath));
+
+    Assertions.assertThat(title.getText().equals(title1));
+    Assertions.assertThat(second_Title.getText().equals(title2));
+    Assertions.assertThat(pickUp_Address.getText().equals(pickup_Address));
+    Assertions.assertThat(first_Address.getText().equals(address1));
   }
 }

@@ -25,6 +25,13 @@ Feature: Shipper Address Configuration
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
+    Then Operator verify modal with below data:
+      | title           | Select group address                                                      |
+      | title2          | Select the main address that will be shown as the waypoint on drivers app |
+      | pickup_Address  | Pickup Address                                                            |
+      | address1        | 36SenokoRd,Singapore, SG, 124100                                          |
+
+
 
 
 

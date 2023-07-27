@@ -312,6 +312,16 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
       shipperAddressConfigurationPage.clickOnAddressToGroup(finalAddressId);
     };
     doWithRetry(clickButton, "Click on Button");
+
+  }
+
+  @Then("Operator verify modal with below data:")
+  public void operatorVerifyModalWithBelowData(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    shipperAddressConfigurationPage.verifyGroupAddressModal(data.get("title1"),
+                                                            data.get("title2"),
+                                                            data.get("pickup_Address"),
+                                                            data.get("address1"));
     takesScreenshot();
   }
 }
