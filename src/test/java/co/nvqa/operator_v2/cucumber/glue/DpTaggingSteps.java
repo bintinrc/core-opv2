@@ -52,6 +52,29 @@ public class DpTaggingSteps extends AbstractSteps {
       put(KEY_DISTRIBUTION_POINT_ID, dpId);
     });
   }
+  @When("Operator tags single order to DP with DPMS ID = {string} and tracking id = {string}")
+  public void operatorTagsSingleOrderToDpWithId(String dpIdAsString,String tracking) {
+    String trackingId = resolveValue(tracking);
+    long dpId = Long.parseLong(dpIdAsString);
+
+    DpTagging dpTagging = new DpTagging();
+    dpTagging.setTrackingId(trackingId);
+    dpTagging.setDpId(dpId);
+
+    List<DpTagging> listOfDpTagging = new ArrayList<>();
+    listOfDpTagging.add(dpTagging);
+
+    dpTaggingPage.inFrame(() -> {
+      dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
+      dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+      dpTaggingPage.selectDateToNextDay();
+      dpTaggingPage.checkAndAssignAll(false);
+      takesScreenshot();
+      pause5s();
+      put("listOfDpTagging", listOfDpTagging);
+      put(KEY_DISTRIBUTION_POINT_ID, dpId);
+    });
+  }
 
   @When("Operator untags created orders from DP with DPMS ID = {string} on DP Tagging page")
   public void operatorUntagsSingleOrder(String dpIdAsString) {
