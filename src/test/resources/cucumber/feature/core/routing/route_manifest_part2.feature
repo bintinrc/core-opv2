@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart2 @runnow
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart2
 Feature: Route Manifest
 
   Background:
@@ -29,7 +29,7 @@ Feature: Route Manifest
       | {order-tag-name}   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {order-tag-name-2} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
-  @DeleteOrArchiveRoute @reservationrm
+  @DeleteOrArchiveRoute
   Scenario: Operator Load Route Manifest of a Driver Multiple Pending Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
