@@ -1,16 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.dp.DpDetailsResponse;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -108,7 +106,6 @@ public class GlobalInboundSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     pause1s();
     mapOfData = resolveKeyValues(mapOfData);
-    Order order = get(KEY_CREATED_ORDER);
     GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
     String toastText = mapOfData.get("toastText");
     String rackInfo = mapOfData.get("rackInfo");
@@ -116,12 +113,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     String weightWarning = mapOfData.get("weightWarning");
     String destinationHub = mapOfData.get("destinationHub");
     String rackSector = mapOfData.get("rackSector");
-    if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(destinationHub)) {
-      destinationHub = order.getDestinationHub();
-    }
-    if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(rackSector)) {
-      rackSector = order.getRackSector();
-    }
+
     globalInboundPage.switchTo();
     globalInboundPage
         .globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor,
@@ -154,6 +146,7 @@ public class GlobalInboundSteps extends AbstractSteps {
   @Then("Operator verify info on Global Inbound page using data below:")
   public void operatorVerifyInfoOnGlobalInboundPageUsingDataBelow(Map<String, String> data) {
     data = resolveKeyValues(data);
+    pause3s();
     if (data.containsKey("destinationHub")) {
       String expected = data.get("destinationHub");
       String actual = globalInboundPage.destinationHub.getText();
@@ -208,13 +201,16 @@ public class GlobalInboundSteps extends AbstractSteps {
 
   @Then("Ninja Collect Operator verifies that all the details for Confirmed Status via {string} are right")
   public void ninjaCollectOperatorVerifiesThatAllTheDetailsForConfirmedStatusViaAreRightAndIsFollowedByStatus(
-      String source) {
-    DatabaseCheckingNinjaCollectConfirmed dbCheckingResult = get(
-        KEY_DATABASE_CHECKING_NINJA_COLLECT_CONFIRMED);
-    DpDetailsResponse dpDetails = get(KEY_DP_DETAILS);
-    String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
+      String source, Map <String,String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String barcode = dataTable.get("barcode");
+    String id = dataTable.get("id");
+    String dpBarcode = dataTable.get("dpBarcode");
+    String dpDetailsId=dataTable.get("dpDetailsId");
+    String dpSource=dataTable.get("dpSource");
+    String dpStatus = dataTable.get("dpStatus");
     globalInboundPage
-        .verifiesDetailsAreRightForGlobalInbound(dbCheckingResult, dpDetails, barcode, source);
+        .verifiesDetailsAreRightForGlobalInbound(barcode, dpBarcode, id, dpDetailsId,dpSource,source,dpStatus);
   }
 
   @Then("Operator verifies tags on Global Inbound page")
@@ -259,15 +255,21 @@ public class GlobalInboundSteps extends AbstractSteps {
     globalInboundPage.verifiesPriorTag();
   }
 
-  @And("Operator verifies order weight is overridden based on the volumetric weight")
-  public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight() {
-    String countryCode = StandardTestConstants.NV_SYSTEM_ID;
-    Order order = get(KEY_CREATED_ORDER);
-    double orderWeight;
-    double height = order.getDimensions().getHeight();
-    double width = order.getDimensions().getWidth();
-    double length = order.getDimensions().getLength();
+  @Then("Operator verifies Recovery Ticket status is {string} for {string}")
+  public void operatorVerifiesRecoveryTicketStatusIs(String ticketStatus , String recoveryTicket) {
+    recoveryTicket = resolveValue(recoveryTicket);
+    Assertions.assertThat(ticketStatus).isEqualToIgnoringCase(recoveryTicket);
+  }
 
+  @And("Operator verifies order weight is overridden based on the volumetric weight")
+  public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight(Map<String,String>dataAsMap) {
+    String countryCode = StandardTestConstants.NV_SYSTEM_ID;
+    dataAsMap = resolveKeyValues(dataAsMap);
+
+    double orderWeight;
+    double height = Double.parseDouble(dataAsMap.get("orderHeight"));
+    double width = Double.parseDouble(dataAsMap.get("orderWidth"));
+    double length = Double.parseDouble(dataAsMap.get("orderLength"));
     switch (countryCode) {
       case "ID":
         orderWeight = (length + width + height) / 6000;
@@ -282,7 +284,7 @@ public class GlobalInboundSteps extends AbstractSteps {
         break;
 
       case "SG":
-        orderWeight = order.getWeight();
+        orderWeight = Double.parseDouble(dataAsMap.get("orderWeight"));
         break;
 
       case "VN":
@@ -290,14 +292,50 @@ public class GlobalInboundSteps extends AbstractSteps {
         break;
 
       default:
-        orderWeight = order.getWeight();
+        orderWeight = Double.parseDouble(dataAsMap.get("orderWeight"));
     }
 
     String orderWeightAsString = String.valueOf(orderWeight);
-    String actualOrderWeightAsString = String.valueOf(order.getWeight());
-
+    String actualOrderWeightAsString = String.valueOf(dataAsMap.get("orderWeight"));
     Assertions.assertThat(orderWeightAsString.contains(actualOrderWeightAsString))
         .as("Order weight is overridden").isTrue();
     takesScreenshot();
+  }
+
+  @When("Operator save current order cost {string}")
+  public void operatorSaveCurrentOrderCost(String currentCost) {
+    String cost = resolveValue(currentCost);
+    put("KEY_CURRENT_COST",cost);
+  }
+
+  @When("Operator verifies order cost is updated")
+  public void operatorVerifiesOrderCostIsUpdated(Map<String, String> mapOfData) {
+    String previousCost= resolveValue(mapOfData.get("previousCost")).toString();
+    String costAfterInbound= resolveValue(mapOfData.get("costAfterInbound")).toString();
+    Assertions.assertThat(previousCost).isNotEqualTo(costAfterInbound).as("order cost is updated");
+  }
+
+  @And("Operator verify DP details {string} is {string}")
+  public void operatorVerifyDPDetailsIs(String dpDetail, String expected) {
+    String actual = resolveValue(dpDetail);
+    Assertions.assertThat(actual).isEqualToIgnoringCase(expected);
+  }
+
+  @And("Operator verify multiple Key details with data below:")
+  public void operatorVerifyMultipleKeyDetailsWithDataBelow(List<Map<String, String>> data) {
+    List<String> key = new ArrayList<>();
+    List<String> KeyName = new ArrayList<>();
+    List<String> expectedValue = new ArrayList<>();
+    for (Map<String, String> entry : data) {
+      KeyName.add(entry.get("key"));
+      key.add(resolveValue(entry.get("key")));
+      expectedValue.add(resolveValue(entry.get("expectedValue")));
+    }
+
+    for (int i = 0; i < key.size(); i++) {
+      String actual = key.get(i);
+      String expected = expectedValue.get(i);
+      Assertions.assertThat(actual).as(KeyName.get(i)+" Key Details is correct").containsIgnoringCase(expected);
+    }
   }
 }

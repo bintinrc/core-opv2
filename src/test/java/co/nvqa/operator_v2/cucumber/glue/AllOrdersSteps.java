@@ -22,6 +22,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -201,24 +202,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
   }
 
-  @When("^Operator Force Success single order on All Orders page$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    String reason = allOrdersPage.forceSuccessOrders();
-    put(KEY_ORDER_CHANGE_REASON, reason);
-  }
 
-  @When("^Operator Force Success single order on All Orders page:$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
 
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
@@ -281,11 +265,31 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.errorsDialog.close.click();
   }
 
-  @When("Operator Force Success multiple orders on All Orders page")
-  public void operatorForceSuccessOrders() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  @When("Operator Force Success single order on All Orders page:")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String trackingId = data.get("trackingId");
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
+  }
+
+  @When("Operator Force Success multiple orders on All Orders page:")
+  public void operatorForceSuccessOrders(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String trackingIdsString = data.get("trackingIds");
+    final List<String> trackingIds = Arrays
+        .stream(trackingIdsString.split(","))
+        .map(StringUtils::trim)
+        .map(tidKey -> (String) resolveValue(tidKey))
+        .collect(Collectors.toList());
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
     allOrdersPage.findOrdersWithCsv(trackingIds);
-    allOrdersPage.forceSuccessOrders();
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
   }
 
   @Then("^Operator verify the order is Force Successed successfully$")

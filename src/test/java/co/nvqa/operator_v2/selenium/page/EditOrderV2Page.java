@@ -999,7 +999,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public PageElement toAddress;
     @FindBy(xpath = ".//div[label[.='Start date/time']]/div[1]")
     public PageElement startDateTime;
-    @FindBy(xpath = ".//div[label[.='End date/time']]/div[1]")
+    @FindBy(xpath = ".//div[label[.='End date/time']]/div[2]")
     public PageElement endDateTime;
 
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")

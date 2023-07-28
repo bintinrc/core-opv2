@@ -361,6 +361,13 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator clicks on Shippers Remove button")
+  public void operatorClickOnShipperRemoveButton() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickShippersRemoveButton();
+    });
+  }
+
   @When("Operator clicks on Search by Shipper tab")
   public void operatorClickOnSearchByShipperTab() {
     campaignCreateEditPage.inFrame(page -> {
@@ -376,11 +383,29 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator search and select the created shipper")
-  public void operatorSearchAndSelectShipper() {
+  @Then("Operator search using {string} and select the created shipper")
+  public void operatorSearchAndSelectShipper(String searchOption) {
     campaignCreateEditPage.inFrame(page -> {
       Shipper createdShipper = resolveValue(KEY_CREATED_SHIPPER);
-      page.searchForTheShipper(createdShipper.getName());
+      String searchValue = null;
+      switch (searchOption) {
+        case "Legacy ID":
+          LOGGER.info("Using Legacy ID to search Shipper");
+          searchValue = createdShipper.getLegacyId().toString();
+          break;
+        case "Invalid Shipper ID":
+          LOGGER.info("Using Invalid Shipper ID to search Shipper");
+          searchValue = "Invalid Shipper ID";
+          break;
+        case "Name":
+          LOGGER.info("Using Name to search Shipper");
+          searchValue = createdShipper.getName();
+        default:
+          LOGGER.info("Using user defined value to search Shipper");
+          searchValue = searchOption;
+      }
+
+      page.searchForTheShipper(searchValue);
     });
   }
 
@@ -562,5 +587,41 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     campaignCreateEditPage.inFrame(page -> {
       campaignCreateEditPage.verifyFileDownloadedSuccessfully("shippers.csv");
     });
+  }
+  @Then("Operator verifies {string} modal is displayed")
+  public void operatorVerifiesModalIsDisplayed(String modalName) {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.shipperModalDisplayed(modalName);
+    });
+  }
+
+  @And("Operator verifies {string} is default selected tab")
+  public void operatorVerifiesBulkUploadIsDefaultSelectedTab(String tab) {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.addShipperSelectedTab(tab);
+    });
+  }
+
+  @And("Operator verifies Shipper count is {string}")
+  public void operatorVerifiesShipperCountIs(String value) {
+    campaignCreateEditPage.inFrame(page -> {
+      Assertions.assertThat(campaignCreateEditPage.getShipperCount()).isEqualTo(value)
+          .as(f("Shipper Count expected is %s and actual is %s", value,
+              campaignCreateEditPage.getShipperCount()));
+    });
+  }
+
+  @And("Operator removes selected shipper")
+  public void operatorRemoveSelectedShipper() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.removeSelectedShipper();
+    });
+  }
+
+  @And("Operator verifies error message is {string}")
+  public void operatorVerifiesErrorMessageIs(String error) {
+    String validateNotificationText = campaignCreateEditPage.toastErrorMessage.getText();
+    Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
+        .contains(error);
   }
 }
