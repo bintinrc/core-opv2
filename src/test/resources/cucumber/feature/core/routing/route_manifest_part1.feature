@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart1
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart1 @runnow
 Feature: Route Manifest
 
   Background:
@@ -58,7 +58,7 @@ Feature: Route Manifest
       | delivery.status        | Fail                          |
       | delivery.failureReason | 6                             |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @reservationrm
   Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -87,7 +87,7 @@ Feature: Route Manifest
       | failureReason  | {KEY_SELECTED_FAILURE_REASON.description} |
     And DB Operator verifies waypoint status is "FAIL"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @reservationrm
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
