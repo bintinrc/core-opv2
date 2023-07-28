@@ -260,7 +260,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path @wip
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -289,21 +289,21 @@ Feature: Route Inbound Expected Scans
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                           |
-      | routes     | KEY_DRIVER_ROUTES                                                                    |
-      | jobType    | TRANSACTION                                                                          |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                              |
-      | jobMode    | PICK_UP                                                                              |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | PICK_UP                                                                         |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                           |
-      | routes     | KEY_DRIVER_ROUTES                                                                    |
-      | jobType    | TRANSACTION                                                                          |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                              |
-      | jobMode    | PICK_UP                                                                              |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | PICK_UP                                                                         |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
@@ -319,11 +319,11 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedScans  | 0                                         |
       | parcelProcessedTotal  | 2                                         |
       | c2cReturnPickupsScans | 0                                         |
-      | c2cReturnPickupsTotal | 1                                         |
+      | c2cReturnPickupsTotal | 2                                         |
     When Operator open C2C / Return Pickups dialog on Route Inbound page
     Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
       | shipperName       | scanned | total |
-      | {shipper-v4-name} | 0       | 1     |
+      | {shipper-v4-name} | 0       | 2     |
     When Operator click 'View orders or reservations' button for shipper #1 in C2C / Return Pickups Waypoints dialog
     Then Operator verify Orders table in C2C / Return Pickups Waypoints dialog using data below:
       | trackingId                            | stampId | location                                           | type             | status  | cmiCount | routeInboundStatus |
@@ -336,6 +336,7 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal  | 2 |
       | c2cReturnPickupsScans | 1 |
       | c2cReturnPickupsTotal | 2 |
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -349,7 +350,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @wip
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
