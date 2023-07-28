@@ -24,7 +24,7 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
 
   public static final String CAMPAIGN_HEADER_STATUS = "//h4[text()='Campaign']/ancestor::div[contains(@class,'space-item')]/following-sibling::div";
 
-  public static final String CAMPAIGN_BUTTON = "//button[span[text()='%s'] and %s] | //a[text()='%s' and %s]";
+  public static final String CAMPAIGN_BUTTON = "(//*[span[text()='%s'] and (name()='button' or name()='div') and %s])[last()] | //a[text()='%s' and %s]";
 
   public DiscountAndPromotionPage(WebDriver webDriver) {
     super(webDriver);

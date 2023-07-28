@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @DeleteOrder @EditOrder4
+#@OperatorV2 @Core @EditOrder @DeleteOrder @EditOrder4
 Feature: Delete Order
 
   Background:
