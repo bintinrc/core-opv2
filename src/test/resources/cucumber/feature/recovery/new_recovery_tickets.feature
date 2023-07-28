@@ -1519,11 +1519,11 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO LABEL - order_outcome = XMAS CAGE                               | NO LABEL          | XMAS CAGE                       | Cancelled  | Cancelled              |
       | ticket_subtype = NO ORDER - order_outcome = ORDERS CREATED                          | NO ORDER          | ORDERS CREATED                  | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE              | REJECTED RETURN   | DAMAGED - NV LIABLE             | Cancelled  | Cancelled              |
-      | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV Not Liable - PARCEL SCRAPPED | Completed  | Completed              |
+      | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV NOT LIABLE - PARCEL SCRAPPED | Completed  | Completed              |
       | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
       | ticket_subtype = POOR LABELLING - order_outcome = RESUME PICKUP                     | POOR LABELLING    | RESUME PICKUP                   | Pending    | Pending Pickup         |
-      | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV to Repack and Ship           | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | Parcel Scrapped                 | Completed  | Completed              |
+      | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV TO REPACK AND SHIP           | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | PARCEL SCRAPPED                 | Completed  | Completed              |
 
   Scenario: Operator Resolve Ticket - ticket_type = SHIPPER ISSUE -RTS
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -1678,6 +1678,6 @@ Feature: New Recovery Tickets
 
     Examples:
       | Dataset Name                          | orderOutcome          | postStatus | postGranularStatus     |
-      | order_outcome = NV Liable - XMAS CAGE | NV Liable - XMAS CAGE | Cancelled  | Cancelled              |
-      | order_outcome = NV Liable - Delivered | NV Liable - Delivered | Completed  | Completed              |
-      | order_outcome = Resume delivery       | Resume delivery       | Transit    | Arrived at Sorting Hub |
+      | order_outcome = NV Liable - XMAS CAGE | NV LIABLE - XMAS CAGE | Cancelled  | Cancelled              |
+      | order_outcome = NV Liable - Delivered | NV LIABLE - DELIVERED | Completed  | Completed              |
+      | order_outcome = Resume delivery       | RESUME DELIVERY       | Transit    | Arrived at Sorting Hub |
