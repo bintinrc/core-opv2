@@ -475,6 +475,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
   }
 
+  @Then("Operator verifies that Edit Order page is opened on clicking tracking id {value}")
+  public void operator_verifies_that_Edit_Order_page_is_opened_on_clicking_trackingId(
+      String trackingId) {
+    stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
+  }
+
   @Then("Operator verifies that Route Manifest page is opened on clicking route id")
   public void operator_verifies_that_Route_Manifest_page_is_opened_on_clicking_route_id() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);

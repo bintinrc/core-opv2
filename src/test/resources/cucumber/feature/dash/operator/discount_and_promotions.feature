@@ -18,7 +18,7 @@ Feature: Discount & Promotions Page
     And Operator verifies the published campaign page
     And Operator clicks on Shippers Add button
     And Operator clicks on Search by Shipper tab
-    Then Operator search and select the created shipper
+    Then Operator search using "Name" and select the created shipper
     And Operator clicks on upload button
     And Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
     And DB Operator verifies shipper is assigned to campaign successfully
@@ -37,7 +37,7 @@ Feature: Discount & Promotions Page
     And Operator verifies the published campaign page
     And Operator clicks on Shippers Add button
     And Operator clicks on Search by Shipper tab
-    Then Operator search and select the created shipper
+    Then Operator search using "Name" and select the created shipper
     And Operator clicks on upload button
     And Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
     And DB Operator verifies shipper is assigned to campaign successfully

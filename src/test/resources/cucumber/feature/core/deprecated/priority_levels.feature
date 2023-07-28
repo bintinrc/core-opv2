@@ -1,4 +1,3 @@
-@OperatorV2 @Core @NewFeatures @PriorityLevels @NewFeatures2
 Feature: Priority Levels
 
   Background:

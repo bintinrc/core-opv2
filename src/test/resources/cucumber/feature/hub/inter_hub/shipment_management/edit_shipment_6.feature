@@ -5,7 +5,7 @@ Feature: Shipment Management - Edit Shipment 6
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @HappyPath @DeleteShipments
   Scenario: Edit Shipment - Shipment Type
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -30,7 +30,7 @@ Feature: Shipment Management - Edit Shipment 6
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipments
+  @HappyPath @DeleteShipments
   Scenario: Edit Shipment - Origin Hub - select same hub with Destination Hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -46,7 +46,7 @@ Feature: Shipment Management - Edit Shipment 6
     Then Operator verify error message "Origin Hub and Destination Hub cannot be the same" is shown
     And Operator verify "save changes button" on edit popup is disable
 
-  @DeleteShipments
+  @HappyPath @DeleteShipments
   Scenario: Edit Shipment - Destination Hub - select same hub with Origin Hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management

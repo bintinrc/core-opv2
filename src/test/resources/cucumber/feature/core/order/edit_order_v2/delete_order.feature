@@ -12,7 +12,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -27,7 +27,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Returned To Sender                 |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -42,7 +42,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Cancelled                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -57,7 +57,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | En-route to Sorting Hub            |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -94,20 +94,19 @@ Feature: Delete Order
     And Operator delete order on Edit Order V2 page
     And Operator waits for 5 seconds
     Then Operator verifies All Orders Page is displayed
-    And DB Operator verifies order is deleted
-    And DB Operator verifies orders records are hard-deleted in orders table:
+    And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in transactions table:
+    And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_details table:
+    And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+    And DB Core - verify orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And DB Operator verify the order_events record:
+    And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
@@ -128,19 +127,18 @@ Feature: Delete Order
     And Operator delete order on Edit Order V2 page
     And Operator waits for 5 seconds
     Then Operator verifies All Orders Page is displayed
-    And DB Operator verifies order is deleted
-    And DB Operator verifies orders records are hard-deleted in orders table:
+    And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in transactions table:
+    And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_details table:
+    And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+    And DB Core - verify orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
   Scenario: Operator Delete Order - Status = Van en-route to Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -149,7 +147,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Van en-route to Pickup             |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -158,20 +156,19 @@ Feature: Delete Order
     And Operator delete order on Edit Order V2 page
     And Operator waits for 5 seconds
     Then Operator verifies All Orders Page is displayed
-    And DB Operator verifies order is deleted
-    And DB Operator verifies orders records are hard-deleted in orders table:
+    And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in transactions table:
+    And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_details table:
+    And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+    And DB Core - verify orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And DB Operator verify the order_events record:
+    And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
@@ -186,7 +183,7 @@ Feature: Delete Order
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Pickup Fail                        |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -195,20 +192,19 @@ Feature: Delete Order
     And Operator delete order on Edit Order V2 page
     And Operator waits for 5 seconds
     Then Operator verifies All Orders Page is displayed
-    And DB Operator verifies order is deleted
-    And DB Operator verifies orders records are hard-deleted in orders table:
+    And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in transactions table:
+    And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_details table:
+    And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+    And DB Core - verify orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And DB Operator verify the order_events record:
+    And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
@@ -228,20 +224,19 @@ Feature: Delete Order
     And Operator delete order on Edit Order V2 page
     And Operator waits for 5 seconds
     Then Operator verifies All Orders Page is displayed
-    And DB Operator verifies order is deleted
-    And DB Operator verifies orders records are hard-deleted in orders table:
+    And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in transactions table:
+    And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_details table:
+    And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+    And DB Core - verify orders records are hard-deleted in order_delivery_verifications table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And DB Operator verify the order_events record:
+    And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
       | type      | 49                                                            |
       | userId    | 397                                                           |
