@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @EditPickupDeliveryDetails
+@OperatorV2 @Core @EditOrderV2 @EditPickupDeliveryDetails @runnow
 Feature: Edit Order Details
 
   Background:
@@ -184,6 +184,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
+  @ROUTE-1055
   Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
