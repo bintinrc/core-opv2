@@ -29,7 +29,6 @@ import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
-import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.CreateTicketDialog;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -123,6 +122,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
   @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::div")
   public PageElement dimensions;
+
+  @FindBy(xpath = "//iframe[contains(@src,'recovery')][2]")
+  public PageElement recoveryFrame;
 
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
@@ -1812,22 +1814,23 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   }
 
   public void createTicket(RecoveryTicket recoveryTicket) {
+    recoveryFrame.waitUntilVisible();
+    getWebDriver().switchTo().frame(recoveryFrame.getWebElement());
     String trackingId = recoveryTicket.getTrackingId();
     String ticketType = recoveryTicket.getTicketType();
 
-    createTicketDialog.waitUntilVisible();
-    waitWhilePageIsLoading(120);
+    createTicketDialog.waitUntilVisible(30);
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
     createTicketDialog.investigatingDept.selectValue(recoveryTicket.getInvestigatingDepartment());
-    createTicketDialog.investigatingHub.searchAndSelectValue(recoveryTicket.getInvestigatingHub());
+    createTicketDialog.investigatingHub.selectValue(recoveryTicket.getInvestigatingHub());
     createTicketDialog.ticketType.selectValue(ticketType);
 
     switch (ticketType) {
       case RecoveryTicketsPage.TICKET_TYPE_DAMAGED: {
         //Damaged Details
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getLiability())) {
           createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
         }
@@ -1843,13 +1846,13 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_MISSING: {
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
@@ -1858,7 +1861,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       }
       case RecoveryTicketsPage.TICKET_TYPE_PARCEL_ON_HOLD: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
@@ -1867,14 +1870,14 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       }
       case RecoveryTicketsPage.TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
       }
       case RecoveryTicketsPage.TICKET_TYPE_SELF_COLLECTION: {
-        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        createTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
         break;
       }
     }
@@ -1884,7 +1887,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     createTicketDialog.ticketNotes.setValue(recoveryTicket.getTicketNotes());
 
     retryIfRuntimeExceptionOccurred(() -> {
-      if (createTicketDialog.createTicket.isDisabled()) {
+      if (!createTicketDialog.createTicket.isEnabled()) {
         createTicketDialog.trackingId.setValue(trackingId + " ");
         pause100ms();
         throw new NvTestRuntimeException(
@@ -1892,8 +1895,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       }
     });
 
-    createTicketDialog.createTicket.clickAndWaitUntilDone(60);
-    waitUntilInvisibilityOfToast("Ticket created");
+    createTicketDialog.createTicket.click();
   }
 
   /**
@@ -2066,6 +2068,67 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public ForceClearTextBox reasonForChange;
 
     public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class CreateTicketDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.tracking-id.input']")
+    public ForceClearTextBox trackingId;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.entry-source.single-select']")
+    public AntSelect3 entrySource;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.inv-dept.single-select']")
+    public AntSelect3 investigatingDept;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.inv-hub.single-select']")
+    public AntSelect3 investigatingHub;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.ticket-type.single-select']")
+    public AntSelect3 ticketType;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.sub-type.single-select']")
+    public AntSelect3 ticketSubtype;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.order-outcome.custom-field']")
+    public AntSelect3 orderOutcome;
+
+    @FindBy(css = "[id^='commons.rts-reason']")
+    public MdSelect rtsReason;
+
+    @FindBy(id = "parcelLocation")
+    public MdSelect parcelLocation;
+
+    @FindBy(id = "liability")
+    public MdSelect liability;
+
+    @FindBy(id = "damageDescription")
+    public TextBox damageDescription;
+
+    @FindBy(id = "parcelDescription")
+    public TextBox parcelDescription;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.exception-reason.custom-field']")
+    public ForceClearTextBox exceptionReason;
+
+    @FindBy(id = "issueDescription")
+    public TextBox issueDescription;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.cust-zendesk-id.input']")
+    public ForceClearTextBox customerZendeskId;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.shipper-zendesk-id.input']")
+    public ForceClearTextBox shipperZendeskId;
+
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.ticket-notes.input']")
+    public ForceClearTextBox ticketNotes;
+
+    @FindBy(css = "[data-testid='btn-create']")
+    public Button createTicket;
+
+    public CreateTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
