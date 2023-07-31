@@ -43,6 +43,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
   private DpAdministrationReactPage dpAdminReactPage;
+  private static final String SYSTEM_ID = StandardTestConstants.NV_SYSTEM_ID;
 
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
@@ -55,6 +56,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String CHECK_DP_PHOTO = "CHECK_DP_PHOTO";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
+  private static final String KEY_LIST_OF_OPERATOR_GENERATE_PREFIX = "KEY_LIST_OF_OPERATOR_GENERATE_PREFIX";
+  private static final String KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER = "KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
   public static final String SINGLE = "SINGLE";
@@ -262,6 +265,47 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.clearDpFilter(extractDetail);
       }
     });
+  }
+
+  @And("Operator generate {int} random phone number")
+  public void generateMultipleRandomPhoneNum(int total) {
+    int limit = 0;
+    String phoneNum = "";
+    while (limit < total) {
+      pause1s();
+      if (SYSTEM_ID.equalsIgnoreCase("id")) {
+        phoneNum = f("857%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(7));
+      } else if (SYSTEM_ID.equalsIgnoreCase("ph")) {
+        phoneNum = f("564%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(5));
+      } else if (SYSTEM_ID.equalsIgnoreCase("th")) {
+        phoneNum = f("224%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
+      } else if (SYSTEM_ID.equalsIgnoreCase("my")) {
+        phoneNum = f("883%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
+      } else if (SYSTEM_ID.equalsIgnoreCase("vn")) {
+        phoneNum = f("341%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(5));
+      } else if (SYSTEM_ID.equalsIgnoreCase("sg")) {
+        phoneNum = f("855%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
+      }
+
+      pause1s();
+      putInList(KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER, phoneNum);
+      LOGGER.info(f("number generated: +%s%s",
+          co.nvqa.common.utils.NvCountry.fromString(SYSTEM_ID).getCountryCallingCode(), phoneNum));
+      limit++;
+    }
+  }
+
+
+  @And("Operator generate {int} prefix")
+  public void generateMultiplePrefix(int total) {
+    int limit = 0;
+    while (limit < total) {
+      pause1s();
+      String prefix = co.nvqa.common.utils.RandomUtil.randomString(5);
+      putInList(KEY_LIST_OF_OPERATOR_GENERATE_PREFIX, prefix);
+      LOGGER.info(f("prefix generated: %s", prefix));
+      limit++;
+    }
   }
 
   @And("Operator Search with Some DP User Details :")
