@@ -335,6 +335,14 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verify current group text with below data:")
+  public void operatorVerifyCurrentGroupModalWithBelowData(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String first_Address = data.get("address1");
+    shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(first_Address);
+    takesScreenshot();
+  }
+
   @Then("Operator verify success message is displayed")
   public void operatorVerifySuccessMessageIsDisplayed() {
    shipperAddressConfigurationPage.verifySuccessMessage();

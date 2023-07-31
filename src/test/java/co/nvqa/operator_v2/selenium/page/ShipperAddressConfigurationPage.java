@@ -38,6 +38,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='group-address-table-checkbox-%s']";
   public static final String RADIO_CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='radio-option-%s']";
   public static final String GROUP_ADDRESS_VERIFY_MODAL = "//span[contains(text(), '%s')]";
+  public static final String CURRENT_GROUP_ADDRESS_VERIFY_MODAL = "//i[contains(text(), '%s')]";
 
   public static final String GROUP_ADDRESS_VERIFY_COLUMN = "//div[@data-testid='virtual-table.%s.formatted_group_address.cell']";
 
@@ -48,6 +49,8 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String GROUP_ADDRESSES_BUTTON = "//button[@data-testid='shipper-address.menu.groupAddressesButton']";
   public static final String GROUP_ADDRESS_BUTTON = "//button[@data-testid='shipper-address.group-addresses.group-address']";
   public static final String CONFIRM_BUTTON = "//button[@data-testid='shipper-address.group-addresses.dialog.confirm']";
+  public static final String REMOVE_FROM_GROUP__BUTTON = "//button[@data-testid='shipper-address.group-addresses.remove-from-group']";
+  public static final String REMOVE_BUTTON = "//button[@data-testid='shipper-address.remove-group.remove']";
   public static final String UPLOAD_CSV_BUTTON = "//button[@data-testid='shipper-address.results.upload-csv-button']";
   public static final String UPDATE_LAT_LONG_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.latLongButton']";
   public static final String UPLOAD_CVS_CONFIGURE_PICKUP_TYPE = "//button[@data-testid='shipper-address.results.upload-csv-button']";
@@ -317,6 +320,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     if(buttonText.equals("Confirm")){
       elementXpath = CONFIRM_BUTTON;
     }
+    if(buttonText.equals("Remove from Group")){
+      elementXpath = REMOVE_FROM_GROUP__BUTTON;
+    }
+    if(buttonText.equals("Remove")){
+      elementXpath = REMOVE_BUTTON;
+    }
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
     buttonXpath.click();
   }
@@ -428,6 +437,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     Assertions.assertThat(second_Title.getText().equals(title2));
     Assertions.assertThat(pickUp_Address.getText().equals(pickup_Address));
     Assertions.assertThat(first_Address.getText().equals(address1));
+  }
+
+  public void verifyCurrentGroupAddressModal(String address1) {
+    String title1Xpath = f(CURRENT_GROUP_ADDRESS_VERIFY_MODAL, address1);
+    WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
+    Assertions.assertThat(title.getText().equals(title));
   }
 
   public void verifySuccessMessage() {
