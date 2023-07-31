@@ -30,7 +30,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 
   @HappyPath @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Warehouse to Airport Trip with Pending Status and Assigned Driver
@@ -60,7 +60,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 
   @HappyPath @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and No Assigned Driver
@@ -87,7 +87,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 
   @HappyPath @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and Assigned Driver
@@ -117,7 +117,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Cancel Airport to Warehouse Trip with Other Status and Assigned Driver
@@ -171,7 +171,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 	Then Operator verifies action buttons below are disable on Port Trip Management page:
 	  | Cancel |
 
@@ -183,7 +183,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	Given API MM - Operator creates new Port with data below:
 	  | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
 	When API MM - Operator creates new "Flight" Air Haul Trip with data below:
-	  | requestBody | {"origin_hub_id":"{KEY_MM_LIST_OF_CREATED_PORTS[1].hubId}","origin_hub_system_id":"sg","destination_hub_id":"{KEY_MM_LIST_OF_CREATED_PORTS[2].hubId}","destination_hub_system_id":"sg","departure_date_time":"{date: 1 days next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
+	  | requestBody | {"origin_hub_id":"{KEY_MM_LIST_OF_CREATED_PORTS[1].hubId}","origin_hub_system_id":"sg","destination_hub_id":"{KEY_MM_LIST_OF_CREATED_PORTS[2].hubId}","destination_hub_system_id":"sg","departure_date_time":"{date: 4 hours next, yyyy-MM-dd'T'HH:mm:ss'Z'}","duration":60,"comment":"Created by automation."} |
 	  | extraData   | {"at_origin_processing_time_min":60,"at_destination_processing_time_min":60,"flight_no":"123"}                                                                                                                                                                                                                 |
 	Given Operator go to menu Inter-Hub -> Port Trip Management
 	And Operator verifies that the Port Management Page is opened
@@ -203,7 +203,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
 	And Operator verifies the Cancel Trip button in Trip Management page is "enable"
 	When Operator clicks "Cancel Flight Trip" button on cancel trip dialog
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_AIR_HAUL_TRIPS[1].tripId} cancelled" display on Port Trip Management page
-	And Operator verifies "CANCELLED" button is shown on Port Trip Management page
+	And Operator verifies "CANCELLED" button on Port Trip Management page is shown
 	Then Operator verifies action buttons below are disable on Port Trip Management page:
 	  | Cancel |
 
