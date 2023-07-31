@@ -153,7 +153,7 @@ Feature: Shipper Address Configuration
       | Address id #991119 Not Found |
       | Address id #881118 Not Found |
 
-  @HappyPath @Debug
+  @HappyPath
   Scenario Outline: View Updated Shipper Address Detail on Update Lat Long Page
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
