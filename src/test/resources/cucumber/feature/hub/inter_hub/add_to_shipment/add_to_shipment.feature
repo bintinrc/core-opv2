@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @AddToShipment
 Feature: Add To Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @runthis
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -17,7 +17,8 @@ Feature: Add To Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator verifies that the row of the added order is blue highlighted
-    And Operator close the shipment which has been created
+    And Operator clicks "Close Shipment" button on Add To Shipment page
+    And Operator clicks "Confirm Close Shipment" button on Add To Shipment page
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -43,7 +44,8 @@ Feature: Add To Shipment
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
-    And Operator close the shipment which has been created
+    And Operator clicks "Close Shipment" button on Add To Shipment page
+    And Operator clicks "Confirm Close Shipment" button on Add To Shipment page
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -56,7 +58,7 @@ Feature: Add To Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @HappyPath @DeleteShipment @ForceSuccessOrder
+  @HappyPath @DeleteShipment @ForceSuccessOrder @runthis
   Scenario: Remove Parcel In Shipment from Remove Field (uid:47720f77-304f-4aeb-a114-57695f24a050)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -203,6 +205,6 @@ Feature: Add To Shipment
     And Operator verify order event on Edit order page using data below:
       | name | REMOVED FROM SHIPMENT |
 
-  @KillBrowser
+  @KillBrowser @runthis
   Scenario: Kill Browser
     Given no-op
