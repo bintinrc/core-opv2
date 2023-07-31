@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointUpdateEndpoint
+@OperatorV2 @DistributionPointEndpoint
 Feature: Distribution Point - Endpoint
 
   @DeleteDpPartnerV2
