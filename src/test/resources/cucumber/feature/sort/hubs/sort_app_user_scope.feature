@@ -20,7 +20,7 @@ Feature: Sort App User Scope
     Then Make sure "{permission-error-title}" notification pop up with "{error-without-create-scope}"
 
   @LaunchBrowser @SortAppUserScope
-  Scenario: Unbale Edit Sort User without Scope SORT_EDIT_SORT_APP_USER
+  Scenario: Unable Edit Sort User without Scope SORT_EDIT_SORT_APP_USER
     Given Operator login with client id = "{sort-without-scope-client-id}" and client secret = "{sort-without-scope-secret-id}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
