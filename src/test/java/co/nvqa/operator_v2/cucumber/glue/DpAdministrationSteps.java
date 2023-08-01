@@ -267,35 +267,6 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @And("Operator generate {int} random phone number")
-  public void generateMultipleRandomPhoneNum(int total) {
-    int limit = 0;
-    String phoneNum = "";
-    while (limit < total) {
-      pause1s();
-      if (SYSTEM_ID.equalsIgnoreCase("id")) {
-        phoneNum = f("857%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(7));
-      } else if (SYSTEM_ID.equalsIgnoreCase("ph")) {
-        phoneNum = f("564%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(5));
-      } else if (SYSTEM_ID.equalsIgnoreCase("th")) {
-        phoneNum = f("224%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
-      } else if (SYSTEM_ID.equalsIgnoreCase("my")) {
-        phoneNum = f("883%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
-      } else if (SYSTEM_ID.equalsIgnoreCase("vn")) {
-        phoneNum = f("341%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(5));
-      } else if (SYSTEM_ID.equalsIgnoreCase("sg")) {
-        phoneNum = f("855%s", co.nvqa.common.utils.RandomUtil.randomNumbersString(4));
-      }
-
-      pause1s();
-      putInList(KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER, phoneNum);
-      LOGGER.info(f("number generated: +%s%s",
-          co.nvqa.common.utils.NvCountry.fromString(SYSTEM_ID).getCountryCallingCode(), phoneNum));
-      limit++;
-    }
-  }
-
-
   @And("Operator generate {int} prefix")
   public void generateMultiplePrefix(int total) {
     int limit = 0;
