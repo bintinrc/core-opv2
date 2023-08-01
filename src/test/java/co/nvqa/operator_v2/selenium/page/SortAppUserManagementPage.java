@@ -24,7 +24,7 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   public PageElement loadingIcon;
   @FindBy(xpath="//div[@class='ant-notification-notice-description']")
   public PageElement notifDescription;
-
+  private static final String NAME ="(//input[@class='ant-input'])['%s']";
   private static final String EDIT_INPUT_XPATH ="//input[contains(@data-testid,'%s')]";
   private static final String ADD_SORT_USER_BUTTON_XPATH = "//button[@data-testid='add-user-button']";
 
@@ -404,31 +404,31 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   }
 
   public void searchSortAppUser(String searchBar, String value) {
-    String xpath = "(//input[@class='ant-input'])[1]";
+    String xpath = NAME;
     switch (searchBar) {
 
       case "User ID":
-        xpath = "(//input[@class='ant-input'])[1]";
+        xpath = f(NAME,"1");
         findElementByXpath(xpath).sendKeys(value);
         break;
       case "Hub":
-        xpath = "(//input[@class='ant-input'])[2]";
+        xpath = f(NAME,"2");
         findElementByXpath(xpath).sendKeys(value);
         break;
       case "Position":
-        xpath = "(//input[@class='ant-input'])[3]";
+        xpath = f(NAME,"3");
         findElementByXpath(xpath).sendKeys(value);
         break;
       case "Employment Type":
-        xpath = "(//input[@class='ant-input'])[4]";
+        xpath = f(NAME,"4");
         findElementByXpath(xpath).sendKeys(value);
         break;
       case "First Name":
-        xpath = "(//input[@class='ant-input'])[5]";
+        xpath = f(NAME,"5");
         findElementByXpath(xpath).sendKeys(value);
         break;
       case "Last Name":
-        xpath = "(//input[@class='ant-input'])[6]";
+        xpath = f(NAME,"6");
         findElementByXpath(xpath).sendKeys(value);
         break;
       default:
