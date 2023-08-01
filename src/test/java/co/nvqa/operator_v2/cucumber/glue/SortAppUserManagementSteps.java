@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Tristania Siagian
@@ -25,6 +27,37 @@ public class SortAppUserManagementSteps extends AbstractSteps {
   @Override
   public void init() {
     sortAppUserManagementPage = new SortAppUserManagementPage(getWebDriver());
+  }
+
+  @When("Operator create new Sort App User with detailsV2:")
+  public void operatorCreateNewSortAppUserV2(Map<String, String> data) {
+    String firstName = data.get("firstName");
+    String lastName = data.get("lastName");
+    String contact = data.get("contact");
+    String username = data.get("username");
+    String password = data.get("password");
+    String employmentType = data.get("employmentType");
+    String primaryHub = data.get("primaryHub");
+    String warehouseTeamFormation = data.get("warehouseTeamFormation");
+    String position = data.get("position");
+    String comments = data.get("comments");
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+    sortAppUserManagementPage.clickAddSortAppUserButton();
+    sortAppUserManagementPage.fillFirstName(firstName);
+    sortAppUserManagementPage.fillLastName(lastName);
+    sortAppUserManagementPage.fillContact(contact);
+    sortAppUserManagementPage.fillUsername(username);
+    sortAppUserManagementPage.fillPassword(password);
+    sortAppUserManagementPage.selectEmploymentType(employmentType);
+    sortAppUserManagementPage.selectEmploymentStartDate(calFormatter.format(today));
+    sortAppUserManagementPage.selectPrimaryHubForSortAppUser(primaryHub);
+    sortAppUserManagementPage.fillWareHouseTeamFormation(warehouseTeamFormation);
+    sortAppUserManagementPage.fillPosition(position);
+    sortAppUserManagementPage.fillComments(comments);
+    sortAppUserManagementPage.switchTo();
+    sortAppUserManagementPage.confirmButton.click();
+
   }
 
   @When("Operator create new Sort App User with details:")
@@ -115,6 +148,8 @@ public class SortAppUserManagementSteps extends AbstractSteps {
     navigateRefresh();
     pause2s();
     sortAppUserManagementPage.clickAllSortAppUser();
+    sortAppUserManagementPage.loadingIcon.waitUntilInvisible();
+
   }
 
   @Then("Operator verifies that the newly created Sort App User will be shown")
@@ -209,5 +244,40 @@ public class SortAppUserManagementSteps extends AbstractSteps {
       sortAppUserManagementPage.fillFirstName(sortAppUser.getFirstName());
       sortAppUserManagementPage.fillPosition(sortAppUser.getPosition());
     }
+  }
+
+  @When("Operator search sort app user by {string} with {string}")
+  public void operatorSearchSortAppUserByWith(String searchBar, String value) {
+    sortAppUserManagementPage.waitUntilPageLoaded();
+    sortAppUserManagementPage.switchTo();
+    sortAppUserManagementPage.searchSortAppUser(searchBar,value);
+    }
+
+  @When("Operator edit the top searched user with data below:")
+  public void operatorEditTheTopSearchedUserWithDataBelow(Map<String, String> data) {
+    String firstName = data.get("firstName");
+    String lastName = data.get("lastName");
+    String contact = data.get("contact");
+    String employmentType = data.get("employmentType");
+    String primaryHub = data.get("primaryHub");
+    String warehouseTeamFormation = data.get("warehouseTeamFormation");
+    String position = data.get("position");
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+    sortAppUserManagementPage.editButton.click();
+    sortAppUserManagementPage.fillEdit("contact", contact);
+    sortAppUserManagementPage.fillEdit("first-name", firstName);
+    sortAppUserManagementPage.fillEdit("last-name", lastName);
+    sortAppUserManagementPage.fillEdit("position", position);
+    sortAppUserManagementPage.confirmButton.click();
+  }
+
+  @Then("Make sure {string} notification pop up with {string}")
+  public void makeSureNotificationPopUpWith(String notifTitle, String notifDescription) {
+    sortAppUserManagementPage.waitUntilNoticeMessage(notifTitle);
+    Assertions.assertThat(sortAppUserManagementPage.notifTitle.getText()).as("Notification Title Match")
+        .containsIgnoringCase(notifTitle);
+    Assertions.assertThat(sortAppUserManagementPage.notifDescription.getText()).as("Notification Description Match")
+        .containsIgnoringCase(notifDescription);
   }
 }
