@@ -402,4 +402,36 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     findElementByXpath(xpath).sendKeys(Keys.COMMAND+"A"+Keys.DELETE);
     findElementByXpath(xpath).sendKeys(value);
   }
+
+  public void searchSortAppUser(String searchBar, String value) {
+    String xpath = "(//input[@class='ant-input'])[1]";
+    switch (searchBar) {
+
+      case "User ID":
+        xpath = "(//input[@class='ant-input'])[1]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      case "Hub":
+        xpath = "(//input[@class='ant-input'])[2]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      case "Position":
+        xpath = "(//input[@class='ant-input'])[3]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      case "Employment Type":
+        xpath = "(//input[@class='ant-input'])[4]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      case "First Name":
+        xpath = "(//input[@class='ant-input'])[5]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      case "Last Name":
+        xpath = "(//input[@class='ant-input'])[6]";
+        findElementByXpath(xpath).sendKeys(value);
+        break;
+      default:
+  }
+}
 }

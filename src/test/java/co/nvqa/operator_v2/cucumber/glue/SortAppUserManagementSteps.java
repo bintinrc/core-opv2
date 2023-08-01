@@ -250,37 +250,8 @@ public class SortAppUserManagementSteps extends AbstractSteps {
   public void operatorSearchSortAppUserByWith(String searchBar, String value) {
     sortAppUserManagementPage.waitUntilPageLoaded();
     sortAppUserManagementPage.switchTo();
-    String xpath = "(//input[@class='ant-input'])[1]";
-    switch (searchBar) {
-
-      case "User ID":
-        xpath = "(//input[@class='ant-input'])[1]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      case "Hub":
-        xpath = "(//input[@class='ant-input'])[2]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      case "Position":
-        xpath = "(//input[@class='ant-input'])[3]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      case "Employment Type":
-        xpath = "(//input[@class='ant-input'])[4]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      case "First Name":
-        xpath = "(//input[@class='ant-input'])[5]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      case "Last Name":
-        xpath = "(//input[@class='ant-input'])[6]";
-        sortAppUserManagementPage.findElementByXpath(xpath).sendKeys(value);
-        break;
-      default:
-        // code block
+    sortAppUserManagementPage.searchSortAppUser(searchBar,value);
     }
-  }
 
   @When("Operator edit the top searched user with data below:")
   public void operatorEditTheTopSearchedUserWithDataBelow(Map<String, String> data) {
