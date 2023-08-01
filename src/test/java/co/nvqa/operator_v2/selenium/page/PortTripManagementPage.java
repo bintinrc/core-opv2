@@ -1008,10 +1008,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   public void createNewAirportTrip(Map<String, String> mapOfData) {
     createToFromAirportForm_originFacility.click();
     sendKeysAndEnterById("createToFromAirportForm_originFacility", mapOfData.get("originFacility"));
+    waitUntilVisibilityOfElementLocated(f(DROPDOWN_INPUT_ITEM_XPATH, mapOfData.get("originFacility")));
 
     createToFromAirportForm_destinationFacility.click();
-    sendKeysAndEnterById("createToFromAirportForm_destinationFacility",
-        mapOfData.get("destinationFacility"));
+    sendKeysAndEnterById("createToFromAirportForm_destinationFacility", mapOfData.get("destinationFacility"));
+    waitUntilVisibilityOfElementLocated(f(DROPDOWN_INPUT_ITEM_XPATH, mapOfData.get("destinationFacility")));
 
     String[] hourtime = mapOfData.get("departureTime").split(":");
     String hour = f(departureTimeXpath, 1, hourtime[0]);

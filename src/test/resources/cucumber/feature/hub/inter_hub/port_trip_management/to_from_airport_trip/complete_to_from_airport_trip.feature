@@ -32,7 +32,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Warehouse to Airport Trip with Expired Employment Date
@@ -62,7 +62,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Warehouse to Airport Trip with Expired License Date
@@ -92,7 +92,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Warehouse to Airport Trip with Expired Employment and License Date
@@ -123,7 +123,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @HappyPath @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Airport to Warehouse Trip
@@ -152,7 +152,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Airport to Warehouse Trip with Expired Employment Date
@@ -182,7 +182,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Airport to Warehouse Trip with Expired License Date
@@ -212,7 +212,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @DeleteCreatedPorts @DeleteCreatedHubs @DeleteMiddleMileDriver
   Scenario: Complete Airport to Warehouse Trip with Expired Employment and License Date
@@ -243,7 +243,7 @@ Feature: Airport Trip Management - Complete To From Airport Trip
 	  | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
 	When Operator completes trip "{KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id}" on Port Trip Management page
 	Then Operator verifies trip message "Trip {KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1].id} has completed" display on Port Trip Management page
-	And Operator verifies "COMPLETED" button is shown on Port Trip Management page
+	And Operator verifies "COMPLETED" button on Port Trip Management page is shown
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
