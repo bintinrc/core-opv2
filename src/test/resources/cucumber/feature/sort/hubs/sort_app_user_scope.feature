@@ -2,7 +2,7 @@
 Feature: Sort App User Scope
 
   @LaunchBrowser
-  Scenario: Create Sort User without Scope SORT_CREATE_SORT_APP_USER
+  Scenario: Unable Create Sort User without Scope SORT_CREATE_SORT_APP_USER
     Given Operator login with client id = "sortappuserwithoutscopeuserid" and client secret = "Sortappuserwithoutscopesecret1"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
@@ -20,7 +20,7 @@ Feature: Sort App User Scope
    Then Make sure "Insufficient Permissions" notification pop up with "{error-without-create-scope}"
 
  @LaunchBrowser
-Scenario: Edit Sort User without Scope SORT_EDIT_SORT_APP_USER
+Scenario: Unbale Edit Sort User without Scope SORT_EDIT_SORT_APP_USER
   Given Operator login with client id = "sortappuserwithoutscopeuserid" and client secret = "Sortappuserwithoutscopesecret1"
   Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Sort App User Management
