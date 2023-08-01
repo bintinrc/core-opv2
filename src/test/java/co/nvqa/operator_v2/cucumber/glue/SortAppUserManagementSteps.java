@@ -299,7 +299,6 @@ public class SortAppUserManagementSteps extends AbstractSteps {
     sortAppUserManagementPage.fillEdit("last-name", lastName);
     sortAppUserManagementPage.fillEdit("position", position);
     sortAppUserManagementPage.confirmButton.click();
-//    sortAppUserManagementPage.confirmButton.click();
   }
 
   @Then("Make sure {string} notification pop up with {string}")
