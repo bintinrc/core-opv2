@@ -212,6 +212,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(xpath = "//div[@class='ant-modal-body']/div[@class='ant-row']")
     public List<PageElement> message;
 
+    @FindBy(xpath = "//div[@data-testid='inner-element']//div[@role='gridcell']//span[@class]")
+    public List<PageElement> failureReason;
+
     @FindBy(xpath = "//div[@class='ant-modal-footer']//h4")
     public PageElement displayedUploadedFileName;
 
