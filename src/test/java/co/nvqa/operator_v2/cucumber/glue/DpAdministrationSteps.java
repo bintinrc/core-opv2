@@ -57,7 +57,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   private static final String KEY_LIST_OF_OPERATOR_GENERATE_PREFIX = "KEY_LIST_OF_OPERATOR_GENERATE_PREFIX";
-  private static final String KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER = "KEY_LIST_OF_OPERATOR_GENERATE_PHONE_NUMBER";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
   public static final String SINGLE = "SINGLE";
