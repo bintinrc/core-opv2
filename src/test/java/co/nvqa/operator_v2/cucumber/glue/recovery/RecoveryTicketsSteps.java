@@ -334,7 +334,6 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-
   @When("Operator create new ticket on new page Recovery Tickets using data below:")
   public void createNewSingleTicket(Map<String, String> map) {
     recoveryTicketsPage.inFrame(() -> {
@@ -432,6 +431,55 @@ public class RecoveryTicketsSteps extends AbstractSteps {
   public void clearFilterSearch() {
     recoveryTicketsPage.inFrame((page) -> {
       page.resultsTable.clearFilterButton.click();
+    });
+  }
+
+  @When("Operator search created ticket by {string} filter with value {string}")
+  public void searchTicketByFilter(String field, String value) {
+    recoveryTicketsPage.inFrame(() -> {
+      final String finalValue = resolveValue(value);
+      recoveryTicketsPage.filterByField(field, finalValue);
+    });
+  }
+
+  @When("Operator click ticket's action button")
+  public void clickTicketActionButton() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+    });
+  }
+
+  @When("Operator selects {string} from ticket status in Edit Ticket dialog")
+  public void changeTicketStatus(String value) {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.editTicketDialog.ticketStatus.selectValue(resolveValue(value));
+      recoveryTicketsPage.editTicketDialog.keep.click();
+    });
+  }
+
+  @When("Operator clicks Update Ticket button in Edit Ticket dialog")
+  public void clickUpdateTicket() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.editTicketDialog.updateTicket.click();
+    });
+  }
+
+  @Then("Operator verifies ticket is updates to {string} status")
+  public void verifyUpdatedTicketStatus(String updatedStatus) {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilInvisibilityOfToast();
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(updatedStatus);
+    });
+  }
+
+  @Then("Operator verify the status update event from {string} to {string} by {string} is recorded correctly")
+  public void verifyEventUpdate(String oldStatus, String newStatus, String operatorName) {
+    recoveryTicketsPage.inFrame(() -> {
+      pause5s();
+      Assertions.assertThat(recoveryTicketsPage.editTicketDialog.changesAndComments.getText())
+          .as("changes and comments recorded").isEqualTo(
+              "Status change: From '" + oldStatus + "' to '" + newStatus + "' by " + operatorName);
     });
   }
 }
