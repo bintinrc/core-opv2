@@ -1,19 +1,33 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.SortAppUser;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Tristania Siagian
  */
 public class SortAppUserManagementPage extends OperatorV2SimplePage {
+  @FindBy(xpath = "//button[@data-testid='confirm-button']")
+  public PageElement confirmButton;
+  @FindBy(xpath="//button[contains(@data-testid,'edit-button')]")
+  public PageElement editButton;
+  @FindBy(xpath="//div[@class='ant-notification-notice-message']")
+  public PageElement notifTitle;
+  @FindBy(xpath="//span[@class='ant-btn-loading-icon']")
+  public PageElement loadingIcon;
+  @FindBy(xpath="//div[@class='ant-notification-notice-description']")
+  public PageElement notifDescription;
 
-  private static final String ADD_SORT_USER_BUTTON_XPATH = "//button[@id='btnAddUser']";
+  private static final String EDIT_INPUT_XPATH ="//input[contains(@data-testid,'%s')]";
+  private static final String ADD_SORT_USER_BUTTON_XPATH = "//button[@data-testid='add-user-button']";
+
   private static final String FILTER_XPATH = "//div[@id='%s']";
   private static final String EMPLOYMENT_START_DATE_FILTER_XPATH = "//span[@id='employmentStartDate']";
   private static final String START_DATE_INPUT_XPATH = "//div[contains(@class,'calendar-range-left')]//td[@title='%s']";
@@ -21,19 +35,19 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   private static final String INACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='INACTIVE']";
   private static final String UNSELECTABLE_FILTER = "//div[@id='%s']//span[@unselectable='on']";
 
-  private static final String ADD_EDIT_SORT_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
-  private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employmentType']";
-  private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
-  private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
-  private static final String PRIMARY_HUB_SELECTION_XPATH = "(//li[text()='%s'])[1]";
-  private static final String ADDITIONAL_HUB_SELECTION_XPATH = "(//li[text()='%s'])[2]";
-  private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employmentStartDate']";
-  private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
-  private static final String PRIMARY_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hubId']";
-  private static final String ADDITIONAL_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='additionalHubs[0]']";
-  private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//div[@class='ant-modal-footer']//button[contains(@class,'ant-btn-primary')]";
+  private static final String ADD_EDIT_SORT_USER_DIALOG_XPATH = "//div[contains(@id,'rc_unique')]";
+  private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//input[@id='employment_type']";
+  private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//div[text()='Full Time']";
+  private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//div[text()='Part Time']";
+  private static final String PRIMARY_HUB_SELECTION_XPATH = "(//div[@title='%s'])[1]";
+  private static final String ADDITIONAL_HUB_SELECTION_XPATH = "(//div[text()='%s'])[2]";
+  private static final String EMPLOYMENT_START_DATE_XPATH = "//input[@id='customEmploymentStartDate']";
+  private static final String RECENT_MONTH_XPATH = "//button[@class='ant-picker-month-btn']";
+  private static final String PRIMARY_HUB_COMBOBOX_XPATH = "//input[@id='hub_id']";
+  private static final String ADDITIONAL_HUB_COMBOBOX_XPATH = "//input[@id='customAdditionalHub1]";
+  private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//div[@class='ant-modal-footer']//button[contains(@data-testid,'confirm-button')]";
   private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
-  private static final String EDIT_LINK_TEXT_XPATH = "//a[contains(@class, 'edit-user')]";
+  private static final String EDIT_LINK_TEXT_XPATH = "//button[contains(@data-testid,'edit-button')]";
   private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='isActive']";
 
   private static final String CLEAR_FILTERS_BUTTON_XPATH = "//button[span[text()='Clear Filters']]";
@@ -48,18 +62,18 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   private static final String ERROR_MESSAGE_EMPTY_FIELD_XPATH = "//div[@class='ant-form-explain']/span[text()='%s']";
   private static final String TEST_CALENDAR = "//td[@title='%s']/div";
 
-  private static final String FIRST_NAME_ID = "firstName";
-  private static final String LAST_NAME_ID = "lastName";
-  private static final String CONTACT_DETAIL_ID = "contactDetails";
+  private static final String FIRST_NAME_ID = "first_name";
+  private static final String LAST_NAME_ID = "last_name";
+  private static final String CONTACT_DETAIL_ID = "contact_details";
   private static final String USERNAME_ID = "username";
   private static final String PASSWORD_ID = "password";
   private static final String WAREHOUSE_TEAM_FORMATION_ID = "team";
   private static final String POSITION_ID = "position";
   private static final String COMMENT_ID = "comment";
-  private static final String STATUS_ID = "isActive";
+  private static final String STATUS_ID = "is_active";
 
   private static final String USERNAME_CLASS = "username";
-  private static final String HUB_CLASS = "hubId";
+  private static final String HUB_CLASS = "hub_id";
   private static final String POSITION_CLASS = "position";
   private static final String EMPLOYMENT_TYPE_CLASS = "employmentType";
   private static final String FIRST_NAME_CLASS = "firstName";
@@ -140,7 +154,7 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(EMPLOYMENT_START_DATE_XPATH);
     waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
-    click(f(TEST_CALENDAR, startDate));
+    click("//a[@class='ant-picker-today-btn']");
     getWebDriver().switchTo().parentFrame();
   }
 
@@ -160,6 +174,7 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   public void selectPrimaryHubForSortAppUser(String hubName) {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(PRIMARY_HUB_COMBOBOX_XPATH);
+    sendKeys(PRIMARY_HUB_COMBOBOX_XPATH,hubName);
     waitUntilVisibilityOfElementLocated(f(PRIMARY_HUB_SELECTION_XPATH, hubName));
     pause1s();
     click(f(PRIMARY_HUB_SELECTION_XPATH, hubName));
@@ -231,7 +246,7 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   public void clickAllSortAppUser() {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
-    waitUntilVisibilityOfElementLocated("//tbody//td[@class='hubId']");
+    waitUntilVisibilityOfElementLocated("//tbody//td[@class='hub_name']");
     getWebDriver().switchTo().parentFrame();
   }
 
@@ -376,5 +391,15 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     click(EDIT_LINK_TEXT_XPATH);
     waitUntilVisibilityOfElementLocated(ADD_EDIT_SORT_USER_DIALOG_XPATH);
     getWebDriver().switchTo().parentFrame();
+  }
+
+  public void fillEditFirstName() {
+    click(f(EDIT_INPUT_XPATH,FIRST_NAME_ID));
+  }
+
+  public void fillEdit(String edit, String value) {
+    String xpath = f(EDIT_INPUT_XPATH,edit);
+    findElementByXpath(xpath).sendKeys(Keys.COMMAND+"A"+Keys.DELETE);
+    findElementByXpath(xpath).sendKeys(value);
   }
 }
