@@ -4,7 +4,6 @@ Feature: Distribution Point - Endpoint
   @DeleteDpPartnerV2
   Scenario: DP Administration - Attempting to create user for DP from another partner - dp management service endpoint
     Given Operator generate 11 prefix
-    Given Operator generate 7 random phone number
     Given API DP - Operator Create DP Partner:
       | dpPartner | { "name": "{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[1]}", "poc_name": "Diaz{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[2]}", "poc_tel": "DUSER00123","poc_email": "{default-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     And API DP - Operator Create DP:
@@ -22,7 +21,6 @@ Feature: Distribution Point - Endpoint
   @DeleteDpPartnerV2
   Scenario: DP Administration - Creating user for valid partner and DP from a different country - dp management service endpoint
     Given Operator generate 11 prefix
-    Given Operator generate 7 random phone number
     Given API DP - Operator Create DP Partner:
       | dpPartner | { "name": "{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[1]}", "poc_name": "Diaz{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[2]}", "poc_tel": "DUSER00123","poc_email": "{default-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     And API DP - Operator Create DP:
@@ -40,7 +38,6 @@ Feature: Distribution Point - Endpoint
   @DeleteDpPartnerV2
   Scenario: DP Administration - Invalid fields in request - Password is empty string  - dp management service endpoint
     Given Operator generate 8 prefix
-    Given Operator generate 7 random phone number
     Given API DP - Operator Create DP Partner:
       | dpPartner | { "name": "{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[1]}", "poc_name": "Diaz{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[2]}", "poc_tel": "DUSER00123","poc_email": "{default-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     And API DP - Operator Create DP:
@@ -58,7 +55,6 @@ Feature: Distribution Point - Endpoint
   @DeleteDpPartnerV2 @DeleteDpUser
   Scenario: DP Administration - Invalid fields in request - Username already exists  - dp management service endpoint
     Given Operator generate 9 prefix
-    Given Operator generate 7 random phone number
     Given API DP - Operator Create DP Partner:
       | dpPartner | { "name": "{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[1]}", "poc_name": "Diaz{KEY_LIST_OF_OPERATOR_GENERATE_PREFIX[2]}", "poc_tel": "DUSER00123","poc_email": "{default-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     And API DP - Operator Create DP:
