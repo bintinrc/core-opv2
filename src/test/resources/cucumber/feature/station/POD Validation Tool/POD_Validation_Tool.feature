@@ -589,46 +589,46 @@ Feature: POD Validation
 
 
   Scenario: Download POD Validation Report and View Audit Detail
-  Given Operator loads Operator portal home page
-  And Operator go to menu Station Management Tool -> Download Validation Reports
-  When Operator selects the date time range based on below data:
-    | startDate | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
-    | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
-  When Operator click "Download Report" button
-  And Verify that csv file is downloaded with filename: "Download_Validation_Report.csv"
-  Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
-    | TaskID            |
-    | JobID             |
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Download Validation Reports
+    When Operator selects the date time range based on below data:
+      | startDate | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+    When Operator click "Download Report" button
+    And Verify that csv file is downloaded with filename: "Download_Validation_Report.csv"
+    Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
+      | TaskID            |
+      | JobID             |
       | JobType           |
       | AttemptedAt       |
       | HubID             |
       | FailureReasonId   |
       | DriverID          |
-    | ShipperIDs        |
-    | ShipperNames      |
-    | ParentShipperIDs  |
+      | ShipperIDs        |
+      | ShipperNames      |
+      | ParentShipperIDs  |
       | OrderIds          |
       | TrackingIds       |
       | ValidatorId       |
-    | ValidatorEmail    |
-    | ValidatorValidity |
-    | ValidatorReason   |
-    | ValidationTime    |
-    | AuditorId         |
-    | AuditorEmail      |
-    | AuditorValidity   |
-    | AuditorReason     |
-    | AuditTime         |
-    | ValidationMatches |
-    | AppealReasonId    |
-    | AppealReason      |
-    | AppealInfo        |
-    | AppealUpdatedAt   |
-    | ReviewerId        |
-    | ReviewerEmail     |
-    | ReviewerValidity  |
-    | ReviewerReason    |
-    | ReviewTime        |
+      | ValidatorEmail    |
+      | ValidatorValidity |
+      | ValidatorReason   |
+      | ValidationTime    |
+      | AuditorId         |
+      | AuditorEmail      |
+      | AuditorValidity   |
+      | AuditorReason     |
+      | AuditTime         |
+      | ValidationMatches |
+      | AppealReasonId    |
+      | AppealReason      |
+      | AppealInfo        |
+      | AppealUpdatedAt   |
+      | ReviewerId        |
+      | ReviewerEmail     |
+      | ReviewerValidity  |
+      | ReviewerReason    |
+      | ReviewTime        |
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Productivity Count
