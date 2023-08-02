@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1 @current
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1
 Feature: Route Inbound Expected Scans
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Route Inbound Expected Scans : Pending Deliveries
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -74,7 +74,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -167,7 +167,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -260,7 +260,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -320,7 +320,7 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal  | 2                                         |
       | c2cReturnPickupsScans | 0                                         |
       | c2cReturnPickupsTotal | 2                                         |
-    When Operator open C2C / Return Pickups dialog on Route Inbound page
+    When Operator open C2C Return Pickups dialog on Route Inbound page
     Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
       | shipperName       | scanned | total |
       | {shipper-v4-name} | 0       | 2     |
@@ -350,7 +350,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path @wip
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -360,168 +360,201 @@ Feature: Route Inbound Expected Scans
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                              |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
-      | routeId                      | {KEY_CREATED_ROUTE_ID} |
-      | driverName                   | {ninja-driver-name}    |
-      | hubName                      | {hub-name}             |
-      | routeDate                    | GET_FROM_CREATED_ROUTE |
-      | parcelProcessedScans         | 0                      |
-      | parcelProcessedTotal         | 1                      |
-      | pendingC2cReturnPickupsScans | 0                      |
-      | pendingC2cReturnPickupsTotal | 1                      |
-    When Operator open Pending C2C / Return Pickups dialog on Route Inbound page
+      | routeId                      | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName                   | {ninja-driver-name}                       |
+      | hubName                      | {hub-name}                                |
+      | routeDate                    | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | parcelProcessedScans         | 0                                         |
+      | parcelProcessedTotal         | 1                                         |
+      | pendingC2cReturnPickupsScans | 0                                         |
+      | pendingC2cReturnPickupsTotal | 1                                         |
+    When Operator open Pending C2C Return Pickups dialog on Route Inbound page
     Then Operator verify Shippers Info in Pending C2C / Return Pickups Waypoints dialog using data below:
       | shipperName       | scanned | total |
       | {shipper-v4-name} | 0       | 1     |
     When Operator click 'View orders or reservations' button for shipper #1 in Pending C2C / Return Pickups Waypoints dialog
     Then Operator verify Orders table in Pending C2C / Return Pickups Waypoints dialog using data below:
-      | trackingId                                 | stampId | location             | type             | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | CREATED_ORDER_FROM_1 | Pick Up (Return) | Pending | 0        |                    |
+      | trackingId                            | stampId | location                                           | type             | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineFromAddress} | Pick Up (Return) | Pending | 0        |                    |
     When Operator close Pending C2C / Return Pickups dialog on Route Inbound page
-    And Operator scan a tracking ID of created order on Route Inbound page
+    And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | parcelProcessedScans         | 1 |
       | parcelProcessedTotal         | 1 |
       | pendingC2cReturnPickupsScans | 1 |
       | pendingC2cReturnPickupsTotal | 1 |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name    | ROUTE INBOUND SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-      | hubName | {hub-name}             |
-    And DB Operator verifies inbound_scans record with type "2" and correct route_id
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ROUTE INBOUND SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | hubName | {hub-name}                         |
+    And DB Core - Operator verifies inbound_scans record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | hubId   | {hub-id}                           |
+      | type    | 2                                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Route Inbound Expected Scans : Reservation Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add reservation pick-up to the route
-    And API Driver collect all his routes
-    And API Driver get Reservation Job using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-    And API Driver success Reservation using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                   |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                    |
+      | jobType    | RESERVATION                                                                                                          |
+      | jobAction  | SUCCESS                                                                                                              |
+      | jobMode    | PICK_UP                                                                                                              |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
-      | routeId                 | {KEY_CREATED_ROUTE_ID} |
-      | driverName              | {ninja-driver-name}    |
-      | hubName                 | {hub-name}             |
-      | routeDate               | GET_FROM_CREATED_ROUTE |
-      | parcelProcessedScans    | 0                      |
-      | parcelProcessedTotal    | 1                      |
-      | reservationPickupsScans | 0                      |
-      | reservationPickupsTotal | 1                      |
+      | routeId                 | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName              | {ninja-driver-name}                       |
+      | hubName                 | {hub-name}                                |
+      | routeDate               | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | parcelProcessedScans    | 0                                         |
+      | parcelProcessedTotal    | 1                                         |
+      | reservationPickupsScans | 0                                         |
+      | reservationPickupsTotal | 1                                         |
     When Operator open Reservation Pickups dialog on Route Inbound page
     And Operator close Reservation Pickups dialog on Route Inbound page
-    And Operator scan a tracking ID of created order on Route Inbound page
+    And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | parcelProcessedScans    | 1 |
       | parcelProcessedTotal    | 1 |
       | reservationPickupsScans | 1 |
       | reservationPickupsTotal | 1 |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name    | ROUTE INBOUND SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-      | hubName | {hub-name}             |
-    And DB Operator verifies inbound_scans record with type "2" and correct route_id
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ROUTE INBOUND SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | hubName | {hub-name}                         |
+    And DB Core - Operator verifies inbound_scans record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | hubId   | {hub-id}                           |
+      | type    | 2                                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders
     Given Operator go to menu Utilities -> QRCode Printing
+    Given API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator add reservation pick-up to the route
-    And API Driver collect all his routes
-    And API Operator start the route
-    And API Driver get Reservation Job using data below:
-      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-    And API Driver success Reservation by NOT scanning order using data below:
-      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | routeId        | {KEY_CREATED_ROUTE_ID}                   |
-      | pickupQuantity | 1                                        |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId                  | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | waypointId               | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | parcels                  | []                                               |
+      | routes                   | KEY_DRIVER_ROUTES                                |
+      | jobType                  | RESERVATION                                      |
+      | jobAction                | SUCCESS                                          |
+      | jobMode                  | PICK_UP                                          |
+      | totalUnmanifestedParcels | 1                                                |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
-      | routeId                 | {KEY_CREATED_ROUTE_ID} |
-      | driverName              | {ninja-driver-name}    |
-      | hubName                 | {hub-name}             |
-      | routeDate               | GET_FROM_CREATED_ROUTE |
-      | reservationPickupsScans | 0                      |
-      | reservationPickupsTotal | 1                      |
-    And Operator scan a tracking ID of created order on Route Inbound page
+      | routeId                 | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName              | {ninja-driver-name}                       |
+      | hubName                 | {hub-name}                                |
+      | routeDate               | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | reservationPickupsScans | 0                                         |
+      | reservationPickupsTotal | 1                                         |
+    And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     Then Operator verify Waypoint Scans record using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | status     | Reservation Pickup                         |
-      | reason     | ^.*Extra Order                             |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | status     | Reservation Pickup                    |
+      | reason     | ^.*Extra Order                        |
     Then Operator verify the Route Inbound Details is correct using data below:
       | reservationPickupsScans       | 0 |
       | reservationPickupsTotal       | 1 |
       | reservationPickupsExtraOrders | 1 |
     When Operator open Reservation Pickups dialog on Route Inbound page
     Then Operator verify Extra Orders record using data below:
-      | trackingId  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | shipperName | {shipper-v4-name}                          |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | shipperName | {shipper-v4-name}                     |
     When Operator close Reservation Pickups dialog on Route Inbound page
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name    | ROUTE INBOUND SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
-      | hubName | {hub-name}             |
-    And DB Operator verifies inbound_scans record with type "2" and correct route_id
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ROUTE INBOUND SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | hubName | {hub-name}                         |
+    And DB Core - Operator verifies inbound_scans record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | hubId   | {hub-id}                           |
+      | type    | 2                                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Show DP Return Pickups Under Return Pickups Modal & Reservation Modal Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     When API Order - Shipper create multiple V4 orders using data below:
@@ -570,7 +603,7 @@ Feature: Route Inbound Expected Scans
       | driverName | {ninja-driver-name}    |
       | hubName    | {hub-name}             |
       | routeDate  | GET_FROM_CREATED_ROUTE |
-    When Operator open C2C / Return Pickups dialog on Route Inbound page
+    When Operator open C2C Return Pickups dialog on Route Inbound page
     Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
       | shipperName             | scanned | total |
       | {lodge-in-shipper-name} | 0       | 1     |
