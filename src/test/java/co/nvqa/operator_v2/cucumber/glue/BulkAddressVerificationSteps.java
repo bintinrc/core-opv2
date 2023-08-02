@@ -78,7 +78,6 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
     String method = data.getOrDefault("method", "");
     Long waypointId = Long.valueOf(resolveValue(data.get("waypoint")));
     String toAddress1 = resolveValue(data.get("toAddress1"));
-//    List<Order> ordersDetails =  (get(resolveValue(data.get("order"))));
     List<JaroScore>
         jaroScores = new ArrayList<>();
 
