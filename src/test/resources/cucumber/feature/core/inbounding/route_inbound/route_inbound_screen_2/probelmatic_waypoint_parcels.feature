@@ -68,15 +68,15 @@ Feature: Problematic Waypoints/Parcels
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | driverName  | {ninja-driver-name}               |
-      | hubName     | {hub-name}                        |
-      | routeDate   | GET_FROM_CREATED_ROUTE            |
-      | wpPending   | 2                                 |
-      | wpPartial   | 0                                 |
-      | wpFailed    | 2                                 |
-      | wpCompleted | 0                                 |
-      | wpTotal     | 4                                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}         |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 2                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 2                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 4                                         |
     And Operator verifies that Problematic Parcels table exactly contains records:
       | trackingId                                 | shipperName       | location                                              | type              | issue                                                 |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildFromAddressString} | Pick Up (Return)  | Cannot Make It (CMI)                                  |
@@ -116,15 +116,15 @@ Feature: Problematic Waypoints/Parcels
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | driverName  | {ninja-driver-name}               |
-      | hubName     | {hub-name}                        |
-      | routeDate   | GET_FROM_CREATED_ROUTE            |
-      | wpPending   | 1                                 |
-      | wpPartial   | 0                                 |
-      | wpFailed    | 1                                 |
-      | wpCompleted | 0                                 |
-      | wpTotal     | 2                                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}         |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 1                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 2                                         |
     And Operator verifies that Problematic Waypoints table exactly contains records:
       | shipperName       | location                                                            | type                  | issue                |
       | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Cannot Make It (CMI) |

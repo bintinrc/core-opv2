@@ -38,15 +38,15 @@ Feature: Waypoint Performance
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 4                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 0                      |
-      | wpCompleted | 0                      |
-      | wpTotal     | 4                      |
+      | routeId     | GET_FROM_CREATED_ROUTE                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 4                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 4                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
@@ -100,15 +100,15 @@ Feature: Waypoint Performance
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 0                      |
-      | wpCompleted | 3                      |
-      | wpTotal     | 3                      |
+      | routeId     | GET_FROM_CREATED_ROUTE                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 3                                         |
+      | wpTotal     | 3                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
@@ -159,15 +159,15 @@ Feature: Waypoint Performance
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 3                      |
-      | wpCompleted | 0                      |
-      | wpTotal     | 3                      |
+      | routeId     | GET_FROM_CREATED_ROUTE                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 3                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 3                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
@@ -247,15 +247,15 @@ Feature: Waypoint Performance
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 3                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 1                      |
-      | wpCompleted | 2                      |
-      | wpTotal     | 6                      |
+      | routeId     | GET_FROM_CREATED_ROUTE                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 3                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 1                                         |
+      | wpCompleted | 2                                         |
+      | wpTotal     | 6                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
@@ -317,15 +317,15 @@ Feature: Waypoint Performance
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID} |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 1                      |
-      | wpFailed    | 0                      |
-      | wpCompleted | 0                      |
-      | wpTotal     | 1                      |
+      | routeId     | {KEY_CREATED_ROUTE_ID}                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 1                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 1                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
