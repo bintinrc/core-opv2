@@ -587,8 +587,8 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
 
-@Debug
-Scenario: Download POD Validation Report and View Audit Detail
+
+  Scenario: Download POD Validation Report and View Audit Detail
   Given Operator loads Operator portal home page
   And Operator go to menu Station Management Tool -> Download Validation Reports
   When Operator selects the date time range based on below data:
