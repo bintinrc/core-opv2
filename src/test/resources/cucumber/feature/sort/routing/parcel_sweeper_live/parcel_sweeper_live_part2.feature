@@ -147,11 +147,6 @@ Feature: Parcel Sweeper Live
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-#    And API Driver get pickup/delivery waypoint of the created order
-#    And API Driver - Driver van inbound:
-#    And API Operator Van Inbound parcel
-#    And API Operator start the route
-#    And API Driver failed the delivery of the created parcel
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator refresh page
     Given Operator go to menu Routing -> Parcel Sweeper Live
@@ -167,11 +162,6 @@ Feature: Parcel Sweeper Live
       | zoneName      | {KEY_SORT_ZONE_INFO.name}      |
       | zoneShortName | {KEY_SORT_ZONE_INFO.shortName} |
       | textColor     | {blue-hex-color}               |
-    #When DB Sort - get next sorting task
-     # | zoneName   | {KEY_SORT_ZONE_INFO.name} |
-      #| sourceName | {hub-name}                    |
-    #Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      #| nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |
       | textColor | {dark-gray-hex-color}                          |
@@ -225,11 +215,6 @@ Feature: Parcel Sweeper Live
       | zoneName      | {KEY_SORT_ZONE_INFO.name}      |
       | zoneShortName | {KEY_SORT_ZONE_INFO.shortName} |
       | textColor     | {blue-hex-color}               |
-    #When DB Sort - get next sorting task
-     # | zoneName   | {KEY_SORT_ZONE_INFO.name} |
-     # | sourceName | {hub-name}                    |
-    #Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-     # | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |
       | textColor | {dark-gray-hex-color}                          |

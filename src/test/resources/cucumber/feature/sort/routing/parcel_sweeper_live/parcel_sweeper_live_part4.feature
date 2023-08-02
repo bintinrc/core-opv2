@@ -145,8 +145,6 @@ Feature: Parcel Sweeper Live
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When API DP - Operator tag order to DP:
       | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
-#    Given Operator go to menu Distribution Points -> DP Tagging
-#    When Operator tags single order to DP with DPMS ID = "{dpms-id}" and tracking id = "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
@@ -259,11 +257,6 @@ Feature: Parcel Sweeper Live
       | zoneName      | {KEY_SORT_ZONE_INFO.name}      |
       | zoneShortName | {KEY_SORT_ZONE_INFO.shortName} |
       | textColor     | {blue-hex-color}               |
-    #When DB Sort - get next sorting task
-     # | zoneName   | {KEY_SORT_ZONE_INFO.name} |
-    # | sourceName | {hub-name}                    |
-    #Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-     # | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |
       | textColor | {dark-gray-hex-color}                          |
