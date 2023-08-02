@@ -38,7 +38,9 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
       }
       trackingId = trackingIds.get(0);
     }
-
+    if (trackingId == null) {
+      trackingId = resolveValue(dataTableAsMap.get("trackingId"));
+    }
     String shipperName = dataTableAsMap.get("3plShipperName");
     String shipperId = dataTableAsMap.get("3plShipperId");
 
