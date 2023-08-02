@@ -13,7 +13,10 @@ Feature: Create Recovery Ticket Deprecated
 #    And API Driver collect all his routes
 #    And API Driver get pickup/delivery waypoint of the created order
 #    And API Operator Van Inbound parcel
-#    And API Operator start the route
+#    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
 #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
 #    Then Operator verify order status is "Transit" on Edit Order page
 #    And Operator verify order granular status is "On Vehicle For Delivery" on Edit Order page
@@ -66,7 +69,10 @@ Feature: Create Recovery Ticket Deprecated
 #    And API Driver collect all his routes
 #    And API Driver get pickup/delivery waypoint of the created order
 #    And API Operator Van Inbound parcel
-#    And API Operator start the route
+#    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
 #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
 #    Then Operator verify order status is "Transit" on Edit Order page
 #    And Operator verify order granular status is "On Vehicle For Delivery" on Edit Order page

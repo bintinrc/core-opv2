@@ -576,7 +576,10 @@ Feature: Route Inbound Expected Scans
     And API Operator get "{KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}" reservation
     And API Driver collect all his routes
     And API Operator Van Inbound parcel
-#    And API Operator start the route
+#    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
