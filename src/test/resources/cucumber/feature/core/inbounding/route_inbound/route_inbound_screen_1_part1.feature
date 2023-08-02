@@ -45,15 +45,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | <fetchBy>      |
       | fetchByValue | <fetchByValue> |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
-      | wpPending   | 0                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 1                                  |
-      | wpTotal     | 1                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 1                                         |
+      | wpTotal     | 1                                         |
     Examples:
       | Note        | fetchBy              | fetchByValue                          |
       | Route ID    | FETCH_BY_ROUTE_ID    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
@@ -133,15 +133,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_ROUTE_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
-      | wpPending   | 1                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 1                                  |
-      | wpCompleted | 1                                  |
-      | wpTotal     | 3                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 1                                         |
+      | wpCompleted | 1                                         |
+      | wpTotal     | 3                                         |
 
   @ArchiveRouteCommonV2
   Scenario: Get Route Details by Route ID - Route with No Waypoints
