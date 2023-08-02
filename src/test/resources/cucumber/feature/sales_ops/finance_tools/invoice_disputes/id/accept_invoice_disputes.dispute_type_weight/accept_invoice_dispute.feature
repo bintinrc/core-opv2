@@ -22,7 +22,7 @@ Feature: Accept Invoice Disputes
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":{"weight": 2.0}} |
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                       |
-      | hubId                | {hub-id-2}                                                  |
+      | hubId                | {hub-id}                                                    |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "ARRIVED_AT_SORTING_HUB"
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "COMPLETED"
