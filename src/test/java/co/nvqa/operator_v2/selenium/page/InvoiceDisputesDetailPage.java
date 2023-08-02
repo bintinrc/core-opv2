@@ -167,10 +167,10 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
     @FindBy(xpath = "//article[text()='RTS']//parent::div//following-sibling::div//article")
     public PageElement orderInfoRts;
 
-    @FindBy(xpath = "//article[text()='NV original billed amt (tax-exclusive) ($)']//parent::div//following-sibling::div//article")
+    @FindBy(xpath = "//article[contains(text(),'NV original billed amt (tax-exclusive)')]//parent::div//following-sibling::div//article")
     public PageElement disputeInfoOriginalBilledAmount;
 
-    @FindBy(xpath = "//article[text()='COD Amount ($)']//parent::div//following-sibling::div//article")
+    @FindBy(xpath = "//article[contains(text(),'COD Amount')]//parent::div//following-sibling::div//article")
     public PageElement disputeInfoCODAmount;
 
     @FindBy(xpath = "//input[@value='ACCEPTED']")
@@ -181,6 +181,9 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
 
     @FindBy(xpath = "//span[text()='Manual adjustment']//parent::button")
     public Button manualAdjustmentButton;
+
+    @FindBy(xpath = "//span[text()='Calculate']//parent::button")
+    public Button calculateButton;
 
     @FindBy(xpath = "//span[text()='Remarks (shown to shipper)']//parent::div//following-sibling::div//div[@class='ant-select-selector']")
     public AntSelect3 remark;
@@ -232,6 +235,12 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
 
     @FindBy(xpath = "//input[@placeholder = 'Input here']")
     public TextBox customRemarksInput;
+
+    @FindBy(xpath = "//span[text() = 'Revised weight input']//parent::div//following-sibling::div//descendant::span//input")
+    public TextBox revisedWeightInput;
+
+    @FindBy(xpath = "//label[text() = 'NV original bill amount']//parent::div//following-sibling::div//descendant::input")
+    public TextBox nvOriginalBilledAmount;
 
     public ManualResolutionDisputedOrderModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

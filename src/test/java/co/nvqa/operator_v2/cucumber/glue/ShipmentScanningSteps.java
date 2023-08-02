@@ -646,4 +646,15 @@ public class ShipmentScanningSteps extends AbstractSteps {
     pause5s();
   }
 
+  @And("Operator clicks {string} button on Add To Shipment page")
+  public void operatorClicksButtonOnAddToShipmentPage(String buttonName) {
+    switch (buttonName) {
+      case "Close Shipment":
+        shipmentScanningPage.closeShipment.click();
+        break;
+      case "Confirm Close Shipment":
+        shipmentScanningPage.confirmCloseShipment.click();
+        break;
+    }
+  }
 }

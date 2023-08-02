@@ -6,9 +6,11 @@ import co.nvqa.common.mm.model.Port;
 import co.nvqa.common.mm.model.PortTrip;
 import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.selenium.page.PortTripManagementPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -390,7 +392,7 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.createPortTripUsingData(resolvedMapOfData);
     }
 
-    @Then("Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page")
+    @Then("Operator verifies Submit button on Create Airport Trip Port Trip Management page is disabled")
     public void operatorVerifySubmitButton() {
         portTripManagementPage.verifySubmitButtonDisable();
     }
@@ -529,7 +531,7 @@ public class PortTripManagementSteps extends AbstractSteps {
         portTripManagementPage.ArriveTripAndVerifyItems();
     }
 
-    @Then("Operator verifies {string} button is shown on Port Trip Management page")
+    @Then("Operator verifies {string} button on Port Trip Management page is shown")
     public void operatorVerifiesButtonIsShownOnAirTripPage(String button) {
         portTripManagementPage.verifyButtonIsShown(button);
     }
@@ -695,5 +697,13 @@ public class PortTripManagementSteps extends AbstractSteps {
     @Then("Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page")
     public void operatorVerifiesCanViewAssignedMAWBOnFlightTripInPortTripManagementPage() {
         portTripManagementPage.verifyCanViewAssignedMAWBOnFlightTrip();
+    }
+
+    @Then("Operator opens trip detail page for trip id {string} on Port Trip Management")
+    public void operatorOpensTripDetailPageForTripIdOnPortTripManagement(String tripIdAsStr) {
+        String url = f("%s/%s/port-trip-management/%d/details", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.NV_SYSTEM_ID, Long.parseLong(resolveValue(tripIdAsStr)));
+        LOGGER.info("Go to url: {}", url);
+        portTripManagementPage.goToUrl(url);
+        portTripManagementPage.switchTo();
     }
 }

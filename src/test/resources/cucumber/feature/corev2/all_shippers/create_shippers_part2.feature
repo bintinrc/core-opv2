@@ -5,6 +5,7 @@ Feature: Create shipper part1
     When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Create normal shipper - all field filled
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -203,7 +204,7 @@ Feature: Create shipper part1
       | Billing Address   | test address |
       | Billing Post Code | 45685        |
 
-
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Create normal shipper - mandatory field
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -267,6 +268,7 @@ Feature: Create shipper part1
       | Billing Address   | test address |
       | Billing Post Code | 45685        |
 
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Create marketplace shipper - mandatory field
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -333,7 +335,7 @@ Feature: Create shipper part1
       | Billing Address   | test address |
       | Billing Post Code | 45685        |
 
-
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Create corporate shipper - mandatory field
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button

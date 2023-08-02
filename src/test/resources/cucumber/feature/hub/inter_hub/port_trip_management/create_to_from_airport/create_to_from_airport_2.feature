@@ -58,7 +58,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
     And Operator verifies that the Port Management Page is opened
     And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     Then Operator verifies past date picker "{date: 1 days ago, yyyy-MM-dd}" is disable on "Create Airport Trip" Port Trip Management page
-    And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
+    And Operator verifies Submit button on Create Airport Trip Port Trip Management page is disabled
 
   @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip without Assign Driver in Port Trip Management page
@@ -91,7 +91,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | originFacility | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
     And Operator removes text of "Origin Facility" field on "Create Airport Trip" Port Trip Management page
     Then Operator verifies Mandatory require error message of "Origin Facility" field on "Create Airport Trip" Port Trip Management page
-    And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
+    And Operator verifies Submit button on Create Airport Trip Port Trip Management page is disabled
 
   @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with Same Origin and Destination in Port Trip Management page
@@ -105,7 +105,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | originFacility      | {local-hub-3-name} |
       | destinationFacility | {local-hub-3-name} |
     Then Operator verifies same hub error messages on "Create Airport Trip" Port Trip Management page
-    And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
+    And Operator verifies Submit button on Create Airport Trip Port Trip Management page is disabled
 
   @DeleteCreatedPorts @DeleteCreatedHubs
   Scenario: Create To/from Airport Trip with zero duration time in Port Trip Management page
@@ -129,7 +129,7 @@ Feature: Port Trip Management - Create To From Airport Trip 2
       | durationminutes | 00 |
       | durationhour    | 00 |
     Then Operator verifies duration time error messages on "Create Airport Trip" Port Trip Management page
-    And Operator verifies Submit button is disable on Create Airport Trip Port Trip Management page
+    And Operator verifies Submit button on Create Airport Trip Port Trip Management page is disabled
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

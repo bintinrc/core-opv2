@@ -106,8 +106,7 @@ public class EditOrderSteps extends AbstractSteps {
   @When("updates parcel size from {string} to {string} for the order")
   public void updates_parcel_size_from_to_for_the_order(String fromSize, String toSize) {
     Order order = get(KEY_CREATED_ORDER);
-    Dimension.Size parcelSize = Dimension.Size.fromString(toSize);
-    order.setParcelSize(parcelSize.getRegular());
+    order.setParcelSize(toSize);
     editOrderPage.editOrderDetails(order);
     takesScreenshot();
   }

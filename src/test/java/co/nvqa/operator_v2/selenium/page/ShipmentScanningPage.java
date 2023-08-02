@@ -226,6 +226,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(css = "[data-testid='close-shipment-buton']")
   public Button closeShipmentButton;
 
+  @FindBy(xpath = "//button[@data-testid='close-shipment-buton']")
+  public Button closeShipment;
+
+  @FindBy(xpath = "//button[@data-testid='confirm-close-shipment-button']")
+  public Button confirmCloseShipment;
+
   @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Close Shipment']")
   public PageElement closeShipmentButtonOnDialog;
 
