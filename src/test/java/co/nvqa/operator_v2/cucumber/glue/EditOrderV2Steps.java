@@ -789,25 +789,24 @@ public class EditOrderV2Steps extends AbstractSteps {
       var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
       data.forEach(eventData -> {
         OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-        var actualEvent = actualEvents.get().stream()
+        var foundEvents = actualEvents.get().stream()
             .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-            .findFirst()
-            .orElse(null);
-        if (actualEvent == null) {
+            .collect(Collectors.toList());
+        if (foundEvents.isEmpty()) {
           pause5s();
           page.refreshPage();
           page.switchTo();
           actualEvents.set(page.eventsTable().readAllEntities());
-          actualEvent = actualEvents.get().stream()
+          foundEvents = actualEvents.get().stream()
               .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-              .findFirst()
-              .orElse(null);
+              .collect(Collectors.toList());
         }
-        Assertions.assertThat(actualEvent)
+        Assertions.assertThat(foundEvents)
             .withFailMessage("There is no [%s] event on Edit Order V2 page",
                 expectedEvent.getName())
-            .isNotNull();
-        expectedEvent.compareWithActual(actualEvent);
+            .isNotEmpty();
+        DataEntity.assertListContains(foundEvents, expectedEvent,
+            f("[%s] events", expectedEvent.getName()));
       });
     });
   }
