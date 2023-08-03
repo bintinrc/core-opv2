@@ -35,9 +35,22 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
   public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
+  public static final String CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='group-address-table-checkbox-%s']";
+  public static final String RADIO_CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='radio-option-%s']";
+  public static final String GROUP_ADDRESS_VERIFY_MODAL = "//span[contains(text(), '%s')]";
+  public static final String CURRENT_GROUP_ADDRESS_VERIFY_MODAL = "//i[contains(text(), '%s')]";
+
+  public static final String GROUP_ADDRESS_VERIFY_COLUMN = "//div[@data-testid='virtual-table.%s.formatted_group_address.cell']";
+
+
   public static final String BUTTON = "//span[text()='%s']/parent::button";
   public static final String CONFIGURE_PICKUP_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.pickupTypeButton']";
   public static final String SAVE_CHANGES_BUTTON = "//button[@data-testid='shipper-address.edit-pickup-type.save-changes']";
+  public static final String GROUP_ADDRESSES_BUTTON = "//button[@data-testid='shipper-address.menu.groupAddressesButton']";
+  public static final String GROUP_ADDRESS_BUTTON = "//button[@data-testid='shipper-address.group-addresses.group-address']";
+  public static final String CONFIRM_BUTTON = "//button[@data-testid='shipper-address.group-addresses.dialog.confirm']";
+  public static final String REMOVE_FROM_GROUP__BUTTON = "//button[@data-testid='shipper-address.group-addresses.remove-from-group']";
+  public static final String REMOVE_BUTTON = "//button[@data-testid='shipper-address.remove-group.remove']";
   public static final String UPLOAD_CSV_BUTTON = "//button[@data-testid='shipper-address.results.upload-csv-button']";
   public static final String UPDATE_LAT_LONG_TYPE_BUTTON = "//button[@data-testid='shipper-address.menu.latLongButton']";
   public static final String UPLOAD_CVS_CONFIGURE_PICKUP_TYPE = "//button[@data-testid='shipper-address.results.upload-csv-button']";
@@ -70,6 +83,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[@class='BaseTable__row-cell' and @data-datakey='lat_long']//*[local-name()='svg' and contains (@class,'GaComponent__StyledAxleIconComponent')]")
   public PageElement greencheckMark;
+
+  @FindBy(xpath = "//div[@class='ant-message-custom-content ant-message-success']")
+  public PageElement successMessage;
 
   @FindAll(@FindBy(xpath = "//div[@class='BaseTable__row-cell' and @data-datakey='lat_long']//*[local-name()='svg' and contains (@class,'GaComponent__StyledAxleIconComponent')]"))
   private List<PageElement> greencheckMarks;
@@ -295,6 +311,21 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     if(buttonText.contains("Save Changes")){
       elementXpath = f(SAVE_CHANGES_BUTTON, buttonText);
     }
+    if(buttonText.equals("Group Addresses")){
+      elementXpath = GROUP_ADDRESSES_BUTTON;
+    }
+    if(buttonText.equals("Group Address")){
+      elementXpath = GROUP_ADDRESS_BUTTON;
+    }
+    if(buttonText.equals("Confirm")){
+      elementXpath = CONFIRM_BUTTON;
+    }
+    if(buttonText.equals("Remove from Group")){
+      elementXpath = REMOVE_FROM_GROUP__BUTTON;
+    }
+    if(buttonText.equals("Remove")){
+      elementXpath = REMOVE_BUTTON;
+    }
     WebElement buttonXpath = getWebDriver().findElement(By.xpath(elementXpath));
     buttonXpath.click();
   }
@@ -378,4 +409,50 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
         formatTedFilename);
     Assertions.assertThat(fileName.equals(downloadedCsvFile));
  }
+
+  public void clickOnAddressToGroup(String addressId) {
+    String checkBoxXpath = f(CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED, addressId);
+    WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
+    checkBox.click();
+  }
+
+  public void clickOnRadioCheckBoxForAddressToGroup(String addressId) {
+    String checkBoxXpath = f(RADIO_CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED, addressId);
+    WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
+    checkBox.click();
+  }
+
+  public void verifyGroupAddressModal(String title1, String title2, String pickup_Address, String address1) {
+    String title1Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String title2Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String pick_AddressXpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+    String address1Xpath = f(GROUP_ADDRESS_VERIFY_MODAL, title1);
+
+    WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
+    WebElement second_Title = getWebDriver().findElement(By.xpath(title2Xpath));
+    WebElement pickUp_Address = getWebDriver().findElement(By.xpath(pick_AddressXpath));
+    WebElement first_Address = getWebDriver().findElement(By.xpath(address1Xpath));
+
+    Assertions.assertThat(title.getText().equals(title1));
+    Assertions.assertThat(second_Title.getText().equals(title2));
+    Assertions.assertThat(pickUp_Address.getText().equals(pickup_Address));
+    Assertions.assertThat(first_Address.getText().equals(address1));
+  }
+
+  public void verifyCurrentGroupAddressModal(String address1) {
+    String title1Xpath = f(CURRENT_GROUP_ADDRESS_VERIFY_MODAL, address1);
+    WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
+    Assertions.assertThat(title.getText().equals(title));
+  }
+
+  public void verifySuccessMessage() {
+    Assertions.assertThat(successMessage.isDisplayed());
+  }
+
+  public void verifyGroupAddressIsShown(String addressID, String textMessage) {
+    String title1Xpath = f(GROUP_ADDRESS_VERIFY_COLUMN, addressID);
+    WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
+    Assertions.assertThat(title.getText().equals(textMessage));
+
+  }
 }

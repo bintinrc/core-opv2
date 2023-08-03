@@ -5,14 +5,14 @@ Feature: Problematic Waypoints/Parcels
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Problematic Parcels (uid:d3e91af7-2cac-416f-8194-ecb28e289859)
     Given Operator go to menu Shipper Support -> Blocked Dates
     # Create 1st order - Return
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
@@ -81,10 +81,10 @@ Feature: Problematic Waypoints/Parcels
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString}   | Delivery (Normal) | Pending                                               |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildFromAddressString} | Pick Up (Return)  | Pending                                               |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Problematic Waypoints (uid:cc9a6c2b-62a8-4c7b-a7bd-666100e85223)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

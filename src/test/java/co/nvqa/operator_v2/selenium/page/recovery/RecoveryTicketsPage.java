@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
@@ -45,6 +46,18 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
   @FindBy(xpath = "//div[@class='ant-modal-title' and .='Create Ticket']")
   public PageElement createTicketDialogBox;
 
+  @FindBy(css = "[data-testid='btn-clear-all-filters']")
+  public Button clearAllSelections;
+
+  @FindBy(xpath = "//div[@data-testid='select-tracking_ids']//input")
+  public PageElement trackingIdFilter;
+
+  @FindBy(css = "[data-testid='btn-load-selection']")
+  public Button loadSelection;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and .='Edit Ticket']")
+  public EditTicketDialog editTicketDialog;
+
   public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
   public static final String TICKET_TYPE_MISSING = "MISSING";
   public static final String TICKET_TYPE_PARCEL_ON_HOLD = "PARCEL ON HOLD";
@@ -52,8 +65,6 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
   public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
   public static final String TICKET_TYPE_SELF_COLLECTION = "SELF COLLECTION";
   public static final String TICKET_TYPE_SLA_BREACH = "SLA BREACH";
-
-  public static final String ORDER_OUTCOME_XPATH = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.order-outcome.custom-field']";
 
   public RecoveryTicketsPage(WebDriver webDriver) {
     super(webDriver);
@@ -171,6 +182,17 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     createTicketDialog.createTicket.click();
     waitUntilVisibilityOfNotification("Ticket has been created!");
+  }
+
+  public void filterByField(String field, String value) {
+    clearAllSelections.click();
+    switch (field) {
+      case "Tracking ID":
+        trackingIdFilter.waitUntilVisible();
+        trackingIdFilter.sendKeys(value);
+        break;
+    }
+    loadSelection.click();
   }
 
   public static class creatByCSVDialog extends AntModal {
@@ -359,7 +381,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       );
       setEntityClass(RecoveryTicket.class);
       setActionButtonsLocators(ImmutableMap.of(
-          ACTION_EDIT, "//button[@data-pa-action='Edit Hub Missing Investigation']"
+          ACTION_EDIT, "//button[starts-with(@data-testid,'edit-recovery-')]"
       ));
     }
 
@@ -453,5 +475,28 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       super(webDriver, webElement);
     }
   }
-}
 
+  public static class EditTicketDialog extends AntModal {
+
+    @FindBy(xpath = "//div[@class='ant-select ant-select-in-form-item ant-select-single ant-select-show-arrow']")
+    public AntSelect ticketStatus;
+
+    @FindBy(xpath = "//span[starts-with(.,'Status change')]")
+    public PageElement changesAndComments;
+
+    @FindBy(xpath = "//button[@class='ant-btn ant-btn-link btn-keep']")
+    public Button keep;
+
+    @FindBy(xpath = "//button/span[.='Update Ticket']")
+    public Button updateTicket;
+
+    public EditTicketDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public void verifyTicketStatus(String expectedStatus) {
+      String statusUpdate = f("//span[@title='%s']", expectedStatus);
+      assertEquals(expectedStatus.toLowerCase(), statusUpdate.toLowerCase());
+    }
+  }
+}
