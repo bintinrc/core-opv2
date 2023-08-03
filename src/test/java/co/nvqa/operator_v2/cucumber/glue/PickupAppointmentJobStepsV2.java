@@ -48,7 +48,11 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
-      pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+      try {
+        pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+      } catch (Exception e){
+        pause2s();
+      }
     }
     getWebDriver().switchTo().frame(0);
     pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(

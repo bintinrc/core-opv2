@@ -193,7 +193,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String TITLE = "title";
   public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
-  public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
+  public final String SELECTION_LABEL_LOCATOR = "//*[label='%s']";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
 
@@ -205,6 +205,10 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
   public final String FAILURE_REASON_DROPDOWN_ITEM = "//div[@label='%s']";
+  public final String DROPDOWN_MENU_SERVICELEVEL = "//*[@id='serviceLevel']";
+  public final String DROPDOWN_MENU_SERVICETYPE = "//*[@id='serviceType']";
+  public final String DROPDOWN_MENU_JOBSTATUS = "//*[@id='jobStatus']";
+    public final String DROPDOWN_MENU_ZONES = "//*[@id='zones']";
 
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
@@ -437,7 +441,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public boolean isFilterDropdownMenuDisplayed() {
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR)).isDisplayed();
+    return webDriver.findElement(By.xpath(DROPDOWN_MENU_LOCATOR)).isDisplayed();
   }
 
   public boolean isFilterDropdownMenuWithoutDataDisplayed() {
@@ -508,7 +512,6 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public void inputOnJobShipper(String text) {
-    clearOnJobShipper();
     shipperIDField.sendKeys(text);
   }
 
@@ -525,10 +528,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public void selectJobSelection(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
-    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
+    jobZonesInput.sendKeys(Keys.RETURN);
   }
 
   public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
@@ -658,5 +658,19 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     waitUntilVisibilityOfElementLocated(DROPDOWN_BOTTOM_LEFT_LOCATOR);
   }
 
+  public boolean isServiceLevelDropdownMenuDisplayed() {
+    return webDriver.findElement(By.xpath(DROPDOWN_MENU_SERVICELEVEL)).isDisplayed();
+  }
 
+  public boolean isServiceTypeDropdownMenuDisplayed() {
+    return webDriver.findElement(By.xpath(DROPDOWN_MENU_SERVICETYPE)).isDisplayed();
+  }
+
+  public boolean isJobStatusDropdownMenuDisplayed() {
+    return webDriver.findElement(By.xpath(DROPDOWN_MENU_JOBSTATUS)).isDisplayed();
+  }
+
+  public boolean isZonesDropdownMenuDisplayed() {
+    return webDriver.findElement(By.xpath(DROPDOWN_MENU_ZONES)).isDisplayed();
+  }
 }

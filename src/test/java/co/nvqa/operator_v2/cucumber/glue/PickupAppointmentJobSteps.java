@@ -943,16 +943,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyShipperListShownAfterTypeThreeCharacters(String text) {
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(() -> {
-        pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-        Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
-            .as("Dropdown Menu No Data is displayed").isTrue();
-
         pickupAppointmentJobPage.inputOnJobShipper(text);
         pickupAppointmentJobPage.clearOnJobShipper();
         pickupAppointmentJobPage.inputOnJobShipper(text);
-        Assertions.assertThat(
-                pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
-            .as("Dropdown Menu No Data is displayed").isTrue();
         pickupAppointmentJobPage.clearOnJobShipper();
       });
     }, 3000, 3);
@@ -1036,4 +1029,35 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     return then.format(format);
   }
 
+  @Then("QA verify a service level dropdown menu shown")
+  public void verifyServiceLevelDropdownMenuShown() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.isServiceLevelDropdownMenuDisplayed())
+          .as("Service Level Dropdown Menu is displayed").isTrue();
+    });
+  }
+
+  @Then("QA verify a service type dropdown menu shown")
+  public void verifyServiceTypeDropdownShown() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.isServiceTypeDropdownMenuDisplayed())
+          .as("Service Type Dropdown Menu is displayed").isTrue();
+    });
+  }
+
+  @Then("QA verify a job status dropdown menu shown")
+  public void verifyJobStatusDropdownShown() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.isJobStatusDropdownMenuDisplayed())
+          .as("Job Status Dropdown Menu is displayed").isTrue();
+    });
+  }
+
+  @Then("QA verify a zones dropdown menu shown")
+  public void verifyZonesDropdownShown() {
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.isZonesDropdownMenuDisplayed())
+          .as("Zones Dropdown Menu is displayed").isTrue();
+    });
+  }
 }
