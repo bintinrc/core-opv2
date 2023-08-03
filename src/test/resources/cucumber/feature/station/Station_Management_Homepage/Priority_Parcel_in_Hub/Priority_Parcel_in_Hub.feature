@@ -5,7 +5,7 @@ Feature: Priority Parcel in Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @Pass
   Scenario Outline: View Priority Parcel in Hub (uid:4e760809-5688-407c-83c5-32f2fe53e368)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -28,8 +28,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -51,7 +53,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Priority Parcel in Hub by Tracking ID (uid:0b167e79-c711-4a02-a135-ca97ac6b6ac9)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -74,8 +76,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -99,7 +103,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Unlisted Priority Parcel in Hub by Tracking ID (uid:5a7fa32f-0149-49eb-a847-f79aedebf3c8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -122,8 +126,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -145,7 +151,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | TrackingId  |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | UNLISTED_ID |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
   Scenario Outline: Search Priority Parcel in Hub by Route ID (uid:8bb1be40-27c4-4712-a33f-1ec350361401)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -173,8 +179,10 @@ Feature: Priority Parcel in Hub
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -198,11 +206,12 @@ Feature: Priority Parcel in Hub
       | HubId      | HubName      | TileName                | ModalName               |
       | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Search Priority Parcel in Hub by Address (uid:13a0e3d0-5879-48f0-958c-91302cedf212)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     When API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -210,7 +219,6 @@ Feature: Priority Parcel in Hub
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And Operator saves to address used in the parcel in the key
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
@@ -222,8 +230,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -239,28 +249,27 @@ Feature: Priority Parcel in Hub
       | Timeslot              |
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID                      | Address                                |
-      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}, {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}, {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
     And Operator verifies that the following details are displayed on the modal
       | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
-      | Address               | {KEY_COMMA_DELIMITED_ORDER_TO_ADDRESS}        |
+      | Address               | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}, {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}, {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Search Unlisted Priority Parcel in Hub by Address (uid:843e3f04-1971-4ca0-bcab-bd908cfa4ab2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     When API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"TEST-STATION","phone_number":"+6591434259","email":"station@ninjavan.co","address":{"address1":"28woodlands","address2":"Test","country":"SG","postcode":"758103"}},"to":{"name":"TEST-SITI-CUSTOMER","phone_number":"+65914341111","email":"nadia.dwijaatamaja@ninjavan.co","address":{"address1":"Yishun","address2":"Test","country":"SG","postcode":"758103","latitude":"1.46378","longitude":"103.801811"}},"parcel_job":{"is_pickup_required":false,"pickup_date":"{gradle-current-date-yyyy-MM-dd}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{gradle-current-date-yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Singapore"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
     When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And Operator saves to address used in the parcel in the key
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
@@ -274,6 +283,7 @@ Feature: Priority Parcel in Hub
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -292,10 +302,10 @@ Feature: Priority Parcel in Hub
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | <Address> |
 
     Examples:
-      | HubName      | HubId      | TileName                | ModalName               | Address         |
-      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | UnlistedAddress |
+      | HubName      | HubId      | TileName                | ModalName               | FSRModalName                                 | Address         |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | UnlistedAddress |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Search Priority Parcel in Hub by Granular Status (uid:4480b84e-2cf9-40a2-b52a-9caf02a0720a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -307,7 +317,6 @@ Feature: Priority Parcel in Hub
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And Operator saves to address used in the parcel in the key
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
@@ -319,8 +328,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -345,7 +356,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | GranularStatus         |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Arrived at Sorting Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Priority Parcel in Hub by Size (uid:26f7e683-9b6d-4136-af89-a9875c5f46ab)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -368,8 +379,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -395,7 +408,7 @@ Feature: Priority Parcel in Hub
       | SizeShortForm | Size  | HubName      | HubId      | TileName                | ModalName               |
       | S             | Small | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Search Priority Parcel in Hub by Timeslot (uid:083e8984-56d1-4f1e-8936-b52273e433ef)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -418,8 +431,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -469,7 +484,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And API Operator tags the parcel as SFLD parcel using below data:
+    And API Station - Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDERS[1].id} , "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -513,7 +528,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | FSRModalName                                 | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Priority Parcel in Hub by Recovery Ticket Type (uid:aaae82b8-355e-4081-81d6-43f6b6a1f1e7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -547,8 +562,10 @@ Feature: Priority Parcel in Hub
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -571,12 +588,10 @@ Feature: Priority Parcel in Hub
       | Recovery Ticket Type | <TicketType> |
 
     Examples:
-      | HubName      | HubId      | TileName                | ModalName               | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
-      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
-
+      | HubName      | HubId      | TileName                | ModalName               | FSRModalName                                 | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
 
   @ForceSuccessOrder @Set1
-    @ForceSuccessOrder
   Scenario Outline: Search Priority Parcel in Hub by Ticket Status (uid:ee55364a-d65e-4655-b037-f7915e243edb)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -638,11 +653,8 @@ Feature: Priority Parcel in Hub
     Examples:
       | HubName      | HubId      | TileName                | ModalName               | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CREATED      |
-    Examples:
-      | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
-      | {hub-name-19} | {hub-id-19} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Sort Priority Parcel in Hub Based on Size (uid:ec1a8d72-07d5-4376-b2ab-286b240c5ba9)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -665,8 +677,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -691,11 +705,12 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | ColumnName |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Size       |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Can Not View Untagged Priority Parcel in Hub (uid:059c175f-842b-4f9a-bea0-0d7b02039fb6)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     When API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -714,11 +729,12 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And API Operator tags the parcel as SFLD parcel using below data:
+    And API Station - Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDERS[1].id} , "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator closes the modal: "<ModalName1>" if it is displayed on the page
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator get the count from the tile: "<TileName>"
     And Operator opens modal pop-up: "<ModalName2>" through hamburger button for the tile: "<TileName>"
@@ -738,7 +754,9 @@ Feature: Priority Parcel in Hub
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | - |
-    When API Operator delete order tag with id: <TagId> from the created order
+    When API Core - Operator delete tag from order:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | tagId   | <TagId>                            |
     Then Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -753,7 +771,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | TagId | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | 5570  | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @Hold
   Scenario Outline: View Priority Parcel in Hub of Unacknowledged SLFD Parcel (uid:f748e580-5089-4003-bdee-b9cfaa06e8ff)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -776,7 +794,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When API Operator tags the parcel as SFLD parcel using below data:
+    And API Station - Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDERS[1].id} , "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -805,7 +823,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           |
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @Hold
   Scenario Outline: View Priority Parcel in Hub of Acknowledged SLFD Parcel (uid:1d024335-8032-4efb-b82a-c9b6bf14e387)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -828,7 +846,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When API Operator tags the parcel as SFLD parcel using below data:
+    And API Station - Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDERS[1].id} , "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1690,7 +1708,7 @@ Feature: Priority Parcel in Hub
       | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | ON HOLD      |
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Hold
   Scenario Outline: Filter Parcels by Committed ETA (uid:c3b04170-37eb-4f15-9597-41f22ef4521a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1713,8 +1731,9 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And API Operator tags the parcel as SFLD parcel using below data:
+    And API Station - Operator tags the parcel as SFLD parcel using below data:
       | sfldRequest | {"order_id": {KEY_LIST_OF_CREATED_ORDERS[1].id} , "system_id": "sg", "suggested_etas": ["{gradle-next-1-day-yyyy-MM-dd}", "{gradle-next-2-day-yyyy-MM-dd}"], "sfld_slack_notification": {"slack_channel_id": "uat-sg-fss", "slack_message_title": "Test executed on-{gradle-current-date-yyyy-MM-dd}", "slack_message_content": "<SlackMessageContent>"}} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<ModalName1>" if it is displayed on the page
@@ -1752,7 +1771,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | Filter        | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Committed ETA | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Filter Parcels by Routed (uid:cb324815-cf07-45fa-9dd6-416d934eea1f)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1780,6 +1799,7 @@ Feature: Priority Parcel in Hub
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -1807,7 +1827,7 @@ Feature: Priority Parcel in Hub
       | HubId      | HubName      | TileName                | ModalName               | Filter | FSRModalTitle                                |
       | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Routed | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Filter Parcels by Unrouted (uid:01408032-d8ea-4259-a3fa-12b7edfd7c7b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1830,6 +1850,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2164,9 +2185,6 @@ Feature: Priority Parcel in Hub
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | orderTag | {order-tag-prior-id}               |
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
@@ -2255,7 +2273,7 @@ Feature: Priority Parcel in Hub
       | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
       | investigatingHubId | <HubId>                               |
       | ticketType         | <TicketType>                          |
-      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
+      | orderOutcomeName   | <OrderOutcomeName>                    |
       | creatorUserId      | {ticketing-creator-user-id}           |
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
@@ -2739,7 +2757,7 @@ Feature: Priority Parcel in Hub
       | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RESUME DELIVERY | RESOLVED     |
 
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @Pass
   Scenario Outline: View Priority Parcel of Missing Ticket Type (uid:05e8d756-57f8-48bc-aa3a-f3b35c67d41d)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -2784,6 +2802,7 @@ Feature: Priority Parcel in Hub
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2812,7 +2831,7 @@ Feature: Priority Parcel in Hub
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | MISSING    | IMPROPER PACKAGING | ORDER OUTCOME (MISSING) | FOUND - INBOUND | RESOLVED     |
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: [SG] Filter Parcels by Late If Inbound After Cut Off Time (uid:dcd4bf2f-37c5-4ea1-81f6-276ecf2ed1e0)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -2835,6 +2854,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3106,7 +3126,7 @@ Feature: Priority Parcel in Hub
       | Country | HubName      | HubId      | TileName                | ModalName               | Filter | HubInboundedAt                              | FSRModalTitle                                |
       | Vietnam | {hub-name-1} | {hub-id-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-2-day-yyyy-MM-dd} 14:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: [SG] Filter Parcels by Late If Inbound Before Cut Off Time (uid:1d34e4c1-2c3c-47af-866d-b7d58fe85bd7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -3129,6 +3149,7 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3400,7 +3421,7 @@ Feature: Priority Parcel in Hub
       | Vietnam | {hub-name-1} | {hub-id-1} | Priority parcels in hub | Priority Parcels in Hub | Late   | {gradle-previous-1-day-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: [SG] Filter Parcels by Due Today (uid:ea79f9c2-25a6-49e8-a3d6-8e0bfca49c12)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -3423,8 +3444,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
@@ -3693,7 +3716,7 @@ Feature: Priority Parcel in Hub
       | Country | HubName      | HubId      | TileName                | ModalName               | Filter    | HubInboundedAt                            | FSRModalTitle                                |
       | Vietnam | {hub-name-1} | {hub-id-1} | Priority parcels in hub | Priority Parcels in Hub | Due Today | {gradle-current-date-yyyy-MM-dd} 03:00:00 | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Filter Parcels by Post-tagged (uid:3ed01f3c-c5c7-40a9-b683-4fe02ac1d650)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -3716,6 +3739,7 @@ Feature: Priority Parcel in Hub
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
+    Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3795,7 +3819,7 @@ Feature: Priority Parcel in Hub
       | HubName1     | HubId1     | HubName2     | HubId2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-name-9} | {hub-id-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Pass
   Scenario Outline: Unable to Filter Parcels by Post-tagged If Van Inbound in Different Hub (uid:276160f5-17c5-4fa2-980c-b59804c3803c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -3818,9 +3842,9 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId1>                                                                                     |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId1> , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}} |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
@@ -3829,12 +3853,13 @@ Feature: Priority Parcel in Hub
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | <driverId>                         |
+      | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When API Sort - Operator parcel sweep
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId2>                                                                                     |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3860,7 +3885,7 @@ Feature: Priority Parcel in Hub
       | HubName1     | HubId1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-id-9} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
   Scenario Outline: Sort Priority Parcel in Hub Based on Time in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -3883,8 +3908,10 @@ Feature: Priority Parcel in Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "Please Confirm ETA of FSR Parcels to Proceed" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
