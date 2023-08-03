@@ -249,3 +249,211 @@ Feature: Resolve Recovery Ticket
       | UPDATE STATUS   |
       | TICKET UPDATED  |
       | TICKET RESOLVED |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RTS
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator create new recovery ticket on Edit Order V2 page:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Recovery                              |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL EXCEPTION                      |
+      | ticketSubType           | COMPLETED ORDER                       |
+      | liability               | Shipper                               |
+      | orderOutcome            | RTS                                   |
+      | rtsReason               | Nobody at address                     |
+    When Operator verifies that success react notification displayed:
+      | top                | Ticket has been created! |
+      | waitUntilInvisible | true                     |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator updates recovery ticket on Edit Order V2 page:
+      | status                  | RESOLVED |
+      | outcome                 | RTS      |
+      | keepCurrentOrderOutcome | true     |
+    Then Operator verifies that success react notification displayed:
+      | top                | ^Ticket ID: .* Updated |
+      | waitUntilInvisible | true                   |
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
+    And DB Core - verify orders record:
+      | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | rts | 1                                  |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | FAIL     |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name             |
+      | UPDATE STATUS    |
+      | RESCHEDULE       |
+      | RTS              |
+      | REVERT COMPLETED |
+      | UPDATE ADDRESS   |
+      | TICKET UPDATED   |
+      | TICKET RESOLVED  |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = Resend
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator create new recovery ticket on Edit Order V2 page:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Recovery                              |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL EXCEPTION                      |
+      | ticketSubType           | COMPLETED ORDER                       |
+      | liability               | Shipper                               |
+      | orderOutcome            | RESEND                                |
+    When Operator verifies that success react notification displayed:
+      | top                | Ticket has been created! |
+      | waitUntilInvisible | true                     |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator updates recovery ticket on Edit Order V2 page:
+      | status                  | RESOLVED |
+      | outcome                 | RESEND   |
+      | keepCurrentOrderOutcome | true     |
+    Then Operator verifies that success react notification displayed:
+      | top                | ^Ticket ID: .* Updated |
+      | waitUntilInvisible | true                   |
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | FAIL     |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name             |
+      | UPDATE STATUS    |
+      | RESCHEDULE       |
+      | REVERT COMPLETED |
+      | TICKET UPDATED   |
+      | TICKET RESOLVED  |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RELABELLED TO SEND
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator create new recovery ticket on Edit Order V2 page:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Recovery                              |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL EXCEPTION                      |
+      | ticketSubType           | COMPLETED ORDER                       |
+      | liability               | Shipper                               |
+      | orderOutcome            | RELABELLED TO SEND                    |
+    When Operator verifies that success react notification displayed:
+      | top                | Ticket has been created! |
+      | waitUntilInvisible | true                     |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator updates recovery ticket on Edit Order V2 page:
+      | status                  | RESOLVED           |
+      | outcome                 | RELABELLED TO SEND |
+      | keepCurrentOrderOutcome | true               |
+    Then Operator verifies that success react notification displayed:
+      | top                | ^Ticket ID: .* Updated |
+      | waitUntilInvisible | true                   |
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | SUCCESS  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = XMAS CAGE
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator create new recovery ticket on Edit Order V2 page:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Recovery                              |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL EXCEPTION                      |
+      | ticketSubType           | COMPLETED ORDER                       |
+      | liability               | Shipper                               |
+      | orderOutcome            | XMAS CAGE                             |
+    When Operator verifies that success react notification displayed:
+      | top                | Ticket has been created! |
+      | waitUntilInvisible | true                     |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    When Operator updates recovery ticket on Edit Order V2 page:
+      | status                  | RESOLVED  |
+      | outcome                 | XMAS CAGE |
+      | keepCurrentOrderOutcome | true      |
+    Then Operator verifies that success react notification displayed:
+      | top                | ^Ticket ID: .* Updated |
+      | waitUntilInvisible | true                   |
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Completed |
+      | granularStatus | Completed |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | SUCCESS  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |

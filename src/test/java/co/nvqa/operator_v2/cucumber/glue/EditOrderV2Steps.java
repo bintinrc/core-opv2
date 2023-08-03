@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -784,24 +785,31 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verify order events on Edit Order V2 page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    page.inFrame(() -> data.forEach(eventData -> {
-      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-      OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
-          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-          .orElse(null);
-      if (actualEvent == null) {
-        pause5s();
-        page.refreshPage();
-        page.switchTo();
-        actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      data.forEach(eventData -> {
+        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+        var actualEvent = actualEvents.get().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .findFirst()
             .orElse(null);
-      }
-      Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
-          .isNotNull();
-      expectedEvent.compareWithActual(actualEvent);
-    }));
+        if (actualEvent == null) {
+          pause5s();
+          page.refreshPage();
+          page.switchTo();
+          actualEvents.set(page.eventsTable().readAllEntities());
+          actualEvent = actualEvents.get().stream()
+              .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+              .findFirst()
+              .orElse(null);
+        }
+        Assertions.assertThat(actualEvent)
+            .withFailMessage("There is no [%s] event on Edit Order V2 page",
+                expectedEvent.getName())
+            .isNotNull();
+        expectedEvent.compareWithActual(actualEvent);
+      });
+    });
   }
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
@@ -810,7 +818,7 @@ public class EditOrderV2Steps extends AbstractSteps {
     data = resolveValues(data);
     SoftAssertions assertions = new SoftAssertions();
     data.forEach(expected -> assertions.assertThat(
-        events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
+            events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
         .as("%s event was found").isFalse());
     assertions.assertAll();
     takesScreenshot();
