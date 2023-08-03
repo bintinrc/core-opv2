@@ -123,7 +123,7 @@ public class RouteInboundSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator verify error message displayed on Route Inbound:$")
+  @When("Operator verify error message displayed on Route Inbound:")
   public void checkErrorMessage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String status = data.get("status");
@@ -134,7 +134,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.verifyErrorMessage(status, url, errorCode, errorMessage);
   }
 
-  @Then("^Operator verify the Route Summary Details is correct using data below:$")
+  @Then("Operator verify the Route Summary Details is correct using data below:")
   public void operatorVerifyTheRouteSummaryDetailsIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -148,16 +148,8 @@ public class RouteInboundSteps extends AbstractSteps {
     ZonedDateTime routeDate;
 
     try {
-      if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
-        List<RouteResponse> routes = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
-        RouteResponse route = routes.get(routes.size() - 1);
-        routeDate = StandardTestUtils
-            .convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
-                DTF_ISO_8601_LITE);
-      } else {
-        routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
-            DTF_NORMAL_DATE);
-      }
+      routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+          DTF_ISO_8601_LITE);
     } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse route date.", ex);
     }
@@ -216,7 +208,7 @@ public class RouteInboundSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify the Route Inbound Details is correct using data below:$")
+  @Then("Operator verify the Route Inbound Details is correct using data below:")
   public void operatorVerifyTheRouteInboundDetailsIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -230,17 +222,9 @@ public class RouteInboundSteps extends AbstractSteps {
     ZonedDateTime routeDate = null;
     if (StringUtils.isNotBlank(routeDateAsString)) {
       try {
-        if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString)) {
-          Route route = get(KEY_CREATED_ROUTE);
-          StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(), ZoneId.of("UTC"),
-              DTF_ISO_8601_LITE);
-          routeDate = StandardTestUtils.convertToZonedDateTime(route.getCreatedAt(),
-              ZoneId.of("UTC"), DTF_ISO_8601_LITE);
-        } else {
-          routeDate = StandardTestUtils
-              .convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
-                  DTF_ISO_8601_LITE);
-        }
+        routeDate = StandardTestUtils
+            .convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+                DTF_ISO_8601_LITE);
       } catch (DateTimeParseException ex) {
         throw new NvTestRuntimeException("Failed to parse route date.", ex);
       }
@@ -311,12 +295,12 @@ public class RouteInboundSteps extends AbstractSteps {
         .verifyRouteInboundInfoIsCorrect(routeId, driverName, hubName, routeDate, expectedScans);
   }
 
-  @When("^Operator open Pending Waypoints Info dialog on Route Inbound page$")
+  @When("Operator open Pending Waypoints Info dialog on Route Inbound page")
   public void operatorOpenPendingWaypointsInfoDialogOnRouteInboundPage() {
     routeInboundPage.openPendingWaypointsDialog();
   }
 
-  @Then("^Operator verify Shippers Info in (.+) dialog using data below:$")
+  @Then("Operator verify Shippers Info in {} dialog using data below:")
   public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream()
@@ -325,7 +309,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.validateShippersTable(expectedShippersInfo);
   }
 
-  @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) dialog$")
+  @When("Operator click 'View orders or reservations' button for shipper #{int} in {} dialog")
   public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(
       int index, String status) {
     routeInboundPage.openViewOrdersOrReservationsDialog(index);
@@ -410,7 +394,7 @@ public class RouteInboundSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @Then("^Operator verify Orders table in (.+) dialog using data below:$")
+  @Then("Operator verify Orders table in {} dialog using data below:")
   public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(String status,
       List<Map<String, String>> listOfData) {
     List<WaypointOrderInfo> expectedOrdersInfo = listOfData.stream().map(data ->
@@ -490,7 +474,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.continueToInbound.click();
   }
 
-  @When("^Operator click 'Photo Audit' button on Route Inbound page$")
+  @When("Operator click 'Photo Audit' button on Route Inbound page")
   public void operatorClickPhotoAuditButtonOnRouteInboundPage() {
     routeInboundPage.photoAudit.click();
   }
@@ -509,7 +493,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.photoAuditDialog.searchTrackingId.setValue(resolveValue(trackingId));
   }
 
-  @When("^Operator close Photo Audit dialog$")
+  @When("Operator close Photo Audit dialog")
   public void operatorClosePhotoAuditDialogOnRouteInboundPage() {
     routeInboundPage.photoAuditDialog.close();
   }
@@ -710,7 +694,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.verifyRouteInboundComment(expectedComment);
   }
 
-  @And("^Operator scan a tracking ID of created order on Route Inbound page$")
+  @And("Operator scan a tracking ID of created order on Route Inbound page")
   public void operatorScanATrackingIDOfCreatedOrderOnRouteInboundPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     routeInboundPage.scanTrackingId(trackingId);
@@ -721,23 +705,23 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.scanTrackingId(trackingId);
   }
 
-  @When("^Operator click 'Go Back' button on Route Inbound page$")
+  @When("Operator click 'Go Back' button on Route Inbound page")
   public void operatorClickGoBackButtonOnRouteInboundPage() {
     routeInboundPage.goBack.click();
     pause1s();
   }
 
-  @When("^Operator open Completed Waypoints Info dialog on Route Inbound page$")
+  @When("Operator open Completed Waypoints Info dialog on Route Inbound page")
   public void operatorOpenCompletedWaypointsInfoDialogOnRouteInboundPage() {
     routeInboundPage.openCompletedWaypointsDialog();
   }
 
-  @When("^Operator open Failed Waypoints Info dialog on Route Inbound page$")
+  @When("Operator open Failed Waypoints Info dialog on Route Inbound page")
   public void operatorOpenFailedWaypointsInfoDialogOnRouteInboundPage() {
     routeInboundPage.openFailedWaypointsDialog();
   }
 
-  @When("^Operator open Failed Parcels dialog on Route Inbound page$")
+  @When("Operator open Failed Parcels dialog on Route Inbound page")
   public void operatorOpenFailedParcelsDialogOnRouteInboundPage() {
     routeInboundPage.openFailedParcelsDialog();
   }
@@ -747,57 +731,57 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openC2CReturnDialog();
   }
 
-  @When("^Operator open Reservations dialog on Route Inbound page$")
+  @When("Operator open Reservations dialog on Route Inbound page")
   public void operatorOpenReservationsDialogOnRouteInboundPage() {
     routeInboundPage.openReservationsDialog();
   }
 
-  @When("^Operator open Total Waypoints Info dialog on Route Inbound page$")
+  @When("Operator open Total Waypoints Info dialog on Route Inbound page")
   public void operatorOpenTotalWaypointsInfoDialogOnRouteInboundPage() {
     routeInboundPage.openTotalWaypointsDialog();
   }
 
-  @When("^Operator open Partial Waypoints Info dialog on Route Inbound page$")
+  @When("Operator open Partial Waypoints Info dialog on Route Inbound page")
   public void operatorOpenPartialWaypointsInfoDialogOnRouteInboundPage() {
     routeInboundPage.openPartialWaypointsDialog();
   }
 
-  @When("^Operator open Pending Deliveries dialog on Route Inbound page$")
+  @When("Operator open Pending Deliveries dialog on Route Inbound page")
   public void operatorOpenPendingDeliveriesInfoDialogOnRouteInboundPage() {
     routeInboundPage.openPendingDeliveriesDialog();
   }
 
-  @When("^Operator open Failed Deliveries Valid dialog on Route Inbound page$")
+  @When("Operator open Failed Deliveries Valid dialog on Route Inbound page")
   public void operatorOpenFailedDeliveriesValidDialogOnRouteInboundPage() {
     routeInboundPage.openFailedDeliveriesValidDialog();
   }
 
-  @When("^Operator open Failed Deliveries Invalid dialog on Route Inbound page$")
+  @When("Operator open Failed Deliveries Invalid dialog on Route Inbound page")
   public void operatorOpenFailedDeliveriesInvalidDialogOnRouteInboundPage() {
     routeInboundPage.openFailedDeliveriesInvalidDialog();
   }
 
-  @When("^Operator open C2C / Return Pickups dialog on Route Inbound page$")
+  @When("Operator open C2C Return Pickups dialog on Route Inbound page")
   public void operatorOpenC2CReturnPickupsDialogOnRouteInboundPage() {
     routeInboundPage.openC2CReturnPickupsDialog();
   }
 
-  @When("^Operator open Parcel Processed dialog on Route Inbound page$")
+  @When("Operator open Parcel Processed dialog on Route Inbound page")
   public void operatorOpenParcelProcessedDialogOnRouteInboundPage() {
     routeInboundPage.openParcelProcessedDialog();
   }
 
-  @When("^Operator open Pending C2C / Return Pickups dialog on Route Inbound page$")
+  @When("Operator open Pending C2C Return Pickups dialog on Route Inbound page")
   public void operatorOpenPendingC2CReturnPickupsDialogOnRouteInboundPage() {
     routeInboundPage.openPendingC2CReturnPickupsDialog();
   }
 
-  @When("^Operator open Reservation Pickups dialog on Route Inbound page$")
+  @When("Operator open Reservation Pickups dialog on Route Inbound page")
   public void operatorOpenReservationPickupsDialogOnRouteInboundPage() {
     routeInboundPage.openReservationPickupsDialog();
   }
 
-  @When("^Operator close (.+) dialog on Route Inbound page$")
+  @When("Operator close {} dialog on Route Inbound page")
   public void operatorCloseDialogOnRouteInboundPage(String status) {
     routeInboundPage.closeDialog();
   }
@@ -834,13 +818,13 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.moneyCollectionDialog().fillForm(moneyCollection).save();
   }
 
-  @When("^Operator open Money Collection history dialog on Route Inbound page$")
+  @When("Operator open Money Collection history dialog on Route Inbound page")
   public void operatorOpenMoneyCollectionHistoryDialog() {
     routeInboundPage.cashButton.click();
     routeInboundPage.moneyCollectionHistoryDialog.waitUntilVisible();
   }
 
-  @Then("^Operator verify Money Collection history record using data below:$")
+  @Then("Operator verify Money Collection history record using data below:")
   public void operatorVerifyMoneyCollectionHistoryRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     MoneyCollectionHistoryEntry expectedRecord = new MoneyCollectionHistoryEntry(mapOfData);
@@ -853,7 +837,7 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator verify Non-Inbounded Orders record using data below:$")
+  @Then("Operator verify Non-Inbounded Orders record using data below:")
   public void operatorVerifyNonInboundedOrdersRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
@@ -864,7 +848,7 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator verify Inbounded Orders record using data below:$")
+  @Then("Operator verify Inbounded Orders record using data below:")
   public void operatorVerifyInboundedOrdersRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
@@ -875,7 +859,7 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator verify Extra Orders record using data below:$")
+  @Then("Operator verify Extra Orders record using data below:")
   public void operatorVerifyExtraOrdersRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
@@ -886,7 +870,7 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator verify Money Collection Collected Order record using data below:$")
+  @Then("Operator verify Money Collection Collected Order record using data below:")
   public void operatorVerifyMoneyCollectionCollectedOrderRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     MoneyCollectionCollectedOrderEntry expectedRecord = new MoneyCollectionCollectedOrderEntry(
@@ -898,7 +882,7 @@ public class RouteInboundSteps extends AbstractSteps {
     expectedRecord.compareWithActual(actualRecord);
   }
 
-  @Then("^Operator verify Waypoint Scans record using data below:$")
+  @Then("Operator verify Waypoint Scans record using data below:")
   public void operatorVerifyWaypointScansRecord(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     WaypointScanInfo expectedRecord = new WaypointScanInfo(mapOfData);

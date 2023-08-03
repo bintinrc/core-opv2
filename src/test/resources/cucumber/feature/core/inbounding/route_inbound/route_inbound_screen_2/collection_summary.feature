@@ -5,7 +5,7 @@ Feature: Collection Summary
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Cash Collection (uid:0dccc613-ddc8-4c11-bee2-ed3d15a50590)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -13,7 +13,7 @@ Feature: Collection Summary
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
@@ -39,10 +39,10 @@ Feature: Collection Summary
       | trackingId            | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | customType            | Delivery (Normal)                          |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Failed Parcels
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -92,10 +92,10 @@ Feature: Collection Summary
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Failed | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2 | Delivery (Return) | Failed | 0        | Inbounded          |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Return Parcels (uid:2a66a597-c949-49fd-912e-89cfa1f072ce)
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -175,10 +175,10 @@ Feature: Collection Summary
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | CREATED_ORDER_FROM_1 | Pick Up (Return) | Success | 0        |                    |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | CREATED_ORDER_FROM_2 | Pick Up (Return) | Success | 0        | Inbounded          |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: View Reservations (uid:7b009bad-45fa-4783-a33a-f4525b0a989a)
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |

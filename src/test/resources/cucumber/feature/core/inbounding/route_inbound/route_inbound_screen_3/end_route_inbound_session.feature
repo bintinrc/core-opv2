@@ -58,15 +58,15 @@ Feature: End Route Inbound Session
       | fetchBy      | FETCH_BY_TRACKING_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | GET_FROM_CREATED_ROUTE             |
-      | wpPending   | 1                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 1                                  |
-      | wpTotal     | 2                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 1                                         |
+      | wpTotal     | 2                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     Then Operator verify 'Money to collect' value is "<cashOnDelivery>" on Route Inbound page
@@ -131,15 +131,15 @@ Feature: End Route Inbound Session
       | fetchBy      | FETCH_BY_TRACKING_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | GET_FROM_CREATED_ROUTE             |
-      | wpPending   | 1                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 1                                  |
-      | wpTotal     | 2                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 1                                         |
+      | wpTotal     | 2                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" on Route Inbound page

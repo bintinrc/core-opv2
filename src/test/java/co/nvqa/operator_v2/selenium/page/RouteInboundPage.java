@@ -319,7 +319,7 @@ public class RouteInboundPage extends OperatorV2SimplePage {
       String expectedValue = expectedScans.getFailedDeliveriesInvalidScans() + " / " + expectedScans
           .getFailedDeliveriesInvalidTotal();
       Assertions.assertThat(failedDeliveriesInvalid.getText())
-          .as("Waypoint Performance - Failed Deliveries (Valid)").isEqualTo(expectedValue);
+          .as("Waypoint Performance - Failed Deliveries (InValid)").isEqualTo(expectedValue);
     }
     if (expectedScans.getC2cReturnPickupsScans() != null) {
       String expectedValue = expectedScans.getC2cReturnPickupsScans() + " / " + expectedScans

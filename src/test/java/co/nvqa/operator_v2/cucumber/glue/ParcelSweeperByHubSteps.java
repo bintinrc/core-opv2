@@ -105,13 +105,6 @@ public class ParcelSweeperByHubSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String hubName = mapOfData.get("hubName");
-    if (StringUtils.equalsAnyIgnoreCase(hubName, "GLOBAL INBOUND")) {
-      GlobalInboundResponse globalInboundResponse = get(KEY_GLOBAL_INBOUND_DATA);
-      hubName = globalInboundResponse.getResponsibleHubName();
-    } else if (StringUtils.equalsIgnoreCase(hubName, "FROM CREATED ORDER")) {
-      Order order = get(KEY_CREATED_ORDER);
-      hubName = order.getDestinationHub();
-    }
     String color = mapOfData.get("textColor");
     parcelSweeperByHubPage.verifyDestinationHub(hubName, color);
   }

@@ -297,6 +297,11 @@ public class InvoiceDisputesSteps extends AbstractSteps {
     final Map<String, String> finalMapData = resolveKeyValues(mapData);
     invoiceDisputesDetailPage.inFrame(page -> {
       SoftAssertions softAssertions = new SoftAssertions();
+      if (finalMapData.containsKey("revisedWeightInput")) {
+        softAssertions.assertThat(
+                page.manualResolutionDisputedOrderModal.revisedWeightInput.getValue())
+            .as("Revised Weight are correct").isEqualTo(finalMapData.get("revisedWeightInput"));
+      }
       if (finalMapData.containsKey("originalDeliveryFee")) {
         softAssertions.assertThat(
                 page.manualResolutionDisputedOrderModal.originalDeliveryFee.getValue())
@@ -401,6 +406,13 @@ public class InvoiceDisputesSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator clicks calculate button")
+  public void clickCalculateButton() {
+    invoiceDisputesDetailPage.inFrame(page -> {
+      page.manualResolutionDisputedOrderModal.calculateButton.click();
+    });
+  }
+
   @And("Operator select remark as {string}")
   public void clickRejectButton(String remark) {
     invoiceDisputesDetailPage.inFrame(page -> {
@@ -412,7 +424,17 @@ public class InvoiceDisputesSteps extends AbstractSteps {
   public void enterRevisedResolutionData(Map<String, String> mapData) {
     final Map<String, String> finalMapData = resolveKeyValues(mapData);
     invoiceDisputesDetailPage.inFrame(page -> {
+      if (finalMapData.containsKey("revisedWeightInput")) {
+        page.manualResolutionDisputedOrderModal.revisedWeightInput.setValue(
+            finalMapData.get("revisedWeightInput"));
+      }
+      if (finalMapData.containsKey("nvOriginalBilledAmount")) {
+        page.manualResolutionDisputedOrderModal.nvOriginalBilledAmount.forceClear();
+        page.manualResolutionDisputedOrderModal.nvOriginalBilledAmount.setValue(
+            finalMapData.get("nvOrignalBilledAmount"));
+      }
       if (finalMapData.containsKey("revisedDeliveryFee")) {
+        page.manualResolutionDisputedOrderModal.revisedDeliveryFee.forceClear();
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.setValue(
             finalMapData.get("revisedDeliveryFee"));
       }
@@ -429,6 +451,7 @@ public class InvoiceDisputesSteps extends AbstractSteps {
             finalMapData.get("revisedInsuranceFee"));
       }
       if (finalMapData.containsKey("revisedTax")) {
+        page.manualResolutionDisputedOrderModal.revisedTax.forceClear();
         page.manualResolutionDisputedOrderModal.revisedTax.setValue(finalMapData.get("revisedTax"));
       }
       if (finalMapData.containsKey("remarks")) {

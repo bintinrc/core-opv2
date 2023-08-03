@@ -1,17 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.GlobalInboundResponse;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
-import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -103,4 +98,5 @@ public class ParcelSweeperSteps extends AbstractSteps {
     parcelSweeperPage.addPrefix(prefix);
     parcelSweeperPage.enterTrackingId(trackingId);
   }
+
 }

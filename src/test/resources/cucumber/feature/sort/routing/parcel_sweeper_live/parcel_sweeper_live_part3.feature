@@ -22,101 +22,125 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Van enroute to pickup (uid:c69dde9c-d01a-439f-94d1-de932d7e84a6)
     Given Operator go to menu Order -> All Orders
-    Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":310205,"country":"{country}"}}} |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | PICKUP |
-    And API Operator start the route
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                               |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator go to menu Routing -> Parcel Sweeper Live
     And Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}                            |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor       | {error-bg-not-inbounded} |
       | routeId               | Error                    |
       | routeInfoColor        | {white-hex-color}        |
       | driverName            | Not Inbounded            |
       | routeDescriptionColor | {white-hex-color}        |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify order_events record for the created order:
-      | type | 27 |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Van en-route to pickup" on Edit Order page
+    And DB Events - verify order_events record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | 27                                 |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator unmask edit order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Van en-route to pickup |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | PARCEL ROUTING SCAN |
+      | hubName | {hub-name}          |
+      | hubId   | {hub-id}            |
 
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Pickup Fail (uid:1815fa85-51da-45d8-8595-fd33b0df081f)
     When Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | PICKUP |
-    And API Operator start the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                               |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":139}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 139                                                                                                  |
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}                            |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor       | {error-bg-not-inbounded} |
       | routeId               | Error                    |
       | routeInfoColor        | {white-hex-color}        |
       | driverName            | Not Inbounded            |
       | routeDescriptionColor | {white-hex-color}        |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify order_events record for the created order:
-      | type | 27 |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Pickup fail" on Edit Order page
-    And Operator verify order granular status is "Pickup Fail" on Edit Order page
+    And DB Events - verify order_events record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | 27                                 |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator unmask edit order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pickup fail |
+      | granularStatus | Pickup fail |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | PARCEL ROUTING SCAN |
+      | hubName | {hub-name}          |
+      | hubId   | {hub-id}            |
 
   @CloseNewWindows
   Scenario: Parcel Sweeper Live - Cancelled (uid:90c01f74-aa3a-451d-82b2-d60c9455f62f)
     Given Operator go to menu Order -> All Orders
-    Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
-    When API Operator cancel created order
-    When API Operator refresh created order data
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Core - force cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name}                      |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | hubName    | {hub-name}                            |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor       | {error-bg-invalid} |
       | routeId               | Recovery           |
       | routeInfoColor        | {white-hex-color}  |
       | driverName            | Cancelled          |
       | routeDescriptionColor | {white-hex-color}  |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify order_events record for the created order:
-      | type | 27 |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And DB Events - verify order_events record:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | 27                                 |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator unmask edit order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Cancelled |
+      | granularStatus | Cancelled |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | PARCEL ROUTING SCAN |
+      | hubName | {hub-name}          |
+      | hubId   | {hub-id}            |
 
   @CloseNewWindows
   Scenario: Parcel Sweeper Live - should show error when parcel sweep with more than 50 characters
@@ -135,6 +159,7 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | /          |
     Then Operator verifies error toast with "Exception" message is shown
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
