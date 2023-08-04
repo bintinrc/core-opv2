@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaign @AddRemoveShippers
+@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaign @AddRemoveShippers @CWF
 
 Feature: Add Remove Shippers
 
@@ -230,7 +230,7 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Active campaign
+    And Operator clicks on first "Active" campaign
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
     When Operator clicks on upload button
@@ -240,7 +240,7 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload - CSV file contains valid and invalid shipper
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Active campaign
+    And Operator clicks on first "Active" campaign
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID},9999999999"
     When Operator clicks on upload button
@@ -250,9 +250,145 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Active campaign
+    And Operator clicks on first "Active" campaign
     When Operator clicks on Shippers Add button
     When Operator clicks on Search by Shipper tab
     Then Operator search using "Name" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteNewlyCreatedShipper @PassRN
+  Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers - Shipper Already in Another Archive Campaign - Overlapped Start Date and End Date
+    Given Operator go to menu Shipper -> Discount & Promotions
+    And Operator clicks on first "Active" campaign
+    And Operator verifies Campaign is Active
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230815231624276" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteCampaign @PassRN
+  Scenario: Add Shippers - Select Shippers - Search by Shippers - Shipper Already in Another Active Campaign - Overlapped Start Date and End Date
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230731171436342" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies error message is "Error Message: Cannot add shipper(s): duplicate entries for this campaign or already exists in another campaign with overlapping date"
+
+  @DeleteCampaign @PassRN
+  Scenario: Success Add Shippers - Select Shippers - Search by Shippers - Shipper Already in Another Pending Campaign - Start Date and End Date Not Overlapped
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230815221154023" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteCampaign @PassRN
+  Scenario: Success Add Shippers - Select Shippers - Search by Shippers - Shipper Already in Expired Campaign
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230815223419482" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteCampaign @PassRN
+  Scenario: Success Add Shippers - Select Shippers - Search by Shippers - Shipper Already in Another Archive Campaign - Overlapped Start Date and End Date
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230815231624276" and select the created shipper
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteCampaign @DeleteNewlyCreatedShipper @CheckWithQAs
+  Scenario: Partial Success Remove Shippers - Select Shippers - Bulk Upload
+    Given API Operator create new 'normal' shipper
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+    Then Operator verifies Shipper count is "1 Shippers"
+    When Operator clicks on Shippers Remove button
+    When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID},985548"
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully removed." in Campaign Page
+    Then Operator verifies Shipper count is "0 Shippers"
+
+  @DeleteCampaign @DeleteNewlyCreatedShipper @PassRN @CheckWithQAs
+  Scenario: Partial Success Add Shippers - Select Shippers - Bulk Upload
+    Given API Operator create new 'normal' shipper
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
+    When Operator clicks on Shippers Add button
+    When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID},985548"
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteNewlyCreatedShipper @PassRN @CheckWithQAs
+  Scenario: Partial Success Add Shippers when Campaign is active - Select Shippers - Bulk Upload
+    Given API Operator create new 'normal' shipper
+    Given Operator go to menu Shipper -> Discount & Promotions
+    Given Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/discount-and-promotions?id=12291"
+    And Operator refresh page
+    And Operator verifies Campaign is Active
+    When Operator clicks on Shippers Add button
+    When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID},985548"
+    When Operator clicks on upload button
+    Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page
+
+  @DeleteCampaign @DeleteNewlyCreatedShipper @PassRN
+  Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers - Shipper Already in Another Pending Campaign - Start Date and End Date Not Overlapped
+    Given Operator go to menu Shipper -> Discount & Promotions
+    And Operator clicks on first "Active" campaign
+    And Operator verifies Campaign is Active
+    When Operator clicks on Shippers Add button
+    When Operator clicks on Search by Shipper tab
+    Then Operator search using "value-20230815221154023" and select the created shipper
     When Operator clicks on upload button
     Then Operator verifies toast message "1 shippers have been successfully added." in Campaign Page

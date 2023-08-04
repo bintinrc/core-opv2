@@ -378,6 +378,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @When("Operator uploads csv file with {value}")
   public void operatorUploadsCsvFileWithBelowData(String shipperLegacyId) {
     campaignCreateEditPage.inFrame(page -> {
+      System.out.println(resolveValue(shipperLegacyId).toString());
       File csvFile = getCsvFile(resolveValue(shipperLegacyId));
       campaignCreateEditPage.uploadFile(csvFile);
     });
@@ -400,6 +401,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
         case "Name":
           LOGGER.info("Using Name to search Shipper");
           searchValue = createdShipper.getName();
+          break;
         default:
           LOGGER.info("Using user defined value to search Shipper");
           searchValue = searchOption;
@@ -424,30 +426,39 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     return csvFile;
   }
 
-  @And("^Operator clicks on campaign with name (.+)$")
+  @And("Operator clicks on campaign with name {string}")
   public void operatorClicksOnCampaignWithName(String name) {
     discountAndPromotionsPage.inFrame(page -> {
-      doWithRetry(() ->
-      {
-        pause10s();
-        pause10s();
-        discountAndPromotionsPage.selectCampaignWithName(name);
-      }, getCurrentMethodName(), 500, 5);
+
+      pause10s();
+      pause10s();
+      discountAndPromotionsPage.selectCampaignWithName(name);
     });
   }
 
-  @And("^Operator clicks on first (.+) campaign$")
+  @And("Operator clicks on first {string} campaign")
   public void operatorClicksOnFirstCampaign(String status) {
     discountAndPromotionsPage.inFrame(page -> {
       doWithRetry(() ->
       {
         pause5s();
-        discountAndPromotionsPage.selectCampaignWithStatus(status);
+        discountAndPromotionsPage.selectCampaignWithStatus(status, "1");
       }, getCurrentMethodName(), 500, 5);
     });
   }
 
-  @And("^Operator verifies (.+) (input|select|picker) field is (.+)$")
+  @And("Operator clicks on second {string} campaign")
+  public void operatorClicksOnSecondCampaign(String status) {
+    discountAndPromotionsPage.inFrame(page -> {
+      doWithRetry(() ->
+      {
+        pause5s();
+        discountAndPromotionsPage.selectCampaignWithStatus(status, "2");
+      }, getCurrentMethodName(), 500, 5);
+    });
+  }
+
+  @And("Operator verifies {string} (input)(select)(picker) field is {string}")
   public void operatorVerifiesValueIsDisabled(String fieldName, String fieldType,
       String isClickable) {
     discountAndPromotionsPage.inFrame(page -> {
@@ -588,6 +599,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       campaignCreateEditPage.verifyFileDownloadedSuccessfully("shippers.csv");
     });
   }
+
   @Then("Operator verifies {string} modal is displayed")
   public void operatorVerifiesModalIsDisplayed(String modalName) {
     campaignCreateEditPage.inFrame(page -> {

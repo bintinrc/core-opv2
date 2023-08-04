@@ -8,7 +8,7 @@ Feature: Edit Campaign
   @DeleteCampaign
   Scenario: Edit Pending Campaign - User Only Have View Access
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Pending campaign
+    And Operator clicks on first "Pending" campaign
     And Operator verifies Campaign is Pending
     Then Operator enter campaign details using data below:
       | endDate                         |
@@ -21,9 +21,9 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     And Operator clicks on campaign with name QA-Automation-Campaign-16896918867762
     And Operator verifies Campaign name input field is clickable
-    And Operator verifies Campaign ID input field is not clickable
+    And Operator verifies Campaign ID" input field is "not clickable"
     And Operator verifies Campaign Description input field is clickable
-    And Operator verifies Promotion type select field is not clickable
+    And Operator verifies "Promotion type" select field is "not clickable"
     And Operator verifies Discount event counter select field is not clickable
     And Operator verifies Discount fee type select field is not clickable
     And Operator verifies Disbursement event counter select field is not clickable

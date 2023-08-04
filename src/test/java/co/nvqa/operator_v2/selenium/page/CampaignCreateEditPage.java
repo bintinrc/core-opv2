@@ -339,6 +339,9 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }else if (shipperName.contains("id-")) {
       searchByShipper.enterSearchTerm(shipperName.substring(3));
     }
+    else if (shipperName.contains("value-")) {
+      searchByShipper.selectValue(shipperName.substring(6));
+    }
     else {
       searchByShipper.selectValue(shipperName);
     }
