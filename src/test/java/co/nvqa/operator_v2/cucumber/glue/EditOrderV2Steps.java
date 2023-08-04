@@ -370,20 +370,29 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     String pickupInstruction = data.get("pickupInstruction");
     String deliveryInstruction = data.get("deliveryInstruction");
+    String orderInstruction = data.get("orderInstruction");
 
-    SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
-      if (StringUtils.isNotBlank(pickupInstruction)) {
+      if (StringUtils.isNotBlank(pickupInstruction) && !StringUtils
+          .equalsIgnoreCase(pickupInstruction, "-")) {
         String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
-        assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
-            .isEqualToIgnoringCase(pickupInstruction);
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, pickupInstruction));
       }
-      if (StringUtils.isNotBlank(deliveryInstruction)) {
+      if (StringUtils.isNotBlank(deliveryInstruction) && !StringUtils
+          .equalsIgnoreCase(deliveryInstruction, "-")) {
         String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
-        assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, deliveryInstruction));
+      }
+      if (orderInstruction == null || orderInstruction.isEmpty()) {
+        String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(pickupInstruction);
+        String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
             .isEqualToIgnoringCase(deliveryInstruction);
       }
-      assertions.assertAll();
     });
   }
 

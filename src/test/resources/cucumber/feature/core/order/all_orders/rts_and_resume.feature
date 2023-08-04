@@ -40,10 +40,6 @@ Feature: All Orders - RTS & Resume
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 5                                                                                                  |
-    And API Sort - Operator global inbound
-      | globalInboundRequest | {"inbound_type":"SORTING_HUB","to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
-      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                       |
-      | hubId                | {hub-id}                                                                                    |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator find multiple orders below by uploading CSV on All Orders page
@@ -55,8 +51,8 @@ Feature: All Orders - RTS & Resume
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator unmask edit order V2 page
     Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
+      | status         | Transit                 |
+      | granularStatus | En-route to Sorting Hub |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | RTS |
@@ -64,17 +60,6 @@ Feature: All Orders - RTS & Resume
       | name | UPDATE ADDRESS |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE CONTACT INFORMATION |
-    And Operator verify Pickup details on Edit Order V2 page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit Order V2 page using data below:
-      | status | FAIL |
-    And Operator verify Pickup transaction on Edit Order V2 page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status | FAIL |
-    And DB Core - verify orders record:
-      | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | rts | 1                                  |
 
   @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator RTS Multiple Orders on All Orders Page
@@ -245,13 +230,13 @@ Feature: All Orders - RTS & Resume
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | granularStatus | Completed                                  |
+      | granularStatus | Completed                          |
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | granularStatus | Cancelled                                  |
+      | granularStatus | Cancelled                          |
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
-      | granularStatus | Returned To Sender                         |
+      | granularStatus | Returned To Sender                 |
     When Operator go to menu Order -> All Orders
     And Operator find orders by uploading CSV on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |

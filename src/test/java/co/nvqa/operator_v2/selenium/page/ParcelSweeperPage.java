@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -31,6 +30,9 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//h3[contains(@data-testid,'next-sorting-node')]")
   public PageElement nextSortingTask;
+
+  @FindBy(xpath = "//span[@class='ant-notification-close-x']")
+  public PageElement notificationCloseButton;
 
   @FindBy(xpath = "//div[contains(@class,'panel info-container')]//h3")
   public PageElement routeInfoColorXpath;
