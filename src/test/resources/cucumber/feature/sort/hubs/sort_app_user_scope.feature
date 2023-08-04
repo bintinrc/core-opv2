@@ -101,7 +101,7 @@ Feature: Sort App User Scope
       | position               | {edit-position}                 |
     Then Make sure "{edit-sucess-title}" notification pop up with "Username"
 
-  @LaunchBrowser @SortAppUserScope @TAG
+  @LaunchBrowser @SortAppUserScope
   Scenario: Sort App Unable View Sort User without Scope SORT_VIEW_SORT_APP_USER
     Given Operator login with client id = "{sort-without-view-scope-client-id}" and client secret = "{sort-without-view-scope-secret-id}"
     Given Operator go to menu Shipper Support -> Blocked Dates
