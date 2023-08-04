@@ -41,6 +41,11 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.loadShipperAddressConfigurationPage();
   }
 
+  @When("Operator loads Shipper Address Configuration page in VN")
+  public void operator_loads_shipper_address_configuration_page_in_vn() {
+    shipperAddressConfigurationPage.loadShipperAddressConfigurationPageInVN();
+  }
+
   @SuppressWarnings("unchecked")
   @And("Operator selects {string} in the Address Status dropdown")
   public void operatorSelectsInTheAddressStatusDropdown(String option) {
@@ -346,6 +351,12 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator verify success message is displayed")
   public void operatorVerifySuccessMessageIsDisplayed() {
    shipperAddressConfigurationPage.verifySuccessMessage();
+  }
+
+  @Then("Operator verify {string} message is displayed")
+  public void operatorVerifySuccessMessageIsDisplayed(String message) {
+    message = resolveValue(message);
+    shipperAddressConfigurationPage.verifyMessage(message);
   }
 
   @Then("Verify that the Group Address for Id {string} is showing with text {string}")

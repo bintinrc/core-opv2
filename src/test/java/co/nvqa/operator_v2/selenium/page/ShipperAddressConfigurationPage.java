@@ -56,7 +56,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String UPLOAD_CVS_CONFIGURE_PICKUP_TYPE = "//button[@data-testid='shipper-address.results.upload-csv-button']";
   public static final String CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s addresses pick up has been updated!']";
   public static final String FILENAME_IN_UPLOAD_WINDOW = "//span[text()='%s']";
-
+  public static final String WARNING_MESSAGE = "//span[text()='%s']";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
       ShipperAddressConfigurationPage.class);
@@ -151,6 +151,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/shipper-address");
   }
 
+  public void loadShipperAddressConfigurationPageInVN() {
+    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/vn/shipper-address");
+  }
 
   public void clickLoadSelection() {
     waitUntilVisibilityOfElementLocated(loadSelection.getWebElement());
@@ -447,6 +450,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   public void verifySuccessMessage() {
     Assertions.assertThat(successMessage.isDisplayed());
+  }
+
+  public void verifyMessage(String message) {
+    String messageText = f(WARNING_MESSAGE, message);
+    WebElement textElement = getWebDriver().findElement(By.xpath(messageText));
+    Assertions.assertThat(textElement.getText().equals(message));
   }
 
   public void verifyGroupAddressIsShown(String addressID, String textMessage) {
