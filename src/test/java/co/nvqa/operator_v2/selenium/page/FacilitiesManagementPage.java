@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commonsort.model.sort.Hub;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -78,7 +78,7 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     addHubDialog.hubName.setValue(hub.getName());
     addHubDialog.displayName.setValue(hub.getShortName());
     if (isNotBlank(hub.getFacilityType())) {
-      addHubDialog.facilityType.selectValue(hub.getFacilityTypeDisplay());
+      addHubDialog.facilityType.selectValue(hub.getFacilityType());
     }
     if (BooleanUtils.isTrue(hub.getSortHub())) {
       addHubDialog.sortHub.check();
@@ -92,7 +92,6 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     addHubDialog.longitude.setValue(hub.getLongitude());
     if (BooleanUtils.isTrue(hub.getVirtualHub())) {
       addHubDialog.virtualHub.check();
-      addHubDialog.parentHub.selectValue(hub.getParentHub());
     }
     addHubDialog.submit.click();
   }
@@ -109,7 +108,7 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     editHubDialog.hubName.setValue(hub.getName());
     editHubDialog.displayName.setValue(hub.getShortName());
     if (isNotBlank(hub.getFacilityType())) {
-      editHubDialog.facilityType.selectValue(hub.getFacilityTypeDisplay());
+      editHubDialog.facilityType.selectValue(hub.getFacilityType());
     }
     if (BooleanUtils.isTrue(hub.getSortHub())) {
       editHubDialog.sortHub.check();
@@ -125,7 +124,6 @@ public class FacilitiesManagementPage extends SimpleReactPage<FacilitiesManageme
     editHubDialog.longitude.setValue(hub.getLongitude());
     if (BooleanUtils.isTrue(hub.getVirtualHub())) {
       editHubDialog.virtualHub.check();
-      editHubDialog.parentHub.selectValue(hub.getParentHub());
     }
     editHubDialog.submit.click();
     if (confirmUpdateHubDialog.waitUntilVisible(1)) {

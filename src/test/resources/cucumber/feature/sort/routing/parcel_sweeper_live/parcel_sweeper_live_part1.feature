@@ -28,9 +28,9 @@ Feature: Parcel Sweeper Live
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator unmask edit order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | PARCEL ROUTING SCAN |
-      | hubName | {hub-name}          |
-      | hubId   | {hub-id}            |
+      | name    | PARCEL ROUTING SCAN       |
+      | hubName | {parcel-sweeper-hub-name} |
+      | hubId   | {parcel-sweeper-hub-id}   |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -80,15 +80,15 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date = today (uid:ca0f7cf5-13ac-4265-934d-052136902ec7)
     Given API Order - Shipper create multiple V4 orders using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":310205,"country":"{country}"}}} |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_LIST_OF_CREATED_ORDERS[1].hubId}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-jkb}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
@@ -124,9 +124,9 @@ Feature: Parcel Sweeper Live
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator unmask edit order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | PARCEL ROUTING SCAN |
-      | hubName | {hub-name}          |
-      | hubId   | {hub-id}            |
+      | name    | PARCEL ROUTING SCAN                            |
+      | hubName | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |
+      | hubId   | {KEY_LIST_OF_CREATED_ORDERS[1].hubId}          |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -192,7 +192,7 @@ Feature: Parcel Sweeper Live
       | hubId                | {hub-id-jkb}                          |
       | globalInboundRequest | { "hubId":{hub-id-jkb} }              |
     And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_LIST_OF_CREATED_ORDERS[1].hubId}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-1-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-1-day-yyyy-MM-dd}}T16:00:00+00:00"} |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-jkb}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-1-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-1-day-yyyy-MM-dd}}T16:00:00+00:00"} |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
@@ -202,7 +202,7 @@ Feature: Parcel Sweeper Live
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator refresh page
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name-jkb}                        |
+      | hubName    | {parcel-sweeper-hub-name}             |
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor       | {error-bg-invalid}                 |
@@ -226,9 +226,9 @@ Feature: Parcel Sweeper Live
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator unmask edit order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | PARCEL ROUTING SCAN                            |
-      | hubName | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub} |
-      | hubId   | {KEY_LIST_OF_CREATED_ORDERS[1].hubId}          |
+      | name    | PARCEL ROUTING SCAN       |
+      | hubName | {parcel-sweeper-hub-name} |
+      | hubId   | {parcel-sweeper-hub-id}   |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
