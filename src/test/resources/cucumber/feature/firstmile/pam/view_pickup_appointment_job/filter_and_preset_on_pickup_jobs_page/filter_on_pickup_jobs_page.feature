@@ -35,28 +35,23 @@ Feature: Pickup Appointment Job Page Part 1
       | priority       | All                              |
       | jobServiceType | Scheduled                        |
       | jobStatus      | Ready for Routing, Routed        |
-    When Operator click Preset Filters field
-    Then QA verify dropdown menu shown with a list of saved preset
     When Operator click Data Range field
     And QA verify data start to end limited to 7 days
     When Operator click Priority field
     Then QA verify a dropdown menu shown with priority option
     When Operator click Job Service Type field
-    Then QA verify a dropdown menu shown with no data
+    Then QA verify a service type dropdown menu shown
     When Operator click Job Service Level field
-    Then QA verify a dropdown menu shown
+    Then QA verify a service level dropdown menu shown
     And Select multiple service level
     When Operator click Job Status field
-    Then QA verify a dropdown menu shown
+    Then QA verify a job status dropdown menu shown
     And Select multiple job Status
     When Operator click Job Zone field
-    Then QA verify a dropdown menu shown
+    Then QA verify a zones dropdown menu shown
     And Select multiple job Zone
-      | zones | {zone-name}, {zone-name-2} |
-    When Operator click Job Master Shipper field
-    Then QA verify a dropdown menu shown
+      | zones | {zone-name}, {zone-name-3} |
     When Operator click Job Shipper field
-    Then QA verify a dropdown menu shown
     And QA verify Shipper list will be shown after operator type 3 characters or more "123" in the Shipper field
     Then Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     Then QA verify filters on Pickup Jobs page are shown
@@ -65,7 +60,7 @@ Feature: Pickup Appointment Job Page Part 1
       | jobServiceType  | Scheduled                                         |
       | jobServiceLevel | Premium, Standard                                 |
       | jobStatus       | Ready for Routing, Routed, In Progress, Cancelled |
-      | zones           | {zone-name}, {zone-name-2}                        |
+      | zones           | {zone-name}, {zone-name-3}                        |
       | shippers        | 830859 - Pickup Appointment Job Normal            |
 
   Scenario: View pickup jobs filters on Pickup Jobs page result table

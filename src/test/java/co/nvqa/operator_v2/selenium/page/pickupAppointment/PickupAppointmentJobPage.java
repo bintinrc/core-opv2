@@ -193,14 +193,14 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String TITLE = "title";
   public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
-  public final String SELECTION_LABEL_LOCATOR = "//*[label='%s']";
+  public final String SELECTION_LABEL_LOCATOR = "//*[contains(text(),'%s')]";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
 
   public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
   public final String ARIA_LABEL = "aria-label";
   public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
-  public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "td.ant-picker-cell-selected";
+  public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "//td[contains(@class, 'ant-picker-cell-selected')]";
   public final String SHOW_PREVIOUS_MONTH_BUTTON_LOCATION = "button.ant-picker-header-prev-btn";
 
   public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
@@ -480,7 +480,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-        By.cssSelector(SELECTED_DAY_IN_CALENDAR_LOCATOR)));
+        By.xpath(SELECTED_DAY_IN_CALENDAR_LOCATOR)),3);
     Assertions.assertThat(
             webDriver.findElement(
                     By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
@@ -533,10 +533,8 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
     waitUntilVisibilityOfElementLocated(
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
+        webDriver.findElement(By.xpath(f(SELECTION_LABEL_LOCATOR, selection))));
+    return webDriver.findElement(By.xpath(f(SELECTION_LABEL_LOCATOR, selection)))
         .isDisplayed();
   }
 

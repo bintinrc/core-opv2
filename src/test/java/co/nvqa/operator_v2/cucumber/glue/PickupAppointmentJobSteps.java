@@ -766,7 +766,6 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("QA verify dropdown menu shown with a list of saved preset")
   public void verifyDropdownMenuShownWIthAListOfSavedPreset() {
     pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
       Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
           .as("Preset Filter Dropdown Menu is displayed").isTrue();
       pickupAppointmentJobPage.clickOnPresetFilters();
@@ -793,7 +792,6 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("QA verify a dropdown menu shown with priority option")
   public void verifyADropdownMenuShownWIthPriorityOption() {
     pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
       Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
               PickupAppointmentPriorityEnum.PRIORITY.getName()))
           .as("Priority in Priority Filter is displayed").isTrue();
