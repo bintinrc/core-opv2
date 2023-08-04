@@ -1,0 +1,52 @@
+package co.nvqa.operator_v2.cucumber.glue;
+
+import co.nvqa.operator_v2.selenium.page.GroupAddressesPage;
+import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
+
+@ScenarioScoped
+public class GroupAddressesSteps extends AbstractSteps{
+
+  private GroupAddressesPage groupAddressesPage;
+
+
+  public GroupAddressesSteps() {
+  }
+
+  @Override
+  public void init() {
+    groupAddressesPage = new GroupAddressesPage(getWebDriver());
+  }
+
+  @When("Operator loads Shipper Address Configuration page")
+  public void operator_loads_shipper_address_configuration_page() {
+    shipperAddressConfigurationPage.loadShipperAddressConfigurationPage();
+  }
+
+  @When("Operator search address {string} on Group Addresses page")
+  public void inputSearchAddress(String address) {
+    groupAddressesPage.inFrame(page ->{
+      groupAddressesPage.searchAddress(address);
+    });
+  }
+
+  @Then("Operator verify that address {string} is displayed on pickup address column")
+  public void verifyPickupAddress(String address) {
+    groupAddressesPage.inFrame(page ->{
+      Assertions.assertThat(groupAddressesPage.getTextCellPickupAddress()).as("Pickup Address contains string").contains(address);
+    });
+  }
+
+  @Then("Operator verify search result is displayed on list of pickup addresses")
+  public void verifyListOfPickupAddress() {
+    groupAddressesPage.inFrame(page ->{
+      Assertions.assertThat(groupAddressesPage.isCellGroupAddressDisplayed()).as("Group Address is displayed").isTrue();
+      Assertions.assertThat(groupAddressesPage.isCellPickupAddressDisplayed()).as("Pickup Address is displayed").isTrue();
+      Assertions.assertThat(groupAddressesPage.isCellShipperIdDisplayed()).as("Shipper Id is displayed").isTrue();
+      Assertions.assertThat(groupAddressesPage.isCellShipperNameDisplayed()).as("Shipper Name is displayed").isTrue();
+      Assertions.assertThat(groupAddressesPage.isCellLatestPickupDateDisplayed()).as("Latest Pickup is displayed").isTrue();
+    });
+  }
+}
