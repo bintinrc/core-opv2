@@ -78,7 +78,7 @@ Feature: Shipper Address Configuration
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Please check that there is only 1 group address selected" message is displayed
-
+@Debug
   Scenario: Unable to Group Addresses with No Physical Zone
     When Operator loads Shipper Address Configuration page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"

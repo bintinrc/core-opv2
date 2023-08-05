@@ -21,7 +21,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
+    And Operator waits for 150 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
@@ -53,7 +53,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
+    And Operator waits for 150 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Remove from Group" button
@@ -86,7 +86,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
+    And Operator waits for 150 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[4]}"
     And Operator clicks on the "Remove from Group" button
@@ -118,7 +118,7 @@ Feature: Shipper Address Configuration
   And Operator clicks on the load selection button
   And Operator waits for 60 seconds
   And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-  And Operator waits for 120 seconds
+  And Operator waits for 150 seconds
   When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
   When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
   And Operator clicks on the "Group Address" button
@@ -154,7 +154,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
+    And Operator waits for 150 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
     And Operator clicks on the "Group Address" button
