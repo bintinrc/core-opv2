@@ -336,7 +336,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     String second_Title = data.get("title2");
     String pickup_Address = data.get("pickup_Address");
     String first_Address = data.get("address1");
-    shipperAddressConfigurationPage.verifyGroupAddressModal(first_Title, second_Title, pickup_Address, first_Address);
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.verifyGroupAddressModal(first_Title, second_Title, pickup_Address, first_Address);
+    };
+    doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
 
@@ -344,7 +347,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifyCurrentGroupModalWithBelowData(Map<String, String> data) {
     data = resolveKeyValues(data);
     String first_Address = data.get("address1");
-    shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(first_Address);
+    Runnable clickButton = () -> {
+      shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(first_Address);
+    };
+    doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
   }
 

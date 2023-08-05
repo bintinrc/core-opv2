@@ -416,6 +416,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public void clickOnAddressToGroup(String addressId) {
     String checkBoxXpath = f(CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED, addressId);
     WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
+    waitUntilVisibilityOfElementLocated(checkBoxXpath);
     checkBox.click();
   }
 

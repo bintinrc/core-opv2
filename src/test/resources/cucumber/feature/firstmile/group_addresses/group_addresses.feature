@@ -64,7 +64,6 @@ Feature: Shipper Address Configuration
     Then Operator verify success message is displayed
     Then Verify that the Group Address for Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}" is showing with text "No Group"
 
-
   Scenario: Success Remove Multiple Addresses with More than 1 Parent
     When Operator loads Shipper Address Configuration page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
