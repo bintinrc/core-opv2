@@ -21,6 +21,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
+    And Operator waits for 60 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Please select at least 2 addresses to start grouping" message is displayed
@@ -46,6 +47,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
+    And Operator waits for 60 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
@@ -71,6 +73,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
+    And Operator waits for 60 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
     And Operator clicks on the "Group Address" button
@@ -92,6 +95,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
+    And Operator waits for 60 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
