@@ -455,14 +455,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public void verifyMessage(String message) {
     String messageText = f(WARNING_MESSAGE, message);
     WebElement textElement = getWebDriver().findElement(By.xpath(messageText));
-    waitUntilVisibilityOfMdDialogByTitle(messageText);
     Assertions.assertThat(textElement.getText().equals(message));
   }
 
   public void verifyGroupAddressIsShown(String addressID, String textMessage) {
     String title1Xpath = f(GROUP_ADDRESS_VERIFY_COLUMN, addressID);
     WebElement title = getWebDriver().findElement(By.xpath(title1Xpath));
-    waitUntilVisibilityOfMdDialogByTitle(title1Xpath);
     Assertions.assertThat(title.getText().equals(textMessage));
 
   }
