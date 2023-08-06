@@ -21,7 +21,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Please select at least 2 addresses to start grouping" message is displayed
@@ -47,7 +46,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
@@ -73,7 +71,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
     And Operator clicks on the "Group Address" button
@@ -95,7 +92,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
@@ -110,7 +106,7 @@ Feature: Shipper Address Configuration
     Then Operator verify "Selected addresses do not have a zone assigned: {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}, {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}. Please contact first mile team" message is displayed
 
   @SystemIdNotSg @default-vn
-  Scenario: Unable to Group Addresses with No Lat Long
+  Scenario: [VN] Unable to Group Addresses with No Lat Long
     When Operator loads Shipper Address Configuration page in VN
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
@@ -126,7 +122,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
@@ -148,7 +143,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 60 seconds
     And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    And Operator waits for 120 seconds
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Remove from Group" button
