@@ -28,6 +28,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Group Addresses with Different Billing Zone
     When Operator loads Shipper Address Configuration page
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
@@ -54,6 +55,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable Group addresses with Multiple Parent
     When Operator loads Shipper Address Configuration page
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 4                                                                                                                                                                                                                                           |
@@ -79,6 +81,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Group Addresses with No Physical Zone
     When Operator loads Shipper Address Configuration page
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 2                                                                                                                                                                                                                                           |
@@ -109,6 +112,7 @@ Feature: Shipper Address Configuration
   @SystemIdNotSg @default-vn
   Scenario: Unable to Group Addresses with No Lat Long
     When Operator loads Shipper Address Configuration page in VN
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 2                                                                                                                                                                                                                                           |
@@ -130,6 +134,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Remove Address with No Group Address
     When Operator loads Shipper Address Configuration page
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 2                                                                                                                                                                                                                                           |

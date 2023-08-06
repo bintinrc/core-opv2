@@ -65,6 +65,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Success Remove Multiple Addresses with More than 1 Parent
     When Operator loads Shipper Address Configuration page
+    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 4                                                                                                                                                                                                                                           |
@@ -97,6 +98,7 @@ Feature: Shipper Address Configuration
 
   Scenario: Success Add New Address Existing Group and Set As New Group Address
   When Operator loads Shipper Address Configuration page
+  And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
   When API Operator creates shipper address using below data:
     | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
     | noOfAddress                 | 3                                                                                                                                                                                                                                           |
@@ -130,8 +132,9 @@ Feature: Shipper Address Configuration
   Then Verify that the Group Address for Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}" is showing with text "36SenokoRd,Singapore, SG, 124100"
 
   Scenario: Success Add New Address Existing Group and Group Address Remain the Same
-    When Operator loads Shipper Address Configuration page
-    When API Operator creates shipper address using below data:
+  When Operator loads Shipper Address Configuration page
+  And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
+  When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 3                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
