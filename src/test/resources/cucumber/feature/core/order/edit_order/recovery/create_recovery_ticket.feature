@@ -402,7 +402,6 @@ Feature: Create Recovery Ticket
     When API Recovery - Operator search recovery ticket:
       | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
-
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
