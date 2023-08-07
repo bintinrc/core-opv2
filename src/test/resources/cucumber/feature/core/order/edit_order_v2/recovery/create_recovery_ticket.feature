@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrder @Recovery @CreateTicket @EditOrder3
+@OperatorV2 @Core @EditOrderV2 @Recovery @CreateTicket
 Feature: Create Recovery Ticket
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create Recovery Ticket For Return Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -71,7 +71,7 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create Recovery Ticket For Pending Reschedule Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -82,9 +82,6 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -155,7 +152,7 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create Recovery Ticket For Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -279,7 +276,7 @@ Feature: Create Recovery Ticket
     When API Recovery - Operator search recovery ticket:
       | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Route Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -344,7 +341,7 @@ Feature: Create Recovery Ticket
     When API Recovery - Operator search recovery ticket:
       | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Outbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -473,7 +470,7 @@ Feature: Create Recovery Ticket
     When API Recovery - Operator search recovery ticket:
       | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

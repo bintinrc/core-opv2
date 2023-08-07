@@ -371,20 +371,29 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     String pickupInstruction = data.get("pickupInstruction");
     String deliveryInstruction = data.get("deliveryInstruction");
+    String orderInstruction = data.get("orderInstruction");
 
-    SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
-      if (StringUtils.isNotBlank(pickupInstruction)) {
+      if (StringUtils.isNotBlank(pickupInstruction) && !StringUtils
+          .equalsIgnoreCase(pickupInstruction, "-")) {
         String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
-        assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
-            .isEqualToIgnoringCase(pickupInstruction);
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, pickupInstruction));
       }
-      if (StringUtils.isNotBlank(deliveryInstruction)) {
+      if (StringUtils.isNotBlank(deliveryInstruction) && !StringUtils
+          .equalsIgnoreCase(deliveryInstruction, "-")) {
         String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
-        assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, deliveryInstruction));
+      }
+      if (orderInstruction == null || orderInstruction.isEmpty()) {
+        String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(pickupInstruction);
+        String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
             .isEqualToIgnoringCase(deliveryInstruction);
       }
-      assertions.assertAll();
     });
   }
 
@@ -1374,11 +1383,11 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void deliveryIsIndicatedByIcon(String indicationValue) {
     page.inFrame(() -> {
       if (Objects.equals(indicationValue, "is")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isTrue();
       } else if (Objects.equals(indicationValue, "is not")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isFalse();
       }
