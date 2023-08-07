@@ -6,38 +6,56 @@ Feature: Collection Summary
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteCommonV2
-  Scenario: View Cash Collection (uid:0dccc613-ddc8-4c11-bee2-ed3d15a50590)
+  Scenario: View Cash Collection
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Core - Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cashOnDelivery>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given API Driver deliver the created parcel successfully
+    And API Core - Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
+      | routes     | KEY_DRIVER_ROUTES                                                                                       |
+      | jobType    | TRANSACTION                                                                                             |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
+      | jobAction  | SUCCESS                                                                                                 |
+      | jobMode    | DELIVERY                                                                                                |
+#    TODO
     When API Operator create new COD for created order
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator open Money Collection history dialog on Route Inbound page
     Then Operator verify Money Collection history record using data below:
       | processedAmount | {KEY_ROUTE_CASH_INBOUND_COD.amountCollected} |
       | processedType   | Cash                                         |
       | receiptNo       | {KEY_ROUTE_CASH_INBOUND_COD.receiptNumber}   |
     And Operator verify Money Collection Collected Order record using data below:
-      | processedCodAmount    | {KEY_COD_GOODS_AMOUNT}                     |
-      | processedCodCollected | 0                                          |
-      | trackingId            | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customType            | Delivery (Normal)                          |
+      | processedCodAmount    | {KEY_COD_GOODS_AMOUNT}                |
+      | processedCodCollected | 0                                     |
+      | trackingId            | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | customType            | Delivery (Normal)                     |
 
   @ArchiveRouteCommonV2
   Scenario: View Failed Parcels
@@ -66,15 +84,15 @@ Feature: Collection Summary
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE           |
-      | driverName  | {ninja-driver-name}              |
-      | hubName     | {hub-name}                       |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
-      | wpPending   | 0                                |
-      | wpPartial   | 0                                |
-      | wpFailed    | 2                                |
-      | wpCompleted | 0                                |
-      | wpTotal     | 2                                |
+      | routeId     | GET_FROM_CREATED_ROUTE                    |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 2                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 2                                         |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page

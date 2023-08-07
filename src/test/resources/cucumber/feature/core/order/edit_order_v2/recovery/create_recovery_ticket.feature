@@ -474,7 +474,7 @@ Feature: Create Recovery Ticket
       | addressId | {shipper-address-id} |
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}} |
     And API Core - Operator add reservation to route using data below:
