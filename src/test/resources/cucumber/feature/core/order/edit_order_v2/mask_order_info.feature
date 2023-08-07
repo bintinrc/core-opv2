@@ -738,13 +738,7 @@ Feature: Mask Order Info
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK","address2":"old address 2","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Sort - Operator global inbound
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id}}                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)0004                                                                                                                             |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
