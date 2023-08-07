@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @EditInstructions @current @wip
+@OperatorV2 @Core @EditOrderV2 @EditInstructions
 Feature: Edit Instructions
 
   Background:

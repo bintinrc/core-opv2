@@ -1376,11 +1376,11 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void deliveryIsIndicatedByIcon(String indicationValue) {
     page.inFrame(() -> {
       if (Objects.equals(indicationValue, "is")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isTrue();
       } else if (Objects.equals(indicationValue, "is not")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isFalse();
       }
