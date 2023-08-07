@@ -107,7 +107,8 @@ Feature: Shipper Address Configuration
 
   @SystemIdNotSg @default-vn
   Scenario: [VN] Unable to Group Addresses with No Lat Long
-    When Operator loads Shipper Address Configuration page in VN
+    When Operator loads Shipper Address Configuration page
+    Given Operator change the country to "Vietnam"
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |

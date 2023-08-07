@@ -41,11 +41,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.loadShipperAddressConfigurationPage();
   }
 
-  @When("Operator loads Shipper Address Configuration page in VN")
-  public void operator_loads_shipper_address_configuration_page_in_vn() {
-    shipperAddressConfigurationPage.loadShipperAddressConfigurationPageInVN();
-  }
-
   @SuppressWarnings("unchecked")
   @And("Operator selects {string} in the Address Status dropdown")
   public void operatorSelectsInTheAddressStatusDropdown(String option) {
@@ -313,44 +308,44 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorSelectMultipleAddressesThatHasNoGroupUsingBelowData(String addressId) {
     addressId = resolveValue(addressId);
     String finalAddressId = addressId;
-    Runnable clickButton = () -> {
+    Runnable selectAddress = () -> {
       shipperAddressConfigurationPage.clickOnAddressToGroup(finalAddressId);
     };
-    doWithRetry(clickButton, "Click on Button");
+    doWithRetry(selectAddress, "Select Address from List");
   }
 
   @When("Operator select radio checkbox for address from the list with Id {string}")
   public void operatorSelectRadioThatHasNoGroupUsingBelowData(String addressId) {
     addressId = resolveValue(addressId);
     String finalAddressId = addressId;
-    Runnable clickButton = () -> {
+    Runnable clickRadioBox = () -> {
       shipperAddressConfigurationPage.clickOnRadioCheckBoxForAddressToGroup(finalAddressId);
     };
-    doWithRetry(clickButton, "Click on Button");
+    doWithRetry(clickRadioBox, "Click Radio Box");
   }
 
   @Then("Operator verify modal with below data:")
   public void operatorVerifyModalWithBelowData(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String first_Title = data.get("title");
-    String second_Title = data.get("title2");
-    String pickup_Address = data.get("pickup_Address");
-    String first_Address = data.get("address1");
-    Runnable clickButton = () -> {
-      shipperAddressConfigurationPage.verifyGroupAddressModal(first_Title, second_Title, pickup_Address, first_Address);
+    String firstTitle = data.get("title");
+    String secondTitle = data.get("title2");
+    String pickupAddress = data.get("pickup_Address");
+    String firstAddress = data.get("address1");
+    Runnable verifyModal = () -> {
+      shipperAddressConfigurationPage.verifyGroupAddressModal(firstTitle, secondTitle, pickupAddress, firstAddress);
     };
-    doWithRetry(clickButton, "Click on Button");
+    doWithRetry(verifyModal, "verify Modal");
     takesScreenshot();
   }
 
   @Then("Operator verify current group text with below data:")
   public void operatorVerifyCurrentGroupModalWithBelowData(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String first_Address = data.get("address1");
-    Runnable clickButton = () -> {
-      shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(first_Address);
+    String firstAddress = data.get("address1");
+    Runnable verifyCurrentText = () -> {
+      shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(firstAddress);
     };
-    doWithRetry(clickButton, "Click on Button");
+    doWithRetry(verifyCurrentText, "verify Current Text");
     takesScreenshot();
   }
 

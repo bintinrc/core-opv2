@@ -151,10 +151,6 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/shipper-address");
   }
 
-  public void loadShipperAddressConfigurationPageInVN() {
-    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/vn/shipper-address");
-  }
-
   public void clickLoadSelection() {
     waitUntilVisibilityOfElementLocated(loadSelection.getWebElement());
     loadSelection.click();
