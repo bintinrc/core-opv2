@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @ViewListOfCampaignUser1 @user1
+@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @ViewListOfCampaignUser1 @User1
 
 Feature: Discount and Promotion
 
