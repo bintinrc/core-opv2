@@ -226,3 +226,14 @@ Feature: Create Campaign
       | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;Parcel | Standard;Standard | 10;10         |
     When Operator clicks on publish button
     And Operator verifies validation error message for "campaign-same-rule"
+
+  @DeleteCampaign
+  Scenario: Success Create New Campaign - Discount Operator Percentage - Multiple rules - SG
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType                                                      | serviceLevel                                                           | discountValue              |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document; | Standard;Express;Next Day;Same Day;Standard;Express;Same Day;Next Day; | 5;1.2;3.2;2;3.1;4;1.9;2.2; |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page
