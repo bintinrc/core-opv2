@@ -149,7 +149,14 @@ public class SortAppUserManagementSteps extends AbstractSteps {
     pause2s();
     sortAppUserManagementPage.clickAllSortAppUser();
     sortAppUserManagementPage.loadingIcon.waitUntilInvisible();
-
+  }
+  @And("Operator Click Load Users")
+  public void operatorClickLoadUsers() {
+    navigateRefresh();
+    pause2s();
+    sortAppUserManagementPage.switchTo();
+    sortAppUserManagementPage.loadUsersButton.click();
+    sortAppUserManagementPage.loadingIcon.waitUntilInvisible();
   }
 
   @Then("Operator verifies that the newly created Sort App User will be shown")

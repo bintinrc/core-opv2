@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -784,24 +785,30 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verify order events on Edit Order V2 page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    page.inFrame(() -> data.forEach(eventData -> {
-      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-      OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
-          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-          .orElse(null);
-      if (actualEvent == null) {
-        pause5s();
-        page.refreshPage();
-        page.switchTo();
-        actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-            .orElse(null);
-      }
-      Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
-          .isNotNull();
-      expectedEvent.compareWithActual(actualEvent);
-    }));
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      data.forEach(eventData -> {
+        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+        var foundEvents = actualEvents.get().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .collect(Collectors.toList());
+        if (foundEvents.isEmpty()) {
+          pause5s();
+          page.refreshPage();
+          page.switchTo();
+          actualEvents.set(page.eventsTable().readAllEntities());
+          foundEvents = actualEvents.get().stream()
+              .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+              .collect(Collectors.toList());
+        }
+        Assertions.assertThat(foundEvents)
+            .withFailMessage("There is no [%s] event on Edit Order V2 page",
+                expectedEvent.getName())
+            .isNotEmpty();
+        DataEntity.assertListContains(foundEvents, expectedEvent,
+            f("[%s] events", expectedEvent.getName()));
+      });
+    });
   }
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
@@ -810,7 +817,7 @@ public class EditOrderV2Steps extends AbstractSteps {
     data = resolveValues(data);
     SoftAssertions assertions = new SoftAssertions();
     data.forEach(expected -> assertions.assertThat(
-        events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
+            events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
         .as("%s event was found").isFalse());
     assertions.assertAll();
     takesScreenshot();
@@ -1726,48 +1733,54 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verifies ticket status is {value} on Edit Order V2 page")
   public void updateRecoveryTicket(String data) {
-    String status = page.recoveryTicket.getText();
-    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
-    Matcher m = p.matcher(status);
-    if (m.matches()) {
-      Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
-    } else {
-      Assertions.fail("Could not get ticket status from string: " + status);
-    }
+    page.inFrame(() -> {
+      String status = page.recoveryTicket.getText();
+      Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+      Matcher m = p.matcher(status);
+      if (m.matches()) {
+        Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
+      } else {
+        Assertions.fail("Could not get ticket status from string: " + status);
+      }
+    });
   }
 
   @Then("Operator updates recovery ticket on Edit Order V2 page:")
   public void updateRecoveryTicket(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    page.recoveryTicket.click();
-    page.editTicketDialog.waitUntilVisible();
-    pause5s();
-    if (data.containsKey("status")) {
-      page.editTicketDialog.ticketStatus.selectValue(data.get("status"));
-    }
-    pause5s();
-    if (data.containsKey("keepCurrentOrderOutcome")) {
-      page.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
-    }
-    pause5s();
-    if (data.containsKey("outcome")) {
-      page.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
-    }
-    if (data.containsKey("assignTo")) {
-      page.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
-    }
-    if (data.containsKey("rtsReason")) {
-      page.editTicketDialog.rtsReason.selectValue(data.get("rtsReason"));
-    }
-    if (data.containsKey("newInstructions")) {
-      String instruction = data.get("newInstructions");
-      if ("GENERATED".equals(instruction)) {
-        instruction = f("This damage description is created by automation at %s.",
-            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.recoveryTicket.click();
+      page.editRecoveryFrame.waitUntilVisible();
+      getWebDriver().switchTo().frame(page.editRecoveryFrame.getWebElement());
+      page.editTicketDialog.waitUntilVisible();
+      if (finalData.containsKey("status")) {
+        page.editTicketDialog.ticketStatus.selectValue(finalData.get("status"));
       }
-      page.editTicketDialog.newInstructions.setValue(instruction);
-    }
-    page.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
+      if (finalData.containsKey("keepCurrentOrderOutcome")) {
+        if (page.editTicketDialog.keep.waitUntilVisible(5)) {
+          page.editTicketDialog.keep.click();
+          page.editTicketDialog.keep.waitUntilInvisible();
+        }
+      }
+      if (finalData.containsKey("outcome")) {
+        page.editTicketDialog.orderOutcome.selectValue(finalData.get("outcome"));
+      }
+      if (finalData.containsKey("assignTo")) {
+        page.editTicketDialog.assignTo.selectValue(finalData.get("assignTo"));
+      }
+      if (finalData.containsKey("rtsReason")) {
+        page.editTicketDialog.rtsReason.selectValue(finalData.get("rtsReason"));
+      }
+      if (finalData.containsKey("newInstructions")) {
+        String instruction = finalData.get("newInstructions");
+        if ("GENERATED".equals(instruction)) {
+          instruction = f("This damage description is created by automation at %s.",
+              DTF_CREATED_DATE.format(ZonedDateTime.now()));
+        }
+        page.editTicketDialog.newInstructions.setValue(instruction);
+      }
+      page.editTicketDialog.updateTicket.click();
+    });
   }
 
   @When("^Operator create new recovery ticket on Edit Order V2 page:$")
