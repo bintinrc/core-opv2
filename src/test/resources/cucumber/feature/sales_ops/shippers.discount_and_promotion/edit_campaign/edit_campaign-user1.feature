@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaignUser1
+@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @EditCampaignUser1 @user1
 
 Feature: Edit Campaign
 
