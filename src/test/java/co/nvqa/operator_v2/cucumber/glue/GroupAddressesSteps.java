@@ -20,9 +20,9 @@ public class GroupAddressesSteps extends AbstractSteps{
     groupAddressesPage = new GroupAddressesPage(getWebDriver());
   }
 
-  @When("Operator loads Shipper Address Configuration page")
-  public void operator_loads_shipper_address_configuration_page() {
-    shipperAddressConfigurationPage.loadShipperAddressConfigurationPage();
+  @When("Operator loads Group Addresses page")
+  public void operatorLoadsGroupAddressespage() {
+    groupAddressesPage.loadGroupAddressesPage();
   }
 
   @When("Operator search address {string} on Group Addresses page")

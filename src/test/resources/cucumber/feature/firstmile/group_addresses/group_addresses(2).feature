@@ -1,4 +1,4 @@
-@FirstMile @AddressesGrouping
+@FirstMile @AddressesGrouping @SG
 Feature: Shipper Address Configuration
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,5 +6,6 @@ Feature: Shipper Address Configuration
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Success Group Addresses
-    Given Operator loads Shipper Address Configuration page
+    Given Operator loads Group Addresses page
+    When Operator search address "jalan kilang barat" on Group Addresses page
 
