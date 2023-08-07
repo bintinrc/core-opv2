@@ -587,7 +587,8 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
 
-  Scenario: Download Validation Report
+
+  Scenario: Download POD Validation Report and View Audit Detail
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Download Validation Reports
     When Operator selects the date time range based on below data:
@@ -598,13 +599,13 @@ Feature: POD Validation
     Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
       | TaskID            |
       | JobID             |
-      | JobStatus         |
       | JobType           |
       | AttemptedAt       |
       | HubID             |
       | FailureReasonId   |
       | DriverID          |
       | ShipperIDs        |
+      | ShipperNames      |
       | ParentShipperIDs  |
       | OrderIds          |
       | TrackingIds       |
@@ -619,6 +620,15 @@ Feature: POD Validation
       | AuditorReason     |
       | AuditTime         |
       | ValidationMatches |
+      | AppealReasonId    |
+      | AppealReason      |
+      | AppealInfo        |
+      | AppealUpdatedAt   |
+      | ReviewerId        |
+      | ReviewerEmail     |
+      | ReviewerValidity  |
+      | ReviewerReason    |
+      | ReviewTime        |
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Productivity Count
