@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.hub.Hub;
-import co.nvqa.commons.util.factory.HubFactory;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
+import co.nvqa.commonsort.model.sort.Hub;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -23,6 +22,7 @@ import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTab
 @ScenarioScoped
 public class FacilitiesManagementSteps extends AbstractSteps {
 
+  private static final String KEY_SORT_LIST_OF_UPDATED_HUBS = "KEY_SORT_LIST_OF_UPDATED_HUBS";
   private FacilitiesManagementPage facilitiesManagementPage;
   private static final String HUB_CD_CD = "CD->CD";
   private static final String HUB_CD_ITS_ST = "CD->its ST";
@@ -56,7 +56,6 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     String sortHub = data.get("sortHub");
 
     String uniqueCode = StandardTestUtils.generateDateUniqueString();
-    Address address = AddressFactory.getRandomAddress();
 
     if ("GENERATED".equals(name)) {
       name = "HUB DO NOT USE " + uniqueCode;
@@ -67,21 +66,25 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     }
 
     if ("GENERATED".equals(city)) {
-      city = address.getCity();
+      city = "randomcity" + uniqueCode;
     }
 
-    if ("GENERATED".equals(country)) {
-      country = address.getCountry();
+    if ("GENERATED".equalsIgnoreCase(country)) {
+      country = StandardTestConstants.NV_SYSTEM_ID;
     }
-
-    Hub randomHub = HubFactory.getRandomHub();
-
+    double randomNumber = Math.random() * (2) + 1;
+    double randomLatitude = Math.random() * (90);
+    double randomLongitude = Math.random() * (180);
+    if (randomNumber % 2 == 0) {
+      randomLatitude = -Math.random() * (90);
+      randomLongitude = -Math.random() * (180);
+    }
     if ("GENERATED".equals(latitude)) {
-      latitude = String.valueOf(randomHub.getLatitude());
+      latitude = String.valueOf(randomLatitude);
     }
 
     if ("GENERATED".equals(longitude)) {
-      longitude = String.valueOf(randomHub.getLongitude());
+      longitude = String.valueOf(randomLongitude);
     }
 
     Hub hub = new Hub();
@@ -93,91 +96,121 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     hub.setLongitude(Double.parseDouble(longitude));
     hub.setFacilityType(facilityType);
     hub.setRegion(region);
-    hub.setSortHub(sortHub);
+    hub.setSortHub(Boolean.valueOf(sortHub));
 
     put(KEY_CREATED_HUB, hub);
-    putInList(KEY_LIST_OF_CREATED_HUBS, hub);
+    putInList(SortScenarioStorageKeys.KEY_SORT_LIST_OF_CREATED_HUBS, hub);
 
     facilitiesManagementPage.inFrame(page -> page.createNewHub(hub));
   }
 
   @Then("^Operator verify hub parameters on Facilities Management page:$")
   public void verifyHubParameters(Map<String, String> data) {
-    Hub expected = new Hub(resolveKeyValues(data));
+    data = resolveKeyValues(data);
+    Hub expected = new Hub();
+    if (StringUtils.isNotBlank(data.get("name"))) {
+      expected.setName(data.get("name"));
+    }
+    if (StringUtils.isNotBlank(data.get("facilityType"))) {
+      expected.setFacilityType(data.get("facilityType"));
+    }
+    if (StringUtils.isNotBlank(data.get("region"))) {
+      expected.setRegion(data.get("region"));
+    }
+    if (StringUtils.isNotBlank(data.get("displayName"))) {
+      expected.setShortName(data.get("displayName"));
+    }
+    if (StringUtils.isNotBlank(data.get("city"))) {
+      expected.setCity(data.get("city"));
+    }
+    if (StringUtils.isNotBlank(data.get("country"))) {
+      expected.setCountry(data.get("country"));
+    }
+    if (StringUtils.isNotBlank(data.get("latitude"))) {
+      expected.setLatitude(Double.valueOf(data.get("latitude")));
+    }
+    if (StringUtils.isNotBlank(data.get("longitude"))) {
+      expected.setLongitude(Double.valueOf(data.get("longitude")));
+    }
+    if (StringUtils.isNotBlank(data.get("status")) && (data.get("status")
+        .equalsIgnoreCase("disabled"))) {
+      expected.setStatus(data.get("status"));
+    }
+    if (StringUtils.isNotBlank(data.get("sortHub"))) {
+      expected.setSortHub(Boolean.valueOf(data.get("sortHub")));
+    }
     facilitiesManagementPage.inFrame(page -> {
       page.hubsTable.filterByColumn(COLUMN_NAME, expected.getName());
       Assertions.assertThat(page.hubsTable.isEmpty())
           .as("Hub with name [%s] was found", expected.getName()).isFalse();
       Hub actual = page.hubsTable.readEntity(1);
       expected.compareWithActual(actual);
+      expected.setId(actual.getId());
+      putInList(SortScenarioStorageKeys.KEY_SORT_LIST_OF_CREATED_HUBS, expected);
     });
   }
 
   @When("^Operator update Hub on page Hubs Administration using data below:$")
   public void operatorUpdateHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data) {
     data = resolveKeyValues(data);
-    Hub hub;
-    if (get(KEY_CREATED_HUB) != null) {
-      hub = get(KEY_CREATED_HUB);
-    } else {
-      hub = new Hub();
-      put(KEY_CREATED_HUB, hub);
-      putInList(KEY_LIST_OF_CREATED_HUBS, hub);
+    Hub hub = new Hub();
+    double randomNumber = Math.random() * (2) + 1;
+    double randomLatitude = Math.random() * (90);
+    double randomLongitude = Math.random() * (180);
+    if (randomNumber % 2 == 0) {
+      randomLatitude = -Math.random() * (90);
+      randomLongitude = -Math.random() * (180);
     }
-
-    String facilityType = data.get("facilityType");
-    String searchHubsKeyword = data.get("searchHubsKeyword");
-    String name = data.get("name");
-    String displayName = data.get("displayName");
-    String city = data.get("city");
-    String country = data.get("country");
-    String latitude = data.get("latitude");
-    String longitude = data.get("longitude");
-    String sortHub = data.get("sortHub");
-
-    Address address = AddressFactory.getRandomAddress();
-
-    if ("GENERATED".equals(city)) {
-      city = address.getCity();
-    }
-
-    if ("GENERATED".equals(country)) {
-      country = address.getCountry();
-    }
-
-    Hub randomHub = HubFactory.getRandomHub();
-
-    if ("GENERATED".equals(latitude)) {
-      latitude = String.valueOf(randomHub.getLatitude());
-    }
-
-    if ("GENERATED".equals(longitude)) {
-      longitude = String.valueOf(randomHub.getLongitude());
-    }
-
-    if (StringUtils.isNotBlank(facilityType)) {
+    if (StringUtils.isNotBlank(data.get("facilityType"))) {
+      String facilityType = data.get("facilityType");
       hub.setFacilityType(facilityType);
     }
-    if (StringUtils.isNotBlank(name)) {
+
+    String searchHubsKeyword = data.get("searchHubsKeyword");
+
+    if (StringUtils.isNotBlank(data.get("name"))) {
+      String name = data.get("name");
       hub.setName(name);
     }
-    if (StringUtils.isNotBlank(displayName)) {
+    if (StringUtils.isNotBlank(data.get("displayName"))) {
+      String displayName = data.get("displayName");
       hub.setShortName(displayName);
     }
-    if (StringUtils.isNotBlank(city)) {
+
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
+    if (StringUtils.isNotBlank(data.get("city"))) {
+      String city = data.get("city");
+      if ("GENERATED".equals(city)) {
+        city = "randomcity" + uniqueCode;
+      }
       hub.setCity(city);
     }
-    if (StringUtils.isNotBlank(country)) {
+    if (StringUtils.isNotBlank(data.get("country"))) {
+      String country = data.get("country");
+      if ("GENERATED".equalsIgnoreCase(country)) {
+        country = StandardTestConstants.NV_SYSTEM_ID;
+      }
       hub.setCountry(country);
     }
-    if (StringUtils.isNotBlank(latitude)) {
-      hub.setLatitude(Double.parseDouble(latitude));
+    if (StringUtils.isNotBlank(data.get("latitude"))) {
+      String latitude = data.get("latitude");
+      if("GENERATED".equalsIgnoreCase(latitude)){
+        hub.setLatitude(randomLatitude);
+      }else{
+        hub.setLatitude(Double.valueOf(latitude));
+      }
     }
-    if (StringUtils.isNotBlank(longitude)) {
-      hub.setLongitude(Double.parseDouble(longitude));
+    if (StringUtils.isNotBlank(data.get("longitude"))) {
+      String longitude = data.get("longitude");
+      if("GENERATED".equalsIgnoreCase(longitude)){
+        hub.setLongitude(randomLongitude);
+      }else{
+        hub.setLongitude(Double.valueOf(longitude));
+      }
     }
-    hub.setSortHub(sortHub);
-
+    String sortHub = data.get("sortHub");
+    hub.setSortHub(Boolean.valueOf(sortHub));
+    put(KEY_SORT_LIST_OF_UPDATED_HUBS, hub);
     facilitiesManagementPage.inFrame(
         page -> facilitiesManagementPage.updateHub(searchHubsKeyword, hub));
   }
@@ -197,9 +230,19 @@ public class FacilitiesManagementSteps extends AbstractSteps {
   }
 
   @Then("^Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info$")
-  public void operatorVerifyHubCsvFileIsDownloadedSuccessfullyOnPageHubsAdministrationAndContainsCorrectInfo() {
-    Hub hub = get(KEY_CREATED_HUB);
-    facilitiesManagementPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(hub);
+  public void operatorVerifyHubCsvFileIsDownloadedSuccessfullyOnPageHubsAdministrationAndContainsCorrectInfo(
+      Map<String, String> data) {
+    data = resolveKeyValues(data);
+    Hub expected = new Hub();
+    expected.setName(data.get("name"));
+    expected.setFacilityType(data.get("facilityType"));
+    expected.setRegion(data.get("region"));
+    expected.setShortName(data.get("displayName"));
+    expected.setCity(data.get("city"));
+    expected.setCountry(data.get("country"));
+    expected.setLatitude(Double.valueOf(data.get("latitude")));
+    expected.setLongitude(Double.valueOf(data.get("longitude")));
+    facilitiesManagementPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(expected);
   }
 
   @When("^Operator refresh hubs cache on Facilities Management page$")
@@ -210,20 +253,12 @@ public class FacilitiesManagementSteps extends AbstractSteps {
       pause2s();
     });
   }
-
-  @When("^Operator disable created hub on Facilities Management page$")
-  public void operatorDisableCreatedHub() {
-    Hub hub = get(KEY_CREATED_HUB);
-    facilitiesManagementPage.inFrame(page -> page.disableHub(hub.getName()));
-    hub.setActive(false);
-  }
-
   @When("Operator disable hub with name {string} on Facilities Management page")
   public void operatorDisableCreatedHub(String hubName) {
     Hub hub = new Hub();
     hub.setName(resolveValue(hubName));
-
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    facilitiesManagementPage.switchTo();
+    doWithRetry(() -> {
       try {
         facilitiesManagementPage.disableHub(hub.getName());
         hub.setActive(false);
@@ -233,20 +268,12 @@ public class FacilitiesManagementSteps extends AbstractSteps {
       }
     }, "Unable to find the hub, retrying...");
   }
-
-  @When("^Operator activate created hub on Facilities Management page$")
-  public void operatorActivateCreatedHub() {
-    Hub hub = get(KEY_CREATED_HUB);
-    facilitiesManagementPage.inFrame(page -> page.activateHub(hub.getName()));
-    hub.setActive(true);
-  }
-
   @When("Operator activate hub with name {string} on Facilities Management page")
   public void operatorActivateCreatedHub(String hubName) {
     Hub hub = new Hub();
     hub.setName(resolveValue(hubName));
-
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    facilitiesManagementPage.switchTo();
+    doWithRetry(() -> {
       try {
         facilitiesManagementPage.activateHub(hub.getName());
         hub.setActive(true);
@@ -263,7 +290,8 @@ public class FacilitiesManagementSteps extends AbstractSteps {
     Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
 
     if ("facility type".equals(columnName)) {
-     Assertions.assertThat(          actualHub.getFacilityTypeDisplay()).as("Facility Type Display").isEqualTo(expectedHub.getFacilityTypeDisplay());
+      Assertions.assertThat(actualHub.getFacilityType()).as("Facility Type Display")
+          .isEqualTo(expectedHub.getFacilityType());
     }
     if ("status".equals(columnName)) {
      Assertions.assertThat(actualHub.getActive()).as("Status").isEqualTo(expectedHub.getActive());
@@ -273,9 +301,12 @@ public class FacilitiesManagementSteps extends AbstractSteps {
      Assertions.assertThat(actualHub.getLongitude()).as("Hub longitude").isEqualTo(expectedHub.getLongitude());
     }
     if ("facility type and lat/long".equals(columnName)) {
-     Assertions.assertThat(          actualHub.getFacilityTypeDisplay()).as("Facility Type Display").isEqualTo(expectedHub.getFacilityTypeDisplay());
-     Assertions.assertThat(actualHub.getLatitude()).as("Hub latitude").isEqualTo(expectedHub.getLatitude());
-     Assertions.assertThat(actualHub.getLongitude()).as("Hub longitude").isEqualTo(expectedHub.getLongitude());
+      Assertions.assertThat(actualHub.getFacilityType()).as("Facility Type Display")
+          .isEqualTo(expectedHub.getFacilityType());
+      Assertions.assertThat(actualHub.getLatitude()).as("Hub latitude")
+          .isEqualTo(expectedHub.getLatitude());
+      Assertions.assertThat(actualHub.getLongitude()).as("Hub longitude")
+          .isEqualTo(expectedHub.getLongitude());
     }
   }
 

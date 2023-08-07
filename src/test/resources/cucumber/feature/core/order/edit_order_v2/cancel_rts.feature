@@ -31,9 +31,8 @@ Feature: Cancel RTS
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE ADDRESS                                                                                                                                 |
       | description | To Address 1 changed from 233E ST. JOHN'S ROAD to 9 TUA KONG GREEN To Postcode changed from 757995 to 455384 Is RTS changed from true to false |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                      |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: 9 TUA KONG GREEN \|\|\|\|455384 Zone ID: 22861 Destination Hub ID: 387 Lat, Long: 1.3184395712682, 103.925311276846 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name | UPDATE AV |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | Elsa Sender                |
       | email   | elsaf@ninja.com            |

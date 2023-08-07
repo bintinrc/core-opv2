@@ -88,7 +88,7 @@ Feature: Manual Update Order Status
       | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
       | Pending Pickup | Pending | PENDING      | PENDING        | Pending        | Pending          | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Pickup\n\nOld Order Status: Transit\nNew Order Status: Pending\n\nReason: Status updated for testing purposes |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

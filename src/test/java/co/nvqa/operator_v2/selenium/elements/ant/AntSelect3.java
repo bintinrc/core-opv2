@@ -162,8 +162,11 @@ public class AntSelect3 extends PageElement {
         + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
         + normalizeSpace(value) + "')]";
   }
+
   private String getItemValueLocator(String value) {
-    return getListBoxLocator() + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"+ value +"')]]]";
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"
+        + value + "')]]]";
   }
 
   private String getItemEqualsLocator(String value) {
@@ -216,8 +219,13 @@ public class AntSelect3 extends PageElement {
   }
 
   public void enterSearchTerm(String value) {
-    searchInput.setValue(value);
-    waitUntilLoaded();
+    var readonly = searchInput.getAttribute("readonly");
+    if (!"true".equals(readonly)) {
+      searchInput.setValue(value);
+      waitUntilLoaded();
+    } else {
+      click();
+    }
   }
 
   public void fillSearchTermAndEnter(String value) {

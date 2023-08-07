@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
@@ -182,6 +183,21 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     createTicketDialog.createTicket.click();
     waitUntilVisibilityOfNotification("Ticket has been created!");
+  }
+
+  public void editTicket(RecoveryTicket recoveryTicket) {
+    editTicketDialog.ticketSettings.get(0).selectValue(recoveryTicket.getInvestigatingDepartment());
+    editTicketDialog.ticketSettings.get(1).selectValue(recoveryTicket.getInvestigatingHub());
+    editTicketDialog.ticketStatus.selectValue(recoveryTicket.getTicketStatus());
+    editTicketDialog.ticketSettings.get(4).selectValue(recoveryTicket.getAssignTo());
+    editTicketDialog.ticketSettings.get(3).selectValue(recoveryTicket.getOrderOutcome());
+    editTicketDialog.newInstructions.clearAndSendkeysV2(recoveryTicket.getEnterNewInstruction());
+    editTicketDialog.ticketComments.clearAndSendkeysV2(recoveryTicket.getTicketComments());
+    editTicketDialog.customerZendeskId.forceClear();
+    editTicketDialog.customerZendeskId.sendKeys(recoveryTicket.getCustZendeskId());
+    editTicketDialog.shipperZendeskId.forceClear();
+    editTicketDialog.shipperZendeskId.sendKeys(recoveryTicket.getShipperZendeskId());
+    editTicketDialog.updateTicket.click();
   }
 
   public void filterByField(String field, String value) {
@@ -481,6 +497,21 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(xpath = "//div[@class='ant-select ant-select-in-form-item ant-select-single ant-select-show-arrow']")
     public AntSelect ticketStatus;
 
+    @FindBy(xpath = "//div[@class='ant-select-selector']")
+    public List<AntSelect3> ticketSettings;
+
+    @FindBy(xpath = "//input[@id='new_instruction']")
+    public PageElement newInstructions;
+
+    @FindBy(xpath = "//input[@id='comments']")
+    public PageElement ticketComments;
+
+    @FindBy(xpath = "//input[@id='customer_zendesk_id']")
+    public ForceClearTextBox customerZendeskId;
+
+    @FindBy(xpath = "//input[@id='shipper_zendesk_id']")
+    public ForceClearTextBox shipperZendeskId;
+
     @FindBy(xpath = "//span[starts-with(.,'Status change')]")
     public PageElement changesAndComments;
 
@@ -489,6 +520,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//button/span[.='Update Ticket']")
     public Button updateTicket;
+    @FindBy(xpath = "//h4[@id='last_instruction']")
+    public PageElement lastInstruction;
+
 
     public EditTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

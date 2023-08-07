@@ -196,13 +196,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
   }
 
+  public void waitWhileStationPageLoads() {
+    waitUntilInvisibilityOfElementLocated("//span[@class='ant-spin-dot ant-spin-dot-spin']", 60);
+    waitUntilPageLoaded();
+  }
+
   public void selectHubAndProceed(String hubName) {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       switchToStationHomeFrame();
     }
     waitWhilePageIsLoading();
-    if(modalHubSelection.size() == 0){
+    if (modalHubSelection.size() == 0) {
       refreshPage_v1();
     }
     hubs.enterSearchTerm(hubName);
@@ -1040,7 +1045,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void applyQuickFilter(String filter) {
-    waitWhilePageIsLoading();
+    waitWhileStationPageLoads();
     String filterXpath = f(QUICK_FILTER_BY_TEXT_XPATH, filter);
     WebElement quickFilter = getWebDriver().findElement(
         By.xpath(filterXpath));
@@ -1051,7 +1056,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     quickFilter.click();
     pause2s();
     Assert.assertTrue(f("Assert that the filter %s is applied", filter),
-        filterApplied.size() > 0 );
+        filterApplied.size() > 0);
+    waitWhileStationPageLoads();
   }
 
   public void selectCheckboxByTrackingId(List<String> trackingIds) {
