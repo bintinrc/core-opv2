@@ -410,7 +410,7 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -459,7 +459,7 @@ Feature: Create Recovery Ticket
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
@@ -526,4 +526,4 @@ Feature: Create Recovery Ticket
       | tags          | name          | description                                                                                                                                                   |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |

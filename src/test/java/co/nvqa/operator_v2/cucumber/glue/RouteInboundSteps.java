@@ -316,7 +316,7 @@ public class RouteInboundSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @Then("^Operator verify Reservations table in (.+) dialog using data below:$")
+  @Then("Operator verify Reservations table in {} dialog using data below:")
   public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String
       status,
       List<Map<String, String>> listOfData) {
