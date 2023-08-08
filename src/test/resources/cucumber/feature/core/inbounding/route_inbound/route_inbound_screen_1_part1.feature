@@ -177,9 +177,9 @@ Feature: Route Inbound Screen 1
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id} } |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify error message displayed on Route Inbound:
       | status       | 400 Unknown                        |
       | errorCode    | 103088                             |

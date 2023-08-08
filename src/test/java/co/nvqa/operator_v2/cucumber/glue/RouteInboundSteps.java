@@ -2,12 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.route.RouteResponse;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Reservation;
-import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
 import co.nvqa.operator_v2.model.MoneyCollectionCollectedOrderEntry;
@@ -316,7 +312,7 @@ public class RouteInboundSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @Then("^Operator verify Reservations table in (.+) dialog using data below:$")
+  @Then("Operator verify Reservations table in {} dialog using data below:")
   public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String
       status,
       List<Map<String, String>> listOfData) {
@@ -331,58 +327,26 @@ public class RouteInboundSteps extends AbstractSteps {
 
       value = data.get("location");
 
-      if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value)) {
-        reservationInfo.setLocation((Address) get(KEY_CREATED_ADDRESS));
-      } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ADDRESS_")) {
-        int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ADDRESS_", "").trim()) - 1;
-        reservationInfo
-            .setLocation(((List<Address>) get(KEY_LIST_OF_CREATED_ADDRESSES)).get(index));
-      } else if (StringUtils.isNotBlank(value)) {
+      if (StringUtils.isNotBlank(value)) {
         reservationInfo.setLocation(value);
       }
 
       value = data.get("readyToLatestTime");
-
-      if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value)) {
-        Reservation reservation = get(KEY_CREATED_RESERVATION);
-        value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
-      } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_")) {
-        int index =
-            Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
-        Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS))
-            .get(index);
-        value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
-      }
-
       if (StringUtils.isNotBlank(value)) {
-        //reservationInfo.setReadyToLatestTime(value);
+        reservationInfo.setReadyToLatestTime(value);
       }
 
       value = data.get("approxVolume");
-
-      if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value)) {
-        Reservation reservation = get(KEY_CREATED_RESERVATION);
-        value = reservation.getApproxVolume();
-      } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_")) {
-        int index =
-            Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
-        Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS))
-            .get(index);
-        value = reservation.getApproxVolume();
-      }
-
       if (StringUtils.isNotBlank(value)) {
         reservationInfo.setApproxVolume(value);
       }
 
       value = data.get("status");
-
       if (StringUtils.isNotBlank(value)) {
         reservationInfo.setStatus(value);
       }
 
       value = data.get("receivedParcels");
-
       if (StringUtils.isNotBlank(value)) {
         reservationInfo.setReceivedParcels(value);
       }
@@ -407,34 +371,8 @@ public class RouteInboundSteps extends AbstractSteps {
       }
 
       value = data.get("location");
-      if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value)) {
-        Order order = get(KEY_CREATED_ORDER);
-        orderInfo.setLocation(order);
-      } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_")) {
-        int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ORDER_", "").trim()) - 1;
-        orderInfo.setLocation(((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).get(index));
-      } else if (StringUtils.startsWithIgnoreCase(value, "CREATED_ORDER_FROM_")) {
-        int index = Integer.parseInt(value.replace("CREATED_ORDER_FROM_", "").trim()) - 1;
-        Order order = ((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).get(index);
-        String address =
-            order.getFromAddress1() + " " + order.getFromAddress2() + " " + order
-                .getFromPostcode()
-                + " " + order.getFromCountry();
-        orderInfo.setLocation(address.trim());
-      } else if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value)) {
-        Address location = get(KEY_CREATED_ADDRESS);
-        String address =
-            location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode()
-                + " " + location.getCountry();
-        orderInfo.setLocation(address);
-      } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ADDRESS_")) {
-        int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ADDRESS_", "").trim()) - 1;
-        Address location = ((List<Address>) get(KEY_LIST_OF_CREATED_ADDRESSES)).get(index);
-        String address =
-            location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode()
-                + " " + location.getCountry();
-        orderInfo.setLocation(address);
-      } else if (StringUtils.isNotBlank(value)) {
+
+      if (StringUtils.isNotBlank(value)) {
         orderInfo.setLocation(value);
       }
 
