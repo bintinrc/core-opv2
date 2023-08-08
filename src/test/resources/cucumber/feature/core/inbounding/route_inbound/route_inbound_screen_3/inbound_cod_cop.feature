@@ -106,7 +106,7 @@ Feature: Inbound COD & COP
       | fetchBy      | FETCH_BY_TRACKING_ID          |
       | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID}                    |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
       | driverName  | {ninja-driver-name}                       |
       | hubName     | {hub-name}                                |
       | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
