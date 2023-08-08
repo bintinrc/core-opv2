@@ -100,11 +100,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id}        |
       | driverName  | {ninja-driver-name}                       |
       | hubName     | {hub-name}                                |
-<<<<<<< HEAD
-      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
-=======
       | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[2].createdAt} |
->>>>>>> feature/NVQA-8221
       | wpPending   | 1                                         |
       | wpPartial   | 0                                         |
       | wpFailed    | 0                                         |
