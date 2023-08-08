@@ -44,7 +44,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @HighPriority
   Scenario Outline: Unable Van Inbound Parcels in Transit Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -171,7 +171,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @Happypath @ForceSuccessOrder @ArchiveRoute
+  @Happypath @ForceSuccessOrder @ArchiveRoute @HighPriority
   Scenario Outline: Complete Shipment Before Scan Parcel to Van Inbound (uid:a244ba55-96d4-417d-af81-42549ea00786)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -283,7 +283,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ArchiveRoute
+  @ArchiveRoute @HighPriority
   Scenario Outline: Van Inbound Parcels in Completed Shipment (uid:6fba8e5f-55b7-4402-925d-ca00660a8746)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -378,7 +378,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
-  @ArchiveRoute
+  @ArchiveRoute @HighPriority
   Scenario Outline: Van Inbound Parcels Not in Any Shipment (uid:c9292f60-eb4a-485c-8004-3711b20f3a71)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -453,7 +453,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @HighPriority
   Scenario Outline: Unable Van Inbound Parcels Yet to Parcel Sweep
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -492,7 +492,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @HighPriority
   Scenario Outline: Unable Van Inbound Parcels in Pending Shipment and Yet to Parcel Swept
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -527,7 +527,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @HighPriority
   Scenario Outline: Parcel Sweep Before Scan Parcel to Van Inbound
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
