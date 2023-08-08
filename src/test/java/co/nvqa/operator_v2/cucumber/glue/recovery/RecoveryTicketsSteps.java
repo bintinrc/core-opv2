@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.recovery.RecoveryTicketsPage;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
@@ -27,11 +26,6 @@ public class RecoveryTicketsSteps extends AbstractSteps {
   @Override
   public void init() {
     recoveryTicketsPage = new RecoveryTicketsPage(getWebDriver());
-  }
-
-  @Given("Operator goes to new Recovery Tickets page")
-  public void goToNewRecoveryTicketsPage() {
-    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/recovery-tickets-new");
   }
 
   @When("Operator create ticket by csv in Recovery Tickets page")
@@ -480,6 +474,61 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       Assertions.assertThat(recoveryTicketsPage.editTicketDialog.changesAndComments.getText())
           .as("changes and comments recorded").isEqualTo(
               "Status change: From '" + oldStatus + "' to '" + newStatus + "' by " + operatorName);
+    });
+  }
+
+  @When("Operator edit the ticket with the following and verifies it:")
+  public void editTicketDetails(Map<String, String> map) {
+    recoveryTicketsPage.inFrame((page) -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      String ticketStatus = mapOfData.get("ticketStatus");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String assignTo = mapOfData.get("assignTo");
+      String enterNewInstruction = mapOfData.get("enterNewInstruction");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String investigatingDept = mapOfData.get("investigatingDept");
+      String customerZendeskID = mapOfData.get("customerZendeskID");
+      String shipperZendeskID = mapOfData.get("shipperZendeskID");
+      String ticketComments = mapOfData.get("ticketComments");
+
+      if ("GENERATED".equals(enterNewInstruction)) {
+        enterNewInstruction = f("This instruction is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+      if ("RANDOM".equals(customerZendeskID)) {
+        customerZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
+      }
+
+      if ("RANDOM".equals(shipperZendeskID)) {
+        shipperZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
+      }
+
+      RecoveryTicket recoveryTicket = new RecoveryTicket();
+      recoveryTicket.setTicketStatus(ticketStatus);
+      recoveryTicket.setOrderOutcome(orderOutcome);
+      recoveryTicket.setAssignTo(assignTo);
+      recoveryTicket.setEnterNewInstruction(enterNewInstruction);
+      recoveryTicket.setTicketComments(ticketComments);
+      recoveryTicket.setInvestigatingDepartment(investigatingDept);
+      recoveryTicket.setInvestigatingHub(investigatingHub);
+      recoveryTicket.setCustZendeskId(customerZendeskID);
+      recoveryTicket.setShipperZendeskId(shipperZendeskID);
+
+      page.editTicket(recoveryTicket);
+      page.waitUntilInvisibilityOfToast();
+
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getTicketStatus());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getOrderOutcome());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getAssignTo());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingDepartment());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingHub());
+      Assertions.assertThat(page.editTicketDialog.customerZendeskId.getAttribute("value"))
+          .as("customer zendesk id").isEqualTo(recoveryTicket.getCustZendeskId());
+      Assertions.assertThat(page.editTicketDialog.shipperZendeskId.getAttribute("value"))
+          .as("shipper zendesk id").isEqualTo(recoveryTicket.getShipperZendeskId());
+      Assertions.assertThat(page.editTicketDialog.lastInstruction.getText()).as("last instruction")
+          .isEqualTo(recoveryTicket.getEnterNewInstruction());
     });
   }
 }
