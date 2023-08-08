@@ -35,7 +35,7 @@ Feature: Bulk search on pickup jobs
       | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[2].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
       | {KEY_CONTROL_CREATED_PA_JOBS[2].id} |
@@ -69,7 +69,7 @@ Feature: Bulk search on pickup jobs
       | abcde |
     Then Operator verifies invalid pickup ID error message below on Pickup Jobs Page:
       | Reservation/Job ID is invalid. It should be only number |
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
 
   @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Search pickup jobs and reservations by ID on Pickup Jobs page - more than 1000 ids
@@ -85,7 +85,7 @@ Feature: Bulk search on pickup jobs
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     Then Operator verifies invalid pickup ID error message below on Pickup Jobs Page:
       | Reservation/Job IDs are more than 1000. Only max 1000 IDs will be processed |
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
