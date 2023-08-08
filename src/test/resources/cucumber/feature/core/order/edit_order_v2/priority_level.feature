@@ -100,8 +100,9 @@ Feature: Priority Level
       | granularStatus | Completed                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Priority Level to "2" on Edit Order V2 page
-    And Operator verifies that error react notification displayed:
-      | top | Not allowed to update order after completion. |
+    Then Operator verifies that error react notification displayed:
+      | top    | Status 200: Unknown                                              |
+      | bottom | ^.*Error Message: Not allowed to update order after completion.* |
     And Operator verify Current priority is "0" on Edit Order V2 page
 
   Scenario: Edit Order - Add Priority Level more than 3

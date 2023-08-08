@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.recovery.RecoveryTicketsPage;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
@@ -19,7 +18,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.openqa.selenium.Keys;
 
 public class RecoveryTicketsSteps extends AbstractSteps {
 
@@ -430,14 +428,11 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator search created ticket by {string} filter with values:")
-  public void searchTicketByFilter(String field, List<String> values) {
+  @When("Operator search created ticket by {string} filter with value {string}")
+  public void searchTicketByFilter(String field, String value) {
     recoveryTicketsPage.inFrame(() -> {
-      final List<String> finalValues = values.stream()
-          .map(StringUtils::trim)
-          .flatMap(s -> Arrays.stream(s.split(",")))
-          .collect(Collectors.toList());
-      recoveryTicketsPage.filterByField(field, resolveValues(finalValues));
+      final String finalValue = resolveValue(value);
+      recoveryTicketsPage.filterByField(field, finalValue);
     });
   }
 
@@ -482,69 +477,58 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-  @Given("Operator clicks {string} button on Recovery Tickets Page")
-  public void operatorClicksButtonRecoveryTicketsPage(String buttonName) {
-    recoveryTicketsPage.inFrame(page -> {
-      switch (buttonName) {
-        case "Select All Shown":
-          page.resultsTable.actionButton.click();
-          page.resultsTable.selectAll.click();
-          break;
-        case "Clear all selections":
-          page.clearAllSelections.click();
-          break;
-        case "Bulk Update":
-          page.bulkUpdate.click();
-          break;
-        case "Edit Filter":
-          page.editFilter.click();
-          break;
-        case "Load Selection":
-          page.loadSelection.click();
-          break;
-      }
-    });
-  }
-
-  @When("Operator bulk update tickets on new page Recovery Tickets using data below:")
-  public void operatorBulkUpdateTickets(Map<String, String> map) {
-    recoveryTicketsPage.inFrame(() -> {
+  @When("Operator edit the ticket with the following and verifies it:")
+  public void editTicketDetails(Map<String, String> map) {
+    recoveryTicketsPage.inFrame((page) -> {
       Map<String, String> mapOfData = resolveKeyValues(map);
       String ticketStatus = mapOfData.get("ticketStatus");
-      String investigatingDepartment = mapOfData.get("investigatingDepartment");
-      String investigatingHub = mapOfData.get("investigatingHub");
       String orderOutcome = mapOfData.get("orderOutcome");
-      String ticketComment = mapOfData.get("ticketComment");
-      String assignee = mapOfData.get("assignee");
-      String newInstruction = mapOfData.get("newInstruction");
+      String assignTo = mapOfData.get("assignTo");
+      String enterNewInstruction = mapOfData.get("enterNewInstruction");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String investigatingDept = mapOfData.get("investigatingDept");
+      String customerZendeskID = mapOfData.get("customerZendeskID");
+      String shipperZendeskID = mapOfData.get("shipperZendeskID");
+      String ticketComments = mapOfData.get("ticketComments");
 
-      if ("GENERATED".equals(ticketComment)) {
-        ticketComment = f("This ticket notes is created by automation at %s.",
+      if ("GENERATED".equals(enterNewInstruction)) {
+        enterNewInstruction = f("This instruction is created by automation at %s.",
             DTF_CREATED_DATE.format(ZonedDateTime.now()));
       }
+      if ("RANDOM".equals(customerZendeskID)) {
+        customerZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
+      }
 
-      if ("GENERATED".equals(newInstruction)) {
-        newInstruction = f("This instruction is created by automation at %s.",
-            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      if ("RANDOM".equals(shipperZendeskID)) {
+        shipperZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
       }
 
       RecoveryTicket recoveryTicket = new RecoveryTicket();
       recoveryTicket.setTicketStatus(ticketStatus);
       recoveryTicket.setOrderOutcome(orderOutcome);
-      recoveryTicket.setInvestigatingDepartment(investigatingDepartment);
+      recoveryTicket.setAssignTo(assignTo);
+      recoveryTicket.setEnterNewInstruction(enterNewInstruction);
+      recoveryTicket.setTicketComments(ticketComments);
+      recoveryTicket.setInvestigatingDepartment(investigatingDept);
       recoveryTicket.setInvestigatingHub(investigatingHub);
-      recoveryTicket.setTicketComments(ticketComment);
-      recoveryTicket.setEnterNewInstruction(newInstruction);
-      recoveryTicket.setAssignTo(assignee);
-      recoveryTicketsPage.bulkUpdate(recoveryTicket);
-    });
-  }
+      recoveryTicket.setCustZendeskId(customerZendeskID);
+      recoveryTicket.setShipperZendeskId(shipperZendeskID);
 
-  @When("Operator Add {string} filter")
-  public void operatorAddFilter(String filter) {
-    recoveryTicketsPage.inFrame(page -> {
-      page.addFilter.sendKeys(filter);
-      page.addFilter.sendKeys(Keys.RETURN);
+      page.editTicket(recoveryTicket);
+      page.waitUntilInvisibilityOfToast();
+
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getTicketStatus());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getOrderOutcome());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getAssignTo());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingDepartment());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingHub());
+      Assertions.assertThat(page.editTicketDialog.customerZendeskId.getAttribute("value"))
+          .as("customer zendesk id").isEqualTo(recoveryTicket.getCustZendeskId());
+      Assertions.assertThat(page.editTicketDialog.shipperZendeskId.getAttribute("value"))
+          .as("shipper zendesk id").isEqualTo(recoveryTicket.getShipperZendeskId());
+      Assertions.assertThat(page.editTicketDialog.lastInstruction.getText()).as("last instruction")
+          .isEqualTo(recoveryTicket.getEnterNewInstruction());
     });
   }
 }

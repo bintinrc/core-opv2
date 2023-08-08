@@ -1780,8 +1780,13 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("Operator verifies that there will be a toast of successfully downloaded airway bill")
   public void operatorVerifiesThatThereWillBeAToastOfSuccessfullyDownloadedAirwayBill() {
     editOrderPage.switchToOtherWindowUrlContains("https://operatorv2-qa.ninjavan.co/#/my/order");
-    editOrderPage.waitUntilVisibilityOfToast("Attempting to print waybill(s)");
-    editOrderPage.waitUntilInvisibilityOfToast("Print waybill(s) successfully");
+    editOrderPage.switchTo();
+    doWithRetry(() -> {
+      Assertions.assertThat(
+          editOrderPage.findElementByXpath(
+                  "//div[contains(text(), 'Print waybill(s) successfully')]")
+              .isDisplayed()).isTrue();
+    }, "Print waybill(s) successfully");
   }
 
   @When("Operator opens and verifies the downloaded airway bill pdf")

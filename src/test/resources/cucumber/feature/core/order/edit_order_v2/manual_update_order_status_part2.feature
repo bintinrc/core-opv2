@@ -159,7 +159,7 @@ Feature: Manual Update Order Status
       | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                   |
       | On Vehicle for Delivery | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Delivery Status: Fail\nNew Delivery Status: Pending\n\nOld Granular Status: Pending Reschedule\nNew Granular Status: On Vehicle for Delivery\n\nOld Order Status: Delivery fail\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - On Vehicle for Delivery, Latest Delivery is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -263,7 +263,7 @@ Feature: Manual Update Order Status
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify menu item "Order Settings" > "Update Status" is disabled on Edit Order V2 page
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule to Arrived at Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

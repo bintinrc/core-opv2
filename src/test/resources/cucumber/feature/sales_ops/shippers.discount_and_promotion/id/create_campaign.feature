@@ -15,3 +15,15 @@ Feature: Create Campaign
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
+
+  @DeleteCampaign
+  Scenario: Success Create New Campaign - Discount Operator Flat - Multiple rules - ID
+    Given API Operator create new 'normal' shipper
+    Given Operator go to menu Shipper -> Discount & Promotions
+    When Operator click Create new campaign button in Discounts & Promotion Page
+    Then Operator enter campaign details using data below:
+      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType    | serviceLevel       | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Next Day; | 50;20;        |
+    When Operator clicks on publish button
+    Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
+    Then Operator verifies the published campaign page

@@ -134,7 +134,7 @@ Feature: New Recovery Tickets
       | creatorUserId      | {ticketing-creator-user-id}           |
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator click Find Tickets By CSV on Recovery Tickets Page
     And Operator downloads search csv sample file on Find Tickets by CSV modal
     And Operator upload a csv on Find Tickets By CSV dialog
@@ -175,7 +175,7 @@ Feature: New Recovery Tickets
       | creatorUserId      | {ticketing-creator-user-id}           |
       | creatorUserName    | {ticketing-creator-user-name}         |
       | creatorUserEmail   | {ticketing-creator-user-email}        |
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator click Find Tickets By CSV on Recovery Tickets Page
     And Operator downloads search csv sample file on Find Tickets by CSV modal
     And Operator upload a csv on Find Tickets By CSV dialog
@@ -797,7 +797,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | ROUTE INBOUNDING                      |
@@ -810,8 +810,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | PARCEL ON HOLD : <ticketSubtype>             |
@@ -847,7 +846,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                   | ROUTE INBOUNDING                      |
@@ -861,8 +860,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | PARCEL EXCEPTION : <ticketSubtype>           |
@@ -904,7 +902,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | ROUTE INBOUNDING                      |
@@ -918,8 +916,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SHIPPER ISSUE : <ticketSubtype>              |
@@ -958,7 +955,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | CUSTOMER COMPLAINT                    |
@@ -972,8 +969,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | DAMAGED                                      |
@@ -1003,7 +999,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | CUSTOMER COMPLAINT                    |
@@ -1015,8 +1011,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | MISSING                                      |
@@ -1046,7 +1041,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | DRIVER TURN                           |
@@ -1057,8 +1052,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SELF COLLECTION                              |
@@ -1088,7 +1082,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | DRIVER TURN                           |
@@ -1101,8 +1095,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SLA BREACH                                   |
@@ -1144,8 +1137,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                        |
       | shipperZendeskId        | 1                                        |
       | ticketNotes             | GENERATED                                |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verifies correct ticket details as following:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
       | ticketType/subType | SHIPPER ISSUE : <ticketSubtype>          |
@@ -1199,7 +1191,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | CUSTOMER COMPLAINT                    |
@@ -1213,8 +1205,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1244,7 +1235,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | CUSTOMER COMPLAINT                    |
@@ -1259,8 +1250,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1288,7 +1278,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | CUSTOMER COMPLAINT                    |
@@ -1300,8 +1290,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1332,7 +1321,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | DRIVER TURN                           |
@@ -1343,8 +1332,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1372,7 +1360,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | DRIVER TURN                           |
@@ -1384,8 +1372,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1408,7 +1395,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                   | ROUTE INBOUNDING                      |
@@ -1421,8 +1408,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1456,7 +1442,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                   | ROUTE INBOUNDING                      |
@@ -1470,8 +1456,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1499,7 +1484,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | ROUTE INBOUNDING                      |
@@ -1512,8 +1497,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1548,7 +1532,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource                 | ROUTE INBOUNDING                      |
@@ -1562,8 +1546,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1586,7 +1569,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | ROUTE INBOUNDING                      |
@@ -1599,8 +1582,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1628,7 +1610,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | ROUTE INBOUNDING                      |
@@ -1642,8 +1624,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1666,7 +1647,7 @@ Feature: New Recovery Tickets
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Recovery -> Recovery Tickets
+    Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on new page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | entrySource             | DRIVER TURN                           |
@@ -1679,8 +1660,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
-    When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+    When Operator search created ticket by "Tracking ID" filter with value "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1702,523 +1682,323 @@ Feature: New Recovery Tickets
       | order_outcome = NV Liable - Delivered | NV LIABLE - DELIVERED | Completed  | Completed              |
       | order_outcome = Resume delivery       | RESUME DELIVERY       | Transit    | Arrived at Sorting Hub |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = PARCEL ON HOLD - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Parcel Exception - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | PARCEL ON HOLD                        |
-      | subTicketType      | <ticketSubtype>                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (<ticketSubtype>)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | PARCEL ON HOLD                        |
-      | subTicketType      | <ticketSubtype>                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (<ticketSubtype>)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | PARCEL ON HOLD : <ticketSubtype>      |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | PARCEL ON HOLD : <ticketSubtype>      |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                   | ROUTE INBOUNDING                      |
+      | investigatingDepartment       | Fleet (First Mile)                    |
+      | investigatingHub              | {hub-name}                            |
+      | ticketType                    | PARCEL EXCEPTION                      |
+      | ticketSubType                 | COMPLETED ORDER                       |
+      | orderOutcomeInaccurateAddress | RELABELLED TO SEND                    |
+      | exceptionReason               | GENERATED                             |
+      | custZendeskId                 | 1                                     |
+      | shipperZendeskId              | 1                                     |
+      | ticketNotes                   | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | RELABELLED TO SEND        |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                                                                | ticketSubtype                  | orderOutcome    | postGranularStatus     |
-      | ticket_subtype = CUSTOMER REQUEST - order_outcome = RTS                     | CUSTOMER REQUEST               | RTS             | Arrived at Sorting Hub |
-      | ticket_subtype = SHIPPER REQUEST - order_outcome = RESUME DELIVERY          | SHIPPER REQUEST                | RESUME DELIVERY | Arrived at Sorting Hub |
-      | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) - order_outcome = XMAS CAGE | PAYMENT PENDING (NINJA DIRECT) | XMAS CAGE       | Cancelled              |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SLA BREACH - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Parcel On Hold - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | SLA BREACH                            |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (SLA BREACH)            |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | SLA BREACH                            |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (SLA BREACH)            |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | SLA BREACH                            |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | SLA BREACH                            |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | ROUTE INBOUNDING                      |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | PARCEL ON HOLD                        |
+      | ticketSubType           | PAYMENT PENDING (NINJA DIRECT)        |
+      | orderOutcome            | RESUME DELIVERY                       |
+      | exceptionReason         | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | XMAS CAGE                 |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                                   | orderOutcome                   | postGranularStatus     |
-      | order_outcome = NV Liable - XMAS CAGE          | NV LIABLE - XMAS CAGE          | Cancelled              |
-      | order_outcome = Resume delivery                | RESUME DELIVERY                | Arrived at Sorting Hub |
-      | order_outcome = NV Liable - Delivered          | NV LIABLE - DELIVERED          | Completed              |
-      | order_outcome = NV Liable - XMAS CAGE (Tiktok) | NV LIABLE - XMAS CAGE (TIKTOK) | Cancelled              |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = DAMAGED - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Shipper Issue  - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | DAMAGED                               |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)               |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | DAMAGED                               |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)               |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | DAMAGED                               |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | DAMAGED                               |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                 | ROUTE INBOUNDING                      |
+      | investigatingDepartment     | Fleet (First Mile)                    |
+      | investigatingHub            | {hub-name}                            |
+      | ticketType                  | SHIPPER ISSUE                         |
+      | ticketSubType               | POOR PACKAGING                        |
+      | orderOutcomeDuplicateParcel | NV TO REPACK AND SHIP                 |
+      | issueDescription            | GENERATED                             |
+      | custZendeskId               | 1                                     |
+      | shipperZendeskId            | 1                                     |
+      | ticketNotes                 | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | CONFISCATED BY CUSTOMS    |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                                              | orderOutcome                              | postGranularStatus     |
-      | order_outcome = NV Liable - PARCEL DISPOSED               | NV LIABLE - PARCEL DISPOSED               | Cancelled              |
-      | order_outcome = NV LIABLE - RETURN PARCEL                 | NV LIABLE - RETURN PARCEL                 | Arrived at Sorting Hub |
-      | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED       | NV LIABLE - FULL - PARCEL DELIVERED       | Completed              |
-      | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED    | NV LIABLE - PARTIAL - PARCEL DELIVERED    | Completed              |
-      | order_outcome = NV LIABLE - PARTIAL - RESUME DELIVERY     | NV LIABLE - PARTIAL - RESUME DELIVERY     | Arrived at Sorting Hub |
-      | order_outcome = NV NOT LIABLE - PARTIAL - RESUME DELIVERY | NV NOT LIABLE - PARTIAL - RESUME DELIVERY | Arrived at Sorting Hub |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = MISSING - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Missing - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | MISSING                               |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | MISSING                               |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | MISSING                               |
-      | orderGranularStatus | Cancelled                             |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | MISSING                               |
-      | orderGranularStatus | Cancelled                             |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | MISSING                               |
+      | orderOutcomeMissing     | FOUND - INBOUND                       |
+      | parcelDescription       | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | CUSTOMER RECEIVED         |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                                  | orderOutcome                  |
-      | order_outcome = LOST - DECLARED               | LOST - DECLARED               |
-      | order_outcome = LOST - NO RESPONSE - DECLARED | LOST - NO RESPONSE - DECLARED |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SELF COLLECTION - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Damaged - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | SELF COLLECTION                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (SELF COLLECTION)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | SELF COLLECTION                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (SELF COLLECTION)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | SELF COLLECTION                       |
-      | orderGranularStatus | Completed                             |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | SELF COLLECTION                       |
-      | orderGranularStatus | Completed                             |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | CUSTOMER COMPLAINT                    |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | DAMAGED                               |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED   |
+      | parcelLocation          | DAMAGED RACK                          |
+      | liability               | Fleet (First Mile)                    |
+      | damageDescription       | GENERATED                             |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>           |
+      | orderOutcome        | NV LIABLE - PARCEL DISPOSED |
+      | assignTo            | Batoul samoudi              |
+      | enterNewInstruction | GENERATED                   |
+      | investigatingDept   | Recovery                    |
+      | investigatingHub    | SORT-2623 up                |
+      | customerZendeskID   | RANDOM                      |
+      | shipperZendeskID    | RANDOM                      |
+      | ticketComments      | Update Ticket For Testing   |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                           | orderOutcome           |
-      | order_outcome = PARCEL SCRAPPED        | PARCEL SCRAPPED        |
-      | order_outcome = COLLECTED BY SHIPPER   | COLLECTED BY SHIPPER   |
-      | order_outcome = COLLECTED BY CONSIGNEE | COLLECTED BY CONSIGNEE |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = PARCEL EXCEPTION - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Self Collection - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | PARCEL EXCEPTION                      |
-      | subTicketType      | INACCURATE ADDRESS                    |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | PARCEL EXCEPTION                      |
-      | subTicketType      | INACCURATE ADDRESS                    |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | PARCEL EXCEPTION : INACCURATE ADDRESS |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | PARCEL EXCEPTION : INACCURATE ADDRESS |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                 | DRIVER TURN                           |
+      | investigatingDepartment     | Fleet (First Mile)                    |
+      | investigatingHub            | {hub-name}                            |
+      | ticketType                  | SELF COLLECTION                       |
+      | orderOutcomeDuplicateParcel | COLLECTED BY CONSIGNEE                |
+      | custZendeskId               | 1                                     |
+      | shipperZendeskId            | 1                                     |
+      | ticketNotes                 | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | COLLECTED BY SHIPPER      |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                    | orderOutcome    | postGranularStatus     |
-      | order_outcome = RESUME DELIVERY | RESUME DELIVERY | Arrived at Sorting Hub |
-      | order_outcome = RTS             | RTS             | Arrived at Sorting Hub |
-      | order_outcome = RESUME PICKUP   | RESUME PICKUP   | Pending Pickup         |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
-  Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SHIPPER ISSUE - <Dataset Name>
+  Scenario Outline: Operator Update Single Ticket - Recovery Ticket - SLA BREACH - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | SHIPPER ISSUE                         |
-      | subTicketType      | <ticketSubtype>                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (<ticketSubtype>)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType         | SHIPPER ISSUE                         |
-      | subTicketType      | <ticketSubtype>                       |
-      | entrySource        | RECOVERY SCANNING                     |
-      | orderOutcomeName   | ORDER OUTCOME (<ticketSubtype>)       |
-      | investigatingParty | 456                                   |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | 117472837373252971898                 |
-      | creatorUserName    | Ekki Syam                             |
-      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
-    And Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator clicks "Select All Shown" button on Recovery Tickets Page
-    And Operator clicks "Bulk Update" button on Recovery Tickets Page
-    When Operator bulk update tickets on new page Recovery Tickets using data below:
-      | ticketStatus            | RESOLVED          |
-      | orderOutcome            | <orderOutcome>    |
-      | investigatingDepartment | Recovery          |
-      | investigatingHub        | {hub-name}        |
-      | assignee                | AUTOMATION EDITED |
-      | ticketComment           | GENERATED         |
-      | newInstruction          | GENERATED         |
-    And Operator clicks "Edit Filter" button on Recovery Tickets Page
-    And Operator Add "Created At" filter
-    And Operator search created ticket by "Ticket Status" filter with values:
-      | RESOLVED |
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType/subType  | SHIPPER ISSUE : <ticketSubtype>       |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
-    When Operator clear the filter search
-    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-    Then Operator verifies correct ticket details as following:
-      | trackingId          | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | ticketType/subType  | SHIPPER ISSUE : <ticketSubtype>       |
-      | orderGranularStatus | <postGranularStatus>                  |
-      | investigatingDept   | Recovery                              |
-      | investigatingHub    | {hub-name}                            |
-      | status              | RESOLVED                              |
-      | assignee            | AUTOMATION EDITED                     |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | DRIVER TURN                           |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | SLA BREACH                            |
+      | orderOutcome            | NV LIABLE - DELIVERED                 |
+      | breachReason            | Auto breach reason                    |
+      | breachLeg               | Forward                               |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator click ticket's action button
+    And Operator edit the ticket with the following and verifies it:
+      | ticketStatus        | <newTicketStatus>         |
+      | orderOutcome        | RESUME DELIVERY           |
+      | assignTo            | Batoul samoudi            |
+      | enterNewInstruction | GENERATED                 |
+      | investigatingDept   | Recovery                  |
+      | investigatingHub    | SORT-2623 up              |
+      | customerZendeskID   | RANDOM                    |
+      | shipperZendeskID    | RANDOM                    |
+      | ticketComments      | Update Ticket For Testing |
+    And Operator verify the status update event from "PENDING" to "<newTicketStatus>" by "QA Ninja" is recorded correctly
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET UPDATED |
 
     Examples:
-      | Dataset Name                                                           | ticketSubtype     | orderOutcome        | postGranularStatus     |
-      | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE | REJECTED RETURN   | DAMAGED - NV LIABLE | Cancelled              |
-      | ticket_subtype = REJECTED RETURN - order_outcome = MISSING - NV LIABLE | REJECTED RETURN   | MISSING - NV LIABLE | Cancelled              |
-      | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = RESUME DELIVERY   | SUSPICIOUS PARCEL | RESUME DELIVERY     | Arrived at Sorting Hub |
-      | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = PARCEL SCRAPPED   | SUSPICIOUS PARCEL | PARCEL SCRAPPED     | Completed              |
+      | Dataset Name                        | newTicketStatus |
+      | New Ticket Status = In Progress     | IN PROGRESS     |
+      | New Ticket Status = On Hold         | ON HOLD         |
+      | New Ticket Status = Pending Shipper | PENDING SHIPPER |
+

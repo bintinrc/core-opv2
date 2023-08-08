@@ -27,6 +27,11 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
 
   public static final String CAMPAIGN_BUTTON = "(//*[span[text()='%s'] and (name()='button' or name()='div') and %s])[last()] | //a[text()='%s' and %s]";
 
+  public static final String CAMPAIGN_COLUMN = "//div[@role='columnheader']//span[text()='%s']";
+
+  @FindBy (xpath = "//div[@class='container']/preceding-sibling::div[contains(@class,'ant-col')]")
+  public PageElement campaignCount;
+
   public DiscountAndPromotionPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -134,5 +139,9 @@ public class DiscountAndPromotionPage extends SimpleReactPage<DiscountAndPromoti
   public boolean verifyShippersCount() {
     return waitUntilVisibilityOfElementLocated(
         "(//div[contains(@class,'row-middle')]/span)[2]").isDisplayed();
+  }
+
+  public boolean verifyColumnPresent(String columnName) {
+    return waitUntilVisibilityOfElementLocated(CAMPAIGN_COLUMN, columnName).isDisplayed();
   }
 }
