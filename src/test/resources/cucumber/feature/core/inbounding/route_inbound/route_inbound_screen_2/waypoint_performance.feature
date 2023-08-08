@@ -61,8 +61,8 @@ Feature: Waypoint Performance
       | {shipper-v4-name} | 1       | 2     |
     When Operator click 'View orders or reservations' button for shipper #1 in Pending Waypoints dialog
     Then Operator verify Reservations table in Pending Waypoints dialog using data below:
-      | reservationId                            | location                                                            | readyToLatestTime                                                                                          | approxVolume                                       | status  | receivedParcels |
-      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithSpaceDelimiter} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].readyDatetime} - {KEY_LIST_OF_CREATED_RESERVATIONS[1].latestDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | Pending | 0               |
+      | reservationId                            | location                                                            | readyToLatestTime                                                                     | approxVolume                                       | status  | receivedParcels |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithSpaceDelimiter} | {gradle-current-date-yyyy-MM-dd} 15:00:00 - {gradle-current-date-yyyy-MM-dd} 18:00:00 | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | Pending | 0               |
     Then Operator verify Orders table in Pending Waypoints dialog using data below:
       | trackingId                            | stampId | location                                           | type              | status  | cmiCount | routeInboundStatus |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress}   | Delivery (Normal) | Pending | 0        |                    |
