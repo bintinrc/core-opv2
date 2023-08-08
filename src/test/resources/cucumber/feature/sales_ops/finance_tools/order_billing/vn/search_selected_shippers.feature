@@ -9,7 +9,7 @@ Feature: Order Billing
     Given API Gmail - Connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
     And API Gmail - Operator marks all gmail messages as read
 
-#@nad
+
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - VN (uid:ba9acffd-d7b3-4bf1-99e7-a1479b7ef8c4)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-normal-noDiscount-country-default-3-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
