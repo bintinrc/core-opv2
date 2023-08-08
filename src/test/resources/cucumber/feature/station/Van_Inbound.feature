@@ -11,11 +11,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator adds parcels to shipment using following data:
@@ -37,7 +40,6 @@ Feature: Van Inbound
       | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
       | WarningMessage | Please hub inbound shipment!    |
 
-
     Examples:
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
@@ -48,11 +50,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator create new route using data below:
@@ -79,7 +84,6 @@ Feature: Van Inbound
       | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
       | WarningMessage | Please hub inbound shipment!    |
 
-
     Examples:
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
@@ -90,11 +94,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator create new route using data below:
@@ -130,11 +137,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator create new route using data below:
@@ -157,7 +167,6 @@ Feature: Van Inbound
       | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
       | WarningMessage | Please hub inbound shipment!    |
 
-
     Examples:
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
@@ -168,11 +177,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator create new route using data below:
@@ -223,11 +235,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -274,11 +289,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -319,11 +337,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -363,11 +384,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -398,11 +422,14 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <OrigHubId>                     |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <OrigHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator adds parcels to shipment using following data:
@@ -432,8 +459,10 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator adds parcels to shipment using following data:
@@ -469,8 +498,10 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
     And API Operator creates shipment using data below:
       | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
     And API Operator adds parcels to shipment using following data:
@@ -502,8 +533,10 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -538,8 +571,10 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<CorrectHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -568,18 +603,18 @@ Feature: Van Inbound
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <CorrectHubId>                  |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <CorrectHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<CorrectHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <WrongHubId>                    |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <WrongHubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
