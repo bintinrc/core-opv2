@@ -14,7 +14,7 @@ Feature: Bulk search on pickup jobs
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
@@ -53,7 +53,7 @@ Feature: Bulk search on pickup jobs
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator clears the filter jobs list on Pickup Jobs Page
@@ -64,7 +64,7 @@ Feature: Bulk search on pickup jobs
   Scenario:Search pickup jobs by job ID on Pickup Jobs page - invalid separation - letter
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
       | abcde |
     Then Operator verifies invalid pickup ID error message below on Pickup Jobs Page:
@@ -80,7 +80,7 @@ Feature: Bulk search on pickup jobs
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
+    Then Operator check Filter Job button is disabled on Pickup job page
     Given Operator fill more than 1000 pickup jobs Id on Pickup Jobs Page:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     Then Operator verifies invalid pickup ID error message below on Pickup Jobs Page:

@@ -662,7 +662,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @Then("Operator verifies Filter Job button is disabled on Pickup job page")
+  @Then("Operator check Filter Job button is disabled on Pickup job page")
   public void operatorVerifiesFilterJobButtonDisabled() {
     pickupAppointmentJobPage.inFrame(
         () -> Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
