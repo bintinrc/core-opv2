@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @CollectionSummary @current
+@OperatorV2 @Core @Inbounding @RouteInbound @CollectionSummary
 Feature: Collection Summary
 
   Background:
@@ -225,7 +225,7 @@ Feature: Collection Summary
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineFromAddress} | Pick Up (Return) | Success | 0        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineFromAddress} | Pick Up (Return) | Success | 0        | Inbounded          |
 
-  @ArchiveRouteCommonV2 @wip
+  @ArchiveRouteCommonV2
   Scenario: View Reservations
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
