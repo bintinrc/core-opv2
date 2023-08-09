@@ -6,6 +6,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -141,6 +142,12 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator validate {string} text is displayed")
+  public void operatorValidateTextIsDisplayed(String text) {
+    validateAttemptPage.validateTextIsDisplayed(text);
+    takesScreenshot();
+  }
+
 
   @When("Operator selects the Invalid Attempt Reason {string}")
   public void operatorSelectsTheInvalidAttemptReason(String invalidAttemptReason) {
@@ -148,7 +155,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies the following details in the POD validate details page")
+  @Then("Operator verifies the following details in the POD validate/audit/review details page")
   public void operatorVerifiesTheFollowingDetailsInThePODValidateDetailsPage(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -279,4 +286,42 @@ public class ValidateAttemptSteps extends AbstractSteps {
   public void operatorGoesBackOnBrowser() {
     validateAttemptPage.navigateBackInBrowser();
   }
+
+  @When("Operator click back to task button")
+  public void operatorClickbackToTaskButton() {
+    validateAttemptPage.clickbackTotask();
+  }
+
+  @When("Operator filters the PODs to audit based on below criteria")
+  public void operatorFiltersThePODsToAuditBasedOnBelowCriteria(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String validatorName = mapOfData.get("validatorName");
+    String startDate = mapOfData.get("startDate");
+    String endDate = mapOfData.get("endDate");
+    validateAttemptPage.switchToFrame();
+
+    validateAttemptPage.selectDateTime(startDate, endDate);
+    if (StringUtils.isNotBlank(validatorName)) {
+      validateAttemptPage.selectValidator(validatorName);
+    }
+
+    pause2s();
+    validateAttemptPage.clickButton("Start Auditing");
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that the following texts are available in the POD validation report file {string}")
+  public void operatorverifiesThatTheFollowingTextsAreAvailableInThePODValidationReportFile(
+      String filePattern,
+      List<String> expected) {
+    expected = resolveValues(expected);
+    String downloadedCsvFile = validateAttemptPage.getLatestDownloadedFilename(
+        filePattern);
+    expected.forEach(
+        (expectedText) -> validateAttemptPage.verifyFileDownloadedSuccessfully(
+            downloadedCsvFile,
+            expectedText, true));
+  }
+
 }
