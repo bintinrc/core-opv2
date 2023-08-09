@@ -22,6 +22,8 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
   public PageElement notifTitle;
   @FindBy(xpath="//span[@class='ant-btn-loading-icon']")
   public PageElement loadingIcon;
+  @FindBy(xpath="//button[@data-testid='load-users-button']")
+  public PageElement loadUsersButton;
   @FindBy(xpath="//div[@class='ant-notification-notice-description']")
   public PageElement notifDescription;
   private static final String SEARCH_USER_XPATH ="(//input[@class='ant-input'])['%s']";
@@ -88,6 +90,9 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     waitUntilVisibilityOfElementLocated(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
     click(ADD_SORT_USER_BUTTON_XPATH);
+    if (!isElementExist(ADD_EDIT_SORT_USER_DIALOG_XPATH)) {
+      click(ADD_SORT_USER_BUTTON_XPATH);
+    }
     waitUntilVisibilityOfElementLocated(ADD_EDIT_SORT_USER_DIALOG_XPATH);
     getWebDriver().switchTo().parentFrame();
   }
@@ -245,7 +250,11 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage {
 
   public void clickAllSortAppUser() {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-    click(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
+      click(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
+
+    if (!isElementExist("//tbody//td[@class='hub_name']")){
+      click(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
+    }
     waitUntilVisibilityOfElementLocated("//tbody//td[@class='hub_name']");
     getWebDriver().switchTo().parentFrame();
   }

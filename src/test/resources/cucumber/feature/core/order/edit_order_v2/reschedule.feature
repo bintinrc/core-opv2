@@ -5,7 +5,7 @@ Feature: Reschedule
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -112,7 +112,7 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -247,7 +247,7 @@ Feature: Reschedule
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -390,7 +390,7 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -529,7 +529,7 @@ Feature: Reschedule
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Pickup - Edit Pickup Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -650,7 +650,7 @@ Feature: Reschedule
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | archived   | 1                                                          |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -797,7 +797,7 @@ Feature: Reschedule
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery - Failure Reason Code Id 13
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
