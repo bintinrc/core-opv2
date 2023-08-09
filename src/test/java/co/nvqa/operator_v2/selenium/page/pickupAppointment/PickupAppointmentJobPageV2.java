@@ -165,20 +165,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   }
 
   public void choosePresetByName(String presetName) {
-    HashMap keys = new HashMap();
-    presetFilters.sendKeys(Keys.ARROW_UP);
-    while (true) {
-      String name = webDriver.findElement(
-          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
-      if (name.equalsIgnoreCase(presetName)) {
-        break;
-      }
-      if (keys.containsKey(name)) {
-        throw new java.util.NoSuchElementException("the preset name is not in the list");
-      }
-      keys.put(name, "founded");
-      presetFilters.sendKeys(Keys.ARROW_DOWN);
-    }
+    presetFilters.sendKeys(presetName);
     presetFilters.sendKeys(Keys.ENTER);
   }
 
