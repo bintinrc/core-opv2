@@ -1238,11 +1238,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       String routeName = resolveValue(route);
       String jobId = resolveValue(JobId);
 
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         pickupAppointmentJobPage.inFrame(() -> {
           pickupAppointmentJobPage.editJobRouteModal.selectRouteForJob(routeName, jobId);
         });
-      }, 1000, 5);
     });
   }
 
@@ -1657,6 +1655,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies that Filter Jobs button on the modal is disabled on Pickup job page")
+  public void operatorVerifiesFilterJobButtonModalDisabled() {
+    pickupAppointmentJobPage.inFrame(
+        () -> Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
+            getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
+  }
 
 }
 
