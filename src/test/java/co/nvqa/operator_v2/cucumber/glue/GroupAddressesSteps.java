@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.GroupAddressesPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
@@ -32,6 +33,14 @@ public class GroupAddressesSteps extends AbstractSteps{
     });
   }
 
+  @When("Operator select zone {string} on Group Addresses page")
+  public void inputZone(String zone) {
+    groupAddressesPage.inFrame(page ->{
+      groupAddressesPage.searchZone(zone);
+
+    });
+  }
+
   @Then("Operator verify that address {string} is displayed on pickup address column")
   public void verifyPickupAddress(String address) {
     groupAddressesPage.inFrame(page ->{
@@ -47,6 +56,20 @@ public class GroupAddressesSteps extends AbstractSteps{
       Assertions.assertThat(groupAddressesPage.isCellShipperIdDisplayed()).as("Shipper Id is displayed").isTrue();
       Assertions.assertThat(groupAddressesPage.isCellShipperNameDisplayed()).as("Shipper Name is displayed").isTrue();
       Assertions.assertThat(groupAddressesPage.isCellLatestPickupDateDisplayed()).as("Latest Pickup is displayed").isTrue();
+    });
+  }
+
+  @And("Operator clicks on the load selection button on Group Addresses page")
+  public void operatorClicksOnTheLoadSelectionButton() {
+    groupAddressesPage.inFrame(page ->{
+      groupAddressesPage.clickLoadSelection();
+    });
+  }
+
+  @When("Operator select {string} on Grouping option")
+  public void selectGrouping(String grouping) {
+    groupAddressesPage.inFrame(page -> {
+      groupAddressesPage.selectGrouping(grouping);
     });
   }
 }
