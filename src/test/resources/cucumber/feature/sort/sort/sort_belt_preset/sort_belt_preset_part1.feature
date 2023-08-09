@@ -50,10 +50,6 @@ Feature: Sort Belt Preset
       | name        | {KEY_SORT_CREATED_SORT_BELT_PRESET.name}        |
       | description | {KEY_SORT_CREATED_SORT_BELT_PRESET.description} |
       | rulesString | {KEY_SORT_CREATED_SORT_BELT_PRESET.rulesString} |
-#
-#    When DB Operator check saved sort belt preset by name
-#    And Operator verify preset created correctly on Sort Belt Preset detail page
-#      | shipper       | {shipper-v4-name}     |
 
 #  https://studio.cucumber.io/projects/208191/test-plan/folders/2172562/scenarios/7016680
   @CleanCreatedSortBeltPresetV2
@@ -92,10 +88,6 @@ Feature: Sort Belt Preset
       | description | RANDOM |
     And Operator click Cancel in the Create Preset UI
     When Operator search sort belt preset by "{KEY_CREATED_SORT_BELT_PRESET_NAME}" name and make sure its "not exist"
-#    And Operator verify no sort belt preset is created
-#      | name        | {KEY_SORT_CREATED_SORT_BELT_PRESET.name}        |
-#      | description | {KEY_SORT_CREATED_SORT_BELT_PRESET.description} |
-#      | rulesString | {KEY_SORT_CREATED_SORT_BELT_PRESET.rulesString} |
 
 #  https://studio.cucumber.io/projects/208191/test-plan/folders/2172562/scenarios/7016589
   @CleanCreatedSortBeltPresetV2

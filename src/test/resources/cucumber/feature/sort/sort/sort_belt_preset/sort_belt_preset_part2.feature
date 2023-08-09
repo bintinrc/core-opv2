@@ -6,7 +6,6 @@ Feature: Sort Belt Preset
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 #  https://studio.cucumber.io/projects/208191/test-plan/folders/2172562/scenarios/7016503
-
   Scenario: Sort Belt Preset - Create Preset - Cancel Creation
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Sort -> Sort Belt Preset
@@ -22,11 +21,8 @@ Feature: Sort Belt Preset
       | values      | ABC        |
     And Operator click Cancel in the Create Preset UI
     When Operator search sort belt preset by "{KEY_CREATED_SORT_BELT_PRESET_NAME}" name and make sure its "not exist"
-#    When DB Operator check saved sort belt preset by name
-#    And Operator verify no sort belt preset is created
 
 #  https://studio.cucumber.io/projects/208191/test-plan/folders/2172562/scenarios/7016533
-
   Scenario: Sort Belt Preset - Create Preset - Duplicate Rules
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Sort -> Sort Belt Preset
