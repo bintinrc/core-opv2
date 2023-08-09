@@ -109,6 +109,12 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-image']//img//ancestor::div[@class='ant-row']//div[text()='Signature']")
   public PageElement podSignature;
 
+  @FindBy(xpath = "//div[@data-testid='pod-validation_task_back-button']")
+  public PageElement backToTask;
+
+  @FindBy(xpath = "//label[text()='Select Validator']//parent::div//following::div[@class='ant-select-selector'][1]")
+  public AntSelect2 selectValidator;
+
 
   public ValidateAttemptPage(WebDriver webDriver) {
     super(webDriver);
@@ -230,6 +236,15 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     String modalXpath = f("//div[text()='%s']", modalText);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(modalXpath)).isDisplayed())
         .as(f("Validation for Modal Title Text : %s", modalText))
+        .isTrue();
+  }
+
+  public void validateTextIsDisplayed(String modalText) {
+    waitWhilePageIsLoading();
+    pause2s();
+    String textXpath = f("//*[text()='%s']", modalText);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(textXpath)).isDisplayed())
+        .as(f("Validation for Text : %s", modalText))
         .isTrue();
   }
 
@@ -473,6 +488,20 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     Assertions.assertThat(pendingAssignedPodText.isDisplayed())
         .as("Validation for Pending Assigned POD popup")
         .isTrue();
+  }
+
+  public void clickbackTotask() {
+    backToTask.click();
+  }
+
+  public void selectValidator(String validatorName) {
+    selectValidator.enterSearchTerm(validatorName);
+    pause2s();
+    selectValidator.sendReturnButton();
+    webDriver.findElement(
+            By.xpath(
+                "//label[text()='Select Validator']//parent::div//following::div[@class='ant-select-selector'][1]//input"))
+        .sendKeys(Keys.TAB);
   }
 
 }
