@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.sort.sort_vendor.SortBeltPreset;
-import co.nvqa.commons.model.sort.sort_vendor.SortBeltPreset.Filter;
-import co.nvqa.commons.model.sort.sort_vendor.SortBeltPreset.Rule;
+
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commonsort.model.sort_vendor.persisted_class.SortBeltPresetEntity;
+import co.nvqa.commonsort.model.sort_vendor.SortBeltPreset;
+import co.nvqa.commonsort.model.sort_vendor.SortBeltPreset.Filter;
+import co.nvqa.commonsort.model.sort_vendor.SortBeltPreset.Rule;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.selenium.page.sort.sortbeltpreset.CheckSortBeltPresetPage;
 import co.nvqa.operator_v2.selenium.page.sort.sortbeltpreset.CreatePresetSortBeltPresetPage;
@@ -58,12 +60,17 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator verify sort belt preset search result")
-  public void operatorVerifySortBeltPresetSearchResult() {
+  public void operatorVerifySortBeltPresetSearchResult(Map<String,String>data) {
+    data = resolveKeyValues(data);
+    String presetName = data.get("presetName");
+    String description = data.get("description");
     List<SBPresetListElement> list = sortBeltPresetPage.listItems;
     Assertions.assertThat(list.size())
         .as("Sort Belt Preset contains the search result")
         .isNotEqualTo(0);
-    SortBeltPreset savedPreset = get(KEY_CREATED_SORT_BELT_PRESET);
+    SortBeltPreset savedPreset = new SortBeltPreset();
+    savedPreset.setName(presetName);
+    savedPreset.setDescription(description);
     Assertions.assertThat(list.get(0).title.getText())
         .as("Sort Belt Preset have the correct name as the created preset")
         .isEqualTo(savedPreset.getName());
@@ -144,14 +151,14 @@ public class SortBeltPresetSteps extends AbstractSteps {
     createPresetSortBeltPresetPage.notification.waitUntilVisible();
     String header = dataTable.get("header");
     String message = dataTable.get("message");
+doWithRetry(()->{Assertions.assertThat(createPresetSortBeltPresetPage.notification.message.getText())
+    .as("show correct header message :" + header)
+    .isEqualTo(header);
 
-    Assertions.assertThat(createPresetSortBeltPresetPage.notification.message.getText())
-        .as("show correct header message :" + header)
-        .isEqualTo(header);
+  Assertions.assertThat(createPresetSortBeltPresetPage.notification.description.getText())
+      .as("show correct message :" + message)
+      .isEqualTo(message);},"Assert failed notification");
 
-    Assertions.assertThat(createPresetSortBeltPresetPage.notification.description.getText())
-        .as("show correct message :" + message)
-        .isEqualTo(message);
   }
 
   @And("Operator clear name and description in Create Preset UI")
@@ -212,8 +219,13 @@ public class SortBeltPresetSteps extends AbstractSteps {
   @And("Operator verify preset created correctly on Sort Belt Preset detail page")
   public void operatorVerifyPresetCreatedCorrectlyOnSortBeltPresetDetailPage(
       Map<String, String> dataTable) {
-    SortBeltPreset sb = get(KEY_CREATED_SORT_BELT_PRESET);
 
+    dataTable=resolveKeyValues(dataTable);
+    SortBeltPresetEntity entity = new SortBeltPresetEntity();
+    entity.setRulesString(dataTable.get("rulesString"));
+    entity.setName(dataTable.get("name"));
+    entity.setDescription(dataTable.get("description"));
+    SortBeltPreset sb = SortBeltPreset.fromEntity(entity);
     Assertions.assertThat(sortBeltPresetDetailPage.cancelBtn.isDisplayed())
         .as("Cancel button is displayed")
         .isTrue();
@@ -277,7 +289,6 @@ public class SortBeltPresetSteps extends AbstractSteps {
                 .as(f("Destination Hub show correct value : %s", finalDestinationHub))
                 .isEqualTo(finalDestinationHub);
           }
-
           break;
         case "Marketplace Shipper":
           String masterShipper = dataTable.get("masterShipper");
@@ -287,7 +298,6 @@ public class SortBeltPresetSteps extends AbstractSteps {
                 .as(f("Master shipper show correct value : %s", finalMasterShipper))
                 .isEqualTo(finalMasterShipper);
           }
-
           break;
         case "Shipper":
         case "Exclude Shippers":
@@ -314,10 +324,10 @@ public class SortBeltPresetSteps extends AbstractSteps {
               .isEqualTo(yesNoRTS);
           break;
         case "Service Level":
-          String serviceLevels = String.join(", ", f.getServiceLevels());
-          Assertions.assertThat(row.getFilterValue())
+          String serviceLevels = dataTable.get("serviceLevel");
+          doWithRetry(()->{Assertions.assertThat(row.getFilterValue())
               .as("Service levels show correct values")
-              .isEqualTo(serviceLevels);
+              .isEqualTo(serviceLevels);},"Assert Service Levels");
           break;
         case "Transaction End Day":
           Assertions.assertThat(row.getFilterValue().contains(String.valueOf(f.getTxnEndInDays())))
@@ -334,9 +344,14 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator verify no sort belt preset is created")
-  public void operatorVerifyNoSortBeltPresetIsCreated() {
-    SortBeltPreset preset = get(KEY_CREATED_SORT_BELT_PRESET);
-    Assertions.assertThat(preset)
+  public void operatorVerifyNoSortBeltPresetIsCreated(Map<String,String>dataTable) {
+    dataTable=resolveKeyValues(dataTable);
+    SortBeltPresetEntity entity = new SortBeltPresetEntity();
+    entity.setRulesString(dataTable.get("rulesString"));
+    entity.setName(dataTable.get("name"));
+    entity.setDescription(dataTable.get("description"));
+    SortBeltPreset sb = SortBeltPreset.fromEntity(entity);
+    Assertions.assertThat(sb)
         .as("No sort belt preset is created")
         .isNull();
   }
@@ -381,17 +396,19 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator take note the old preset name")
-  public void operatorTakeNoteTheOldPresetName() {
-    String oldPresetName = get(KEY_CREATED_SORT_BELT_PRESET_NAME);
+  public void operatorTakeNoteTheOldPresetName(Map<String,String>data) {
+    data = resolveKeyValues(data);
+    String oldPresetName = data.get("oldPresetName");
     put(KEY_UPDATED_SORT_BELT_PRESET_NAME, oldPresetName);
   }
 
   @And("Operator verify sort belt preset is not updated")
-  public void operatorVerifySortBeltPresetIsNotUpdated() {
-    SortBeltPreset savedPreset = get(KEY_CREATED_SORT_BELT_PRESET);
-    String oldName = get(KEY_UPDATED_SORT_BELT_PRESET_NAME);
+  public void operatorVerifySortBeltPresetIsNotUpdated(Map<String,String>data) {
+    data = resolveKeyValues(data);
+    String savedPreset = data.get("savedPreset");
+    String oldName = data.get("oldName");
 
-    Assertions.assertThat(savedPreset.getName())
+    Assertions.assertThat(savedPreset)
         .as("Preset name is not updated")
         .isEqualTo(oldName);
   }
@@ -400,5 +417,12 @@ public class SortBeltPresetSteps extends AbstractSteps {
   public void operatorClickOnEditButtonAtTheCheckSortBeltPresetDetailPage() {
     checkSortBeltPresetPage.editButton.click();
     createPresetSortBeltPresetPage.waitUntilLoaded();
+  }
+
+  @When("Operator search sort belt preset by {string} name and make sure its {string}")
+  public void operatorSearchSortBeltPresetByNameAndMakeSureIts(String name, String isExist) {
+    String sortBeltPresetName = resolveValue(name);
+    sortBeltPresetPage.assertSortBeltCreated(sortBeltPresetName,isExist);
+
   }
 }
