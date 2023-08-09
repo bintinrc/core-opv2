@@ -537,6 +537,25 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verifies updated recovery ticket")
+  public void verifyEditTicketDetails(Map<String, String> map) {
+    recoveryTicketsPage.inFrame((page) -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      String ticketStatus = mapOfData.get("ticketStatus");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String assignTo = mapOfData.get("assignTo");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String investigatingDept = mapOfData.get("investigatingDept");
+
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(ticketStatus);
+      page.editTicketDialog.verifyTicketStatus(orderOutcome);
+      page.editTicketDialog.verifyTicketStatus(assignTo);
+      page.editTicketDialog.verifyTicketStatus(investigatingDept);
+      page.editTicketDialog.verifyTicketStatus(investigatingHub);
+    });
+  }
+
 
   @Given("Operator clicks {string} button on Recovery Tickets Page")
   public void operatorClicksButtonRecoveryTicketsPage(String buttonName) {
@@ -601,6 +620,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage.inFrame(page -> {
       page.addFilter.sendKeys(filter);
       page.addFilter.sendKeys(Keys.RETURN);
+    });
+  }
+
+  @When("Operator close Edit Ticket Modal")
+  public void operatorCloseEditTicketModal() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.closeEditTicketModal();
     });
   }
 }

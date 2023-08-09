@@ -22,6 +22,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -296,6 +297,11 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     }
     loadSelection.click();
     resultsTable.waitUntilPageLoaded();
+  }
+
+  public void closeEditTicketModal() {
+    Actions actions = new Actions(getWebDriver());
+    actions.sendKeys(Keys.ESCAPE).build().perform();
   }
 
   public static class creatByCSVDialog extends AntModal {
