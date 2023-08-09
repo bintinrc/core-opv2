@@ -52,9 +52,6 @@ Feature: Manual Update Order Status
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
