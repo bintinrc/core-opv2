@@ -37,7 +37,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
-  @Happypath
+  @Happypath @HighPriority
   Scenario Outline: Remove User from Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
@@ -72,7 +72,7 @@ Feature: Station User Management
       | HubName1     | HubID      | HubName2     | HubName3     |
       | {hub-name-6} | {hub-id-6} | {hub-name-8} | {hub-name-9} |
 
-  @Happypath
+  @Happypath @HighPriority
   Scenario Outline: Add User to Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
@@ -127,6 +127,7 @@ Feature: Station User Management
     Then Operator searches by "Region": "JKB"
     And Operator verifies table is filtered "region" based on input in "JKB"
 
+  @HighPriority
   Scenario Outline: Search Station by Station Name (uid:734b60e8-d052-41db-a225-3875f35f6486)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
@@ -138,6 +139,7 @@ Feature: Station User Management
       | HubName      |
       | {hub-name-6} |
 
+  @HighPriority
   Scenario Outline: Search Station by Station ID (uid:dc65295e-6465-45d1-ab38-35f554b6be06)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
