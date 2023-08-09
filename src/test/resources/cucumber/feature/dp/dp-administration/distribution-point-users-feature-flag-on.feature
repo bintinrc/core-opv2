@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @CIFFeatureFlagOn @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @Dp @CIF
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
