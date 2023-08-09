@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @WaypointPerformance @current
+@OperatorV2 @Core @Inbounding @RouteInbound @WaypointPerformance
 Feature: Waypoint Performance
 
   Background:
@@ -402,7 +402,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | null    | {KEY_LIST_OF_CREATED_ORDERS[3].to1LineToAddress}                | Delivery (Normal)     | Success | 0        | null               |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | null    | {KEY_LIST_OF_CREATED_ORDERS[4].to1LineFromAddress}              | Pick Up (Return)      | Pending | 0        | Inbounded          |
 
-  @ArchiveRouteCommonV2 @wip
+  @ArchiveRouteCommonV2
   Scenario: View Waypoint Performance of Partial Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -447,14 +447,16 @@ Feature: Waypoint Performance
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                  |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                                                                          |
-      | routes     | KEY_DRIVER_ROUTES                                                                                                                                                                   |
-      | jobType    | TRANSACTION                                                                                                                                                                         |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}, { "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL", "failure_reason_id":11}] |
-      | jobAction  | SUCCESS                                                                                                                                                                             |
-      | jobMode    | DELIVERY                                                                                                                                                                            |
-
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | DELIVERY                                                                        |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | granularStatus | Pending Reschedule                 |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
