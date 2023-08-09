@@ -1,8 +1,8 @@
-@OperatorV2 @Recovery @FailedPickupManagementV2
+@OperatorV2 @Recovery @FailedPickupManagementV2 @ClearCache @ClearCookies @CWF
 Feature: Failed Pickup Management Page - Action Feature
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator - Select all shown - Failed Pickup Management page
@@ -142,22 +142,21 @@ Feature: Failed Pickup Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
-    And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Pending" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | NORMAL                                   |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | PICKUP                                   |
       | status | PENDING                                  |
       | dnr    | NORMAL                                   |
@@ -200,22 +199,21 @@ Feature: Failed Pickup Management Page - Action Feature
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
     And Recovery User - verify CSV file downloaded after reschedule failed pickup
-    And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Pending" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | NORMAL                                   |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | PICKUP                                   |
       | status | PENDING                                  |
       | dnr    | NORMAL                                   |
@@ -278,45 +276,44 @@ Feature: Failed Pickup Management Page - Action Feature
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 2 order(s) |
     And Recovery User - verify CSV file downloaded after reschedule failed pickup
-    And Operator waits for 5 seconds
 
      #Verify first failed order
-    Given Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Pending" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | NORMAL                                   |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | PICKUP                                   |
       | status | PENDING                                  |
       | dnr    | NORMAL                                   |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
 
      #Verify Second failed order
-    Given Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Pending" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | NORMAL                                   |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | PICKUP                                   |
       | status | PENDING                                  |
       | dnr    | NORMAL                                   |
@@ -361,21 +358,18 @@ Feature: Failed Pickup Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Cancel Order Successfully    |
       | description | Success 1 order(s) Cancelled |
-    Given Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | FAIL |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | CANCELLED |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator go to menu Order -> All Orders
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Cancelled" on Edit Order V2 page
+    And Operator verify order granular status is "Cancelled" on Edit Order V2 page
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | RESCHEDULING                             |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | DELIVERY                               |
       | status | CANCELLED                              |
       | dnr    | CANCEL                                 |
@@ -441,47 +435,36 @@ Feature: Failed Pickup Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Cancel Order Successfully    |
       | description | Success 2 order(s) Cancelled |
-    And Operator waits for 5 seconds
+    And Operator go to menu Order -> All Orders
 
-    Given Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | FAIL |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | CANCELLED |
-    And Operator verify transaction on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Cancelled" on Edit Order V2 page
+    And Operator verify order granular status is "Cancelled" on Edit Order V2 page
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | RESCHEDULING                             |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                               |
-      | status | CANCELLED                              |
-      | dnr    | CANCEL                                 |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY                                 |
+      | status | CANCELLED                                |
+      | dnr    | CANCEL                                   |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
-    Given Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | FAIL |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | CANCELLED |
-    And Operator verify transaction on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Cancelled" on Edit Order V2 page
+    And Operator verify order granular status is "Cancelled" on Edit Order V2 page
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type    | PICKUP                                   |
       | status  | FAIL                                     |
       | driver  | {ninja-driver-name}                      |
-      | routeId | {KEY_CREATED_ROUTE_ID}                   |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
       | dnr     | RESCHEDULING                             |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                               |
-      | status | CANCELLED                              |
-      | dnr    | CANCEL                                 |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY                                 |
+      | status | CANCELLED                                |
+      | dnr    | CANCEL                                   |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
-
-  Scenario: Kill Browser
-    Given no-op
