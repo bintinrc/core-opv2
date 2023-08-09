@@ -664,7 +664,7 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openFailedParcelsDialog();
   }
 
-  @When("^Operator open C2C \\+ Return dialog on Route Inbound page$")
+  @When("Operator open C2C + Return dialog on Route Inbound page")
   public void operatorOpenC2CReturnDialogOnRouteInboundPage() {
     routeInboundPage.openC2CReturnDialog();
   }
