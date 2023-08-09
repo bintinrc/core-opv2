@@ -5,7 +5,7 @@ Feature: Station Management Homepage
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath
+  @Happypath @HighPriority
   Scenario Outline: Station Management Homepage Navigation Panel - <dataset_name> (<hiptest-uid>)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
