@@ -1,4 +1,4 @@
-@OperatorV2Id @Dp @CIF
+@OperatorV2Id @Dp @CIF @CreateCifUserId
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
