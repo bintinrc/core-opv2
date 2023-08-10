@@ -100,7 +100,7 @@ Feature: New Recovery Tickets
     Then Operator verifies error message is displayed
       | top      | Successfully create tickets for following tracking ID(s) |
       | fileName | csv_create_tickets_                                      |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "On Hold" on Edit Order V2 page
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -818,6 +818,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -870,6 +871,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -928,6 +930,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -983,6 +986,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1027,6 +1031,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1070,6 +1075,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1115,6 +1121,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1159,6 +1166,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                        |
       | shipperZendeskId        | 1                                        |
       | ticketNotes             | GENERATED                                |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1230,6 +1238,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1277,6 +1286,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1319,6 +1329,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1362,6 +1373,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1404,6 +1416,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1442,6 +1455,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1492,6 +1506,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1535,6 +1550,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1586,6 +1602,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1624,6 +1641,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1668,6 +1686,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1708,6 +1727,7 @@ Feature: New Recovery Tickets
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks "Update Ticket" button in Edit Ticket dialog
