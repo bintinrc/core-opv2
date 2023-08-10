@@ -6,7 +6,19 @@ Feature: Implanted Manifest
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @debug
-  Scenario: DEBUG
+  Scenario: DEBUG1
+    Given Operator waits for 100000 seconds
+
+  @debug
+  Scenario: DEBUG2
+    Given Operator waits for 100000 seconds
+
+  @debug
+  Scenario: DEBUG3
+    Given Operator waits for 100000 seconds
+
+  @debug
+  Scenario: DEBUG4
     Given Operator waits for 100000 seconds
 
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
