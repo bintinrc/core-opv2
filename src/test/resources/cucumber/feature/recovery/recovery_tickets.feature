@@ -811,7 +811,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | PARCEL ON HOLD : <ticketSubtype>             |
@@ -862,7 +862,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | PARCEL EXCEPTION : <ticketSubtype>           |
@@ -919,7 +919,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SHIPPER ISSUE : <ticketSubtype>              |
@@ -973,7 +973,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | DAMAGED                                      |
@@ -1016,7 +1016,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | MISSING                                      |
@@ -1058,7 +1058,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SELF COLLECTION                              |
@@ -1102,7 +1102,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | ticketType/subType  | SLA BREACH                                   |
@@ -1145,7 +1145,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                        |
       | ticketNotes             | GENERATED                                |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
       | ticketType/subType | SHIPPER ISSUE : <ticketSubtype>          |
@@ -1214,10 +1214,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1260,10 +1260,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1301,10 +1301,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1344,10 +1344,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1385,10 +1385,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1422,10 +1422,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1471,7 +1471,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks Update Ticket button in Edit Ticket dialog
@@ -1513,10 +1513,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1563,10 +1563,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1600,10 +1600,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1643,10 +1643,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1680,10 +1680,10 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1723,7 +1723,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -1770,7 +1770,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -1817,7 +1817,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -1863,7 +1863,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -1911,7 +1911,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>           |
@@ -1956,7 +1956,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -2003,7 +2003,7 @@ Feature: New Recovery Tickets
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator search created ticket by "Tracking ID" filter with values:
-      | "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator edit the ticket with the following and verifies it:
       | ticketStatus        | <newTicketStatus>         |
@@ -3363,3 +3363,44 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
+
+  Scenario: Operator Update Single Ticket - Recovery Ticket - Cancel Ticket
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                   | ROUTE INBOUNDING                      |
+      | investigatingDepartment       | Fleet (First Mile)                    |
+      | investigatingHub              | {hub-name}                            |
+      | ticketType                    | PARCEL EXCEPTION                      |
+      | ticketSubType                 | COMPLETED ORDER                       |
+      | orderOutcomeInaccurateAddress | RELABELLED TO SEND                    |
+      | exceptionReason               | GENERATED                             |
+      | custZendeskId                 | 1                                     |
+      | shipperZendeskId              | 1                                     |
+      | ticketNotes                   | GENERATED                             |
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    And Operator click ticket's action button
+    And Operator clicks "Cancel Ticket" button in Edit Ticket dialog
+    Then Operator verifies Cancel Ticket dialog
+    When Operator clicks Delete button in Cancel Ticket dialog
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name           | description                                                                    |
+      | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
