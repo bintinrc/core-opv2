@@ -5,7 +5,7 @@ Feature: Number of Missing Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @Happypath @Pass
+  @ForceSuccessOrder @Happypath
   Scenario Outline: View Pending Missing Ticket Type (uid:1b0879dc-9af9-428b-9d30-c27f3d772f81)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -56,7 +56,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View In-progress Missing Ticket Type (uid:ad02e20f-0bf6-4408-a1b1-afb851693d30)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -119,7 +119,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | IN PROGRESS  |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View on Hold Missing Ticket Type (uid:32ed909f-4b6e-437a-959b-fc40d047606c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -182,7 +182,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | ON HOLD      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View Pending Shipper Missing Ticket Type (uid:8c5a1caf-308c-4916-ad93-aaa6137d6bc5)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -245,7 +245,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | ON HOLD      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View Order Details of Missing Parcels (uid:e2b42ea0-26ae-4207-8485-e5d64958ac3f)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -334,7 +334,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | CREATED      |
 
-  @Happypath @ForceSuccessOrder @Pass
+  @Happypath @ForceSuccessOrder
   Scenario Outline: Resolved Ticket of Missing Type Disappear (uid:9366a5d9-5245-4651-a799-146fbcdac30b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -400,7 +400,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | RESOLVED     |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: Parcel Exception Ticket Not Appears in Missing Cases (uid:c1d5ec41-0bef-4eab-9200-16b8cb7aa433)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -444,7 +444,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName1       | ModalName1      | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: Parcel on Hold Ticket Not Appears in Missing Cases (uid:940a6d90-26b6-4bd4-82d9-0203be558e68)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -488,7 +488,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName1       | ModalName1      | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: Shipper Issue Ticket Not Appears in Missing Cases (uid:f722c7f8-7dfe-43c2-9346-20e4e00259a3)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -532,7 +532,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName1       | ModalName1      | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: Damaged Ticket Not Appears in Missing Cases (uid:bff303e4-a9c9-477f-a8ac-656cdf39dc59)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -575,7 +575,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View Hub Inbound Scanned Missing Parcels (uid:c2316f01-daa3-4d75-a498-f2acb2d57a2b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -627,7 +627,7 @@ Feature: Number of Missing Parcels
       | {hub-name-Global2} | {hub-id-Global2} | Missing parcels | Missing Parcels | HUB_INBOUND_SCAN | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: View Parcel Routing Scanned Missing Parcels
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -683,7 +683,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | LastScannedEvent    | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | PARCEL_ROUTING_SCAN | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Driver Inbound Scanned Missing Parcels (uid:f985d503-87ed-4289-b7f0-21c066bedc8b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -747,7 +747,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | LastScannedEvent    | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | DRIVER_INBOUND_SCAN | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Route Inbound Scanned Missing Parcels (uid:a08ac796-5052-4427-b079-79deb22ce462)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -830,7 +830,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | LastScannedEvent   | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | ROUTE_INBOUND_SCAN | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
-  @ForceSuccessOrder @Pass
+  @ForceSuccessOrder
   Scenario Outline: Sort Missing Parcels Based on Last Scanned Time (uid:b91f8411-5117-49cc-b02a-a62a5534dedc)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
