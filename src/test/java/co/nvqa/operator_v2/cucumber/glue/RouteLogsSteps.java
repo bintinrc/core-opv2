@@ -1072,6 +1072,7 @@ public class RouteLogsSteps extends AbstractSteps {
         try {
           toastInfo = routeLogsPage.noticeNotifications.stream().filter(toast -> {
             String actualTop = toast.message.getNormalizedText();
+            toast.moveToElement();
             LOGGER.info("Found notification: " + actualTop);
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
@@ -1088,6 +1089,7 @@ public class RouteLogsSteps extends AbstractSteps {
             value = finalData.get("bottom");
             if (StringUtils.isNotBlank(value)) {
               String actual = toast.description.getNormalizedText();
+              toast.moveToElement();
               LOGGER.info("Found description: " + actual);
               if (value.startsWith("^")) {
                 return actual.matches(value);
