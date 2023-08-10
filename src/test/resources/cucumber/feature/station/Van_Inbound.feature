@@ -5,7 +5,7 @@ Feature: Van Inbound
     When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ForceSuccessOrder @ArchiveRoute
+  @Happypath @ForceSuccessOrder @ArchiveRoute @MediumPriority
   Scenario Outline: Unable to Van Inbound Parcels in Pending Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -88,7 +88,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @MediumPriority
   Scenario Outline: Unable Van Inbound Parcels at Transit Hub Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -131,7 +131,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | TransHubId | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-id-0} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @MediumPriority
   Scenario Outline: Unable to Van Inbound Parcels in Closed Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -229,7 +229,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | DestHubName  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | {hub-name-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @MediumPriority
   Scenario Outline: Unable to Van Inbound Parcels in Incomplete Latest Shipment
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -331,7 +331,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | GENERATED |
 
-  @ArchiveRoute
+  @ArchiveRoute @MediumPriority
   Scenario Outline: Van Inbound Parcels in Cancelled Shipment (uid:9973ea31-d21f-4787-9a19-b800d97f4355)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -566,7 +566,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRoute
+  @ForceSuccessOrder @ArchiveRoute @MediumPriority
   Scenario Outline: Unable to Van Inbound Parcels Due to Parcel Sweep at Wrong Hub
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:

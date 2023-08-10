@@ -22,6 +22,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
+  @MediumPriority
   Scenario Outline: Add User that Already Added to the Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
@@ -91,6 +92,7 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
+  @MediumPriority
   Scenario Outline: Add User to Multiple Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
@@ -152,6 +154,7 @@ Feature: Station User Management
       | {hub-id-6} |
 
 
+  @MediumPriority
   Scenario Outline: Search User by Email Address (uid:bdf4ac68-0417-43e1-8904-a42b451eb79c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management
