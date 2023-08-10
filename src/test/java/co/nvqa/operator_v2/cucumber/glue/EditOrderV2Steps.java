@@ -1725,9 +1725,9 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.chatWithDriverDialog.waitUntilVisible();
   }
 
-  @When("Operator selects {string} in Events Filter menu on Edit Order V2 page")
+  @When("Operator selects {value} in Events Filter menu on Edit Order V2 page")
   public void selectEventsFilter(String option) {
-    page.eventsTableFilter.selectOption(resolveValue(option));
+    page.inFrame(() -> page.eventsTableFilter.selectValue(option));
   }
 
   @Then("Operator verify POD details on Edit Order V2 page:")

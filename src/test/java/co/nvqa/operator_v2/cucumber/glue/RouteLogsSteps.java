@@ -1108,7 +1108,9 @@ public class RouteLogsSteps extends AbstractSteps {
           .withFailMessage("Toast is not displayed: " + finalData)
           .isNotNull();
       if (toastInfo != null && waitUntilInvisible) {
-        toastInfo.waitUntilInvisible();
+        if (!toastInfo.waitUntilInvisible(20)) {
+          toastInfo.close.jsClick();
+        }
       }
     });
   }
