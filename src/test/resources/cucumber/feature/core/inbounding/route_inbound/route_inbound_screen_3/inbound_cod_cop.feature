@@ -102,9 +102,9 @@ Feature: Inbound COD & COP
       | jobMode    | PICK_UP                                                                                               |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}                    |
-      | fetchBy      | FETCH_BY_TRACKING_ID          |
-      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+      | hubName      | {hub-name}                          |
+      | fetchBy      | FETCH_BY_TRACKING_ID                |
+      | fetchByValue | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Then Operator verify the Route Summary Details is correct using data below:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
       | driverName  | {ninja-driver-name}                       |

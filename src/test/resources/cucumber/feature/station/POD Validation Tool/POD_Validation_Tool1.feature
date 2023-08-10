@@ -354,7 +354,7 @@ Feature: POD Validation
       | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | transactionStatus | SUCCESS                                    |
     When Operator click "Valid" button
-#    Then Operator validates current URL ends with "validate-attempt/completed"
+    Then Operator validates current URL ends with "validate-attempt/completed"
     Given Operator login with client id = "{POD-Auditor-Reviewer-client-id}" and client secret = "{POD-Auditor-Reviewer-client-secret}"
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator validates current URL ends with "validate-attempt/role"
