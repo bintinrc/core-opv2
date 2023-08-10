@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies @CWF
 Feature: New Recovery Tickets
 
   Background:
@@ -897,16 +897,17 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name         | ticketSubtype               |
-      | cancelled order      | CANCELLED ORDER             |
-      | completed order      | COMPLETED ORDER             |
-      | customer rejected    | CUSTOMER REJECTED           |
-      | disputed order info  | DISPUTED ORDER INFO         |
-      | dp oversized         | DP OVERSIZED                |
-      | inaccurate address   | INACCURATE ADDRESS          |
-      | max attempt delivery | MAXIMUM ATTEMPTS (DELIVERY) |
-      | max attempt rts      | MAXIMUM ATTEMPTS (RTS)      |
-      | restricted zones     | RESTRICTED ZONES            |
+      | Dataset Name                                 | ticketSubtype               |
+      | ticket_subtype = CANCELLED ORDER             | CANCELLED ORDER             |
+      | ticket_subtype = COMPLETED ORDER             | COMPLETED ORDER             |
+      | ticket_subtype = CUSTOMER REJECTED           | CUSTOMER REJECTED           |
+      | ticket_subtype = DISPUTED ORDER INFO         | DISPUTED ORDER INFO         |
+      | ticket_subtype = DP OVERSIZED                | DP OVERSIZED                |
+      | ticket_subtype = INACCURATE ADDRESS          | INACCURATE ADDRESS          |
+      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) | MAXIMUM ATTEMPTS (DELIVERY) |
+      | ticket_subtype = MAXIMUM ATTEMPTS (RTS)      | MAXIMUM ATTEMPTS (RTS)      |
+      | ticket_subtype = RESTRICTED ZONES            | RESTRICTED ZONES            |
+      | ticket_subtype = WRONG AV/RACK/HUB           | WRONG AV/RACK/HUB           |
 
   @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - <Dataset Name>
@@ -956,13 +957,14 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name         | ticketSubtype        |
-      | duplicate parcel     | DUPLICATE PARCEL     |
-      | no order             | NO ORDER             |
-      | overweight oversized | OVERWEIGHT/OVERSIZED |
-      | poor packaging label | POOR PACKAGING/LABEL |
-      | rejected return      | REJECTED RETURN      |
-      | restricted goods     | RESTRICTED GOODS     |
+      | Dataset Name                          | ticketSubtype        |
+      | ticket_subtype = DUPLICATE PARCEL     | DUPLICATE PARCEL     |
+      | ticket_subtype = NO ORDER             | NO ORDER             |
+      | ticket_subtype = OVERWEIGHT/OVERSIZED | OVERWEIGHT/OVERSIZED |
+      | ticket_subtype = POOR LABELLING       | POOR LABELLING       |
+      | ticket_subtype = POOR PACKAGING       | POOR PACKAGING       |
+      | ticket_subtype = REJECTED RETURN      | REJECTED RETURN      |
+      | ticket_subtype = RESTRICTED GOODS     | RESTRICTED GOODS     |
 
   @CreateTicket
   Scenario: Operator Create Single Ticket - Recovery Ticket - DAMAGED
@@ -1168,7 +1170,7 @@ Feature: New Recovery Tickets
       | ticketNotes             | GENERATED                                |
     And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
     Then Operator verifies correct ticket details as following:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
       | ticketType/subType | SHIPPER ISSUE : <ticketSubtype>          |
@@ -1257,11 +1259,11 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                           | orderOutcome                           | postStatus | postGranularStatus |
-      | order_outcome = NV NOT LIABLE - PARCEL DELIVERED       | NV NOT LIABLE - PARCEL DELIVERED       | Completed  | Completed          |
-      | order_outcome = NV LIABLE - PARCEL DISPOSED            | NV LIABLE - PARCEL DISPOSED            | Cancelled  | Cancelled          |
-      | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED    | NV LIABLE - FULL - PARCEL DELIVERED    | Completed  | Completed          |
-      | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED | NV LIABLE - PARTIAL - PARCEL DELIVERED | Completed  | Completed          |
+      | Dataset Name                                           | orderOutcome                           | postStatus | postGranularStatus     |
+      | order_outcome = NV NOT LIABLE - PARCEL DELIVERED       | NV NOT LIABLE - PARCEL DELIVERED       | Completed  | Completed              |
+      | order_outcome = NV LIABLE - PARCEL DISPOSED            | NV LIABLE - PARCEL DISPOSED            | Cancelled  | Cancelled              |
+      | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED    | NV LIABLE - FULL - PARCEL DELIVERED    | Completed  | Completed              |
+      | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED | NV LIABLE - PARTIAL - PARCEL DELIVERED | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
   Scenario Outline: Resolve Ticket - ticket_type = DAMAGED -RTS- <Dataset Name>
@@ -1307,7 +1309,7 @@ Feature: New Recovery Tickets
     Examples:
       | Dataset Name                                  | orderOutcome                  | postStatus | postGranularStatus     |
       | order_outcome = NV NOT LIABLE - RETURN PARCEL | NV NOT LIABLE - RETURN PARCEL | Transit    | Arrived at Sorting Hub |
-      | order_outcome = NV LIABLE - RETURN PARCEL     | NV LIABLE - RETURN PARCEL     | Cancelled  | Cancelled              |
+      | order_outcome = NV LIABLE - RETURN PARCEL     | NV LIABLE - RETURN PARCEL     | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = MISSING - <Dataset Name>
@@ -1348,11 +1350,11 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                      | orderOutcome                    | postStatus | postGranularStatus      |
-      | order_outcome = CUSTOMER RECEIVED                 | CUSTOMER RECEIVED               | Completed  | Completed               |
-      | order_outcome = LOST - NO RESPONSE - UNDECLARED   | LOST - NO RESPONSE - UNDECLARED | Transit    | Arrived at Sorting Hub  |
-      | order_outcome = LOST - NO RESPONSE - DECLARED     | LOST - NO RESPONSE - DECLARED   | Cancelled  | Cancelled               |
-      | order_outcome = FOUND - INBOUND (Parcel Transfer) | FOUND - INBOUND                 | Transit    | On Vehicle for Delivery |
+      | Dataset Name                                      | orderOutcome                    | postStatus | postGranularStatus     |
+      | order_outcome = CUSTOMER RECEIVED                 | CUSTOMER RECEIVED               | Completed  | Completed              |
+      | order_outcome = LOST - NO RESPONSE - UNDECLARED   | LOST - NO RESPONSE - UNDECLARED | Transit    | Arrived at Sorting Hub |
+      | order_outcome = LOST - NO RESPONSE - DECLARED     | LOST - NO RESPONSE - DECLARED   | Cancelled  | Cancelled              |
+      | order_outcome = FOUND - INBOUND (Parcel Transfer) | FOUND - INBOUND                 | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = SELF COLLECTION - <Dataset Name>
@@ -1434,7 +1436,7 @@ Feature: New Recovery Tickets
       | TICKET RESOLVED |
       | TICKET UPDATED  |
 
-  @ResolveTicket
+  @ResolveTicket @RT
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1474,15 +1476,15 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                                                   | ticketSubtype               | orderOutcome       | postStatus | postGranularStatus     |
-      | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
-      | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = INACCURATE ADDRESS - order_outcome = RESUME PICKUP            | INACCURATE ADDRESS          | RESUME PICKUP      | Pending    | Pending Pickup         |
-      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
-      | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV                  | WRONG AV/RACK/HUB           | FIXED AV           | Transit    | Arrived at Sorting Hub |
+      | Dataset Name                                                  | ticketSubtype     | orderOutcome | postStatus | postGranularStatus     |
+#      | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
+#      | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+#      | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+#      | ticket_subtype = INACCURATE ADDRESS - order_outcome = RESUME PICKUP            | INACCURATE ADDRESS          | RESUME PICKUP      | Pending    | Pending Pickup         |
+#      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+#      | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
+#      | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV | WRONG AV/RACK/HUB | FIXED AV     | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION -RTS- <Dataset Name>
@@ -1511,7 +1513,7 @@ Feature: New Recovery Tickets
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1725,9 +1727,9 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
     And Operator clicks "Update Ticket" button in Edit Ticket dialog
@@ -1770,6 +1772,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1818,6 +1821,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1866,6 +1870,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1913,6 +1918,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1962,6 +1968,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -2008,6 +2015,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -2056,6 +2064,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button

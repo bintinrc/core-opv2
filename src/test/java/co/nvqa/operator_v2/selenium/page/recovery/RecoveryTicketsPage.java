@@ -99,6 +99,11 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       "NV LIABLE - RETURN PARCEL",
       "NV LIABLE - FULL - PARCEL DELIVERED",
       "NV LIABLE - PARTIAL - PARCEL DELIVERED",
+      "NV LIABLE - PARTIAL - RESUME DELIVERY",
+      "NV LIABLE - XMAS CAGE",
+      "NV LIABLE - XMAS CAGE (TIKTOK)",
+      "NV LIABLE - DELIVERED",
+      "RESUME DELIVERY",
       "LOST - DECLARED",
       "LOST - NO RESPONSE - DECLARED",
       "DAMAGED - NV LIABLE",
@@ -149,10 +154,11 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       case TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome.waitUntilVisible();
-        createTicketDialog.orderOutcome
-            .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
-        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+
+        if (recoveryTicket.getTicketSubType().equals("INACCURATE ADDRESS")) {
+          createTicketDialog.orderOutcome.waitUntilVisible();
+          createTicketDialog.orderOutcome
+              .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
           createTicketDialog.rtsReason.waitUntilVisible();
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
