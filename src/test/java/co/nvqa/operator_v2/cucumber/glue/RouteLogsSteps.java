@@ -1067,7 +1067,6 @@ public class RouteLogsSteps extends AbstractSteps {
       boolean waitUntilInvisible = Boolean.parseBoolean(
           finalData.getOrDefault("waitUntilInvisible", "false"));
       long start = new Date().getTime();
-      pause3s();
       AntNotification toastInfo;
       do {
         try {
