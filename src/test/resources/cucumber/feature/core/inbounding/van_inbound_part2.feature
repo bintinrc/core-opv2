@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart2 @current
+@OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart2
 Feature: Van Inbound
 
   Background:
@@ -41,8 +41,7 @@ Feature: Van Inbound
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                       |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Van en-route to pickup\n\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: START_ROUTE |
-
-  @wip
+    
   Scenario: Operator Van Inbounds And Starts Route with Tagged Order - Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
