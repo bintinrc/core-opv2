@@ -123,7 +123,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
 
       public String readJobTags(int index) {
         var xpath = f(TAG_LOCATOR, index);
-        return Strings.join(",", getTextOfElements(xpath));
+        return String.join(",", getTextOfElements(xpath));
       }
     }
   }
