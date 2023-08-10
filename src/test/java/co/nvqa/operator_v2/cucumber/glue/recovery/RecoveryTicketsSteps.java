@@ -654,4 +654,13 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.waitUntilInvisibilityOfToast("Cancelled");
     });
   }
+
+  @Then("Operator verifies error toast message in recovery tickets page")
+  public void verifiesErrorToastMessage() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfNotification("Invalid Selection");
+      Assertions.assertThat(page.getAntDescription()).as("toast description").isEqualTo(
+          "Selection must be of the same ticket type (e.g. Damaged only, Parcel Exception only) and not in RESOLVED or CANCELLED state");
+    });
+  }
 }

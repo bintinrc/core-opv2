@@ -3404,3 +3404,75 @@ Feature: New Recovery Tickets
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name           | description                                                                    |
       | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+  Scenario: Error message - Bulk Update Ticket - Multiple Ticket Type
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | DAMAGED                               |
+      | entrySource        | RECOVERY SCANNING                     |
+      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)               |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | ticketType         | MISSING                               |
+      | entrySource        | RECOVERY SCANNING                     |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    And Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    Then Operator verifies error toast message in recovery tickets page
+
+  Scenario: Error Message - Bulk Update Ticket - Resolved Ticket Status
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | DRIVER TURN                           |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | SLA BREACH                            |
+      | orderOutcome            | NV LIABLE - XMAS CAGE                 |
+      | breachReason            | Auto breach reason                    |
+      | breachLeg               | Forward                               |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    And Operator click ticket's action button
+    And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
+    And Operator clicks "Edit Filter" button on Recovery Tickets Page
+    And Operator Add "Created At" filter
+    And Operator search created ticket by "Ticket Status" filter with values:
+      | RESOLVED |
+    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    Then Operator verifies error toast message in recovery tickets page
