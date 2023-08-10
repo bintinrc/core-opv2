@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @FailedDeliveryManagementV2 @ClearCache @ClearCookies
+@OperatorV2 @Recovery @FailedDeliveryManagementV2 @ClearCache @ClearCookies @CWF
 Feature: Failed Delivery Management Page - Action Feature
 
   Background:
@@ -7,11 +7,12 @@ Feature: Failed Delivery Management Page - Action Feature
 
   @ForceSuccessOrder @ActionFeature
   Scenario: Operator - Find Failed Delivery Order - by some filters
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | { "hubId":{hub-id} }                       |
@@ -29,21 +30,21 @@ Feature: Failed Delivery Management Page - Action Feature
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                          |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL" }] |
-      | routes          | KEY_DRIVER_ROUTES                                                                   |
-      | jobAction       | FAIL                                                                                |
-      | jobMode         | DELIVERY                                                                            |
-      | failureReasonId | 139                                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                         |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                 |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL", "failure_reason_id": 5}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                          |
+      | jobAction       | FAIL                                                                                                       |
+      | jobMode         | DELIVERY                                                                                                   |
+      | failureReasonId | 5                                                                                                          |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Recovery User - Wait until FDM Page loaded completely
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - Search failed orders by shipperName = "{KEY_LIST_OF_CREATED_ORDERS[1].shipper.name}"
     And Recovery User - verify failed delivery table on FDM page:
-      | trackingId            | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
-      | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
-      | failureReasonComments | {KEY_SELECTED_FAILURE_REASON.description}    |
+      | trackingId            | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}        |
+      | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name}      |
+      | failureReasonComments | Customer requested change of delivery date / time |
 
   @ActionFeature
   Scenario: Operator - Select all shown - Failed Delivery Management page
@@ -84,11 +85,12 @@ Feature: Failed Delivery Management Page - Action Feature
 
   @ActionFeature @ForceSuccessOrder
   Scenario: Operator - Download and Verify CSV File
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | { "hubId":{hub-id} }                       |
@@ -106,13 +108,13 @@ Feature: Failed Delivery Management Page - Action Feature
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                          |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL" }] |
-      | routes          | KEY_DRIVER_ROUTES                                                                   |
-      | jobAction       | FAIL                                                                                |
-      | jobMode         | DELIVERY                                                                            |
-      | failureReasonId | 139                                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                          |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                  |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL", "failure_reason_id": 5 }] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                           |
+      | jobAction       | FAIL                                                                                                        |
+      | jobMode         | DELIVERY                                                                                                    |
+      | failureReasonId | 5                                                                                                           |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator refresh page
     And Recovery User - Wait until FDM Page loaded completely
@@ -123,11 +125,12 @@ Feature: Failed Delivery Management Page - Action Feature
 
   @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Next Day - <Dataset_Name>
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | { "hubId":{hub-id} }                       |
@@ -145,13 +148,13 @@ Feature: Failed Delivery Management Page - Action Feature
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                          |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL" }] |
-      | routes          | KEY_DRIVER_ROUTES                                                                   |
-      | jobAction       | FAIL                                                                                |
-      | jobMode         | DELIVERY                                                                            |
-      | failureReasonId | 139                                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                           |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL", "failure_reason_id": <reason_id>}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                    |
+      | jobAction       | FAIL                                                                                                                 |
+      | jobMode         | DELIVERY                                                                                                             |
+      | failureReasonId | <reason_id>                                                                                                          |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Recovery User - Wait until FDM Page loaded completely
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
@@ -159,40 +162,36 @@ Feature: Failed Delivery Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
-    And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    And Operator go to menu Order -> All Orders
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
-    And API Operator verify order info after failed delivery order rescheduled on next day
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}     |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+#    And API Operator verify order info after failed delivery order rescheduled on next day
 
     Examples:
-      | Dataset_Name | order_type |
-      | Normal       | Parcel     |
-      | Return       | Return     |
+      | Dataset_Name | order_type | reason_id |
+      | Normal       | Parcel     | 5         |
+      | Return       | Return     | 84        |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @RT
   Scenario Outline:Operator - Reschedule Failed Delivery - Single Order - Latest Scan = Route Inbound Scan - <Dataset_Name>
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | { "hubId":{hub-id} }                       |
@@ -210,13 +209,13 @@ Feature: Failed Delivery Management Page - Action Feature
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                  |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                          |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL" }] |
-      | routes          | KEY_DRIVER_ROUTES                                                                   |
-      | jobAction       | FAIL                                                                                |
-      | jobMode         | DELIVERY                                                                            |
-      | failureReasonId | 139                                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                           |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL","failure_reason_id": <reason_id> }] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                    |
+      | jobAction       | FAIL                                                                                                                 |
+      | jobMode         | DELIVERY                                                                                                             |
+      | failureReasonId | <reason_id>                                                                                                          |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -238,30 +237,30 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | RESCHEDULE |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}     |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     Examples:
-      | Dataset_Name | order_type |
-      | Normal       | Parcel     |
-      | Return       | Return     |
+      | Dataset_Name | order_type | reason_id |
+      | Normal       | Parcel     | 5         |
+      | Return       | Return     | 84        |
 
   @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Specific Date - <Dataset_Name>
@@ -305,7 +304,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | description | Success to reschedule 1 order(s) |
     And Recovery User - verify CSV file downloaded after reschedule
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -313,17 +312,17 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And API Operator verify order info after failed delivery order rescheduled on next 2 days
 
     Examples:
@@ -398,7 +397,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator waits for 5 seconds
 
     #Verify first failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -406,20 +405,20 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     #Verify Second failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -427,17 +426,17 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario: Operator - Reschedule Failed Delivery - Multiple Orders - by Upload CSV
@@ -503,7 +502,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator waits for 5 seconds
 
     #Verify first failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -511,20 +510,20 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     #Verify Second failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -532,17 +531,17 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   Scenario Outline: Operator - RTS Failed Delivery - Single Order - on Next Day - <Dataset_Name>
     Given API Shipper create V4 order using data below:
@@ -579,21 +578,21 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
-      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | address1            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -683,7 +682,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | description | Success 2 order(s) RTS-ed |
     And Operator waits for 5 seconds
     #verify first order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -702,7 +701,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | FAIL |
     #verify second order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[2]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -761,14 +760,14 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
-      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | address1            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - change order address in Edit RTS Details dialog
     And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
@@ -776,7 +775,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -835,14 +834,14 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
-      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | address1            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - search address by name in Edit RTS Details dialog
     And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
@@ -850,7 +849,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -909,14 +908,14 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
-      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | address1            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - change order address in Edit RTS Details dialog
     And Recovery User - cancel address change in Edit RTS Details dialog
@@ -925,7 +924,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -997,21 +996,21 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - RTS order on next day
     Then Recovery User - verifies Edit RTS Details dialog
-      | recipientName       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}     |
-      | recipientContact    | {KEY_LIST_OF_CREATED_ORDER[1].fromContact}  |
-      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDER[1].fromEmail}    |
-      | country             | {KEY_LIST_OF_CREATED_ORDER[1].fromCountry}  |
-      | address1            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress1} |
-      | address2            | {KEY_LIST_OF_CREATED_ORDER[1].fromAddress2} |
-      | postalCode          | {KEY_LIST_OF_CREATED_ORDER[1].fromPostcode} |
+      | recipientName       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | recipientContact    | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | recipientEmail      | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | shipperInstructions | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | country             | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | address1            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     And Operator waits for 5 seconds
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order events on Edit order page using data below:
       | name                       |
       | RTS                        |
@@ -1101,7 +1100,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator waits for 5 seconds
 
     #Verify first failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -1109,20 +1108,20 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     #Verify Second failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -1130,17 +1129,17 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   Scenario: Operator - Reschedule Failed Delivery - Upload CSV with empty line at the middle
     Given API Shipper create multiple V4 orders using data below:
@@ -1208,7 +1207,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator waits for 5 seconds
 
     #Verify first failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -1216,20 +1215,20 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     #Verify Second failed order
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -1237,17 +1236,17 @@ Feature: Failed Delivery Management Page - Action Feature
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
     And Operator verify transaction on Edit order page using data below:
-      | type    | DELIVERY                              |
-      | status  | FAIL                                  |
-      | driver  | {ninja-driver-name}                   |
-      | routeId | {KEY_CREATED_ROUTE_ID}                |
-      | dnr     | NORMAL                                |
-      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type    | DELIVERY                               |
+      | status  | FAIL                                   |
+      | driver  | {ninja-driver-name}                    |
+      | routeId | {KEY_CREATED_ROUTE_ID}                 |
+      | dnr     | NORMAL                                 |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY                              |
-      | status | PENDING                               |
-      | dnr    | NORMAL                                |
-      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+      | type   | DELIVERY                               |
+      | status | PENDING                                |
+      | dnr    | NORMAL                                 |
+      | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   Scenario: Operator - Reschedule Failed Delivery - Upload CSV without TIDs
     When Operator go to menu Shipper Support -> Failed Delivery Management
@@ -1266,7 +1265,3 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - uploads csv file without header
     Then Recovery User - verifies that toast displayed with message below:
       | message | Invalid Header in CSV, please check the sample file |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @FailedPickupManagementV2 @ClearCache @ClearCookies @CWF
+@OperatorV2 @Recovery @FailedPickupManagementV2 @ClearCache @ClearCookies
 Feature: Failed Pickup Management Page - Action Feature
 
   Background:
