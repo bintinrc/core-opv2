@@ -67,7 +67,7 @@ Feature: Batch Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route with following data:
+    And API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
@@ -123,7 +123,7 @@ Feature: Batch Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route with following data:
+    And API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |

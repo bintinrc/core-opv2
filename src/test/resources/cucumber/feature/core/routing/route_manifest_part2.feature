@@ -309,7 +309,7 @@ Feature: Route Manifest
     Given API Driver collect all his routes
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
-    Given API Operator start the route with following data:
+    Given API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
@@ -353,7 +353,7 @@ Feature: Route Manifest
     Given API Driver collect all his routes
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
-    Given API Operator start the route with following data:
+    Given API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |

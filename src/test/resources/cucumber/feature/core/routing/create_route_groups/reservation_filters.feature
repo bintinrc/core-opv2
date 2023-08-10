@@ -66,7 +66,7 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
-    And API Operator start the route with following data:
+    And API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
@@ -106,7 +106,7 @@ Feature: Create Route Groups - Reservation Filters
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route with following data:
+    And API Core - Operator start the route with following data:
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
