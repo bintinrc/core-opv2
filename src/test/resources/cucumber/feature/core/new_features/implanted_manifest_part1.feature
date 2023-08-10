@@ -7,7 +7,7 @@ Feature: Implanted Manifest
 
   @debug
   Scenario: DEBUG
-    And Operator waits for 10000000000 seconds
+    Given Operator waits for 100000 seconds
 
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
     Given API Order - Shipper create multiple V4 orders using data below:
