@@ -291,7 +291,7 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
       | {hub-id-25} | {hub-name-25} | {ninja-driver-name-25} | {ninja-driver-id-25} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
 
-  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Filter Auditor Task given Operator has Multiple Roles
     Given Operator login with client id = "{POD-Validator-client-id}" and client secret = "{POD-Validator-client-secret}"
     Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
