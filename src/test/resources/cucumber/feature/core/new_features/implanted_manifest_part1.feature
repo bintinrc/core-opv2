@@ -21,6 +21,18 @@ Feature: Implanted Manifest
   Scenario: DEBUG4
     Given Operator waits for 100000 seconds
 
+  @debug
+  Scenario: DEBUG5
+    Given Operator waits for 100000 seconds
+
+  @debug
+  Scenario: DEBUG6
+    Given Operator waits for 100000 seconds
+
+  @debug
+  Scenario: DEBUG7
+    Given Operator waits for 100000 seconds
+
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
