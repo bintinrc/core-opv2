@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart1 @current
+@OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart1
 Feature: Van Inbound
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -51,7 +51,7 @@ Feature: Van Inbound
       | type    | 4                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds with Invalid Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -61,7 +61,7 @@ Feature: Van Inbound
     And Operator fill the tracking ID "INVALID_TRACKING_ID" on Van Inbound Page then click enter
     Then Operator verify the tracking ID "INVALID_TRACKING_ID" that has been input on Van Inbound Page is invalid
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds with Empty Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
@@ -73,7 +73,7 @@ Feature: Van Inbound
     And Operator fill the empty tracking ID on Van Inbound Page
     Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -121,7 +121,7 @@ Feature: Van Inbound
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].toContact} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | On Vehicle for Delivery | Transit |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].toContact} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | Arrived at Sorting Hub  | Transit |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -202,7 +202,7 @@ Feature: Van Inbound
       | id     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status | IN_PROGRESS                        |
 
-  @DeleteOrArchiveRoute @wip
+  @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -218,14 +218,14 @@ Feature: Van Inbound
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                               |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                               |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[3].id}                               |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
@@ -276,7 +276,7 @@ Feature: Van Inbound
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
     And Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name    | DRIVER START ROUTE                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
