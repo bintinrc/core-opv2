@@ -1,6 +1,6 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @InvoiceDisputes @AcceptInvoiceDisputes
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @InvoiceDisputes @ErrorByPricingNullInvoiceDisputes
 
-Feature: Accept Invoice Disputes
+Feature: Error By Pricing Null Invoice Disputes
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"

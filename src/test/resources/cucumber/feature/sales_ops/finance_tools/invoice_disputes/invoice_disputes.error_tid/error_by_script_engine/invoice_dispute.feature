@@ -1,6 +1,6 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @InvoiceDisputes @AcceptInvoiceDisputes
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @InvoiceDisputes @ErrorByScriptEngineInvoiceDisputes
 
-Feature: Accept Invoice Disputes
+Feature: Error By Script Engine Invoice Disputes
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -109,20 +109,20 @@ Feature: Accept Invoice Disputes
       | originalBilledAmount | 8                                   |
       | codAmount            | 5                                   |
     And Operator verifies Manual Resolution data in manual resolution modal using data below:
-      | originalDeliveryFee    | 7.9                             |
-      | originalRTSFee         | 0                               |
-      | originalCODFee         | 0.1                             |
-      | originalInsuranceFee   | 0                               |
-      | originalTax            | 0.64                            |
-      | originalBillAmount     | 8.64                            |
-      | revisedDeliveryFee     | 10                              |
-      | revisedRTSFee          | 0                               |
-      | revisedCODFee          | 0.1                             |
-      | revisedInsuranceFee    | 0                               |
-      | revisedTax             | 0.64                            |
-      | revisedTotalBillAmount | 10.74                           |
-      | deltaAmount            | 2.10                            |
-      | remarks                | Fee has been revised.           |
+      | originalDeliveryFee    | 7.9                   |
+      | originalRTSFee         | 0                     |
+      | originalCODFee         | 0.1                   |
+      | originalInsuranceFee   | 0                     |
+      | originalTax            | 0.64                  |
+      | originalBillAmount     | 8.64                  |
+      | revisedDeliveryFee     | 10                    |
+      | revisedRTSFee          | 0                     |
+      | revisedCODFee          | 0.1                   |
+      | revisedInsuranceFee    | 0                     |
+      | revisedTax             | 0.64                  |
+      | revisedTotalBillAmount | 10.74                 |
+      | deltaAmount            | 2.10                  |
+      | remarks                | Fee has been revised. |
 
   @DeleteNewlyCreatedShipperCommonV2
   Scenario: Resolve TID with Dispute Type = "Billing Weight" - Invoice Dispute Status is Open - TID has Manual Resolution with Status Error from Script Engine - Not Input Revised Weight - Input All Revised Fees Breakdown - Submit with Internal Commentary (uid:a422f840-8b3b-43da-ab46-ad87a3bc674e)
