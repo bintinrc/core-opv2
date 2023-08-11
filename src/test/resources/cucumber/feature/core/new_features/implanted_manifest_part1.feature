@@ -5,34 +5,6 @@ Feature: Implanted Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @debug
-  Scenario: DEBUG1
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG2
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG3
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG4
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG5
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG6
-    Given Operator waits for 100000 seconds
-
-  @debug
-  Scenario: DEBUG7
-    Given Operator waits for 100000 seconds
-
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -144,10 +116,9 @@ Feature: Implanted Manifest
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     When Operator creates manifest for "1" reservation on Implanted Manifest page
     Then Operator verifies that error react notification displayed:
-      | top    | Error                                                     |
-      | bottom | POD not available. Please re-enter Reservation or Job ID. |
+      | top    | Error                                                    |
+      | bottom | Reservation or Job ID not found! Please enter another ID |
 
-  @wip2
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Pending Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -167,6 +138,6 @@ Feature: Implanted Manifest
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
     Then Operator verifies that error react notification displayed:
-      | top    | Error                                                     |
-      | bottom | POD not available. Please re-enter Reservation or Job ID. |
+      | top    | Error                      |
+      | bottom | Not a success reservation! |
     Then API Core - Operator verify there is no pods assigned to reservation id "{KEY_CREATED_RESERVATION_ID}"
