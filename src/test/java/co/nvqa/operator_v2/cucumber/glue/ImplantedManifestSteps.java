@@ -36,7 +36,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     page = new ImplantedManifestPage(getWebDriver());
   }
 
-  @When("^Operator selects Hub ([^\"]*) and clicks on \"Create Manifest\" button$")
+  @When("Operator selects Hub ([^\"]*) and clicks on \"Create Manifest\" button")
   public void operatorSelectsHubAndClicksOnButton(String hubName) {
     page.inFrame(() -> {
       page.selectHub(hubName);
@@ -134,7 +134,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator clicks \"Actions X\" button on Manifest table for all created orders on Implanted Manifest page$")
+  @When("Operator clicks \"Actions X\" button on Manifest table for all created orders on Implanted Manifest page")
   public void operatorClicksButtonOnManifestTableForAllCreatedOrdersOnImplementedManifestPage() {
     List<Order> orders = getListOfCreatedOrders();
     int ordersSize = orders.size();
@@ -178,7 +178,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     page.inFrame(() -> page.hubSelect.selectValue(hubName));
   }
 
-  @When("^Operator clicks Create Manifest on Implanted Manifest page$")
+  @When("Operator clicks Create Manifest on Implanted Manifest page")
   public void operatorClicksCreateManifestOnImplantedManifestPage() {
     page.inFrame(() -> page.createManifest.click());
   }
@@ -192,7 +192,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator saves created orders Tracking IDs without prefix$")
+  @When("Operator saves created orders Tracking IDs without prefix")
   public void removeTrackingIdsPrefix() {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
     String prefix = OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID);
@@ -212,7 +212,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator adds country prefix on Implanted Manifest page$")
+  @When("Operator adds country prefix on Implanted Manifest page")
   public void operatorAddsPrefixOnImplantedManifestPage() {
     page.inFrame(() -> {
       page.addPrefix.click();
@@ -224,14 +224,14 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator closes Create Manifest dialog on Implanted Manifest page$")
+  @When("Operator closes Create Manifest dialog on Implanted Manifest page")
   public void operatorClosesCreateManifestDialogOnImplantedManifestPage() {
     page.createManifestDialog.close();
     page.createManifestDialog.waitUntilInvisible();
   }
 
-  @When("^Operator verifies that \"(.+)\" success toast message is displayed$")
-  @And("^Operator verifies that \"(.+)\" error toast message is displayed$")
+  @When("Operator verifies that \"(.+)\" success toast message is displayed")
+  @And("Operator verifies that \"(.+)\" error toast message is displayed")
   public void operatorVerifiesErrorToast(String message) {
     message = resolveValue(message);
     page.waitUntilInvisibilityOfToast(message);
