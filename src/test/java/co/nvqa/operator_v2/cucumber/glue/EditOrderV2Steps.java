@@ -822,14 +822,15 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
   public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
-    List<OrderEvent> events = page.eventsTable().readAllEntities();
-    data = resolveValues(data);
-    SoftAssertions assertions = new SoftAssertions();
-    data.forEach(expected -> assertions.assertThat(
-            events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
-        .as("%s event was found").isFalse());
-    assertions.assertAll();
-    takesScreenshot();
+    List<String> resolvedData = resolveValues(data);
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      resolvedData.forEach(eventData -> Assertions
+          .assertThat(
+              actualEvents.get().stream().anyMatch(e -> equalsIgnoreCase(e.getName(), eventData)))
+          .as("%s event was found")
+          .isFalse());
+    });
   }
 
   @Then("Operator unmask Delivery details on Edit Order V2 page")

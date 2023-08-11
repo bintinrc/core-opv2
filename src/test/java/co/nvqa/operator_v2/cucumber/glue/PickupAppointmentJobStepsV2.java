@@ -48,11 +48,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
-      pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+      doWithRetry(() -> {
+        pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+      }, "wait toast until invisible", 2000, 5);
     }
-    getWebDriver().switchTo().frame(0);
-    pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
-        pickupAppointmentJobPage.getLoadSelection().getWebElement());
+    pickupAppointmentJobPage.inFrame(page ->{
+      pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
+          pickupAppointmentJobPage.getLoadSelection().getWebElement());
+    });
   }
 
   @When("Operator click on Create or edit job button on this top right corner of the page")
@@ -562,7 +565,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void verifyDownloadedParcelList(List<String> tids) {
     pickupAppointmentJobPage.inFrame(() -> {
       String fileanme = pickupAppointmentJobPage.getLatestDownloadedFilename("pop-file-id-");
-      String content = "Scanned at Shipper (POP)\n" + Strings.join("\n", resolveValues(tids));
+      String content = "Scanned at Shipper (POP)\n" + String.join("\n", resolveValues(tids));
       pickupAppointmentJobPage.verifyFileDownloadedSuccessfully(fileanme, content);
     });
   }

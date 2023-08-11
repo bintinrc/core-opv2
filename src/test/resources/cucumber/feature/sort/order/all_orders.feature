@@ -5,7 +5,7 @@ Feature: All Orders
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedSortCode
+  @DeleteCreatedSortCodeCommonV2
   Scenario: Print AWB - Delivery Sort Code Exist (uid:c6fb37da-e61c-4fbf-940c-224877a5319a)
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     And API Order - Operator create a sort code using postcode "RANDOM"

@@ -36,7 +36,6 @@ Feature: Shipper Address Configuration
 
   Scenario: Success Remove All Addresses from Group
     When Operator loads Shipper Address Configuration page
-    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 2                                                                                                                                                                                                                                           |
@@ -63,7 +62,6 @@ Feature: Shipper Address Configuration
     And Operator clicks on the "Remove" button
     Then Operator verify success message is displayed
     Then Verify that the Group Address for Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}" is showing with text "No Group"
-
 
   Scenario: Success Remove Multiple Addresses with More than 1 Parent
     When Operator loads Shipper Address Configuration page
@@ -134,9 +132,9 @@ Feature: Shipper Address Configuration
   Then Verify that the Group Address for Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}" is showing with text "36SenokoRd,Singapore, SG, 124100"
 
   Scenario: Success Add New Address Existing Group and Group Address Remain the Same
-    When Operator loads Shipper Address Configuration page
-    And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
-    When API Operator creates shipper address using below data:
+  When Operator loads Shipper Address Configuration page
+  And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
+  When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 3                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |

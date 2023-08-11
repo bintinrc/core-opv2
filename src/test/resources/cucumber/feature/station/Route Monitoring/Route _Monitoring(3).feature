@@ -5,14 +5,14 @@ Feature: Route Monitoring V2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Empty Route
     Given Operator loads Operator portal home page
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -28,25 +28,41 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
-  Scenario Outline: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @Hold
+  Scenario Outline: Show Updated Driver Name in Route Monitoring (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
     Given Operator loads Operator portal home page
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | {"first_name":"{{RANDOM_FIRST_NAME}}","last_name":"driver","display_name":"D{{TIMESTAMP}}","license_number":"D{{TIMESTAMP}}","driver_type":"{driver-type-name}","availability":false,"cod_limit":4353,"vehicles":[{"active":true,"vehicleNo":"6456345","vehicleType":"{vehicle-type-name}","ownVehicle":false,"capacity":345}],"contacts":[{"active":true,"type":"Mobile Phone","details":"+65 65745 455"}],"zone_preferences":[{"latitude":1.3597220659709373,"longitude":103.82701942695314,"maxWaypoints":6,"minWaypoints":6,"rank":1,"zoneId":3629,"cost":6}],"max_on_demand_jobs":45,"username":"Station{{TIMESTAMP}}","password":"Password1","tags":{},"employment_start_date":"{date:0 days next,YYYY-MM-dd}","employment_end_date":null,"hub_id":<HubId>,"hub":{"displayName":"<HubName>","value":<HubId>}} |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep multiple parcels in the hub
-      | hubId | <HubId> |
-    And API Operator create new route using data below:
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    When API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | {"first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "driver", "display_name": "D{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"Station{{TIMESTAMP}}","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":<HubId>} |
+      | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                      |
+      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+65 65745 455"}]                                                                                                                                                                                                                                                                                                                                                                  |
+      | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": 2, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                          |
+      | hub                    | {"displayName": "<HubName>", "value": <HubId>}                                                                                                                                                                                                                                                                                                                                                                                     |
+      | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                |
+#   And API Operator create new Driver using data below:
+#  | driverCreateRequest | {"first_name":"{{RANDOM_FIRST_NAME}}","last_name":"driver","display_name":"D{{TIMESTAMP}}","license_number":"D{{TIMESTAMP}}","driver_type":"{driver-type-name}","availability":false,"cod_limit":4353,"vehicles":[{"active":true,"vehicleNo":"6456345","vehicleType":"{vehicle-type-name}","ownVehicle":false,"capacity":345}],"contacts":[{"active":true,"type":"Mobile Phone","details":"+65 65745 455"}],"zone_preferences":[{"latitude":1.3597220659709373,"longitude":103.82701942695314,"maxWaypoints":6,"minWaypoints":6,"rank":1,"zoneId":3629,"cost":6}],"max_on_demand_jobs":45,"username":"Station{{TIMESTAMP}}","password":"Password1","tags":{},"employment_start_date":"{date:0 days next,YYYY-MM-dd}","employment_end_date":null,"hub_id":<HubId>,"hub":{"displayName":"<HubName>","value":<HubId>}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    When API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{ninja-driver-name}"
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -54,35 +70,38 @@ Feature: Route Monitoring V2
       | routeDateTo   | TODAY     |
       | hubName       | <HubName> |
     And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}         |
-      | tags       | {route-tag-name}                         |
-      | zone       | {zone-name}                              |
-      | hub        | <HubName>                                |
-      | driverName | {KEY_CREATED_DRIVER_INFO.getDisplayName} |
-      | comments   | Route has been edited by automated test  |
+      | date       | {gradle-current-date-yyyy-MM-dd}            |
+      | tags       | {route-tag-name}                            |
+      | zone       | {zone-name}                                 |
+      | hub        | <HubName>                                   |
+      | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | comments   | Route has been edited by automated test     |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
-    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_CREATED_DRIVER_INFO.getDisplayName}"
+    And Operator enters routeID "{KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}"
 
 
     Examples:
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @Pass
   Scenario Outline: View Pickup Appointment Job in Route Monitoring - Add Multiple PA Jobs to Route
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -98,19 +117,22 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
   Scenario Outline: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending PA Job From Route
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -123,10 +145,10 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
     And API Operator removes Pickup Appointment job to Route
       | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+      | route_Id | {KEY_LIST_OF_CREATED_ROUTES[1].id}  |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -141,19 +163,22 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Hold
   Scenario Outline: Show Updated Route Id & Driver Name of Routed PA Job in Route Monitoring
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -167,11 +192,11 @@ Feature: Route Monitoring V2
     And Operator saves old route
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"first_name":"{{RANDOM_FIRST_NAME}}","last_name":"driver","display_name":"D{{TIMESTAMP}}","license_number":"D{{TIMESTAMP}}","driver_type":"{driver-type-name}","availability":false,"cod_limit":4353,"vehicles":[{"active":true,"vehicleNo":"6456345","vehicleType":"{vehicle-type-name}","ownVehicle":false,"capacity":345}],"contacts":[{"active":true,"type":"Mobile Phone","details":"+65 65745 455"}],"zone_preferences":[{"latitude":1.3597220659709373,"longitude":103.82701942695314,"maxWaypoints":6,"minWaypoints":6,"rank":1,"zoneId":3629,"cost":6}],"max_on_demand_jobs":45,"username":"Station{{TIMESTAMP}}","password":"Password1","tags":{},"employment_start_date":"{date:0 days next,YYYY-MM-dd}","employment_end_date":null,"hub_id":<HubId>,"hub":{"displayName":"<HubName>","value":<HubId>}} |
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{KEY_CREATED_DRIVER_ID} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_OLD_ROUTE_ID}" in the Route filter
@@ -187,7 +212,7 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_CREATED_DRIVER_INFO.getDisplayName}"
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
@@ -204,21 +229,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Pass
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - PA Job
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator success Pickup Appointment job
-      | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
+      | pickupAppointmentProofRequest | {"status":"completed","photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -234,22 +263,30 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @SystemIdNotSg @default-my @Pass
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed PA Job
     Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator fails Pickup Appointment job
-      | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
-      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                         |
+      | pickupAppointmentProofRequest | {"failure_reason_code_id": 9,"failure_reason_id": 2664,"status": "failed","photo_urls": []} |
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -262,25 +299,28 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
 
     Examples:
-      | HubId       | HubName       |
-      | {hub-id-22} | {hub-name-22} |
+      | HubId      | HubName      | Country  |
+      | {hub-id-2} | {hub-name-2} | Malaysia |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @Pass
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator fails Pickup Appointment job
-      | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
-      | requestBody | {"status":"failed","failure_reason_id":1476,"failure_reason_code_id":1476,"photo_urls":[]} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
+      | pickupAppointmentProofRequest | {"status":"failed","failure_reason_id":1476,"failure_reason_code_id":1476,"photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -296,22 +336,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @Pass
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator fails Pickup Appointment job
-      | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
-      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
+      | pickupAppointmentProofRequest | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -342,19 +385,22 @@ Feature: Route Monitoring V2
       | HubId       | HubName       | Name                        | Address                 | Contact                 |
       | {hub-id-22} | {hub-name-22} | {PA_shipper-v4-pickup-name} | {PA_shipper-v4-address} | {PA_shipper-v4-contact} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @TimeBased @Failed
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending & Late PA Job Waypoint
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -370,21 +416,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @TimeBased @Failed
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Late PA Job Waypoint
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator success Pickup Appointment job
-      | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
+      | pickupAppointmentProofRequest | {"status":"completed","photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -400,22 +450,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @TimeBased @Failed
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Late PA Job Waypoint
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator fails Pickup Appointment job
-      | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
-      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                     |
+      | pickupAppointmentProofRequest | {"status":"failed","failure_reason_id":9,"failure_reason_code_id":2664,"photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -431,21 +484,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @TimeBased @Failed
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Early PA Job Waypoint
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator success Pickup Appointment job
-      | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
+      | pickupAppointmentProofRequest | {"status":"completed","photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
@@ -461,22 +518,25 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-22} | {hub-name-22} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriver @TimeBased @Failed
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Early PA Job Waypoint
     Given Operator loads Operator portal home page
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {PA_shipper-v4-id} |
+      | generateAddress | RANDOM             |
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    And API Operator create new route using data below:
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
-    And API Operator fails Pickup Appointment job
-      | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
-      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+    When API Control - Operator update pickup appointment job proof with data below:
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                     |
+      | pickupAppointmentProofRequest | {"status":"failed","failure_reason_id":9,"failure_reason_code_id":2664,"photo_urls":[]} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
-    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    And Operator enters routeID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
     Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
