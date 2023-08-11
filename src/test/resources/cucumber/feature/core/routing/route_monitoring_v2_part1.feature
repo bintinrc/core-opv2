@@ -155,7 +155,7 @@ Feature: Route Monitoring V2
       | numInvalidFailed     | 0                      |
       | numValidFailed       | 0                      |
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

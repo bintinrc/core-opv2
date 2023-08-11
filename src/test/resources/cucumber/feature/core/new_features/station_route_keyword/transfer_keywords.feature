@@ -13,21 +13,21 @@ Feature: Transfer Keywords
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                                                                                                                        |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}                                                                                                      |
+      | area             | Area tksk {gradle-current-date-yyyyMMddHHmmsss}                                                                                                 |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss}                                                                                             |
       | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss}, Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}, Keyword 3 {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                                                                              |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                                                                                                              |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tksk {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword 4 {gradle-current-date-yyyyMMddHHmmsss}     |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                  |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tksk {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword 5 {gradle-current-date-yyyyMMddHHmmsss}     |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
@@ -35,22 +35,22 @@ Feature: Transfer Keywords
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area     | Area {gradle-current-date-yyyyMMddHHmmsss}    |
-      | keywords | Keyword {gradle-current-date-yyyyMMddHHmmsss} |
+      | area     | Area tksk {gradle-current-date-yyyyMMddHHmmsss} |
+      | keywords | Keyword {gradle-current-date-yyyyMMddHHmmsss}   |
     And Operator transfer keywords on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify keywords on Transfer keywords dialog:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verify coverages on Transfer keywords dialog:
-      | area                                       | keywords                                        | primaryDriver                               | fallbackDriver                              |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 5 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | area                                            | keywords                                        | primaryDriver                               | fallbackDriver                              |
+      | AREA TKSK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | AREA TKSK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 5 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     When Operator select coverage on Transfer keywords dialog:
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} |
+      | AREA TKSK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that success react notification displayed:
-      | top    | Keywords transferred                                                 |
-      | bottom | 1 keywords transferred to AREA {gradle-current-date-yyyyMMddHHmmsss} |
+      | top    | Keywords transferred                                                      |
+      | bottom | 1 keywords transferred to AREA TKSK {gradle-current-date-yyyyMMddHHmmsss} |
     Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
@@ -66,21 +66,21 @@ Feature: Transfer Keywords
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                                                                                                                        |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}                                                                                                      |
+      | area             | Area tkmk {gradle-current-date-yyyyMMddHHmmsss}                                                                                                 |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss}                                                                                             |
       | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss}, Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}, Keyword 3 {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                                                                              |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                                                                                                              |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tkmk {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword 4 {gradle-current-date-yyyyMMddHHmmsss}     |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                  |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tkmk {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword 5 {gradle-current-date-yyyyMMddHHmmsss}     |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
@@ -88,8 +88,8 @@ Feature: Transfer Keywords
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area     | Area {gradle-current-date-yyyyMMddHHmmsss}    |
-      | keywords | Keyword {gradle-current-date-yyyyMMddHHmmsss} |
+      | area     | Area tkmk {gradle-current-date-yyyyMMddHHmmsss} |
+      | keywords | Keyword {gradle-current-date-yyyyMMddHHmmsss}   |
     And Operator transfer keywords on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
@@ -97,15 +97,15 @@ Feature: Transfer Keywords
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verify coverages on Transfer keywords dialog:
-      | area                                       | keywords                                        | primaryDriver                               | fallbackDriver                              |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 5 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | area                                            | keywords                                        | primaryDriver                               | fallbackDriver                              |
+      | AREA TKMK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | AREA TKMK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 5 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     When Operator select coverage on Transfer keywords dialog:
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} |
+      | AREA TKMK {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD 4 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that success react notification displayed:
-      | top    | Keywords transferred                                                 |
-      | bottom | 2 keywords transferred to AREA {gradle-current-date-yyyyMMddHHmmsss} |
+      | top    | Keywords transferred                                                      |
+      | bottom | 2 keywords transferred to AREA TKMK {gradle-current-date-yyyyMMddHHmmsss} |
     Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
@@ -123,7 +123,7 @@ Feature: Transfer Keywords
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                                                                                                                        |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}                                                                                                      |
+      | area             | Area tknc {gradle-current-date-yyyyMMddHHmmsss}                                                                                                 |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss}                                                                                             |
       | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss}, Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}, Keyword 3 {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                                                                              |
@@ -131,7 +131,7 @@ Feature: Transfer Keywords
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area | Area {gradle-current-date-yyyyMMddHHmmsss} |
+      | area | Area tknc {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator transfer keywords on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify keywords on Transfer keywords dialog:
@@ -147,7 +147,7 @@ Feature: Transfer Keywords
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tknk {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                  |
@@ -165,28 +165,28 @@ Feature: Transfer Keywords
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tkcf {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss}       |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                  |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                                                                         |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}                                                       |
+      | area             | Area tkcf {gradle-current-date-yyyyMMddHHmmsss}                                                  |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss}                                              |
       | keywords         | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}, Keyword 3 {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                               |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                                                               |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                            |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | area             | Area tkcf {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                  |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                  |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area     | Area {gradle-current-date-yyyyMMddHHmmsss}                                                       |
+      | area     | Area tkcf {gradle-current-date-yyyyMMddHHmmsss}                                                  |
       | keywords | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}, Keyword 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator transfer keywords on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
@@ -195,15 +195,15 @@ Feature: Transfer Keywords
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verify coverages on Transfer keywords dialog:
-      | area                                       | keywords                                      | primaryDriver                               | fallbackDriver                              |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} |                                               | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | area                                            | keywords                                      | primaryDriver                               | fallbackDriver                              |
+      | AREA TKCF {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | AREA TKCF {gradle-current-date-yyyyMMddHHmmsss} |                                               | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     When Operator select coverage on Transfer keywords dialog:
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | AREA TKCF {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                            |
-      | bottom | ^.*Error Message: cannot transfer all keywords of current coverage \[area=AREA {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no keyword.* |
+      | top    | Status 400: Unknown                                                                                                                                                                                 |
+      | bottom | ^.*Error Message: cannot transfer all keywords of current coverage \[area=AREA TKCF {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no keyword.* |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Transfer Keywords for Coverage on Station Route Keyword - Coverage Found - Coverages Have Duplicate Empty Area Variation
@@ -212,35 +212,35 @@ Feature: Transfer Keywords
     Given API Driver - Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Route - Operator create new coverage:
-      | hubId            | {hub-id}                                      |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}    |
-      | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss} |
-      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}           |
-      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}           |
+      | hubId            | {hub-id}                                        |
+      | area             | Area tkdv {gradle-current-date-yyyyMMddHHmmsss} |
+      | keywords         | Keyword {gradle-current-date-yyyyMMddHHmmsss}   |
+      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}              |
+      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}              |
     And API Route - Operator create new coverage:
       | hubId            | {hub-id}                                        |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}      |
+      | area             | Area tkdv {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords         | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}             |
-      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}             |
+      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}              |
+      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}              |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area     | Area {gradle-current-date-yyyyMMddHHmmsss}      |
+      | area     | Area tkdv {gradle-current-date-yyyyMMddHHmmsss} |
       | keywords | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator transfer keywords on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify keywords on Transfer keywords dialog:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verify coverages on Transfer keywords dialog:
-      | area                                       | keywords                                      | primaryDriver                                | fallbackDriver                               |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | area                                            | keywords                                      | primaryDriver                               | fallbackDriver                              |
+      | AREA TKDV {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     When Operator select coverage on Transfer keywords dialog:
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | AREA TKDV {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that success react notification displayed:
-      | top    | Keywords transferred                                                 |
-      | bottom | 1 keywords transferred to AREA {gradle-current-date-yyyyMMddHHmmsss} |
+      | top    | Keywords transferred                                                      |
+      | bottom | 1 keywords transferred to AREA TKDV {gradle-current-date-yyyyMMddHHmmsss} |
     Then DB Route - verifies that route_qa_gl.sr_keywords multiple records are created:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE[1].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
