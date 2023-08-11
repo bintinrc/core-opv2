@@ -171,9 +171,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
         String outcome = recoveryTicket.getOrderOutcome();
         if (StringUtils.isEmpty(outcome)) {
           outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
-          createTicketDialog.orderOutcome.waitUntilVisible();
-          createTicketDialog.orderOutcome.selectValue(outcome);
         }
+        createTicketDialog.orderOutcome.waitUntilVisible();
+        createTicketDialog.orderOutcome.selectValue(outcome);
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.waitUntilVisible();
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
