@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @EditArea
 Feature: Edit Area
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverageV2

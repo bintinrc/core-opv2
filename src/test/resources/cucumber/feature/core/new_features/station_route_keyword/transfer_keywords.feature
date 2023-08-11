@@ -5,10 +5,6 @@ Feature: Transfer Keywords
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Transfer Keywords for Coverage on Station Route Keyword - Coverages found - Single Keyword
     Given API Driver - Operator create new Driver using data below:
