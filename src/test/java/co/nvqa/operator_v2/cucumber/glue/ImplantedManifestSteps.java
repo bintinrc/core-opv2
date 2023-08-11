@@ -194,7 +194,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
 
   @When("^Operator saves created orders Tracking IDs without prefix$")
   public void removeTrackingIdsPrefix() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
     String prefix = OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID);
     List<String> prefixlessTrackingIds = trackingIds.stream()
         .map(s -> s.replaceFirst(prefix, ""))
@@ -214,12 +214,14 @@ public class ImplantedManifestSteps extends AbstractSteps {
 
   @When("^Operator adds country prefix on Implanted Manifest page$")
   public void operatorAddsPrefixOnImplantedManifestPage() {
-    page.addPrefix.click();
-    page.setPrefixDialog.waitUntilVisible();
-    page.setPrefixDialog.prefix
-        .setValue(OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID));
-    page.setPrefixDialog.save.click();
-    page.setPrefixDialog.waitUntilInvisible();
+    page.inFrame(() -> {
+      page.addPrefix.click();
+      page.setPrefixDialog.waitUntilVisible();
+      page.setPrefixDialog.prefix.sendKeys(
+          OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID));
+      page.setPrefixDialog.save.click();
+      page.setPrefixDialog.waitUntilInvisible();
+    });
   }
 
   @When("^Operator closes Create Manifest dialog on Implanted Manifest page$")

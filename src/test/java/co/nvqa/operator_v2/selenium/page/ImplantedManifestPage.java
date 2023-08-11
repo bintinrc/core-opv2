@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -9,13 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Map;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -33,7 +25,7 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
   @FindBy(xpath = ".//div[contains(@class,'ant-card')][./div/div/div[.='Remove order by scan']]//input[@data-testid='barcode-input-field']")
   public ForceClearTextBox removeOrderByScanInput;
 
-  @FindBy(css = ".//div[contains(@class,'ant-card')][./div/div/div[.='Scan Barcode']]//button[@data-testid='scan-field.set-prefix-button']")
+  @FindBy(xpath = ".//div[contains(@class,'ant-card')][./div/div/div[.='Scan Barcode']]//button[@data-testid='scan-field.set-prefix-button']")
   public Button addPrefix;
 
   @FindBy(css = "[data-testid='download-csv-button']")
@@ -66,7 +58,7 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
   @FindBy(css = ".ant-modal")
   public CreateManifestDialog createManifestDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "[class='ant-modal-content']")
   public SetPrefixDialog setPrefixDialog;
 
   public ImplantedManifestOrderTable implantedManifestOrderTable;
@@ -143,13 +135,13 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
     }
   }
 
-  public static class SetPrefixDialog extends MdDialog {
+  public static class SetPrefixDialog extends AntModal {
 
-    @FindBy(id = "container.global-inbound.prefix")
+    @FindBy(xpath = "//input[@data-testid='prefix-input-field']")
     public TextBox prefix;
 
-    @FindBy(id = "saveButtonPrefix")
-    public NvIconTextButton save;
+    @FindBy(xpath = "//button[@data-testid='set-prefix-dialog.confirm-button']")
+    public Button save;
 
     public SetPrefixDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
