@@ -155,7 +155,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
         createTicketDialog.ticketSubtype.waitUntilVisible();
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
 
-        if (recoveryTicket.getTicketSubType().equals("INACCURATE ADDRESS")) {
+        if ("RTS".equals(recoveryTicket.getOrderOutcomeInaccurateAddress())) {
           createTicketDialog.orderOutcome.waitUntilVisible();
           createTicketDialog.orderOutcome
               .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
@@ -169,13 +169,13 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       case TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        String outcome = recoveryTicket.getOrderOutcome();
-        if (StringUtils.isEmpty(outcome)) {
+        if (recoveryTicket.getTicketSubType().equals("DUPLICATE PARCEL")) {
+          String outcome = recoveryTicket.getOrderOutcome();
           outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
+          createTicketDialog.orderOutcome.waitUntilVisible();
+          createTicketDialog.orderOutcome.selectValue(outcome);
         }
-        createTicketDialog.orderOutcome.waitUntilVisible();
-        createTicketDialog.orderOutcome.selectValue(outcome);
-        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+        if ("RTS".equals(createTicketDialog.orderOutcome.getText())) {
           createTicketDialog.rtsReason.waitUntilVisible();
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }

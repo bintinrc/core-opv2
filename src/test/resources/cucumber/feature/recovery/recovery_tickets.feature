@@ -957,12 +957,12 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name                          | ticketSubtype        |
-      | ticket_subtype = DUPLICATE PARCEL     | DUPLICATE PARCEL     |
+      | Dataset Name                      | ticketSubtype    |
+      | ticket_subtype = DUPLICATE PARCEL | DUPLICATE PARCEL |
       | ticket_subtype = NO ORDER             | NO ORDER             |
       | ticket_subtype = OVERWEIGHT/OVERSIZED | OVERWEIGHT/OVERSIZED |
       | ticket_subtype = POOR LABELLING       | POOR LABELLING       |
-      | ticket_subtype = POOR PACKAGING       | POOR PACKAGING       |
+      | ticket_subtype = POOR PACKAGING   | POOR PACKAGING   |
       | ticket_subtype = REJECTED RETURN      | REJECTED RETURN      |
       | ticket_subtype = RESTRICTED GOODS     | RESTRICTED GOODS     |
 
@@ -1259,11 +1259,11 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                           | orderOutcome                           | postStatus | postGranularStatus     |
-      | order_outcome = NV NOT LIABLE - PARCEL DELIVERED       | NV NOT LIABLE - PARCEL DELIVERED       | Completed  | Completed              |
-      | order_outcome = NV LIABLE - PARCEL DISPOSED            | NV LIABLE - PARCEL DISPOSED            | Cancelled  | Cancelled              |
-      | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED    | NV LIABLE - FULL - PARCEL DELIVERED    | Completed  | Completed              |
-      | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED | NV LIABLE - PARTIAL - PARCEL DELIVERED | Transit    | Arrived at Sorting Hub |
+      | Dataset Name                                           | orderOutcome                           | postStatus | postGranularStatus |
+      | order_outcome = NV NOT LIABLE - PARCEL DELIVERED       | NV NOT LIABLE - PARCEL DELIVERED       | Completed  | Completed          |
+      | order_outcome = NV LIABLE - PARCEL DISPOSED            | NV LIABLE - PARCEL DISPOSED            | Cancelled  | Cancelled          |
+      | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED    | NV LIABLE - FULL - PARCEL DELIVERED    | Completed  | Completed          |
+      | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED | NV LIABLE - PARTIAL - PARCEL DELIVERED | Completed  | Completed          |
 
   @ResolveTicket
   Scenario Outline: Resolve Ticket - ticket_type = DAMAGED -RTS- <Dataset Name>
@@ -1436,7 +1436,7 @@ Feature: New Recovery Tickets
       | TICKET RESOLVED |
       | TICKET UPDATED  |
 
-  @ResolveTicket @RT
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1477,13 +1477,13 @@ Feature: New Recovery Tickets
 
     Examples:
       | Dataset Name                                                  | ticketSubtype     | orderOutcome | postStatus | postGranularStatus     |
-#      | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
-#      | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-#      | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-#      | ticket_subtype = INACCURATE ADDRESS - order_outcome = RESUME PICKUP            | INACCURATE ADDRESS          | RESUME PICKUP      | Pending    | Pending Pickup         |
-#      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-#      | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
-#      | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
+      | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = INACCURATE ADDRESS - order_outcome = RESUME PICKUP            | INACCURATE ADDRESS          | RESUME PICKUP      | Pending    | Pending Pickup         |
+      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
+      | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV | WRONG AV/RACK/HUB | FIXED AV     | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
@@ -1577,7 +1577,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO ORDER - order_outcome = ORDERS CREATED                          | NO ORDER          | ORDERS CREATED                  | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE              | REJECTED RETURN   | DAMAGED - NV LIABLE             | Cancelled  | Cancelled              |
       | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV NOT LIABLE - PARCEL SCRAPPED | Completed  | Completed              |
-      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
+#      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
       | ticket_subtype = POOR LABELLING - order_outcome = RESUME PICKUP                     | POOR LABELLING    | RESUME PICKUP                   | Pending    | Pending Pickup         |
       | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV TO REPACK AND SHIP           | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | PARCEL SCRAPPED                 | Completed  | Completed              |
