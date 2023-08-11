@@ -73,7 +73,10 @@ Feature: Cancel Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Van En-route to Pickup" on Edit Order page
@@ -125,7 +128,10 @@ Feature: Cancel Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup using data below:
@@ -212,7 +218,10 @@ Feature: Cancel Order
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver failed the delivery of the created parcel using data below:
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
@@ -257,7 +266,10 @@ Feature: Cancel Order
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When API Operator cancel created order and get error:
       | statusCode | 500                               |
       | message    | Order is On Vehicle for Delivery! |

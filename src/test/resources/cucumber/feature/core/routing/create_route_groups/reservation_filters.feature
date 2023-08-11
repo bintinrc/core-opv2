@@ -6,7 +6,6 @@ Feature: Create Route Groups - Reservation Filters
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Pickup Size Create Route Groups - Reservation Filters - Pickup Size = <pickupSize>
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -34,7 +33,6 @@ Feature: Create Route Groups - Reservation Filters
       | Trolley Required     |
 
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Cancel - Reservation Filters
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -56,7 +54,6 @@ Feature: Create Route Groups - Reservation Filters
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Fail - Reservation Filters
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new shipper address V2 using data below:
@@ -66,7 +63,10 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver fail the reservation using data below:
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 9           |
@@ -86,7 +86,6 @@ Feature: Create Route Groups - Reservation Filters
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Success - Reservation Filters
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -103,7 +102,10 @@ Feature: Create Route Groups - Reservation Filters
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
@@ -125,7 +127,6 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | SUCCESS | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Pending - Reservation Filters
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -145,7 +146,6 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   Scenario Outline: Operator Filter Reservation Type on Create Route Groups - Reservation Filters - <Note>
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
