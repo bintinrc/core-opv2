@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies @CWF
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
 Feature: New Recovery Tickets
 
   Background:
