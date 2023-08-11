@@ -71,12 +71,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    implementation "co.nvqa:common-base:1.3.3"
-    implementation "co.nvqa:common-ui:1.3.2"
+    implementation "co.nvqa:common-base:1.3.4"
+    implementation "co.nvqa:common-ui:1.3.3"
     implementation "co.nvqa:common-ordercreate:1.3.2"
     implementation "co.nvqa:common-driver:1.3.6"
     implementation "co.nvqa:common-corev2:1.2.6"
-    implementation "co.nvqa:common-core:1.3.18-RC6"
+    implementation "co.nvqa:common-core:1.3.18-RC8"
     implementation "co.nvqa:common-dp:1.3.23"
     implementation "co.nvqa:common-auth:1.3.1"
     implementation "co.nvqa:common-sort:1.3.13"
@@ -85,7 +85,7 @@ dependencies {
     implementation "co.nvqa:common-recovery:1.3.1"
     implementation "co.nvqa:common-mm:1.3.10"
     implementation "co.nvqa:common-pricing:1.3.19"
-    implementation "co.nvqa:common-lighthouse:1.3.0"
+    implementation "co.nvqa:common-lighthouse:1.3.1"
     implementation "co.nvqa:common-station:1.3.3"
     implementation "co.nvqa:common-sns:1.2.1"
     implementation "co.nvqa:common-fm:1.0.0"
