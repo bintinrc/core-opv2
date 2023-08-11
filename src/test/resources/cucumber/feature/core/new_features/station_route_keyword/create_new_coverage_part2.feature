@@ -1,8 +1,12 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart2
 Feature: Create New Coverage
 
-  Background:
-    Given Launch browser
+#  Background:
+#    Given Launch browser
+#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverageV2
@@ -455,3 +459,7 @@ Feature: Create New Coverage
       | hubId            | {hub-id}                                           |
       | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[3].id}                 |
       | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[4].id}                 |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

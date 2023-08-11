@@ -1,8 +1,12 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @TransferKeywords
 Feature: Transfer Keywords
 
-  Background:
-    Given Launch browser
+#  Background:
+#    Given Launch browser
+#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverageV2
@@ -247,3 +251,7 @@ Feature: Transfer Keywords
     And DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
