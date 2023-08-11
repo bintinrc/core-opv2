@@ -1,10 +1,6 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @EditArea
 Feature: Edit Area
 
-#  Background:
-#    Given Launch browser
-#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -350,14 +346,10 @@ Feature: Edit Area
       | areaVariations | VARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}   |
     And Operator verifies that success react notification displayed:
       | top    | Coverage updated                                                                                                                |
-      | bottom | Area eadh AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} with variations VARIATION 3 {gradle-current-date-yyyyMMddHHmmsss} |
+      | bottom | Area AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} with variations VARIATION 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Route - verify that sr_coverages record is created:
       | id             | {KEY_LIST_OF_COVERAGE[2].id}                        |
       | area           | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id-6}                                          |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[3].id}                  |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].id}                  |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

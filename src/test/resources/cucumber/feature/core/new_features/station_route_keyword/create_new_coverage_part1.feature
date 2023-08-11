@@ -1,11 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart1
 Feature: Create New Coverage
 
-#  Background:
-#    Given Launch browser
-#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverageV2
@@ -307,7 +304,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}           |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                                                            |
-      | bottom | ^.*Error Message: More than one existing areas are found in the area and area variation input: \[AREA cncnm {gradle-current-date-yyyyMMddHHmmsss},AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]. Please adjust ....* |
+      | bottom | ^.*Error Message: More than one existing areas are found in the area and area variation input: \[AREA cncnm {gradle-current-date-yyyyMMddHHmmsss},AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]. Please a....* |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Creates New Coverage on Station Route Keyword - Duplicate Area, New Area Variation, and Duplicate Keyword - Not Transfer Keyword
@@ -472,7 +469,3 @@ Feature: Create New Coverage
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Route - fetch coverage id for "AREA CNCDAVK {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Route - verify that sr_keywords record is not created for "{KEY_COVERAGE_ID}" area
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

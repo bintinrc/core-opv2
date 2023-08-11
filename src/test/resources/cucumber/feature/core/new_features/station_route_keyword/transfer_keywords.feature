@@ -1,9 +1,9 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @TransferKeywords
 Feature: Transfer Keywords
 
-#  Background:
-#    Given Launch browser
-#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+  Background:
+    Given Launch browser
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -158,7 +158,7 @@ Feature: Transfer Keywords
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
-      | area | Area {gradle-current-date-yyyyMMddHHmmsss} |
+      | area | Area tknk {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify there are no keywords to transfer on Station Route Keyword page
 
   @DeleteDriverV2 @DeleteCoverageV2
@@ -207,7 +207,7 @@ Feature: Transfer Keywords
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                                 |
-      | bottom | ^.*Error Message: cannot transfer all keywords of current coverage \[area=AREA TKCF {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no keyword.* |
+      | bottom | ^.*Error Message: cannot transfer all keywords of current coverage \[area=AREA TKCF {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no key....* |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Transfer Keywords for Coverage on Station Route Keyword - Coverage Found - Coverages Have Duplicate Empty Area Variation
@@ -251,7 +251,3 @@ Feature: Transfer Keywords
     And DB Route - verifies that route_qa_gl.sr_keywords multiple records were deleted:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE[2].id} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

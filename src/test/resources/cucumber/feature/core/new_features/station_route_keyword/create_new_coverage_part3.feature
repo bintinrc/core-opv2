@@ -1,12 +1,8 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart3
 Feature: Create New Coverage
 
-#  Background:
-#    Given Launch browser
-#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteCoverageV2
@@ -47,8 +43,8 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}      |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                          |
-      | bottom | ^.*Error Message: cannot create current coverage\. Please adjust your input. \[area: AREA CNHMD {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and n\.\.\..* |
+      | top    | Status 400: Unknown                                                                                                                                                                               |
+      | bottom | ^.*Error Message: cannot create current coverage\. Please adjust your input. \[area: AREA CNHMD {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     And DB Route - verify that sr_coverages record is not created:
       | area             | AREA CNHMD {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId            | {hub-id}                                         |
@@ -93,8 +89,8 @@ Feature: Create New Coverage
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}      |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                           |
-      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNHMDAV {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and n\.\.\..* |
+      | top    | Status 400: Unknown                                                                                                                                                                                |
+      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNHMDAV {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     And DB Route - verify that sr_coverages record is not created:
       | area             | AREA CNHMDAV {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId            | {hub-id}                                           |
@@ -387,8 +383,3 @@ Feature: Create New Coverage
     And DB Route - verify that sr_area_variations record is created:
       | area          | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}   |
       | variationName | AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
-
