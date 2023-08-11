@@ -3405,6 +3405,7 @@ Feature: New Recovery Tickets
       | tags          | name           | description                                                                    |
       | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
 
+  @ErrorValidation
   Scenario: Error message - Bulk Update Ticket - Multiple Ticket Type
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -3442,6 +3443,7 @@ Feature: New Recovery Tickets
     And Operator clicks "Bulk Update" button on Recovery Tickets Page
     Then Operator verifies error toast message in recovery tickets page
 
+  @ErrorValidation
   Scenario: Error Message - Bulk Update Ticket - Resolved Ticket Status
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
