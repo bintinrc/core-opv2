@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +10,12 @@ public class GroupAddressesPage extends SimpleReactPage<GroupAddressesPage>{
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
+  @FindBy(css = "div.ant-picker-range")
+  public AntDateRangePicker addressCreationDate;
+  @FindBy(xpath = "//div[@data-testid='shipper-address.filter-addresses.latest-pickup-date']//input[@placeholder='Start date']")
+  private PageElement inputPickupStartDate;
+  @FindBy(xpath = "//div[@data-testid='shipper-address.filter-addresses.latest-pickup-date']//input[@placeholder='End date']")
+  private PageElement inputPickupEndDate;
   @FindBy(xpath = "//*[@data-testid='address-search-input']")
   private PageElement inputAddressSearch;
   @FindBy(xpath = "//div[@data-testid='shipper-address.filter-addresses.zone']//input")
@@ -74,6 +81,18 @@ public class GroupAddressesPage extends SimpleReactPage<GroupAddressesPage>{
     else
       selectAll.click();
   }
+
+  public void selectDateRange(String fromDate, String toDate) {
+    waitUntilVisibilityOfElementLocated(inputPickupStartDate.getWebElement());
+    inputPickupStartDate.click();
+    inputPickupStartDate.sendKeys(fromDate);
+    inputPickupStartDate.sendKeys(Keys.ENTER);
+    pause3s();
+    inputPickupEndDate.click();
+    inputPickupEndDate.sendKeys(toDate);
+    inputPickupEndDate.sendKeys(Keys.ENTER);
+  }
+
   public boolean isCellShipperNameDisplayed(){
     return cellShipperName.isDisplayed();
   }

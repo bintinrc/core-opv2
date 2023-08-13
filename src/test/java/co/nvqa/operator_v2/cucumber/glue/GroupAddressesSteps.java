@@ -5,6 +5,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 
 @ScenarioScoped
@@ -37,7 +38,6 @@ public class GroupAddressesSteps extends AbstractSteps{
   public void inputZone(String zone) {
     groupAddressesPage.inFrame(page ->{
       groupAddressesPage.searchZone(zone);
-
     });
   }
 
@@ -71,5 +71,18 @@ public class GroupAddressesSteps extends AbstractSteps{
     groupAddressesPage.inFrame(page -> {
       groupAddressesPage.selectGrouping(grouping);
     });
+  }
+
+  @And("Operator chooses start and end date on Address PickUp date using the following data:")
+  public void operatorChoosesStartAndEndDateOnAddressCreationDateUsingTheFollowingData(
+      Map<String, String> addressCreationDate) {
+          addressCreationDate = resolveKeyValues(addressCreationDate);
+          String startDate = addressCreationDate.get("From");
+          String endDate = addressCreationDate.get("To");
+        groupAddressesPage.inFrame(page -> {
+            groupAddressesPage.selectDateRange(startDate,
+                endDate);
+          });
+    takesScreenshot();
   }
 }
