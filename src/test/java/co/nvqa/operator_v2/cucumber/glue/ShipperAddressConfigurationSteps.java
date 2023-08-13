@@ -73,7 +73,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator clicks on the load selection button")
   public void operatorClicksOnTheLoadSelectionButton() {
-    shipperAddressConfigurationPage.clickLoadSelection();
+      shipperAddressConfigurationPage.clickLoadSelection();
   }
 
   @Then("Operator filter the column {string} with {string}")
@@ -314,56 +314,9 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     doWithRetry(selectAddress, "Select Address from List");
   }
 
-  @When("Operator select radio checkbox for address from the list with Id {string}")
-  public void operatorSelectRadioThatHasNoGroupUsingBelowData(String addressId) {
-    addressId = resolveValue(addressId);
-    String finalAddressId = addressId;
-    Runnable clickRadioBox = () -> {
-      shipperAddressConfigurationPage.clickOnRadioCheckBoxForAddressToGroup(finalAddressId);
-    };
-    doWithRetry(clickRadioBox, "Click Radio Box");
-  }
-
-  @Then("Operator verify modal with below data:")
-  public void operatorVerifyModalWithBelowData(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String firstTitle = data.get("title");
-    String secondTitle = data.get("title2");
-    String pickupAddress = data.get("pickup_Address");
-    String firstAddress = data.get("address1");
-    Runnable verifyModal = () -> {
-      shipperAddressConfigurationPage.verifyGroupAddressModal(firstTitle, secondTitle, pickupAddress, firstAddress);
-    };
-    doWithRetry(verifyModal, "verify Modal");
-    takesScreenshot();
-  }
-
-  @Then("Operator verify current group text with below data:")
-  public void operatorVerifyCurrentGroupModalWithBelowData(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String firstAddress = data.get("address1");
-    Runnable verifyCurrentText = () -> {
-      shipperAddressConfigurationPage.verifyCurrentGroupAddressModal(firstAddress);
-    };
-    doWithRetry(verifyCurrentText, "verify Current Text");
-    takesScreenshot();
-  }
-
-  @Then("Operator verify success message is displayed")
-  public void operatorVerifySuccessMessageIsDisplayed() {
-   shipperAddressConfigurationPage.verifySuccessMessage();
-  }
-
   @Then("Operator verify {string} message is displayed")
   public void operatorVerifySuccessMessageIsDisplayed(String message) {
     message = resolveValue(message);
     shipperAddressConfigurationPage.verifyMessage(message);
-  }
-
-  @Then("Verify that the Group Address for Id {string} is showing with text {string}")
-  public void verifyThatTheGroupAddressForIdIsShowingWithText(String addressId, String addressText) {
-    addressId = resolveValue(addressId);
-    shipperAddressConfigurationPage.verifyGroupAddressIsShown(addressId,addressText);
-    takesScreenshot();
   }
 }

@@ -15,7 +15,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"SG","latitude":1.3594786439016684,"longitude":103.83924902161432,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
@@ -40,7 +40,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"SG","latitude":1.4300973657820213,"longitude":103.83564428801563,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
@@ -65,7 +65,7 @@ Feature: Shipper Address Configuration
       | request | {"group_shipper_address_id" : {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}, "shipper_address_ids" : [{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]},{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[4]}]} |
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
@@ -86,7 +86,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"SG","postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
      And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
@@ -117,7 +117,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"VN","postcode":"960000","milkrun_settings":[],"is_milk_run":false} |
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
@@ -138,7 +138,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"FirstMile","contact":"09876576","email":"Station@gmail.com","address1":"36SenokoRd,Singapore","address2":"","country":"SG","latitude":1.3610824655719687,"longitude":103.82899312865466,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
     And Operator clicks on the "Group Addresses" button
     Then Operator verifies page url ends with "group-addresses"
-    And Operator chooses start and end date on Address Creation date using the following data:
+    And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
     And Operator clicks on the load selection button
