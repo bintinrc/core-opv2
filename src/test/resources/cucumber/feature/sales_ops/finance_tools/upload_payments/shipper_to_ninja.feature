@@ -172,8 +172,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
 
-    @test
-      @DeleteNewlyCreatedShipper
+
+  @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper Remit with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer And Payee Info - Check Payment Tags (uid:04036c7b-d541-4223-92aa-d222da2d5932)
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
@@ -407,9 +407,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 12.69  | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
-  @test
-# #- issue reported
-    @DeleteNewlyCreatedShipper
+
+  @DeleteNewlyCreatedShipper
   Scenario Outline: Operator Upload CSV Payment With Both Debit And Credit Type
     #1 Account ID linked to 2 Shippers
     #Shipper 1

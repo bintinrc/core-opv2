@@ -208,8 +208,8 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | source   | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
-    @test
-      @DeleteNewlyCreatedShipper
+
+  @DeleteNewlyCreatedShipper
   Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Shipper Legacy ID From Different Account ID (uid:c549dd65-ca71-4b2f-854e-4d07bac3acc0)
     #Shipper 1 - "Ready" ledger is exists
     Given API Operator create new 'normal' shipper

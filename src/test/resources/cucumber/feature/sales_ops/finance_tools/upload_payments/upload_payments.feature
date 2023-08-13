@@ -11,9 +11,8 @@ Feature: Upload Payments
     Then Operator clicks on "Template Shipper ID" option
     And Operator verifies that downloaded csv file for "Template Shipper ID" is same as "{upload-payments-template-shipper-id-sample-csv}"
 
-@test
- # - passed
-Scenario: Operator Download CSV Payment Template For Netsuite ID
+
+  Scenario: Operator Download CSV Payment Template For Netsuite ID
   Given Operator go to menu Finance Tools -> Upload Payments
   When  Operator clicks on Download Template CSV dropdown
   Then  Operator clicks on "Template Netsuite ID" option
@@ -60,7 +59,7 @@ Scenario: Operator Download CSV Payment Template For Netsuite ID
     Then Operator verifies csv file is successfully uploaded on the Upload Payments page
     Then DB Billing - Operator verify new payment for "{KEY_SHIPPER_ID}" shipper is not added to billing_qa_gl.transaction table
 
-  @test
+
   Scenario: Operator Upload CSV Payment With Invalid Shipper ID (Not Exist)
     Given Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -72,7 +71,7 @@ Scenario: Operator Download CSV Payment Template For Netsuite ID
     Then Operator - verifies csv file is not successfully uploaded on the Upload Payments page
     Then DB Billing - Operator verify new payment for "{shipper-non-existent-id}" shipper is not added to billing_qa_gl.transaction table
 
-  @test
+
   Scenario: Operator Upload CSV Payment Wrong Combination Between Transaction Type and Transaction Event
     Given Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -83,7 +82,7 @@ Scenario: Operator Download CSV Payment Template For Netsuite ID
       | message | invalid transaction type |
     Then DB Billing - Operator verify new payment for "{shipper-non-existent-id}" shipper is not added to billing_qa_gl.transaction table
 
-  @test
+
   Scenario: Operator Upload CSV Payment With Transaction Event = Account Correction
     Given Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -94,7 +93,7 @@ Scenario: Operator Download CSV Payment Template For Netsuite ID
       | message | invalid transaction type |
     Then DB Billing - Operator verify new payment for "{shipper-non-existent-id}" shipper is not added to billing_qa_gl.transaction table
 
-  @test
+
   Scenario: Operator Upload CSV Payment With Invalid Transaction Type
     Given Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -181,8 +180,8 @@ Scenario: Operator Download CSV Payment Template For Netsuite ID
       | source   | account_id                                           | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 81.64  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
-  @test
-    @DeleteNewlyCreatedShipper
+
+  @DeleteNewlyCreatedShipper
   Scenario Outline: Upload Payment with Shipper ID Template - Upload Invoiced Orders - Check Payments Tags
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
