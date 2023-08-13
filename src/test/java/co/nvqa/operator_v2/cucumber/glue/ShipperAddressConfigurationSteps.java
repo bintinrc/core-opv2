@@ -313,10 +313,4 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     };
     doWithRetry(selectAddress, "Select Address from List");
   }
-
-  @Then("Operator verify {string} message is displayed")
-  public void operatorVerifySuccessMessageIsDisplayed(String message) {
-    message = resolveValue(message);
-    shipperAddressConfigurationPage.verifyMessage(message);
-  }
 }

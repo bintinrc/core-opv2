@@ -64,7 +64,6 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-
   @FindBy(css = "div.ant-picker-range")
   public AntDateRangePicker addressCreationDate;
 

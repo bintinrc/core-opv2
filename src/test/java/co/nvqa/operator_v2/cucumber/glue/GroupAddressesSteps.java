@@ -183,4 +183,13 @@ public class GroupAddressesSteps extends AbstractSteps{
     takesScreenshot();
   }
 
+  @Then("Operator verify {string} message is displayed")
+  public void operatorVerifySuccessMessageIsDisplayed(String message) {
+    message = resolveValue(message);
+    String finalMessage = message;
+    groupAddressesPage.inFrame(page -> {
+      groupAddressesPage.verifyMessage(finalMessage);
+    });
+    takesScreenshot();
+  }
 }

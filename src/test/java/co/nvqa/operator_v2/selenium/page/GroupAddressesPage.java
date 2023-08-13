@@ -22,6 +22,8 @@ public class GroupAddressesPage extends SimpleReactPage<GroupAddressesPage>{
   public static final String CURRENT_GROUP_ADDRESS_VERIFY_MODAL = "//i[contains(text(), '%s')]";
   public static final String RADIO_CHECKBOX_FOR_ADDRESS_TO_BE_GROUPED = "//input[@data-testid='radio-option-%s']";
   public static final String GROUP_ADDRESS_VERIFY_COLUMN = "//div[@data-testid='virtual-table.%s.formatted_group_address.cell']";
+
+  public static final String WARNING_MESSAGE = "//span[text()='%s']";
   @FindBy(xpath = "//div[@data-testid='shipper-address.filter-addresses.latest-pickup-date']//input[@placeholder='Start date']")
   private PageElement inputPickupStartDate;
   @FindBy(xpath = "//div[@data-testid='shipper-address.filter-addresses.latest-pickup-date']//input[@placeholder='End date']")
@@ -50,7 +52,6 @@ public class GroupAddressesPage extends SimpleReactPage<GroupAddressesPage>{
   private PageElement selectNotGrouped;
   @FindBy(xpath ="//div[@data-testid='shipper-address.filter-addresses.grouping']//*[text()='All']")
   private PageElement selectAll;
-
   @FindBy(xpath = "//div[@class='ant-message-custom-content ant-message-success']")
   public PageElement successMessage;
 
@@ -197,4 +198,11 @@ public class GroupAddressesPage extends SimpleReactPage<GroupAddressesPage>{
   public String getTextCellPickupAddress() {
     return cellPickupAddress.getText();
   }
+
+  public void verifyMessage(String message) {
+    String messageText = f(WARNING_MESSAGE, message);
+    WebElement textElement = getWebDriver().findElement(By.xpath(messageText));
+    Assertions.assertThat(textElement.getText().equals(message));
+  }
+
 }

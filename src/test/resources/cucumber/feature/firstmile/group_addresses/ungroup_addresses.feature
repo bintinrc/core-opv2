@@ -18,10 +18,10 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Please select at least 2 addresses to start grouping" message is displayed
 
@@ -43,11 +43,11 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Selected addresses have different billing zones: {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}, {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}. Please contact pricing and finance team" message is displayed
 
@@ -68,11 +68,11 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[3]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "Please check that there is only 1 group address selected" message is displayed
 
@@ -89,11 +89,11 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
     And Operator waits for 5 seconds
     Then Operator verify modal with below data:
@@ -120,11 +120,11 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Group Address" button
     Then Operator verify "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}, {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]} do not have a lat long assigned. Please contact first mile team" message is displayed
 
@@ -141,11 +141,11 @@ Feature: Shipper Address Configuration
     And Operator chooses start and end date for Address Creation date on group address page using the following data:
       | From | {date: 1 days ago,  dd/MM/yyyy} |
       | To   | {date: 1 days next, dd/MM/yyyy} |
-    And Operator clicks on the load selection button
+    And Operator clicks on the load selection button on Group Addresses page
     And Operator waits for 60 seconds
-    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
-    When Operator select address from the list with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
+    And Operator filter the column "Pickup Address" with "36SenokoRd,Singapore" on group address page
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    When Operator select address from the list on group address page with Id "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[2]}"
     And Operator clicks on the "Remove from Group" button
     Then Operator verify "Please check that all addresses selected have an existing group address" message is displayed
 
