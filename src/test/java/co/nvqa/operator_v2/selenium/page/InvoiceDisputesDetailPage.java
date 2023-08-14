@@ -247,9 +247,6 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
     @FindBy(xpath = "//span[text() = 'Revised weight input']//parent::div//following-sibling::div//descendant::span//input")
     public TextBox revisedWeightInput;
 
-    @FindBy(xpath = "//html/body/div[2]/div/div[2]/div/div[2]/div/div/div[2]/div/div[3]/div/div[2]/div/div[4]/div[16]/div[2]/span/input")
-    public TextBox nvOriginalBilledAmount;
-
     public ManualResolutionDisputedOrderModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
