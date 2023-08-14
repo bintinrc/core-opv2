@@ -148,14 +148,14 @@ public class InvoiceDisputesSteps extends AbstractSteps {
       softAssertions.assertThat(invoiceDisputeDetails.getDisputePersonName())
           .as("Dispute person name is correct")
           .isEqualTo(invoiceDispute.getDisputePersonName());
-      if (!invoiceDisputesDetailPage.numberOfDisputeTIDs.getText().equals("-") && !mapOfData.get(
+      if (!invoiceDisputeDetails.getNumberOfTIDs().equals("-") && !mapOfData.get(
           "errorTIDs").equals("-")) {
         softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
             .as("Number of disputed TIDs is correct")
             .isEqualTo(
                 String.valueOf(
                     invoiceDispute.getNumberOfTids() - Long.parseLong(mapOfData.get("errorTIDs"))));
-      } else if (!invoiceDisputesDetailPage.numberOfDisputeTIDs.getText().equals("-")
+      } else if (!invoiceDisputeDetails.getNumberOfTIDs().equals("-")
           && mapOfData.get(
           "errorTIDs").equals("-")) {
         softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
