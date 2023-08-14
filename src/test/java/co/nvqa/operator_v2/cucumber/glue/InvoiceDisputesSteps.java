@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.JavascriptExecutor;
 
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTES_COUNT;
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTE_DETAILS_DB;
@@ -539,8 +540,9 @@ public class InvoiceDisputesSteps extends AbstractSteps {
       }
       if (finalMapData.containsKey("nvOriginalBilledAmount")) {
         page.manualResolutionDisputedOrderModal.originalBillingAmount.forceClear();
-        page.manualResolutionDisputedOrderModal.originalBillingAmount.setValue(
-            finalMapData.get("nvOrignalBilledAmount"));
+        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].value=arguments[1]",
+                page.manualResolutionDisputedOrderModal.originalBillingAmount.getWebElement(),
+                finalMapData.get("originalBillingAmount"));
       }
       if (finalMapData.containsKey("revisedDeliveryFee")) {
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.forceClear();
