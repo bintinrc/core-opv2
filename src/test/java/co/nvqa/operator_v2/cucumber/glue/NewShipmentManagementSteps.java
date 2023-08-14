@@ -1045,23 +1045,4 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       page.clickMAWBLinkButtonOnEditShipment();
     });
   }
-
-  @When("Operator searches shipments by given Ids on Shipment Management page:")
-  public void fillSearchesShipmentsByIds(List<String> ids) {
-    enterTheShipmentIds(ids);
-    clickSearchByShipmentId();
-    page.waitUntilInvisibilityOfElementLocated("//span[@class='ant-btn-loading-icon']");
-  }
-
-  @When("Operator enters the shipment ids on Shipment Management page:")
-  public void enterTheShipmentIds(List<String> ids) {
-    doWithRetry(() -> {
-      reloadPage();
-      page.inFrame(() -> {
-                page.shipmentIds.waitUntilVisible();
-                page.shipmentIds.setValue(ids);
-              }
-      );
-    }, "Retry until page is loaded...");
-  }
 }
