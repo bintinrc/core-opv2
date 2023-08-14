@@ -538,11 +538,11 @@ public class InvoiceDisputesSteps extends AbstractSteps {
         page.manualResolutionDisputedOrderModal.originalTax.setValue(
             finalMapData.get("originalTax"));
       }
-      if (finalMapData.containsKey("nvOriginalBilledAmount")) {
+      if (finalMapData.containsKey("originalBillAmount")) {
         page.manualResolutionDisputedOrderModal.originalBillingAmount.forceClear();
         ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].value=arguments[1]",
                 page.manualResolutionDisputedOrderModal.originalBillingAmount.getWebElement(),
-                finalMapData.get("originalBillingAmount"));
+                finalMapData.get("originalBillAmount"));
       }
       if (finalMapData.containsKey("revisedDeliveryFee")) {
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.forceClear();

@@ -81,9 +81,9 @@ Feature: Error By Script Engine Invoice Disputes
       | internalCommentary     | {empty}               |
     And Operator clicks calculate button
     And Operator enters Manual Resolution data using data below:
-      | revisedDeliveryFee     | 10                              |
-      | nvOriginalBilledAmount | 9                               |
-      | internalCommentary     | This is a Test Accepted Dispute |
+      | revisedDeliveryFee | 10                              |
+      | originalBillAmount | 9                               |
+      | internalCommentary | This is a Test Accepted Dispute |
     And Operator clicks save and exit button
     And Operator verifies Invoice Dispute Case Information using below data:
       | numberOfInvalidTIDs | - |
