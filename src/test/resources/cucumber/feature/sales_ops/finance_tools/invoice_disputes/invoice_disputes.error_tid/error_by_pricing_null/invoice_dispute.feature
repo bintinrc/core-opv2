@@ -75,10 +75,10 @@ Feature: Error By Pricing Null Invoice Disputes
       | remarks                | Fee has been revised. |
       | internalCommentary     | {empty}               |
     And Operator enters Manual Resolution data using data below:
-      | originalBillingAmount | 10                              |
-      | revisedWeightInput    | 9                               |
-      | originalDeliveryFee   | 10                              |
-      | internalCommentary    | This is a Test Accepted Dispute |
+      | nvOriginalBilledAmount | 10                              |
+      | revisedWeightInput     | 9                               |
+      | originalDeliveryFee    | 10                              |
+      | internalCommentary     | This is a Test Accepted Dispute |
     And Operator clicks calculate button
     And Operator clicks save and exit button
     And Operator verifies Invoice Dispute Case Information using below data:
@@ -190,17 +190,17 @@ Feature: Error By Pricing Null Invoice Disputes
       | remarks                | Fee has been revised. |
       | internalCommentary     | {empty}               |
     And Operator enters Manual Resolution data using data below:
-      | originalDeliveryFee   | 1.23  |
-      | originalRTSFee        | 2.34  |
-      | originalCODFee        | 3.21  |
-      | originalInsuranceFee  | 5.43  |
-      | originalTax           | 6.75  |
-      | originalBillingAmount | 88.31 |
-      | revisedDeliveryFee    | 2     |
-      | revisedRTSFee         | 3     |
-      | revisedCODFee         | 4     |
-      | revisedInsuranceFee   | 5     |
-      | revisedTax            | 6     |
+      | originalDeliveryFee    | 1.23  |
+      | originalRTSFee         | 2.34  |
+      | originalCODFee         | 3.21  |
+      | originalInsuranceFee   | 5.43  |
+      | originalTax            | 6.75  |
+      | nvOriginalBilledAmount | 88.31 |
+      | revisedDeliveryFee     | 2     |
+      | revisedRTSFee          | 3     |
+      | revisedCODFee          | 4     |
+      | revisedInsuranceFee    | 5     |
+      | revisedTax             | 6     |
     And Operator clicks save and exit button
     And Operator verifies Invoice Dispute Case Information using below data:
       | numberOfInvalidTIDs | - |
