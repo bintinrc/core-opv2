@@ -38,7 +38,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.creatByCSVDialog.title.waitUntilVisible(60);
       Assertions.assertThat(recoveryTicketsPage.creatByCSVDialog.title.getText())
           .isEqualTo("Create Tickets Via CSV");
-      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("AIR FREIGHT REJECTION");
+      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("RECOVERY SCANNING");
       recoveryTicketsPage.creatByCSVDialog.searchByTicketType("MISSING");
       recoveryTicketsPage.creatByCSVDialog.searchByInvestigationDept("Recovery");
     });
