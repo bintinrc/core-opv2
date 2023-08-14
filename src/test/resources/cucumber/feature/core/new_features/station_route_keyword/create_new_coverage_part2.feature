@@ -179,7 +179,7 @@ Feature: Create New Coverage
     And DB Route - verify that sr_area_variations record is created:
       | area          | AREA CNTNAT {gradle-current-date-yyyyMMddHHmmsss}   |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator fetch coverage id for "AREA CNTNAT {gradle-current-date-yyyyMMddHHmmsss}" area
+    And DB Route - fetch coverage id for "AREA CNTNAT {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Route - verify that sr_keywords record is not created for "{KEY_LIST_OF_COVERAGE[1].id}" area
     And DB Route - verifies that route_qa_gl.sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                             |
