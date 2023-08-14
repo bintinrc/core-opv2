@@ -5,7 +5,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Nett COD Remitt
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-    @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload for Nett COD Remittance with exact amount of "Ready" ledger balance - CSV Has Shipper Legacy ID And Payee Info - ID
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
