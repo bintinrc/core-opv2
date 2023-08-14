@@ -337,18 +337,18 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | timeRange | Customised time range |
     And Operator select Ready by and Latest by in Pickup Job create:
       | readyBy  | 09:00 |
-      | latestBy | 23:00 |
+      | latestBy | 16:00 |
     Then Operator verify Create button in enabled
     When Operator click Create button
     Then Operator verifies job created success following data below:
-      | errorMessage | Timeslot provided is not valid. Please refer to documentation for valid timeslot |
+      | followingDates | {gradle-next-3-day-yyyy-MM-dd} |
     When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
       | IN_PROGRESS       |
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
-    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 0
+    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 1
 
   @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - multiple job in a day

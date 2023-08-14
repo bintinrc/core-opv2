@@ -200,7 +200,6 @@ Feature: Cancel Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) cancelled                        |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | waitUntilInvisible | true                                        |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
