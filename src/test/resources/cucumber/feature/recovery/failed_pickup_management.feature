@@ -38,6 +38,7 @@ Feature: Failed Pickup Management Page - Action Feature
     When Recovery User - clicks "Clear Current Selection" button on Failed Pickup Management page
     Then Recovery User - verify the number of selected Failed Pickup rows is "0"
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Find Failed Pickup Return Order - by some filters
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -74,6 +75,7 @@ Feature: Failed Pickup Management Page - Action Feature
       | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
       | failureReasonComments | Parcel is not ready for collection           |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Download and Verify Failed Pickup order - CSV File
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -108,6 +110,7 @@ Feature: Failed Pickup Management Page - Action Feature
     And Recovery User - Download CSV file of failed pickup order on Failed Pickup orders list
     And Recovery User - verify CSV file of failed pickup order on Failed Pickup orders list downloaded successfully
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Pickup - Single Order - on Next Day
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -162,6 +165,7 @@ Feature: Failed Pickup Management Page - Action Feature
       | dnr    | NORMAL                                   |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Pickup - Single Order - specific date
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -219,6 +223,7 @@ Feature: Failed Pickup Management Page - Action Feature
       | dnr    | NORMAL                                   |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Multiple Failed Pickup Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |

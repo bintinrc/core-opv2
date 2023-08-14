@@ -5,7 +5,7 @@ Feature: Failed Delivery Management Page - Action Feature
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @ActionFeature
+  @ForceSuccessOrder @ActionFeature @ArchiveRouteCommonV2
   Scenario: Operator - Find Failed Delivery Order - by some filters
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -83,7 +83,7 @@ Feature: Failed Delivery Management Page - Action Feature
     When Recovery User - clicks "Show Only Selected" button on Failed Delivery Management page
     Then Recovery User - verify the number of selected Failed Delivery rows is "1"
 
-  @ActionFeature @ForceSuccessOrder
+  @ActionFeature @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Download and Verify CSV File
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -123,7 +123,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list
     And Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Next Day - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -184,7 +184,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline:Operator - Reschedule Failed Delivery - Single Order - Latest Scan = Route Inbound Scan - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -261,7 +261,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Specific Date - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -329,7 +329,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Delivery - Multiple Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -438,7 +438,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | dnr    | NORMAL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Delivery - Multiple Orders - by Upload CSV
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -544,7 +544,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | dnr    | NORMAL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - RTS Failed Delivery - Single Order - on Next Day - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -621,7 +621,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - RTS Failed Delivery - Multiple Order - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -741,6 +741,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
+  @ArchiveRouteCommonV2 @ForceSuccessOrder
   Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Add new address - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -819,6 +820,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Search address by Name - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -897,6 +899,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
+  @ArchiveRouteCommonV2 @ForceSuccessOrder
   Scenario Outline: Operator - RTS Failed Delivery Change Address - Single Order - Cancel Change Address - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -976,6 +979,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator - RTS Failed Delivery - Single Order - Latest Scan = Route Inbound Scan - <Dataset_Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -1066,7 +1070,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     | 5         |
       | Return       | Return     | 84        |
 
-  @RescheduleFailedDelivery @ForceSuccessOrder
+  @RescheduleFailedDelivery @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Delivery - Upload CSV with empty line at the end
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -1175,6 +1179,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | dnr    | NORMAL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario: Operator - Reschedule Failed Delivery - Upload CSV with empty line at the middle
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
