@@ -17,8 +17,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -54,8 +53,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -91,8 +89,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -134,8 +131,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -189,8 +185,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -293,8 +288,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |

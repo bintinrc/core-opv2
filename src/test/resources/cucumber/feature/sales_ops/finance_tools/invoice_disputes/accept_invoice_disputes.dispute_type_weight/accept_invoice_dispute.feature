@@ -354,9 +354,9 @@ Feature: Accept Invoice Disputes
       | internalCommentary     | This is a Test Rejected Dispute |
     And Operator clicks calculate button
     And Operator enters Manual Resolution data using data below:
-      | nvOriginalBilledAmount | 10                              |
-      | revisedDeliveryFee     | 12                              |
-      | internalCommentary     | This is a Test Accepted Dispute |
+      | originalBillAmount | 10                              |
+      | revisedDeliveryFee | 12                              |
+      | internalCommentary | This is a Test Accepted Dispute |
     And Operator clicks save and confirm button
     And Operator verifies Invoice Dispute Case Information using below data:
       | numberOfInvalidTIDs | - |

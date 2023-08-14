@@ -55,7 +55,6 @@ Feature: RTS
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed                           |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
       | status | PENDING                                        |
@@ -144,7 +143,6 @@ Feature: RTS
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed                           |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
@@ -238,7 +236,6 @@ Feature: RTS
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed                           |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -325,7 +322,6 @@ Feature: RTS
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed                           |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -485,7 +481,6 @@ Feature: RTS
       | postalCode   | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
@@ -558,7 +553,6 @@ Feature: RTS
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) RTS-ed                           |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |

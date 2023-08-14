@@ -5,6 +5,7 @@ Feature: New Recovery Tickets
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CreateByCSV
   Scenario: Create Ticket Via CSV Modals - Upload CSV file without header
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create ticket by csv in Recovery Tickets page
@@ -13,6 +14,7 @@ Feature: New Recovery Tickets
       | top      | Invalid csv. Please include headers in csv file. |
       | fileName | No Headers File.csv                              |
 
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - Partial Success
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -52,6 +54,7 @@ Feature: New Recovery Tickets
       | ticketType/subType  | PARCEL EXCEPTION : CANCELLED ORDER         |
       | orderGranularStatus | On Hold                                    |
 
+  @CreateByCSV
   Scenario:Operator Create Bulk Ticket - Recovery Ticket - Error data
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create ticket by csv in Recovery Tickets page
@@ -70,6 +73,7 @@ Feature: New Recovery Tickets
     When Operator click "Download Error Data File" on Creat Ticket Via CSV dialog
     Then Operator verify error data file downloaded successfully with correct content
 
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - Proceed with valid data
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -96,7 +100,7 @@ Feature: New Recovery Tickets
     Then Operator verifies error message is displayed
       | top      | Successfully create tickets for following tracking ID(s) |
       | fileName | csv_create_tickets_                                      |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "On Hold" on Edit Order V2 page
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -105,6 +109,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @SearchTicket
   Scenario: Operator Find tickets By CSV - all TIDs not found
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator click Find Tickets By CSV on Recovery Tickets Page
@@ -116,6 +121,7 @@ Feature: New Recovery Tickets
       | message     | No relevant PETS tickets for these Tracking IDs found |
       | trackingIds | NINJRECOVERY112606,AUTORECOVERY126346                 |
 
+  @SearchTicket
   Scenario: Operator Find tickets By CSV - some TIDs not found
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -157,6 +163,7 @@ Feature: New Recovery Tickets
       | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
+  @SearchTicket
   Scenario: Operator Find tickets By CSV - search results
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -193,7 +200,7 @@ Feature: New Recovery Tickets
       | daysSince           | 0                                            |
       | created             | {date: 0 days next, yyyy-MM-dd}              |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario Outline: Operator Create Bulk Ticket - Recovery Ticket - PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -288,7 +295,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = MAXIMUM ATTEMPTS (RTS)      | MR      | PARCEL EXCEPTION : MAXIMUM ATTEMPTS (RTS)      |
       | ticket_subtype = RESTRICTED ZONES            | RZ      | PARCEL EXCEPTION : RESTRICTED ZONES            |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario Outline: Operator Create Bulk Ticket - Recovery Ticket - SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -382,7 +389,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = POOR PACKAGING       | PP      | SHIPPER ISSUE : POOR PACKAGING       |
       | ticket_subtype = SUSPICIOUS PARCEL    | SP      | SHIPPER ISSUE : SUSPICIOUS PARCEL    |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario Outline: Operator Create Bulk Ticket - Recovery Ticket - PARCEL ON HOLD - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -470,7 +477,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = CUSTOMER REQUEST               | CQ      | PARCEL ON HOLD : CUSTOMER REQUEST               |
       | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) | ND      | PARCEL ON HOLD : PAYMENT PENDING (NINJA DIRECT) |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - DAMAGED
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -550,7 +557,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - MISSING
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -630,7 +637,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -710,7 +717,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
-  @BulkCSV
+  @CreateByCSV
   Scenario: Operator Create Bulk Ticket - Recovery Ticket - SLA BREACH
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -790,6 +797,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - PARCEL ON HOLD - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -810,6 +818,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -840,6 +849,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = CUSTOMER REQUEST               | CUSTOMER REQUEST               |
       | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) | PAYMENT PENDING (NINJA DIRECT) |
 
+  @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -861,6 +871,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -886,17 +897,19 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name         | ticketSubtype               |
-      | cancelled order      | CANCELLED ORDER             |
-      | completed order      | COMPLETED ORDER             |
-      | customer rejected    | CUSTOMER REJECTED           |
-      | disputed order info  | DISPUTED ORDER INFO         |
-      | dp oversized         | DP OVERSIZED                |
-      | inaccurate address   | INACCURATE ADDRESS          |
-      | max attempt delivery | MAXIMUM ATTEMPTS (DELIVERY) |
-      | max attempt rts      | MAXIMUM ATTEMPTS (RTS)      |
-      | restricted zones     | RESTRICTED ZONES            |
+      | Dataset Name                                 | ticketSubtype               |
+      | ticket_subtype = CANCELLED ORDER             | CANCELLED ORDER             |
+      | ticket_subtype = COMPLETED ORDER             | COMPLETED ORDER             |
+      | ticket_subtype = CUSTOMER REJECTED           | CUSTOMER REJECTED           |
+      | ticket_subtype = DISPUTED ORDER INFO         | DISPUTED ORDER INFO         |
+      | ticket_subtype = DP OVERSIZED                | DP OVERSIZED                |
+      | ticket_subtype = INACCURATE ADDRESS          | INACCURATE ADDRESS          |
+      | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) | MAXIMUM ATTEMPTS (DELIVERY) |
+      | ticket_subtype = MAXIMUM ATTEMPTS (RTS)      | MAXIMUM ATTEMPTS (RTS)      |
+      | ticket_subtype = RESTRICTED ZONES            | RESTRICTED ZONES            |
+      | ticket_subtype = WRONG AV/RACK/HUB           | WRONG AV/RACK/HUB           |
 
+  @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -918,6 +931,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -943,14 +957,16 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name         | ticketSubtype        |
-      | duplicate parcel     | DUPLICATE PARCEL     |
-      | no order             | NO ORDER             |
-      | overweight oversized | OVERWEIGHT/OVERSIZED |
-      | poor packaging label | POOR PACKAGING/LABEL |
-      | rejected return      | REJECTED RETURN      |
-      | restricted goods     | RESTRICTED GOODS     |
+      | Dataset Name                      | ticketSubtype    |
+      | ticket_subtype = DUPLICATE PARCEL | DUPLICATE PARCEL |
+      | ticket_subtype = NO ORDER             | NO ORDER             |
+      | ticket_subtype = OVERWEIGHT/OVERSIZED | OVERWEIGHT/OVERSIZED |
+      | ticket_subtype = POOR LABELLING       | POOR LABELLING       |
+      | ticket_subtype = POOR PACKAGING   | POOR PACKAGING   |
+      | ticket_subtype = REJECTED RETURN      | REJECTED RETURN      |
+      | ticket_subtype = RESTRICTED GOODS     | RESTRICTED GOODS     |
 
+  @CreateTicket
   Scenario: Operator Create Single Ticket - Recovery Ticket - DAMAGED
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -972,6 +988,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -996,6 +1013,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @CreateTicket
   Scenario: Operator Create Single Ticket - Recovery Ticket - MISSING
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1015,6 +1033,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1039,6 +1058,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @CreateTicket
   Scenario: Operator Create Single Ticket - Recovery Ticket - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1057,6 +1077,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1081,6 +1102,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @CreateTicket
   Scenario: Operator Create Single Ticket - Recovery Ticket - SLA BREACH
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1101,6 +1123,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies correct ticket details as following:
@@ -1125,6 +1148,7 @@ Feature: New Recovery Tickets
       | name           |
       | TICKET CREATED |
 
+  @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - No Label/No Order - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1144,8 +1168,9 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                        |
       | shipperZendeskId        | 1                                        |
       | ticketNotes             | GENERATED                                |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
     Then Operator verifies correct ticket details as following:
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}123 |
       | ticketType/subType | SHIPPER ISSUE : <ticketSubtype>          |
@@ -1162,6 +1187,7 @@ Feature: New Recovery Tickets
       | No label     | NO LABEL      |
       | no order     | NO ORDER      |
 
+  @CreateByCSV
   Scenario: Create Bulk PETS via CSV - with invalid Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -1192,6 +1218,7 @@ Feature: New Recovery Tickets
       | failureReason | Investigating hub is not a valid hub!                        |
       | fileName      | csv_create_tickets_                                          |
 
+  @ResolveTicket
   Scenario Outline: Resolve Ticket - ticket_type = DAMAGED - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1213,6 +1240,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1237,6 +1265,7 @@ Feature: New Recovery Tickets
       | order_outcome = NV LIABLE - FULL - PARCEL DELIVERED    | NV LIABLE - FULL - PARCEL DELIVERED    | Completed  | Completed          |
       | order_outcome = NV LIABLE - PARTIAL - PARCEL DELIVERED | NV LIABLE - PARTIAL - PARCEL DELIVERED | Completed  | Completed          |
 
+  @ResolveTicket
   Scenario Outline: Resolve Ticket - ticket_type = DAMAGED -RTS- <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1259,6 +1288,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1279,8 +1309,9 @@ Feature: New Recovery Tickets
     Examples:
       | Dataset Name                                  | orderOutcome                  | postStatus | postGranularStatus     |
       | order_outcome = NV NOT LIABLE - RETURN PARCEL | NV NOT LIABLE - RETURN PARCEL | Transit    | Arrived at Sorting Hub |
-      | order_outcome = NV LIABLE - RETURN PARCEL     | NV LIABLE - RETURN PARCEL     | Cancelled  | Cancelled              |
+      | order_outcome = NV LIABLE - RETURN PARCEL     | NV LIABLE - RETURN PARCEL     | Transit    | Arrived at Sorting Hub |
 
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = MISSING - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1300,6 +1331,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1318,13 +1350,13 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                      | orderOutcome                    | postStatus | postGranularStatus      |
-      | order_outcome = CUSTOMER RECEIVED                 | CUSTOMER RECEIVED               | Completed  | Completed               |
-      | order_outcome = LOST - NO RESPONSE - UNDECLARED   | LOST - NO RESPONSE - UNDECLARED | Transit    | Arrived at Sorting Hub  |
-      | order_outcome = LOST - NO RESPONSE - DECLARED     | LOST - NO RESPONSE - DECLARED   | Cancelled  | Cancelled               |
-      | order_outcome = FOUND - INBOUND (Parcel Transfer) | FOUND - INBOUND                 | Transit    | On Vehicle for Delivery |
+      | Dataset Name                                      | orderOutcome                    | postStatus | postGranularStatus     |
+      | order_outcome = CUSTOMER RECEIVED                 | CUSTOMER RECEIVED               | Completed  | Completed              |
+      | order_outcome = LOST - NO RESPONSE - UNDECLARED   | LOST - NO RESPONSE - UNDECLARED | Transit    | Arrived at Sorting Hub |
+      | order_outcome = LOST - NO RESPONSE - DECLARED     | LOST - NO RESPONSE - DECLARED   | Cancelled  | Cancelled              |
+      | order_outcome = FOUND - INBOUND (Parcel Transfer) | FOUND - INBOUND                 | Transit    | Arrived at Sorting Hub |
 
-
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = SELF COLLECTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1343,6 +1375,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1365,6 +1398,7 @@ Feature: New Recovery Tickets
       | order_outcome = COLLECTED BY CONSIGNEE | COLLECTED BY CONSIGNEE | Completed  | Completed              |
       | order_outcome = RE-DELIVER             | RE-DELIVER             | Transit    | Arrived at Sorting Hub |
 
+  @ResolveTicket
   Scenario: Operator Resolve Ticket - ticket_type = SELF COLLECTION - RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1384,6 +1418,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1401,6 +1436,7 @@ Feature: New Recovery Tickets
       | TICKET RESOLVED |
       | TICKET UPDATED  |
 
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1421,6 +1457,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1439,7 +1476,7 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                                                   | ticketSubtype               | orderOutcome       | postStatus | postGranularStatus     |
+      | Dataset Name                                                  | ticketSubtype     | orderOutcome | postStatus | postGranularStatus     |
       | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
       | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
@@ -1447,8 +1484,9 @@ Feature: New Recovery Tickets
       | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
       | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV                  | WRONG AV/RACK/HUB           | FIXED AV           | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV | WRONG AV/RACK/HUB | FIXED AV     | Transit    | Arrived at Sorting Hub |
 
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION -RTS- <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1470,11 +1508,12 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
     And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
-    And Operator clicks Update Ticket button in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
     Then Operator verifies ticket is updates to "RESOLVED" status
     And Operator verify the status update event from "PENDING" to "RESOLVED" by "QA Ninja" is recorded correctly
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1492,6 +1531,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = COMPLETED ORDER - order_outcome = RTS     | COMPLETED ORDER     | RTS          | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = DISPUTED ORDER INFO - order_outcome = RTS | DISPUTED ORDER INFO | RTS          | Transit    | Arrived at Sorting Hub |
 
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1512,6 +1552,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1536,11 +1577,12 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO ORDER - order_outcome = ORDERS CREATED                          | NO ORDER          | ORDERS CREATED                  | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE              | REJECTED RETURN   | DAMAGED - NV LIABLE             | Cancelled  | Cancelled              |
       | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV NOT LIABLE - PARCEL SCRAPPED | Completed  | Completed              |
-      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
+#      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
       | ticket_subtype = POOR LABELLING - order_outcome = RESUME PICKUP                     | POOR LABELLING    | RESUME PICKUP                   | Pending    | Pending Pickup         |
       | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV TO REPACK AND SHIP           | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | PARCEL SCRAPPED                 | Completed  | Completed              |
 
+  @ResolveTicket
   Scenario: Operator Resolve Ticket - ticket_type = SHIPPER ISSUE -RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1562,6 +1604,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1579,6 +1622,7 @@ Feature: New Recovery Tickets
       | TICKET RESOLVED |
       | TICKET UPDATED  |
 
+  @ResolveTicket
   Scenario Outline:Operator Resolve Ticket - ticket_type = PARCEL ON HOLD - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1599,6 +1643,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1621,6 +1666,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = SHIPPER REQUEST - order_outcome = RESUME DELIVERY          | SHIPPER REQUEST                | RESUME DELIVERY | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) - order_outcome = XMAS CAGE | PAYMENT PENDING (NINJA DIRECT) | XMAS CAGE       | Cancelled  | Cancelled              |
 
+  @ResolveTicket
   Scenario:Operator Resolve Ticket - ticket_type = PARCEL ON HOLD - RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1642,6 +1688,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1659,6 +1706,7 @@ Feature: New Recovery Tickets
       | TICKET RESOLVED |
       | TICKET UPDATED  |
 
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = SLA BREACH - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1679,6 +1727,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1702,6 +1751,7 @@ Feature: New Recovery Tickets
       | order_outcome = NV Liable - Delivered | NV LIABLE - DELIVERED | Completed  | Completed              |
       | order_outcome = Resume delivery       | RESUME DELIVERY       | Transit    | Arrived at Sorting Hub |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Parcel Exception - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1722,6 +1772,7 @@ Feature: New Recovery Tickets
       | custZendeskId                 | 1                                     |
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1749,6 +1800,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Parcel On Hold - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1769,6 +1821,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1796,6 +1849,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Shipper Issue  - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1816,6 +1870,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1843,6 +1898,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Missing - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1862,6 +1918,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1889,6 +1946,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Damaged - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1910,6 +1968,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1937,6 +1996,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - Self Collection - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1955,6 +2015,7 @@ Feature: New Recovery Tickets
       | custZendeskId               | 1                                     |
       | shipperZendeskId            | 1                                     |
       | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -1982,6 +2043,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @UpdateTicket
   Scenario Outline: Operator Update Single Ticket - Recovery Ticket - SLA BREACH - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -2002,6 +2064,7 @@ Feature: New Recovery Tickets
       | custZendeskId           | 1                                     |
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
     When Operator search created ticket by "Tracking ID" filter with values:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator click ticket's action button
@@ -2029,6 +2092,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = On Hold         | ON HOLD         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = PARCEL ON HOLD - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2104,6 +2168,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = SHIPPER REQUEST - order_outcome = RESUME DELIVERY          | SHIPPER REQUEST                | RESUME DELIVERY | Arrived at Sorting Hub |
       | ticket_subtype = PAYMENT PENDING (NINJA DIRECT) - order_outcome = XMAS CAGE | PAYMENT PENDING (NINJA DIRECT) | XMAS CAGE       | Cancelled              |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SLA BREACH - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2178,6 +2243,7 @@ Feature: New Recovery Tickets
       | order_outcome = NV Liable - Delivered          | NV LIABLE - DELIVERED          | Completed              |
       | order_outcome = NV Liable - XMAS CAGE (Tiktok) | NV LIABLE - XMAS CAGE (TIKTOK) | Cancelled              |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = DAMAGED - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2254,6 +2320,7 @@ Feature: New Recovery Tickets
       | order_outcome = NV LIABLE - PARTIAL - RESUME DELIVERY     | NV LIABLE - PARTIAL - RESUME DELIVERY     | Arrived at Sorting Hub |
       | order_outcome = NV NOT LIABLE - PARTIAL - RESUME DELIVERY | NV NOT LIABLE - PARTIAL - RESUME DELIVERY | Arrived at Sorting Hub |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = MISSING - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2326,6 +2393,7 @@ Feature: New Recovery Tickets
       | order_outcome = LOST - DECLARED               | LOST - DECLARED               |
       | order_outcome = LOST - NO RESPONSE - DECLARED | LOST - NO RESPONSE - DECLARED |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SELF COLLECTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2399,6 +2467,7 @@ Feature: New Recovery Tickets
       | order_outcome = COLLECTED BY SHIPPER   | COLLECTED BY SHIPPER   |
       | order_outcome = COLLECTED BY CONSIGNEE | COLLECTED BY CONSIGNEE |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = PARCEL EXCEPTION - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2474,6 +2543,7 @@ Feature: New Recovery Tickets
       | order_outcome = RTS             | RTS             | Arrived at Sorting Hub |
       | order_outcome = RESUME PICKUP   | RESUME PICKUP   | Pending Pickup         |
 
+  @BulkResolveTicket
   Scenario Outline: Operator Resolve Bulk Ticket - ticket_type = SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2550,6 +2620,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = RESUME DELIVERY   | SUSPICIOUS PARCEL | RESUME DELIVERY     | Arrived at Sorting Hub |
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = PARCEL SCRAPPED   | SUSPICIOUS PARCEL | PARCEL SCRAPPED     | Completed              |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Parcel Exception - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2653,6 +2724,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Parcel On Hold - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2756,6 +2828,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Shipper Issue - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2859,6 +2932,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Missing - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -2960,6 +3034,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Damaged - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -3061,6 +3136,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Damaged - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -3162,6 +3238,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - Self Collection - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -3263,6 +3340,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @BulkUpdateTicket
   Scenario Outline: Operator Update Bulk Ticket - Recovery Ticket - SLA BREACH - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -3364,6 +3442,7 @@ Feature: New Recovery Tickets
       | New Ticket Status = Pending         | PENDING         |
       | New Ticket Status = Pending Shipper | PENDING SHIPPER |
 
+  @CancelTicket
   Scenario: Operator Update Single Ticket - Recovery Ticket - Cancel Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -3404,3 +3483,77 @@ Feature: New Recovery Tickets
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name           | description                                                                    |
       | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+  @ErrorValidation
+  Scenario: Error message - Bulk Update Ticket - Multiple Ticket Type
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | DAMAGED                               |
+      | entrySource        | RECOVERY SCANNING                     |
+      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)               |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | ticketType         | MISSING                               |
+      | entrySource        | RECOVERY SCANNING                     |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)               |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When Operator go to menu Recovery -> Recovery Tickets
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    And Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    Then Operator verifies error toast message in recovery tickets page
+
+  @ErrorValidation
+  Scenario: Error Message - Bulk Update Ticket - Resolved Ticket Status
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource             | DRIVER TURN                           |
+      | investigatingDepartment | Fleet (First Mile)                    |
+      | investigatingHub        | {hub-name}                            |
+      | ticketType              | SLA BREACH                            |
+      | orderOutcome            | NV LIABLE - XMAS CAGE                 |
+      | breachReason            | Auto breach reason                    |
+      | breachLeg               | Forward                               |
+      | custZendeskId           | 1                                     |
+      | shipperZendeskId        | 1                                     |
+      | ticketNotes             | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    And Operator click ticket's action button
+    And Operator selects "RESOLVED" from ticket status in Edit Ticket dialog
+    And Operator clicks "Update Ticket" button in Edit Ticket dialog
+    And Operator clicks "Edit Filter" button on Recovery Tickets Page
+    And Operator Add "Created At" filter
+    And Operator search created ticket by "Ticket Status" filter with values:
+      | RESOLVED |
+    And Operator filter search result by field "Tracking ID" with value "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    Then Operator verifies error toast message in recovery tickets page

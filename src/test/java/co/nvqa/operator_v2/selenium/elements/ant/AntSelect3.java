@@ -131,7 +131,7 @@ public class AntSelect3 extends PageElement {
   public void clearValue() {
     if (StringUtils.isNotBlank(getValue())) {
       openMenu();
-      if (clearIcon.isDisplayedFast() || clearIcon.isDisplayed()) {
+      if (clearIcon.waitUntilVisible(1)) {
         clearIcon.click();
       } else {
         searchInput.forceClear();
@@ -219,12 +219,11 @@ public class AntSelect3 extends PageElement {
   }
 
   public void enterSearchTerm(String value) {
+    click();
     var readonly = searchInput.getAttribute("readonly");
     if (!"true".equals(readonly)) {
       searchInput.setValue(value);
       waitUntilLoaded();
-    } else {
-      click();
     }
   }
 
@@ -233,8 +232,7 @@ public class AntSelect3 extends PageElement {
   }
 
   public String getValue() {
-    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title")
-        : selectionPlaceholder.isDisplayed() ? selectionPlaceholder.getText() : null;
+    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title") : null;
   }
 
   public List<String> getValues() {

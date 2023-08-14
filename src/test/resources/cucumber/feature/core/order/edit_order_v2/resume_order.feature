@@ -21,7 +21,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verify order status is "Pending" on Edit Order V2 page
     And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
@@ -121,7 +120,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -196,7 +194,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -234,7 +231,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |

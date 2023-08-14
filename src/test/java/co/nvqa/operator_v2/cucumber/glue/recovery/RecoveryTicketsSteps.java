@@ -38,7 +38,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.creatByCSVDialog.title.waitUntilVisible(60);
       Assertions.assertThat(recoveryTicketsPage.creatByCSVDialog.title.getText())
           .isEqualTo("Create Tickets Via CSV");
-      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("AIR FREIGHT REJECTION");
+      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("RECOVERY SCANNING");
       recoveryTicketsPage.creatByCSVDialog.searchByTicketType("MISSING");
       recoveryTicketsPage.creatByCSVDialog.searchByInvestigationDept("Recovery");
     });
@@ -652,6 +652,15 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage.inFrame(() -> {
       recoveryTicketsPage.cancelTicketDialog.delete.click();
       recoveryTicketsPage.waitUntilInvisibilityOfToast("Cancelled");
+    });
+  }
+
+  @Then("Operator verifies error toast message in recovery tickets page")
+  public void verifiesErrorToastMessage() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfNotification("Invalid Selection");
+      Assertions.assertThat(page.getAntDescription()).as("toast description").isEqualTo(
+          "Selection must be of the same ticket type (e.g. Damaged only, Parcel Exception only) and not in RESOLVED or CANCELLED state");
     });
   }
 }
