@@ -38,7 +38,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.creatByCSVDialog.title.waitUntilVisible(60);
       Assertions.assertThat(recoveryTicketsPage.creatByCSVDialog.title.getText())
           .isEqualTo("Create Tickets Via CSV");
-      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("AIR FREIGHT REJECTION");
+      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("RECOVERY SCANNING");
       recoveryTicketsPage.creatByCSVDialog.searchByTicketType("MISSING");
       recoveryTicketsPage.creatByCSVDialog.searchByInvestigationDept("Recovery");
     });
@@ -456,10 +456,17 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator clicks Update Ticket button in Edit Ticket dialog")
-  public void clickUpdateTicket() {
+  @When("Operator clicks {string} button in Edit Ticket dialog")
+  public void clickUpdateTicket(String buttonName) {
     recoveryTicketsPage.inFrame(() -> {
-      recoveryTicketsPage.editTicketDialog.updateTicket.click();
+      switch (buttonName) {
+        case "Update Ticket":
+          recoveryTicketsPage.editTicketDialog.updateTicket.click();
+          break;
+        case "Cancel Ticket":
+          recoveryTicketsPage.editTicketDialog.cancelTicket.click();
+          break;
+      }
     });
   }
 
@@ -627,6 +634,33 @@ public class RecoveryTicketsSteps extends AbstractSteps {
   public void operatorCloseEditTicketModal() {
     recoveryTicketsPage.inFrame(() -> {
       recoveryTicketsPage.closeEditTicketModal();
+    });
+  }
+
+  @Then("Operator verifies Cancel Ticket dialog")
+  public void verifyCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.title.getText())
+          .as("cancel dialog title").isEqualTo("Confirm Cancel Ticket");
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.content.getText())
+          .as("cancel dialog content").isEqualTo("Do you want to cancel this ticket?");
+    });
+  }
+
+  @When("Operator clicks Delete button in Cancel Ticket dialog")
+  public void clickDeleteButtonInCancelDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.cancelTicketDialog.delete.click();
+      recoveryTicketsPage.waitUntilInvisibilityOfToast("Cancelled");
+    });
+  }
+
+  @Then("Operator verifies error toast message in recovery tickets page")
+  public void verifiesErrorToastMessage() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfNotification("Invalid Selection");
+      Assertions.assertThat(page.getAntDescription()).as("toast description").isEqualTo(
+          "Selection must be of the same ticket type (e.g. Damaged only, Parcel Exception only) and not in RESOLVED or CANCELLED state");
     });
   }
 }

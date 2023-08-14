@@ -224,6 +224,39 @@ Feature: Facilities Management
       | longitude    | 12                                        |
       | sortHub      | false                                     |
 
+  Scenario: User Unable to Disable active hub attached to Zone
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Hubs -> Facilities Management
+    And Operator disable hub with name "{hub-with-zone}" on Facilities Management page
+    Then Operator verifies that error react notification displayed:
+      | top    | NOT_ALLOWED_TO_DELETE_HUB        |
+      | bottom | There are sort tasks in this hub |
+
+  Scenario: User Unable to Disable active hub attached to MiddleTierNode
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Hubs -> Facilities Management
+    And Operator disable hub with name "{hub-with-middle-tier}" on Facilities Management page
+    Then Operator verifies that error react notification displayed:
+      | top    | NOT_ALLOWED_TO_DELETE_HUB        |
+      | bottom | There are sort tasks in this hub |
+
+  Scenario: User Unable to Disable active hub attached to Hub User
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Hubs -> Facilities Management
+    And Operator disable hub with name "{hub-with-hub-user}" on Facilities Management page
+    Then Operator verifies that error react notification displayed:
+      | top    | NOT_ALLOWED_TO_DELETE_HUB              |
+      | bottom | Hub has existing Sort App / OpV2 users |
+
+  Scenario: User Unable to Disable active hub attached to SortApp User
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Hubs -> Facilities Management
+    And Operator disable hub with name "{hub-with-sort-app-user}" on Facilities Management page
+    Then Operator verifies that error react notification displayed:
+      | top    | NOT_ALLOWED_TO_DELETE_HUB        |
+      | bottom | Hub has existing Sort App / OpV2 users |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
