@@ -7,7 +7,7 @@ Feature: All Orders - Manually Completed Selected
 
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                            |

@@ -240,9 +240,6 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -352,9 +349,6 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     And DB Sort - get hub by hub name "{KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_SORT_LIST_OF_HUBS_DB[1].hubId}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -416,7 +410,7 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -428,9 +422,6 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     And API Sort - Operator parcel sweep
       | parcelSweepRequest | {"hubId" : {hub-id}, "scan": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"} |
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                 |
@@ -468,7 +459,7 @@ Feature: Create Recovery Ticket
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
@@ -483,7 +474,7 @@ Feature: Create Recovery Ticket
       | addressId | {shipper-address-id} |
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}} |
     And API Core - Operator add reservation to route using data below:
@@ -535,4 +526,4 @@ Feature: Create Recovery Ticket
       | tags          | name          | description                                                                                                                                                   |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |

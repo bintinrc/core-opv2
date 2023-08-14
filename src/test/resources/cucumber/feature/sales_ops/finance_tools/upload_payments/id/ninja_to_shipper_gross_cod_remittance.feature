@@ -127,6 +127,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | source   | account_id                                           | amount | type | event                | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 100    | Out  | Gross COD Remittance | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
+
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked 1 Shipper - Payment via CSV Upload with Shipper ID for COD Transaction Event Type "Gross COD Remittance" with exact amount of Total Adjusted COD - Input Remittance Type with Lowercase - ID (uid:1a5e2056-a2c8-4181-910a-c48604138e8d)
     Given API Operator create new 'normal' shipper

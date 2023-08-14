@@ -137,13 +137,7 @@ Feature: Implanted Manifest
       | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | Not a success reservation! |
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                      |
+      | bottom | Not a success reservation! |
+    Then API Core - Operator verify there is no pods assigned to reservation id "{KEY_CREATED_RESERVATION_ID}"
