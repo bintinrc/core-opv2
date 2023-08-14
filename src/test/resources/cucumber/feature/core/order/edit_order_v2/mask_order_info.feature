@@ -73,8 +73,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
@@ -133,8 +132,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Return details updated |
-      | waitUntilInvisible | true                   |
+      | top | Return details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -193,8 +191,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
@@ -258,8 +255,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Return details updated |
-      | waitUntilInvisible | true                   |
+      | top | Return details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -330,8 +326,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
+      | top | Order rescheduled successfully |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -397,8 +392,7 @@ Feature: Mask Order Info
       | deliveryDate  | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
+      | top | Order rescheduled successfully |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                                                                                                                                  |
       | contact | Click to reveal (tracked)0004                                                                                                                             |
@@ -481,8 +475,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
+      | top | Order rescheduled successfully |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -556,8 +549,7 @@ Feature: Mask Order Info
       | deliveryDate  | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
+      | top | Order rescheduled successfully |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                                                                                                                                  |
       | contact | Click to reveal (tracked)0004                                                                                                                             |
@@ -609,8 +601,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery details updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -653,8 +644,7 @@ Feature: Mask Order Info
       | deliveryDate  | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery details updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                                                                                                                                  |
       | contact | Click to reveal (tracked)0004                                                                                                                             |
@@ -714,8 +704,7 @@ Feature: Mask Order Info
       | address2         | new home                       |
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery details updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -756,8 +745,7 @@ Feature: Mask Order Info
       | deliveryDate  | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery details updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery details updated |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                                                                                                                                  |
       | contact | Click to reveal (tracked)0004                                                                                                                             |
@@ -799,8 +787,7 @@ Feature: Mask Order Info
       | address2         | Kilang Selatan     |
       | postalCode       | 318405             |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery Details Updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery Details Updated |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | description | To Address 1 changed from Click to reveal (tracked)D MANDAI SQUARE 116 to Click to reveal (tracked)OAD To Address 2 changed from Click to reveal (tracked)g Timur to Click to reveal (tracked)g Selatan To Postcode changed from 308412 to 318405 To City updated: assigned new value Singapore To Country changed from SG to Singapore To Latitude changed from 1.288148 to 1.288147 To Longitude changed from 103.740232 to 103.740233 Is RTS changed from false to false |
