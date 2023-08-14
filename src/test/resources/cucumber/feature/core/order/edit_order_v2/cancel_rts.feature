@@ -23,7 +23,6 @@ Feature: Cancel RTS
     And Operator cancel RTS on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
       | top                | The RTS has been cancelled |
-      | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order V2 page
     When Operator unmask Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:

@@ -16,8 +16,7 @@ Feature: Edit Order Details
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator set Delivery Verification Required to "<new_delivery_verification_mode>" on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery verification required updated successfully |
-      | waitUntilInvisible | true                                                |
+      | top | Delivery verification required updated successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | deliveryVerificationType | <new_delivery_verification_mode> |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -71,7 +70,7 @@ Feature: Edit Order Details
     Then Operator verify POD details on Edit Order V2 page:
       | type               | DELIVERY                                                  |
       | status             | Success                                                   |
-      | driver             | {ninja-driver-name}                                   |
+      | driver             | {ninja-driver-name}                                       |
       | recipient          | {KEY_LIST_OF_CREATED_ORDERS[1].toName}                    |
       | address            | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | verificationMethod | NO_VERIFICATION                                           |

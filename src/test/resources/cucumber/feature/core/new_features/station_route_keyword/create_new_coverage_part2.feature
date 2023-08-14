@@ -179,7 +179,7 @@ Feature: Create New Coverage
     And DB Route - verify that sr_area_variations record is created:
       | area          | AREA CNTNAT {gradle-current-date-yyyyMMddHHmmsss}   |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
+    And DB Operator fetch coverage id for "AREA CNTNAT {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Route - verify that sr_keywords record is not created for "{KEY_LIST_OF_COVERAGE[1].id}" area
     And DB Route - verifies that route_qa_gl.sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                             |
@@ -274,7 +274,7 @@ Feature: Create New Coverage
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator create new coverage on Station Route Keyword page:
       | area           | AREA CNTDV 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | areaVariation  | AREA {gradle-current-date-yyyyMMddHHmmsss}         |
+      | areaVariation  | AREA CNTDV {gradle-current-date-yyyyMMddHHmmsss}         |
       | keyword        | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}        |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}        |
@@ -404,7 +404,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}       |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                                         |
-      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and n\.\.\..* |
+      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |
       | primaryDriver  |  |
@@ -422,7 +422,7 @@ Feature: Create New Coverage
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Creates New Coverage on Station Route Keyword - Duplicate Area, Duplicate Area Variation, and Duplicate Empty Keyword
     Given API Driver - Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}"-{{TIMESTAMP}}, "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC4{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC4{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     Given API Driver - Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC4{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     Given API Driver - Operator create new Driver using data below:
@@ -444,7 +444,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}        |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                                           |
-      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDAVK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and n\.\.\..* |
+      | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDAVK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |
       | primaryDriver  |  |

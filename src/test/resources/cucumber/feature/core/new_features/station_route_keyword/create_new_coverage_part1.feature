@@ -304,7 +304,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}           |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                                                            |
-      | bottom | ^.*Error Message: More than one existing areas are found in the area and area variation input: \[AREA cncnm {gradle-current-date-yyyyMMddHHmmsss},AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]. Please a....* |
+      | bottom | ^.*Error Message: More than one existing areas are found in the area and area variation input: \[AREA CNCNM {gradle-current-date-yyyyMMddHHmmsss},AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]. Please a....* |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Creates New Coverage on Station Route Keyword - Duplicate Area, New Area Variation, and Duplicate Keyword - Not Transfer Keyword
