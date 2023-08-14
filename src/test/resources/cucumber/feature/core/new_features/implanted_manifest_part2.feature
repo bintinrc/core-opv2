@@ -27,21 +27,16 @@ Feature: Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | Not a success reservation! |
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | FAIL                             |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | scannedAtShipperCount | 0       |
-      | scannedAtShipperPOD   | No data |
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                      |
+      | bottom | Not a success reservation! |
+    And API Core - Operator verify pods in pickup details of reservation id below:
+      | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | pods[1].shipperScansQuantity | 0                                        |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup
@@ -59,32 +54,26 @@ Feature: Implanted Manifest
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
     And API Driver success Reservation using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDERS[1].id}       |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | No POD available! |
-    And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | SUCCESS                          |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | scannedAtShipperCount | 1                                          |
-      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                                                     |
+      | bottom | No POD available! |
+
 
   @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Total Scanned Orders != Total of POD
@@ -108,19 +97,12 @@ Feature: Implanted Manifest
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | POD and Manifest parcel count do not match. |
-    And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | SUCCESS                          |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | scannedAtShipperCount | 0       |
-      | scannedAtShipperPOD   | No data |
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                                       |
+      | bottom | POD and Manifest parcel count do not match. |
+    And API Core - Operator verify pods in pickup details of reservation id below:
+      | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | pods[1].shipperScansQuantity | 0                                        |
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD
@@ -164,69 +146,81 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" barcode on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}" reservation on Implanted Manifest page
-    And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | SUCCESS                          |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | inputOnPod            | 2                                                                           |
-      | scannedAtShipperCount | 2                                                                           |
-      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator creates manifest for "{KEY_LIST_OF_CREATED_RESERVATIONS[2].id}" reservation on Implanted Manifest page
+    # Verify Order 1
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags         | name                    | description                                                                                                                                                                                                  |
       | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    # Verify Order 2
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags         | name                    | description                                                                                                                                                                                                  |
       | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
+
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
-    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" barcode on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" barcode on Implanted Manifest page
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
+
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Using Prefix - Multiple TID
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator saves created orders Tracking IDs without prefix
     And Operator adds country prefix on Implanted Manifest page
-    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[1]},{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[2]}" barcode on Implanted Manifest page
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[1]}" barcode on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
+
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Invalid Tracking Id
     Given Operator go to menu Utilities -> QRCode Printing
@@ -243,6 +237,7 @@ Feature: Implanted Manifest
     And Operator verify rack sector details on Implanted Manifest page:
       | rackSector | -                 |
       | stamp      | INVALIDTRACKINGID |
+
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Duplicate Tracking Id
     Given Operator go to menu Utilities -> QRCode Printing
@@ -269,6 +264,7 @@ Feature: Implanted Manifest
     Then Operator verify scanned orders on Implanted Manifest page:
       | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Non-Pending Order
     Given Operator go to menu Utilities -> QRCode Printing

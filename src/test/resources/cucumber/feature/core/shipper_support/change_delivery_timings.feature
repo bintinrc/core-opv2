@@ -76,7 +76,10 @@ Feature: Change Delivery Timings
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And Operator go to menu Shipper Support -> Change Delivery Timings
     And Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID}  |

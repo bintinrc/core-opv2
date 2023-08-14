@@ -565,7 +565,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void verifyDownloadedParcelList(List<String> tids) {
     pickupAppointmentJobPage.inFrame(() -> {
       String fileanme = pickupAppointmentJobPage.getLatestDownloadedFilename("pop-file-id-");
-      String content = "Scanned at Shipper (POP)\n" + Strings.join("\n", resolveValues(tids));
+      String content = "Scanned at Shipper (POP)\n" + String.join("\n", resolveValues(tids));
       pickupAppointmentJobPage.verifyFileDownloadedSuccessfully(fileanme, content);
     });
   }
@@ -665,7 +665,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @Then("Operator verifies Filter Job button is disabled on Pickup job page")
+  @Then("Operator check Filter Job button is disabled on Pickup job page")
   public void operatorVerifiesFilterJobButtonDisabled() {
     pickupAppointmentJobPage.inFrame(
         () -> Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.

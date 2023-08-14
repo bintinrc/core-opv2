@@ -469,16 +469,10 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies that Edit Order page is opened on clicking tracking id")
-  public void operator_verifies_that_Edit_Order_page_is_opened_on_clicking_tracking_id() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
-  }
-
-  @Then("Operator verifies that Edit Order page is opened on clicking tracking id {value}")
+  @Then("Operator verifies that Edit Order page is opened on clicking tracking id {value} and edit order page is loaded with order id {value}")
   public void operator_verifies_that_Edit_Order_page_is_opened_on_clicking_trackingId(
-      String trackingId) {
-    stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId);
+      String trackingId, String expectedURL) {
+    stationManagementHomePage.verifyNavigationToEditOrderScreen(trackingId, expectedURL);
   }
 
   @Then("Operator verifies that Route Manifest page is opened on clicking route id")
@@ -650,11 +644,16 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.validateStationRecoveryURLPath(trackingId);
   }
 
-  @Then("Operator verifies that the url for edit order page is loaded with order id")
-  public void operator_verifies_that_the_url_for_edit_order_page_is_loaded_with_order_id() {
-    String orderId = get(KEY_CREATED_ORDER_ID).toString();
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    stationManagementHomePage.verifyEditOrderScreenURL(trackingId, orderId);
+  @Then("Operator verifies that the url for recovery tickets page is loaded with tracking id {value}")
+  public void operator_verifies_that_the_url_for_recovery_tickets_page_is_loaded_with_tracking_id(
+      String trackingId) {
+    stationManagementHomePage.validateStationRecoveryURLPath(trackingId);
+  }
+
+  @Then("Operator verifies that the url for edit order page is loaded with order id {value}")
+  public void operator_verifies_that_the_url_for_edit_order_page_is_loaded_with_order_id(
+      String expectedURL) {
+    stationManagementHomePage.verifyCurrentPageURL(expectedURL);
   }
 
   @Then("Operator verifies that the modal: {string} is displayed and can be closed")
@@ -871,5 +870,19 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Assertions.assertThat(expectedAdjustedTimeEndDateInUTC)
         .as(f("Assert that last Scan Time is added with %d from utc time in database", timeDiff))
         .isEqualTo(actualLastScanTime);
+  }
+
+  @And("Operator gets Last Scan time for TrackingId {value}")
+  public void operatorGetsLastScanTimeForTrackingId(
+      String trackingId) {
+    doWithRetry(() -> {
+      ParcelsDao parcels = new ParcelsDao();
+      List<Parcel> dbResults = parcels.getParcelDetails(trackingId);
+
+      String lastScannedTimeAdjustedTimeEndDateInUTC = DateUtil.getAdjustedLocalTimeFromUTC(
+          dbResults.get(0).getLastScanTime(), 8);
+      put(KEY_EVENT_TIME, lastScannedTimeAdjustedTimeEndDateInUTC);
+      LOGGER.info("Last Scanned Time: " + lastScannedTimeAdjustedTimeEndDateInUTC);
+    }, "Operator gets Last Scan time for TrackingId", 5000, 3);
   }
 }

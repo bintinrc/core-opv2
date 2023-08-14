@@ -77,6 +77,8 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
   @FindBy(css = "[data-testid='btn-edit-filter']")
   public Button editFilter;
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-content' and contains(.,'cancel')]")
+  public ConfirmCancelTicketDialog cancelTicketDialog;
 
   public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
   public static final String TICKET_TYPE_MISSING = "MISSING";
@@ -97,6 +99,11 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       "NV LIABLE - RETURN PARCEL",
       "NV LIABLE - FULL - PARCEL DELIVERED",
       "NV LIABLE - PARTIAL - PARCEL DELIVERED",
+      "NV LIABLE - PARTIAL - RESUME DELIVERY",
+      "NV LIABLE - XMAS CAGE",
+      "NV LIABLE - XMAS CAGE (TIKTOK)",
+      "NV LIABLE - DELIVERED",
+      "RESUME DELIVERY",
       "LOST - DECLARED",
       "LOST - NO RESPONSE - DECLARED",
       "DAMAGED - NV LIABLE",
@@ -619,6 +626,10 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//button/span[.='Update Ticket']")
     public Button updateTicket;
+
+    @FindBy(xpath = "//button/span[.='Cancel Ticket']")
+    public Button cancelTicket;
+
     @FindBy(xpath = "//h4[@id='last_instruction']")
     public PageElement lastInstruction;
 
@@ -674,5 +685,21 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
         .isEqualTo("Confirm Update For 2 Ticket(s)");
     Assertions.assertThat(actualBody).as("Confirmation message is match")
         .isEqualTo("Resolving tickets with this order outcome will result in shipper claims");
+  }
+
+  public static class ConfirmCancelTicketDialog extends AntModal {
+
+    @FindBy(xpath = "//span[@class='ant-modal-confirm-title']")
+    public PageElement title;
+
+    @FindBy(xpath = "//div[@class='ant-modal-confirm-content']")
+    public PageElement content;
+
+    @FindBy(xpath = "//button/span[.='Delete']")
+    public Button delete;
+
+    public ConfirmCancelTicketDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }
