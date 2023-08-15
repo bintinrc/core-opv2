@@ -101,10 +101,10 @@ Feature: Shipment Management - Shipment Events
 	  | scanType   | SHIPMENT_HUB_INBOUND                     |
 	  | scanValue  | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
 	  | actionType | ADD                                      |
+	When API MM - Operator "complete" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
 	When API MM - Operator end shipment inbound with movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]":
 	  | scanType | SHIPMENT_HUB_INBOUND                               |
 	  | driverId | {KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].id} |
-	When API MM - Operator "complete" movement trip "KEY_MM_LIST_OF_CREATED_MOVEMENT_TRIPS[1]"
 	Given Operator go to menu Shipper Support -> Blocked Dates
 	When Operator go to menu Inter-Hub -> Shipment Management
 	And Operator search shipments by given Ids on Shipment Management page:
