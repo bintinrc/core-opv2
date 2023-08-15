@@ -961,8 +961,6 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
