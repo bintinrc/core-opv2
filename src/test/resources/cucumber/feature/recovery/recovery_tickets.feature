@@ -957,12 +957,12 @@ Feature: New Recovery Tickets
       | TICKET CREATED |
 
     Examples:
-      | Dataset Name                      | ticketSubtype    |
-      | ticket_subtype = DUPLICATE PARCEL | DUPLICATE PARCEL |
+      | Dataset Name                          | ticketSubtype        |
+      | ticket_subtype = DUPLICATE PARCEL     | DUPLICATE PARCEL     |
       | ticket_subtype = NO ORDER             | NO ORDER             |
       | ticket_subtype = OVERWEIGHT/OVERSIZED | OVERWEIGHT/OVERSIZED |
       | ticket_subtype = POOR LABELLING       | POOR LABELLING       |
-      | ticket_subtype = POOR PACKAGING   | POOR PACKAGING   |
+      | ticket_subtype = POOR PACKAGING       | POOR PACKAGING       |
       | ticket_subtype = REJECTED RETURN      | REJECTED RETURN      |
       | ticket_subtype = RESTRICTED GOODS     | RESTRICTED GOODS     |
 
@@ -1476,7 +1476,7 @@ Feature: New Recovery Tickets
       | TICKET UPDATED  |
 
     Examples:
-      | Dataset Name                                                  | ticketSubtype     | orderOutcome | postStatus | postGranularStatus     |
+      | Dataset Name                                                                   | ticketSubtype               | orderOutcome       | postStatus | postGranularStatus     |
       | ticket_subtype = CANCELLED ORDER - order_outcome = XMAS CAGE                   | CANCELLED ORDER             | XMAS CAGE          | Cancelled  | Cancelled              |
       | ticket_subtype = CUSTOMER REJECTED - order_outcome = RESUME DELIVERY           | CUSTOMER REJECTED           | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = DP OVERSIZED - order_outcome = RESUME DELIVERY                | DP OVERSIZED                | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
@@ -1484,7 +1484,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) - order_outcome = RESUME DELIVERY | MAXIMUM ATTEMPTS (DELIVERY) | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = MAXIMUM ATTEMPTS (RTS) - order_outcome = RELABELLED TO SEND   | MAXIMUM ATTEMPTS (RTS)      | RELABELLED TO SEND | Completed  | Completed              |
       | ticket_subtype = RESTRICTED ZONES - order_outcome = RESUME DELIVERY            | RESTRICTED ZONES            | RESUME DELIVERY    | Transit    | Arrived at Sorting Hub |
-      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV | WRONG AV/RACK/HUB | FIXED AV     | Transit    | Arrived at Sorting Hub |
+      | ticket_subtype = WRONG AV/RACK/HUB - order_outcome = FIXED AV                  | WRONG AV/RACK/HUB           | FIXED AV           | Transit    | Arrived at Sorting Hub |
 
   @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = PARCEL EXCEPTION -RTS- <Dataset Name>
@@ -3557,3 +3557,154 @@ Feature: New Recovery Tickets
     And Operator clicks "Select All Shown" button on Recovery Tickets Page
     And Operator clicks "Bulk Update" button on Recovery Tickets Page
     Then Operator verifies error toast message in recovery tickets page
+
+  @CancelTicket
+  Scenario Outline: Operator Update Bulk Ticket - With Ticket_Subtype - Cancelled Tickets - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | <ticketType>                          |
+      | subTicketType      | <ticketSubType>                       |
+      | entrySource        | RECOVERY SCANNING                     |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | ticketType         | <ticketType>                          |
+      | subTicketType      | <ticketSubType>                       |
+      | entrySource        | RECOVERY SCANNING                     |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    And Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    And Operator clicks Cancel Tickets button on Bulk Edit dialog
+    Then Operator verifies bulk cancel tickets dialog
+    When Operator click Cancel Tickets on Cancel Tickets dialog
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name           | description                                                                    |
+      | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"]} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name           | description                                                                    |
+      | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+    Examples:
+      | Dataset Name                          | ticketType       | ticketSubType      |
+      | PARCEL_EXCEPTION / INACCURATE ADDRESS | PARCEL EXCEPTION | INACCURATE ADDRESS |
+      | PARCEL ON HOLD / CUSTOMER REQUEST     | PARCEL ON HOLD   | CUSTOMER REQUEST   |
+      | SHIPPER ISSUE / REQUEST RECEIPT       | SHIPPER ISSUE    | REQUEST RECEIPT    |
+
+  @CancelTicket
+  Scenario Outline:Operator Update Bulk Ticket - Without Ticket_Subtype - Cancelled Tickets - <Dataset Name>
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | <ticketType>                          |
+      | entrySource        | RECOVERY SCANNING                     |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | ticketType         | <ticketType>                          |
+      | entrySource        | RECOVERY SCANNING                     |
+      | investigatingParty | 456                                   |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | 117472837373252971898                 |
+      | creatorUserName    | Ekki Syam                             |
+      | creatorUserEmail   | ekki.syam@ninjavan.co                 |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    And Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator clicks "Select All Shown" button on Recovery Tickets Page
+    And Operator clicks "Bulk Update" button on Recovery Tickets Page
+    And Operator clicks Cancel Tickets button on Bulk Edit dialog
+    Then Operator verifies bulk cancel tickets dialog
+    When Operator click Cancel Tickets on Cancel Tickets dialog
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name           | description                                                                    |
+      | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name            |
+      | TICKET RESOLVED |
+      | TICKET UPDATED  |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"]} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name           | description                                                                    |
+      | MANUAL ACTION | TICKET UPDATED | Ticket ID: {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}\nTicket status: CANCELLED |
+
+    Examples:
+      | Dataset Name    | ticketType      |
+      | MISSING         | MISSING         |
+      | DAMAGED         | DAMAGED         |
+      | SLA BREACH      | SLA BREACH      |
+      | SELF COLLECTION | SELF COLLECTION |
