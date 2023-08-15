@@ -32,8 +32,7 @@ Feature: Resolve Recovery Ticket
       | status  | RESOLVED                         |
       | outcome | NV NOT LIABLE - PARCEL DELIVERED |
     Then Operator verifies that success toast displayed:
-      | top                | ^Ticket ID : .* updated |
-      | waitUntilInvisible | true                    |
+      | top | ^Ticket ID : .* updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page

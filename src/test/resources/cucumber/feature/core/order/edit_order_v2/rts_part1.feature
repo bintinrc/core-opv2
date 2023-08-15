@@ -28,9 +28,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -142,9 +141,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -258,9 +256,8 @@ Feature: RTS
       | address2     | 15                             |
       | postalCode   | 308402                         |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -397,8 +394,7 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -538,8 +534,7 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -660,8 +655,7 @@ Feature: RTS
       | address2     | 15                             |
       | postalCode   | 308402                         |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |
@@ -773,9 +767,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
       | RTS                        |

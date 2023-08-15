@@ -187,8 +187,7 @@ Feature: Order Events
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verifies that info toast displayed:
-      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
-      | waitUntilInvisible | true                                                                                           |
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
     Then Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
 
@@ -253,15 +252,13 @@ Feature: Order Events
       | granularStatus | Pending Pickup                      |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success toast displayed:
-      | top                | Status Updated |
-      | waitUntilInvisible | true           |
+      | top | Status Updated |
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verifies that info toast displayed:
-      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
-      | waitUntilInvisible | true                                                                                           |
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     When Operator selects "All Events" in Events Filter menu on Edit Order page

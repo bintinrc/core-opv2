@@ -45,7 +45,6 @@ Feature: Reschedule
       | timeslot      | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
@@ -164,7 +163,6 @@ Feature: Reschedule
       | timeslot         | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
@@ -308,7 +306,6 @@ Feature: Reschedule
       | postalCode       | 308402                         |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -447,7 +444,6 @@ Feature: Reschedule
       | postalCode       | 308402                         |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -574,7 +570,6 @@ Feature: Reschedule
       | postalCode    | 308402                         |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | RESCHEDULE     |
@@ -707,7 +702,6 @@ Feature: Reschedule
       | postalCode       | 308402                         |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -849,7 +843,6 @@ Feature: Reschedule
       | deliveryTimeslot | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
       | top                | Order rescheduled successfully |
-      | waitUntilInvisible | true                           |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
