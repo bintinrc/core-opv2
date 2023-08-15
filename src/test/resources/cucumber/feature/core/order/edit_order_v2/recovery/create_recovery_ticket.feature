@@ -41,8 +41,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -122,8 +121,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -200,8 +198,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -259,8 +256,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -323,8 +319,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -385,8 +380,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -447,8 +441,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId        | 1                                     |
       | ticketNotes             | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -514,8 +507,7 @@ Feature: Create Recovery Ticket
       | shipperZendeskId              | 1                                     |
       | ticketNotes                   | GENERATED                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |

@@ -22,8 +22,7 @@ Feature: Order Weight Update V2
       | trackingId                            | weight |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | 4.5    |
     Then Operator verifies that success react notification displayed:
-      | top                | Matches with file shown in table |
-      | waitUntilInvisible | true                             |
+      | top | Matches with file shown in table |
     And Operator verify table records on Order Weight Update page:
       | id                                 | trackingId                            | stampId | status  | newWeight | isValid |
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | Pending | 4.5       | Valid   |
@@ -54,8 +53,7 @@ Feature: Order Weight Update V2
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | 4.5    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | 3.5    |
     Then Operator verifies that success react notification displayed:
-      | top                | Matches with file shown in table |
-      | waitUntilInvisible | true                             |
+      | top | Matches with file shown in table |
     And Operator verify table records on Order Weight Update page:
       | id                                 | trackingId                            | stampId | status  | newWeight | isValid |
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | Pending | 4.5       | Valid   |

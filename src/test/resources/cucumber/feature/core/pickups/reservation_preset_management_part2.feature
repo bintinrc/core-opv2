@@ -91,8 +91,7 @@ Feature: Reservation Preset Management
       | shipper | {KEY_CREATED_SHIPPER.name}           |
       | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
     Then Operator verifies that success toast displayed:
-      | top                | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
-      | waitUntilInvisible | true                                                                                         |
+      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
     And API Operator get created Reservation Group params
     And Operator waits for 10 seconds
     And Operator uploads CSV on Reservation Preset Management page:
@@ -298,14 +297,12 @@ Feature: Reservation Preset Management
       | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}     |
     Then Operator verifies that success toast displayed:
-      | top                | Routes have been created for all groups! |
-      | waitUntilInvisible | true                                     |
+      | top | Routes have been created for all groups! |
     When Operator create route on Reservation Preset Management page:
       | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
       | routeDate | {gradle-next-1-day-yyyy-MM-dd}       |
     Then Operator verifies that success toast displayed:
-      | top                | Routes have been created for all groups! |
-      | waitUntilInvisible | true                                     |
+      | top | Routes have been created for all groups! |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator search reservations on Shipper Pickups page:
       | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
