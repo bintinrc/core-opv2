@@ -48,6 +48,6 @@ public class AntMenuBar extends PageElement {
   private void openMenu(String menu) {
     String selector = f(MD_MENU_LOCATOR, StringUtils.normalizeSpace(menu.toLowerCase(Locale.ROOT)));
     new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector))).click();
-    pause100ms();
+    pause200ms();
   }
 }
