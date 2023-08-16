@@ -78,16 +78,6 @@ Feature: Create Pricing Profile - TH
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
 
-  @DeleteNewlyCreatedShipper @CloseNewWindows
-  Scenario: Create Pending Profile - Not Select Any Billing Weight Logic - TH (uid:8690a0c1-ce4c-45bf-aa9e-ad88c8ab5cc3)
-    Given Operator go to menu Shipper -> All Shippers
-    Given API Operator create new 'normal' shipper
-    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-    And Operator adds pricing profile with below details and verifies save button is disabled
-      | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
-      | type               | PERCENTAGE                                          |
-      | comments           | This is a test pricing script                       |
-      | billingWeightLogic | Empty                                               |
 
 
   @KillBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@MileZero @B2B
+@MileZero @CorporateHQ @WithSg
 Feature: Prevent Corporate account linking
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -28,37 +28,37 @@ Feature: Prevent Corporate account linking
     Then Operator verifies toast "Shipper Email (Basic Settings)" displayed on edit shipper page
 
   Scenario: Create Corporate branch using the existing email - same parent (uid:21df8bba-04b1-41ff-b146-1b559c043c04)
-    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Given API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
     And API Operator delete corporate sub shippers
-    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
-    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    When Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
+    And Operator go to "Corporate sub shippers" tab on Edit Shipper page
     And Operator create corporate sub shipper with data below:
       | branchId | generated |
       | name     | generated |
       | email    | generated |
-    Then Operator verifies corporate sub shipper is created
+    And Operator verifies corporate sub shipper is created
     And Operator create corporate sub shipper with data below:
       | branchId | generated                              |
       | name     | generated                              |
       | email    | {KEY_LIST_SUB_SHIPPER_SELLER_EMAIL[1]} |
     Then Operator verifies corporate sub shipper is created
-    When Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[2]}" corporate sub shipper
-    Then Operator verifies that error toast displayed:
+    And Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[2]}" corporate sub shipper
+    And Operator verifies that error toast displayed:
       | top    | Network Request Error                     |
       | bottom | ^.*Error Message: shipper \d* not found.* |
 
   Scenario: Create Corporate branch using the existing email - different country (uid:6afd2b69-7e59-47bd-bc5e-9c745c600982)
-    Given API Operator get b2b sub shippers for master shipper id "{operator-b2b-master-shipper-id}"
+    Given API Operator get b2b sub shippers for master shipper id "{postpaid-corporate-hq-id}"
     And API Operator delete corporate sub shippers
-    When Operator edits shipper "{operator-b2b-master-shipper-legacy-id}"
-    When Operator go to "Corporate sub shippers" tab on Edit Shipper page
+    When Operator edits shipper "{postpaid-corporate-hq-legacy-id}"
+    And Operator go to "Corporate sub shippers" tab on Edit Shipper page
     And Operator create corporate sub shipper with data below:
       | branchId | generated          |
       | name     | generated          |
       | email    | {my-shipper-email} |
-    Then Operator verifies success notification "New sub-shipper(s) created successfully" is displayed on Corporate sub shippers tab
+    And Operator verifies success notification "New sub-shipper(s) created successfully" is displayed on Corporate sub shippers tab
     And Operator verifies corporate sub shipper is created
-    When Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[1]}" corporate sub shipper
+    And Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[1]}" corporate sub shipper
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                     |
       | bottom | ^.*Error Message: shipper \d* not found.* |
@@ -83,7 +83,7 @@ Feature: Prevent Corporate account linking
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    When Operator clear browser cache and reload All Shipper page
+    And Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
 
   @DeleteShipper
@@ -105,7 +105,7 @@ Feature: Prevent Corporate account linking
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
       | branchId | generated |
@@ -129,15 +129,15 @@ Feature: Prevent Corporate account linking
       | pricingScriptName            | {pricing-script-name} |
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
-    When Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
-    When Operator go to tab corporate sub shipper
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator go to tab corporate sub shipper
     And Operator create corporate sub shipper with data below:
       | branchId | generated                              |
       | name     | generated                              |
       | email    | {KEY_LIST_SUB_SHIPPER_SELLER_EMAIL[1]} |
     Then Operator verifies success notification "New sub-shipper(s) created successfully" is displayed on Corporate sub shippers tab
-    When Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[2]}" corporate sub shipper
-    Then Operator verifies that error toast displayed:
+    And Operator click Ninja Dash Login button for "{KEY_LIST_SUB_SHIPPER_SELLER_ID[2]}" corporate sub shipper
+    And Operator verifies that error toast displayed:
       | top    | Network Request Error                     |
       | bottom | ^.*Error Message: shipper \d* not found.* |
 

@@ -5,6 +5,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 /**
  * @author Kateryna Skakunova
@@ -12,13 +13,17 @@ import java.time.ZonedDateTime;
 public class ImplantedManifestOrder extends DataEntity<ImplantedManifestOrder> {
 
   private String trackingId;
-  private ZonedDateTime scannedAt;
+  private String scannedAt;
   private String destination;
   private String addressee;
   private String rackSector;
   private String deliveryBy;
 
   public ImplantedManifestOrder() {
+  }
+
+  public ImplantedManifestOrder(Map<String, ?> data) {
+    fromMap(data);
   }
 
   public String getTrackingId() {
@@ -29,13 +34,12 @@ public class ImplantedManifestOrder extends DataEntity<ImplantedManifestOrder> {
     this.trackingId = trackingId;
   }
 
-  public ZonedDateTime getScannedAt() {
+  public String getScannedAt() {
     return scannedAt;
   }
 
   public void setScannedAt(String scannedAt) {
-    this.scannedAt = DateUtil.getDate(scannedAt,
-        DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
+    this.scannedAt = scannedAt;
   }
 
   public String getDestination() {

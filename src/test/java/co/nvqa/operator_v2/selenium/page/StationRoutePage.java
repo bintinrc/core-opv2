@@ -55,10 +55,10 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
   @FindBy(css = "input[type='checkbox']")
   public CheckBox alsoSearchInHub;
 
-  @FindBy(css = "[data-pa-label='Download CSV']")
+  @FindBy(css = "[data-testid='station-route-testid.assign-drivers.download-csv.button']")
   public Button downloadCsv;
 
-  @FindBy(css = "[data-pa-label='Assign drivers']")
+  @FindBy(css = "[data-testid='station-route-testid.assign-drivers.button']")
   public Button assignDrivers;
 
   @FindBy(css = "[data-testid='next-button']")
@@ -151,6 +151,9 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
 
   @FindBy(css = "[data-testid='station-route-testid.create-routes.button']")
   public Button createRoutes;
+
+  @FindBy(css = "[data-testid='station-route-testid.remove-all-selected-parcels.button']")
+  public Button removeAllSelectedParcels;
 
   @FindBy(xpath = "//label[.='Show only matching area but no keyword']//input")
   public CheckBox showOnlyMatchingArea;

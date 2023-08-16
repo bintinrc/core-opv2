@@ -1,8 +1,8 @@
 @OperatorV2 @Core @SystemSettings @PrinterSettings
 Feature: Printer Settings
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePrinter
@@ -57,10 +57,5 @@ Feature: Printer Settings
     When Operator go to menu System Settings -> Printer Settings
     And Operator set printer as default printer
     Then Operator verifies that success toast displayed:
-      | top                | Set successfully |
-      | waitUntilInvisible | true             |
+      | top | Set successfully |
     And Operator verify Printer Settings is set as default
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

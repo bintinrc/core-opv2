@@ -1,76 +1,123 @@
-@OperatorV2 @Core @NewFeatures @ImplantedManifestPart1 @NewFeatures1
+@OperatorV2 @Core @NewFeatures @ImplantedManifest @ImplantedManifestPart1 @NewFeatures1
 Feature: Implanted Manifest
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given Operator go to menu New Features -> Implanted Manifest
-    When Operator creates Manifest for Hub {hub-name} and scan barcodes
-    And Operator clicks "Download CSV File" on Implanted Manifest
-    Then Operator verifies the file is downloaded successfully and contains all scanned orders with correct info
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator clicks 'Download CSV File' on Implanted Manifest page
+    Then Operator verifies CSV file for "{hub-name}" hub is downloaded successfully on Implanted Manifest page:
+      | trackingId                          | address                                                                               | rackSector                                 | toName                                 |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given Operator go to menu New Features -> Implanted Manifest
-    When Operator creates Manifest for Hub {hub-name} and scan barcodes
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove Scanned Order by Scanning
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu New Features -> Implanted Manifest
-    When Operator creates Manifest for Hub {hub-name} and scan barcodes
-    And Operator do "Remove order by Scan" for all created orders on Implanted Manifest page
-    Then Operator verifies all scanned orders is removed from the Manifest table
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator removes order by scan on Implanted Manifest page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    Then Operator verifies orders are removed on Implanted Manifest page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by Remove All Button
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu New Features -> Implanted Manifest
-    When Operator creates Manifest for Hub {hub-name} and scan barcodes
-    And Operator clicks "Remove All" button on Implanted Manifest page
-    Then Operator verifies all scanned orders is removed from the Manifest table
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator remove all scanned orders on Implanted Manifest page
+    Then Operator verifies that success react notification displayed:
+      | top | All scanned item has been deleted |
+    Then Operator verifies orders are removed on Implanted Manifest page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by X Button
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu New Features -> Implanted Manifest
-    When Operator creates Manifest for Hub {hub-name} and scan barcodes
-    And Operator clicks "Actions X" button on Manifest table for all created orders on Implanted Manifest page
-    Then Operator verifies all scanned orders is removed from the Manifest table
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And Operator removes scanned orders on Implanted Manifest page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    Then Operator verifies orders are removed on Implanted Manifest page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Id
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu New Features -> Implanted Manifest
-    And Operator selects "{hub-name}" hub on Implanted Manifest page
-    And Operator clicks Create Manifest on Implanted Manifest page
-    And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
-    When Operator creates manifest for "000001" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | Reservation or Job ID not found! Please enter another ID |
+    When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
+    When Operator creates manifest for "1" reservation on Implanted Manifest page
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                                                    |
+      | bottom | Reservation or Job ID not found! Please enter another ID |
 
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Pending Reservation
     Given Operator go to menu Utilities -> QRCode Printing
@@ -86,19 +133,11 @@ Feature: Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
-    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    Then Operator verify scanned orders on Implanted Manifest page:
+      | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that error toast displayed:
-      | top | Not a success reservation! |
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+    Then Operator verifies that error react notification displayed:
+      | top    | Error                      |
+      | bottom | Not a success reservation! |
+    Then API Core - Operator verify there is no pods assigned to reservation id "{KEY_CREATED_RESERVATION_ID}"

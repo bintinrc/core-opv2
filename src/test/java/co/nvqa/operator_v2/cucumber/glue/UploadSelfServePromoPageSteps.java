@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.shipper.Pricing;
 import co.nvqa.operator_v2.selenium.page.UploadSelfServePromoPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -210,4 +211,10 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
         PRICING_PROFILE_ERRORS_CSV_FILENAME_PATTERN);
   }
 
+  @And("Operator verifies operator is in login page")
+  public void operatorVerifiesOperatorIsInLoginPage() {
+    String currentUrl = getWebDriver().getCurrentUrl();
+    Assertions.assertThat(currentUrl).as("Operator is directed to login page")
+        .isEqualTo(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
+  }
 }

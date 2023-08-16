@@ -1,8 +1,8 @@
 @OperatorV2 @Core @ShipperSupport @BlockedDates
 Feature: Blocked Dates
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Add Blocked Date (uid:29f8048f-8c86-41af-8f00-70563b9c43bd)
@@ -14,7 +14,3 @@ Feature: Blocked Dates
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator removes Blocked Date
     Then Operator verifies Blocked Date is removed successfully
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
 Feature: Order Parcel Size Update
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator download sample CSV file for Order Parcel Size Update
@@ -24,8 +24,7 @@ Feature: Order Parcel Size Update
       | top | Matches with file shown in table |
     When Operator clicks Upload button on Order Parcel Size Update page
     Then Operator verifies that success react notification displayed:
-      | top                | Parcel size update success |
-      | waitUntilInvisible | true                       |
+      | top | Parcel size update success |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verifies dimensions information on Edit Order page:
       | size | MEDIUM |
@@ -34,7 +33,3 @@ Feature: Order Parcel Size Update
     Then Operator verifies dimensions information on Edit Order page:
       | size | LARGE |
     And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.commons.model.pdf.AirwayBill;
@@ -11,6 +12,8 @@ import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.OrdersTable.OrderInfo;
+import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,6 +22,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +35,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.MANUALLY_COMPLETE_ERROR_CSV_FILENAME;
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.SELECTION_ERROR_CSV_FILENAME;
@@ -52,18 +58,10 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage = new AllOrdersPage(getWebDriver());
   }
 
-  @When("^Operator switch to Edit Order's window$")
-  public void operatorSwitchToEditOrderWindow() {
-    Long orderId = get(KEY_CREATED_ORDER_ID);
-    if (orderId == null) {
-      List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-      if (org.apache.commons.collections4.CollectionUtils.isEmpty(orders)) {
-        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_ORDERS is empty");
-      }
-      orderId = orders.get(orders.size() - 1).getId();
-    }
+  @When("Operator switch to Edit Order's window of {string}")
+  public void operatorSwitchToEditOrderWindow(String orderId) {
     String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
-    allOrdersPage.switchToEditOrderWindow(orderId);
+    allOrdersPage.switchToEditOrderWindow(Long.parseLong(resolveValue(orderId)));
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
   }
 
@@ -81,10 +79,10 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(
       Map<String, String> dataTableAsMap) {
     dataTableAsMap = resolveKeyValues(dataTableAsMap);
-    AllOrdersPage.Category category = AllOrdersPage.Category
-        .findByValue(dataTableAsMap.get("category"));
-    AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic
-        .findByValue(dataTableAsMap.get("searchLogic"));
+    AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(
+        dataTableAsMap.get("category"));
+    AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(
+        dataTableAsMap.get("searchLogic"));
     String searchTerm = dataTableAsMap.get("searchTerm");
     String searchBy = searchTerm;
 
@@ -108,10 +106,10 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator can't find order on All Orders page using this criteria below:$")
   public void operatorCantFindOrderOnAllOrdersPageUsingThisCriteriaBelow(
       Map<String, String> dataTableAsMap) {
-    AllOrdersPage.Category category = AllOrdersPage.Category
-        .findByValue(dataTableAsMap.get("category"));
-    AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic
-        .findByValue(dataTableAsMap.get("searchLogic"));
+    AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(
+        dataTableAsMap.get("category"));
+    AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(
+        dataTableAsMap.get("searchLogic"));
     String searchTerm = dataTableAsMap.get("searchTerm");
 
     if (containsKey(searchTerm)) {
@@ -145,6 +143,10 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage() {
     List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
+
+    //handle masking
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    allOrdersPage.operatorClickMaskingText(elements);
   }
 
   @When("^Operator find orders by uploading CSV on All Orders page:$")
@@ -167,11 +169,11 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
   }
 
-  @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
+  @Then("Operator verify all orders in CSV is found on All Orders page with correct info")
   public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
     List<Order> listOfCreatedOrder =
         containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS)
-            : get(KEY_LIST_OF_CREATED_ORDERS);
+            : get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS);
     allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
   }
 
@@ -192,33 +194,13 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
   }
 
-  @When("^Operator Force Success single order on All Orders page$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    String reason = allOrdersPage.forceSuccessOrders();
-    put(KEY_ORDER_CHANGE_REASON, reason);
-  }
-
-  @When("^Operator Force Success single order on All Orders page:$")
-  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
-    allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
 
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
       List<Map<String, String>> data) {
-    Map<String, Boolean> resolvedData = data.stream()
-        .collect(Collectors.toMap(
-            row -> resolveValue(row.get("trackingId")).toString(),
-            row -> Boolean.valueOf(row.get("collected"))
-        ));
+    Map<String, Boolean> resolvedData = data.stream().collect(
+        Collectors.toMap(row -> resolveValue(row.get("trackingId")).toString(),
+            row -> Boolean.valueOf(row.get("collected"))));
     allOrdersPage.findOrdersWithCsv(new ArrayList<>(resolvedData.keySet()));
     allOrdersPage.clearFilterTableOrderByTrackingId();
     allOrdersPage.selectAllShown();
@@ -261,12 +243,10 @@ public class AllOrdersSteps extends AbstractSteps {
     data = resolveValues(data);
     Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5))
         .as("Errors dialog is displayed").isTrue();
-    List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
-        .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
-            .replaceAll("^\\d{1,2}\\.", ""))
-        .collect(Collectors.toList());
-    Assertions.assertThat(actual)
-        .as("List of error messages")
+    List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream().map(
+        element -> StringUtils.normalizeSpace(element.getNormalizedText())
+            .replaceAll("^\\d{1,2}\\.", "")).collect(Collectors.toList());
+    Assertions.assertThat(actual).as("List of error messages")
         .containsExactlyInAnyOrderElementsOf(data);
   }
 
@@ -276,11 +256,31 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.errorsDialog.close.click();
   }
 
-  @When("Operator Force Success multiple orders on All Orders page")
-  public void operatorForceSuccessOrders() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  @When("Operator Force Success single order on All Orders page:")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String trackingId = data.get("trackingId");
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
+  }
+
+  @When("Operator Force Success multiple orders on All Orders page:")
+  public void operatorForceSuccessOrders(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String trackingIdsString = data.get("trackingIds");
+    final List<String> trackingIds = Arrays
+        .stream(trackingIdsString.split(","))
+        .map(StringUtils::trim)
+        .map(tidKey -> (String) resolveValue(tidKey))
+        .collect(Collectors.toList());
+    String reason = data.getOrDefault("reason", "Others (fill in below)");
+    String reasonDescription = data.getOrDefault("reasonDescription",
+        "Force success from automated test");
     allOrdersPage.findOrdersWithCsv(trackingIds);
-    allOrdersPage.forceSuccessOrders();
+    allOrdersPage.forceSuccessOrders(reason, reasonDescription);
   }
 
   @Then("^Operator verify the order is Force Successed successfully$")
@@ -295,12 +295,10 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.rtsSingleOrderNextDay(trackingId);
   }
 
-  @When("^Operator cancel multiple orders on All Orders page$")
-  public void operatorCancelMultipleOrdersOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    allOrdersPage.cancelSelected(listOfTrackingIds);
+  @When("Operator cancel multiple orders below on All Orders page:")
+  public void operatorCancelMultipleOrdersOnAllOrdersPage(List<String> listOfOrder) {
+    List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
+    allOrdersPage.cancelSelected(listOfCreatedTrackingId);
   }
 
   @When("^Operator cancel order on All Orders page$")
@@ -309,11 +307,9 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.cancelSelected(Collections.singletonList(trackingID));
   }
 
-  @When("^Operator pull out multiple orders from route on All Orders page$")
-  public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
+  @When("Operator pull out multiple orders below from route on All Orders page:")
+  public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage(
+      List<String> listOfTrackingIds) {
     allOrdersPage.pullOutFromRoute(listOfTrackingIds);
   }
 
@@ -341,15 +337,14 @@ public class AllOrdersSteps extends AbstractSteps {
     } else {
       listOfTrackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     }
-    allOrdersPage
-        .fillAddToRouteFormUsingSetToAll(listOfTrackingIds, data.get("routeId"), data.get("tag"));
+    allOrdersPage.fillAddToRouteFormUsingSetToAll(listOfTrackingIds, data.get("routeId"),
+        data.get("tag"));
   }
 
   @When("Operator suggest routes on Add Selected to Route form:")
   public void operatorSuggestRoutes(List<Map<String, String>> data) {
     List<AddToRouteData> tagsMap = data.stream()
-        .map(val -> new AddToRouteData(resolveKeyValues(val)))
-        .collect(Collectors.toList());
+        .map(val -> new AddToRouteData(resolveKeyValues(val))).collect(Collectors.toList());
     allOrdersPage.fillRouteSuggestion(tagsMap);
   }
 
@@ -425,23 +420,21 @@ public class AllOrdersSteps extends AbstractSteps {
         } catch (AssertionError ex) {
         }
       }
-      Assertions.assertThat(found)
-          .withFailMessage(
-              "Correct info for order " + orders.get(i).getTrackingId() + " was not found")
-          .isTrue();
+      Assertions.assertThat(found).withFailMessage(
+          "Correct info for order " + orders.get(i).getTrackingId() + " was not found").isTrue();
     }
   }
 
-  @When("^Operator resume order on All Orders page$")
-  public void operatorResumeOrderOnAllOrdersPage() {
-    List<String> trackingIds = Collections.singletonList(get(KEY_CREATED_ORDER_TRACKING_ID));
-    resumeOrders(trackingIds);
+  @When("Operator resume this order {string} on All Orders page")
+  public void operatorResumeOrderOnAllOrdersPage(String trackingId) {
+    String resolveTrackingId = resolveValue(trackingId);
+    resumeOrders(Collections.singletonList(resolveTrackingId));
   }
 
-  @When("^Operator resume multiple orders on All Orders page$")
-  public void operatorResumeOrdersOnAllOrdersPage() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    resumeOrders(trackingIds);
+  @When("Operator resume multiple orders on All Orders page below:")
+  public void operatorResumeOrdersOnAllOrdersPage(List<String> trackingIds) {
+    List<String> resolveTrackingIds = resolveValues(trackingIds);
+    resumeOrders(resolveTrackingIds);
   }
 
   private void resumeOrders(List<String> trackingIds) {
@@ -459,20 +452,20 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator apply \"(.+)\" action to created orders$")
   public void operatorApplyActionToCreatedOrders(String actionName) {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    AllOrdersAction action = AllOrdersAction
-        .valueOf(actionName.toUpperCase().replaceAll("\\s", "_"));
+    AllOrdersAction action = AllOrdersAction.valueOf(
+        actionName.toUpperCase().replaceAll("\\s", "_"));
     allOrdersPage.applyActionToOrdersByTrackingId(trackingIds, action);
   }
 
   @When("^Operator apply \"Pull From Route\" action and expect to see \"Selection Error\"$")
-  public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.pullOutFromRouteWithExpectedSelectionError(trackingIds);
+  public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError(
+      List<String> trackingIds) {
+    allOrdersPage.pullOutFromRouteWithExpectedSelectionError(resolveValues(trackingIds));
   }
 
   @Then("^Operator verify Selection Error dialog for invalid Pull From Order action$")
-  public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction(
+      List<String> trackingIds) {
     List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
     Collections.fill(expectedFailureReasons, "No route found to unroute");
     allOrdersPage.verifySelectionErrorDialog(trackingIds, AllOrdersAction.PULL_FROM_ROUTE,
@@ -483,10 +476,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorOpenPageOfTheCreatedOrderFromAllOrdersPage() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    operatorOpenPageOfOrderFromAllOrdersPage(ImmutableMap.of(
-        "trackingId", trackingId,
-        "orderId", String.valueOf(orderId)
-    ));
+    operatorOpenPageOfOrderFromAllOrdersPage(
+        ImmutableMap.of("trackingId", trackingId, "orderId", String.valueOf(orderId)));
   }
 
   @When("^Operator open page of an order from All Orders page using data below:$")
@@ -497,12 +488,11 @@ public class AllOrdersSteps extends AbstractSteps {
     String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     allOrdersPage.waitUntilPageLoaded();
-    allOrdersPage.categorySelect
-        .selectValue(AllOrdersPage.Category.TRACKING_OR_STAMP_ID.getValue());
-    allOrdersPage.searchLogicSelect
-        .selectValue(AllOrdersPage.SearchLogic.EXACTLY_MATCHES.getValue());
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    allOrdersPage.categorySelect.selectValue(
+        AllOrdersPage.Category.TRACKING_OR_STAMP_ID.getValue());
+    allOrdersPage.searchLogicSelect.selectValue(
+        AllOrdersPage.SearchLogic.EXACTLY_MATCHES.getValue());
+    retryIfRuntimeExceptionOccurred(() -> {
       allOrdersPage.searchTerm.selectValue(trackingId);
       pause1s();
       allOrdersPage.waitUntilPageLoaded();
@@ -521,12 +511,14 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyItsCurrentPage();
   }
 
-  @When("^Operator RTS multiple orders on next day on All Orders page$")
-  public void operatorRtsMultipleOrdersOnNextDayOnAllOrdersPage() {
-    List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
-    List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    allOrdersPage.rtsMultipleOrderNextDay(listOfTrackingIds);
+  @When("Operator RTS multiple orders on next day on All Orders Page:")
+  public void operatorRtsOrdersOnNextDayOnAllOrdersPage(List<String> listOfTrackingIds) {
+    List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
+    if (CollectionUtils.isEmpty(resolveListOfTrackingIds)) {
+      throw new IllegalArgumentException(
+          "List of created Tracking Id should not be null or empty.");
+    }
+    allOrdersPage.rtsMultipleOrderNextDay(resolveListOfTrackingIds);
   }
 
   @When("^Operator select 'Set RTS to Selected' action for found orders on All Orders page$")
@@ -539,8 +531,7 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("Operator verify {value} process in Selection Error dialog on All Orders page")
   public void verifyProcessInSelectionError(String process) {
     allOrdersPage.selectionErrorDialog.waitUntilVisible();
-    Assertions.assertThat(allOrdersPage.selectionErrorDialog.process.getText())
-        .as("Process")
+    Assertions.assertThat(allOrdersPage.selectionErrorDialog.process.getText()).as("Process")
         .isEqualTo(process);
   }
 
@@ -561,8 +552,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyFileDownloadedSuccessfully(SELECTION_ERROR_CSV_FILENAME);
     List<String> actual = allOrdersPage.readDownloadedFile(SELECTION_ERROR_CSV_FILENAME);
     actual.remove(0);
-    Assertions.assertThat(actual)
-        .as("List of invalid tracking ids")
+    Assertions.assertThat(actual).as("List of invalid tracking ids")
         .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
   }
 
@@ -571,8 +561,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyFileDownloadedSuccessfully(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
     List<String> actual = allOrdersPage.readDownloadedFile(MANUALLY_COMPLETE_ERROR_CSV_FILENAME);
     actual.remove(0);
-    Assertions.assertThat(actual)
-        .as("List of invalid tracking ids")
+    Assertions.assertThat(actual).as("List of invalid tracking ids")
         .containsExactlyInAnyOrderElementsOf(resolveValues(trackingIds));
   }
 
@@ -588,8 +577,7 @@ public class AllOrdersSteps extends AbstractSteps {
       row.put("reason", allOrdersPage.selectionErrorDialog.reasons.get(i).getText());
       actual.add(row);
     }
-    Assertions.assertThat(actual)
-        .as("List of tracing ids and reasons")
+    Assertions.assertThat(actual).as("List of tracing ids and reasons")
         .containsExactlyInAnyOrderElementsOf(data);
   }
 
@@ -710,8 +698,8 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.addFilter("Granular Status");
       }
       allOrdersPage.granularStatusFilter.clearAll();
-      allOrdersPage.granularStatusFilter
-          .selectFilter(splitAndNormalize(data.get("granularStatus")));
+      allOrdersPage.granularStatusFilter.selectFilter(
+          splitAndNormalize(data.get("granularStatus")));
     }
 
     if (data.containsKey("creationTimeFrom")) {
@@ -760,8 +748,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Status filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.statusFilter.getSelectedValues())
-            .as("Status items")
+        assertions.assertThat(allOrdersPage.statusFilter.getSelectedValues()).as("Status items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
       }
     }
@@ -783,8 +770,7 @@ public class AllOrdersSteps extends AbstractSteps {
         assertions.fail("Creation Time filter is not displayed");
       } else {
         assertions.assertThat(allOrdersPage.creationTimeFilter.fromDate.getValue())
-            .as("Creation Time From Date")
-            .isEqualTo(data.get("creationTimeFrom"));
+            .as("Creation Time From Date").isEqualTo(data.get("creationTimeFrom"));
       }
     }
 
@@ -794,8 +780,7 @@ public class AllOrdersSteps extends AbstractSteps {
         assertions.fail("Creation Time filter is not displayed");
       } else {
         assertions.assertThat(allOrdersPage.creationTimeFilter.toDate.getValue())
-            .as("Creation Time To Date")
-            .isEqualTo(data.get("creationTimeTo"));
+            .as("Creation Time To Date").isEqualTo(data.get("creationTimeTo"));
       }
     }
 
@@ -804,8 +789,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Shipper filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.shipperFilter.getSelectedValues())
-            .as("Shipper items")
+        assertions.assertThat(allOrdersPage.shipperFilter.getSelectedValues()).as("Shipper items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipperName")));
       }
     }
@@ -833,10 +817,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void verifySelectedFiltersForPreset(List<String> expected) {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     List<String> actual = allOrdersPage.savePresetDialog.selectedFilters.stream()
-        .map(PageElement::getNormalizedText)
-        .collect(Collectors.toList());
-    Assertions.assertThat(actual)
-        .as("List of selected filters")
+        .map(PageElement::getNormalizedText).collect(Collectors.toList());
+    Assertions.assertThat(actual).as("List of selected filters")
         .containsExactlyInAnyOrderElementsOf(expected);
   }
 
@@ -844,32 +826,28 @@ public class AllOrdersSteps extends AbstractSteps {
   public void verifyPresetNameIsRequired() {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.savePresetDialog.presetName.getAttribute("ng-required"))
-        .as("Preset Name field ng-required attribute")
-        .isEqualTo("required");
+        .as("Preset Name field ng-required attribute").isEqualTo("required");
   }
 
   @When("Operator verifies help text {string} is displayed in Save Preset dialog on All Orders page")
   public void verifyHelpTextInSavePreset(String expected) {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.savePresetDialog.helpText.getNormalizedText())
-        .as("Help Text")
-        .isEqualTo(resolveValue(expected));
+        .as("Help Text").isEqualTo(resolveValue(expected));
   }
 
   @When("Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled")
   public void verifyCancelIsEnabled() {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.savePresetDialog.cancel.isEnabled())
-        .as("Cancel button is enabled")
-        .isTrue();
+        .as("Cancel button is enabled").isTrue();
   }
 
   @When("Operator verifies Save button in Save Preset dialog on All Orders page is enabled")
   public void verifySaveIsEnabled() {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
-        .as("Save button is enabled")
-        .isTrue();
+        .as("Save button is enabled").isTrue();
   }
 
   @When("Operator clicks Save button in Save Preset dialog on All Orders page")
@@ -886,8 +864,7 @@ public class AllOrdersSteps extends AbstractSteps {
   public void verifySaveIsDisabled() {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
-        .as("Save button is enabled")
-        .isFalse();
+        .as("Save button is enabled").isFalse();
   }
 
   @When("Operator disable granular status filter for {string}")
@@ -944,16 +921,14 @@ public class AllOrdersSteps extends AbstractSteps {
   public void verifyCancelIsEnabledInDeletePreset() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.deletePresetDialog.cancel.isEnabled())
-        .as("Cancel button is enabled")
-        .isTrue();
+        .as("Cancel button is enabled").isTrue();
   }
 
   @When("Operator verifies Delete button in Delete Preset dialog on All Orders page is enabled")
   public void verifyDeleteIsEnabled() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.deletePresetDialog.delete.isEnabled())
-        .as("Delete button is enabled")
-        .isTrue();
+        .as("Delete button is enabled").isTrue();
   }
 
   @When("Operator selects {string} preset in Delete Preset dialog on All Orders page")
@@ -971,16 +946,14 @@ public class AllOrdersSteps extends AbstractSteps {
   public void verifyDeleteIsDisabled() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.deletePresetDialog.delete.isEnabled())
-        .as("Delete button is enabled")
-        .isFalse();
+        .as("Delete button is enabled").isFalse();
   }
 
   @When("Operator verifies {string} message is displayed in Delete Preset dialog on All Orders page")
   public void verifyMessageInDeletePreset(String expected) {
     allOrdersPage.deletePresetDialog.waitUntilVisible();
     Assertions.assertThat(allOrdersPage.deletePresetDialog.message.getNormalizedText())
-        .as("Delete Preset message")
-        .isEqualTo(resolveValue(expected));
+        .as("Delete Preset message").isEqualTo(resolveValue(expected));
   }
 
   @When("Operator enters {string} Preset Name in Save Preset dialog on All Orders page")
@@ -994,8 +967,7 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it")
   public void verifyPresetNameIsValidated() {
     Assertions.assertThat(allOrdersPage.savePresetDialog.confirmedIcon.isDisplayed())
-        .as("Preset Name checkmark")
-        .isTrue();
+        .as("Preset Name checkmark").isTrue();
   }
 
   @When("Operator verifies selected Filter Preset name is {string} on All Orders page")
@@ -1004,14 +976,11 @@ public class AllOrdersSteps extends AbstractSteps {
     String actual = StringUtils.trim(allOrdersPage.filterPreset.getValue());
     Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
     Matcher m = p.matcher(actual);
-    Assertions.assertThat(m.matches())
-        .as("Selected Filter Preset value matches to pattern")
+    Assertions.assertThat(m.matches()).as("Selected Filter Preset value matches to pattern")
         .isTrue();
     Long presetId = Long.valueOf(m.group(1));
     String presetName = m.group(2);
-    Assertions.assertThat(presetName)
-        .as("Preset Name")
-        .isEqualTo(expected);
+    Assertions.assertThat(presetName).as("Preset Name").isEqualTo(expected);
     put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, presetId);
   }
 
@@ -1060,8 +1029,8 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @Then("Operator verifies the data on the database for driver collect scenarios are all right")
   public void operatorVerifiesTheDataOnTheDatabaseForDriverCollectScenariosAreAllRight() {
-    DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder =
-        get(KEY_DATABASE_CHECKING_DP_DRIVER_COLLECT_ORDER);
+    DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder = get(
+        KEY_DATABASE_CHECKING_DP_DRIVER_COLLECT_ORDER);
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.verifyDriverCollect(dbCheckingDriverCollectOrder, trackingId);
   }
@@ -1075,8 +1044,8 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @Then("Operator verifies the data on the database for Customer Collect scenarios are all right")
   public void operatorVerifiesTheDataOnTheDatabaseForCustomerCollectScenariosAreAllRight() {
-    DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder =
-        get(KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
+    DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder = get(
+        KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.databaseVerifyCustomerCollect(dbCheckingCustomerCollectOrder, trackingId);
   }
@@ -1103,5 +1072,19 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorFindMultipleOrdersByUploadingCsvOnAllOrderPage(List<String> listOfOrder) {
     List<String> listOfCreatedTrackingId = resolveValues(listOfOrder);
     operatorFindOrdersByUploadingCsvOnAllOrderPage(listOfCreatedTrackingId);
+  }
+
+  @When("Operator verify order record on All Orders page:")
+  public void verifyOrderRecord(Map<String, String> data) {
+    var expected = new OrderInfo(resolveKeyValues(data));
+    allOrdersPage.ordersTable.filterByColumn("trackingId", expected.getTrackingId());
+    var actual = allOrdersPage.ordersTable.readEntity(1);
+    expected.compareWithActual(actual);
+  }
+
+  @Then("Operator unmask All Orders page")
+  public void unmaskPage() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    allOrdersPage.operatorClickMaskingText(elements);
   }
 }

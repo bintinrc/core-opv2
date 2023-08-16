@@ -1,8 +1,8 @@
 @OperatorV2 @Core @SystemSettings @GlobalSettings
 Feature: Global Settings
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @RestoreInboundSettings
@@ -91,7 +91,3 @@ Feature: Global Settings
       | top | Updated |
     When Operator refresh page
     Then Operator verifies that Exempted Shippers from Return Pickup SMS contains "{KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name}" shipper on Global Settings page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

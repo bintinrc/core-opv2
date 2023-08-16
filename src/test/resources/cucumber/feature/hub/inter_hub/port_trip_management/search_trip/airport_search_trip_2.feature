@@ -13,7 +13,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Destination Facility" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -26,7 +26,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Trip ID" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -39,7 +39,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Origin Facility" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -52,7 +52,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Departure Date Time" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -65,7 +65,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Duration" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -78,7 +78,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Flight Number" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -91,7 +91,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Driver" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -104,7 +104,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Status" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
@@ -117,7 +117,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {other-airport-name-1} (Airport);{other-airport-name-2} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     And Operator search the "Comments" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page

@@ -102,7 +102,7 @@ Feature: Hub User Management
     When Hub User admin click edit user button
     When Hub User search "{hub-user-admin-email}" hub user email
     Then Operator verifies "edit" user modal for Station Admin flow is shown
-    Then Operator verifies remove user button is not exist
+    Then Operator verify remove hub user remove button is not exist
 
   Scenario:Hub User Management - Edit Hub User  - Should not be Able to Remove Station Admin
     When Operator refresh page
@@ -112,7 +112,7 @@ Feature: Hub User Management
     When Operator search "{hub-user-admin-name}" username with "{hub-user-admin-role}" role
     When Operator click edit view user "{hub-user-admin-id}" navigation button on Hub User Management Page
     Then Operator verifies "edit" user modal for Station Admin flow is shown
-    Then Operator verifies remove user button is not exist
+    Then Operator verify remove hub user remove button is not exist
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

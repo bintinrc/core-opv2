@@ -2086,7 +2086,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Integer orderNumber = Integer.parseInt(orderNumberAsString);
     List<String> trackingIds = getCoreJdbc()
         .getTrackingIdByStatusAndGranularStatus(orderNumber, orderStatus, orderGranularStatus);
-    put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, trackingIds);
+    put(KEY_LIST_OF_CREATED_TRACKING_IDS, trackingIds);
   }
 
   @When("DB Operator verifies orders records are hard-deleted in orders table:")

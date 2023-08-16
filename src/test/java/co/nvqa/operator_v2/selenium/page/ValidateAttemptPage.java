@@ -57,6 +57,9 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//h2[text()='Filter PODs to start validating']")
   public PageElement validateAttemptHeadingText;
 
+  @FindBy(xpath = "//p[text()='You have some PODs assigned to you that have not been validated. Do you want to resume validation?']")
+  public PageElement pendingAssignedPodText;
+
   @FindBy(xpath = "//label[contains(text(),'Select Job')]/ancestor::div[contains(@class,'ant-row ant-form-item')]//div[@class='ant-select-selector']")
   public AntSelect4 selectJob;
 
@@ -105,6 +108,12 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[@class='ant-image']//img//ancestor::div[@class='ant-row']//div[text()='Signature']")
   public PageElement podSignature;
+
+  @FindBy(xpath = "//div[@data-testid='pod-validation_task_back-button']")
+  public PageElement backToTask;
+
+  @FindBy(xpath = "//label[text()='Select Validator']//parent::div//following::div[@class='ant-select-selector'][1]")
+  public AntSelect2 selectValidator;
 
 
   public ValidateAttemptPage(WebDriver webDriver) {
@@ -230,14 +239,25 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
+  public void validateTextIsDisplayed(String modalText) {
+    waitWhilePageIsLoading();
+    pause2s();
+    String textXpath = f("//*[text()='%s']", modalText);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(textXpath)).isDisplayed())
+        .as(f("Validation for Text : %s", modalText))
+        .isTrue();
+  }
+
   public void validatetrackingIDtextboxIsEmpty() {
+    waitUntilVisibilityOfElementLocated(trackingIdTextArea.getWebElement());
     Assertions.assertThat(trackingIdTextArea.getText().isEmpty())
         .as("Validation for TrackingID textbox is empty")
         .isTrue();
   }
 
   public void validateDisabledButton() {
-    Assertions.assertThat(disabledValidateButton.getText().isEmpty())
+    waitUntilVisibilityOfElementLocated(disabledValidateButton.getWebElement());
+    Assertions.assertThat(disabledValidateButton.isDisplayed())
         .as("Validation for disabled button")
         .isTrue();
   }
@@ -417,12 +437,27 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     Assertions.assertThat(getWebDriver().findElement(By.xpath(errorMessageXpath)).isDisplayed())
         .as(f("Validation for error message : %s", message))
         .isTrue();
-
   }
 
-  public void validate404StatusCode() {
-    Assertions.assertThat(statusCode404message.isDisplayed())
-        .as("Validation for Code Text : statusCode 404 message")
+  public void validateDataInErrorMessage(String dataText) {
+    String errorMessageDataXpath = f("//span[text()='%s']", dataText);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(errorMessageDataXpath)).isDisplayed())
+        .as(f("Validation for error message Data: %s", dataText))
+        .isTrue();
+  }
+
+  public void validate404StatusCode(String statusCode) {
+    String requestStatusCodeXpath = f("//div[text()='%s']", statusCode);
+    Assertions.assertThat(
+            getWebDriver().findElement(By.xpath(requestStatusCodeXpath)).isDisplayed())
+        .as(f("Validation for Status code Text : %s", statusCode))
+        .isTrue();
+  }
+
+  public void validateURL(String url) {
+    String requestURLXpath = f("//span[text()='%s']", url);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(requestURLXpath)).isDisplayed())
+        .as(f("Validation for URL Text : %s", url))
         .isTrue();
   }
 
@@ -430,9 +465,46 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     notificationCloseIcon.click();
   }
 
+  public void selectDropdownValue(String fieldName, String value) {
+    String dropDownxpath = "//label[contains(text(),'" + fieldName
+        + "')]/ancestor::div[contains(@class,'ant-row ant-form-item')]//div[@class='ant-select-selector']//span[@class='ant-select-selection-item']";
+    getWebDriver().findElement(By.xpath(dropDownxpath)).click();
+    pause1s();
+    getWebDriver().findElement(By.xpath(
+        "//div[contains(@class, 'ant-select-dropdown')]//*[contains(normalize-space(text()), '"
+            + value + "')]")).click();
+  }
+
+  public void loadValidateDeliveryOrPickAttemptPage() {
+    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/validate-attempt");
+  }
+
+  public void navigateBackInBrowser() {
+    getWebDriver().navigate().back();
+  }
+
+  public void validatePendingAssignedPODModal() {
+    switchToFrame();
+    Assertions.assertThat(pendingAssignedPodText.isDisplayed())
+        .as("Validation for Pending Assigned POD popup")
+        .isTrue();
+  }
+
+  public void clickbackTotask() {
+    backToTask.click();
+  }
+
+  public void selectValidator(String validatorName) {
+    selectValidator.enterSearchTerm(validatorName);
+    pause2s();
+    selectValidator.sendReturnButton();
+    webDriver.findElement(
+            By.xpath(
+                "//label[text()='Select Validator']//parent::div//following::div[@class='ant-select-selector'][1]//input"))
+        .sendKeys(Keys.TAB);
+  }
 
 }
-
 
 
 

@@ -4,6 +4,7 @@ import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.FailedDelivery;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage;
 import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage.FailedDeliveryTable;
 import io.cucumber.java.en.Given;
@@ -11,11 +12,15 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+
+import static co.nvqa.commons.util.NvAssertions.LOGGER;
 
 public class FailedDeliveryManagementSteps extends AbstractSteps {
 
@@ -56,7 +61,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   }
 
   @Then("Recovery User - verify failed delivery table on FDM page:")
-  public void doverifyFdmTable(Map<String, String> dataTable) {
+  public void doVerifyFdmTable(Map<String, String> dataTable) {
     FailedDelivery expected = new FailedDelivery(resolveKeyValues(dataTable));
 
     failedDeliveryManagementReactPage.inFrame(page -> {
@@ -172,17 +177,47 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   }
 
   @Then("Recovery User - verifies that toast displayed with message below:")
-  public void doVerifiesToastDisplayed(Map<String, String> dataTable) {
-    dataTable = resolveKeyValues(dataTable);
-    String message = dataTable.get("message");
-    String description = dataTable.get("description");
-    failedDeliveryManagementReactPage.inFrame((page) -> {
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-        Assertions.assertThat(page.notifMessage.getText())
-            .as(f("Notification Message contains: %s", message)).isEqualTo(message);
-        Assertions.assertThat(page.notifDescription.getText())
-            .as(f("Notification Description contains %s", description)).isEqualTo(description);
-      }, 5);
+  public void doVerifiesToastDisplayed(Map<String, String> data) {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      Map<String, String> finalData = resolveKeyValues(data);
+      boolean waitUntilInvisible = Boolean.parseBoolean(
+          finalData.getOrDefault("waitUntilInvisible", "false"));
+      long start = new Date().getTime();
+      AntNotification toastInfo;
+      do {
+        toastInfo = failedDeliveryManagementReactPage.noticeNotifications.stream().filter(toast -> {
+          String actualTop = failedDeliveryManagementReactPage.notifMessage.getText();
+          LOGGER.info("Found notification: " + actualTop);
+          String value = finalData.get("message");
+          if (StringUtils.isNotBlank(value)) {
+            if (value.startsWith("^")) {
+              if (!actualTop.matches(value)) {
+                return false;
+              }
+            } else {
+              if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
+                return false;
+              }
+            }
+          }
+          value = finalData.get("description");
+          if (StringUtils.isNotBlank(value)) {
+            String actual = failedDeliveryManagementReactPage.notifDescription.getText();
+            if (value.startsWith("^")) {
+              return actual.matches(value);
+            } else {
+              return StringUtils.equalsIgnoreCase(value, actual);
+            }
+          }
+          return true;
+        }).findFirst().orElse(null);
+      } while (toastInfo == null && new Date().getTime() - start < 20000);
+      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed").isTrue();
+      if (toastInfo != null && waitUntilInvisible) {
+        toastInfo.waitUntilInvisible();
+      }
+      pause3s();
+      reloadPage();
     });
   }
 
@@ -196,9 +231,9 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - set reschedule date to {string}")
   public void doSetRescheduleDate(String date) {
-    failedDeliveryManagementReactPage.inFrame((page) -> {
-      page.rescheduleDialog.setRescheduleDate(resolveValue(date));
-      page.rescheduleDialog.rescheduleButton.click();
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.rescheduleDialog.setRescheduleDate(resolveValue(date));
+      failedDeliveryManagementReactPage.rescheduleDialog.rescheduleButton.click();
     });
   }
 
@@ -332,6 +367,30 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   public void cancelAddressChange() {
     failedDeliveryManagementReactPage.inFrame((page) -> {
       page.rtsDetailsDialog.cancelAddressChange.click();
+    });
+  }
+
+  @Then("Recovery User - verifies that error dialog displayed with message below:")
+  public void doVerifiesErrorDialogDisplayed(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String message = dataTable.get("message");
+    String description = dataTable.get("description");
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.errorDialog.alertMessage.getText())
+            .as(f("Error Message contains: %s", message)).isEqualTo(message);
+        Assertions.assertThat(page.errorDialog.alertDescription.getText())
+            .as(f("Error Description contains %s", description)).isEqualTo(description);
+        page.errorDialog.close.click();
+      }, 5);
+    });
+  }
+
+  @When("Recovery User - uploads csv file without header")
+  public void uploadInvalidFile() {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.uploadCSVDialog.generateNoHeaderCSV();
+      failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
     });
   }
 }

@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
@@ -69,7 +70,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
     private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead//span[contains(@data-testid,'column-title-middle-mile-driver')]";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
-    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
+    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()=\"%s\"]";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
@@ -82,6 +83,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='%s']";
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
+
+    private static final String LICENSE_TYPE_FILTER_XPATH = "//span[@class='ant-dropdown-menu-title-content']/span[contains(text(),'%s')]";
 
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
     private static final String FIRST_NAME_INPUT_CREATE_DRIVER_ID = "first_name";
@@ -108,12 +111,14 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String USERNAME_TABLE_FILTER_ID = "username";
     private static final String HUB_TABLE_FILTER_ID = "hub";
     private static final String COMMENTS_TABLE_FILTER_ID = "comments";
+    private static final String VENDOR_TABLE_FILTER_ID = "vendor";
 
     private static final Integer NEW_NAME_TABLE_FILTER_ID = 1;
     private static final Integer NEW_ID_TABLE_FILTER_ID = 2;
     private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 3;
     private static final Integer NEW_HUB_TABLE_FILTER_ID = 4;
     private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 5;
+    private static final Integer NEW_VENDOR_FILTER_ID = 6;
     private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
     private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
     private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
@@ -131,8 +136,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String YES = "yes";
     private static final String NO = "no";
 
-    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), '%s')]";
+    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), \"%s\")]";
 
+    private static final String MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+
+    private static final String TOAST_ERROR_400_MESSAGE_XPATH = "//div[contains(@class,'ant-notification-notice-message')]";
+
+    private static final String LICENSE_TYPE_PH_CHECKED_XPATH = "//span[contains(@class,'ant-checkbox-checked')]";
+
+    public static String actualToastMessageContent = "";
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -158,6 +170,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     public TextBox hubFilter;
     @FindBy(xpath = "//th[div[.='Comments']]//input")
     public TextBox commentsFilter;
+    @FindBy(xpath = "//input[@aria-label='input-vendor_name']")
+    public TextBox vendorFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Status']]")
     public StatusFilter employmentStatusFilter;
     @FindBy(xpath = "//th[.//span[.='Employment Type']]")
@@ -231,6 +245,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//button[@data-testid='driver-dialog-save-button']/span")
     public Button saveCreateDriver;
+
+    @FindBy(xpath = "//button[@data-testid='column-filter-icon-middle-mile-driver-license-type']")
+    public Button clickLicenseTypeFilterInColumn;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -341,6 +358,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         click(f(CALENDAR_DATE_XPATH, licenseExpiryDate));
     }
 
+    public void uncheckAllCheckbox() {
+        List<WebElement> checkedCheckbox = findElementsByXpath(LICENSE_TYPE_PH_CHECKED_XPATH);
+        checkedCheckbox.forEach(WebElement::click);
+    }
+
+    public void updatePhLicenseTypes(String value) {
+        uncheckAllCheckbox();
+        for (String val : value.split(",")) {
+            chooseLicenseType(val);
+        }
+        editDriverDialog.save.click();
+        editDriverDialog.waitUntilInvisible();
+    }
+
     public void chooseLicenseType(String licenseType) {
         click(f(LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH, licenseType));
     }
@@ -414,6 +445,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 displayNameFilter.setValue(driver.getDisplayName());
                 commentsFilter.scrollIntoView();
                 commentsFilter.setValue(driver.getComments());
+                break;
+
+            case VENDOR_TABLE_FILTER_ID:
+                displayNameFilter.setValue(driver.getDisplayName());
+                vendorFilter.scrollIntoView();
+                vendorFilter.setValue(Objects.nonNull(driver.getVendorId()) ? driver.getVendorName() : "-");
                 break;
 
             default:
@@ -565,6 +602,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
         String actualEmploymentType = getText(
             f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+        String actualVendor = getText(
+            f(TABLE_ASSERTION_XPATH, NEW_VENDOR_FILTER_ID));
         String actualEmpStatus = getText(f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID));
         String actualLicenseType = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
@@ -580,6 +619,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             .isEqualTo(middleMileDriver.getHubName());
         Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same")
             .isEqualTo(middleMileDriver.getEmploymentType());
+        Assertions.assertThat(actualVendor).as("The Vendor Name is the same")
+            .isEqualTo(Objects.nonNull(middleMileDriver.getVendorId()) ? middleMileDriver.getVendorName() : "-");
         Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same")
             .isEqualTo(middleMileDriver.getIsEmploymentActive() ? "Active" : "Inactive");
         Assertions.assertThat(actualLicenseType).as("The License Type is the same")
@@ -599,7 +640,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void tableFilterCombobox(MiddleMileDriver driver, String filterBy) {
         pause3s();
-        displayNameFilter.setValue(driver.getFirstName());
+        displayNameFilter.setValue(driver.getDisplayName());
         waitUntilVisibilityOfElementLocated(
             f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
@@ -669,17 +710,25 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         antDotSpinner.waitUntilInvisible();
     }
 
-    public void editDriverByWithValue(String column, String value) {
+    public void editDriverByWithValue(String column, String value, boolean withSave) {
         switch (column) {
-            case "name":
+            case "firstName":
                 editDriverDialog.name.forceClear();
                 editDriverDialog.name.sendKeys(value);
                 break;
-            case "contactNumber":
+            case "lastName":
+                editDriverDialog.lastName.forceClear();
+                editDriverDialog.lastName.sendKeys(value);
+                break;
+            case "displayName":
+                editDriverDialog.displayName.forceClear();
+                editDriverDialog.displayName.sendKeys(value);
+                break;
+            case "contactDetails":
                 editDriverDialog.contactNumber.forceClear();
                 editDriverDialog.contactNumber.sendKeys(value);
                 break;
-            case "hub":
+            case "hubName":
                 editDriverDialog.hub.selectValue(value);
                 break;
             case "licenseNumber":
@@ -687,7 +736,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.licenseNumber.sendKeys(value);
                 break;
             case "licenseExpiryDate":
-              editDriverDialog.licenseExpiryDate.setDate(value);
+                editDriverDialog.licenseExpiryDate.setDate(value);
                 break;
             case "licenseType":
                 editDriverDialog.selectLicenseType(value);
@@ -698,14 +747,21 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
-              editDriverDialog.employmentStartDate.setDate(value);
+                editDriverDialog.employmentStartDate.setDate(value);
                 break;
             case "employmentEndDate":
-              editDriverDialog.employmentEndDate.setDate(value);
+                editDriverDialog.employmentEndDate.setDate(value);
                 break;
         }
-        editDriverDialog.save.click();
-        editDriverDialog.waitUntilInvisible();
+
+        if (withSave) {
+            editDriverDialog.save.click();
+            editDriverDialog.waitUntilInvisible();
+        }
+    }
+
+    public void editDriverByWithValue(String column, String value) {
+        editDriverByWithValue(column, value, true);
     }
 
     public void verifiesDriverIsUpdatedByWithValue(String column, String value) {
@@ -816,6 +872,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 break;
             case "Comments":
                 body_class_name ="comments";
+                break;
+            case "Vendor's Name":
+                body_class_name ="vendor-name";
                 break;
         }
 
@@ -1074,6 +1133,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         public TextBox dialogTitle;
         @FindBy(id = "first_name")
         public TextBox name;
+        @FindBy(id = "last_name")
+        public TextBox lastName;
+        @FindBy(id = "display_name")
+        public TextBox displayName;
         @FindBy(id = "contact_number")
         public TextBox contactNumber;
         @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='hub_id']]")
@@ -1341,29 +1404,66 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifyMandatoryFieldErrorMessageMiddlemileDriverPage(String fieldName) {
-        String actualMessage = "";
+        String actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, fieldName)).getText();
         String expectedMessage = "Please enter " + fieldName;
-        switch (fieldName) {
-            case "First Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "First Name")).getText();
-                break;
-            case "Display Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Display Name")).getText();
-                break;
-            case "Contact Number":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Contact Number")).getText();
-                break;
-            case "License Type":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "License Type")).getText();
-                break;
-        }
         Assertions.assertThat(actualMessage).as("Mandatory field error message is same")
                 .isEqualTo(expectedMessage);
+    }
+
+    public void clearTextonField(String fieldName) {
+        if (fieldName.equals("Employment Type")) {
+            findElementByXpath(f(MIDDLE_MILE_DRIVER_CLEAR_BUTTON_XPATH, "employment_type")).click();
+        }
     }
 
     public void verifyErrorNotificationDriverAlreadyRegistered() {
         Assertions.assertThat(isElementExist(NOTIFICATION_DRIVER_ALREADY_REGISTERED_XPATH))
             .as("Error notification is Username already registered")
             .isTrue();
+    }
+
+    public void editDriverByWithVendorValue(String employmentType, String vendorName) {
+        editDriverByWithVendorValue(employmentType, vendorName, true);
+    }
+
+    public void editDriverByWithVendorValue(String employmentType, String vendorName, boolean withSave) {
+        chooseEmploymentType(employmentType);
+        if (vendorName.equals("-")) return;
+        chooseVendorName(vendorName);
+
+        if (withSave) {
+            editDriverDialog.save.click();
+            editDriverDialog.waitUntilInvisible();
+        }
+    }
+
+    public void verifiesToastWithMessage(String errorMessage) {
+        if (errorMessage.equals("Request failed with status code 400")) {
+            Assertions.assertThat(isElementExistFast(TOAST_ERROR_400_MESSAGE_XPATH))
+                    .as("Toast Error Request 400")
+                    .isTrue();
+        }
+    }
+
+    public void editDriverByWithInvalidValue(String fieldName, String value) {
+        switch (fieldName) {
+            case "firstName":
+                editDriverDialog.name.forceClear();
+                editDriverDialog.name.sendKeys(value);
+                break;
+            case "lastName":
+                editDriverDialog.lastName.forceClear();
+                editDriverDialog.lastName.sendKeys(value);
+                break;
+            case "displayName":
+                editDriverDialog.displayName.forceClear();
+                editDriverDialog.displayName.sendKeys(value);
+                break;
+        }
+        editDriverDialog.save.click();
+    }
+
+    public void chooseLicenseTypeFilter(String licenseType) {
+        click(f(LICENSE_TYPE_FILTER_XPATH, licenseType));
     }
 }

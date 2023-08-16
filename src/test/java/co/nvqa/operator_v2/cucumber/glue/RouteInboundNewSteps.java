@@ -35,14 +35,31 @@ public class RouteInboundNewSteps extends AbstractSteps {
     String trackingId = mapOfData.get("trackingId");
     String driverName = mapOfData.get("driverName");
 
-    if (StringUtils.isNotBlank(routeId)) {
+    if (StringUtils.isNotBlank(routeId) && fetchBy.equalsIgnoreCase("RouteId")) {
       routeInboundNewPage.fetchRouteByRouteId(hubName, routeId);
     }
-    if (StringUtils.isNotBlank(trackingId)) {
+    if (StringUtils.isNotBlank(trackingId) && fetchBy.equalsIgnoreCase("TrackingId")) {
       routeInboundNewPage.fetchRouteByTrackingId(hubName, trackingId);
     }
-    if (StringUtils.isNotBlank(driverName)) {
+    if (StringUtils.isNotBlank(driverName) && fetchBy.equalsIgnoreCase("DriverName")) {
       routeInboundNewPage.fetchRouteByDriver(hubName, driverName);
+    }
+    pause2s();
+    if (routeInboundNewPage.chooseRouteModal.size() > 0) {
+      routeInboundNewPage.chooseRoute(routeId);
+    }
+  }
+
+  @When("Station operator get Route Summary Details on Route Inbound page using trackingId with multiple routes:")
+  public void operatorGetRouteDetailsOnRouteInboundPageUsingTrackingIdWithMultipleRoutesDataBelow(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String hubName = mapOfData.get("hubName");
+    String routeId = mapOfData.get("routeId");
+    String trackingId = mapOfData.get("trackingId");
+
+    if (StringUtils.isNotBlank(trackingId)) {
+      routeInboundNewPage.fetchRouteByTrackingId(hubName, trackingId);
     }
   }
 

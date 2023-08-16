@@ -41,7 +41,7 @@ public class ChangeDeliveryTimingsPage extends SimpleReactPage<ChangeDeliveryTim
 
   private static final String CSV_FILENAME_PATTERN = "sample_change_delivery_timings";
   private static final String COMMA = ",";
-  private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
+  private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow_id";
 
   public ChangeDeliveryTimingsPage(WebDriver webDriver) {
     super(webDriver);
@@ -65,11 +65,8 @@ public class ChangeDeliveryTimingsPage extends SimpleReactPage<ChangeDeliveryTim
         sb.append(row.getTrackingId()).append(COMMA);
         sb.append(row.getStartDate()).append(COMMA);
         sb.append(row.getEndDate()).append(COMMA);
-
         if (row.getTimewindow() != null) {
           sb.append(row.getTimewindow()).append(COMMA);
-        } else {
-          sb.append(COMMA);
         }
 
         csvData.append(sb).append(System.lineSeparator());

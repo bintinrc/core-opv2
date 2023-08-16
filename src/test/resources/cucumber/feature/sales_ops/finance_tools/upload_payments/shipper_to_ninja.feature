@@ -76,6 +76,16 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source          | <source>     |
       | overall_balance | 0.0          |
       | logs            | <amount>,0.0 |
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value        |
+      | payment_tags | COD_REMITTED,FEE_PAID |
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+      | column            | expected_value         |
+      | order_id          | {KEY_CREATED_ORDER_ID} |
+      | shipper_id        | {KEY_SHIPPER_ID}       |
+      | parent_shipper_id | null                   |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.39   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
@@ -153,9 +163,15 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount>,2.38 |
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is not in billing_qa_gl.invoiced_orders table
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is not in billing_qa_gl.invoiced_orders table
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value |
+      | payment_tags | null           |
+    Then DB Billing - Operator verifies there is no entry in the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
+
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper Remit with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer And Payee Info - Check Payment Tags (uid:04036c7b-d541-4223-92aa-d222da2d5932)
@@ -228,9 +244,19 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source          | <source>       |
       | overall_balance | -2.62          |
       | logs            | <amount>,-2.62 |
+    Then Operator gets price order details from the billing_qa_gl.priced_orders table
+    Then Operator verifies below details in billing_qa_gl.priced_orders table
+      | column       | expected_value        |
+      | payment_tags | COD_REMITTED,FEE_PAID |
+    Then DB Billing - Operator gets order_payment_tags from the billing_qa_gl.order_payment_tags table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then Operator verifies below details in billing_qa_gl.order_payment_tags table for tracking_id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+      | column            | expected_value         |
+      | order_id          | {KEY_CREATED_ORDER_ID} |
+      | shipper_id        | {KEY_SHIPPER_ID}       |
+      | parent_shipper_id | null                   |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.39   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-1-{gradle-current-date-yyyyMMddHH} | 7.39   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 3 Shippers - "Ready" ledger is exists for each shipper - Payment via CSV Upload from Shipper is enough to offset balance of all shippers (uid:8298abe9-6199-42cf-9d1d-86c7203b2faf)
@@ -380,6 +406,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 12.69  | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Operator Upload CSV Payment With Both Debit And Credit Type

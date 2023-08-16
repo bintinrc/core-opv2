@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @BatchOrder @NewFeatures2
 Feature: Batch Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Rollback Order - Valid Batch Id, Status = Pending Pickup
@@ -23,8 +23,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -67,7 +66,10 @@ Feature: Batch Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator go to menu New Features -> Batch Order
     And Operator search for "{KEY_CREATED_BATCH_ID}" batch on Batch Orders page
     Then Operator verifies orders info on Batch Orders page:
@@ -76,8 +78,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Transit | Van en-route to pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -120,7 +121,10 @@ Feature: Batch Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Driver failed multiple C2C/Return orders pickup
@@ -132,8 +136,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -179,8 +182,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Staging | Staging        |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -244,8 +246,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -278,7 +279,3 @@ Feature: Batch Order
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
       | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

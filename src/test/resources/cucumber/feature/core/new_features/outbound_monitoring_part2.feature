@@ -1,8 +1,8 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoringPart2 @NewFeatures1
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart2 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -169,7 +169,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver deliver the created parcel successfully
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -206,7 +209,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver pickup the created parcel successfully
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -252,7 +258,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
     When API Operator get order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
@@ -326,7 +331,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver failed the delivery of the created parcel using data below:
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 6           |
@@ -339,7 +347,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator go to menu New Features -> Outbound Load Monitoring
     Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
@@ -369,7 +380,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     Given Operator go to menu New Features -> Outbound Load Monitoring
     Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
@@ -418,7 +432,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 2 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
     When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
@@ -459,7 +472,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver successfully deliver created parcels with numbers: 1
     And API Driver failed the delivery of parcels with numbers: 2
     Given Operator go to menu New Features -> Outbound Load Monitoring
@@ -506,7 +522,10 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver deliver the created parcel successfully
     Given Operator go to menu New Features -> Outbound Load Monitoring
     Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
@@ -530,7 +549,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders info on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed      | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
@@ -546,7 +564,3 @@ Feature: Outbound Monitoring
     Then Operator verify order event on Edit order page using data below:
       | name    | PULL OUT OF ROUTE                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

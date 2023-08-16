@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Order @ViewTaggedOrders @ViewTaggedOrdersPart2
 Feature: View Tagged Orders
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -11,13 +11,17 @@ Feature: View Tagged Orders
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver pickup the created parcel successfully
@@ -40,8 +44,9 @@ Feature: View Tagged Orders
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -52,7 +57,10 @@ Feature: View Tagged Orders
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}        |
@@ -72,8 +80,9 @@ Feature: View Tagged Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     Given API DP creates a return fully integrated order in a dp "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
@@ -94,13 +103,17 @@ Feature: View Tagged Orders
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup using data below:
@@ -127,13 +140,17 @@ Feature: View Tagged Orders
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}       |
@@ -146,7 +163,3 @@ Feature: View Tagged Orders
       | lastAttempt          | No Attempt                      |
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Van en-route to pickup          |
-
-  @KillBrowser
-  Scenario: Kill Browser
-    Given no-op

@@ -58,6 +58,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
       List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
       Map<String, String> filter = resolveKeyValues(filters.get(0));
       stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+      pause5s();
       if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 1) {
         getWebDriver().navigate().refresh();
         throw new NvTestRuntimeException("One record is not displayed after filtering "
@@ -75,6 +76,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
       List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
       Map<String, String> filter = resolveKeyValues(filters.get(0));
       stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+      pause5s();
       if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 0) {
         getWebDriver().navigate().refresh();
         throw new NvTestRuntimeException("Record are displayed after filtering "
@@ -163,6 +165,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
 
   @When("operator click {string} filter button")
   public void operatorClickFilterButton(String buttonText) {
+    stationPendingPickupJobsPage.switchToFrame();
     stationPendingPickupJobsPage.clickFilterButton(buttonText);
   }
 

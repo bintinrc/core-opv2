@@ -52,6 +52,29 @@ public class DpTaggingSteps extends AbstractSteps {
       put(KEY_DISTRIBUTION_POINT_ID, dpId);
     });
   }
+  @When("Operator tags single order to DP with DPMS ID = {string} and tracking id = {string}")
+  public void operatorTagsSingleOrderToDpWithId(String dpIdAsString,String tracking) {
+    String trackingId = resolveValue(tracking);
+    long dpId = Long.parseLong(dpIdAsString);
+
+    DpTagging dpTagging = new DpTagging();
+    dpTagging.setTrackingId(trackingId);
+    dpTagging.setDpId(dpId);
+
+    List<DpTagging> listOfDpTagging = new ArrayList<>();
+    listOfDpTagging.add(dpTagging);
+
+    dpTaggingPage.inFrame(() -> {
+      dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
+      dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+      dpTaggingPage.selectDateToNextDay();
+      dpTaggingPage.checkAndAssignAll(false);
+      takesScreenshot();
+      pause5s();
+      put("listOfDpTagging", listOfDpTagging);
+      put(KEY_DISTRIBUTION_POINT_ID, dpId);
+    });
+  }
 
   @When("Operator untags created orders from DP with DPMS ID = {string} on DP Tagging page")
   public void operatorUntagsSingleOrder(String dpIdAsString) {
@@ -139,4 +162,19 @@ public class DpTaggingSteps extends AbstractSteps {
         .verifiesDetailsForDriverDropOffConfirmedStatus(dbCheckingResult, barcode);
     takesScreenshot();
   }
+
+  @When("^Operator click on Download Button for Sample CSV File of DP tagging")
+  public void operatorClickOnDownloadSampleCSVFile() {
+    dpTaggingPage.inFrame(() -> dpTaggingPage.downloadSampleCsv.click());
+  }
+
+  @Then("^sample CSV file on DP Tagging page is downloaded successfully$")
+  public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
+    retryIfAssertionErrorOccurred(() -> {
+      dpTaggingPage.verifyFileDownloadedSuccessfully("sample-tag-order-to-dp.csv",
+              "NVSGPAOV4001002003004");
+    }, "verify csv file downloaded successfully");
+
+  }
+
 }

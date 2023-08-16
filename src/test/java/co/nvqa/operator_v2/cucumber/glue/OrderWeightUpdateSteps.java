@@ -1,11 +1,17 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.page.OrderWeightUpdatePage;
+import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -13,7 +19,7 @@ import java.util.Map;
 @ScenarioScoped
 public class OrderWeightUpdateSteps extends AbstractSteps {
 
-  private OrderWeightUpdatePage orderWeightUpdatePage;
+  private OrderWeightUpdatePage page;
 
   public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
 
@@ -22,47 +28,58 @@ public class OrderWeightUpdateSteps extends AbstractSteps {
 
   @Override
   public void init() {
-    orderWeightUpdatePage = new OrderWeightUpdatePage(getWebDriver());
+    page = new OrderWeightUpdatePage(getWebDriver());
   }
 
-  @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page$")
-  public void OrderWeightUpdateUploadCsvFile(Map<String, String> map) {
-    put(KEY_ORDER_WEIGHT, map.get("new-weight-in-double-format"));
-    String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    orderWeightUpdatePage.uploadOrderUpdateCsv(OrderTrackingId, map);
-    pause5s();
+  @When("Operator upload Order Weight update CSV on Order Weight Update page:")
+  public void OrderWeightUpdateUploadCsvFile(List<Map<String, String>> map) {
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      page.findOrdersWithCsv.click();
+      page.findOrdersWithCsvDialog.waitUntilVisible();
+      List<String> rows = resolveListOfMaps(map).stream()
+          .map(e -> "\"" + e.get("trackingId") + "\",\"" + e.get("weight") + "\"")
+          .collect(Collectors.toList());
+      File file = TestUtils.createFileOnTempFolder(
+          String.format("create-order-update_%s.csv", page.generateDateUniqueString()));
+      try {
+        FileUtils.writeLines(file, rows);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      page.findOrdersWithCsvDialog.uploadFile(file);
+    });
   }
 
-  @Then("^Operator Order Weight update on Order Weight Update V2 page$")
+  @When("Operator verify table records on Order Weight Update page:")
+  public void verifyTableRecords(List<Map<String, String>> rows) {
+    page.inFrame(() -> {
+      var actual = page.weighUpdateTable.readAllEntities();
+      rows.forEach(row -> {
+        var expected = new OrderWeightUpdatePage.WeighUpdateRecord(resolveKeyValues(row));
+        DataEntity.assertListContains(actual, expected, "Weight update record");
+      });
+    });
+  }
+
+  @Then("Operator click Upload button on Order Weight Update page")
   public void OrderWeightUpdate() {
-    pause2s();
-    orderWeightUpdatePage.upload.click();
-    orderWeightUpdatePage.waitUntilInvisibilityOfToast("Order weight update success", true);
+    page.inFrame(() -> page.upload.click());
   }
 
-  @When("^Operator Multiple Order Weight update CSV Upload on Order Weight Update V2 page$")
-  public void multiOrderWeightUpdateUploadCsvFile(List<String> listWeight) {
-    List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-
-    if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty()) {
-      throw new RuntimeException("List of created Tracking ID should not be null or empty.");
-    }
-    put("orderMultiweight", listWeight);
-    orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId, listWeight);
-    pause5s();
-  }
-
-  @When("^Operator download sample CSV file for 'Find Orders with CSV' on Order Weight Update page$")
+  @When("Operator download sample CSV file for 'Find Orders with CSV' on Order Weight Update page")
   public void operatorDownloadSampleCsvFileForFindOrdersWithCsv() {
-    orderWeightUpdatePage.findOrdersWithCsv.click();
-    orderWeightUpdatePage.findOrdersWithCsvDialog.waitUntilVisible();
-    orderWeightUpdatePage.findOrdersWithCsvDialog.downloadSample.click();
-    orderWeightUpdatePage.findOrdersWithCsvDialog.cancel.click();
+    page.inFrame(() -> {
+      page.findOrdersWithCsv.click();
+      page.findOrdersWithCsvDialog.waitUntilVisible();
+      page.findOrdersWithCsvDialog.downloadSample.click();
+      page.findOrdersWithCsvDialog.cancel.click();
+    });
   }
 
-  @Then("^sample CSV file for 'Find Orders with CSV' on Order Weight Update page is downloaded successfully$")
+  @Then("Operator verify sample CSV file is downloaded successfully on Order Weight Update page")
   public void operatorVerifySampleCsvFileForFindOrdersWithCsvIsDownloadedSuccessfully() {
-    orderWeightUpdatePage.verifyFileDownloadedSuccessfully("find-orders-with-csv.csv",
+    page.verifyFileDownloadedSuccessfully("weight-update.csv.csv",
         "NVSGNINJA000000001,20.0\n"
             + "NVSGNINJA000000002,5.2\n"
             + "NVSGNINJA000000003,1.4");

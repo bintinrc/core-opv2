@@ -1,11 +1,11 @@
 @OperatorV2 @Core @Route @NewFeatures @StationRoute @AddExistingRoutesOnStationRoute
 Feature: Add To Existing Routes on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Success Assign Unrouted Order To Existing Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -22,7 +22,7 @@ Feature: Add To Existing Routes on Station Route
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
-    And API Operator create new coverage:
+    And API Route - Operator create new coverage:
       | hubId            | {hub-id-2}                                          |
       | area             | {KEY_CREATED_ORDER.toAddress1}                      |
       | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
@@ -89,7 +89,7 @@ Feature: Add To Existing Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
 
-  @DeleteDriverV2 @DeleteCoverage @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Partial Success Assign Unrouted Order To Existing Route on Station Route
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -117,7 +117,7 @@ Feature: Add To Existing Routes on Station Route
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "DC9{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{KEY_LIST_OF_CREATED_DRIVERS[1].id}, "comments":"Created by TA {gradle-current-date-yyyyMMddHHmmsss}"} |
-    And API Operator create new coverage:
+    And API Route - Operator create new coverage:
       | hubId            | {hub-id-2}                                                 |
       | area             | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}  |
       | areaVariations   | 998 Toa Payoh, North {gradle-current-date-yyyyMMddHHmmsss} |
@@ -186,7 +186,4 @@ Feature: Add To Existing Routes on Station Route
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
-    
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+

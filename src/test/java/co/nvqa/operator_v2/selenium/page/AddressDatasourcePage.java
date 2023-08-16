@@ -125,6 +125,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='search-input-city']")
   public TextBox kotaTextBox;
 
+  @FindBy(xpath = "//h3[contains(text(),'Find Match')]")
+  public PageElement findMatch;
+
   @FindBy(css = "[data-testid='search-input-district']")
   public TextBox kecamatanTextBox;
 

@@ -37,7 +37,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_HOME_URL_PATH = "/station-homepage";
   private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
   private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
-  private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
+  private static final String STATION_EDIT_ORDER_URL_PATH = "/order-v2?id=%s";
   private static final String TILE_VALUE_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//div[@class='value']";
   private static final String PENDING_PICKUP_TILE_VALUE_XPATH = "//*[.='%s']/following-sibling::*";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
@@ -62,6 +62,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
   private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[normalize-space(text())='No Results Found']";
+
+  private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//div[text()='%s']";
+
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -193,13 +196,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
   }
 
+  public void waitWhileStationPageLoads() {
+    waitUntilInvisibilityOfElementLocated("//span[@class='ant-spin-dot ant-spin-dot-spin']", 60);
+    waitUntilPageLoaded();
+  }
+
   public void selectHubAndProceed(String hubName) {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       switchToStationHomeFrame();
     }
     waitWhilePageIsLoading();
-    if(modalHubSelection.size() == 0){
+    if (modalHubSelection.size() == 0) {
       refreshPage_v1();
     }
     hubs.enterSearchTerm(hubName);
@@ -517,7 +525,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void validateHeaderHubValue(String expectedHub) {
-    refreshPage_v1();
     pause10s();
     if (pageFrame.size() > 0) {
       switchToStationHomeFrame();
@@ -581,6 +588,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         waitWhilePageIsLoading();
         filterFields.get(0).click();
         filterFields.get(0).sendKeys(filter.getValue());
+        pause1s();
       }
     }
     waitWhilePageIsLoading();
@@ -650,7 +658,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         tableRows.size() == resultSize);
   }
 
-  public void verifyNavigationToEditOrderScreen(String expectedTrackingId) {
+  public void verifyNavigationToEditOrderScreen(String expectedTrackingId, String expectedURL) {
     String windowHandle = getWebDriver().getWindowHandle();
     String trackingIdXpath = f(TABLE_TRACKING_ID_XPATH, expectedTrackingId, expectedTrackingId);
     WebElement trackingIdLink = getWebDriver().findElement(By.xpath(trackingIdXpath));
@@ -658,11 +666,21 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     switchToNewWindow();
     waitWhilePageIsLoading();
     pause3s();
-    String actualTrackingId = editOrderTrackingId.getText().trim();
+    switchToStationHomeFrame();
+    Assertions.assertThat(
+            getWebDriver().findElements(By.xpath(f(EDIT_ORDER_TRACKING_ID_XPATH, expectedTrackingId))))
+        .as("Assertion for Navigation on clicking Tracking ID").isNotEmpty();
+    verifyCurrentPageURL(expectedURL);
     closeAllWindows(windowHandle);
-    pause3s();
-    Assert.assertTrue("Assert that the search has results as expected after applying filters",
-        actualTrackingId.equalsIgnoreCase(expectedTrackingId));
+  }
+
+  public void verifyCurrentPageURL(String expectedURL) {
+    waitWhilePageIsLoading();
+    pause5s();
+    String currentURL = getWebDriver().getCurrentUrl().trim();
+    Assertions.assertThat(getWebDriver().getCurrentUrl().endsWith("/" + expectedURL)).
+        as("Assertion for the URL ends with " + expectedURL).isTrue();
+
   }
 
   public void verifyEditOrderScreenURL(String expectedTrackingId, String orderId) {
@@ -1037,7 +1055,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void applyQuickFilter(String filter) {
-    waitWhilePageIsLoading();
+    waitWhileStationPageLoads();
     String filterXpath = f(QUICK_FILTER_BY_TEXT_XPATH, filter);
     WebElement quickFilter = getWebDriver().findElement(
         By.xpath(filterXpath));
@@ -1048,7 +1066,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     quickFilter.click();
     pause2s();
     Assert.assertTrue(f("Assert that the filter %s is applied", filter),
-        filterApplied.size() > 0 );
+        filterApplied.size() > 0);
+    waitWhileStationPageLoads();
   }
 
   public void selectCheckboxByTrackingId(List<String> trackingIds) {

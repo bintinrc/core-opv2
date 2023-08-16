@@ -379,7 +379,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class CreateTicketDialog extends AntModal {
+  public static class CreateTicketDialog extends MdDialog {
 
     @FindBy(id = "trackingId")
     public TextBox trackingId;

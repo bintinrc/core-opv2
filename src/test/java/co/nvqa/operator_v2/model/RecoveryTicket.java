@@ -32,6 +32,8 @@ public class RecoveryTicket extends DataEntity<RecoveryTicket> {
   private String orderOutcomeDuplicateParcel;
   private String issueDescription;
   private String rtsReason;
+  private String breachReason;
+  private String breachLeg;
 
   public RecoveryTicket() {
   }
@@ -235,5 +237,21 @@ public class RecoveryTicket extends DataEntity<RecoveryTicket> {
 
   public void setRtsReason(String rtsReason) {
     this.rtsReason = rtsReason;
+  }
+
+  public String getBreachReason() {
+    return breachReason;
+  }
+
+  public void setBreachReason(String breachReason) {
+    this.breachReason = breachReason;
+  }
+
+  public String getBreachLeg() {
+    return breachLeg;
+  }
+
+  public void setBreachLeg(String breachLeg) {
+    this.breachLeg = breachLeg;
   }
 }

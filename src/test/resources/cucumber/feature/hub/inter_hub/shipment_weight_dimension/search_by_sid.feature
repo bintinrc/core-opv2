@@ -8,7 +8,7 @@ Feature: Search by SID
 
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796810
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search by SID with Single Valid Shipment ID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -25,6 +25,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796818
+  @HappyPath
   Scenario: Search by SID with Single Invalid Shipment ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
@@ -135,7 +136,7 @@ Feature: Search by SID
     Then Operator verify Shipment Weight Dimension Table page is shown
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796825
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search by SID with Duplicate Shipment ID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -152,7 +153,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6853705
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search by SID with Valid Shipment ID but has NO Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -170,7 +171,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7015320
-  @DeleteCreatedShipments
+  @HappyPath @DeleteCreatedShipments
   Scenario: Search by SID and Select All Data Searched by Shipment ID field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

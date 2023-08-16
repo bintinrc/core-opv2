@@ -3,8 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.ValidateAttemptPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,10 +76,10 @@ public class ValidateAttemptSteps extends AbstractSteps {
       validateAttemptPage.selectStatus(status);
     }
     if (StringUtils.isNotBlank(cod)) {
-      validateAttemptPage.selectCOD(cod);
+      validateAttemptPage.selectDropdownValue("COD", cod);
     }
     if (StringUtils.isNotBlank(rts)) {
-      validateAttemptPage.selectRTS(rts);
+      validateAttemptPage.selectDropdownValue("RTS", rts);
     }
     validateAttemptPage.selectDateTime(startDate, endDate);
     if (StringUtils.isNotBlank(hub)) {
@@ -140,6 +142,12 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator validate {string} text is displayed")
+  public void operatorValidateTextIsDisplayed(String text) {
+    validateAttemptPage.validateTextIsDisplayed(text);
+    takesScreenshot();
+  }
+
 
   @When("Operator selects the Invalid Attempt Reason {string}")
   public void operatorSelectsTheInvalidAttemptReason(String invalidAttemptReason) {
@@ -147,7 +155,7 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies the following details in the POD validate details page")
+  @Then("Operator verifies the following details in the POD validate/audit/review details page")
   public void operatorVerifiesTheFollowingDetailsInThePODValidateDetailsPage(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
@@ -233,11 +241,27 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator validate the error code and error message {string}")
-  public void operatorValidateTheErrorCodeAndErrorMessage(String message) {
+  @Then("Operator validate the error code and error details")
+  public void operatorValidateTheErrorCodeAndErrorMessage(
+      Map<String, String> mapOfData) {
+    String statusCode = mapOfData.get("statusCode");
+    String url = mapOfData.get("url");
+    mapOfData = resolveKeyValues(mapOfData);
+    String message = mapOfData.get("message");
+    String data = mapOfData.get("data");
     pause3s();
-    validateAttemptPage.validate404StatusCode();
-    validateAttemptPage.validateErrorMessage(message);
+    if (StringUtils.isNotBlank(statusCode)) {
+      validateAttemptPage.validate404StatusCode(statusCode);
+    }
+    if (StringUtils.isNotBlank(message)) {
+      validateAttemptPage.validateErrorMessage(message);
+    }
+    if (StringUtils.isNotBlank(url)) {
+      validateAttemptPage.validateURL(url);
+    }
+    if (StringUtils.isNotBlank(data)) {
+      validateAttemptPage.validateDataInErrorMessage(data);
+    }
     takesScreenshot();
   }
 
@@ -245,6 +269,59 @@ public class ValidateAttemptSteps extends AbstractSteps {
   public void operatorClosesTheNotificationMessage() {
     validateAttemptPage.closeNotification();
     takesScreenshot();
+  }
+
+  @When("Operator loads Validate Validate Delivery or Pickup Attempt page")
+  public void operatorLoadsValidateDeliveryOrPickupAttemptPage() {
+    validateAttemptPage.loadValidateDeliveryOrPickAttemptPage();
+  }
+
+  @Then("Operator validate Pending assigned POD modal")
+  public void operatorValidatePendingAssignedPODModal() {
+    validateAttemptPage.validatePendingAssignedPODModal();
+    takesScreenshot();
+  }
+
+  @And("Operator goes back on browser")
+  public void operatorGoesBackOnBrowser() {
+    validateAttemptPage.navigateBackInBrowser();
+  }
+
+  @When("Operator click back to task button")
+  public void operatorClickbackToTaskButton() {
+    validateAttemptPage.clickbackTotask();
+  }
+
+  @When("Operator filters the PODs to audit based on below criteria")
+  public void operatorFiltersThePODsToAuditBasedOnBelowCriteria(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String validatorName = mapOfData.get("validatorName");
+    String startDate = mapOfData.get("startDate");
+    String endDate = mapOfData.get("endDate");
+    validateAttemptPage.switchToFrame();
+
+    validateAttemptPage.selectDateTime(startDate, endDate);
+    if (StringUtils.isNotBlank(validatorName)) {
+      validateAttemptPage.selectValidator(validatorName);
+    }
+
+    pause2s();
+    validateAttemptPage.clickButton("Start Auditing");
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that the following texts are available in the POD validation report file {string}")
+  public void operatorverifiesThatTheFollowingTextsAreAvailableInThePODValidationReportFile(
+      String filePattern,
+      List<String> expected) {
+    expected = resolveValues(expected);
+    String downloadedCsvFile = validateAttemptPage.getLatestDownloadedFilename(
+        filePattern);
+    expected.forEach(
+        (expectedText) -> validateAttemptPage.verifyFileDownloadedSuccessfully(
+            downloadedCsvFile,
+            expectedText, true));
   }
 
 }

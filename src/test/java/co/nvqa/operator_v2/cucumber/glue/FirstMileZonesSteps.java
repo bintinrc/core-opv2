@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
+import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.FirstMileZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +47,103 @@ public class FirstMileZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage = new ZonesSelectedPolygonsPage(getWebDriver());
   }
 
+  @When("Operator loads First Mile Zone Page")
+  public void operator_loads_first_mile_zone_page() {
+    firstMileZonesPage.loadFirstMileZonePage();
+  }
+
+  @And("Operator clicks on the {string} button on First Mile Zone Page")
+  @SuppressWarnings("unchecked")
+  public void Operator_clicks_on_the_button(String buttonText) {
+    firstMileZonesPage.inFrame(page -> {
+      firstMileZonesPage.clickButton();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator clicks on the save changes button on First Mile Zone Page")
+  @SuppressWarnings("unchecked")
+  public void Operator_clicks_on_save_changes_button() {
+    firstMileZonesPage.inFrame(page -> {
+      page.editDriverZoneModal.clickOnSaveChangesButton();
+      pause5s();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator verify success message toast is displayed")
+  @SuppressWarnings("unchecked")
+  public void Operator_verify_success_message() {
+    firstMileZonesPage.inFrame(page -> {
+      firstMileZonesPage.validateInvalidFileErrorMessageIsShown();
+      takesScreenshot();
+    });
+  }
+
+  @Then("Operator verifies the Table on Edit Driver Zone Modal")
+  public void operatorVerifiesTableOnEditDriverZoneModalPage() {
+      firstMileZonesPage.inFrame(page -> {
+        Assertions.assertThat(page.editDriverZoneModal.getModalTitle("Edit Driver Zones")).
+            as("Title is correct").isEqualToIgnoringCase("Edit Driver Zones");
+        Assertions.assertThat(page.editDriverZoneModal.getHubText("Hubs")).
+            as("Hubs is correct").isEqualToIgnoringCase("Hubs");
+        Assertions.assertThat(page.editDriverZoneModal.getButton("close-modal-button")).
+            as("Close button is Displayed").isTrue();
+        Assertions.assertThat(page.editDriverZoneModal.getButton("save-changes-button")).
+            as("Save Changes button is correct").isTrue();
+      });
+    }
+
+  @Then("Operator verifies the Table of Zone on Edit Driver Zone Modal")
+  public void operatorVerifiesTableOfZoneOnEditDriverZoneModalPage() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone zone = get(KEY_CREATED_ZONE);
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-name")).
+          as("Zone Name is correct").isEqualToIgnoringCase(zone.getName());
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-shortName")).
+          as("Zone Short Name is correct").isEqualToIgnoringCase(zone.getShortName());
+      Assertions.assertThat(page.editDriverZoneModal.verifyZoneTableValues("editDriver-hubName")).
+          as("Zone Hub is correct").isEqualToIgnoringCase(zone.getHubName());
+    });
+  }
+
+  @And("Operator search for hub on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_search_for_hub() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone hubName = get(KEY_CREATED_ZONE);
+      page.editDriverZoneModal.hub.selectValue(hubName.getHubName());
+      page.editDriverZoneModal.hub.click();
+      pause5s();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator search for zone on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_search_for_zone() {
+    firstMileZonesPage.inFrame(page -> {
+      Zone zone = get(KEY_CREATED_ZONE);
+      page.editDriverZoneModal.getZoneByName(zone.getName());
+      pause5s();
+      takesScreenshot();
+    });
+  }
+
+  @And("Operator search for driver {string} on Edit Driver Zone Modal")
+  @SuppressWarnings("unchecked")
+  public void Operator_search_for_driver(String driver) {
+    firstMileZonesPage.inFrame(page -> {
+      page.editDriverZoneModal.driver.selectValue(driver);
+      takesScreenshot();
+    });
+  }
+
   @When("Operator creates first mile zone using {string} hub")
   public void operatorCreatesFirstMileZoneUsingHub(String hubName) {
     firstMileZonesPage.waitUntilPageLoaded();
     operatorCreateFirstMileZone(hubName);
+    pause5s();
   }
 
   @When("Operator creates first mile zone with empty field in one of the mandatory field")
@@ -88,54 +183,52 @@ public class FirstMileZonesSteps extends AbstractSteps {
       firstMileZonesPage.findZone(expected.getShortName());
       Zone actual = firstMileZonesPage.zonesTable.readEntity(1);
       if (StringUtils.equals(expected.getName(), actual.getName())) {
-        put(KEY_CREATED_ZONE_ID, actual.getId());
-        putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+        put(SortScenarioStorageKeys.KEY_SORT_CREATED_FIRST_MILE_ZONE_ID, actual.getId());
       }
       expected.compareWithActual(actual);
     });
   }
 
-  @When("Operator delete first mile zone")
-  public void operatorDeleteTheFirstMileZone() {
-    Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
+  @When("Operator delete first mile zone with {string} short name")
+  public void operatorDeleteTheFirstMileZone(String zoneName) {
+    String shortName = resolveValue(zoneName);
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getShortName());
+      firstMileZonesPage.findZone(shortName);
       firstMileZonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
       firstMileZonesPage.confirmDeleteDialog.waitUntilVisible();
       firstMileZonesPage.confirmDeleteDialog.confirm.click();
     });
   }
 
-  @Then("^Operator verify first mile zone is deleted successfully$")
-  public void operatorVerifyTheFistMileZoneIsDeletedSuccessfully() {
-    Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_CREATED_ZONE);
+  @Then("Operator verify first mile zone with {string} short name is deleted successfully")
+  public void operatorVerifyFirstMileZoneIsDeletedSuccessfully(String zoneName) {
+    String shortName = resolveValue(zoneName);
     firstMileZonesPage.inFrame(page -> {
-      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
+      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, shortName);
       Assertions.assertThat(firstMileZonesPage.zonesTable.isTableEmpty())
-          .as("Zone " + zone.getName() + " were deleted").isTrue();
+          .as("Zone " + shortName + " were deleted").isTrue();
     });
   }
 
-  @When("Operator update first mile zone with empty field in one of the mandatory field")
-  public void operatorUpdateFirstMileZoneWithEmptyField() {
-    Zone zone = get(KEY_CREATED_ZONE);
+  @When("Operator update {string} first mile zone with empty field in one of the mandatory field")
+  public void operatorUpdateFirstMileZoneWithEmptyField(String zoneName) {
+    String shortName = resolveValue(zoneName);
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getShortName());
+      firstMileZonesPage.findZone(shortName);
       firstMileZonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       firstMileZonesPage.editFmZoneDialog.waitUntilVisible();
-      firstMileZonesPage.editFmZoneDialog.name.setValue(zone.getName() + "-EDITED");
+      firstMileZonesPage.editFmZoneDialog.name.setValue("EDITED");
       firstMileZonesPage.editFmZoneDialog.shortName.setValue("");
-      firstMileZonesPage.editFmZoneDialog.latitude.setValue(zone.getLatitude() + 0.1);
-      firstMileZonesPage.editFmZoneDialog.longitude.setValue(zone.getLongitude() + 0.1);
+      firstMileZonesPage.editFmZoneDialog.latitude.setValue(0.1);
+      firstMileZonesPage.editFmZoneDialog.longitude.setValue(0.1);
     });
   }
 
   @When("Operator update the first mile Zone")
-  public void operatorUpdateFirstMileZone() {
-    Zone zone = get(KEY_CREATED_ZONE);
-
+  public void operatorUpdateFirstMileZone(Map<String, String> data) {
+    Zone zone = new Zone(resolveKeyValues(data));
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");
     zoneEdited.setShortName(zone.getShortName() + "-E");
@@ -144,7 +237,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
     zoneEdited.setHubName(zone.getHubName());
     zoneEdited.setDescription(zone.getDescription() + " [EDITED]");
 
-    put(KEY_EDITED_ZONE, zoneEdited);
+    put(SortScenarioStorageKeys.KEY_SORT_EDITED_FIRST_MILE_ZONE, zoneEdited);
 
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
@@ -163,8 +256,8 @@ public class FirstMileZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator check all filters on Fist Mile Zones page work fine")
-  public void operatorCheckAllFiltersOnFistMileZonesPageWork() {
-    Zone zone = get(KEY_CREATED_ZONE);
+  public void operatorCheckAllFiltersOnFistMileZonesPageWork(Map<String,String>data) {
+    Zone zone = new Zone (resolveKeyValues(data));
 
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
@@ -237,17 +330,18 @@ public class FirstMileZonesSteps extends AbstractSteps {
       page.addFmZoneDialog.submit.click();
       page.addFmZoneDialog.waitUntilInvisible();
     });
-    put(KEY_CREATED_ZONE, zone);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_FIRST_MILE_ZONE, zone);
   }
 
   @And("Operator click View Selected Polygons for First Mile Zones name {string}")
   public void operatorClickViewSelectedPolygonsForFirstMileZonesName(String zoneShortName) {
-    firstMileZonesPage.waitUntilLoaded();
-    firstMileZonesPage.inFrame(page -> {
-      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
-      firstMileZonesPage.zonesTable.selectRow(1);
-      firstMileZonesPage.viewSelectedPolygons.click();
-    });
+    doWithRetry(()->{
+      firstMileZonesPage.waitUntilLoaded();
+      firstMileZonesPage.inFrame(page -> {
+        firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
+        firstMileZonesPage.zonesTable.selectRow(1);
+        firstMileZonesPage.viewSelectedPolygons.click();
+      });},"Click View Selected Polygons Zone Name");
   }
 
   @And("Operator click Zones in First Mile Zones drawing page")
@@ -380,9 +474,19 @@ public class FirstMileZonesSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies first mile zone polygon details:")
-  public void operatorVerifiesFirstMileZonePolygonDetails(Map<String, String> data) {
-    Zone expected = new Zone(resolveKeyValues(data));
-    Zone actual = get(KEY_ZONE_POLYGONS_AS_JSON);
-    expected.compareWithActual(actual);
+  public void operatorVerifiesFirstMileZonePolygonDetails(List<Map<String, String>> data) {
+    List<String> expected = new ArrayList<>();
+    List<String> actual = new ArrayList<>();
+    for (Map<String, String> entry : data) {
+      expected.add(resolveValue(entry.get("expected")));
+      actual.add(resolveValue(entry.get("actual")));
+    }
+    Assertions.assertThat(actual).as("First Mile Zone Details is Correct").isEqualTo(expected);
+  }
+
+  @When("Operator search first mile zone by {string} short name")
+  public void operatorSearchFirstMileZoneByShortName(String zoneShortName) {
+    String shortName = resolveValue(zoneShortName);
+
   }
 }

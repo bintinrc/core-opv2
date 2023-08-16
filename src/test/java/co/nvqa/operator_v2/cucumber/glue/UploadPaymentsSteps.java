@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.CsvUtils;
 import co.nvqa.operator_v2.model.UploadPaymentsErrorCSV;
 import co.nvqa.operator_v2.selenium.page.UploadPaymentsPage;
+import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.BufferedReader;
@@ -53,11 +56,14 @@ public class UploadPaymentsSteps extends AbstractSteps {
 
   @Then("Operator verifies csv file is successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsSuccessfullyUploadedOnTheUploadPaymentsPage() {
+    SoftAssertions softAssertions = new SoftAssertions();
     Assertions.assertThat(uploadPaymentsPage.getAntTopTextV2())
         .as("Uploaded file name is correct")
         .isEqualTo("Uploaded successfully - " + CSV_FILENAME_PATTERN);
     Assertions.assertThat(uploadPaymentsPage.getAntDescription())
         .as("Uploaded file name is correct").contains("The transactions are being processed.");
+    softAssertions.assertAll();
+    takesScreenshot();
   }
 
   @Then("Operator - verifies csv file is not successfully uploaded on the Upload Payments page")
@@ -72,6 +78,25 @@ public class UploadPaymentsSteps extends AbstractSteps {
     Assertions.assertThat(actualErrorDescription).as("Error description is correct")
         .isEqualTo(expectedErrorDescription);
   }
+
+
+  @Then("Operator verifies that error toast is displayed on Upload Payments page:")
+  public void operatorVerifiesThatErrorToastDisplayedOnSSBTemplatePage(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    uploadPaymentsPage.getWebDriver().switchTo();
+    String expectedNotifMsgTop = mapOfData.get("top");
+    String expectedNotifDescription = mapOfData.get("bottom");
+    String actualNotifMsgTop = uploadPaymentsPage.getNotificationMessageText();
+    String actualNotifDescription = uploadPaymentsPage.getNotificationMessageDescText();
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(actualNotifMsgTop)
+        .as("Actual Notification is expected").isEqualTo(expectedNotifMsgTop);
+    softAssertions.assertThat(actualNotifDescription)
+        .as("Actual Notification Description is expected").contains(expectedNotifDescription);
+    softAssertions.assertAll();
+  }
+
 
   @Then("Operator - verify Error Upload Payment CSV file is downloaded successfully on Upload Payments Page with below data:")
   public void operatorVerifyErrorUPPCSVFileIsDownloadedSuccessfullyOnUploadSelfServePromoPageWithBelowData(
@@ -97,5 +122,39 @@ public class UploadPaymentsSteps extends AbstractSteps {
           .as("message column is correct").isEqualTo(dataTableAsMap.get("message"));
     }
     softAssertions.assertAll();
+  }
+
+  @And("Operator clicks on Download Template CSV dropdown")
+  public void operatorClicksOnDownloadTemplateCSVDropdown() {
+    uploadPaymentsPage.switchTo();
+    uploadPaymentsPage.clickDownloadTemplateCsv();
+  }
+
+  @And("Operator clicks on {string} option")
+  public void operatorClicksOnOption(String option) {
+    if (option.equalsIgnoreCase("Template Shipper ID")) {
+      uploadPaymentsPage.clickDownloadTemplateShipperID();
+    }
+    if (option.equalsIgnoreCase("Template Netsuite ID")) {
+      uploadPaymentsPage.clickDownloadTemplateNetsuiteID();
+    }
+  }
+
+  @And("Operator verifies that downloaded csv file for {string} is same as {value}")
+  public void operatorVerifiesThatDownloadedCsvFileForIsSameAs(String type, String sampleFilePath) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    File fileCompare = new File(
+        Objects.requireNonNull(classLoader.getResource(sampleFilePath)).getFile());
+    String expectedBody = TestUtils.readFromFile(fileCompare);
+
+    if (type.equals("Template Shipper ID")) {
+      uploadPaymentsPage.verifyFileDownloadedSuccessfully("payment_template_shipper_id.csv",
+          expectedBody);
+    } else if (type.equals("Template Netsuite ID")) {
+      uploadPaymentsPage.verifyFileDownloadedSuccessfully("payment_template_netsuite_id.csv",
+          expectedBody);
+    } else {
+      throw new NvTestRuntimeException("Type of file is not correctly specified");
+    }
   }
 }

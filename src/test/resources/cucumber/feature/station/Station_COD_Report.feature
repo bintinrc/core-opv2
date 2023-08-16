@@ -325,7 +325,7 @@ Feature: Station COD Report
   Scenario Outline: [ID, VN] View COD Amount in Detail Tab (uid:f163c350-3f78-4a28-b16f-84c5bc7b33f4)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": <CODAmount>,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00","timezone": "Asia/Ho_Chi_Minh"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00","timezone": "Asia/Ho_Chi_Minh"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
@@ -333,7 +333,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -368,8 +368,8 @@ Feature: Station COD Report
       | Collected At                | <CollectedAt>                    |
       | COD Amount                  | <CODAmount>                      |
       | Shipper Name                | {shipper-v4-name}                |
-      | Driver Name                 | {ninja-driver-name-1}            |
-      | Driver ID                   | {ninja-driver-id-1}              |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
     And Operator verifies that the COD amount: "<CODAmount>" is separated by dot for thousands and by comma for decimals
 
     Examples:
@@ -433,7 +433,7 @@ Feature: Station COD Report
   Scenario Outline: [ID, VN] View COD Collected in Summary Tab (uid:623d8469-1bea-4fdd-a7d7-721683628256)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": <CODAmount>,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00","timezone": "Asia/Ho_Chi_Minh"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00","timezone": "Asia/Ho_Chi_Minh"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
@@ -441,7 +441,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -465,11 +465,11 @@ Feature: Station COD Report
       | <HubName> | <TransStatus>      |
     And Operator navigates to summary tab in the result grid
     And Operator searches for the details in result grid using the following search criteria:
-      | Driver Name | {ninja-driver-name-1} |
+      | Driver Name | {ninja-driver-name} |
       | Hub         | <HubName>             |
     And Operator gets the order details from summary tab of station cod report
     And Operator verifies that the following details are displayed in summary tab:
-      | Driver Name | {ninja-driver-name-1}  |
+      | Driver Name | {ninja-driver-name}    |
       | Hub         | <HubName>              |
       | Route ID    | {KEY_CREATED_ROUTE_ID} |
       | COD Amount  | <CODAmount>            |
@@ -541,7 +541,7 @@ Feature: Station COD Report
   Scenario Outline: [ID, TH, VN] Transaction End Date Should Match Country's Timezone UTC+7 (uid:31fc432f-6be1-43ab-9764-f520c98920a0)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"STANDARD","from": {"name": "QA-STATION-TEST-FROM","phone_number": "+6281231422926","email": "senderV4@nvqa.co","address": {"address1": "Jl. Gedung Sate No.48","country": "ID","province": "Jawa Barat ","city": "Kota Bandung","postcode": "60272","latitude": -6.921837,"longitude": 107.636803}},"to": {"name": "QA-STATION-TEST-TO","phone_number": "+6281231422926","email": "recipientV4@nvqa.co","address": {"address1": "Jalan Tebet Timur, 12","country": "ID","province": "DKI Jakarta","kecamatan": "Jakarta Selatan","postcode": "11280","latitude": -6.240501,"longitude": 106.841408}},"parcel_job":{ "cash_on_delivery": <CODAmount>,"insured_value": 85000,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00","timezone": "Asia/Ho_Chi_Minh"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00","timezone": "Asia/Ho_Chi_Minh"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
@@ -549,7 +549,7 @@ Feature: Station COD Report
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id-1}, "hubId":<HubId>, "vehicleId":{vehicle-id-1}, "driverId":{ninja-driver-id-1} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -584,8 +584,8 @@ Feature: Station COD Report
       | Collected At                | <CollectedAt>                    |
       | COD Amount                  | <CODAmount>                      |
       | Shipper Name                | {shipper-v4-name}                |
-      | Driver Name                 | {ninja-driver-name-1}            |
-      | Driver ID                   | {ninja-driver-id-1}              |
+      | Driver Name                 | {ninja-driver-name}              |
+      | Driver ID                   | {ninja-driver-id}                |
     And DB Operator verifies that transaction end datetime is +7 hours from job_service_end_datetime_utc in station database
 
     Examples:
@@ -642,7 +642,8 @@ Feature: Station COD Report
     And Operator navigates to summary tab in the result grid
     And Operator searches for the details in result grid using the following search criteria:
       | Driver Name | {KEY_UPDATED_DRIVER_DISPLAY_NAME} |
-      | Hub         | <HubName>                       |
+      | Hub         | <HubName>                         |
+      | Route ID    | {KEY_CREATED_ROUTE_ID}            |
     And Operator gets the order details from summary tab of station cod report
     And Operator verifies that the updated driver name: "{KEY_UPDATED_DRIVER_DISPLAY_NAME}" is displayed in the grid
 

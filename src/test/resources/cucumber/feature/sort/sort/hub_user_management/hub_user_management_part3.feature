@@ -76,7 +76,7 @@ Feature: Hub User Management
     When Operator search "{station-hub-name-2}" hub name
     When Operator click edit button "{station-hub-id-2}" on Hub User Management Page
     When Operator search "{hub-user-admin-name}" username with "{hub-user-admin-role}" role
-    Then Operator verifies delete user button is not exist
+    Then Operator verifies delete hub user button is not exist
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

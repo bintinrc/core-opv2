@@ -28,6 +28,10 @@ public class ShipmentWeightDimensionTablePage extends
       .getLogger(ShipmentWeightDimensionTablePage.class);
   @FindBy(xpath = "//button[strong[text()='Back to Main']]")
   public Button backButton;
+
+  @FindBy(xpath = "//button[@data-testid='back-to-main-button']")
+  public Button backToMainButton;
+
   @FindBy(xpath = "//button[span[contains(text(),'Sum up')]]")
   public Button sumUpButton;
 

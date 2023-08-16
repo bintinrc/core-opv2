@@ -5,6 +5,7 @@ Feature: Sort Belt Manager V2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+
   Scenario: Activate Logic On Sort Belt Manager V2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
@@ -23,14 +24,27 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And Operator verify created logic is correct
+      | actualOpv2                                            | expectedDb                                               |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.name}                |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description}         | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.description}         |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.armFilters}          | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.armFilters}          |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} |
+      | {sbm-create-new-rules}                                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.rulesString}         |
     When Operator activates the selected logic
-    Then DB Operator makes sure logic is activated
+    When DB Sort - Operator get active logic by "{sbm-device-id}" device Id
+    Then Operator make sure correct logic is activated:
+      | activeLogicId  | {KEY_SORT_DB_ACTIVE_LOGIC}              |
+      | createdLogicId | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id} |
     And Operator search "default" logic in Sort Belt Manager page
     And Operator activates the selected logic
-    And DB Operator hard deletes created logic
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
+
 
   Scenario: Activate Logic On Sort Belt Manager V2 - Logic Is Active
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -50,17 +64,30 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And Operator verify created logic is correct
+      | actualOpv2                                            | expectedDb                                               |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.name}                |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description}         | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.description}         |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.armFilters}          | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.armFilters}          |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} |
+      | {sbm-create-new-rules}                                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.rulesString}         |
     When Operator activates the selected logic
-    Then DB Operator makes sure logic is activated
+    When DB Sort - Operator get active logic by "{sbm-device-id}" device Id
+    Then Operator make sure correct logic is activated:
+      | activeLogicId  | {KEY_SORT_DB_ACTIVE_LOGIC}           |
+      | createdLogicId | {KEY_SORT_SBM_CREATED_LOGIC_FORM.id} |
     When Operator search "created" logic in Sort Belt Manager page
     Then Operator make sure can not reactivate logic
     And Operator clicks close button in logic detail page
     And Operator search "default" logic in Sort Belt Manager page
     And Operator activates the selected logic
-    And DB Operator hard deletes created logic
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
+
 
   Scenario: SBMV2UI Create/Edit Logic Section - Create New
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -80,10 +107,19 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And Operator verify created logic is correct
+      | actualOpv2                                            | expectedDb                                               |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.name}                |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description}         | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.description}         |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.armFilters}          | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.armFilters}          |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} |
+      | {sbm-create-new-rules}                                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.rulesString}         |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Create/Edit Logic Section - Create A Copy
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -103,12 +139,16 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
     And Operator clicks close button in logic detail page
     Then Operator make sure redirected to Sort Belt Manager main page
     And Operator clicks Create Logic -> "Create a copy"
-    Then Operator selects a logic to copy
+    Then Operator selects "{KEY_SORT_SBM_CREATED_LOGIC_FORM.name}" logic to copy
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
     Then Operator make sure redirected to "Create" logic page
     And Operator make sure logic form is pre-populated
     And Operator edits logic basic information
@@ -121,12 +161,21 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
     And Operator clicks close button in logic detail page
     Then Operator make sure redirected to Sort Belt Manager main page
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And Operator verify created logic is correct
+      | actualOpv2                                            | expectedDb                                               |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.name}                |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description}         | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.description}         |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.armFilters}          | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.armFilters}          |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} |
+      | {sbm-edited-rules}                                    | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.rulesString}         |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Create/Edit Logic Section - Edit Logic
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -146,8 +195,8 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
     And Operator clicks close button in logic detail page
     Then Operator make sure redirected to Sort Belt Manager main page
     When Operator search "created" logic in Sort Belt Manager page
@@ -164,12 +213,21 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
     And Operator clicks save button in check logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
     And Operator clicks close button in logic detail page
     Then Operator make sure redirected to Sort Belt Manager main page
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And Operator verify created logic is correct
+      | actualOpv2                                            | expectedDb                                               |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}                | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.name}                |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description}         | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.description}         |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.armFilters}          | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.armFilters}          |
+      | {KEY_SORT_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.unassignedParcelArm} |
+      | {sbm-edited-rules}                                    | {KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.rulesString}         |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Create/Edit Logic Section - Filter Exceeds 4 Items
     Given Operator go to menu Shipper Support -> Blocked Dates

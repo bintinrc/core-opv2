@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.mm.model.Shipment;
+import co.nvqa.common.mm.model.ShipmentFilterPreset;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -17,8 +19,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,8 +36,9 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.LocalDateTime;
 
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENTS;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SHIPMENT_FILTER_PRESETS;
 import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
@@ -175,12 +184,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
-    String shipmentIds = Strings.join(resolveValues(ids)).with("\n").replace("[","").replace("]","").replace(",","\n");
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
+    final String finalShipmentIds = shipmentIds.contains("[") ? shipmentIds.replace("[", "").replace("]", "").replace(",", "\n") : shipmentIds;
+
+    doWithRetry(() -> {
       reloadPage();
       page.inFrame(() -> {
             page.shipmentIds.waitUntilVisible();
-            page.shipmentIds.setValue(shipmentIds);
+            page.shipmentIds.setValue(finalShipmentIds);
           }
       );
     }, "Retry until page is loaded...");
@@ -202,10 +213,12 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.clearAllFilters.click());
   }
 
-  @When("^Operator create Shipment on Shipment Management page:$")
+  @When("Operator create Shipment on Shipment Management page:")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() -> {
+
+    LOGGER.info("map of data size: {}", mapOfData.size());
+    doWithRetry(() -> {
       page.inFrame(page -> {
         page.waitUntilLoaded();
         try {
@@ -224,21 +237,21 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           } else {
             listOfOrders = new ArrayList<>();
           }
-
           ShipmentInfo shipmentInfo = new ShipmentInfo();
           shipmentInfo.fromMap(finalData);
           shipmentInfo.setOrdersCount((long) listOfOrders.size());
+          if(finalData.containsKey("shipment_type"))
+          {
+            shipmentInfo.setShipmentType(finalData.get("shipment_type"));
+          }
 
           page.createShipment(shipmentInfo, isNextOrder);
-
-          if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
-            shipmentInfo.setShipmentType("AIR_HAUL");
-          }
 
           put(KEY_SHIPMENT_INFO, shipmentInfo);
           put(KEY_CREATED_SHIPMENT, shipmentInfo);
           put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
           putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
+          putInList(KEY_MM_LIST_OF_CREATED_SHIPMENTS,shipmentInfo);
 
           if (isNextOrder) {
             Long secondShipmentId = page.createAnotherShipment();
@@ -257,7 +270,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           throw new NvTestRuntimeException(ex);
         }
       });
-    }, 1);
+    }, "create shipment");
   }
 
   @When("^Operator create Shipment without confirm on Shipment Management page:$")
@@ -321,8 +334,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     Map<String, String> resolvedData = resolveKeyValues(data);
     String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
-      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
       if (resolvedData.containsKey("origHubName")) {
         page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
@@ -344,8 +357,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     Map<String, String> resolvedData = resolveKeyValues(data);
     String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
-      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
       if (resolvedData.containsKey("origHubName")) {
         page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
@@ -376,7 +389,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
       List<String> shipmentIds) {
     page.inFrame(() -> {
-      List<String> actual = page.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
+      List<String> actual = NewShipmentManagementPage.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
       Assertions.assertThat(actual).as("List of Shipment IDs")
           .containsExactlyInAnyOrderElementsOf(resolveValues(shipmentIds));
     });
@@ -503,9 +516,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         presetId = m.group(1);
         Assertions.assertThat(m.group(3)).as("created preset is selected").isEqualTo(presetName);
       }
-      put(KEY_SHIPMENTS_FILTERS_PRESET_ID, presetId);
-      put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID, presetId);
-      put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME, presetName);
+      putInList(KEY_MM_LIST_OF_CREATED_SHIPMENT_FILTER_PRESETS, new ShipmentFilterPreset(Long.parseLong(presetId), presetName));
     });
   }
 
@@ -518,7 +529,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @And("Operator select {value} filters preset on Shipment Management page")
   public void operatorSelectGivenFiltersPresetOnShipmentManagementPage(String filterPresetName) {
-    page.inFrame(() -> page.selectFiltersPreset.selectValue(filterPresetName));
+    page.inFrame(() -> page.selectFiltersPreset.selectValue(resolveValue(filterPresetName)));
   }
 
   @And("Operator verify selected filters on Shipment Management page:")
@@ -566,10 +577,24 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     assertions.assertAll();
   }
 
+  @Deprecated
   @And("^Operator delete created filters preset on Shipment Management page$")
   public void operatorDeleteCreatedFiltersPresetOnShipmentManagementPage() {
     String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
+    page.inFrame(() -> {
+      page.presetActionsMenu.selectOption("Delete Preset");
+      page.deletePresetDialog.waitUntilVisible();
+      page.deletePresetDialog.name.selectValue(presetName);
+      page.deletePresetDialog.delete.click();
+      page.waitUntilVisibilityOfToastReact("1 preset filter deleted");
+    });
+  }
+
+  @And("Operator delete filters preset {string} on Shipment Management page")
+  public void operatorDeleteFiltersPresetOnShipmentManagementPage(String storageKey) {
+    ShipmentFilterPreset preset = resolveValue(storageKey);
+    String presetName = preset.getId() + " - " + preset.getName();
     page.inFrame(() -> {
       page.presetActionsMenu.selectOption("Delete Preset");
       page.deletePresetDialog.waitUntilVisible();
@@ -657,7 +682,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator clicks on reopen shipment button under the Apply Action")
   public void operatorClicksOnReopenShipmentButtonUnderTheApplyAction() {
     page.inFrame(() -> {
-      page.shipmentsTable.selectRow(1);
+      NewShipmentManagementPage.shipmentsTable.selectRow(1);
       page.actionsMenu.selectOption("Reopen Shipments");
     });
   }
@@ -681,6 +706,13 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator enters multiple shipment ids in the Shipment Management Page")
   public void operatorEntersMultipleShipmentIdsInTheShipmentManagementPage() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    enterShipmentIds(shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
+  }
+
+  @When("Operator enters multiple shipment ids {string} in the Shipment Management Page")
+  public void operatorEntersMultipleShipmentIdsInTheShipmentManagementPage(String storageKey) {
+    List<Long> shipmentIds = resolveValueAsList(storageKey, Shipment.class).stream().map(Shipment::getId).collect(
+        Collectors.toList());
     enterShipmentIds(shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
   }
 
@@ -712,7 +744,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyActionButtonIsDisabled(String actionButton) {
     page.inFrame(() -> {
       if ("Cancel".equals(actionButton)) {
-        Assertions.assertThat(page.shipmentsTable.getActionButton(1, ACTION_CANCEL).isEnabled())
+        Assertions.assertThat(
+                NewShipmentManagementPage.shipmentsTable.getActionButton(1, ACTION_CANCEL).isEnabled())
             .as("Cancel button is enabled").isFalse();
       }
     });
@@ -731,8 +764,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     List<String> ids = resolveValues(shipmentIds);
     page.inFrame(() -> {
       ids.forEach(id -> {
-        page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, id);
-        page.shipmentsTable.selectRow(1);
+        NewShipmentManagementPage.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, id);
+        NewShipmentManagementPage.shipmentsTable.selectRow(1);
       });
       page.actionsMenu.selectOption("Bulk Update");
     });
@@ -919,6 +952,13 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator search shipment id {string} on Shipment Management table")
+  public void operatorSearchShipmentIdOnShipmentManagementTable(String sidAsString) {
+    page.inFrame(()-> {
+      page.shipmentIdInputFieldOnShipmentManagementTable.setValue(resolveValue(sidAsString));
+    });
+  }
+
   @When("Operator search not found shipment id on Shipment Management table")
   public void operatorSearchNotFoundShipmentIdOnShipmentManagementTable() {
     page.inFrame(()-> {
@@ -928,6 +968,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @Then("Operator verify it shows \"No Results Found\" error message")
   public void operatorVerifyItShowsNoResultsFoundErrorMessage() {
+    page.showNoResultsFound.waitUntilVisible(120);
     page.inFrame(()-> {
       Assertions.assertThat(page.showNoResultsFound.getText()).as("Please set filter to no results found error message")
               .isEqualTo("No Results Found");
@@ -993,7 +1034,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @And("Operator clicks Edit action button on Shipment Management page")
   public void operatorClicksEditActionButtonOnShipmentManagementPage() {
     page.inFrame(()-> {
-      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      NewShipmentManagementPage.shipmentsTable.clickActionButton(1, ACTION_EDIT);
       page.editShipmentDialog.waitUntilVisible();
     });
   }

@@ -161,9 +161,11 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
   }
 
   public void clickButtonByText(String name) {
-    String xpathExpression = f("//span[text()='%s']/parent::button", name);
-    waitUntilVisibilityOfElementLocated(xpathExpression);
-    simpleClick(xpathExpression);
+    doWithRetry(() -> {
+      String xpathExpression = f("//span[text()='%s']/parent::button", name);
+      waitUntilVisibilityOfElementLocated(xpathExpression);
+      simpleClick(xpathExpression);
+    }, "Wait until page is properly loaded...", 1000, 3);
   }
 
   public void clickButtonByTextAndWaitUntilDone(String name) {
@@ -322,4 +324,13 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     }
   }
 
+  public void operatorClickMaskingText(List<WebElement> masking) {
+    masking.forEach(m -> {
+      try {
+        m.click();
+      } catch (Exception ex) {
+        LOGGER.debug("mask element not found");
+      }
+    });
+  }
 }

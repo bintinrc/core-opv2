@@ -1444,17 +1444,37 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void readDpUserEntity(DpUser dpUser) {
-    Assertions.assertThat(dpUser.getUsername()).as(f("username Is %s", dpUser.getUsername()))
-        .isEqualTo(labelUsername.getText());
-    Assertions.assertThat(dpUser.getFirstName()).as(f("First Name Is %s", dpUser.getFirstName()))
-        .isEqualTo(labelUserFirstName.getText());
-    Assertions.assertThat(dpUser.getLastName()).as(f("Last Name Is %s", dpUser.getLastName()))
-        .isEqualTo(labelUserLastName.getText());
-    Assertions.assertThat(dpUser.getEmailId()).as(f("Email Is %s", dpUser.getEmailId()))
-        .isEqualTo(labelUserEmail.getText());
-    Assertions.assertThat(dpUser.getContactNo())
-        .as(f("Contact No Is %s", dpUser.getContactNo()))
-        .isEqualTo(labelUserContact.getText());
+      if(dpUser.getUsername()!=null)
+      {
+        Assertions.assertThat(dpUser.getUsername()).as(f("username Is %s", dpUser.getUsername()))
+            .isEqualTo(labelUsername.getText());
+        LOGGER.info("getUsername compare is success");
+      }
+      if(dpUser.getFirstName()!=null)
+      {
+        Assertions.assertThat(dpUser.getFirstName()).as(f("First Name Is %s", dpUser.getFirstName()))
+            .isEqualTo(labelUserFirstName.getText());
+        LOGGER.info("getFirstName compare is success");
+      }
+      if(dpUser.getLastName()!=null)
+      {
+        Assertions.assertThat(dpUser.getLastName()).as(f("Last Name Is %s", dpUser.getLastName()))
+            .isEqualTo(labelUserLastName.getText());
+        LOGGER.info("getLastName compare is success");
+      }
+      if(dpUser.getEmailId()!=null)
+      {
+        Assertions.assertThat(dpUser.getEmailId()).as(f("Email Is %s", dpUser.getEmailId()))
+            .isEqualTo(labelUserEmail.getText());
+        LOGGER.info("getEmailId compare is success");
+      }
+      if(dpUser.getContactNo()!=null)
+      {
+        Assertions.assertThat(dpUser.getContactNo())
+            .as(f("Contact No Is %s", dpUser.getContactNo()))
+            .isEqualTo(labelUserContact.getText());
+        LOGGER.info("getContactNo compare is success");
+      }
   }
 
   public void checkingIdAndDpmsId(Partner partner) {

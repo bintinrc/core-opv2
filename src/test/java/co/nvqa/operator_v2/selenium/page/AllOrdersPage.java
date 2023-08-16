@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.operator_v2.model.AddToRouteData;
@@ -22,6 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.OrdersTable.OrderInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -33,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -52,7 +54,7 @@ import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.PU
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
-public class AllOrdersPage extends OperatorV2SimplePage {
+public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
   public static final String SELECTION_ERROR_CSV_FILENAME = "selection-error.csv";
@@ -72,6 +74,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
+  @FindBy(css = "span[ng-click='onMaskClick()']")
+  public PageElement mask;
   @FindBy(css = "nv-filter-box[main-title='Status']")
   public NvFilterBox statusFilter;
 
@@ -179,19 +183,15 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()
-      .put("Pending Pickup", disablePendingPickup)
-      .build();
+      .put("Pending Pickup", disablePendingPickup).build();
 
   public ImmutableMap<String, Button> disableStatusElement = ImmutableMap.<String, Button>builder()
-      .put("Pending", disablePending)
-      .build();
+      .put("Pending", disablePending).build();
 
 
   public enum Category {
-    TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
-    NAME("Name"),
-    CONTACT_NUMBER("Contact Number"),
-    RECIPIENT_ADDRESS_LINE_1("Recipient Address (Line 1)");
+    TRACKING_OR_STAMP_ID("Tracking / Stamp ID"), NAME("Name"), CONTACT_NUMBER(
+        "Contact Number"), RECIPIENT_ADDRESS_LINE_1("Recipient Address (Line 1)");
 
     private final String value;
 
@@ -218,8 +218,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public enum SearchLogic {
-    EXACTLY_MATCHES("exactly matches"),
-    CONTAINS("contains");
+    EXACTLY_MATCHES("exactly matches"), CONTAINS("contains");
 
     private final String value;
 
@@ -252,6 +251,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public final EditOrderPage editOrderPage;
 
+  public OrdersTable ordersTable;
+
   public AllOrdersPage(WebDriver webDriver) {
     this(webDriver, new EditOrderPage(webDriver));
   }
@@ -259,6 +260,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public AllOrdersPage(WebDriver webDriver, EditOrderPage editOrderPage) {
     super(webDriver);
     this.editOrderPage = editOrderPage;
+    ordersTable = new OrdersTable(webDriver);
   }
 
   public void waitUntilPageLoaded() {
@@ -271,8 +273,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void verifyItsCurrentPage() {
     super.waitUntilPageLoaded();
     Assertions.assertThat(getWebDriver().getCurrentUrl())
-        .withFailMessage("All Orders page is not opened")
-        .endsWith("/order");
+        .withFailMessage("All Orders page is not opened").endsWith("/order");
   }
 
   public void downloadSampleCsvFile() {
@@ -387,28 +388,14 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectionMenu.selectOption("Select All Shown");
   }
 
-  public String forceSuccessOrders() {
-    clearFilterTableOrderByTrackingId();
-    selectAllShown();
-    actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
-    manuallyCompleteOrderDialog.waitUntilVisible();
-    String reason = "Force success from automated test";
-    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
-    manuallyCompleteOrderDialog.reasonForChange.setValue(reason);
-    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
-    manuallyCompleteOrderDialog.waitUntilInvisible();
-    waitUntilInvisibilityOfToast("Complete Order");
-    return reason;
-  }
-
-  public void forceSuccessOrders(String reason, String reasonDescr) {
+  public void forceSuccessOrders(String reason, String reasonDescription) {
     clearFilterTableOrderByTrackingId();
     selectAllShown();
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
     manuallyCompleteOrderDialog.changeReason.setValue(reason);
-    if (StringUtils.isNotBlank(reasonDescr)) {
-      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    if (Objects.equals(reason, "Others (fill in below)")) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescription);
     }
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
@@ -447,9 +434,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         "//tr[@ng-repeat='order in ctrl.orders']/td[1]");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
         .collect(Collectors.toList());
-    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
-        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
-            "Has Expected tracking id"));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
 
     setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
     selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
@@ -472,9 +458,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
     List<String> listOfActualTrackingIds = cancelSelectedDialog.trackingIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
-    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
-        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
-            "Has Expected tracking id"));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
 
     cancelSelectedDialog.cancellationReason.setValue(String.format(
         "This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.",
@@ -498,9 +483,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     resumeSelectedDialog.waitUntilVisible();
     List<String> listOfActualTrackingIds = resumeSelectedDialog.trackingIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
-    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
-        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
-            "Has Expected tracking id"));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
 
     if (listOfActualTrackingIds.size() == 1) {
       resumeSelectedDialog.resumeOrder.clickAndWaitUntilDone();
@@ -531,9 +515,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         "//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
         .collect(Collectors.toList());
-    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
-        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
-            "Has Expected tracking id"));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
   }
 
   public void applyActionToOrdersByTrackingId(
@@ -596,9 +579,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     List<String> actualTrackingId = addToRouteDialog.trackingIds.stream().map(PageElement::getText)
         .collect(Collectors.toList());
 
-    Assertions.assertThat(actualTrackingId).as("Expected Tracking ID not found.")
-        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId),
-            "Has Expected tracking id"));
+    Assertions.assertThat(actualTrackingId).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
 
     addToRouteDialog.setToAll.click();
     if (StringUtils.isNotBlank(routeId)) {
@@ -628,10 +610,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
     addToRouteDialog.waitUntilVisible();
     Map<String, AddToRouteData> dataAsMap = data.stream()
-        .collect(Collectors.toMap(
-            AddToRouteData::getTrackingId,
-            val -> val
-        ));
+        .collect(Collectors.toMap(AddToRouteData::getTrackingId, val -> val));
     for (int i = 0; i < data.size(); i++) {
       String trackingId = addToRouteDialog.trackingIds.get(i).getText();
       String type = dataAsMap.get(trackingId).getType();
@@ -721,7 +700,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void switchToEditOrderWindow(Long orderId) {
-    switchToOtherWindow("order/" + orderId);
+    switchToOtherWindow("order-v2?id=" + orderId);
     editOrderPage.waitWhilePageIsLoading(120);
   }
 
@@ -736,13 +715,10 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public enum AllOrdersAction {
-    SET_RTS_TO_SELECTED("Set RTS to Selected"),
-    CANCEL_SELECTED("Cancel Selected"),
-    RESUME_SELECTED("Resume Selected"),
-    MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
-    PULL_FROM_ROUTE("Pull Selected from Route"),
-    ADD_TO_ROUTE("Add Selected to Route"),
-    REGULAR_PICKUP("Regular Pickup");
+    SET_RTS_TO_SELECTED("Set RTS to Selected"), CANCEL_SELECTED("Cancel Selected"), RESUME_SELECTED(
+        "Resume Selected"), MANUALLY_COMPLETE_SELECTED(
+        "Manually Complete Selected"), PULL_FROM_ROUTE("Pull Selected from Route"), ADD_TO_ROUTE(
+        "Add Selected to Route"), REGULAR_PICKUP("Regular Pickup");
 
     private final String name;
 
@@ -923,8 +899,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     }
 
     public List<String> getRouteIds() {
-      List<String> routeIds = routeInputs.stream()
-          .map(TextBox::getValue)
+      List<String> routeIds = routeInputs.stream().map(TextBox::getValue)
           .collect(Collectors.toList());
       routeIds.addAll(
           routeTexts.stream().map(PageElement::getNormalizedText).collect(Collectors.toList()));
@@ -1085,8 +1060,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         findElementByXpath("//button[@aria-label = 'Submit']"));
     pause2s();
     if ("date".equalsIgnoreCase(date)) {
-      getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
-          .clear();
+      getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]")).clear();
       pause1s();
       getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
           .sendKeys(formatter.format(today.plusDays(5)));
@@ -1111,8 +1085,8 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         .isEqualTo(order.getFromAddress2());
   }
 
-  public void verifyDriverCollect(
-      DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder, String trackingId) {
+  public void verifyDriverCollect(DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder,
+      String trackingId) {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
@@ -1134,10 +1108,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifyOrderStatus(Order order, String status, String granularStatus) {
-    assertTrue("Status is not correct", order.getStatus()
-        .equalsIgnoreCase(status));
-    assertTrue("Granular Status is not correct: ", order
-        .getGranularStatus().equalsIgnoreCase(granularStatus));
+    assertTrue("Status is not correct", order.getStatus().equalsIgnoreCase(status));
+    assertTrue("Granular Status is not correct: ",
+        order.getGranularStatus().equalsIgnoreCase(granularStatus));
   }
 
   public void databaseVerifyCustomerCollect(
@@ -1187,6 +1160,141 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       PrintSizeList.waitUntilVisible();
       findElementByXpath(f(PRINTING_SIZE, size)).click();
       PrintSizeList.waitUntilInvisible();
+    }
+  }
+
+  public static class OrdersTable extends MdVirtualRepeatTable<OrderInfo> {
+
+    public OrdersTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("trackingId", "tracking-id")
+          .put("fromName", "from-name")
+          .put("fromContact", "from-contact")
+          .put("fromAddress", "_from-address")
+          .put("fromPostcode", "from-postcode")
+          .put("toName", "to-name")
+          .put("toContact", "to-contact")
+          .put("toAddress", "_to-address")
+          .put("toPostcode", "to-postcode")
+          .put("granularStatus", "_granular-status")
+          .put("createdAt", "_created-at")
+          .build()
+      );
+      setMdVirtualRepeat("order in getTableData()");
+      setEntityClass(OrderInfo.class);
+//      setActionButtonsLocators(ImmutableMap.of(ACTION_DETAILS, "commons.details", ACTION_PRINT,
+//          "container.bulk-order.print-label"));
+    }
+
+    public static class OrderInfo extends DataEntity<OrderInfo> {
+
+      private String trackingId;
+      private String fromName;
+      private String fromContact;
+      private String fromAddress;
+      private String fromPostcode;
+      private String toName;
+      private String toContact;
+      private String toAddress;
+      private String toPostcode;
+      private String granularStatus;
+      private String createdAt;
+
+      public OrderInfo(Map<String, ?> data) {
+        super(data);
+      }
+
+      public OrderInfo() {
+      }
+
+      public String getTrackingId() {
+        return trackingId;
+      }
+
+      public void setTrackingId(String trackingId) {
+        this.trackingId = trackingId;
+      }
+
+      public String getFromName() {
+        return fromName;
+      }
+
+      public void setFromName(String fromName) {
+        this.fromName = fromName;
+      }
+
+      public String getFromContact() {
+        return fromContact;
+      }
+
+      public void setFromContact(String fromContact) {
+        this.fromContact = fromContact;
+      }
+
+      public String getFromAddress() {
+        return fromAddress;
+      }
+
+      public void setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
+      }
+
+      public String getFromPostcode() {
+        return fromPostcode;
+      }
+
+      public void setFromPostcode(String fromPostcode) {
+        this.fromPostcode = fromPostcode;
+      }
+
+      public String getToName() {
+        return toName;
+      }
+
+      public void setToName(String toName) {
+        this.toName = toName;
+      }
+
+      public String getToContact() {
+        return toContact;
+      }
+
+      public void setToContact(String toContact) {
+        this.toContact = toContact;
+      }
+
+      public String getToAddress() {
+        return toAddress;
+      }
+
+      public void setToAddress(String toAddress) {
+        this.toAddress = toAddress;
+      }
+
+      public String getToPostcode() {
+        return toPostcode;
+      }
+
+      public void setToPostcode(String toPostcode) {
+        this.toPostcode = toPostcode;
+      }
+
+      public String getGranularStatus() {
+        return granularStatus;
+      }
+
+      public void setGranularStatus(String granularStatus) {
+        this.granularStatus = granularStatus;
+      }
+
+      public String getCreatedAt() {
+        return createdAt;
+      }
+
+      public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+      }
     }
   }
 }
