@@ -17,7 +17,7 @@ Feature: Address Datasource
   Scenario: TH Address Datasource Landing Page - Search Box No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
-    When Operator verifies search button is disabled
+    When Operator verifies Address Datasource search button is disabled
 
   Scenario: TH Address Datasource Landing Page - Search Box Invalid Input
     Given Operator go to menu Utilities -> QRCode Printing
