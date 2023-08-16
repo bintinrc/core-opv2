@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Create COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -46,7 +46,7 @@ Feature: Route Cash Inbound
       | amountCollected | {KEY_LIST_OF_CREATED_ORDERS[1].cod.goodsAmount} |
 
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Update COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -85,7 +85,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @DeleteOrArchiveRoute @happy-path
+  @ArchiveRouteCommonV2 @happy-path
   Scenario: Operator Delete COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -127,7 +127,7 @@ Feature: Route Cash Inbound
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Fetch COD Inbound with Date Range Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -167,7 +167,7 @@ Feature: Route Cash Inbound
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Download and Verify Cash Inbound CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
