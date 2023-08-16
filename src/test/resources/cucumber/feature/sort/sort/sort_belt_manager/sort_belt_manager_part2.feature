@@ -158,7 +158,6 @@ Feature: Sort Belt Manager V2
       | unassignedArm | 15                                        |
     And Operator fills logic rules
       | rules | [{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"Yes","Service Levels":"STANDARD","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"No","Service Levels":"STANDARD","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
-#    And Operator checks conflicting logic rules
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
     And Operator make sure Logic is correct as data below:

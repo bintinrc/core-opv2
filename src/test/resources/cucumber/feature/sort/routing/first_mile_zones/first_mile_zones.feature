@@ -11,7 +11,6 @@ Feature: Fist Mile Zones
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> First Mile Zones
     When Operator creates first mile zone using "{hub-name}" hub
-#    When Operator search first mile zone by "" short name
     When Operator refresh page
     Then Operator verifies first mile zone details on First Mile Zones page:
       | shortName   | {KEY_SORT_CREATED_FIRST_MILE_ZONE.shortName}   |
