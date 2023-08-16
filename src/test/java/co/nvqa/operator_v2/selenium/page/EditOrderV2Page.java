@@ -20,6 +20,7 @@ import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
@@ -69,8 +70,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[./div[contains(text(),'Actions')]]")
   public AntMenuBar menuBar;
 
-  @FindBy(css = "div[loading-message='Loading events...'] md-menu")
-  public MdMenu eventsTableFilter;
+  @FindBy(css = "[data-testid='edit-order-testid.displaying-single-select']")
+  public AntSelect3 eventsTableFilter;
 
   @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
   public PageElement trackingId;

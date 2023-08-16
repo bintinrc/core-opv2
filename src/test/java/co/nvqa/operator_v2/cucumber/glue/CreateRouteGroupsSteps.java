@@ -1564,19 +1564,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       pause1s();
       List<TxnRsvn> actual = page.txnRsvnTable.readAllEntities();
       Assertions.assertThat(actual).as("List of found transactions").isNotEmpty();
-      if (actual.size() == 1) {
-        expected.compareWithActual(actual.get(0));
-      } else {
-        actual.stream().filter(a -> {
-          try {
-            expected.compareWithActual(a);
-            return true;
-          } catch (AssertionError e) {
-            return false;
-          }
-        }).findFirst().orElseThrow(
-            () -> new AssertionError("Transaction was not found: " + expected.toMap()));
-      }
+      DataEntity.assertListContains(actual, expected, "List of found transactions");
     }));
   }
 
