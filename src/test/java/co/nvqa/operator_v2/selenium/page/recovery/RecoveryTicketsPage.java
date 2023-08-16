@@ -673,6 +673,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(xpath = "//button/span[.='Update']")
     public Button confirmationUpdate;
 
+    @FindBy(xpath = "//button/span[.='Cancel Tickets']")
+    public Button cancelTickets;
+
     public BulkEditDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -697,6 +700,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//button/span[.='Delete']")
     public Button delete;
+
+    @FindBy(xpath = "//button[@class='ant-btn ant-btn-link cancel']")
+    public PageElement cancelTickets;
 
     public ConfirmCancelTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

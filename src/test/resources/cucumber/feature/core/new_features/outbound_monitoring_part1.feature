@@ -155,8 +155,7 @@ Feature: Outbound Monitoring
     When Operator clicks Edit button for "{KEY_CREATED_ROUTE_ID}" route on Outbound Monitoring Page
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order is pulled out from route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
