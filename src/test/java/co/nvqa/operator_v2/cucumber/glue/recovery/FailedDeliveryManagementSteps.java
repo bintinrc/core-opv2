@@ -43,8 +43,11 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
-    failedDeliveryManagementReactPage.inFrame(
-        page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId));
+      page.fdmTable.verifyTableisFiltered();
+    });
+
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")

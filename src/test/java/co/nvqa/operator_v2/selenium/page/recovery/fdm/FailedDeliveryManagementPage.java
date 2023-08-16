@@ -71,6 +71,7 @@ public class FailedDeliveryManagementPage extends
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
   public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv";
+  private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table')]";
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -141,6 +142,11 @@ public class FailedDeliveryManagementPage extends
 
     public void filterTableByShipperName(String columName, String value) {
       filterTableByColumn(XPATH_SHIPPER_NAME_FILTER_INPUT, columName, value);
+    }
+
+    public void verifyTableisFiltered() {
+      Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
+          .as("End Of Table appear in Failed Delivery Management page").isTrue();
     }
 
     public void clearTIDFilter() {
