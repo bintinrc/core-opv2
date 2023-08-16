@@ -57,6 +57,5 @@ Feature: Printer Settings
     When Operator go to menu System Settings -> Printer Settings
     And Operator set printer as default printer
     Then Operator verifies that success toast displayed:
-      | top                | Set successfully |
-      | waitUntilInvisible | true             |
+      | top | Set successfully |
     And Operator verify Printer Settings is set as default

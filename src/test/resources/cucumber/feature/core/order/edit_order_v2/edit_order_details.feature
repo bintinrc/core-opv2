@@ -19,8 +19,7 @@ Feature: Edit Order Details
       | deliveryTypes | DELIVERY_SAME_DAY |
       | insuredValue  | 100               |
     Then Operator verifies that success react notification displayed:
-      | top                | Current order updated successfully |
-      | waitUntilInvisible | true                               |
+      | top | Current order updated successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | deliveryType | DELIVERY_SAME_DAY |
       | insuredValue | 100               |
@@ -40,8 +39,7 @@ Feature: Edit Order Details
     When Operator Edit Order Details on Edit Order V2 page:
       | weight | 10 |
     Then Operator verifies that success react notification displayed:
-      | top                | Current order updated successfully |
-      | waitUntilInvisible | true                               |
+      | top | Current order updated successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | weight | 10 |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -60,8 +58,7 @@ Feature: Edit Order Details
     When Operator Edit Order Details on Edit Order V2 page:
       | size | <newSize> |
     Then Operator verifies that success react notification displayed:
-      | top                | Current order updated successfully |
-      | waitUntilInvisible | true                               |
+      | top | Current order updated successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | size | <newSizeFull> |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -89,8 +86,7 @@ Feature: Edit Order Details
       | width   | 20 |
       | breadth | 30 |
     Then Operator verifies that success react notification displayed:
-      | top                | Current order updated successfully |
-      | waitUntilInvisible | true                               |
+      | top | Current order updated successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | length | 10 |
       | width  | 20 |

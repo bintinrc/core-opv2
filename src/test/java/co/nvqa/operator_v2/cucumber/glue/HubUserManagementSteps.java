@@ -356,8 +356,8 @@ public class HubUserManagementSteps extends AbstractSteps {
     hubUserManagementPage.searchHub.sendKeys(hubName);
   }
 
-  @Then("Operator verifies remove user button is not exist")
-  public void operatorVerifiesRemoveUserButtonIsNotExist() {
+  @Then("Operator verify remove hub user remove button is not exist")
+  public void operatorVerifiesRemoveHubUserButtonIsNotExist() {
     Assertions.assertThat(hubUserManagementPage.removeButton.isDisplayed())
         .as("Remove Button is not displayed").isFalse();
   }
@@ -370,8 +370,8 @@ public class HubUserManagementSteps extends AbstractSteps {
     hubUserManagementPage.waitUntilPageLoaded();
   }
 
-  @Then("Operator verifies delete user button is not exist")
-  public void operatorVerifiesDeleteUserButtonIsNotExist() {
+  @Then("Operator verifies delete hub user button is not exist")
+  public void operatorVerifiesDeleteHubUserButtonIsNotExist() {
     hubUserManagementPage.deleteButtonContainer.isEmptyOrNullString();
   }
 

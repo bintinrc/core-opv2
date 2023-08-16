@@ -5,7 +5,7 @@ Feature: Number of Parcels In Hub
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: View Number of Parcels in Hub (uid:34b4182d-ee92-4936-b4b8-fbc3890be67d)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -41,7 +41,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | ModalName      | TableName1     | TableName2 |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | Parcels in Hub | By Parcel Size | By Zones   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost-Declared (uid:136f000f-9deb-44b2-9e92-f2195932a3cc)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -92,7 +92,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome         | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - DECLARED | CANCELLED   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost-Undeclared (uid:70f81b81-e530-4a34-b520-ff5b0347977e)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -143,7 +143,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | Status   | KeepCurrentOrderOutcome | Outcome           | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | RESOLVED | No                      | LOST - UNDECLARED | TRANSIT     |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Customer Received (uid:9c5beef9-79df-4423-9a2d-42b9d37e228d)
   NOTE: For the Missing Ticket Type and Order Outcome Is CUSTOMER RECEIVED it suppose be included to the counts but because the granular status will be updated to Completed so it's not included (we have a logic to exclude order counts if the order granular status is '
   Completed', 'Cancelled', 'Returned to Sender')
@@ -199,7 +199,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome      | TicketStatus | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | CUSTOMER RECEIVED | RESOLVED     | COMPLETED   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Found-Inbounded (uid:a1767cec-1039-4743-8f8a-210e8cab9255)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -253,7 +253,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | RESOLVED     | TRANSIT     |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Undeclared (uid:d26b7fca-7087-4fd1-af2b-15e4a7c6f7e6)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -307,7 +307,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome                    | TicketStatus | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | LOST - NO RESPONSE - UNDECLARED | RESOLVED     | TRANSIT     |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Resolved Missing Ticket Type and Outcome is Lost - No Response - Declared (uid:e1957051-c693-420f-8650-073a9bcb023b)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -361,7 +361,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome                  | TicketStatus | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | LOST - NO RESPONSE - DECLARED | RESOLVED     | CANCELLED   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Cancelled Missing Ticket Type (uid:0c3ca8da-7671-4e3c-bd28-8adb6bfb07f5)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -415,7 +415,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | TicketType | OrderOutcomeName        | OrderOutcome       | TicketStatus | OrderStatus |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | NV DID NOT RECEIVE | CANCELLED    | TRANSIT     |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel of Pending Missing Ticket Type
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -454,7 +454,7 @@ Feature: Number of Parcels In Hub
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | MISSING    | ORDER OUTCOME (MISSING) | NV DID NOT RECEIVE | RESOLVED     | TRANSIT     |
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel in Hub after Update to Higher Size in Edit Order (uid:78bf5b4c-6222-42ff-9033-eb2bfedfab57)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -492,7 +492,7 @@ Feature: Number of Parcels In Hub
       | HubName       | HubId       | TileName                 | ModalName      | TableName      | LowerSize | UpperSize |
       | {hub-name-24} | {hub-id-24} | Number of parcels in hub | Parcels in Hub | By Parcel Size | Small     | XX-Large  |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Parcel in Hub after Update to Lower Size in Edit Order (uid:11e13743-5c66-4f81-abf8-9605d55de470)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

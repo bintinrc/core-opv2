@@ -26,7 +26,6 @@ Feature: Resolve Recovery Ticket
       | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DELIVERED      |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -39,7 +38,6 @@ Feature: Resolve Recovery Ticket
       | outcome                 | NV NOT LIABLE - PARCEL DELIVERED |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -88,7 +86,6 @@ Feature: Resolve Recovery Ticket
       | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DISPOSED       |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -101,7 +98,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true                            |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -153,7 +149,6 @@ Feature: Resolve Recovery Ticket
       | parcelLocation          | DAMAGED RACK                          |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -166,7 +161,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true                          |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -222,7 +216,6 @@ Feature: Resolve Recovery Ticket
       | orderOutcomeDamaged     | NV TO REPACK AND SHIP                 |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -235,7 +228,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true                  |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -274,7 +266,6 @@ Feature: Resolve Recovery Ticket
       | rtsReason               | Nobody at address                     |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -284,7 +275,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true     |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -332,7 +322,6 @@ Feature: Resolve Recovery Ticket
       | orderOutcome            | RESEND                                |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -342,7 +331,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true     |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                 |
@@ -381,7 +369,6 @@ Feature: Resolve Recovery Ticket
       | orderOutcome            | RESUME DELIVERY                       |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
       | granularStatus | Cancelled |
@@ -391,7 +378,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true            |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                 |
@@ -434,7 +420,6 @@ Feature: Resolve Recovery Ticket
       | rtsReason               | Nobody at address                     |
     When Operator verifies that success react notification displayed:
       | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
       | granularStatus | Cancelled |
@@ -444,7 +429,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true     |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                 |
@@ -497,7 +481,6 @@ Feature: Resolve Recovery Ticket
       | keepCurrentOrderOutcome | true              |
     Then Operator verifies that success react notification displayed:
       | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |

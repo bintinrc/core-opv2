@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.sort.sort_belt_manager.FilterForm;
-import co.nvqa.commons.model.sort.sort_belt_manager.LogicForm;
-import co.nvqa.commons.model.sort.sort_belt_manager.RuleForm;
+import co.nvqa.commonsort.model.sort_vendor.FilterForm;
+import co.nvqa.commonsort.model.sort_vendor.LogicForm;
+import co.nvqa.commonsort.model.sort_vendor.RuleForm;
 import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -45,7 +45,14 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[text()='%s']";
   public static final String COLUMN_MAPPING_XPATH = "((//div[contains(@class, 'logic-mapping-table')]//div[@class='logic-mapping-rule'])[%d])//div[contains(@class, 'editable-cell')][%d]";
   public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
+
   public static final String ADD_RULE_XPATH = "//button[@data-testid='add-rule-button']";
+  public static final String NO_RULE_XPATH = "//div[contains(text(),'No rules attached: %d arm(s)')]";
+  public static final String MULTIPLE_RULE_XPATH = "//div[contains(text(),'Multiple arms with the same rules: %d rule(s) across %d arm(s)')]";
+
+  public static final String UNIQUE_RULE_XPATH = "//div[contains(text(),'Unique rules and arms: %d Results')]";
+  public static final String CONFLICTING_SHIPMENT_DESTINATION_RULE_XPATH = "//div[contains(text(),'Conflicting shipment destination & type: %d rule(s) across %d arm(s)')]";
+
   public static final String DELETE_RULE_XPATH = "//span[contains(@data-testid,'delete-icon')]";
   public static final String DELETE_RULE_SPECIFIC_XPATH = "//span[@data-testid='delete-icon-%d']";
   public static final String FORM_LOGIC_NAME_VALUE_XPATH = "//input[@data-testid='logic-name-input']";
@@ -377,7 +384,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
         .map(
             WebElement::getText).collect(
             Collectors.toList());
-
     // Get rule values
     List<RuleForm> rules = new ArrayList<>();
     int rulesCount = findElementsByXpath(FORM_RULE_ALL_XPATH).size();
@@ -416,7 +422,6 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     logic.setUnassignedParcelArm(logicUnassignedArm);
     logic.setArmFilters(logicArmFilters);
     logic.setRules(rules);
-
     return logic;
   }
 

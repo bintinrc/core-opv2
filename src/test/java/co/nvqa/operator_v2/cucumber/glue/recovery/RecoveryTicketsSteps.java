@@ -38,7 +38,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.creatByCSVDialog.title.waitUntilVisible(60);
       Assertions.assertThat(recoveryTicketsPage.creatByCSVDialog.title.getText())
           .isEqualTo("Create Tickets Via CSV");
-      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("AIR FREIGHT REJECTION");
+      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("RECOVERY SCANNING");
       recoveryTicketsPage.creatByCSVDialog.searchByTicketType("MISSING");
       recoveryTicketsPage.creatByCSVDialog.searchByInvestigationDept("Recovery");
     });
@@ -652,6 +652,41 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage.inFrame(() -> {
       recoveryTicketsPage.cancelTicketDialog.delete.click();
       recoveryTicketsPage.waitUntilInvisibilityOfToast("Cancelled");
+    });
+  }
+
+  @Then("Operator verifies error toast message in recovery tickets page")
+  public void verifiesErrorToastMessage() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfNotification("Invalid Selection");
+      Assertions.assertThat(page.getAntDescription()).as("toast description").isEqualTo(
+          "Selection must be of the same ticket type (e.g. Damaged only, Parcel Exception only) and not in RESOLVED or CANCELLED state");
+    });
+  }
+
+  @When("Operator clicks Cancel Tickets button on Bulk Edit dialog")
+  public void clickCancelOnBulkEdit() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.bulkEditDialog.cancelTickets.click();
+    });
+  }
+
+  @Then("Operator verifies bulk cancel tickets dialog")
+  public void verifyBulkCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.title.getText())
+          .as("bulk cancel dialog title").isEqualTo("Cancel Tickets");
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.content.getText())
+          .as("bulk cancel dialog content").isEqualTo(
+              "Cancelled tickets will not be modifiable. Proceed to cancel the following tickets?");
+    });
+  }
+
+  @Then("Operator click Cancel Tickets on Cancel Tickets dialog")
+  public void clickOnCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.cancelTicketDialog.cancelTickets.click();
+      recoveryTicketsPage.waitUntilVisibilityOfNotification("Success 2 tickets updated.");
     });
   }
 }

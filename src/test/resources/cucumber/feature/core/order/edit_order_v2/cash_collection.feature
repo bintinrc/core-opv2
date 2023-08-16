@@ -18,7 +18,6 @@ Feature: Cash Collection
       | amount       | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
       | cop | COP SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -47,7 +46,6 @@ Feature: Cash Collection
       | amount         | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
       | cod | COD SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -75,7 +73,6 @@ Feature: Cash Collection
       | amount       | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
       | cop | COP SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -104,7 +101,6 @@ Feature: Cash Collection
       | amount         | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
       | cod | COD SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -131,7 +127,6 @@ Feature: Cash Collection
       | cashOnPickup | no |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     And Operator verify COP icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                            |
@@ -156,7 +151,6 @@ Feature: Cash Collection
       | cashOnDelivery | no |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |

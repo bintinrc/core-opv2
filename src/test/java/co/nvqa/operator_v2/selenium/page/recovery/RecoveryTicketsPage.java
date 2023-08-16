@@ -99,6 +99,11 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       "NV LIABLE - RETURN PARCEL",
       "NV LIABLE - FULL - PARCEL DELIVERED",
       "NV LIABLE - PARTIAL - PARCEL DELIVERED",
+      "NV LIABLE - PARTIAL - RESUME DELIVERY",
+      "NV LIABLE - XMAS CAGE",
+      "NV LIABLE - XMAS CAGE (TIKTOK)",
+      "NV LIABLE - DELIVERED",
+      "RESUME DELIVERY",
       "LOST - DECLARED",
       "LOST - NO RESPONSE - DECLARED",
       "DAMAGED - NV LIABLE",
@@ -668,6 +673,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(xpath = "//button/span[.='Update']")
     public Button confirmationUpdate;
 
+    @FindBy(xpath = "//button/span[.='Cancel Tickets']")
+    public Button cancelTickets;
+
     public BulkEditDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -692,6 +700,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//button/span[.='Delete']")
     public Button delete;
+
+    @FindBy(xpath = "//button[@class='ant-btn ant-btn-link cancel']")
+    public PageElement cancelTickets;
 
     public ConfirmCancelTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
