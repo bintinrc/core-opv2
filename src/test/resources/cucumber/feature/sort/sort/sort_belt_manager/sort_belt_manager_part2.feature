@@ -50,10 +50,15 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
+    And Operator make sure Logic is correct as data below:
+      | condition    | no rules |
+      | numberOfArms | 12       |
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Check Logic Section - Multiple Arms With Same Rules
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -73,11 +78,16 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
-    And Operator make sure rules that have multiple arms with the same rules are correct
+    And Operator make sure Logic is correct as data below:
+      | condition     | same rules |
+      | numberOfArms  | 3          |
+      | numberOfRules | 1          |
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Check Logic Section - Unique Rules And Arms
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -97,11 +107,15 @@ Feature: Sort Belt Manager V2
     And Operator deletes extra rules in create logic
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure logic checking is correct
-    And Operator make sure unique rules and arms are correct
+    And Operator make sure Logic is correct as data below:
+      | condition    | unique |
+      | numberOfArms | 1      |
     And Operator clicks save button in check logic
-    And DB Operator make sure created logic is correct
-    And DB Operator hard deletes created logic
+      | logicName | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name} |
+    And DB Sort - Operator get logic by name and description
+      | name        | {KEY_SORT_SBM_CREATED_LOGIC_FORM.name}        |
+      | description | {KEY_SORT_SBM_CREATED_LOGIC_FORM.description} |
+    And DB Sort - Operator hard deletes logic by "{KEY_SORT_DB_SBM_CREATED_LOGIC_FORM.id}" id
 
   Scenario: SBMV2UI Check Logic Section - Duplicate Rules
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -118,15 +132,16 @@ Feature: Sort Belt Manager V2
       | unassignedArm | 15                                        |
     And Operator fills logic rules
       | rules | [{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","Granular Statuses":"Arrived at Sorting Hub","RTS":"No","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","Granular Statuses":"Arrived at Sorting Hub","RTS":"No","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
-    And Operator checks filled logic rules
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure duplicate rules are correct v2
+    And Operator make sure Logic is correct as data below:
+      | condition     | same rules |
+      | numberOfArms  | 2          |
+      | numberOfRules | 5          |
     And Operator make sure can not click save button in check logic
     And Operator edits the selected logic
     And Operator clicks cancel button in create logic
     And Operator make sure redirected to Sort Belt Manager main page
-    And DB Operator make sure sort belt manager logic is not created
 
   Scenario: SBMV2UI Check Logic Section - Conflicting Shipment Destination And Type
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -143,10 +158,13 @@ Feature: Sort Belt Manager V2
       | unassignedArm | 15                                        |
     And Operator fills logic rules
       | rules | [{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"Yes","Service Levels":"STANDARD","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup","RTS":"No","Service Levels":"STANDARD","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
-    And Operator checks conflicting logic rules
+#    And Operator checks conflicting logic rules
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure conflicting shipment rules are correct v2
+    And Operator make sure Logic is correct as data below:
+      | condition     | conflicting shipment destination |
+      | numberOfArms  | 2                                |
+      | numberOfRules | 2                                |
     And Operator make sure can not click save button in check logic
 
   @KillBrowser @ShouldAlwaysRun

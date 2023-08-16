@@ -375,8 +375,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator verifies search button is disabled$")
-  public void verifiesSearchButtonDisabled() {
+  @Then("Operator verifies Address Datasource search button is disabled")
+  public void verifiesAddressDatasourceSearchButtonDisabled() {
     addressDatasourcePage.switchTo();
     Assertions.assertThat(addressDatasourcePage.searchButton.isEnabled())
         .as("Search button is disabled")
