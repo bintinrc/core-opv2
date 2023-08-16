@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 
@@ -52,16 +53,15 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     String trackingId = dataTableAsMapReplaced.get("trackingId");
     String startDate = dataTableAsMapReplaced.get("startDate");
     String endDate = dataTableAsMapReplaced.get("endDate");
-    String timewindowAsString = dataTableAsMapReplaced.get("timewindow");
+    String timeWindowIdAsString = dataTableAsMapReplaced.get("timewindow");
 
     ChangeDeliveryTiming changeDeliveryTiming = new ChangeDeliveryTiming();
     changeDeliveryTiming.setTrackingId(trackingId);
     changeDeliveryTiming.setStartDate(startDate);
     changeDeliveryTiming.setEndDate(endDate);
 
-    if (!isBlank(timewindowAsString)) {
-      int timewindow = Integer.parseInt(timewindowAsString);
-      changeDeliveryTiming.setTimewindow(timewindow);
+    if (!Objects.equals(timeWindowIdAsString, "null")) {
+      changeDeliveryTiming.setTimewindow(Integer.valueOf(timeWindowIdAsString));
     }
 
     List<ChangeDeliveryTiming> listOfChangeDeliveryTimings = new ArrayList<>();
