@@ -303,7 +303,6 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
         });
     }
     loadSelection.click();
-    resultsTable.waitUntilPageLoaded();
   }
 
   public void closeEditTicketModal() {
