@@ -49,7 +49,7 @@ Feature: Global Inbound
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}}, "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then API Pricing - Operator gets the latest priced order history details from the pricing_qa_gl.pricing_orders_history table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Pricing - Operator gets the latest priced order history details from the pricing_qa_gl.pricing_orders_history table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator save current order cost "{KEY_PRICING_ORDERS_HISTORY_DETAILS_DB.pricingResult.result.totalWithTax}"
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
@@ -61,7 +61,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector}     |
       | color          | #f06c00                                        |
     Then API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    Then API Pricing - Operator gets the latest priced order history details from the pricing_qa_gl.pricing_orders_history table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Then DB Pricing - Operator gets the latest priced order history details from the pricing_qa_gl.pricing_orders_history table for tracking id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator verifies order cost is updated
       | previousCost     | {KEY_CURRENT_COST}                                                        |
       | costAfterInbound | {KEY_PRICING_ORDERS_HISTORY_DETAILS_DB.pricingResult.result.totalWithTax} |
