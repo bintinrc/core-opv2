@@ -37,7 +37,6 @@ Feature: Order Billing - All Shippers
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "PENDING_PICKUP"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Core - Operator create new route using data below:
@@ -110,7 +109,6 @@ Feature: Order Billing - All Shippers
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "PENDING_PICKUP"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "ARRIVED_AT_SORTING_HUB"
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"
