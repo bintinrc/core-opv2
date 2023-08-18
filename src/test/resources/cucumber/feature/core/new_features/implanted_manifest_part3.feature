@@ -43,7 +43,6 @@ Feature: Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator creates manifest for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" reservation on Implanted Manifest page
-    And Operator waits for 1000 seconds
     Then Operator verifies that success react notification displayed:
       | top | Manifest has been created |
     When Operator goes to Pickup Jobs Page
