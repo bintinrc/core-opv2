@@ -107,7 +107,7 @@ Feature: Order Billing - Selected Shippers
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    Then Operator chooses 'Selected Shippers' option and does not input a shipper ID
+    Then Operator chooses 'Selected Shipper' option and does not input a shipper ID
     Then Operator clicks Generate Success Billing Button
     Then Operator verifies error msg "At least 1 shippers must be selected." in Order Billing Page
 
