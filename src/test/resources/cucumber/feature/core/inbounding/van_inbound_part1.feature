@@ -70,8 +70,6 @@ Feature: Van Inbound
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Van Inbound Page then click enter
     And Operator fill the empty tracking ID on Van Inbound Page
