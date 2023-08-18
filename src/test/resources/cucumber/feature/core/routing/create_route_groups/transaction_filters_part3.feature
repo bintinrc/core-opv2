@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart3 @CRG7
 Feature: Create Route Groups - Transaction Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Transaction Timeslot on Create Route Groups - Transaction Filters - Timeslot = <timeslots>
@@ -35,10 +35,12 @@ Feature: Create Route Groups - Transaction Filters
       | Day       | 09:00     | 18:00   |
 
   Scenario Outline: Operator Filter Parcel Size on Create Route Groups - Transaction Filters - Parcel Size = <parcelSize>
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -49,16 +51,10 @@ Feature: Create Route Groups - Transaction Filters
     Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | parcelSize | <parcelSize> |
     And Operator click Load Selection on Create Route Groups page
-    Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
-      | type       | PICKUP Transaction                                         |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-    Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
     Examples:
       | parcelSize  | size |
       | Bulky (XXL) | XXL  |
@@ -179,8 +175,3 @@ Feature: Create Route Groups - Transaction Filters
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
-
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

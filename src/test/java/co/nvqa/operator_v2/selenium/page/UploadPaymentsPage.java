@@ -13,6 +13,22 @@ public class UploadPaymentsPage extends SimpleReactPage {
   @FindBy(css = ".ant-upload-list-item-name")
   private PageElement uploadPaymentOutput;
 
+  @FindBy(css = "[data-testid='uploadPayments.downloadTemplateDropdown']")
+  private PageElement downloadTemplateCsv;
+
+  @FindBy(css = "[data-testid='uploadPayments.downloadShipperIdTemplateBtn']")
+  private PageElement downloadTemplateShipperID;
+
+  @FindBy(css = "[data-testid='uploadPayments.downloadNetsuiteIdTemplateBtn']")
+  private PageElement downloadTemplateNetsuiteID;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement antNotificationMessageDescription;
+
+
   public UploadPaymentsPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -42,5 +58,27 @@ public class UploadPaymentsPage extends SimpleReactPage {
       String filename) {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(filename),
         expectedBody);
+  }
+
+  public void clickDownloadTemplateCsv() {
+    downloadTemplateCsv.click();
+  }
+
+  public void clickDownloadTemplateShipperID() {
+    downloadTemplateShipperID.click();
+  }
+
+  public void clickDownloadTemplateNetsuiteID() {
+    downloadTemplateNetsuiteID.click();
+  }
+
+  public String getNotificationMessageText() {
+    antNotificationMessage.waitUntilVisible();
+    return antNotificationMessage.getText();
+  }
+
+  public String getNotificationMessageDescText() {
+    antNotificationMessage.waitUntilVisible();
+    return antNotificationMessageDescription.getText();
   }
 }

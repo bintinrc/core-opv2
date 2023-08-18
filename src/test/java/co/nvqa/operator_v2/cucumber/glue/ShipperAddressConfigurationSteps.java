@@ -73,7 +73,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator clicks on the load selection button")
   public void operatorClicksOnTheLoadSelectionButton() {
-    shipperAddressConfigurationPage.clickLoadSelection();
+      shipperAddressConfigurationPage.clickLoadSelection();
   }
 
   @Then("Operator filter the column {string} with {string}")
@@ -302,5 +302,15 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     };
     doWithRetry(clickButton, "Click on Button");
     takesScreenshot();
+  }
+
+  @When("Operator select address from the list with Id {string}")
+  public void operatorSelectMultipleAddressesThatHasNoGroupUsingBelowData(String addressId) {
+    addressId = resolveValue(addressId);
+    String finalAddressId = addressId;
+    Runnable selectAddress = () -> {
+      shipperAddressConfigurationPage.clickOnAddressToGroup(finalAddressId);
+    };
+    doWithRetry(selectAddress, "Select Address from List");
   }
 }

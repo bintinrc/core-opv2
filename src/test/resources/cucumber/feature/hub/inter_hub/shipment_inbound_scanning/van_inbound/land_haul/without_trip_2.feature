@@ -73,7 +73,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
     Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" appears in Shipment Inbound Box
 
-  @DeleteShipment
+  @HappyPath @DeleteShipment
   Scenario: Van Inbound Pending Shipment In Origin Hub (uid:12043574-7019-492d-a0f6-0b6147ad518b)
     Given Operator go to menu Utilities -> QRCode Printing
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -88,7 +88,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
       | status      | Transit                   |
       | currHubName | {hub-name}                |
 
-  @DeleteShipment
+  @HappyPath @DeleteShipment
   Scenario: Van Inbound Pending Shipment Not In Origin Hub (uid:7f3b7d1b-ece1-4db1-96d3-f0b78e2a8e6f)
     Given Operator go to menu Utilities -> QRCode Printing
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}

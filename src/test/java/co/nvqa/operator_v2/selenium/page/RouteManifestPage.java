@@ -373,6 +373,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
           .put("pickupsCount", "count-p")
           .put("comments", "comments")
           .put(COLUMN_TRACKING_IDS, "tracking-ids")
+          .put("contact", "contact")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of("details", "Waypoint Details", "edit",

@@ -40,7 +40,15 @@ public class SsbTemplateSteps extends AbstractSteps {
   @And("SSB Report Template Editor page is loaded")
   public void ssbReportTemplateEditorPageIsLoaded() {
     ssbTemplatePage.waitUntilLoaded();
-    ssbTemplatePage.createTemplateHeader.isDisplayed();
+    Assertions.assertThat(ssbTemplatePage.createTemplateHeader.isDisplayed())
+        .as("Available Headers (scroll down to see more) is visible").isTrue();
+    if (!ssbTemplatePage.isLegacyIdHeaderColumnAvailable()) {
+      ssbTemplatePage.clickGoBackBtn();
+      ssbTemplatePage.clickCreateTemplateBtn();
+      ssbTemplatePage.waitUntilLoaded();
+    }
+    Assertions.assertThat(ssbTemplatePage.isLegacyIdHeaderColumnAvailable())
+        .as("Legacy Id is visible").isTrue();
   }
 
   private void setSsbTemplateData(Map<String, String> mapOfData) {

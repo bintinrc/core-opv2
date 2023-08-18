@@ -1,20 +1,22 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ShipmentFiltersPart2 @CRG5
 Feature: Create Route Groups - Shipment Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - Pending - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -25,23 +27,29 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | Pending                        |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - At Transit Hub - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id}
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
+    And API MM - Operator scan inbound single shipment without trip:
+      | scanValue | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+      | scanType  | shipment_hub_inbound                     |
+      | hubId     | {hub-id}                                 |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -52,27 +60,30 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | At Transit Hub                 |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - Transit - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator closes the created shipment
-    And API Operator performs van inbound by updating shipment status using data below:
-      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
-      | hubCountry | SG                        |
-      | hubId      | {hub-id}                  |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
+    When API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
+    And API MM - Operator scan inbound single shipment without trip:
+      | scanValue | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+      | scanType  | SHIPMENT_VAN_INBOUND                     |
+      | hubId     | {hub-id}                                 |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -83,28 +94,38 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | Transit                        |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - Completed - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator closes the created shipment
-    And API Operator performs van inbound by updating shipment status using data below:
-      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
-      | hubCountry | SG                        |
-      | hubId      | {hub-id}                  |
-    Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
+    When API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
+    And API MM - Operator scan inbound single shipment without trip:
+      | scanValue | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+      | scanType  | SHIPMENT_VAN_INBOUND                     |
+      | hubId     | {hub-id}                                 |
+    And API MM - Operator scan inbound single shipment without trip:
+      | scanValue | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+      | scanType  | shipment_hub_inbound                     |
+      | hubId     | {hub-id-2}                               |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -115,23 +136,26 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | Completed                      |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status                 |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Arrived at Sorting Hub |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Arrived at Sorting Hub |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - Cancelled - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator cancel shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
+    When API MM - Operator updates shipment "KEY_MM_LIST_OF_CREATED_SHIPMENTS[1]" status to "Cancelled"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -142,23 +166,26 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | Cancelled                      |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Status on Create Route Group - Closed - Shipment Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator closes the created shipment
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{date: 1 days next, yyyy-MM-dd}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"960304","city":"-","country":"SG"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-2}"
+    And API Sort - Operator adds order to shipment:
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
+      | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
+    When API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -169,12 +196,9 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus   | Closed                         |
+      | shipmentType     | AIR_HAUL                       |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                     | type                 | shipper                      | address                                         | status         |
-      | {KEY_CREATED_ORDER.trackingId} | DELIVERY Transaction | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortToAddressString}   | Pending Pickup |
-      | {KEY_CREATED_ORDER.trackingId} | PICKUP Transaction   | {KEY_CREATED_ORDER.fromName} | {KEY_CREATED_ORDER.buildShortFromAddressString} | Pending Pickup |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |

@@ -1,11 +1,12 @@
-@OperatorV2 @Core @EditOrderv2 @ResumeOrder
+@OperatorV2 @Core @EditOrderV2 @ResumeOrder
 Feature: Resume Order
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Pickup Cancelled, Delivery Cancelled
+  @happy-path
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -20,7 +21,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verify order status is "Pending" on Edit Order V2 page
     And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
@@ -52,76 +52,7 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
-  Scenario: Resume Pickup For On Hold Order
-    Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Sort - Operator global inbound
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id}}                         |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    When API Recovery - Operator create recovery ticket:
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | ticketType         | PARCEL EXCEPTION                      |
-      | subTicketType      | INACCURATE ADDRESS                    |
-      | entrySource        | CUSTOMER COMPLAINT                    |
-      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
-      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
-      | investigatingHubId | {hub-id}                              |
-      | creatorUserId      | {ticketing-creator-user-id}           |
-      | creatorUserName    | {ticketing-creator-user-name}         |
-      | creatorUserEmail   | {ticketing-creator-user-email}        |
-    And Operator refresh page
-    Then Operator verify order status is "On Hold" on Edit Order V2 page
-    And Operator verify order granular status is "On Hold" on Edit Order V2 page
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | UPDATE STATUS |
-    When Operator updates recovery ticket on Edit Order V2 page:
-      | status  | RESOLVED      |
-      | outcome | RESUME PICKUP |
-    And Operator refresh page
-    Then Operator verify order status is "Pending" on Edit Order V2 page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_TRANSACTION_BEFORE"
-    And DB Core - verify transactions record:
-      | id     | {KEY_PP_TRANSACTION_BEFORE.id} |
-      | status | Failed                         |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_BEFORE.waypointId} |
-      | status | Failed                                 |
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_BEFORE"
-    And DB Core - verify transactions record:
-      | id     | {KEY_DD_TRANSACTION_BEFORE.id} |
-      | status | Failed                         |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_BEFORE.waypointId} |
-      | status | Failed                                 |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_TRANSACTION_AFTER"
-    And DB Core - verify transactions record:
-      | id     | {KEY_PP_TRANSACTION_AFTER.id} |
-      | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_AFTER.waypointId} |
-      | status | Pending                               |
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_AFTER"
-    And DB Core - verify transactions record:
-      | id     | {KEY_DD_TRANSACTION_AFTER.id} |
-      | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_AFTER.waypointId} |
-      | status | Pending                               |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name            |
-      | UPDATE STATUS   |
-      | RESUME PICKUP   |
-      | TICKET UPDATED  |
-      | TICKET RESOLVED |
-
-  Scenario: Operator Resume an Order on Edit Order V2 page - Non-Cancelled Order
+  Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
@@ -152,8 +83,8 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Return Pickup Fail With Waypoint
+  @ArchiveRouteCommonV2
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -189,7 +120,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -222,8 +152,8 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Delivery is Not Cancelled
+  @ArchiveRouteCommonV2
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -264,7 +194,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -283,14 +212,14 @@ Feature: Resume Order
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
 
-  Scenario: Operator Resume a Cancelled Order on Edit Order V2 page - Return Pickup Fail With NO Waypoint
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With NO Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Pickup fail                        |
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -302,7 +231,6 @@ Feature: Resume Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) resumed                          |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | waitUntilInvisible | true                                        |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -329,7 +257,3 @@ Feature: Resume Order
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

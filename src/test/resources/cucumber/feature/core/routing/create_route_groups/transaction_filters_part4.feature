@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart4 @CRG7
 Feature: Create Route Groups - Transaction Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace International
@@ -133,11 +133,14 @@ Feature: Create Route Groups - Transaction Filters
       | International | Pending Pickup | DELIVERY Transaction | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - <Note>
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                |
-      | generateFromAndTo | RANDOM           |
-      | v4OrderRequest    | <v4OrderRequest> |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}     |
+      | shipperClientSecret | {shipper-v4-client-secret} |
+      | numberOfOrder       | 2                          |
+      | generateFromAndTo   | RANDOM                     |
+      | v4OrderRequest      | <v4OrderRequest>           |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -149,14 +152,10 @@ Feature: Create Route Groups - Transaction Filters
       | orderServiceType | <service_type> |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                                | type   | shipper                                 | address                                                  | status   |
-      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} | <status> |
-      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString} | <status> |
+      | trackingId                                 | type   | shipper                                  | address                                                   | status   |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} | <status> |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | <type> | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressString} | <status> |
     Examples:
       | Note   | service_type    | status         | type                 | v4OrderRequest                                                                                                                                                                                                                                                                                                                   |
       | Parcel | Parcel Delivery | Pending Pickup | DELIVERY Transaction | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
       | Return | Return          | Pending Pickup | DELIVERY Transaction | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}  |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

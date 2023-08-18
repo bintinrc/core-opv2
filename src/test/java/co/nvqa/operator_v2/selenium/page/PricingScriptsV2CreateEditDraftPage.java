@@ -322,14 +322,15 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
 
   public void verifyErrorMessage(String errorMessage, String status) {
     Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
-
+    SoftAssertions softAssertions = new SoftAssertions();
     if (StringUtils.isNotBlank(status)) {
-      Assertions.assertThat(toastData.get("status")).as("Error toast status")
+      softAssertions.assertThat(toastData.get("status")).as("Error toast status")
           .isEqualToIgnoringCase(status);
     }
     if (StringUtils.isNotBlank(errorMessage)) {
-      Assertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
+      softAssertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
           .isEqualToIgnoringCase(errorMessage);
+      softAssertions.assertAll();
     }
   }
 

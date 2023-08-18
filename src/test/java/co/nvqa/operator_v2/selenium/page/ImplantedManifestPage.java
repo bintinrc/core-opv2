@@ -1,22 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.core.model.order.Order;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import com.google.common.collect.ImmutableMap;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,29 +15,53 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Kateryna Skakunova
  */
-public class ImplantedManifestPage extends OperatorV2SimplePage {
+public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage> {
 
   private static final String CSV_FILENAME_FORMAT = "implanted-manifest-%s.csv";
 
-  @FindBy(id = "scan_barcode_input")
-  public TextBox scanBarcodeInput;
+  @FindBy(xpath = ".//div[contains(@class,'ant-card')][./div/div/div[.='Scan Barcode']]//input[@data-testid='barcode-input-field']")
+  public ForceClearTextBox scanBarcodeInput;
 
-  @FindBy(name = "container.implanted-manifest.add-prefix")
-  public NvIconTextButton addPrefix;
+  @FindBy(xpath = ".//div[contains(@class,'ant-card')][./div/div/div[.='Remove order by scan']]//input[@data-testid='barcode-input-field']")
+  public ForceClearTextBox removeOrderByScanInput;
 
-  @FindBy(id = "hub")
-  public MdSelect hubSelect;
+  @FindBy(xpath = ".//div[contains(@class,'ant-card')][./div/div/div[.='Scan Barcode']]//button[@data-testid='scan-field.set-prefix-button']")
+  public Button addPrefix;
 
-  @FindBy(name = "container.implanted-manifest.create-manifest")
-  public NvApiTextButton createManifest;
+  @FindBy(css = "[data-testid='download-csv-button']")
+  public Button downloadCsvFile;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".//div[contains(@class,'ant-card')][./div/div/div[.='Remove order by scan']]//button[@data-testid='scan-field.set-prefix-button']")
+  public Button removeOrderByScanInputAddPrefix;
+
+  @FindBy(css = "[data-testid='single-select']")
+  public AntSelect3 hubSelect;
+
+  @FindBy(css = "[data-testid='submit.create-manifest']")
+  public Button createManifest;
+
+  @FindBy(css = "[data-testid='create-manifest-button']")
+  public Button bigCreateManifest;
+
+  @FindBy(css = "[data-testid='remove-all-button']")
+  public Button removeAll;
+
+  @FindBy(css = "[data-testid='alert-dialog.confirm-button']")
+  public Button confirmRemoveAll;
+
+  @FindBy(css = "div.rack-sector-card h2")
+  public PageElement rackSector;
+
+  @FindBy(css = "div.rack-sector-card h2 + div")
+  public PageElement rackSectorStamp;
+
+  @FindBy(css = ".ant-modal")
   public CreateManifestDialog createManifestDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = "[class='ant-modal-content']")
   public SetPrefixDialog setPrefixDialog;
 
-  private ImplantedManifestOrderTable implantedManifestOrderTable;
+  public ImplantedManifestOrderTable implantedManifestOrderTable;
 
   public ImplantedManifestPage(WebDriver webDriver) {
     super(webDriver);
@@ -56,31 +71,29 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
   /**
    * Accessor for Manifest table
    */
-  public static class ImplantedManifestOrderTable extends
-      MdVirtualRepeatTable<ImplantedManifestOrder> {
+  public static class ImplantedManifestOrderTable extends AntTableV2<ImplantedManifestOrder> {
 
-    public static final String MD_VIRTUAL_REPEAT = "scan in getTableData()";
-    private static final String COLUMN_TRACKING_ID = "trackingId";
-    private static final String COLUMN_SCANNED_AT = "scannedAt";
-    private static final String COLUMN_DESTINATION = "destination";
-    private static final String COLUMN_ADDRESSEE = "addressee";
-    private static final String COLUMN_RACK_SECTOR = "rackSector";
-    private static final String COLUMN_DELIVERY_BY = "deliveryBy";
+    public static final String COLUMN_TRACKING_ID = "trackingId";
+    public static final String COLUMN_SCANNED_AT = "scannedAt";
+    public static final String COLUMN_DESTINATION = "destination";
+    public static final String COLUMN_ADDRESSEE = "addressee";
+    public static final String COLUMN_RACK_SECTOR = "rackSector";
+    public static final String COLUMN_DELIVERY_BY = "deliveryBy";
+    public static final String ACTION_REMOVE = "remove";
 
     private ImplantedManifestOrderTable(WebDriver webDriver) {
       super(webDriver);
-      setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_TRACKING_ID, "tracking-id")
-          .put(COLUMN_SCANNED_AT, "created-at")
-          .put(COLUMN_DESTINATION, "destination")
-          .put(COLUMN_ADDRESSEE, "addressee")
-          .put(COLUMN_RACK_SECTOR, "rack-sector")
-          .put(COLUMN_DELIVERY_BY, "deliver-by")
-          .build()
-      );
-      setActionButtonsLocators(ImmutableMap.of("close", "//button[@aria-label='close']"));
+      setColumnLocators(
+          ImmutableMap.<String, String>builder()
+              .put(COLUMN_TRACKING_ID, "trackingId")
+              .put(COLUMN_SCANNED_AT, "scannedAt")
+              .put(COLUMN_DESTINATION, "destination")
+              .put(COLUMN_ADDRESSEE, "addressee")
+              .put(COLUMN_RACK_SECTOR, "rackSector")
+              .put(COLUMN_DELIVERY_BY, "deliveryBy")
+              .build());
+      setActionButtonsLocators(ImmutableMap.of(ACTION_REMOVE, "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='isValid']//button"));
       setEntityClass(ImplantedManifestOrder.class);
-      setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
     }
   }
 
@@ -94,41 +107,14 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
     clickNvApiTextButtonByNameAndWaitUntilDone("container.implanted-manifest.create-manifest");
   }
 
-  public void clickDownloadCsvFile() {
-    clickNvApiTextButtonByNameAndWaitUntilDone("Download CSV File");
-  }
-
-  public void clickRemoveAllButtonAndConfirm() {
-    clickButtonByAriaLabelAndWaitUntilDone("Remove All");
-    clickButtonByAriaLabelAndWaitUntilDone("Delete");
-  }
-
-  public void csvDownloadSuccessfullyAndContainsOrderInfo(Order order, String hubName) {
+  public void csvDownloadSuccessfullyAndContainsOrderInfo(String trackingId, String address,
+      String rackSector, String toName, String hubName) {
     String csvFileName = f(CSV_FILENAME_FORMAT, hubName);
 
-    String trackingId = order.getTrackingId();
     verifyFileDownloadedSuccessfully(csvFileName, trackingId);
 
-    String destination = order.getToAddress1() + " " + order.getToAddress2();
-    String rackSector = order.getRackSector();
-    String addressee = order.getToName();
-    String expectedText = f("\"%s\",\"%s\",\"%s\"", destination, addressee, rackSector);
+    String expectedText = f("\"%s\",\"%s\",\"%s\"", address, toName, rackSector);
     verifyFileDownloadedSuccessfully(csvFileName, expectedText);
-  }
-
-  public void removeOrderByScan(String barcode) {
-    sendKeysAndEnterByAriaLabel("remove_scan_barcode", barcode);
-    String xpathToBarCode = "//input[@aria-label='remove_scan_barcode' and contains(@class,'ng-empty')]";
-    waitUntilVisibilityOfElementLocated(xpathToBarCode);
-  }
-
-  public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime,
-      String barcode) {
-    scanBarcodeInput.setValue(barcode + Keys.ENTER);
-    barcodeToScannedAtTime
-        .put(barcode, DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
-    String xpathToBarCode = "//input[@aria-label='scan_barcode' and contains(@class,'ng-empty')]";
-    waitUntilVisibilityOfElementLocated(xpathToBarCode);
   }
 
   public void selectHub(String destinationHub) {
@@ -136,85 +122,26 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
     selectValueFromMdSelectWithSearch("model", destinationHub);
   }
 
-  public void verifyRowsCountEqualsOrdersCountInManifestTable(int ordersCount) {
-    Assertions.assertThat(implantedManifestOrderTable.getRowsCount())
-        .as("Rows count in Implanted Manifest table is not equal to order count")
-        .isEqualTo(ordersCount);
-  }
+  public static class CreateManifestDialog extends AntModal {
 
-  public void verifyManifestTableIsEmpty() {
-    waitUntilVisibilityOfElementLocated("//h5[text()='0 order(s) in manifest']");
-    scrollToBottom();
-    assertTrue(
-        "Manifest table is not empty. Orders were not removed by \"Remove All\" button click",
-        isTableEmpty());
-  }
+    @FindBy(css = "[data-testid='job-id-input-field']")
+    public ForceClearTextBox reservationId;
 
-  public void verifyInfoInManifestTableForOrder(Order order,
-      Map<String, ZonedDateTime> barcodeToScannedAtTime) {
-    String trackingId = order.getTrackingId();
-    ZonedDateTime scannedAt = barcodeToScannedAtTime != null ?
-        barcodeToScannedAtTime.get(trackingId).truncatedTo(ChronoUnit.SECONDS) :
-        null;
-    String destination = order.getToAddress1() + (order.getToAddress2().trim().isEmpty() ? ""
-        : " " + order.getToAddress2());
-    String rackSector = order.getRackSector();
-    String addressee = order.getToName();
-
-    boolean recordFound = false;
-
-    for (int i = 1; i <= implantedManifestOrderTable.getRowsCount(); i++) {
-      ImplantedManifestOrder implantedManifestOrder = implantedManifestOrderTable.readEntity(i);
-
-      if (trackingId.equals(implantedManifestOrder.getTrackingId())) {
-        recordFound = true;
-        if (scannedAt != null) {
-          LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
-          LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt()
-              .toLocalDateTime();
-          Assertions.assertThat(scannedAtLocalExpected)
-              .as("'Scanned At' value in Implant Manifest table is not in expected range")
-              .isIn(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L),
-                  scannedAtLocalActual.plusSeconds(2L), scannedAtLocalActual.minusSeconds(1L),
-                  scannedAtLocalActual.minusSeconds(2L));
-        }
-        Assertions.assertThat(implantedManifestOrder.getDestination())
-            .as("'Destination' value in Implant Manifest table").isEqualTo(destination);
-        Assertions.assertThat(implantedManifestOrder.getRackSector())
-            .as("'Rack Sector' value in Implant Manifest table").isEqualTo(rackSector);
-        Assertions.assertThat(implantedManifestOrder.getAddressee())
-            .as("'Addressee' value in Implant Manifest table").isEqualTo(addressee);
-      }
-    }
-
-    Assertions.assertThat(recordFound)
-        .as(f("No record with tracking Id %s in Manifest table", order.getTrackingId())).isTrue();
-  }
-
-  public void scrollToBottom() {
-    scrollIntoView("//button[@aria-label='Create Manifest']");
-  }
-
-  public static class CreateManifestDialog extends MdDialog {
-
-    @FindBy(id = "container.implanted-manifest.reservation-id")
-    public TextBox reservationId;
-
-    @FindBy(id = "createManifestButton")
-    public NvIconTextButton createManifestButton;
+    @FindBy(css = "[data-testid='create-manifest-dialog.confirm-button']")
+    public Button createManifestButton;
 
     public CreateManifestDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class SetPrefixDialog extends MdDialog {
+  public static class SetPrefixDialog extends AntModal {
 
-    @FindBy(id = "container.global-inbound.prefix")
+    @FindBy(xpath = "//input[@data-testid='prefix-input-field']")
     public TextBox prefix;
 
-    @FindBy(id = "saveButtonPrefix")
-    public NvIconTextButton save;
+    @FindBy(xpath = "//button[@data-testid='set-prefix-dialog.confirm-button']")
+    public Button save;
 
     public SetPrefixDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

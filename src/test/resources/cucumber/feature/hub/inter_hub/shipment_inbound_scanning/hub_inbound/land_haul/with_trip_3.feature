@@ -5,7 +5,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @HappyPath @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Start Hub Inbound After Select Driver and Trip (uid:026a1de3-00a4-4fb3-990e-5514ea40f19b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

@@ -1,16 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.model.order.Order.Cod;
+import co.nvqa.common.core.model.order.Order.Dimension;
+import co.nvqa.common.core.model.order.Order.Transaction;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Cod;
-import co.nvqa.commons.model.core.Dimension;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
@@ -71,7 +71,7 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class EditOrderPage extends OperatorV2SimplePage {
+public class EditOrderPage extends OperatorV2SimplePage implements MaskedPage{
 
   @FindBy(id = "header")
   public PageElement header;
@@ -123,6 +123,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
   public PageElement dimensions;
+
+
 
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;

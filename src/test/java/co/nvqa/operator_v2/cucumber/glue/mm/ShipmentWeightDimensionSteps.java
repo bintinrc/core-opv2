@@ -243,7 +243,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @Then("Operator verify Shipment Weight Dimension Table page is shown")
   public void operatorVerifyShipmentWeightDimensionTablePageIsShown() {
     LOGGER.info("Verifying that Shipment Weight Table page is visible");
-    Assertions.assertThat(shipmentWeightDimensionTablePage.backButton.isDisplayed())
+    Assertions.assertThat(shipmentWeightDimensionTablePage.backToMainButton.isDisplayed())
         .as("Back button is visible").isTrue();
     Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.isDisplayed())
         .as("Shipment Weight table is visible").isTrue();

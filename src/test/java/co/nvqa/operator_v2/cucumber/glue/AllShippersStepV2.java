@@ -2,10 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.all_shippers.AllShippersPageV2;
 import co.nvqa.operator_v2.selenium.page.all_shippers.ShipperCreatePageV2;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-
 import java.util.Map;
-
+import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
@@ -32,6 +32,7 @@ public class AllShippersStepV2 extends AbstractSteps {
     @When("Operator click create new shipper button")
     public void operatorClickCreateNewShipper() {
         allShippersPage.createShipper.click();
+        allShippersPage.waitUntilLoaded(60);
     }
 
     @When("Operator switch to create new shipper tab")
@@ -630,6 +631,17 @@ public class AllShippersStepV2 extends AbstractSteps {
             }
 
         }, 1000, 3);
+    }
+    @Given("Operator verify that toggle: {string} is disabled in Operational settings")
+    public void operatorVerifyThatToggleIsDisabledInOperationalSettings(String toggle) {
+        if (toggle.equalsIgnoreCase("Show Parcel Description")) {
+            System.out.println(shipperCreatePage.basicSettingsForm.operationalSettings.showParcelDescription.getAttribute("disabled"));
+            String actual = ! Objects.isNull(shipperCreatePage.basicSettingsForm.operationalSettings.showParcelDescription.getAttribute("disabled")) ?
+                shipperCreatePage.basicSettingsForm.operationalSettings.showParcelDescription.getAttribute("disabled").trim() : "false";
+            Assertions.assertThat(actual).as("Show Parcel Description").isEqualToIgnoringCase("true");
+            return;
+        }
+        Assertions.fail("No matches for the given toggle name");
     }
 
     @When("Operator fill Failed Delivery Management Section with data:")

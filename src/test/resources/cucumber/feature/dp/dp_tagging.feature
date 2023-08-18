@@ -111,6 +111,12 @@ Feature: DP Tagging
     And Operator verify order event on Edit order page using data below:
       | name | UNASSIGNED FROM DP |
 
+  Scenario: DP Tagging - Download DP tagging sample
+    Given Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
+    When Operator click on Download Button for Sample CSV File of DP tagging
+    Then sample CSV file on DP Tagging page is downloaded successfully
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

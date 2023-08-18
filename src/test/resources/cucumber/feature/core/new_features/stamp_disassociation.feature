@@ -1,8 +1,8 @@
 @OperatorV2 @Core @NewFeatures @StampDisassociation @NewFeatures2
 Feature: Stamp Disassociation
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Should not be Able to Disassociate Order that Has no Stamp ID
@@ -60,7 +60,3 @@ Feature: Stamp Disassociation
     When Operator click on the Disassociate Stamp button
     Then Operator verify the label says "stamp id not available" on Stamp Disassociation page
     And Disassociate Stamp button is disabled
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

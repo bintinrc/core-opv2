@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RouteLogs @ArchiveAndUnarchive
 Feature: Route Logs - Archive & Unarchive
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -121,7 +121,3 @@ Feature: Route Logs - Archive & Unarchive
     Then Operator verifies that error react notification displayed:
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

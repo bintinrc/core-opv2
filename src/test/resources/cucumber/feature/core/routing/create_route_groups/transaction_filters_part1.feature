@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart1 @CRG6
 Feature: Create Route Groups - Transaction Filters
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters
@@ -137,10 +137,15 @@ Feature: Create Route Groups - Transaction Filters
       | Van en-route to pickup               | Parcel      |
 
   Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address":{"address1":"501 ORCHARD ROAD","address2":"WHEELOCK PLACE","country":"SG","postcode":"238880"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -149,14 +154,14 @@ Feature: Create Route Groups - Transaction Filters
       | shipper          | {filter-shipper-name}          |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     Given Operator add following filters on Transactions Filters section on Create Route Groups page:
-      | zone | {zone-full-name-3} |
+      | zone | {KEY_SORT_ZONE_INFO.name} |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-      | status     | Pending Pickup                                           |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | type       | DELIVERY Transaction                                      |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
+      | status     | Pending Pickup                                            |
 
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters (uid:4a5cc769-9638-471a-be6c-6a1b6eb5fdca)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -212,7 +217,3 @@ Feature: Create Route Groups - Transaction Filters
       | type       | DELIVERY Transaction                                     |
       | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

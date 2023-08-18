@@ -1,18 +1,28 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.Driver;
+import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Map;
 import java.util.Random;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DriverInfo extends DataEntity<DriverInfo> {
 
   private String uuid;
@@ -40,130 +50,38 @@ public class DriverInfo extends DataEntity<DriverInfo> {
   private String comments;
   private String hub;
   private String resigned;
-
-  public DriverInfo() {
-  }
+  private Integer maxOnDemandWaypoints;
 
   public DriverInfo(Map<String, ?> data) {
     super(data);
   }
 
-  public String getHub() {
-    return hub;
-  }
-
-  public void setHub(String hub) {
-    this.hub = hub;
-  }
-
-  public String getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(String uuid) {
-    this.uuid = uuid;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public void setId(String id) {
-    setId(Long.valueOf(id));
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getDisplayName() {
-    return displayName;
-  }
-
   public void setDisplayName(String displayName) {
-    if ("GENERATED".equalsIgnoreCase(displayName)) {
-      displayName = "Station" + TestUtils.generateDateUniqueString();
-    }
-    this.displayName = displayName;
+    this.displayName = displayName.equalsIgnoreCase("GENERATED") ?
+        String.format("Driver %s", TestUtils.generateDateUniqueString()) : displayName;
   }
 
   public void setFirstName(String firstName) {
-    if ("GENERATED".equalsIgnoreCase(firstName)) {
-      firstName = "Driver";
-    }
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
+    this.firstName = firstName.equalsIgnoreCase("GENERATED") ? "Driver" : firstName;
   }
 
   public void setLastName(String lastName) {
-    if ("GENERATED".equalsIgnoreCase(lastName)) {
-      lastName = "Auto";
-    }
-    this.lastName = lastName;
-  }
-
-  public String getLicenseNumber() {
-    return licenseNumber;
+    this.lastName = lastName.equalsIgnoreCase("GENERATED") ? "Automation" : lastName;
   }
 
   public void setLicenseNumber(String licenseNumber) {
-    if ("GENERATED".equalsIgnoreCase(licenseNumber)) {
-      licenseNumber = "D" + TestUtils.generateDateUniqueString();
-    }
-    this.licenseNumber = licenseNumber;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  public String getDpmsId() {
-    return dpmsId;
+    this.licenseNumber = licenseNumber.equalsIgnoreCase("GENERATED") ?
+        String.format("D%s", RandomUtil.randomNumbersString(8)) : licenseNumber;
   }
 
   public void setDpmsId(String dpmsId) {
-    if ("GENERATED".equalsIgnoreCase(dpmsId)) {
-      dpmsId = String.valueOf(new Random().nextInt(99999));
-    }
-    this.dpmsId = dpmsId;
-  }
-
-  public Integer getCodLimit() {
-    return codLimit;
-  }
-
-  public void setCodLimit(Integer codLimit) {
-    this.codLimit = codLimit;
-  }
-
-  public void setCodLimit(String codLimit) {
-    setCodLimit(Integer.valueOf(codLimit));
-  }
-
-  public String getVehicleLicenseNumber() {
-    return vehicleLicenseNumber;
+    this.dpmsId = dpmsId.equalsIgnoreCase("GENERATED") ?
+        String.valueOf(new Random().nextInt(100)) : dpmsId;
   }
 
   public void setVehicleLicenseNumber(String vehicleLicenseNumber) {
-    if ("GENERATED".equalsIgnoreCase(vehicleLicenseNumber)) {
-      vehicleLicenseNumber = "D" + TestUtils.generateDateUniqueString();
-    }
-    this.vehicleLicenseNumber = vehicleLicenseNumber;
-  }
-
-  public Integer getVehicleCapacity() {
-    return vehicleCapacity;
+    this.vehicleLicenseNumber = vehicleLicenseNumber.equalsIgnoreCase("GENERATED") ?
+        String.format("D%s", RandomUtil.randomNumbersString(8)) : vehicleLicenseNumber;
   }
 
   public void setVehicleCapacity(Integer vehicleCapacity) {
@@ -174,57 +92,34 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     setVehicleCapacity(Integer.valueOf(vehicleCapacity));
   }
 
-  public String getContactType() {
-    return contactType;
-  }
-
-  public void setContactType(String contactType) {
-    this.contactType = contactType;
-  }
-
-  public String getContact() {
-    return contact;
-  }
-
   public void setContact(String contact) {
-    if ("GENERATED".equalsIgnoreCase(contact)) {
-      final String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
+    final String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
+    if (contact.equalsIgnoreCase("GENERATED")) {
       switch (country) {
         case "SG":
-          contact = "31594329";
+          this.contact = String.format("%s812%s", "+65", RandomStringUtils.randomNumeric(5));
           break;
         case "ID":
-          contact = "+6282188881593";
+          this.contact = String.format("%s812%s", "+62", RandomStringUtils.randomNumeric(6));
           break;
         case "MY":
-          contact = "+6066567878";
+          this.contact = String.format("%s012%s", "+60", RandomStringUtils.randomNumeric(7));
           break;
         case "PH":
-          contact = "+639285554697";
+          this.contact = String.format("%s0905%s", "+63", RandomStringUtils.randomNumeric(7));
           break;
         case "TH":
-          contact = "+66955573510";
+          this.contact = String.format("%s081%s", "+66", RandomStringUtils.randomNumeric(7));
           break;
         case "VN":
-          contact = "+0812345678";
+          this.contact = String.format("%s091%s", "+84", RandomStringUtils.randomNumeric(7));
           break;
         default:
           break;
       }
+    } else {
+      this.contact = contact;
     }
-    this.contact = contact;
-  }
-
-  public String getZoneId() {
-    return zoneId;
-  }
-
-  public void setZoneId(String zoneId) {
-    this.zoneId = zoneId;
-  }
-
-  public Integer getZoneMin() {
-    return zoneMin;
   }
 
   public void setZoneMin(Integer zoneMin) {
@@ -235,20 +130,12 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     setZoneMin(Integer.valueOf(zoneMin));
   }
 
-  public Integer getZoneMax() {
-    return zoneMax;
-  }
-
   public void setZoneMax(Integer zoneMax) {
     this.zoneMax = zoneMax;
   }
 
   public void setZoneMax(String zoneMax) {
     setZoneMax(Integer.valueOf(zoneMax));
-  }
-
-  public Integer getZoneCost() {
-    return zoneCost;
   }
 
   public void setZoneCost(Integer zoneCost) {
@@ -259,26 +146,15 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     setZoneCost(Integer.parseInt(zoneCost));
   }
 
-  public String getUsername() {
-    return username;
-  }
 
   public void setUsername(String username) {
-    if ("GENERATED".equalsIgnoreCase(username)) {
-      username = "D" + TestUtils.generateDateUniqueString();
-    }
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
+    this.username = username.equalsIgnoreCase("GENERATED") ?
+        String.format("D%s", RandomUtil.randomNumbersString(8)) : username;
   }
 
   public void setPassword(String password) {
-    if ("GENERATED".equalsIgnoreCase(password)) {
-      password = "Ninjitsu89";
-    }
-    this.password = password;
+    this.password = password.equalsIgnoreCase("GENERATED") ?
+        "Ninjitsu89" : password;
   }
 
   public void setName(String name) {
@@ -295,24 +171,8 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     }
   }
 
-  public String getComments() {
-    return comments;
-  }
-
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
-
   public boolean hasVehicleInfo() {
     return vehicleLicenseNumber != null || vehicleCapacity != null;
-  }
-
-  public String getVehicleType() {
-    return vehicleType;
-  }
-
-  public void setVehicleType(String vehicleType) {
-    this.vehicleType = vehicleType;
   }
 
   public boolean hasContactsInfo() {
@@ -321,14 +181,6 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public boolean hasZoneInfo() {
     return zoneId != null || zoneMin != null || zoneMax != null || zoneCost != null;
-  }
-
-  public String getEmploymentStartDate() {
-    return employmentStartDate;
-  }
-
-  public void setEmploymentStartDate(String employmentStartDate) {
-    this.employmentStartDate = employmentStartDate;
   }
 
   public void fromDriver(Driver driver) {
@@ -341,9 +193,10 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     setType(driver.getDriverType());
     setCodLimit(driver.getCodLimit());
     setEmploymentStartDate(driver.getEmploymentStartDate());
+    setMaxOnDemandWaypoints(driver.getMaxOnDemandJobs());
 
     if (CollectionUtils.isNotEmpty(driver.getVehicles())) {
-      setVehicleLicenseNumber(driver.getVehicles().get(0).getVehicleNo());
+      setVehicleLicenseNumber(driver.getLicenseNumber());
       setVehicleCapacity(driver.getVehicles().get(0).getCapacity());
     }
 
@@ -359,24 +212,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     }
 
     setUsername(driver.getUsername());
-    setPassword(driver.getPassword());
     setComments(driver.getComments());
-  }
-
-  public String getEmploymentEndDate() {
-    return employmentEndDate;
-  }
-
-  public void setEmploymentEndDate(String employmentEndDate) {
-    this.employmentEndDate = employmentEndDate;
-  }
-
-  public String getResigned() {
-    return resigned;
-  }
-
-  public void setResigned(String resigned) {
-    this.resigned = resigned;
   }
 
   public String getFullName() {

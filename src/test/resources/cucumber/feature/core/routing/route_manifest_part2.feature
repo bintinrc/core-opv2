@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart2
 Feature: Route Manifest
 
-  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @CloseNewWindows
@@ -309,7 +309,10 @@ Feature: Route Manifest
     Given API Driver collect all his routes
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
-    Given API Operator start the route
+    Given API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success delivery waypoint from Route Manifest page
     And Operator refresh page
@@ -350,7 +353,10 @@ Feature: Route Manifest
     Given API Driver collect all his routes
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
-    Given API Operator start the route
+    Given API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail delivery waypoint from Route Manifest page
     And Operator refresh page
@@ -374,7 +380,3 @@ Feature: Route Manifest
       | UPDATE STATUS  |
     And Operator verify Delivery details on Edit order page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

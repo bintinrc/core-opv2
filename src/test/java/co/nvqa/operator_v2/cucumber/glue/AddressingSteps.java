@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.operator_v2.model.Addressing;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
+import co.nvqa.commonsort.model.addressing.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressingPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
@@ -80,7 +81,8 @@ public class AddressingSteps extends AbstractSteps {
     addressing.setAddressType("Standard");
 
     addressingPage.inFrame(page -> page.addNewAddress(addressing));
-    put(KEY_CREATED_ADDRESSING, addressing);
+//    put(KEY_CREATED_ADDRESSING, addressing);
+    put(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESSING, addressing);
   }
 
   @When("^Operator delete address on Addressing Page$")
@@ -102,7 +104,7 @@ public class AddressingSteps extends AbstractSteps {
 
   @When("^Operator edits the address on Addressing Page$")
   public void editAddress() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
+    Addressing addressing = get(SortScenarioStorageKeys.KEY_SORT_CREATED_ADDRESSING);
 
     long uniqueCoordinate = System.currentTimeMillis();
 
@@ -136,9 +138,10 @@ public class AddressingSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verifies address on Addressing Page:$")
+  @Then("^Operator verifies address on Addressing Page:")
   public void verifyAddressEdited(Map<String, String> data) {
     Addressing expected = new Addressing(resolveKeyValues(data));
+
     addressingPage.inFrame(page -> {
       page.addressCardBtn.get(0).click();
       SoftAssertions assertions = new SoftAssertions();

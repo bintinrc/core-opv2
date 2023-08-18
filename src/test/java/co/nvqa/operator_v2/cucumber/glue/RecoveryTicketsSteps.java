@@ -114,6 +114,14 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         .isTrue();
   }
 
+  @Then("Operator verify ticket is created successfully on page Recovery Tickets for Tracking Id {value}")
+  public void verifyTicketIsCreateSuccessfullyForTrackingId(String trackingId) {
+    pause10s();
+    boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
+    Assertions.assertThat(isTicketCreated).as(f("Ticket '%s' does not created.", trackingId))
+        .isTrue();
+  }
+
   @Then("Operator searches the created ticket and clicks on Edit button")
   public void searchAndEditTicket() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);

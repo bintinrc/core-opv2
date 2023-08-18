@@ -1,19 +1,23 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page;
-import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.PodDetailsDialog;
+import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable;
+import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
@@ -23,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -31,6 +36,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,6 +172,15 @@ public class EditOrderV2Steps extends AbstractSteps {
       expected = finalData.get("zone");
       if (StringUtils.isNotBlank(expected)) {
         softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("zone");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("latestRouteId");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.latestRouteId.getText()).as("Latest Route ID")
+            .isEqualTo(expected);
       }
     });
     softAssertions.assertAll();
@@ -355,64 +371,84 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     String pickupInstruction = data.get("pickupInstruction");
     String deliveryInstruction = data.get("deliveryInstruction");
+    String orderInstruction = data.get("orderInstruction");
 
-    SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
-      if (StringUtils.isNotBlank(pickupInstruction)) {
+      if (StringUtils.isNotBlank(pickupInstruction) && !StringUtils
+          .equalsIgnoreCase(pickupInstruction, "-")) {
         String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
-        assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
-            .isEqualToIgnoringCase(pickupInstruction);
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, pickupInstruction));
       }
-      if (StringUtils.isNotBlank(deliveryInstruction)) {
+      if (StringUtils.isNotBlank(deliveryInstruction) && !StringUtils
+          .equalsIgnoreCase(deliveryInstruction, "-")) {
         String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
-        assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, deliveryInstruction));
+      }
+      if (orderInstruction == null || orderInstruction.isEmpty()) {
+        String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(pickupInstruction);
+        String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
             .isEqualToIgnoringCase(deliveryInstruction);
       }
-      assertions.assertAll();
     });
   }
 
-  @When("^Operator confirm manually complete order on Edit Order V2 page$")
-  public void operatorManuallyCompleteOrderOnEditOrderPage() {
-    String changeReason = page.confirmCompleteOrder();
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
-  }
-
-  @When("^Operator confirm manually complete order on Edit Order V2 page:$")
+  @When("Operator confirm manually complete order on Edit Order V2 page:")
   public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String changeReason = data.get("changeReason");
-    String reasonForChange = data.get("reasonForChange");
-    page.confirmCompleteOrder(changeReason, reasonForChange);
-    put(KEY_ORDER_CHANGE_REASON, changeReason);
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      page.manuallyCompleteOrderDialog.changeReason.selectValue(finalData.get("reason"));
+      if (finalData.containsKey("reasonForChange")) {
+        page.manuallyCompleteOrderDialog.reasonForChange.setValue(finalData.get("reasonForChange"));
+      }
+      if (finalData.containsKey("markAll")) {
+        page.manuallyCompleteOrderDialog.markAll.click();
+      }
+      page.manuallyCompleteOrderDialog.completeOrder.click();
+    });
   }
 
-  @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order V2 page")
+  @When("Operator verify 'COD Collected' checkbox is disabled in Manually complete order dialog on Edit Order V2 page")
   public void verifyCodCollectedIsDisabled() {
-    page.manuallyCompleteOrderDialog.waitUntilVisible();
-    Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
-        .as("COD Collected checkbox is enabled").isFalse();
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.codCheckboxes.get(0).isEnabled())
+          .as("COD Collected checkbox is enabled").isFalse();
+    });
+  }
 
+  @When("Operator verify Complete order button is disabled in Manually complete order dialog on Edit Order V2 page")
+  public void verifyCompleteOrderIsDisabled() {
+    page.inFrame(() -> {
+      page.manuallyCompleteOrderDialog.waitUntilVisible();
+      Assertions.assertThat(page.manuallyCompleteOrderDialog.completeOrder.isEnabled())
+          .as("Complete order button is enabled").isFalse();
+    });
   }
 
   @When("Operator confirm manually complete order with COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.markAll.click();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   @When("Operator confirm manually complete order without collecting COD on Edit Order V2 page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     page.manuallyCompleteOrderDialog.waitUntilVisible();
-    page.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    page.manuallyCompleteOrderDialog.changeReason.selectValue("Others (fill in below)");
     page.manuallyCompleteOrderDialog.reasonForChange.setValue("Completed by automated test");
     page.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
-    page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    page.manuallyCompleteOrderDialog.completeOrder.click();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
@@ -469,23 +505,19 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.verifyAirwayBillContentsIsCorrect(order);
   }
 
-  @When("^Operator add created order to the (.+) route on Edit Order V2 page$")
-  public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(String type) {
-    page.addToRoute(get(KEY_CREATED_ROUTE_ID), type);
-  }
-
   @When("Operator add created order route on Edit Order V2 page using data below:")
   public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String type = data.getOrDefault("type", "Delivery");
-    String menu = data.getOrDefault("menu", type);
+    String type = data.get("type");
     String routeId = data.get("routeId");
-    page.clickMenu(menu, "Add To Route");
-    page.addToRouteDialog.waitUntilVisible();
-    page.addToRouteDialog.route.setValue(routeId);
-    page.addToRouteDialog.type.selectValue(type);
-    takesScreenshot();
-    page.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    page.inFrame(() -> {
+      page.addToRouteDialog.waitUntilVisible();
+      page.addToRouteDialog.route.setValue(routeId);
+      if (StringUtils.isNotBlank(type)) {
+        page.addToRouteDialog.type.selectValue(type);
+      }
+      page.addToRouteDialog.addToRoute.click();
+    });
   }
 
   @Then("Operator verify the order is added to the {string} route on Edit Order V2 page")
@@ -574,23 +606,6 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies orders are tagged on Edit Order V2 page")
-  public void operatorVerifiesOrdersAreTaggedOnEditOrderPage() {
-    String tagLabel = get(KEY_ORDER_TAG);
-    List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
-
-    lists.forEach(order -> {
-      navigateTo(
-          f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.NV_SYSTEM_ID,
-              order.getId()));
-      String actualTagName = page.getTag();
-      takesScreenshot();
-      Assertions.assertThat(actualTagName)
-          .as("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s",
-              order.getId()).isEqualTo(tagLabel);
-    });
-  }
-
   @When("^Operator change Stamp ID of the created order to \"(.+)\" on Edit Order V2 page$")
   public void operatorEditStampIdOnEditOrderPage(String stampId) {
     if (equalsIgnoreCase(stampId, "GENERATED")) {
@@ -631,16 +646,18 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @When("Operator update order status on Edit Order V2 page using data below:")
-  public void operatorUpdateStatusOnEditOrderPage(Map<String, String> mapOfData) {
-    page.clickMenu("Order Settings", "Update Status");
-    page.updateStatusDialog.waitUntilVisible();
-
-    String value = mapOfData.get("granularStatus");
-    page.updateStatusDialog.granularStatus.searchAndSelectValue(value);
-    value = mapOfData.get("changeReason");
-    page.updateStatusDialog.changeReason.setValue(value);
-    page.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
+  @When("Operator update order status on Edit Order V2 page:")
+  public void operatorUpdateStatusOnEditOrderPage(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.clickMenu("Order settings", "Update status");
+      page.updateStatusDialog.waitUntilVisible();
+      String value = finalData.get("granularStatus");
+      page.updateStatusDialog.granularStatus.selectValue(value);
+      value = finalData.get("changeReason");
+      page.updateStatusDialog.changeReason.setValue(value);
+      page.updateStatusDialog.saveChanges.click();
+    });
   }
 
   @Then("^Operator verify color of order header on Edit Order V2 page is \"(.+)\"$")
@@ -732,7 +749,7 @@ public class EditOrderV2Steps extends AbstractSteps {
       Assertions.fail(f("Error on attempt to suggest routes: %s",
           page.toastErrors.get(0).toastBottom.getText()));
     }
-    page.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    page.addToRouteDialog.addToRoute.click();
     page.addToRouteDialog.waitUntilInvisible();
     page.waitUntilInvisibilityOfToast(true);
   }
@@ -751,7 +768,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         .isEqualTo(resolveValue(expected));
   }
 
-  @Then("^Operator verify order event on Edit Order V2 page using data below:$")
+  @Then("Operator verify order event on Edit Order V2 page using data below:")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
     page.inFrame(() -> {
       page.waitUntilLoaded();
@@ -777,35 +794,53 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verify order events on Edit Order V2 page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    page.inFrame(() -> data.forEach(eventData -> {
-      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-      OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
-          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-          .orElse(null);
-      if (actualEvent == null) {
-        pause5s();
-        page.refreshPage();
-        actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-            .orElse(null);
-      }
-      Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
-          .isNotNull();
-      expectedEvent.compareWithActual(actualEvent);
-    }));
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      data.forEach(eventData -> {
+        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+        var foundEvents = actualEvents.get().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .collect(Collectors.toList());
+        if (foundEvents.isEmpty()) {
+          pause5s();
+          page.refreshPage();
+          page.switchTo();
+          actualEvents.set(page.eventsTable().readAllEntities());
+          foundEvents = actualEvents.get().stream()
+              .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+              .collect(Collectors.toList());
+        }
+        Assertions.assertThat(foundEvents)
+            .withFailMessage("There is no [%s] event on Edit Order V2 page",
+                expectedEvent.getName())
+            .isNotEmpty();
+        DataEntity.assertListContains(foundEvents, expectedEvent,
+            f("[%s] events", expectedEvent.getName()));
+      });
+    });
   }
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
   public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
-    List<OrderEvent> events = page.eventsTable().readAllEntities();
-    data = resolveValues(data);
-    SoftAssertions assertions = new SoftAssertions();
-    data.forEach(expected -> assertions.assertThat(
-            events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
-        .as("%s event was found").isFalse());
-    assertions.assertAll();
-    takesScreenshot();
+    List<String> resolvedData = resolveValues(data);
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      resolvedData.forEach(eventData -> Assertions
+          .assertThat(
+              actualEvents.get().stream().anyMatch(e -> equalsIgnoreCase(e.getName(), eventData)))
+          .as("%s event was found")
+          .isFalse());
+    });
+  }
+
+  @Then("Operator unmask Delivery details on Edit Order V2 page")
+  public void unmaskDeliveryDetails() {
+    page.inFrame(() -> {
+      while (page.deliveryDetailsBox.mask.isDisplayedFast()) {
+        page.deliveryDetailsBox.mask.click();
+        page.waitUntilLoaded();
+      }
+    });
   }
 
   @Then("^Operator verify Delivery details on Edit Order V2 page using data below:$")
@@ -901,6 +936,17 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
+  @Then("Operator unmask Edit Order V2 page")
+  public void unmaskPage() {
+    page.inFrame(() -> {
+      while (page.mask.existsFast()) {
+        page.mask.scrollIntoView();
+        page.mask.jsClick();
+        page.waitUntilLoaded(1);
+      }
+    });
+  }
+
   @Then("Operator verify Pickup details on Edit Order V2 page using data below:")
   public void verifyPickupDetails(Map<String, String> data) throws ParseException {
     Map<String, String> expectedData = StandardTestUtils.replaceDataTableTokens(
@@ -918,7 +964,7 @@ public class EditOrderV2Steps extends AbstractSteps {
             .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
       }
       if (expectedData.containsKey("contact")) {
-        assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
+        assertions.assertThat(page.pickupDetailsBox.fromContact.getNormalizedText())
             .as("Pickup Details - Contact")
             .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
       }
@@ -951,7 +997,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
             DateUtil.DATE_TIME_FORMATTER.withZone(
                 ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-        Date expectedDateTime = null;
+        Date expectedDateTime;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
               expectedData.get("startDateTime"));
@@ -966,7 +1012,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         Date actualDateTime = Date.from(DateUtil.getDate(actual,
             DateUtil.DATE_TIME_FORMATTER.withZone(
                 ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-        Date expectedDateTime = null;
+        Date expectedDateTime;
         try {
           expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
         } catch (ParseException e) {
@@ -1038,51 +1084,60 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("^Operator verify (.+) transaction on Edit Order V2 page using data below:$")
+  @Then("Operator verify {word} transaction on Edit Order V2 page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(String transactionType,
-      Map<String, String> mapOfData) {
+      Map<String, String> data) {
     int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
 
-    Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    var expected = new TransactionInfo(resolveKeyValues(data));
     page.inFrame(() -> {
-      String value = finalMapOfData.get("status");
-      if (StringUtils.isNotBlank(value)) {
-        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-        Assertions.assertThat(actual.getStatus()).as(f("%s transaction status", transactionType))
-            .isEqualTo(value);
-      }
-      if (finalMapOfData.containsKey("routeId")) {
-        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-        Assertions.assertThat(actual.getRouteId()).as(f("%s transaction Route Id", transactionType))
-            .isEqualTo(StringUtils.trimToNull(finalMapOfData.get("routeId")));
-      }
+      TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
+      expected.compareWithActual(actual);
+    });
+  }
+
+  @Then("Operator unmask contact number of {word} transaction on Edit Order V2 page")
+  public void operatorUnmastTransactionContact(String transactionType) {
+    int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
+    page.inFrame(() -> {
+      page.transactionsTable.unmaskColumn(rowIndex, "contact");
+      page.waitUntilLoaded();
+    });
+  }
+
+  @Then("Operator unmask destination address of {word} transaction on Edit Order V2 page")
+  public void operatorUnmastTransactionAddress(String transactionType) {
+    int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
+    page.inFrame(() -> {
+      page.transactionsTable.unmaskColumn(rowIndex, "destinationAddress");
+    });
+  }
+
+  @Then("Operator unmask description of {value} event on Edit Order V2 page")
+  public void operatorUnmaskEventDescription(String event) {
+    page.inFrame(() -> {
+      int index = page.eventsTable.findEventRow(event);
+      Assertions.assertThat(index).withFailMessage("Event %s is not displayed", event).isPositive();
+      page.eventsTable.unmaskColumn(index, EventsTable.DESCRIPTION);
+      page.waitUntilLoaded();
     });
   }
 
   @Then("Operator verify transaction on Edit Order V2 page using data below:")
   public void operatorVerifyTransactionOnEditOrderPage(Map<String, String> data) {
-    final TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
-    final List<TransactionInfo> transactions = page.transactionsTable.readAllEntities();
-    takesScreenshot();
-    transactions.stream().filter(actual -> {
-      try {
-        expected.compareWithActual(actual);
-        return true;
-      } catch (AssertionError err) {
-        return false;
-      }
-    }).findFirst().orElseThrow(
-        () -> new AssertionError("Transaction " + expected.toMap() + " was not found"));
+    page.inFrame(() -> {
+      final TransactionInfo expected = new TransactionInfo(resolveKeyValues(data));
+      final List<TransactionInfo> transactions = page.transactionsTable.readAllEntities();
+      DataEntity.assertListContains(transactions, expected, "Transactions");
+    });
   }
 
   @Then("Operator verify order summary on Edit Order V2 page using data below:")
   public void operatorVerifyOrderSummaryOnEditOrderPage(Map<String, String> mapOfData) {
     final Order expectedOrder = new Order(resolveKeyValues(mapOfData));
-
-    page.inFrame(() -> {
-      Assertions.assertThat(page.comments.getNormalizedText()).as("Order Summary: Comments")
-          .isEqualTo(expectedOrder.getComments());
-    });
+    page.inFrame(
+        () -> Assertions.assertThat(page.comments.getNormalizedText()).as("Order Summary: Comments")
+            .isEqualTo(expectedOrder.getComments()));
   }
 
   @Then("^Operator verify menu item \"(.+)\" > \"(.+)\" is disabled on Edit Order V2 page$")
@@ -1092,114 +1147,201 @@ public class EditOrderV2Steps extends AbstractSteps {
         .as("%s > %s menu item is enabled", parentMenuItem, childMenuItem).isFalse());
   }
 
-  @Then("Operator update Pickup Details on Edit Order V2 page")
-  public void operatorUpdatePickupDetailsOnEditOrderPage(Map<String, String> data) {
-    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
-    Map<String, String> finalData = StandardTestUtils.replaceDataTableTokens(resolveKeyValues(data),
-        mapOfTokens);
-    page.inFrame(() -> {
-      String senderName = finalData.get("senderName");
-      String senderContact = finalData.get("senderContact");
-      String senderEmail = finalData.get("senderEmail");
-      String internalNotes = finalData.get("internalNotes");
-      String pickupDate = finalData.get("pickupDate");
-      String pickupTimeslot = finalData.get("pickupTimeslot");
-      String country = finalData.get("country");
-      String city = finalData.get("city");
-      String address1 = finalData.get("address1");
-      String address2 = finalData.get("address2");
-      String postalCode = finalData.get("postalCode");
-
-      page.editPickupDetailsDialog.senderName.setValue(senderName);
-      page.editPickupDetailsDialog.senderContact.setValue(senderContact);
-      page.editPickupDetailsDialog.senderEmail.setValue(senderEmail);
-      page.editPickupDetailsDialog.internalNotes.setValue(internalNotes);
-      if (StringUtils.isNotBlank(pickupDate)) {
-        page.editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
-      }
-      if (StringUtils.isNotBlank(pickupTimeslot)) {
-        page.editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
-      }
-      page.editPickupDetailsDialog.shipperRequestedToChange.setValue(
-          Boolean.parseBoolean(finalData.getOrDefault("shipperRequestedToChange", "false")));
-      page.editPickupDetailsDialog.assignPickupLocation.setValue(
-          Boolean.parseBoolean(finalData.getOrDefault("assignPickupLocation", "false")));
-      page.editPickupDetailsDialog.changeAddress.click();
-      page.editPickupDetailsDialog.country.setValue(country);
-      page.editPickupDetailsDialog.city.setValue(city);
-      page.editPickupDetailsDialog.address1.setValue(address1);
-      page.editPickupDetailsDialog.address2.setValue(address2);
-      page.editPickupDetailsDialog.postcode.setValue(postalCode);
-      page.editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    });
-  }
-
-  @Then("Operator update Delivery Details on Edit Order V2 page")
-  public void operatorUpdateDeliveryDetailsOnEditOrderPage(Map<String, String> mapOfData) {
-    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
-    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
-    page.updateDeliveryDetails(mapOfData);
-    takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
-    String recipientName = mapOfData.get("recipientName");
-    String recipientContact = mapOfData.get("recipientContact");
-    String recipientEmail = mapOfData.get("recipientEmail");
-    String internalNotes = mapOfData.get("internalNotes");
-    String changeSchedule = mapOfData.get("changeSchedule");
-    String deliveryDate = mapOfData.get("deliveryDate");
-    String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
-
-    if (Objects.nonNull(recipientName)) {
-      order.setToName(recipientName);
-    }
-    if (Objects.nonNull(recipientContact)) {
-      order.setToContact(recipientContact);
-    }
-    if (Objects.nonNull(recipientEmail)) {
-      order.setToEmail(recipientEmail);
-    }
-//        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
-    if (Objects.nonNull(deliveryDate)) {
-      order.setDeliveryDate(deliveryDate);
-    }
-    if (Objects.nonNull(deliveryTimeslot)) {
-      order.setDeliveryTimeslot(deliveryTimeslot);
-    }
-    if (Objects.nonNull(address1)) {
-      order.setToAddress1(address1);
-    }
-    if (Objects.nonNull(address2)) {
-      order.setToAddress2(address2);
-    }
-    if (Objects.nonNull(postalCode)) {
-      order.setToPostcode(postalCode);
-    }
-    if (Objects.nonNull(city)) {
-      order.setToCity(city);
-    }
-    if (Objects.nonNull(country)) {
-      order.setToCountry(country);
-    }
-    put(KEY_CREATED_ORDER, order);
-  }
-
   @Then("Operator verifies Pickup Details are updated on Edit Order V2 page")
   public void operatorVerifiesPickupDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     page.verifyPickupInfo(order);
-    takesScreenshot();
   }
 
   @Then("Operator verifies Delivery Details are updated on Edit Order V2 page")
   public void operatorVerifiesDeliveryDetailsUpdated() {
     Order order = get(KEY_CREATED_ORDER);
     page.verifyDeliveryInfo(order);
-    takesScreenshot();
+  }
+
+  @Then("Operator edit delivery details on Edit Order V2 page:")
+  @Then("Operator update delivery reschedule on Edit Order V2 page:")
+  @Then("Operator reschedule Delivery on Edit Order V2 page:")
+  @Then("Operator edit Return details on Edit Order V2 page:")
+  public void editDeliveryDetails(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.editDeliveryDetailsDialog.waitUntilVisible();
+      if (finalData.containsKey("recipientName")) {
+        page.editDeliveryDetailsDialog.recipientName.setValue(finalData.get("recipientName"));
+      }
+      if (finalData.containsKey("recipientContact")) {
+        if (page.editDeliveryDetailsDialog.recipientContactCtr.isDisplayedFast()) {
+          page.editDeliveryDetailsDialog.recipientContactCtr.click();
+          page.waitUntilLoaded();
+        }
+        page.editDeliveryDetailsDialog.recipientContact.setValue(finalData.get("recipientContact"));
+      }
+      if (finalData.containsKey("recipientEmail")) {
+        page.editDeliveryDetailsDialog.recipientEmail.setValue(finalData.get("recipientEmail"));
+      }
+      var value = finalData.get("internalNotes");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.internalNotes.setValue(value);
+      }
+      value = finalData.get("deliveryDate");
+      if (StringUtils.isNotBlank(value)) {
+        if (page.editDeliveryDetailsDialog.schedule.existsFast()) {
+          page.editDeliveryDetailsDialog.schedule.check();
+          pause1s();
+        }
+        page.editDeliveryDetailsDialog.deliveryDate.setValue(value);
+      }
+      value = finalData.get("timeslot");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.timeslot.selectValue(value);
+      }
+      value = finalData.get("country");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.changeAddress.click();
+        page.editDeliveryDetailsDialog.country.setValue(value);
+      }
+      value = finalData.get("city");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.city.setValue(value);
+      }
+      value = finalData.get("address1");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.address1.setValue(value);
+      }
+      value = finalData.get("address2");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.address2.setValue(value);
+      }
+      value = finalData.get("postalCode");
+      if (StringUtils.isNotBlank(value)) {
+        page.editDeliveryDetailsDialog.postcode.setValue(value);
+      }
+      if (page.editDeliveryDetailsDialog.saveChanges.isDisplayedFast()) {
+        page.editDeliveryDetailsDialog.saveChanges.click();
+      } else {
+        page.editDeliveryDetailsDialog.rescheduleSaveChanges.click();
+      }
+    });
+  }
+
+  @Then("Operator verify values in Edit return details dialog on Edit Order V2 page:")
+  @Then("Operator verify values in Edit delivery details dialog on Edit Order V2 page:")
+  @Then("Operator verify values in Delivery reschedule dialog on Edit Order V2 page:")
+  public void verifyDeliveryDetailsDetails(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      page.editDeliveryDetailsDialog.waitUntilVisible();
+
+      String value = finalData.get("recipientName");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.recipientName.getValue())
+            .as("Recipient name").isEqualTo(value);
+      }
+      value = finalData.get("recipientContact");
+      if (StringUtils.isNotBlank(value)) {
+        var actual = page.editDeliveryDetailsDialog.recipientContactText.isDisplayedFast()
+            ? page.editDeliveryDetailsDialog.recipientContactText.getNormalizedText()
+            : page.editDeliveryDetailsDialog.recipientContact.getValue();
+        assertions.assertThat(actual).as("Recipient contact").isEqualTo(value);
+      }
+      value = finalData.get("recipientEmail");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.recipientEmail.getValue())
+            .as("Recipient email").isEqualTo(value);
+      }
+      value = finalData.get("country");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.currentCountry.getNormalizedText())
+            .as("Country").isEqualTo(value);
+      }
+      value = finalData.get("city");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.currentCity.getNormalizedText())
+            .as("City").isEqualTo(value);
+      }
+      value = finalData.get("address1");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.currentAddress1.getNormalizedText())
+            .as("Address 1").isEqualTo(value);
+      }
+      value = finalData.get("address2");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.currentAddress2.getNormalizedText())
+            .as("Address 2").isEqualTo(value);
+      }
+      value = finalData.get("postalCode");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editDeliveryDetailsDialog.currentPostcode.getNormalizedText())
+            .as("Postal code").isEqualTo(value);
+      }
+      assertions.assertAll();
+    });
+  }
+
+  @Then("Operator edit pickup details on Edit Order V2 page:")
+  @Then("Operator reschedule Pickup on Edit Order V2 page:")
+  public void editPickupDetails(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.editPickupDetailsDialog.waitUntilVisible();
+      if (finalData.containsKey("senderName")) {
+        page.editPickupDetailsDialog.senderName.setValue(finalData.get("senderName"));
+      }
+      if (finalData.containsKey("senderContact")) {
+        page.editPickupDetailsDialog.senderContact.setValue(finalData.get("senderContact"));
+      }
+      if (finalData.containsKey("senderEmail")) {
+        page.editPickupDetailsDialog.senderEmail.setValue(finalData.get("senderEmail"));
+      }
+      var value = finalData.get("internalNotes");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.internalNotes.setValue(value);
+      }
+      value = finalData.get("pickupDate");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.pickupDate.setDate(value);
+      }
+      value = finalData.get("timeslot");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.timeslot.selectValue(value);
+      }
+      value = finalData.get("shipperRequestedToChange");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.shipperRequestedToChange.setValue(Boolean.parseBoolean(value));
+      }
+      value = finalData.get("assignPickupLocation");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.assignPickupLocation.setValue(Boolean.parseBoolean(value));
+      }
+      value = finalData.get("country");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.changeAddress.click();
+        page.editPickupDetailsDialog.country.setValue(value);
+      }
+      value = finalData.get("city");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.city.setValue(value);
+      }
+      value = finalData.get("address1");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.address1.setValue(value);
+      }
+      value = finalData.get("address2");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.address2.setValue(value);
+      }
+      value = finalData.get("postalCode");
+      if (StringUtils.isNotBlank(value)) {
+        page.editPickupDetailsDialog.postcode.setValue(value);
+      }
+      if (page.editPickupDetailsDialog.saveChanges.existsFast()) {
+        page.editPickupDetailsDialog.saveChanges.click();
+      } else {
+        page.editPickupDetailsDialog.rescheduleSaveChanges.click();
+      }
+    });
   }
 
   @Then("Operator verifies Delivery Details on Edit Order V2 page:")
@@ -1221,28 +1363,36 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator tags order to \"(.+)\" DP on Edit Order V2 page$")
   public void operatorTagOrderToDP(String dpId) {
-    page.tagOrderToDP(dpId);
+    page.inFrame(() -> {
+      page.dpDropOffSettingDialog.waitUntilVisible();
+      page.waitUntilLoaded();
+      page.dpDropOffSettingDialog.dropOffDp.selectValue(dpId);
+      page.dpDropOffSettingDialog.saveChanges.click();
+    });
   }
 
   @Then("Operator untags order from DP on Edit Order V2 page")
   public void operatorUnTagOrderFromDP() {
-    page.dpDropOffSettingDialog.waitUntilVisible();
-    page.dpDropOffSettingDialog.clearSelected.click();
-    page.dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
-    page.waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
+    page.inFrame(() -> {
+      page.dpDropOffSettingDialog.waitUntilVisible();
+      page.dpDropOffSettingDialog.dropOffDp.clearValue();
+      page.dpDropOffSettingDialog.saveChanges.click();
+    });
   }
 
   @Then("^Operator verifies delivery (is|is not) indicated by 'Ninja Collect' icon on Edit Order V2 page$")
   public void deliveryIsIndicatedByIcon(String indicationValue) {
-    if (Objects.equals(indicationValue, "is")) {
-      Assertions.assertThat(page.deliveryIsIndicatedWithIcon())
-          .as("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page")
-          .isTrue();
-    } else if (Objects.equals(indicationValue, "is not")) {
-      Assertions.assertThat(page.deliveryIsIndicatedWithIcon())
-          .as("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page")
-          .isFalse();
-    }
+    page.inFrame(() -> {
+      if (Objects.equals(indicationValue, "is")) {
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
+            .as("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page")
+            .isTrue();
+      } else if (Objects.equals(indicationValue, "is not")) {
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
+            .as("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page")
+            .isFalse();
+      }
+    });
   }
 
   @Then("Operator delete order on Edit Order V2 page")
@@ -1360,7 +1510,7 @@ public class EditOrderV2Steps extends AbstractSteps {
             order.getId()));
   }
 
-  @When("^Operator open Edit Order V2 page for order ID \"(.+)\"$")
+  @When("Operator open Edit Order V2 page for order ID {string}")
   public void operatorOpenEditOrderPage(String orderId) {
     orderId = resolveValue(orderId);
     page.openPage(Long.parseLong(orderId));
@@ -1388,9 +1538,10 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator cancel RTS on Edit Order V2 page$")
   public void operatorCancelRtsOnEditOrderPage() {
-    page.clickMenu("Return to Sender", "Cancel RTS");
-    page.cancelRtsDialog.waitUntilVisible();
-    page.cancelRtsDialog.cancelRts.click();
+    page.inFrame(() -> {
+      page.cancelRtsDialog.waitUntilVisible();
+      page.cancelRtsDialog.cancelRts.click();
+    });
   }
 
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order V2 page$")
@@ -1410,11 +1561,13 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify {value} RTS hint is displayed on Edit Order V2 page")
   public void verifyRtsHint(String value) {
-    page.editRtsDetailsDialog.waitUntilVisible();
-    Assertions.assertThat(page.editRtsDetailsDialog.hint.isDisplayed())
-        .withFailMessage("RTS hint is not displayed").isTrue();
-    Assertions.assertThat(page.editRtsDetailsDialog.hint.getText()).as("RTS hint text")
-        .isEqualTo(value);
+    page.inFrame(() -> {
+      page.editRtsDetailsDialog.waitUntilVisible();
+      Assertions.assertThat(page.editRtsDetailsDialog.hint.isDisplayed())
+          .withFailMessage("RTS hint is not displayed").isTrue();
+      Assertions.assertThat(page.editRtsDetailsDialog.hint.getText()).as("RTS hint text")
+          .isEqualTo(value);
+    });
   }
 
   @Then("Operator RTS order on Edit Order V2 page using data below:")
@@ -1479,6 +1632,57 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies values in Edit RTS details dialog on Edit Order V2 page:")
+  public void verifyRtsDetails(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      page.editRtsDetailsDialog.waitUntilVisible();
+
+      String value = finalData.get("recipientName");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.recipientName.getValue())
+            .as("Recipient name").isEqualTo(value);
+      }
+      value = finalData.get("recipientContact");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.recipientContact.getValue())
+            .as("Recipient contact").isEqualTo(value);
+      }
+      value = finalData.get("recipientEmail");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.recipientEmail.getValue())
+            .as("Recipient email").isEqualTo(value);
+      }
+      value = finalData.get("country");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.currentCountry.getNormalizedText())
+            .as("Country").isEqualTo(value);
+      }
+      value = finalData.get("city");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.currentCity.getNormalizedText()).as("City")
+            .isEqualTo(value);
+      }
+      value = finalData.get("address1");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.currentAddress1.getNormalizedText())
+            .as("Address 1").isEqualTo(value);
+      }
+      value = finalData.get("address2");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.currentAddress2.getNormalizedText())
+            .as("Address 2").isEqualTo(value);
+      }
+      value = finalData.get("postalCode");
+      if (StringUtils.isNotBlank(value)) {
+        assertions.assertThat(page.editRtsDetailsDialog.currentPostcode.getNormalizedText())
+            .as("Postal code").isEqualTo(value);
+      }
+      assertions.assertAll();
+    });
+  }
+
   @Then("Operator resume order on Edit Order V2 page")
   public void operatorResumeOrder() {
     page.inFrame(() -> {
@@ -1488,11 +1692,9 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
-  @And("^Operator verify the tags shown on Edit Order V2 page$")
+  @And("Operator verify the tags shown on Edit Order V2 page")
   public void operatorVerifyTheTagsShownOnEditOrderPage(List<String> expectedOrderTags) {
     expectedOrderTags = resolveValues(expectedOrderTags);
-    Order order = get(KEY_CREATED_ORDER);
-
     List<String> actualOrderTags = page.getTags();
 
     final List<String> normalizedExpectedList = expectedOrderTags.stream().map(String::toLowerCase)
@@ -1501,8 +1703,8 @@ public class EditOrderV2Steps extends AbstractSteps {
         .sorted().collect(Collectors.toList());
 
     Assertions.assertThat(normalizedActualList)
-        .as("Order tags is not equal to tags set on Order Tag Management page for order Id - %s",
-            order.getId()).containsExactlyElementsOf(normalizedExpectedList);
+        .as("Actual tags is not equal to expected tags set on Order Tag Management page")
+        .containsExactlyElementsOf(normalizedExpectedList);
   }
 
   @And("Operator verifies no tags shown on Edit Order V2 page")
@@ -1523,91 +1725,78 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.chatWithDriverDialog.waitUntilVisible();
   }
 
-  @When("Operator selects {string} in Events Filter menu on Edit Order V2 page")
+  @When("Operator selects {value} in Events Filter menu on Edit Order V2 page")
   public void selectEventsFilter(String option) {
-    page.eventsTableFilter.selectOption(resolveValue(option));
+    page.inFrame(() -> page.eventsTableFilter.selectValue(option));
   }
 
-  @Then("Operator verify delivery POD details is correct on Edit Order V2 page using date below:")
+  @Then("Operator verify POD details on Edit Order V2 page:")
   public void verifyDeliveryPodDetails(Map<String, String> data) {
-    final Order order = get(KEY_CREATED_ORDER);
-    final PodDetailsDialog podDetailsDialog = page.podDetailsDialog();
-
-    // open the pod details view
-    podDetailsDialog.getPodDetailTable().clickView(1);
-    podDetailsDialog.scrollToBottom();
-    takesScreenshot();
-
-    final String expectedTransactionText = f("TRANSACTION (%d)",
-        order.getLastDeliveryTransaction().getId());
-    softAssert.assertEquals("tracking id string", order.getTrackingId(),
-        podDetailsDialog.getTrackingId());
-    softAssert.assertEquals("transaction string", expectedTransactionText,
-        podDetailsDialog.getTransaction());
-    softAssert.assertEquals("information - status",
-        StringUtils.lowerCase(order.getLastDeliveryTransaction().getStatus()),
-        StringUtils.lowerCase(podDetailsDialog.getStatus()));
-    softAssert.assertEquals("information - driver", data.get("driver"),
-        podDetailsDialog.getDriver());
-    softAssert.assertTrue("information - priority level",
-        StringUtils.isNotEmpty(podDetailsDialog.getPriorityLevel()));
-    softAssert.assertEquals("information - verification method", data.get("verification method"),
-        podDetailsDialog.getVerificationMethod());
-    softAssert.assertTrue("information - location",
-        podDetailsDialog.getLocation().contains(order.getLastDeliveryTransaction().getAddress1()));
-    softAssert.assertAll();
+    var expected = new PodDetail(resolveKeyValues(data));
+    page.inFrame(() -> {
+      page.podDetailsDialog.waitUntilVisible();
+      page.waitUntilLoaded();
+      var actual = page.podDetailsDialog.podDetailTable.readAllEntities();
+      DataEntity.assertListContains(actual, expected, "PODs list");
+    });
   }
 
   @Then("Operator verifies ticket status is {value} on Edit Order V2 page")
   public void updateRecoveryTicket(String data) {
-    String status = page.recoveryTicket.getText();
-    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
-    Matcher m = p.matcher(status);
-    if (m.matches()) {
-      Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
-    } else {
-      Assertions.fail("Could not get ticket status from string: " + status);
-    }
+    page.inFrame(() -> {
+      String status = page.recoveryTicket.getText();
+      Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+      Matcher m = p.matcher(status);
+      if (m.matches()) {
+        Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
+      } else {
+        Assertions.fail("Could not get ticket status from string: " + status);
+      }
+    });
   }
 
   @Then("Operator updates recovery ticket on Edit Order V2 page:")
   public void updateRecoveryTicket(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    page.recoveryTicket.click();
-    page.editTicketDialog.waitUntilVisible();
-    pause5s();
-    if (data.containsKey("status")) {
-      page.editTicketDialog.ticketStatus.selectValue(data.get("status"));
-    }
-    pause5s();
-    if (data.containsKey("keepCurrentOrderOutcome")) {
-      page.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
-    }
-    pause5s();
-    if (data.containsKey("outcome")) {
-      page.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
-    }
-    if (data.containsKey("assignTo")) {
-      page.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
-    }
-    if (data.containsKey("rtsReason")) {
-      page.editTicketDialog.rtsReason.selectValue(data.get("rtsReason"));
-    }
-    if (data.containsKey("newInstructions")) {
-      String instruction = data.get("newInstructions");
-      if ("GENERATED".equals(instruction)) {
-        instruction = f("This damage description is created by automation at %s.",
-            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.recoveryTicket.click();
+      page.editRecoveryFrame.waitUntilVisible();
+      getWebDriver().switchTo().frame(page.editRecoveryFrame.getWebElement());
+      page.editTicketDialog.waitUntilVisible();
+      if (finalData.containsKey("status")) {
+        page.editTicketDialog.ticketStatus.selectValue(finalData.get("status"));
       }
-      page.editTicketDialog.newInstructions.setValue(instruction);
-    }
-    page.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
+      if (finalData.containsKey("keepCurrentOrderOutcome")) {
+        if (page.editTicketDialog.keep.waitUntilVisible(5)) {
+          page.editTicketDialog.keep.click();
+          page.editTicketDialog.keep.waitUntilInvisible();
+        }
+      }
+      if (finalData.containsKey("outcome")) {
+        page.editTicketDialog.orderOutcome.selectValue(finalData.get("outcome"));
+      }
+      if (finalData.containsKey("assignTo")) {
+        page.editTicketDialog.assignTo.selectValue(finalData.get("assignTo"));
+      }
+      if (finalData.containsKey("rtsReason")) {
+        page.editTicketDialog.rtsReason.selectValue(finalData.get("rtsReason"));
+      }
+      if (finalData.containsKey("newInstructions")) {
+        String instruction = finalData.get("newInstructions");
+        if ("GENERATED".equals(instruction)) {
+          instruction = f("This damage description is created by automation at %s.",
+              DTF_CREATED_DATE.format(ZonedDateTime.now()));
+        }
+        page.editTicketDialog.newInstructions.setValue(instruction);
+      }
+      page.editTicketDialog.updateTicket.click();
+    });
   }
 
   @When("^Operator create new recovery ticket on Edit Order V2 page:$")
   public void createNewTicket(Map<String, String> mapOfData) {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-
+    mapOfData = resolveKeyValues(mapOfData);
+    String trackingId = mapOfData.get("trackingId");
     String entrySource = mapOfData.get("entrySource");
     String investigatingDepartment = mapOfData.get("investigatingDepartment");
     String investigatingHub = mapOfData.get("investigatingHub");
@@ -1713,6 +1902,11 @@ public class EditOrderV2Steps extends AbstractSteps {
       }
       page.editCashCollectionDetailsDialog.saveChanges.click();
     });
+  }
 
+  @Given("Operator unmask edit order V2 page")
+  public void unmaskEditOrder() {
+    List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
+    page.operatorClickMaskingText(elements);
   }
 }

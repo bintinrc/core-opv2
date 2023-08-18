@@ -1,36 +1,22 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.sort.sort_belt_manager.LogicForm;
-import co.nvqa.commons.model.sort.sort_belt_manager.RuleForm;
-import co.nvqa.operator_v2.model.ArmCombination;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
+import co.nvqa.commonsort.model.sort_vendor.LogicForm;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage;
-import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.ArmCombinationContainer;
 import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_ARM_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_GRANULAR_STATUSES_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_RTS_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_SERVICE_LEVELS_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH;
-import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_TAGS_VALUE_XPATH;
 
 /**
  * @author Niko Susanto
@@ -100,8 +86,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
   }
 
 
-  @Then("Operator selects a logic to copy")
-  public void operatorSelectsALogicToCopy() {
+  @Then("Operator selects {string} logic to copy")
+  public void operatorSelectsLogicToCopy(String logicName) {
     // Check every necessary elements exists
     sortBeltManagerPage.waitUntilVisibilityOfElementLocated(
         SortBeltManagerPage.CREATE_COPY_DIALOG_XPATH);
@@ -115,7 +101,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
         .isTrue();
 
     // Get created logic name
-    String createdLogicName = ((LogicForm) get(KEY_SBM_CREATED_LOGIC_FORM)).getName();
+    String createdLogicName = resolveValue(logicName);
     sortBeltManagerPage.copyLogicInput.click();
     pause500ms();
     sortBeltManagerPage.copyLogicInput.sendKeys(createdLogicName);
@@ -148,7 +134,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
     if (selection.equals("default")) {
       createdLogicName = TestConstants.SORT_BELT_MANAGER_DEFAULT_LOGIC;
     } else {
-      createdLogicName = ((LogicForm) get(KEY_SBM_CREATED_LOGIC_FORM)).getName();
+      createdLogicName = resolveValue(selection);
     }
     sortBeltManagerPage.searchAndSelectALogic(createdLogicName);
   }
@@ -170,14 +156,14 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void operatorFillsLogicBasicInformation(Map<String, String> dataTableAsMap) {
     Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
     sortBeltManagerPage.fillLogicBasicInformation(inputMap, false);
-
   }
 
   @And("Operator edits logic basic information")
   public void operatorEditsLogicBasicInformation(Map<String, String> dataTableAsMap) {
     Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
     if ("CREATED".equals(inputMap.get("name"))) {
-      inputMap.replace("name", ((LogicForm) get(KEY_SBM_CREATED_LOGIC_FORM)).getName());
+      inputMap.replace("name",
+          inputMap.get("createdName"));
     }
     sortBeltManagerPage.fillLogicBasicInformation(inputMap, true);
   }
@@ -188,7 +174,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
         Object.class).stream().map(f -> convertValueToMap(f, String.class, String.class)).collect(
         Collectors.toList());
     sortBeltManagerPage.fillLogicRules(filtersAsList);
-    put(KEY_SBM_CREATED_LOGIC_FORM, sortBeltManagerPage.getUpdatedFormState());
+    put(SortScenarioStorageKeys.KEY_SORT_SBM_CREATED_LOGIC_FORM,
+        sortBeltManagerPage.getUpdatedFormState());
   }
 
   @And("Operator edits logic rules")
@@ -197,13 +184,15 @@ public class SortBeltManagerSteps extends AbstractSteps {
         Object.class).stream().map(f -> convertValueToMap(f, String.class, String.class)).collect(
         Collectors.toList());
     sortBeltManagerPage.fillLogicRules(filtersAsList, true);
-    put(KEY_SBM_CREATED_LOGIC_FORM, sortBeltManagerPage.getUpdatedFormState());
+    put(SortScenarioStorageKeys.KEY_SORT_SBM_CREATED_LOGIC_FORM,
+        sortBeltManagerPage.getUpdatedFormState());
   }
 
   @And("Operator deletes extra rules in create logic")
   public void operatorDeletesExtraRulesInCreateLogic() {
     sortBeltManagerPage.deleteRulesExceptTheFirstOne();
-    put(KEY_SBM_CREATED_LOGIC_FORM, sortBeltManagerPage.getUpdatedFormState());
+    put(SortScenarioStorageKeys.KEY_SORT_SBM_CREATED_LOGIC_FORM,
+        sortBeltManagerPage.getUpdatedFormState());
   }
 
   @And("Operator clicks next button in create logic")
@@ -222,20 +211,15 @@ public class SortBeltManagerSteps extends AbstractSteps {
         .isTrue();
   }
 
-  @And("Operator make sure logic checking is correct")
-  public void operatorMakeSureLogicCheckingIsCorrect() {
-    LogicForm logicForm = get(KEY_SBM_CREATED_LOGIC_FORM);
-    sortBeltManagerPage.checkLogicValuesInCheckLogicPage(logicForm);
-  }
-
   @And("Operator clicks save button in check logic")
-  public void operatorClicksSaveButtonInCheckLogic() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
+  public void operatorClicksSaveButtonInCheckLogic(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String logicName = data.get("logicName");
     sortBeltManagerPage.saveLogic.click();
     sortBeltManagerPage.waitUntilVisibilityOfElementLocated(
-        String.format(SortBeltManagerPage.SUB_PAGE_HEADER_XPATH, logic.getName()));
+        String.format(SortBeltManagerPage.SUB_PAGE_HEADER_XPATH, logicName));
     Assertions.assertThat(sortBeltManagerPage.isElementExist(
-            String.format(SortBeltManagerPage.SUB_PAGE_HEADER_XPATH, logic.getName())))
+            String.format(SortBeltManagerPage.SUB_PAGE_HEADER_XPATH, logicName)))
         .as("Redirected to Logic Detail page")
         .isTrue();
   }
@@ -294,35 +278,17 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @And("Operator make sure unique rules and arms are correct")
   public void operatorMakeSureUniqueRulesAndArmsAreCorrect() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
+    LogicForm logic = get(SortScenarioStorageKeys.KEY_SORT_SBM_CREATED_LOGIC_FORM);
     Assertions.assertThat(sortBeltManagerPage.checkIfUniqueRulesAndArmsAreCorrect(logic))
         .as("Unique rules and arms summary is CORRECT")
         .isTrue();
   }
-
-  @And("Operator make sure duplicate rules are correct")
-  public void operatorMakeSureDuplicateRulesAreCorrect() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
-    Assertions.assertThat(sortBeltManagerPage.checkIfDuplicateRulesAreCorrect(logic))
-        .as("Duplicate rules checking is CORRECT")
-        .isTrue();
-  }
-
-  @And("Operator make sure conflicting shipment rules are correct")
-  public void operatorMakeSureConflictingShipmentRulesAreCorrect() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
-    Assertions.assertThat(sortBeltManagerPage.checkIfConflictingShipmentRulesAreCorrect(logic))
-        .as("Conflicting rules checking is CORRECT")
-        .isTrue();
-  }
-
   @And("Operator make sure can not click save button in check logic")
   public void operatorMakeSureCanNotClickSaveButtonInCheckLogic() {
     Assertions.assertThat(sortBeltManagerPage.saveLogic.isEnabled())
         .as("Operator can not save logic with duplicate rules")
         .isFalse();
   }
-
   @When("Operator activates the selected logic")
   public void operatorActivatesTheSelectedLogic() {
     Map<String, String> selectedLogic = sortBeltManagerPage.getLogicDetailFromPage();
@@ -353,433 +319,58 @@ public class SortBeltManagerSteps extends AbstractSteps {
         .as("Activate logic button is DISABLED for currently active logic")
         .isFalse();
   }
+  @And("Operator verify created logic is correct")
+  public void operatorVerifyCreatedLogicIsCorrect(List<Map<String, String>> data) {
+    List<String> opv2 = new ArrayList<>();
+    List<String> db = new ArrayList<>();
+    for (Map<String, String> entry : data) {
+      opv2.add(resolveValue(entry.get("actualOpv2")));
+      db.add(resolveValue(entry.get("expectedDb")));
+    }
+    Assertions.assertThat(opv2).as("Created Logic is Correct").isEqualTo(db);
+  }
 
-  /* =================================================================================== */
-  /* ====================================== SBMv1 ====================================== */
-  /* =================================================================================== */
-
-  @When("^Operator select the hub of Sort Belt Manager$")
-  public void operatorSelectTheHubOfSortBeltManager(Map<String, String> data) {
+  @Then("Operator make sure correct logic is activated:")
+  public void operatorMakeSureCorrectLogicIsActivated(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String hubName = data.get("hubName");
+Long activeLogicId = Long.parseLong(data.get("activeLogicId"));
+Long createdLogicId = Long.parseLong(data.get("createdLogicId"));
+Assertions.assertThat(activeLogicId).as("Created Logic Activated").isEqualTo(createdLogicId);
+  }
+
+  @And("Operator make sure Logic is correct as data below:")
+  public void operatorMakeSureLogicIsCorrectAsDataBelow(Map<String, String> data) {
     sortBeltManagerPage.waitUntilPageLoaded();
-    sortBeltManagerPage.selectHub.selectValue(hubName);
-  }
-
-  @When("^Operator click Proceed button on Sort Belt Manager page$")
-  public void operatorClickProceedButton() {
-    sortBeltManagerPage.proceed.clickAndWaitUntilDone();
-  }
-
-  @When("^Operator fill data in Create Configuration modal:$")
-  public void operatorFillDataInCreateConfigurationModal(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    sortBeltManagerPage.createConfigurationModal.waitUntilVisible();
-    String value = data.get("firstFilter");
-    if (StringUtils.isNotBlank(value)) {
-      sortBeltManagerPage.createConfigurationModal.firstFilter.selectValue(value.toLowerCase());
+    String xpath;
+    int numberOfRules = 0;
+    String condition = (data.get("condition"));
+    int numberOfArms = Integer.parseInt((data.get("numberOfArms")));
+    if (StringUtils.isNotBlank(data.get("numberOfRules"))) {
+      numberOfRules = Integer.parseInt((data.get("numberOfRules")));
     }
-    value = data.get("secondFilter");
-    if (StringUtils.isNotBlank(value)) {
-      sortBeltManagerPage.createConfigurationModal.secondFilter.selectValue(value.toLowerCase());
+    if ("no rules".equals(condition)) {
+      xpath = f(SortBeltManagerPage.NO_RULE_XPATH, numberOfArms);
+      sortBeltManagerPage.waitUntilVisibilityOfElementLocated(xpath);
+      Assertions.assertThat(sortBeltManagerPage.isElementExist(xpath)).isTrue()
+          .as("There is %d Arm with no rules", numberOfArms);
+    } else if ("same rules".equals(condition)) {
+      xpath = f(SortBeltManagerPage.MULTIPLE_RULE_XPATH, numberOfRules, numberOfArms);
+      sortBeltManagerPage.waitUntilVisibilityOfElementLocated(xpath);
+      Assertions.assertThat(sortBeltManagerPage.isElementExist(xpath)).isTrue()
+          .as("Multiple arms with the same rules: %d rule(s) across %d arm(s)", numberOfRules,
+              numberOfArms);
+    } else if ("unique".equals(condition)) {
+      xpath = f(SortBeltManagerPage.UNIQUE_RULE_XPATH, numberOfArms);
+      sortBeltManagerPage.waitUntilVisibilityOfElementLocated(xpath);
+      Assertions.assertThat(sortBeltManagerPage.isElementExist(xpath)).isTrue()
+          .as("Unique rules and arms: %d Results", numberOfArms);
+    } else if ("conflicting shipment destination".equals(condition)) {
+      xpath = f(SortBeltManagerPage.CONFLICTING_SHIPMENT_DESTINATION_RULE_XPATH, numberOfRules,
+          numberOfArms);
+      sortBeltManagerPage.waitUntilVisibilityOfElementLocated(xpath);
+      Assertions.assertThat(sortBeltManagerPage.isElementExist(xpath)).isTrue()
+          .as("Conflicting shipment destination & type: %d rule(s) across %d arm(s)", numberOfRules,
+              numberOfArms);
     }
-    value = data.get("thirdFilter");
-    if (StringUtils.isNotBlank(value)) {
-      sortBeltManagerPage.createConfigurationModal.thirdFilter.selectValue(value.toLowerCase());
-    }
-    value = data.get("unassignedParcelArm");
-    if (StringUtils.isNotBlank(value)) {
-      sortBeltManagerPage.createConfigurationModal.unassignedParcelArm.selectValue(value);
-    }
-    sortBeltManagerPage.createConfigurationModal.confirm.click();
-    sortBeltManagerPage.createConfigurationModal.waitUntilInvisible();
-  }
-
-  @When("^Operator input Configuration name and description$")
-  public void operatorInputConfigurationNameAndDescription(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String name = data.get("configName");
-    String description = data.get("description");
-
-    sortBeltManagerPage.nameInput.setValue(name);
-    Optional.ofNullable(description).ifPresent(value -> {
-      sortBeltManagerPage.descriptionInput.setValue(value);
-    });
-
-    put(KEY_CREATED_SORT_BELT_CONFIG, name);
-    putInList(KEY_LIST_OF_CREATED_SORT_BELT_CONFIGS, name);
-  }
-
-  @When("^Make sure new configuration is not created$")
-  public void makeSureNewConfigurationIsNotCreated() {
-    String configName = get(KEY_CREATED_SORT_BELT_CONFIG);
-    sortBeltManagerPage.verifyConfigNotCreated(configName);
-  }
-
-  @Given("^Operator select combination value for \"([^\"]*)\"$")
-  public void operatorSelectCombinationValue(String armName, Map<String, String> data) {
-    data = resolveKeyValues(data);
-    armName = resolveValue(armName);
-    String status = data.get("status");
-    String destinationHubs = data.get("destinationHubs");
-    String orderTags = data.get("orderTags");
-    String sameAs = data.get("sameAs");
-    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    container.enable.setValue(StringUtils.equalsAnyIgnoreCase(status, "enable", "enabled"));
-    if (StringUtils.isNotBlank(destinationHubs)) {
-      container.getFilterSelect("Destination Hub", 1).selectValue(destinationHubs);
-    }
-    if (StringUtils.isNotBlank(orderTags)) {
-      container.getFilterSelect("Order Tag", 1).selectValue(orderTags);
-    }
-    if (StringUtils.isNotBlank(sameAs)) {
-      container.sameAs.selectValues(splitAndNormalize(sameAs.replaceAll("Arm ", "")));
-    }
-  }
-
-  @Given("Operator remove {string} Same As value from {string} arm")
-  public void operatorRemoveSameAsValue(String sameAsArmName, String armName) {
-    sameAsArmName = resolveValue(sameAsArmName);
-    armName = resolveValue(armName);
-    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    container.removeSameAs(sameAsArmName);
-  }
-
-  @Given("Operator verify {string} arm is enabled on Create Configuration page")
-  public void operatorVerifyArmEnabled(String armName) {
-    armName = resolveValue(armName);
-    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    Assertions.assertThat(container.enable.isEnabled()).as(armName + " is enabled").isTrue();
-  }
-
-  @Given("Operator verify {string} arm is disabled on Create Configuration page")
-  public void operatorVerifyArmDisabled(String armName) {
-    armName = resolveValue(armName);
-    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    Assertions.assertThat(container.enable.isEnabled()).as(armName + " is enabled").isFalse();
-  }
-
-  @Given("Operator remove {int} combination for {string}")
-  public void operatorRemoveCombination(int index, String armName) {
-    armName = resolveValue(armName);
-    sortBeltManagerPage.getArmCombinationContainer(armName).getRemoveButton(index).click();
-  }
-
-  @Given("^Operator add combination value for \"([^\"]*)\"$")
-  public void operatorAddCombinationValue(String armName, Map<String, String> data) {
-    data = resolveKeyValues(data);
-    armName = resolveValue(armName);
-    String destinationHubs = data.get("destinationHubs");
-    String orderTags = data.get("orderTags");
-    ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    container.addCombination.click();
-    int index = container.getCombinationsCount();
-    if (StringUtils.isNotBlank(destinationHubs)) {
-      container.getFilterSelect("Destination Hub", index).selectValue(destinationHubs);
-    }
-    if (StringUtils.isNotBlank(orderTags)) {
-      container.getFilterSelect("Order Tag", index).selectValue(orderTags);
-    }
-  }
-
-  @Given("^Operator click Confirm button on Configuration Summary page$")
-  @When("^Operator click Confirm button on Create Configuration page$")
-  @Then("^Operator click Confirm button on Edit Configuration page$")
-  public void operatorClickConfirmButton() {
-    sortBeltManagerPage.confirm.click();
-  }
-
-  @When("^Operator verifies combination appears under Duplicate Combination table:$")
-  public void makeSureDuplicateCombinationIsAppears(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    ArmCombination expectedCombination = new ArmCombination(data);
-
-    List<ArmCombination> actualList = sortBeltManagerPage.duplicatedCombinationsTable
-        .readAllEntities();
-    Assertions.assertThat(actualList).as("List of duplicated arm combinations").hasSize(1);
-    expectedCombination.compareWithActual(actualList.get(0));
-  }
-
-  @When("^Operator verifies combination appears under Unique Combination table:$")
-  public void makeSureUniqueCombinationIsAppears(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    ArmCombination expectedCombination = new ArmCombination(data);
-
-    List<ArmCombination> actualList = sortBeltManagerPage.uniqueCombinationsTable
-        .readAllEntities();
-    Assertions.assertThat(actualList).as("List of unique arm combinations").hasSize(1);
-    expectedCombination.compareWithActual(actualList.get(0));
-  }
-
-  @When("^Operator verifies combinations appear under Unique Combination table:$")
-  public void makeSureUniqueCombinationsIsAppears(List<Map<String, String>> data) {
-    List<ArmCombination> actualList = sortBeltManagerPage.uniqueCombinationsTable
-        .readAllEntities();
-    Assertions.assertThat(actualList).as("List of unique arm combinations").hasSize(data.size());
-    data.forEach(map -> {
-      ArmCombination expectedCombination = new ArmCombination(resolveKeyValues(map));
-      boolean found = actualList.stream().anyMatch(actual -> {
-        try {
-          expectedCombination.compareWithActual(actual);
-          return true;
-        } catch (Throwable ex) {
-          return false;
-        }
-      });
-      Assertions.assertThat(found)
-          .as(f("Not found unique arm combination " + expectedCombination.toMap())).isTrue();
-    });
-  }
-
-  @When("^Operator verify there are no result under Duplicate Combination table$")
-  public void makeSureThereAreNoDuplicateCombinations() {
-    Assertions.assertThat(sortBeltManagerPage.duplicatedCombinationsTable.isEmpty())
-        .as("Duplicate Combination table is empty").isTrue();
-  }
-
-  @When("^Operator verify there are no result under Unique Combination table$")
-  public void makeSureThereAreNoUniqueCombinations() {
-    Assertions.assertThat(sortBeltManagerPage.uniqueCombinationsTable.isEmpty())
-        .as("Unique Combination table is empty").isTrue();
-  }
-
-  @When("^Operator verifies that \"(.+)\" success notification is displayed$")
-  @And("^Operator verifies that \"(.+)\" error notification is displayed$")
-  public void operatorVerifiesToast(String message) {
-    message = resolveValue(message);
-    pause2s();
-    sortBeltManagerPage.waitUntilInvisibilityOfNotification(message, true);
-  }
-
-  @When("Operator verifies Unassigned Parcel Arm is {string} on Sort Belt Manager page")
-  public void verifyUnassignedParcelArmValue(String expected) {
-    Assertions.assertThat(sortBeltManagerPage.unassignedParcelArm.getText())
-        .as("Unassigned Parcel Arm").isEqualTo(expected);
-  }
-
-  @When("^Operator click Edit Configuration button on Sort Belt Manager page$")
-  public void operatorClickEditConfigurationButton() {
-    sortBeltManagerPage.editConfiguration.click();
-  }
-
-  @When("Operator Change Unassigned Parcel Arm to {string} on Edit Configuration page")
-  public void operatorChangeUnassignedParcelArm(String value) {
-    operatorOpensChangeUnassignedParcelArmModal();
-    operatorSelectsUnassignedParcelArmModal(value);
-    sortBeltManagerPage.changeUnassignedParcelArmModal.confirm.click();
-    sortBeltManagerPage.changeUnassignedParcelArmModal.waitUntilInvisible();
-  }
-
-  @When("Operator opens Change Unassigned Parcel Arm modal on Edit Configuration page")
-  public void operatorOpensChangeUnassignedParcelArmModal() {
-    sortBeltManagerPage.editUnassignedParcelsArm.click();
-    sortBeltManagerPage.changeUnassignedParcelArmModal.waitUntilVisible();
-  }
-
-  @When("Operator selects {string} Unassigned Parcel Arm on Edit Configuration page")
-  public void operatorSelectsUnassignedParcelArmModal(String value) {
-    value = resolveValue(value);
-    if (StringUtils.equalsIgnoreCase(value, "none")) {
-      sortBeltManagerPage.changeUnassignedParcelArmModal.unassignedParcelArm.selectByIndex(0);
-    } else {
-      sortBeltManagerPage.changeUnassignedParcelArmModal.unassignedParcelArm.selectValue(value);
-    }
-  }
-
-  @When("Operator verifies filter values in Change Unassigned Parcel Arm modal:")
-  public void operatorVerifyFilterValues(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String value = data.get("Destination Hub");
-    if (StringUtils.isNotBlank(value)) {
-      Assertions.assertThat(
-              sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Destination Hub"))
-          .as("Destination Hub").isEqualTo(value);
-    }
-    value = data.get("Order Tag");
-    if (StringUtils.isNotBlank(value)) {
-      Assertions.assertThat(
-              sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Order Tag"))
-          .as("Order Tag").isEqualTo(value);
-    }
-  }
-
-  @When("Operator verifies {string} message is displayed in Change Unassigned Parcel Arm modal")
-  public void operatorVerifyNoteMessage(String value) {
-    Assertions.assertThat(sortBeltManagerPage.changeUnassignedParcelArmModal.note.isDisplayedFast())
-        .as("Note message is displayed").isTrue();
-    Assertions.assertThat(sortBeltManagerPage.changeUnassignedParcelArmModal.note.getText())
-        .as("Note message").isEqualTo(value);
-  }
-
-  @When("Operator click Confirm button in Change Unassigned Parcel Arm modal")
-  public void operatorClickConfirmButtonInChangeUnassignedParcelArmModal() {
-    sortBeltManagerPage.changeUnassignedParcelArmModal.confirm.click();
-  }
-
-  @When("Operator save active configuration value on Sort Belt Manager page")
-  public void operatorSaveActiveConfigurationValue() {
-    put(KEY_ACTIVE_SORT_BELT_CONFIG, sortBeltManagerPage.getActiveConfiguration());
-  }
-
-  @When("Operator change active configuration to {string} on Sort Belt Manager page")
-  public void operatorChangeActiveConfigurationValue(String value) {
-    value = resolveValue(value);
-    sortBeltManagerPage.change.click();
-    sortBeltManagerPage.changeActiveConfigurationModal.waitUntilClickable();
-    sortBeltManagerPage.changeActiveConfigurationModal.configuration.selectValue(value);
-    sortBeltManagerPage.changeActiveConfigurationModal.confirm.click();
-    sortBeltManagerPage.changeActiveConfigurationModal.waitUntilInvisible();
-  }
-
-  @When("Operator verify active configuration values on Sort Belt Manager page:")
-  public void operatorVerifyActiveConfigurationValueS(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    String expected = data.get("activeConfiguration");
-    if (StringUtils.isNotBlank(expected)) {
-      Assertions.assertThat(sortBeltManagerPage.getActiveConfiguration()).as("Active Configuration")
-          .isEqualTo(expected);
-    }
-    expected = data.get("previousConfiguration");
-    if (StringUtils.isNotBlank(expected)) {
-      Assertions.assertThat(sortBeltManagerPage.getPreviousConfiguration())
-          .as("Previous Configuration").isEqualTo(expected);
-    }
-    expected = data.get("lastChangedAt");
-    if (StringUtils.isNotBlank(expected)) {
-      Assertions.assertThat(sortBeltManagerPage.getLastChangedAt()).as("Last Changed At")
-          .startsWith(expected);
-    }
-  }
-
-  @And("Operator make sure duplicate rules are correct v2")
-  public void operatorMakeSureDuplicateRulesAreCorrectV() {
-    int duplicate = get("DUPLICATE");
-    int arms = get("ARMS");
-    Assertions.assertThat(
-            sortBeltManagerPage.findElementByXpath(CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH).getText())
-        .as("Duplicate rules checking is CORRECT")
-        .isEqualTo(
-            "Multiple rules with the same filters: " + duplicate + " rule(s) across " + arms
-                + " arm(s)");
-  }
-
-  @And("Operator checks filled logic rules")
-  public void operatorChecksFilledLogicRules() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
-    int duplicateCount = 0;
-    List<RuleForm> rules = logic.getRules();
-    HashMap<String, Integer> dupes = new HashMap<String, Integer>();
-    for (int i = 1; i < rules.size(); i++) {
-      if (dupes.containsKey(
-          sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-              .getText())) {
-        i++;
-      }
-      for (int j = i + 1; j <= rules.size(); j++) {
-        if (sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_RTS_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_RTS_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_GRANULAR_STATUSES_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(
-                        String.format(FORM_RULE_GRANULAR_STATUSES_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_SERVICE_LEVELS_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(
-                        String.format(FORM_RULE_SERVICE_LEVELS_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_TAGS_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_TAGS_VALUE_XPATH, j))
-                    .getText())) {
-          if (dupes.containsKey(
-              sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                  .getText())) {
-            dupes.put(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                    .getText(), dupes.getOrDefault(sortBeltManagerPage.findElementByXpath(
-                    String.format(FORM_RULE_ARM_VALUE_XPATH, i)).getText(), 0) + 1);
-          } else {
-            dupes.put(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                    .getText(), 2);
-          }
-        }
-      }
-    }
-    for (int g : dupes.values()) {
-      duplicateCount += g;
-    }
-    put("ARMS", dupes.size());
-    put("DUPLICATE", duplicateCount);
-  }
-
-  @And("Operator checks conflicting logic rules")
-  public void operatorChecksConflictingLogicRules() {
-    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
-    int conflictingCount = 0;
-    List<RuleForm> rules = logic.getRules();
-    HashMap<String, Integer> conflicts = new HashMap<String, Integer>();
-    for (int i = 1; i < rules.size(); i++) {
-      if (conflicts.containsKey(
-          sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-              .getText())) {
-        i++;
-      }
-      for (int j = i + 1; j <= rules.size(); j++) {
-        if (sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, j))
-                    .getText())) {
-          if (!sortBeltManagerPage.findElementByXpath(
-                  String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, i))
-              .getText().equalsIgnoreCase(
-                  sortBeltManagerPage.findElementByXpath(
-                          String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, j))
-                      .getText())) {
-            if (conflicts.containsKey(
-                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                    .getText())) {
-              conflicts.put(
-                  sortBeltManagerPage.findElementByXpath(
-                          String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                      .getText(), conflicts.getOrDefault(sortBeltManagerPage.findElementByXpath(
-                      String.format(FORM_RULE_ARM_VALUE_XPATH, i)).getText(), 0) + 1);
-            } else {
-              conflicts.put(
-                  sortBeltManagerPage.findElementByXpath(
-                          String.format(FORM_RULE_ARM_VALUE_XPATH, i))
-                      .getText(), 2);
-            }
-          }
-
-        }
-      }
-
-    }
-    for (int g : conflicts.values()) {
-      conflictingCount += g;
-    }
-    put("ARMS", conflictingCount);
-    put("CONFLICTS", conflictingCount);
-  }
-
-  @And("Operator make sure conflicting shipment rules are correct v2")
-  public void operatorMakeSureConflictingShipmentRulesAreCorrectV() {
-    int conflicts = get("CONFLICTS");
-    int arms = get("ARMS");
-    Assertions.assertThat(
-            sortBeltManagerPage.findElementByXpath(CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH)
-                .getText())
-        .as("Conflicting rules checking is CORRECT")
-        .isEqualTo(
-            "Conflicting shipment destination & type: " + conflicts + " rule(s) across " + arms
-                + " arm(s)");
   }
 }

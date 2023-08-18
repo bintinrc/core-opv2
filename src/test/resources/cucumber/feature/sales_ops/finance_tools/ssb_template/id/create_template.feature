@@ -13,16 +13,16 @@ Feature: Create SSB Template
     And SSB Report Template Editor page is loaded
     Then Operator creates SSB template with below data successfully
       | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | selectHeaders       | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID          |
+      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
+      | selectHeaders       | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID,L1 ID (To-address L1 ID),L2 ID (To-address L2 ID),L3 ID (To-address L3 ID) |
     Then DB Operator gets the template details using template name
     Then Operator verifies below details in billing_qa_gl.templates table
       | column                | expected_value                                          |
       | system_id             | {KEY_COUNTRY}                                           |
       | description           | {KEY_TEMPLATE.description}                              |
       | report_type           | {KEY_TEMPLATE.reportType}                               |
-      | configuration         | notNull                                                 |
-      | configuration.headers | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID |
-      | created_at            | {gradle-current-date-yyyy-MM-dd}                        |
+      | configuration         | notNull                                                                   |
+      | configuration.headers | Legacy Shipper ID,Shipper Name,Billing Name,Tracking ID,L1 ID,L2 ID,L3 ID |
+      | created_at            | {gradle-current-date-yyyy-MM-dd}                                          |
       | updated_at            | {gradle-current-date-yyyy-MM-dd}                        |
       | deleted_at            | null                                                    |

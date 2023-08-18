@@ -81,6 +81,28 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator filter route groups table on Route Group Management page:")
+  public void filterRouteGroups(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    routeGroupManagementPage.inFrame(page -> {
+      page.routeGroupsTable.clearColumnFilters();
+      finalData.forEach((key, value) -> {
+        page.routeGroupsTable.filterByColumn(key, value);
+      });
+    });
+  }
+
+  @When("Operator verify only route groups records presented on Route Group Management page:")
+  public void verifyOnlyRouteGroupsRecords(List<Map<String, String>> data) {
+    var expected = data.stream()
+        .map(r -> new RouteGroupInfo(resolveKeyValues(r)))
+        .collect(Collectors.toList());
+    routeGroupManagementPage.inFrame(page -> {
+      var actual = page.routeGroupsTable.readAllEntities();
+      expected.forEach(e -> DataEntity.assertListContains(actual, e, "Route groups records"));
+    });
+  }
+
   @Then("^Route Groups Management page is loaded$")
   public void routeGroupManagementPageIsLoaded() {
     routeGroupManagementPage.inFrame(page -> page.waitUntilLoaded(10));
@@ -332,6 +354,53 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       }
       routeGroupManagementPage.editRouteGroupDialog.downloadSelected.click();
       routeGroupManagementPage.verifyFileDownloadedSuccessfully(CSV_FILE_NAME);
+    });
+  }
+
+  @When("Operator verify job record in Edit Route Group modal on Route Group Management page:")
+  public void verifyJobRecord(Map<String, String> data) {
+    var expected = new RouteGroupJobDetails(resolveKeyValues(data));
+    routeGroupManagementPage.inFrame(page -> {
+      page.editRouteGroupDialog.waitUntilVisible();
+      page.editRouteGroupDialog.jobDetailsTable.clearColumnFilters();
+      page.editRouteGroupDialog.jobDetailsTable.filterByColumn(COLUMN_ID, expected.getId());
+      Assertions.assertThat(page.editRouteGroupDialog.jobDetailsTable.isEmpty())
+          .withFailMessage("Job with id [" + expected.getId() + "] was not found")
+          .isFalse();
+      var actual = page.editRouteGroupDialog.jobDetailsTable.readEntity(1);
+      expected.compareWithActual(actual);
+    });
+  }
+
+  @When("Operator clear jobs table filters in Edit Route Group modal on Route Group Management page")
+  public void clearJobsTableFilters() {
+    routeGroupManagementPage.inFrame(page -> {
+      page.editRouteGroupDialog.waitUntilVisible();
+      page.editRouteGroupDialog.jobDetailsTable.clearColumnFilters();
+    });
+  }
+
+  @When("Operator verify only job records presented in Edit Route Group modal on Route Group Management page:")
+  public void verifyOnlyJobRecords(List<Map<String, String>> data) {
+    var expected = data.stream()
+        .map(r -> new RouteGroupJobDetails(resolveKeyValues(r)))
+        .collect(Collectors.toList());
+    routeGroupManagementPage.inFrame(page -> {
+      page.editRouteGroupDialog.waitUntilVisible();
+      var actual = page.editRouteGroupDialog.jobDetailsTable.readAllEntities();
+      expected.forEach(e -> DataEntity.assertListContains(actual, e, "Job records"));
+    });
+  }
+
+  @When("Operator filter job records in Edit Route Group modal on Route Group Management page:")
+  public void filterJobRecords(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    routeGroupManagementPage.inFrame(page -> {
+      page.editRouteGroupDialog.waitUntilVisible();
+      page.editRouteGroupDialog.jobDetailsTable.clearColumnFilters();
+      finalData.forEach((key, value) -> {
+        page.editRouteGroupDialog.jobDetailsTable.filterByColumn(key, value);
+      });
     });
   }
 

@@ -1,13 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.mm.model.MiddleMileDriver;
+import co.nvqa.common.mm.utils.MiddleMileUtils;
+import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.common.utils.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -22,12 +23,14 @@ import io.cucumber.java.en.When;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +40,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_HUB_RELATIONS;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB;
 import static co.nvqa.operator_v2.selenium.page.MovementManagementPage.SchedulesTable.COLUMN_ORIGIN_HUB;
 
@@ -546,7 +550,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator load schedules on Movement Management page with retry using data below:")
   public void operatorLoadSchedulesOnMovementManagementPageWithRetryUsingDataBelow(
       Map<String, String> inputData) {
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       try {
         final Map<String, String> data = resolveKeyValues(inputData);
         String crossdockHub = data.get("crossdockHub");
@@ -561,7 +565,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPageIsLoaded();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, "Loading movement schedule...", 1000, 10);
   }
 
   @And("Operator load schedules and verifies on Movement Management page with retry using data below:")
@@ -613,8 +617,8 @@ public class MovementManagementSteps extends AbstractSteps {
       MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(i + 1);
       movementSchedule.getSchedule(i).compareWithActual(actual);
     }
-    if (movementManagementPage.middleMileDrivers != null) {
-      movementManagementPage.verifyListDriver(movementManagementPage.middleMileDrivers);
+    if (MovementManagementPage.middleMileDrivers != null) {
+      movementManagementPage.verifyListDriver(MovementManagementPage.middleMileDrivers);
     }
   }
 
@@ -630,16 +634,19 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
-        pause5s();
+        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
-        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       default:
         throw new IllegalArgumentException(
             f("Unknown button name [%s] on 'Add Movement Schedule' dialog", buttonName));
     }
+
+    movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
+    movementManagementPage.closeIfConfirmDialogAppear();
+
   }
 
   @Deprecated
@@ -688,19 +695,41 @@ public class MovementManagementSteps extends AbstractSteps {
   }
 
   @And("Operator fills in Add Movement Schedule form using data below:")
-  public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> data) {
+  public void operatorFillsInAddMovementScheduleFormUsingDataBelow(Map<String, String> dataTableAsMap) {
+    Map<String, String> data = resolveKeyValues(dataTableAsMap);
+    if (dataTableAsMap.containsKey("drivers")) {
+      List<MiddleMileDriver> drivers;
+      if (MiddleMileUtils.isCommaSeparated(dataTableAsMap.get("drivers"))) {
+        drivers = Arrays.stream(dataTableAsMap.get("drivers").split(","))
+            .map((Function<String, MiddleMileDriver>) this::resolveValue)
+            .collect(Collectors.toList());
+      } else if (MiddleMileUtils.isSingleKeyObject(dataTableAsMap.get("drivers"))) {
+        drivers = Collections.singletonList(resolveValue(dataTableAsMap.get("drivers")));
+      } else {
+        drivers = resolveValue(dataTableAsMap.get("drivers"));
+      }
+      data.put("drivers", drivers.stream().map(MiddleMileDriver::getUsername).collect(Collectors.joining(",")));
+    }
+
+    co.nvqa.commonsort.model.sort.Hub originHub = resolveValue(dataTableAsMap.get("originHub"));
+    co.nvqa.commonsort.model.sort.Hub destinationHub = resolveValue(dataTableAsMap.get("destinationHub"));
+
+    data.put("originHub", originHub.getName());
+    data.put("destinationHub", destinationHub.getName());
+
     doWithRetry(() -> {
       try {
-        if (data.containsKey("drivers")) {
-          String driversJoined = getList(data.get("drivers"), MiddleMileDriver.class).stream().map(MiddleMileDriver::getUsername).collect(
-              Collectors.joining(","));
-          data.put("drivers", driversJoined);
-        }
+        movementManagementPage.addMovementScheduleModal.fill(resolveKeyValues(data));
 
-        movementManagementPage.addMovementScheduleModal.fill(data);
+        co.nvqa.common.mm.model.HubRelation hubRelation = new co.nvqa.common.mm.model.HubRelation();
+        hubRelation.setOriginHubId(originHub.getId());
+        hubRelation.setDestinationHubId(destinationHub.getId());
+        hubRelation.setOriginHubIds(Collections.singletonList(originHub.getId()));
+        hubRelation.setDestinationHubIds(Collections.singletonList(destinationHub.getId()));
+        hubRelation.setFacilityType("CROSSDOCK");
+        hubRelation.setIncludeSchedules(true);
+        putInList(KEY_MM_LIST_OF_CREATED_HUB_RELATIONS, hubRelation);
       } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         LOGGER.info(ex.getMessage());
         navigateRefresh();
         movementManagementPage.switchTo();

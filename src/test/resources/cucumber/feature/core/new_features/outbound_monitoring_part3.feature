@@ -1,8 +1,8 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoringPart3 @NewFeatures1
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart3 @NewFeatures1
 Feature: Outbound Monitoring
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -36,9 +36,8 @@ Feature: Outbound Monitoring
       | Get ProcessingException [Code:BAD_REQUEST_EXCEPTION][Message:No route found to unroute for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}]] |
     When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Tracking IDs Pulled Out   |
-      | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 1 Tracking IDs pulled out |
     When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
@@ -68,7 +67,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {KEY_DESTINATION_HUB_ID}                   |
@@ -103,7 +101,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {hub-id}                                   |
@@ -123,8 +120,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order is pulled out from route
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -143,7 +139,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
-    And API Operator start the route
     Given Operator go to menu New Features -> Outbound Load Monitoring
     Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
@@ -160,8 +155,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order is pulled out from route
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -182,7 +176,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
-    And API Operator start the route
     And API Operator sweep parcel:
       | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | hubId | {hub-id}                                   |
@@ -208,8 +201,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Clicks on Flag Icon to Un-Mark Route ID on Outbound Monitoring Page
@@ -226,7 +218,6 @@ Feature: Outbound Monitoring
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator go to menu New Features -> Outbound Load Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
@@ -246,6 +237,3 @@ Feature: Outbound Monitoring
       | id   | {KEY_CREATED_ROUTE_ID} |
       | isOk | 0                      |
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

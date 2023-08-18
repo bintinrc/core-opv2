@@ -1,19 +1,17 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.sort.sort_code.SortCode;
-import co.nvqa.commons.support.RandomUtil;
+import co.nvqa.common.ordercreate.model.SortCode;
 import co.nvqa.operator_v2.selenium.page.SortCodePage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
+import java.util.Map;
 import java.util.Objects;
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class SortCodeSteps extends AbstractSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SortCodeSteps.class);
@@ -43,21 +41,39 @@ public class SortCodeSteps extends AbstractSteps {
   }
 
   @When("Operator searches for Sort Code based on its {string}")
-  public void operatorSearchesForSortCodeBasedOnIts(String key) {
-    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
+  public void operatorSearchesForSortCodeBasedOnIts(String key, Map<String, String> data) {
+    SortCode sortCodes = new SortCode();
+    data = resolveKeyValues(data);
+    if (StringUtils.isNotBlank(data.get("postcode"))) {
+      String postCode = data.get("postcode");
+      sortCodes.setPostcode(postCode);
+    }
+    if (StringUtils.isNotBlank(data.get("sortCode"))) {
+      String sortCode = data.get("sortCode");
+      sortCodes.setSortCode(sortCode);
+    }
+
+//    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
     doWithRetry(() -> {
       if (POSTCODE.equalsIgnoreCase(key)) {
-        sortCodePage.postcodeInput.setValue(sortCode.getPostcode());
+        sortCodePage.postcodeInput.setValue(sortCodes.getPostcode());
         return;
       }
-      sortCodePage.sortCodeInput.setValue(sortCode.getSortCode());
+      sortCodePage.sortCodeInput.setValue(sortCodes.getSortCode());
     }, "Searching for Sort Codes");
   }
 
   @Then("Operator verifies that the sort code details are right")
-  public void operatorVerifiesThatTheSortCodeDetailsAreRight() {
-    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
-    sortCodePage.verifiesSortCodeDetailsAreRight(sortCode);
+  public void operatorVerifiesThatTheSortCodeDetailsAreRight(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    SortCode sortCodes = new SortCode();
+    String postcode = data.get("postcode");
+    String sortCode = data.get("sortCode");
+    String id = data.get("id");
+    sortCodes.setSortCode(sortCode);
+    sortCodes.setPostcode(postcode);
+    sortCodes.setId(Long.valueOf(id));
+    sortCodePage.verifiesSortCodeDetailsAreRight(sortCodes);
   }
 
   @When("Operator clicks on download button on the Sort Code Page")
@@ -66,15 +82,36 @@ public class SortCodeSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the details in the downloaded csv are right")
-  public void operatorVerifiesThatTheDetailsInTheDownloadedCsvAreRight() {
-    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
-    sortCodePage.verifiesDownloadedCsvDetailsAreRight(sortCode);
+  public void operatorVerifiesThatTheDetailsInTheDownloadedCsvAreRight(Map<String, String> data) {
+    SortCode sortCodes = new SortCode();
+    data = resolveKeyValues(data);
+    String postcode = data.get("postcode");
+    String sortCode = data.get("sortCode");
+    String id = data.get("id");
+    sortCodes.setSortCode(sortCode);
+    sortCodes.setPostcode(postcode);
+    sortCodes.setId(Long.valueOf(id));
+    sortCodePage.verifiesDownloadedCsvDetailsAreRight(sortCodes);
   }
 
   @When("Operator uploads the CSV file with name {string}")
-  public void operatorUploadsTheCSVFileWithName(String resourcePath) {
+  public void operatorUploadsTheCSVFileWithName(String resourcePath, Map<String, String> data) {
     ClassLoader classLoader = getClass().getClassLoader();
-    File file = getCreateOrderCSVFile(resourcePath, classLoader);
+    data = resolveKeyValues(data);
+    SortCode sortCodes = new SortCode();
+    if (StringUtils.isNotBlank(data.get("postcode"))) {
+      String postcode = data.get("postcode");
+      sortCodes.setPostcode(postcode);
+    }
+    if (StringUtils.isNotBlank(data.get("sortCode"))) {
+      String sortCode = data.get("sortCode");
+      sortCodes.setSortCode(sortCode);
+    }
+    if (StringUtils.isNotBlank(data.get("id"))) {
+      String id = data.get("id");
+      sortCodes.setId(Long.valueOf(id));
+    }
+    File file = getCreateOrderCSVFile(resourcePath, classLoader, sortCodes);
     sortCodePage.uploadFile(file);
   }
 
@@ -100,12 +137,12 @@ public class SortCodeSteps extends AbstractSteps {
     sortCodePage.verifiiesSortCodeIsNotFound();
   }
 
-  private File getCreateOrderCSVFile(String resourcePath, ClassLoader classLoader) {
+  private File getCreateOrderCSVFile(String resourcePath, ClassLoader classLoader,
+      SortCode sortCode) {
     File file = new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
     String content = TestUtils.readFromFile(file);
     String postcodeValue;
     String sortCodeValue;
-    SortCode sortCode = get(KEY_CREATED_SORT_CODE);
     LOGGER.info("content of original file for upload : \n{}", content);
 
     //Replacing existed postcode
@@ -124,7 +161,7 @@ public class SortCodeSteps extends AbstractSteps {
 
     //Replacing new postcode
     if (content.contains("new-postcode")) {
-      postcodeValue = AddressFactory.getRandomAddress().getPostcode();
+      postcodeValue = sortCode.getPostcode();
       content = content.replaceAll("new-postcode", postcodeValue);
       LOGGER.info(postcodeValue);
       sortCode.setPostcode(postcodeValue);
@@ -132,7 +169,7 @@ public class SortCodeSteps extends AbstractSteps {
 
     //Replacing new sort code
     if (content.contains("new-sort-code")) {
-      sortCodeValue = "SA" + StandardTestUtils.randomInt(0, 999) + RandomUtil.randomString(5);
+      sortCodeValue = sortCode.getSortCode();
       content = content.replaceAll("new-sort-code", sortCodeValue);
       LOGGER.info(sortCodeValue);
       sortCode.setSortCode(sortCodeValue);
@@ -142,7 +179,7 @@ public class SortCodeSteps extends AbstractSteps {
 
     String fileName = file.getName();
     file = TestUtils.createFile(fileName, content);
-    put(KEY_CREATED_SORT_CODE, sortCode);
+    put("KEY_OF_UPLOADED_SORT_CODE", sortCode);
     return file;
   }
 }

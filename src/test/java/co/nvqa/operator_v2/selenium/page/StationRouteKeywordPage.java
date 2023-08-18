@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -21,31 +22,34 @@ import org.openqa.selenium.support.FindBy;
  */
 public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeywordPage> {
 
-  @FindBy(xpath = "//div[./label[.='Select your hub']]//div[contains(@class,'ant-select')]")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.select-hub']")
   public AntSelect3 hub;
 
-  @FindBy(xpath = ".//button[.='Create new coverage']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.bulk-create-coverage.button']")
+  public Button bulkCreateCoverage;
+
+  @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.button']")
   public Button createNewCoverage;
 
-  @FindBy(css = "label[title='Add keywords']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.add-keywords.tab']")
   public Button addKeywords;
 
-  @FindBy(css = "label[title='Transfer keywords']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.transfer-keywords.tab']")
   public Button transferKeywords;
 
-  @FindBy(css = "label[title='Remove coverage']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.remove-coverage.tab']")
   public Button removeCoverage;
 
-  @FindBy(css = "label[title='Remove keywords']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.remove-keywords.tab']")
   public Button removeKeywords;
 
-  @FindBy(css = "label[title='Change drivers']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.change-drivers.tab']")
   public Button changeDrivers;
 
-  @FindBy(css = "label[title='Edit area']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.edit-area.tab']")
   public Button editArea;
 
-  @FindBy(css = "button[data-pa-label='Yes, remove']")
+  @FindBy(css = "[data-testid='station-route-keyword-testid.remove-coverage.yes.button']")
   public Button yesRemove;
 
   @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
@@ -65,6 +69,9 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
   @FindBy(css = ".ant-modal")
   public CreateNewCoverageDialog createNewCoverageDialog;
+
+  @FindBy(css = ".ant-modal")
+  public BulkCreateCoverageDialog bulkCreateCoverageDialog;
 
   @FindBy(css = ".ant-modal")
   public NewCoverageCreatedDialog newCoverageCreatedDialog;
@@ -182,6 +189,38 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
     @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.add.button']")
     public Button add;
+
+  }
+
+  public static class BulkCreateCoverageDialog extends AntModal {
+
+    public BulkCreateCoverageDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "[data-testid='common-component-testid.csv-file-select.button']")
+    public FileInput file;
+
+    @FindBy(css = "[data-testid='station-route-keyword-testid.cancel.button']")
+    public Button cancel;
+
+    @FindBy(css = "[data-testid='station-route-keyword-testid.download-template.button']")
+    public Button downloadTemplate;
+
+    @FindBy(css = "[data-testid='station-route-keyword-testid.upload-and-create-coverages.button']")
+    public Button uploadAndCreateCoverages;
+
+    @FindBy(css = ".ant-alert-message tr td:nth-of-type(2)")
+    public List<PageElement> errors;
+
+    @FindBy(css = "[data-testid='station-route-keyword-testid.bulk-progress-footer.download-error-report.button']")
+    public Button downloadErrorReport;
+
+    @FindBy(css = "[data-testid='station-route-keyword-testid.bulk-progress-footer.ok-got-it.button']")
+    public Button ok;
+
+    @FindBy(xpath = ".//div[.='Please download the error report, fix the errors, and upload the CSV again by clicking on the \"Bulk create coverage\" button.']")
+    public PageElement message;
 
   }
 

@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Shippers @Sales
 Feature: Sales
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Download Sample CSV File for Sales Person Creation on Sales Page (uid:3af61552-4ca9-4246-ba7a-1be3dc528dbc)
@@ -64,10 +64,5 @@ Feature: Sales
     When Operator go to menu Shipper -> Sales
     And Operator deletes "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page
     Then Operator verifies that success toast displayed:
-      | top                | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
-      | waitUntilInvisible | true                                                                                        |
+      | top | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
     And Operator verifies "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person was deleted on Sales page
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -4,7 +4,7 @@ Feature: Check Pricing Script
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Check Script - VN Shopee Script
+  Scenario Outline: Check Script - VN Shopee Script - <datasetName>
     Given Operator go to menu Shipper -> Pricing Scripts V2
     And Operator search custom script id "{pricing-script-id-Shopee-VN}"
     And Operator do Run Check on specific Active Script using this data below:

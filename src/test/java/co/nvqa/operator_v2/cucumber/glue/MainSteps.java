@@ -48,9 +48,14 @@ public class MainSteps extends AbstractSteps {
     mainPage.refreshPage_v1();
   }
 
-  @Given("^Operator refresh page$")
+  @Given("Operator refresh page")
   public void operatorRefreshPage() {
     mainPage.refreshPage();
+  }
+
+  @Given("Operator refresh page without unmask")
+  public void operatorRefreshPageWithoutUnmask() {
+    mainPage.refreshPage(false);
   }
 
   @Then("^Toast \"(.+)\" is displayed$")

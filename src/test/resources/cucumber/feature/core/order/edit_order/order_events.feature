@@ -1,8 +1,8 @@
 @OperatorV2 @Core @EditOrder @OrderEvents @EditOrder1
 Feature: Order Events
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Hub Inbound Scan (uid:bc007800-0866-45e1-9b51-c80ab9a7fa88)
@@ -51,7 +51,10 @@ Feature: Order Events
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
@@ -72,7 +75,10 @@ Feature: Order Events
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver deliver the created parcel successfully
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Completed" on Edit Order page
@@ -105,7 +111,10 @@ Feature: Order Events
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver failed the delivery of the created parcel using data below:
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 6           |
@@ -135,7 +144,10 @@ Feature: Order Events
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup using data below:
@@ -166,14 +178,16 @@ Feature: Order Events
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Operator get order details
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verifies that info toast displayed:
-      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
-      | waitUntilInvisible | true                                                                                           |
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
     Then Operator verify order event on Edit order page using data below:
       | name | PULL OUT OF ROUTE |
 
@@ -238,15 +252,13 @@ Feature: Order Events
       | granularStatus | Pending Pickup                      |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success toast displayed:
-      | top                | Status Updated |
-      | waitUntilInvisible | true           |
+      | top | Status Updated |
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verifies that info toast displayed:
-      | top                | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
-      | waitUntilInvisible | true                                                                                           |
+      | top | {KEY_CREATED_ORDER_TRACKING_ID} has been pulled from route {KEY_CREATED_ROUTE_ID} successfully |
     And Operator click Order Settings -> Manually Complete Order on Edit Order page
     And Operator confirm manually complete order on Edit Order page
     When Operator selects "All Events" in Events Filter menu on Edit Order page
@@ -300,7 +312,3 @@ Feature: Order Events
     Then Operator verify order events on Edit order page using data below:
       | tags | name           |
       | DP   | ASSIGNED TO DP |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

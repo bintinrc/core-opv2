@@ -1,8 +1,8 @@
 @OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactionsPart1
 Feature: Route Logs - Merge Transactions
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
@@ -354,7 +354,3 @@ Feature: Route Logs - Merge Transactions
     And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[4]} |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

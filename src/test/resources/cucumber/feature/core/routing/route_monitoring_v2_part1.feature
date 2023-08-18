@@ -1,8 +1,8 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part1
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part1 @current
 Feature: Route Monitoring V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
@@ -134,7 +134,10 @@ Feature: Route Monitoring V2
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver pickup the created parcel successfully
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
@@ -162,7 +165,10 @@ Feature: Route Monitoring V2
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver pickup the created parcel successfully
@@ -198,7 +204,10 @@ Feature: Route Monitoring V2
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver failed the delivery of the created parcel using data below:
       | failureReasonFindMode  | findAdvance           |
       | failureReasonCodeId    | <failureReasonCodeId> |
@@ -233,7 +242,10 @@ Feature: Route Monitoring V2
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup using data below:
@@ -333,7 +345,3 @@ Feature: Route Monitoring V2
     When Operator click on tracking id of a Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
-
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op

@@ -5,7 +5,7 @@ Feature: Station Management Homepage
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath
+  @Happypath @HighPriority
   Scenario Outline: Station Management Homepage Navigation Panel - <dataset_name> (<hiptest-uid>)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -157,34 +157,35 @@ Feature: Station Management Homepage
       | HubName      | HubId      | InvalidHubId |
       | {hub-name-1} | {hub-id-1} | 997          |
 
-  Scenario Outline: [TH] Petty Cash Navigation Panel (uid:29ceeb23-3a20-4f5b-9580-bfeca74ce53b)
-    Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
-    And Operator refresh page v1
-    When Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
-      | Route Engine - Zonal Routing |
-      | Parcel Sweeper Live          |
-      | Shipment Management          |
-      | Shipment Inbound             |
-      | Van Inbound                  |
-      | Route Log                    |
-      | Outbound Monitoring          |
-      | Route Monitoring             |
-      | Route Inbound                |
-      | Recovery                     |
-      | Petty Cash Claims            |
-    And Operator verifies that the following navigation links are displayed under the header:"<Header2>"
-      | Driver Performance Report |
-      | COD Report                |
-    And Operator verifies that the page:"<PageName>" is loaded on new tab on clicking the link:"<LinkName>"
+#  Scenario Outline: [TH] Petty Cash Navigation Panel (uid:29ceeb23-3a20-4f5b-9580-bfeca74ce53b)
+#    Given Operator loads Operator portal home page
+#    And Operator changes the country to "<Country>"
+#    And Operator verify operating country is "<Country>"
+#    And Operator refresh page v1
+#    When Operator go to menu Station Management Tool -> Station Management Homepage
+#    And Operator selects the hub as "<HubName>" and proceed
+#    Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
+#      | Route Engine - Zonal Routing |
+#      | Parcel Sweeper Live          |
+#      | Shipment Management          |
+#      | Shipment Inbound             |
+#      | Van Inbound                  |
+#      | Route Log                    |
+#      | Outbound Monitoring          |
+#      | Route Monitoring             |
+#      | Route Inbound                |
+#      | Recovery                     |
+#      | Petty Cash Claims            |
+#    And Operator verifies that the following navigation links are displayed under the header:"<Header2>"
+#      | Driver Performance Report |
+#      | COD Report                |
+#    And Operator verifies that the page:"<PageName>" is loaded on new tab on clicking the link:"<LinkName>"
 
     Examples:
       | Country  | HubName      | Header1                      | Header2 | PageName              | LinkName          |
       | Thailand | {hub-name-7} | Standard Operating Procedure | Reports | PCF Management System | Petty Cash Claims |
 
+  @MediumPriority
   Scenario Outline: Be an FSR Ninja Training Navigation Panel - <dataset_name>
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage

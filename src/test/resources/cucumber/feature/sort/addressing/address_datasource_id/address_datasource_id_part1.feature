@@ -1,7 +1,7 @@
 @Sort @AddressDataSourceIdPart1
 Feature: Address Datasource
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @BeforeDeleteAddressCommonV2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -16,10 +16,10 @@ Feature: Address Datasource
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong     | GENERATED  |
-      | province    | {province} |
-      | kota        | {kota}     |
-      | whitelisted | True       |
+      | latlong     | GENERATED           |
+      | province    | {created-province}  |
+      | kecamatan   | {created-kecamatan} |
+      | whitelisted | True                |
     Then Operator verifies Add Button is Disabled
 
   Scenario: ID Address Datasource - Add a Row with Invalid Latlong Input
@@ -27,24 +27,23 @@ Feature: Address Datasource
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong     | 1.1,1.11    |
-      | province    | {province}  |
-      | kota        | {kota}      |
-      | kecamatan   | {kecamatan} |
-      | whitelisted | True        |
+      | latlong     | 1.1,1.11            |
+      | province    | {created-province}  |
+      | kota        | {created-kota}      |
+      | kecamatan   | {created-kecamatan} |
+      | whitelisted | True                |
     Then Operator verifies Add Button is Disabled
     And Operator verifies invalid latlong message
 
-  @DeleteAddressDatasourceCommonV2
   Scenario: ID Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | province    | {province}                 |
-      | kota        | {kota}                     |
-      | kecamatan   | {kecamatan}                |
+      | province    | {auto-province-id-1}       |
+      | kota        | {auto-kota-id-1}           |
+      | kecamatan   | {auto-kecamatan-id-1}      |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -71,16 +70,16 @@ Feature: Address Datasource
       | latitude  | {KEY_SORT_CREATED_ADDRESS.latitude}  |
       | longitude | {KEY_SORT_CREATED_ADDRESS.longitude} |
 
-  @DeleteAddressDatasourceCommonV2
+
   Scenario: ID Address Datasource - Add a Row with Valid Input Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | province    | {province}                 |
-      | kota        | {kota}                     |
-      | kecamatan   | {kecamatan}                |
+      | province    | {auto-province-id-2}       |
+      | kota        | {auto-kota-id-2}           |
+      | kecamatan   | {auto-kecamatan-id-2}      |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
@@ -99,14 +98,14 @@ Feature: Address Datasource
     When Operator refresh page
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong     | {latitude-2},{longitude-2} |
-      | province    | {province}                 |
-      | kota        | {kota}                     |
-      | kecamatan   | {kecamatan}                |
+      | latlong     | {latitude-1},{longitude-1} |
+      | province    | {auto-province-id-2}       |
+      | kota        | {auto-kota-id-2}           |
+      | kecamatan   | {auto-kecamatan-id-2}      |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {latitude-2}, "longitude":{longitude-2}}|
+      | request | {"type": "STANDARD", "latitude": {latitude-1}, "longitude":{longitude-1}} |
     And API Sort - Operator get hub details of hub id "{KEY_SORT_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
       | province  | {KEY_SORT_CREATED_ADDRESS.province} |
@@ -144,7 +143,7 @@ Feature: Address Datasource
   Scenario: ID Address Datasource  Landing Page - Search Box No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
-    When Operator verifies search button is disabled
+    When Operator verifies Address Datasource search button is disabled
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

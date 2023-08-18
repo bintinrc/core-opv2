@@ -6,7 +6,9 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,6 +22,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public static final String SERVICE_DISCOUNT_XPATH = "services_%s_discount_value";
   public static final String SERVICE_TYPE_XPATH_LIST = "//input[contains(@id,'serviceType')]//parent::span//following-sibling::span";
   public static final String SERVICE_LEVEL_XPATH_LIST = "//input[contains(@id,'serviceLevel')]//parent::span//following-sibling::span";
+  public static final String DISCOUNT_OPERATOR_LIST = "//input[contains(@id,'discount_operator')]//parent::span//following-sibling::span";
   public static final String SERVICE_DISCOUNT_XPATH_LIST = "//input[contains(@id,'discount_value')]";
   private static final String CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
 
@@ -80,10 +83,22 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//span[text()='Shippers']//parent::div//following::span[text()='Add']//parent::button")
   public PageElement shippersAddButton;
 
+  @FindBy(xpath = "//span[text()='Add']//parent::button")
+  public PageElement campaignRuleAddButton;
+
+  @FindBy(xpath = "//label[@for='services_1_serviceType']/parent::div")
+  public PageElement newServiceTypeRow;
+
+  @FindBy(xpath = "//label[@for='services_1_serviceLevel']/parent::div")
+  public PageElement newServiceLevelRow;
+
+  @FindBy(xpath = "//label[@for='services_1_discount_value']/parent::div")
+  public PageElement newDiscountValueRow;
+
   @FindBy(xpath = "//span[text()='Search by shipper']//parent::li")
   public PageElement searchByShipperTab;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_14']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[contains(@id,'rc_select_')]]")
   public AntSelect searchByShipper;
 
   @FindBy(xpath = "//span[text()='Upload']//parent::button")
@@ -98,7 +113,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//input[@id='id']")
   public PageElement campaignId;
 
-  @FindBy(xpath = "//span[contains(text(),'Shippers')]")
+  @FindBy(xpath = "(//div[contains(@class,'row-middle')]/span)[2]")
   public PageElement shipperCount;
 
   @FindBy(xpath = "//span[text()='Publish']/parent::button")
@@ -106,6 +121,22 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
 
   @FindBy(xpath = "//span[text()='Cancel']/parent::button")
   public PageElement campaignCancelButton;
+
+  @FindBy(xpath = "//label[text()='Service type']//ancestor::div[contains(@class,'row-middle')]//button[@disabled]")
+  public PageElement campaignRuleRowOne;
+
+  @FindBy(xpath = "//div[@class='ant-modal-header'][div[text() = 'Add shipper']]")
+  public PageElement addShipperModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-header'][div[text() = 'Remove shipper']]")
+  public PageElement removeShipperModal;
+
+  @FindBy(xpath = "//span[contains(@class,'blue')]/span[@aria-label='close']")
+  public PageElement removeShipperCloseButton;
+
+  @FindBy(xpath = "//div[contains(@class,'toast-bottom')]")
+  public PageElement toastErrorMessage;
+  private static final String CAMPAIGN_FIELD_ERROR_MESSAGE = "//label[text()='%s']/ancestor::div[contains(@class,'item-row')]//div[@role='alert']";
 
   public CampaignCreateEditPage(WebDriver webDriver) {
     super(webDriver);
@@ -124,8 +155,8 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     discountType.selectValue(option, ITEM_CONTAINS_XPATH_FOR_DISCOUNT_OPERATOR);
   }
 
-  public void selectServiceType(List<String> options) {
-    int i = 0;
+  public void selectServiceType(List<String> options, int row) {
+    int i = row;
     for (String option : options) {
       AntSelect serviceType = new AntSelect(getWebDriver(),
           findElementBy(By.xpath(f(SERVICE_TYPE_XPATH, Integer.toString(i)))));
@@ -138,8 +169,8 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return campaignServiceTypeError.getText();
   }
 
-  public void selectServiceLevel(List<String> options) {
-    int i = 0;
+  public void selectServiceLevel(List<String> options, int row) {
+    int i = row;
     for (String option : options) {
       AntSelect serviceLevel = new AntSelect(getWebDriver(),
           findElementBy(By.xpath(f(SERVICE_LEVEL_XPATH, Integer.toString(i)))));
@@ -152,8 +183,8 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return campaignServiceLevelError.getText();
   }
 
-  public void enterDiscountValue(List<String> values) {
-    int i = 0;
+  public void enterDiscountValue(List<String> values, int row) {
+    int i = row;
     for (String value : values) {
       findElementBy(By.id(f(SERVICE_DISCOUNT_XPATH, Integer.toString(i)))).sendKeys(value);
       i++;
@@ -184,23 +215,34 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public List<String> getServiceLevel() {
     List<WebElement> elements = findElementsBy(By.xpath(SERVICE_LEVEL_XPATH_LIST));
     List<String> serviceLevelList = new ArrayList<>();
-    for (WebElement element: elements) {
+    for (WebElement element : elements) {
       serviceLevelList.add(element.getText());
     }
     return serviceLevelList;
   }
 
+  public String getDiscountOperator() {
+    List<WebElement> elements = findElementsBy(By.xpath(DISCOUNT_OPERATOR_LIST));
+    Assertions.assertThat(elements.size()).as("Assert that discount operator displays")
+        .isGreaterThan(0);
+    return elements.get(0).getText().trim();
+  }
+
   public List<String> getDiscountValue() {
     List<WebElement> elements = findElementsBy(By.xpath(SERVICE_DISCOUNT_XPATH_LIST));
     List<String> discountList = new ArrayList<>();
-    for (WebElement element: elements) {
+    for (WebElement element : elements) {
       discountList.add(element.getAttribute("value"));
     }
     return discountList;
   }
 
   public void enterCampaignName(String value) {
-    campaignName.sendKeys(value);
+    campaignName.sendKeys(Keys.CONTROL + "a");
+    campaignName.sendKeys(Keys.DELETE);
+    if (!value.equalsIgnoreCase("blank")) {
+      campaignName.sendKeys(value);
+    }
   }
 
   public String getCampaignName() {
@@ -212,7 +254,11 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public void enterCampaignDescription(String value) {
-    campaignDescription.sendKeys(value);
+    campaignDescription.sendKeys(Keys.CONTROL + "a");
+    campaignDescription.sendKeys(Keys.DELETE);
+    if (!value.equalsIgnoreCase("blank")) {
+      campaignDescription.sendKeys(value);
+    }
   }
 
   public String getCampaignDescription() {
@@ -259,12 +305,43 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     shippersAddButton.click();
   }
 
+  public void clickShippersRemoveButton() {
+    shippersRemoveButton.click();
+  }
+
+  public void clickCampaignRuleAddButton() {
+    campaignRuleAddButton.click();
+  }
+
+  public void shipperModalDisplayed(String modalName) {
+    if(modalName.equalsIgnoreCase("Add shipper")){
+    addShipperModal.waitUntilVisible();}
+    else if(modalName.equalsIgnoreCase("Remove shipper")){
+      removeShipperModal.waitUntilVisible();}
+  }
+
+  public void addShipperSelectedTab(String tab) {
+    waitUntilVisibilityOfElementLocated(
+        f("//li[contains(@class,'selected')]/span[text()='%s']", tab));
+  }
+
+  public void clickDownloadButton() {
+    downloadButton.click();
+  }
+
   public void clickSearchByShippersTab() {
     searchByShipperTab.click();
   }
 
   public void searchForTheShipper(String shipperName) {
-    searchByShipper.selectValue(shipperName);
+    if (shipperName.equalsIgnoreCase("Invalid Shipper ID")) {
+      searchByShipper.enterSearchTerm(shipperName);
+    }else if (shipperName.contains("id-")) {
+      searchByShipper.enterSearchTerm(shipperName.substring(3));
+    }
+    else {
+      searchByShipper.selectValue(shipperName);
+    }
   }
 
   public void clickUploadButton() {
@@ -301,7 +378,36 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     campaignCancelButton.click();
   }
 
+  public void verifyNewRowAdded() {
+    newServiceTypeRow.getText().equals("Service type");
+    newServiceLevelRow.getText().equals("Service level");
+    newDiscountValueRow.getText().equals("Discount value");
+  }
+
+  public void removeCampaignRule(int row) {
+    if (row == 1) {
+      campaignRuleRowOne.waitUntilVisible();
+    } else {
+      clickf(
+          "(//label[text()='Service type']//ancestor::div[contains(@class,'row-middle')])[%s]//button",
+          row);
+    }
+  }
+
+  public int getCampaignRuleCount() {
+    return getElementsCount(
+        "//label[text()='Service type']//ancestor::div[contains(@class,'row-middle')]");
+  }
+
   public void waitUntilCampaignPageIsLoaded() {
     campaignPublishButton.waitUntilClickable(30);
+  }
+
+  public String getShipperCount() {
+    return shipperCount.getText();
+  }
+
+  public void removeSelectedShipper(){
+    removeShipperCloseButton.click();
   }
 }

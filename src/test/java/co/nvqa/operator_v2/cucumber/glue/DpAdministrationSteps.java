@@ -43,6 +43,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
   private DpAdministrationReactPage dpAdminReactPage;
+  private static final String SYSTEM_ID = StandardTestConstants.NV_SYSTEM_ID;
 
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
@@ -55,10 +56,12 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String CHECK_DP_PHOTO = "CHECK_DP_PHOTO";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
+  private static final String KEY_LIST_OF_OPERATOR_GENERATE_PREFIX = "KEY_LIST_OF_OPERATOR_GENERATE_PREFIX";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
   public static final String SINGLE = "SINGLE";
   public static final String NEXT = "NEXT";
+  public static final String COPY_PASTE = "COPY_PASTE";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -261,6 +264,18 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.clearDpFilter(extractDetail);
       }
     });
+  }
+
+  @And("Operator generate {int} prefix")
+  public void generateMultiplePrefix(int total) {
+    int limit = 0;
+    while (limit < total) {
+      pause1s();
+      String prefix = co.nvqa.common.utils.RandomUtil.randomString(5);
+      putInList(KEY_LIST_OF_OPERATOR_GENERATE_PREFIX, prefix);
+      LOGGER.info(f("prefix generated: %s", prefix));
+      limit++;
+    }
   }
 
   @And("Operator Search with Some DP User Details :")
@@ -564,7 +579,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator fill the partner filter by {string} with value {string}")
+  @Then("Operator fill the partner filter by {value} with value {value}")
   public void operatorFillThePartnerFilterWithValue(String element, String value) {
     String fillInValue = resolveValue(value);
     dpAdminReactPage.inFrame(() -> {
@@ -1655,4 +1670,97 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpUserOld.setContactNo(dpUser.getContactNo());
     return dpUserOld;
   }
+
+  @Given("Operator generate prefix for dp creation")
+  public void operatorGeneratePrefixForDpCreation()
+  {
+    put(KEY_DP_GENERATED_PREFIX, co.nvqa.common.utils.RandomUtil.randomString(5));
+  }
+
+  @When("Operator fill the Dp User filter by {value} with value {value}")
+  public void operatorFillTheDpUserFilterByValue(String element, String value) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpUserFilter.get(element).waitUntilVisible();
+      dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(value);
+    });
+  }
+
+  @When("Operator Edit Dp User Details with the data below :")
+  public void operatorEditDpUserDetails(DataTable dt) {
+    List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.formDpUserFirstName.forceClear();
+      dpAdminReactPage.formDpUserFirstName.setValue(dpUsers.get(0).getFirstName());
+
+      dpAdminReactPage.formDpUserLastName.forceClear();
+      dpAdminReactPage.formDpUserLastName.setValue(dpUsers.get(0).getLastName());
+
+      dpAdminReactPage.formDpUserContact.forceClear();
+      dpAdminReactPage.formDpUserContact.setValue(dpUsers.get(0).getContactNo());
+
+      dpAdminReactPage.formDpUserEmail.forceClear();
+      dpAdminReactPage.formDpUserEmail.setValue(dpUsers.get(0).getEmailId());
+
+      put(KEY_DP_USER, dpUsers.get(0));
+    });
+  }
+
+  @Then("Operator verify data on dp user creation same with data of dp user on table :")
+  public void newOperatorVerifyDpUserDetails(Map<String, String> searchDetailsAsMap) {
+    DpUser dpUser = resolveValue(searchDetailsAsMap.get("dpUser"));
+
+    searchDetailsAsMap = resolveKeyValues(searchDetailsAsMap);
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpUserElementByMap(extractDetail, dpUser);
+        dpAdminReactPage.fillFilterDpUser(extractDetail, valueDetails);
+        pause2s();
+        dpAdminReactPage.readDpUserEntity(dpUser);
+        dpAdminReactPage.clearDpUserFilter(extractDetail);
+      }
+    });
+  }
+
+  @Then("Operator verify values on dp user table updated")
+  public void operatorVerifyValuesOnDpUserTableUpdated()
+  {
+    doWithRetry(() -> {
+      DpUser dpUser = get(KEY_DP_USER);
+      dpAdminReactPage.refreshPage();
+      dpAdminReactPage.inFrame(() -> dpAdminReactPage.readDpUserEntity(dpUser));
+    }, "verify values on dp user table");
+  }
+
+  @Then("Operator verify dp user username value trimmed to only 100 characters")
+  public void operatorVerifyDpUserUsernameValueTrimmedToOnlyHundred()
+  {
+    dpAdminReactPage.inFrame(() -> {
+      String valueOfUsername = dpAdminReactPage.formDpUserUsername.getValue();
+      Assertions.assertThat(valueOfUsername.length())
+          .as("Username trimmed to 100 chars")
+          .isEqualTo(100);
+    });
+  }
+
+  @When("Operator fill dp user username field with more than 100 characters by {string}")
+  public void operatorFillDpUserUsernameMoreThanHundredByTypingIn(String inputMethod)
+  {
+    String username = co.nvqa.common.utils.RandomUtil.randomString(102);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.formDpUserUsername.forceClear();
+      if(COPY_PASTE.equals(inputMethod))
+      {
+        dpAdminReactPage.formDpUserUsername.setValue(username);
+      }
+      else {
+        dpAdminReactPage.formDpUserUsername.setValueByTyping(username);
+      }
+    });
+  }
+
 }

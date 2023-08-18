@@ -2,10 +2,16 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +20,13 @@ import org.slf4j.LoggerFactory;
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public class MainPage extends OperatorV2SimplePage {
+public class MainPage extends OperatorV2SimplePage implements MaskedPage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MainPage.class);
   private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
   private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
+
+  private static final List<String> LIST_OF_MASKED_PAGE_URL = new ArrayList<>();
 
   @FindBy(css = "button[aria-label='Open Sidenav']")
   public Button openSideNav;
@@ -74,6 +82,13 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Route Inbound (New)", "station-route-inbound");
     MAP_OF_END_URL.put("Validate Delivery or Pickup Attempt", "validate-attempt");
     MAP_OF_END_URL.put("Download Validation Reports", "download-validation-reports");
+    MAP_OF_END_URL.put("Pickup Jobs", "pickup-appointment");
+
+
+    // for all page with masked, add this to the url
+    LIST_OF_MASKED_PAGE_URL.add("\\/order\\/\\d*");
+    LIST_OF_MASKED_PAGE_URL.add("\\/order$");
+    LIST_OF_MASKED_PAGE_URL.add("\\/route-manifest\\/\\d*");
   }
 
   public MainPage(WebDriver webDriver) {
@@ -200,5 +215,29 @@ public class MainPage extends OperatorV2SimplePage {
     }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
     waitUntilPageLoaded();
+  }
+
+  public void refreshPage() {
+    refreshPage(true);
+  }
+
+  public void refreshPage(Boolean isUnmask) {
+    super.refreshPage();
+    if (isUnmask) {
+      String currentUrl = getWebDriver().getCurrentUrl();
+      LIST_OF_MASKED_PAGE_URL.forEach(endUrl -> {
+        Pattern p = Pattern.compile(endUrl);
+        Matcher m = p.matcher(currentUrl);
+        if (m.find()) {
+          try {
+            List<WebElement> masks = getWebDriver().findElements(
+                By.xpath(MaskedPage.MASKING_XPATH));
+            operatorClickMaskingText(masks);
+          } catch (Exception ex) {
+            LOGGER.debug(ex.getMessage());
+          }
+        }
+      });
+    }
   }
 }

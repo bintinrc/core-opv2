@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Waypoint;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvCountry;
-import co.nvqa.commons.util.NvLogger;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.utils.DateUtil;
+import co.nvqa.common.utils.NvCountry;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -21,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -117,6 +114,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='select-preset-holder']/button[contains(@class, 'ant-btn-primary')]")
   public Button loadAddresses;
 
+  public  String TRACKING_NUMBER_TABLE_XPATH="//td[@class='tracking_number']//span[contains(text(),'%s')]";
   private static final String EXISTED_PRESET_SELECTION_XPATH = "//div[contains(@class,'select-preset')]//input[contains(@id,'rc_select')]";
   private static final String DROP_DOWN_PRESET_XPATH = "//ul[contains(@class,'dropdown-menu-root')]";
   private static final String DIALOG_XPATH = "//div[@class='ant-modal-title' and contains(@id,'rc_unique')]";
@@ -244,7 +242,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
 
       default:
-        NvLogger.warn("Invalid Address Download Filter Type");
+        LOGGER.warn("Invalid Address Download Filter Type");
     }
   }
 
@@ -313,14 +311,14 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         break;
 
       default:
-        NvLogger.warn("Invalid Address Download Filter Type");
+        LOGGER.warn("Invalid Address Download Filter Type");
     }
     click(RANDOM_CLICK_XPATH);
     pause1s();
   }
 
   public void verifiesPresetIsExisted(String presetName) {
-    retryIfRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       getWebDriver().navigate().refresh();
       switchToIframe();
       verifiesPageIsFullyLoaded();
@@ -334,21 +332,22 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void verifiesPresetIsNotExisted(String presetName) {
-    getWebDriver().navigate().refresh();
-    switchToIframe();
-    verifiesPageIsFullyLoaded();
-    waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
-    click(EXISTED_PRESET_SELECTION_XPATH);
-    sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
-    waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
-    Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();
+    doWithRetry(()->{getWebDriver().navigate().refresh();
+      switchToIframe();
+      verifiesPageIsFullyLoaded();
+      waitUntilVisibilityOfElementLocated(EXISTED_PRESET_SELECTION_XPATH);
+      click(EXISTED_PRESET_SELECTION_XPATH);
+      sendKeys(EXISTED_PRESET_SELECTION_XPATH, presetName);
+      waitUntilVisibilityOfElementLocated(PRESET_NOT_FOUND_XPATH);
+      Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();},"Verifies Preset is Deleted");
+
   }
 
   public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders,
       String csvTimestamp) {
     String csvContainedFileName = CSV_FILENAME_FORMAT + csvTimestamp;
     LOGGER.debug("Looking for CSV with Name contained {}", csvContainedFileName);
-    String csvFileName = retryIfAssertionErrorOccurred(() ->
+    String csvFileName = doWithRetry(() ->
             getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
         "Getting Exact File Name");
 
@@ -649,146 +648,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     return getAddressDownloadResultCount() > 0;
   }
 
-  public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
-    int resultsCount = getAddressDownloadResultCount();
-    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(),
-        "Asia/Singapore");
-
-    if (resultsCount == 0) {
-      LOGGER.debug(
-          "!! Order's creation time might be in 30 minutes interval. Expanding time range. !!");
-      Assertions.assertThat(expandTimeRangeAndReloadAddress(adjustedOCCreatedAt))
-          .as("Addresses are shown after expanding time range.")
-          .isTrue();
-      resultsCount = getAddressDownloadResultCount();
-    }
-
-    List<WebElement> trackingIDEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "tracking_number")));
-    List<WebElement> addressOneEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "address_one")));
-    List<WebElement> addressTwoEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "address_two")));
-    List<WebElement> createdAtEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "created_at")));
-    List<WebElement> postcodeEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "postcode")));
-    List<WebElement> waypointIDEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "waypoint_id")));
-    List<WebElement> latitudeEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "latitude")));
-    List<WebElement> longitudeEl = webDriver.findElements(
-        By.xpath(f(ORDER_DATA_CELL_XPATH, "longitude")));
-
-    String ocTrackingID = order.getTrackingId();
-    String ocAddressOne = order.getToAddress1();
-    String ocAddressTwo = order.getToAddress2();
-    String ocCreatedAt = ADDRESS_DOWNLOAD_DATE_FORMAT.format(adjustedOCCreatedAt);
-    String ocPostcode = order.getToPostcode();
-    Long ocWaypoint = waypoint.getId();
-    Double ocLatitude = waypoint.getLatitude();
-    Double ocLongitude = waypoint.getLongitude();
-
-    Map<String, Boolean> verifyChecklist = new HashMap<>();
-    verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, false);
-    verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS, false);
-    verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS, false);
-    verifyChecklist.put(ORDER_CREATED_AT_EXISTS, false);
-    verifyChecklist.put(ORDER_POSTCODE_EXISTS, false);
-    verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS, false);
-    verifyChecklist.put(ORDER_LATITUDE_EXISTS, false);
-    verifyChecklist.put(ORDER_LONGITUDE_EXISTS, false);
-
-    boolean creationTimeLatencyExists = false;
-    for (int i = 0; i < resultsCount; i++) {
-      verifyChecklist.put(ORDER_TRACKING_ID_EXISTS,
-          trackingIDEl.get(i).getText().equals(ocTrackingID));
-
-      if (verifyChecklist.get(ORDER_TRACKING_ID_EXISTS)) {
-        verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS,
-            addressOneEl.get(i).getText().equals(ocAddressOne));
-        verifyChecklist.put(ORDER_ADDRESS_TWO_EXISTS,
-            addressTwoEl.get(i).getText().equals(ocAddressTwo));
-        verifyChecklist.put(ORDER_CREATED_AT_EXISTS,
-            createdAtEl.get(i).getText().equals(ocCreatedAt));
-
-        LOGGER.debug("Created at from HTML element: {}", createdAtEl.get(i).getText());
-        LOGGER.debug("Created at from formatted order: {}", ocCreatedAt);
-
-        // Tolerate creation time latency because the sources are different and sometimes there are time difference
-        if (!verifyChecklist.get(ORDER_CREATED_AT_EXISTS)) {
-          LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(
-              Duration.of(1, ChronoUnit.MINUTES));
-          String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(adjustedOCCreatedAt);
-          creationTimeLatencyExists = createdAtEl.get(i).getText().equals(toleratedCreatedAtStr);
-          verifyChecklist.put(ORDER_CREATED_AT_EXISTS, creationTimeLatencyExists);
-        }
-
-        verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS,
-            Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
-        verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
-        verifyChecklist.put(ORDER_LATITUDE_EXISTS,
-            Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
-        verifyChecklist.put(ORDER_LONGITUDE_EXISTS,
-            Double.parseDouble(longitudeEl.get(i).getText()) == ocLongitude);
-
-        break;
-      }
-    }
-
-    int verificationsPassed = verifyChecklist.entrySet()
-        .stream()
-        .filter(map -> map.getValue())
-        .collect(Collectors.toMap(map -> map.getKey(), map -> true)).size();
-
-    if (verificationsPassed < verifyChecklist.size()) {
-      Map<String, Boolean> verificationFailed = verifyChecklist.entrySet()
-          .stream()
-          .filter(map -> !map.getValue())
-          .collect(Collectors.toMap(map -> map.getKey(), map -> false));
-
-      for (String key : verificationFailed.keySet()) {
-        LOGGER.debug("{} checking result is FAILED", key);
-      }
-    }
-
-    Assertions.assertThat(verificationsPassed).as("All data are correct")
-        .isEqualTo(verifyChecklist.size());
-
-    /*
-     * Inform the step that there is latency adjustment to creation time
-     * Doing it this way because I can't access the scenario storage in this file
-     * */
-    return creationTimeLatencyExists;
-  }
-
   public String resolveLatLongStringValue(Double latLong) {
     String stringifiedLatLong = latLong.toString();
     return (stringifiedLatLong.endsWith(".0")) ? String.valueOf(Math.round(latLong))
         : stringifiedLatLong;
-  }
-
-  public void csvDownloadSuccessfullyAndContainsBasicData(Order order, Waypoint waypoint,
-      String preset) {
-    LOGGER.debug("Looking for CSV with Name containing {}", preset);
-    String csvFileName = retryIfAssertionErrorOccurred(() ->
-            getContainedFileNameDownloadedSuccessfully(preset),
-        "Getting Exact File Name");
-
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
-
-    LocalDateTime orderCreationTimestamp = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
-
-    verifyFileDownloadedSuccessfully(csvFileName, order.getTrackingId());
-    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress1());
-    verifyFileDownloadedSuccessfully(csvFileName, order.getToAddress2());
-    verifyFileDownloadedSuccessfully(csvFileName, dtf.format(orderCreationTimestamp));
-    verifyFileDownloadedSuccessfully(csvFileName, order.getToPostcode());
-    verifyFileDownloadedSuccessfully(csvFileName, waypoint.getId().toString());
-    verifyFileDownloadedSuccessfully(csvFileName,
-        resolveLatLongStringValue(waypoint.getLatitude()));
-    verifyFileDownloadedSuccessfully(csvFileName,
-        resolveLatLongStringValue(waypoint.getLongitude()));
   }
 
   public void setNewShipperOnShipperFilter(String newShipper) {
