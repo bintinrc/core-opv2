@@ -289,7 +289,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | CREATED      |
 
-  @ForceSuccessOrder @Bug
+  @ForceSuccessOrder
   Scenario Outline: View Recovery Ticket  of Missing Parcels (uid:9ffe52c5-bc61-410b-bacf-577e29abefee)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -328,7 +328,7 @@ Feature: Number of Missing Parcels
       | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that recovery tickets page is opened on clicking arrow button
-    And Operator verifies that the url for recovery tickets page is loaded with tracking id
+    And Operator verifies that the url for recovery tickets page is loaded with tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
 
     Examples:
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
