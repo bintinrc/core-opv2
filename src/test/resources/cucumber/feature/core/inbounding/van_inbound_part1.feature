@@ -34,6 +34,7 @@ Feature: Van Inbound
       | id                                 | status      |
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} | IN_PROGRESS |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator unmask edit order V2 page
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -43,8 +44,8 @@ Feature: Van Inbound
       | name    | DRIVER START ROUTE                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                        |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Vehicle for Delivery\n\n\nReason: START_ROUTE |
+      | tags          | name          | description                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: On Vehicle for Delivery Old Order Status: Pending New Order Status: Transit Reason: START_ROUTE |
     And DB Core - Operator verifies inbound_scans record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | hubId   | {hub-id}                           |
@@ -64,7 +65,7 @@ Feature: Van Inbound
   @ArchiveRouteCommonV2
   Scenario: Operator Van Inbounds with Empty Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
