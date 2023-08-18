@@ -38,7 +38,6 @@ Feature: Van Inbound
       | id                                 | status      |
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} | IN_PROGRESS |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator unmask edit order V2 page
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
