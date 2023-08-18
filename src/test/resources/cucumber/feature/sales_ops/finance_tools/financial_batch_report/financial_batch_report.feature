@@ -22,7 +22,7 @@ Feature: Financial Batch Report
     And Operator gets the financial batch csv report entries
     Then DB Billing - Operator verifies the count of entries for all ledgers by completed local date
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected Shipper - Ledger has Reversion and Adjustment Ledger Orders (uid:b99e203c-7139-482c-a0bd-32e9602fddd1)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -85,7 +85,7 @@ Feature: Financial Batch Report
       | AmountDueToFromShipper   | 29.37                            |
       | AmountOwingToFromShipper | 4.23                             |
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected Shipper - Batch with status OPEN is exists (uid:127b3e90-948c-47da-b152-d5f6f408a5d9)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -119,7 +119,7 @@ Feature: Financial Batch Report
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and verifies the financial batch email body contains count as 0
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected By Parent Shipper (uid:2b0cce9d-cde9-409c-8a6e-6304ba5bf811)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Marketplace |
@@ -237,7 +237,7 @@ Feature: Financial Batch Report
       | legacyShipperId | {shipper-sop-100-chars-legacy-id} |
       | shipperName     | {shipper-sop-100-chars-name}      |
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper (uid:961925c6-25f7-4d04-9a89-44f5a8b4f6c0)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Marketplace |
@@ -339,7 +339,7 @@ Feature: Financial Batch Report
       | emailAddress  | {financial-batch-report-email}       |
     Then Operator verifies error message "Maximum range allowed is 14 days. Current selection is 100 days." is displayed on Financial Batch Reports Page
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report -  Consolidated by "ALL" - All Shippers - Include Order-Level Details (uid:8be8a6b0-8b9a-4b77-813e-48350d681dfe)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -412,7 +412,7 @@ Feature: Financial Batch Report
       | totalWithTax     | 9.39                                          |
       | type             | Completed                                     |
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected Shipper - Ledger has Reversion and Adjustment Ledger Orders - Include Order-Level Details (uid:d1fb59ef-3345-4402-8118-1759428ad95c)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -494,7 +494,7 @@ Feature: Financial Batch Report
       | totalWithTax     | 9.23                                          |
       | type             | Completed                                     |
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected By Parent Shipper - Include Order-Level Details - Pricing Output Has 2 Decimal Places (uid:edba184e-559f-4c49-bd47-cc60a6bc7c75)
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Marketplace |
@@ -567,7 +567,7 @@ Feature: Financial Batch Report
       | totalWithTax     | 9.23                                          |
       | type             | Completed                                     |
 
-  @DeleteCreatedShipper
+  @DeleteNewlyCreatedShipperCommonV2
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |

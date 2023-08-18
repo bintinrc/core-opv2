@@ -30,18 +30,18 @@ Feature: Parcel Sweeper Live
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                            |
       | hubId              | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}                                                              |
       | taskId             | 1                                                                                                |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name        | PARCEL ROUTING SCAN                                |
       | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
-      | description | Scanned at Hub {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
+      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And Operator refresh page
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name        | OUTBOUND SCAN                                      |
       | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
-      | description | Scanned at Hub {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
+      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And DB Core - verify warehouse_sweeps record:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId      | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}   |
@@ -73,14 +73,14 @@ Feature: Parcel Sweeper Live
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                            |
       | hubId              | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}                                                              |
       | taskId             | 1                                                                                                |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator refresh page
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
       | name        | PARCEL ROUTING SCAN                                |
       | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
-      | description | Scanned at Hub {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
+      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And DB Core - verify warehouse_sweeps record:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | hubId      | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}   |
