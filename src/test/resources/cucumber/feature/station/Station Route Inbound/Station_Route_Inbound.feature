@@ -378,7 +378,7 @@ Feature: Route Inbound
       | HubId       | HubName       |
       | {hub-id-20} | {hub-name-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator Get Route Details - Route ID
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -446,7 +446,7 @@ Feature: Route Inbound
       | HubId       | HubName       |
       | {hub-id-20} | {hub-name-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Operator Get Route Details - Tracking ID
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -514,7 +514,7 @@ Feature: Route Inbound
       | HubId       | HubName       |
       | {hub-id-20} | {hub-name-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriverV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario Outline: Operator Get Route Details - Driver
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -547,7 +547,6 @@ Feature: Route Inbound
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
-    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -591,7 +590,7 @@ Feature: Route Inbound
       | HubId       | HubName       |
       | {hub-id-20} | {hub-name-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriverV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario Outline: Get Route Details by Driver Name - Number of Route_Id > 1
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
