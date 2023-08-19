@@ -103,6 +103,14 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       if (Objects.nonNull(discountValue)) {
         page.enterDiscountValue(discountValue, 0);
       }
+      String discountUsageQuantityPerShipper = campaign.getDiscountUsageQuantityPerShipper();
+      if (Objects.nonNull(discountUsageQuantityPerShipper)) {
+        page.selectDiscountUsageQuantityPerShipper(discountUsageQuantityPerShipper);
+      }
+      String discountUsagePeriod = campaign.getDiscountUsagePeriod();
+      if (Objects.nonNull(discountValue)) {
+        page.selectDiscountUsagePeriod(discountUsagePeriod);
+      }
     });
   }
 
@@ -142,6 +150,9 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     campaignDetail.setServiceLevel(campaignCreateEditPage.getServiceLevel());
     campaignDetail.setDiscountValue(campaignCreateEditPage.getDiscountValue());
     campaignDetail.setDiscountOperator(campaignCreateEditPage.getDiscountOperator());
+    campaignDetail.setDiscountUsageQuantityPerShipper(
+        campaignCreateEditPage.getDiscountUsageQuantityPerShipper());
+    campaignDetail.setDiscountUsagePeriod(campaignCreateEditPage.getDiscountUsagePeriod());
     put(KEY_OBJECT_OF_GET_CAMPAIGN, campaignDetail);
   }
 
@@ -188,6 +199,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       LOGGER.info(validateNotificationText);
       Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
           .isEqualTo(expectedToastMsg);
+      page.closeFirstNotificaitonMessage();
     });
   }
 
@@ -380,7 +392,6 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @When("Operator uploads csv file with {value}")
   public void operatorUploadsCsvFileWithBelowData(String shipperLegacyId) {
     campaignCreateEditPage.inFrame(page -> {
-      System.out.println(resolveValue(shipperLegacyId).toString());
       File csvFile = getCsvFile(resolveValue(shipperLegacyId));
       campaignCreateEditPage.uploadFile(csvFile);
     });
@@ -423,7 +434,13 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
 
   @NotNull
   private File getCsvFile(String shipperLegacyId) {
-    File csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
+    File csvFile = null;
+    if (shipperLegacyId.contains(";")) {
+      csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN,
+          shipperLegacyId.replace(";", "\n"));
+    } else {
+      csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
+    }
     LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());
     return csvFile;
   }
