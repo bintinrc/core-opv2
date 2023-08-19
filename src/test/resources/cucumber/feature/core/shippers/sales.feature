@@ -64,6 +64,5 @@ Feature: Sales
     When Operator go to menu Shipper -> Sales
     And Operator deletes "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page
     Then Operator verifies that success toast displayed:
-      | top                | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
-      | waitUntilInvisible | true                                                                                        |
+      | top | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
     And Operator verifies "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person was deleted on Sales page

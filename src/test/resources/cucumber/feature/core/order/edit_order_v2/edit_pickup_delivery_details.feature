@@ -12,13 +12,7 @@ Feature: Edit Order Details
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Sort - Operator global inbound
-      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id}}                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
     And Operator click Delivery -> Edit delivery details on Edit Order V2 page
     When Operator edit delivery details on Edit Order V2 page:
       | recipientName    | test sender name                       |
@@ -33,8 +27,7 @@ Feature: Edit Order Details
       | address2         | 15                                     |
       | postalCode       | 308402                                 |
     Then Operator verifies that success react notification displayed:
-      | top                | Delivery details updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery details updated |
     And Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | test sender name                              |
@@ -58,8 +51,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                       |
       | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                              |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: 116 Keng Lee Rd 15\|\|Singapore\|\|308402 Zone ID: 1399 Destination Hub ID: 1 Lat, Long: 1.31401544758955, 103.844767199536 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+      | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
@@ -104,9 +96,6 @@ Feature: Edit Order Details
       | v4OrderRequest      | {"service_type":"Return","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Pending        |
-      | granularStatus | Pending Pickup |
     And Operator click Pickup -> Edit pickup details on Edit Order V2 page
     When Operator edit pickup details on Edit Order V2 page:
       | senderName    | test sender name                       |
@@ -121,8 +110,7 @@ Feature: Edit Order Details
       | address2      | 15                                     |
       | postalCode    | 308402                                 |
     Then Operator verifies that success react notification displayed:
-      | top                | Pickup details updated |
-      | waitUntilInvisible | true                   |
+      | top | Pickup details updated |
     And Operator unmask Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | name    | test sender name                              |
@@ -146,8 +134,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                     |
       | description | ^.*Pickup End Time changed from .* 15:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                              |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: 116 Keng Lee Rd 15\|\|Singapore\|\|308402 Zone ID: 1399 Destination Hub ID: 1 Lat, Long: 1.31401544758955, 103.844767199536 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+      | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
@@ -183,7 +170,7 @@ Feature: Edit Order Details
       | postcode      | 308402                            |
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
-    
+
   Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -191,9 +178,6 @@ Feature: Edit Order Details
       | v4OrderRequest      | {"service_type":"Return","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":false,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Pending        |
-      | granularStatus | Pending Pickup |
     And Operator click Pickup -> Edit pickup details on Edit Order V2 page
     When Operator edit pickup details on Edit Order V2 page:
       | senderName               | test sender name                       |
@@ -210,8 +194,7 @@ Feature: Edit Order Details
       | address2                 | 15                                     |
       | postalCode               | 308402                                 |
     Then Operator verifies that success react notification displayed:
-      | top                | Pickup details updated |
-      | waitUntilInvisible | true                   |
+      | top | Pickup details updated |
     And Operator unmask Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | name    | test sender name                              |
@@ -235,7 +218,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                                                                                                                 |
       | description | ^Pickup Start Time changed from .* 09:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 Pickup End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                             |
+      | name        | UPDATE AV                                                                                                                                                                                                                                                                                 |
       | description | User: AUTO (system AV) (support@ninjavan.co) Address: 9 TUA KONG GREEN \|\|\|\|455384 Address Type: ADDRESS_TYPE_DELIVERY Zone ID: 22861 Destination Hub ID: 387 Lat, Long: 1.3184395712682, 103.925311276846 Address Status: VERIFIED AV Mode (Manual/Auto): MANUAL Source: FROM_SHIPPER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"

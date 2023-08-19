@@ -131,7 +131,7 @@ public class AntSelect3 extends PageElement {
   public void clearValue() {
     if (StringUtils.isNotBlank(getValue())) {
       openMenu();
-      if (clearIcon.isDisplayedFast() || clearIcon.isDisplayed()) {
+      if (clearIcon.waitUntilVisible(1)) {
         clearIcon.click();
       } else {
         searchInput.forceClear();
@@ -162,8 +162,11 @@ public class AntSelect3 extends PageElement {
         + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
         + normalizeSpace(value) + "')]";
   }
+
   private String getItemValueLocator(String value) {
-    return getListBoxLocator() + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"+ value +"')]]]";
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"
+        + value + "')]]]";
   }
 
   private String getItemEqualsLocator(String value) {
@@ -216,8 +219,12 @@ public class AntSelect3 extends PageElement {
   }
 
   public void enterSearchTerm(String value) {
-    searchInput.setValue(value);
-    waitUntilLoaded();
+    click();
+    var readonly = searchInput.getAttribute("readonly");
+    if (!"true".equals(readonly)) {
+      searchInput.setValue(value);
+      waitUntilLoaded();
+    }
   }
 
   public void fillSearchTermAndEnter(String value) {
@@ -225,8 +232,7 @@ public class AntSelect3 extends PageElement {
   }
 
   public String getValue() {
-    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title")
-        : selectionPlaceholder.isDisplayed() ? selectionPlaceholder.getText() : null;
+    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title") : null;
   }
 
   public List<String> getValues() {

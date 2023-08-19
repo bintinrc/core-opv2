@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,6 +185,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   public void operatorVerifiesToastMessageInCampaignPage(String expectedToastMsg) {
     campaignCreateEditPage.inFrame(page -> {
       String validateNotificationText = page.getNotificationMessageText();
+      LOGGER.info(validateNotificationText);
       Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
           .isEqualTo(expectedToastMsg);
     });
@@ -633,7 +635,41 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @And("Operator verifies error message is {string}")
   public void operatorVerifiesErrorMessageIs(String error) {
     String validateNotificationText = campaignCreateEditPage.toastErrorMessage.getText();
+    LOGGER.info(validateNotificationText);
     Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
         .contains(error);
+  }
+
+  @And("Operator verifies columns in Discounts & Promotion Page")
+  public void operatorVerifiesColumnsInDiscountsAndPromotionPage() {
+    discountAndPromotionsPage.inFrame(page -> {
+      SoftAssertions softAssertions = new SoftAssertions();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("Name"))
+          .as("Name column present").isTrue();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("Description"))
+          .as("Description column present").isTrue();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("Status"))
+          .as("Status column present").isTrue();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("Create Date"))
+          .as("Create Date column present").isTrue();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("Start Date"))
+          .as("Start Date column present").isTrue();
+      softAssertions.assertThat(discountAndPromotionsPage.verifyColumnPresent("End Date"))
+          .as("End Date column present").isTrue();
+      softAssertions.assertAll();
+    });
+  }
+
+  @And("Operator verifies campaign count present in Discounts & Promotion Page")
+  public void operatorVerifiesCampaignCountPresentInDiscountsAndPromotionPage() {
+    discountAndPromotionsPage.inFrame(page -> {
+      SoftAssertions softAssertions = new SoftAssertions();
+      String value = discountAndPromotionsPage.campaignCount.getText();
+      softAssertions.assertThat(value.contains("Showing "));
+      softAssertions.assertThat(value.contains(" of "));
+      softAssertions.assertThat(value.contains(" results"));
+      softAssertions.assertThat(value.contains(" Active Filter(s)"));
+      softAssertions.assertAll();
+    });
   }
 }

@@ -15,7 +15,7 @@
       <Placemark id="nv-zone.1">
         <ExtendedData>
           <SchemaData schemaUrl="#test2-zone.schema">
-            <SimpleData name="zone_id">432</SimpleData>
+            <SimpleData name="zone_id">1278</SimpleData>
             <SimpleData name="zone_name">RTS-AUTO-ZONE-MDR-MLT-01</SimpleData>
             <SimpleData name="hub_name">SUB-SUB</SimpleData>
             <SimpleData name="zone_long">112.68826028664901</SimpleData>

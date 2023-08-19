@@ -2,9 +2,12 @@ package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -110,6 +113,14 @@ public class MdSelect extends PageElement {
 
   public boolean isValueExist(String value) {
     return isElementExist(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
+  }
+
+  public boolean isValueDisabled(String value) {
+    String disabledValue = findElementByXpath(f(MD_OPTION_BY_VALUE_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value))).getAttribute("disabled");
+    if (disabledValue != null)
+      return true;
+    else return false;
+
   }
 
   public void selectByValue(String value) {

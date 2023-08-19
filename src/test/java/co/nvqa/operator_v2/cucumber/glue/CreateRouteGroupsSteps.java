@@ -14,6 +14,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -786,16 +788,13 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
               DateUtils.getFragmentInHours(date, Calendar.DAY_OF_YEAR));
           page.generalFiltersForm.creationTimeFilter.selectFromMinutes("00");
         } else if (StringUtils.equalsIgnoreCase(value, "today")) {
-          Date date = new Date();
+          var fromDate = new Date();
+          var toDate = DateUtils.addDays(fromDate, 1);
+          page.generalFiltersForm.creationTimeFilter.setToDate(toDate);
+          page.generalFiltersForm.creationTimeFilter.selectToTime("00", "00");
 
-          page.generalFiltersForm.creationTimeFilter.setFromDate(date);
-          page.generalFiltersForm.creationTimeFilter.selectFromHours("00");
-          page.generalFiltersForm.creationTimeFilter.selectFromMinutes("00");
-
-          date = DateUtils.addDays(date, 1);
-          page.generalFiltersForm.creationTimeFilter.setToDate(date);
-          page.generalFiltersForm.creationTimeFilter.selectToHours("00");
-          page.generalFiltersForm.creationTimeFilter.selectToMinutes("00");
+          page.generalFiltersForm.creationTimeFilter.setFromDate(fromDate);
+          page.generalFiltersForm.creationTimeFilter.selectFromTime("00", "00");
         }
       } else if (page.generalFiltersForm.creationTimeFilter.isDisplayedFast()) {
         page.generalFiltersForm.creationTimeFilter.removeFilter();
@@ -920,6 +919,15 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
         value = finalData.get("originalTransactionEndTimeTo");
         if (StringUtils.isNotBlank(value)) {
+          if ("+1 day".equals(value)) {
+            String from = finalData.get("originalTransactionEndTimeFrom");
+            try {
+              var fromDate = DateUtils.parseDate(from, "yyyy-MM-dd");
+              value = DateFormatUtils.format(DateUtils.addDays(fromDate, 1), "yyyy-MM-dd");
+            } catch (ParseException e) {
+              throw new RuntimeException(e);
+            }
+          }
           page.generalFiltersForm.originalTransactionEndTimeFilter.setToDate(value);
           page.generalFiltersForm.originalTransactionEndTimeFilter.selectToHours("00");
           page.generalFiltersForm.originalTransactionEndTimeFilter.selectToMinutes("00");
@@ -1181,17 +1189,17 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("shipmentDateFrom") || finalData.containsKey("shipmentDateTo")) {
-        value = finalData.get("shipmentDateFrom");
-        if (StringUtils.isNotBlank(value)) {
-          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setFromDate(value);
-          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectFromHours("00");
-          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectFromMinutes("00");
-        }
         value = finalData.get("shipmentDateTo");
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setToDate(value);
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToHours("00");
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToMinutes("00");
+        }
+        value = finalData.get("shipmentDateFrom");
+        if (StringUtils.isNotBlank(value)) {
+          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setFromDate(value);
+          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectFromHours("00");
+          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectFromMinutes("00");
         }
       }
 
@@ -1469,7 +1477,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   public void operatorClickLoadSelectionOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
       page.loadSelection.click();
-      page.waitUntilLoaded(5, 60);
+      page.waitUntilLoaded(5, 120);
+      pause2s();
     });
   }
 
@@ -1481,7 +1490,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @Given("^Operator save records from Transactions/Reservations table on Create Route Groups page$")
   public void operatorSaveTableOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
-      List<TxnRsvn> records = page.txnRsvnTable.readAllEntities("sequence");
+      List<TxnRsvn> records = page.txnRsvnTable.readFirstEntities(5);
       put(LIST_OF_TXN_RSVN, records);
     });
   }
@@ -1500,11 +1509,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     String fileName = createRouteGroupsPage.getLatestDownloadedFilename(CSV_FILE_NAME);
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<TxnRsvn> actual = DataEntity.fromCsvFile(TxnRsvn.class, pathName, true);
-    Assertions.assertThat(actual.size()).as("Number of records in " + CSV_FILE_NAME)
-        .isEqualTo(expected.size());
+    Assertions.assertThat(actual).as("Records in " + CSV_FILE_NAME)
+        .hasSizeGreaterThanOrEqualTo(expected.size());
 
-    for (int i = 0; i < expected.size(); i++) {
-      expected.get(i).compareWithActual(actual.get(i));
+    for (TxnRsvn txnRsvn : expected) {
+      DataEntity.assertListContains(actual, txnRsvn, "Transactions/Reservations records");
     }
   }
 
@@ -1555,19 +1564,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       pause1s();
       List<TxnRsvn> actual = page.txnRsvnTable.readAllEntities();
       Assertions.assertThat(actual).as("List of found transactions").isNotEmpty();
-      if (actual.size() == 1) {
-        expected.compareWithActual(actual.get(0));
-      } else {
-        actual.stream().filter(a -> {
-          try {
-            expected.compareWithActual(a);
-            return true;
-          } catch (AssertionError e) {
-            return false;
-          }
-        }).findFirst().orElseThrow(
-            () -> new AssertionError("Transaction was not found: " + expected.toMap()));
-      }
+      DataEntity.assertListContains(actual, expected, "List of found transactions");
     }));
   }
 

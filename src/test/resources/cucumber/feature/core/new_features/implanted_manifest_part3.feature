@@ -5,7 +5,7 @@ Feature: Implanted Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Creates Implanted Manifest for PA Job with Total Scanned Orders = Total of POD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -126,7 +126,7 @@ Feature: Implanted Manifest
     And Operator open Job Details for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" job on Pickup Jobs page
     Then Operator verify no Proof of Pickup details in Job Details modal on Pickup Jobs page
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid PA Job Status - Failed PA Job
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -178,7 +178,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0    |
       | scannedAtShippers     |      |
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup - PA Job without POD Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -230,7 +230,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 1                                     |
       | scannedAtShippers     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Total Scanned Orders != Total of POD for PA Job
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -283,7 +283,7 @@ Feature: Implanted Manifest
       | scannedAtShipperCount | 0       |
       | scannedAtShippers     |         |
 
-  @DeletePickupAppointmentJob @DeleteOrArchiveRoute
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup - PA Job POD More Than 7 Days Ago
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

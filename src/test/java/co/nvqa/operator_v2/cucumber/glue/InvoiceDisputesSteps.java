@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.JavascriptExecutor;
 
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTES_COUNT;
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTE_DETAILS_DB;
@@ -147,9 +148,23 @@ public class InvoiceDisputesSteps extends AbstractSteps {
       softAssertions.assertThat(invoiceDisputeDetails.getDisputePersonName())
           .as("Dispute person name is correct")
           .isEqualTo(invoiceDispute.getDisputePersonName());
-      softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
-          .as("Number of disputed TIDs is correct")
-          .isEqualTo(invoiceDispute.getNumberOfTids().toString());
+      if (!invoiceDisputeDetails.getNumberOfTIDs().equals("-") && !mapOfData.get(
+          "errorTIDs").equals("-")) {
+        softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
+            .as("Number of disputed TIDs is correct")
+            .isEqualTo(
+                String.valueOf(
+                    invoiceDispute.getNumberOfTids() - Long.parseLong(mapOfData.get("errorTIDs"))));
+      } else if (!invoiceDisputeDetails.getNumberOfTIDs().equals("-")
+          && mapOfData.get(
+          "errorTIDs").equals("-")) {
+        softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
+            .as("Number of disputed TIDs is correct")
+            .isEqualTo(invoiceDispute.getNumberOfTids().toString());
+      } else {
+        softAssertions.assertThat(invoiceDisputeDetails.getNumberOfTIDs())
+            .as("Number of disputed TIDs is correct").isEqualTo("-");
+      }
       if (finalMapOfData.containsKey("numberOfInvalidTIDs")) {
         softAssertions.assertThat(invoiceDisputeDetails.getNumberOfInvalidTIDs())
             .as("Number of Invalid TIDs is correct")
@@ -185,6 +200,7 @@ public class InvoiceDisputesSteps extends AbstractSteps {
     final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
     invoiceDisputesDetailPage.inFrame(page -> {
       SoftAssertions softAssertions = new SoftAssertions();
+      page.manualResolutionTab.click();
       if (finalMapOfData.containsKey("manualResolutionCount")) {
         softAssertions.assertThat(page.manualResolutionTab.getText())
             .as("Manual resolution count is correct")
@@ -240,10 +256,79 @@ public class InvoiceDisputesSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator verifies Error TID Disputed Orders in Invoice Dispute page using below data:")
+  public void verifyErrorTIDDisputedOrders(Map<String, String> mapOfData) {
+    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    invoiceDisputesDetailPage.inFrame(page -> {
+      SoftAssertions softAssertions = new SoftAssertions();
+      page.errorTIDTab.click();
+      if (finalMapOfData.containsKey("errorTIDCount")) {
+        softAssertions.assertThat(page.errorTIDTab.getText())
+            .as("Error TID count is correct")
+            .contains(finalMapOfData.get("errorTIDCount"));
+      }
+      if (finalMapOfData.containsKey("trackingId")) {
+        List<String> tids = Arrays.stream(finalMapOfData.get("trackingId").split(","))
+            .collect(Collectors.toList());
+        ListIterator<String> tidIterator = tids.listIterator();
+        while (tidIterator.hasNext()) {
+          int index = tidIterator.nextIndex();
+          String tid = tidIterator.next();
+          if (finalMapOfData.containsKey("disputeType")) {
+            List<String> disputeTypes = Arrays.stream(finalMapOfData.get("disputeType").split(","))
+                .collect(Collectors.toList());
+            softAssertions.assertThat(page.getDisputeType(tid)).as("Dispute Type is correct")
+                .isEqualTo(disputeTypes.get(index));
+          }
+          if (finalMapOfData.containsKey("status")) {
+            List<String> disputeStatuses = Arrays.stream(finalMapOfData.get("status").split(","))
+                .collect(Collectors.toList());
+            softAssertions.assertThat(page.getDisputeStatus(tid))
+                .as("Dispute Status is correct")
+                .isEqualTo(disputeStatuses.get(index));
+          }
+          if (finalMapOfData.containsKey("financeRevisedDeliveryFee")) {
+            List<String> financeRevisedDeliveryFees = Arrays.stream(
+                    finalMapOfData.get("financeRevisedDeliveryFee").split(","))
+                .collect(Collectors.toList());
+            softAssertions.assertThat(page.getDisputeRevisedDeliveryFee(tid))
+                .as("Dispute Revised Delivery Fee is correct")
+                .isEqualTo(financeRevisedDeliveryFees.get(index));
+          }
+          if (finalMapOfData.containsKey("financeRevisedCodFee")) {
+            List<String> financeRevisedCodFees = Arrays.stream(
+                    finalMapOfData.get("financeRevisedCodFee").split(","))
+                .collect(Collectors.toList());
+            softAssertions.assertThat(page.getDisputeRevisedCODFee(tid))
+                .as("Dispute Revised COD Fee is correct")
+                .isEqualTo(financeRevisedCodFees.get(index));
+          }
+          if (finalMapOfData.containsKey("deltaOfOriginalBillAmtAndRevisedAmt")) {
+            List<String> deltaOfOriginalBillAmtAndRevisedAmts = Arrays.stream(
+                    finalMapOfData.get("deltaOfOriginalBillAmtAndRevisedAmt").split(","))
+                .collect(Collectors.toList());
+            softAssertions.assertThat(page.getDisputeDeltaAmount(tid))
+                .as("Dispute Delta Amount is correct")
+                .isEqualTo(deltaOfOriginalBillAmtAndRevisedAmts.get(index));
+          }
+        }
+      }
+      softAssertions.assertAll();
+    });
+  }
+
   @And("Operator click action button in Manual Resolution tab for {value} TID")
   public void clickActionButtonForTI(String value) {
     invoiceDisputesDetailPage.inFrame(page -> {
       page.clickActionButtonInManualResolutionTab(value);
+      page.verifyManualResolutionDisputedOrderIsDisplayed();
+    });
+  }
+
+  @And("Operator click action button in Error TID tab for {value} TID")
+  public void clickActionButtonForErrorTID(String value) {
+    invoiceDisputesDetailPage.inFrame(page -> {
+      page.clickActionButtonInErrorTIDTab(value);
       page.verifyManualResolutionDisputedOrderIsDisplayed();
     });
   }
@@ -428,10 +513,36 @@ public class InvoiceDisputesSteps extends AbstractSteps {
         page.manualResolutionDisputedOrderModal.revisedWeightInput.setValue(
             finalMapData.get("revisedWeightInput"));
       }
-      if (finalMapData.containsKey("nvOriginalBilledAmount")) {
-        page.manualResolutionDisputedOrderModal.nvOriginalBilledAmount.forceClear();
-        page.manualResolutionDisputedOrderModal.nvOriginalBilledAmount.setValue(
-            finalMapData.get("nvOrignalBilledAmount"));
+      if (finalMapData.containsKey("originalDeliveryFee")) {
+        page.manualResolutionDisputedOrderModal.originalDeliveryFee.forceClear();
+        page.manualResolutionDisputedOrderModal.originalDeliveryFee.setValue(
+            finalMapData.get("originalDeliveryFee"));
+      }
+      if (finalMapData.containsKey("originalRTSFee")) {
+        page.manualResolutionDisputedOrderModal.originalRTSFee.forceClear();
+        page.manualResolutionDisputedOrderModal.originalRTSFee.setValue(
+            finalMapData.get("originalRTSFee"));
+      }
+      if (finalMapData.containsKey("originalCODFee")) {
+        page.manualResolutionDisputedOrderModal.originalCODFee.forceClear();
+        page.manualResolutionDisputedOrderModal.originalCODFee.setValue(
+            finalMapData.get("originalCODFee"));
+      }
+      if (finalMapData.containsKey("originalInsuranceFee")) {
+        page.manualResolutionDisputedOrderModal.originalInsuranceFee.forceClear();
+        page.manualResolutionDisputedOrderModal.originalInsuranceFee.setValue(
+            finalMapData.get("originalInsuranceFee"));
+      }
+      if (finalMapData.containsKey("originalTax")) {
+        page.manualResolutionDisputedOrderModal.originalTax.forceClear();
+        page.manualResolutionDisputedOrderModal.originalTax.setValue(
+            finalMapData.get("originalTax"));
+      }
+      if (finalMapData.containsKey("originalBillAmount")) {
+        page.manualResolutionDisputedOrderModal.originalBillingAmount.forceClear();
+        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].value=arguments[1]",
+                page.manualResolutionDisputedOrderModal.originalBillingAmount.getWebElement(),
+                finalMapData.get("originalBillAmount"));
       }
       if (finalMapData.containsKey("revisedDeliveryFee")) {
         page.manualResolutionDisputedOrderModal.revisedDeliveryFee.forceClear();

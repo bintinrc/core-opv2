@@ -6,6 +6,7 @@ Feature: Edit Order
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
     #  as the flow now more on the sort side, this scenario should be on the sort side
+    #  Comment all step that related with jaro score since it turned off by dev side
     #  TODO: change the verification step to call addressing search es
   @ArchiveRouteCommonV2
   Scenario: Operator Reverify Order Address in Edit Order Page
@@ -23,21 +24,20 @@ Feature: Edit Order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> Reverify Delivery Address on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Reverified successfully |
-      | waitUntilInvisible | true                    |
+      | top | Reverified successfully |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 2                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
-      | score      | not null                     |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 0                            |
-      | score      | not null                     |
+#    And DB Core - verify number of records in order_jaro_scores_v2:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | number     | 2                            |
+#    And DB Core - verify order_jaro_scores_v2 record:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | archived   | 1                            |
+#      | score      | not null                     |
+#    And DB Core - verify order_jaro_scores_v2 record:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | archived   | 0                            |
+#      | score      | not null                     |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Reverify Pickup Order Address in Edit Order Page
@@ -55,17 +55,16 @@ Feature: Edit Order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Pickup -> Reverify pickup address on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Reverified successfully |
-      | waitUntilInvisible | true                    |
+      | top | Reverified successfully |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 0                            |
-      | score      | not null                     |
+#    And DB Core - verify number of records in order_jaro_scores_v2:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | number     | 1                            |
+#    And DB Core - verify order_jaro_scores_v2 record:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | archived   | 0                            |
+#      | score      | not null                     |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Reverify RTS Order Address in Edit Order Page
@@ -89,18 +88,17 @@ Feature: Edit Order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Return to sender -> Reverify RTS address on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Reverified successfully |
-      | waitUntilInvisible | true                    |
+      | top | Reverified successfully |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 2                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
-      | score      | not null                     |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 0                            |
-      | score      | not null                     |
+#    And DB Core - verify number of records in order_jaro_scores_v2:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | number     | 2                            |
+#    And DB Core - verify order_jaro_scores_v2 record:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | archived   | 1                            |
+#      | score      | not null                     |
+#    And DB Core - verify order_jaro_scores_v2 record:
+#      | waypointId | {KEY_TRANSACTION.waypointId} |
+#      | archived   | 0                            |
+#      | score      | not null                     |

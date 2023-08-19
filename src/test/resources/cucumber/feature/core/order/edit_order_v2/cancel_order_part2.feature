@@ -103,18 +103,16 @@ Feature: Cancel Order
       | v4OrderRequest      | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Pending" on Edit Order V2 page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | entrySource             | CUSTOMER COMPLAINT              |
-      | investigatingDepartment | Recovery                        |
-      | investigatingHub        | {hub-name}                      |
-      | ticketType              | DAMAGED                         |
-      | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DISPOSED |
-      | parcelLocation          | DAMAGED RACK                    |
-      | liability               | Shipper                         |
-      | damageDescription       | GENERATED                       |
-      | ticketNotes             | GENERATED                       |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | DAMAGED                               |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)               |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
     When Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order V2 page
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
@@ -122,12 +120,18 @@ Feature: Cancel Order
       | name           |
       | TICKET CREATED |
       | UPDATE STATUS  |
-    When Operator updates recovery ticket on Edit Order V2 page:
-      | status  | RESOLVED                        |
-      | outcome | NV NOT LIABLE - PARCEL DISPOSED |
-    Then Operator verifies that success toast displayed:
-      | top                | ^Ticket ID : .* updated |
-      | waitUntilInvisible | true                    |
+    And DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
+    When API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | status           | RESOLVED                                 |
+      | outcome          | NV NOT LIABLE - PARCEL DISPOSED          |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     And Operator refresh page
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
@@ -150,14 +154,17 @@ Feature: Cancel Order
       | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Pending                                                    |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 2                            |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | number     | 1                                                          |
+    And DB Core - verify number of records in order_jaro_scores_v2:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | number     | 1                                                          |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | archived   | 1                                                          |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | archived   | 1                                                          |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Merged Delivery Waypoints
@@ -193,7 +200,6 @@ Feature: Cancel Order
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) cancelled                        |
       | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-      | waitUntilInvisible | true                                        |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page

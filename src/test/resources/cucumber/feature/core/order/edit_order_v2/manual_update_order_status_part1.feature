@@ -17,8 +17,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -52,9 +51,6 @@ Feature: Manual Update Order Status
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -63,8 +59,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -88,7 +83,7 @@ Feature: Manual Update Order Status
       | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
       | Pending Pickup | Pending | PENDING      | PENDING        | Pending        | Pending          | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Pickup\n\nOld Order Status: Transit\nNew Order Status: Pending\n\nReason: Status updated for testing purposes |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -115,8 +110,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -152,8 +146,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -189,8 +182,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -226,8 +218,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -263,8 +254,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -300,8 +290,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -337,8 +326,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |

@@ -17,8 +17,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -54,8 +53,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -91,8 +89,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -134,8 +131,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -159,7 +155,7 @@ Feature: Manual Update Order Status
       | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                   |
       | On Vehicle for Delivery | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Delivery Status: Fail\nNew Delivery Status: Pending\n\nOld Granular Status: Pending Reschedule\nNew Granular Status: On Vehicle for Delivery\n\nOld Order Status: Delivery fail\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - On Vehicle for Delivery, Latest Delivery is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -171,8 +167,8 @@ Feature: Manual Update Order Status
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
     And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | Transit                                    |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -189,8 +185,8 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
+    When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
@@ -263,7 +259,7 @@ Feature: Manual Update Order Status
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify menu item "Order Settings" > "Update Status" is disabled on Edit Order V2 page
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule to Arrived at Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -293,8 +289,7 @@ Feature: Manual Update Order Status
       | granularStatus | <granularStatus>                    |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
+      | top | Status updated |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |

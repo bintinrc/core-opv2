@@ -9,8 +9,9 @@ Feature: View Tagged Orders
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
@@ -30,8 +31,9 @@ Feature: View Tagged Orders
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -42,7 +44,10 @@ Feature: View Tagged Orders
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver failed the delivery of the created parcel using data below:
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 6           |
@@ -60,13 +65,14 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                                   |
       | granularStatus       | Pending Reschedule                  |
 
-  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt
+  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id, No Attempt
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator go to menu Order -> View Tagged Orders
@@ -87,8 +93,9 @@ Feature: View Tagged Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
@@ -107,8 +114,9 @@ Feature: View Tagged Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | granularStatus | On Hold                           |
@@ -131,8 +139,9 @@ Feature: View Tagged Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_CREATED_ORDER_ID} |
+      | orderTag | {order-tag-id}         |
     Given Operator go to menu Distribution Points -> DP Tagging
     And Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{dpms-id}"
@@ -146,7 +155,10 @@ Feature: View Tagged Orders
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
-    And API Operator start the route
+    And API Core - Operator start the route with following data:
+      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | driverId | {ninja-driver-id}                                                                                                                     |
+      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     And API Driver deliver the created parcel successfully
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:

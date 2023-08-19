@@ -19,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
+import org.openqa.selenium.Keys;
 
 public class RecoveryTicketsSteps extends AbstractSteps {
 
@@ -29,11 +30,6 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     recoveryTicketsPage = new RecoveryTicketsPage(getWebDriver());
   }
 
-  @Given("Operator goes to new Recovery Tickets page")
-  public void goToNewRecoveryTicketsPage() {
-    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/recovery-tickets-new");
-  }
-
   @When("Operator create ticket by csv in Recovery Tickets page")
   public void createTicketByCsv() {
     recoveryTicketsPage.inFrame(() -> {
@@ -42,7 +38,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       recoveryTicketsPage.creatByCSVDialog.title.waitUntilVisible(60);
       Assertions.assertThat(recoveryTicketsPage.creatByCSVDialog.title.getText())
           .isEqualTo("Create Tickets Via CSV");
-      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("AIR FREIGHT REJECTION");
+      recoveryTicketsPage.creatByCSVDialog.searchByEntrySource("RECOVERY SCANNING");
       recoveryTicketsPage.creatByCSVDialog.searchByTicketType("MISSING");
       recoveryTicketsPage.creatByCSVDialog.searchByInvestigationDept("Recovery");
     });
@@ -434,11 +430,14 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator search created ticket by {string} filter with value {string}")
-  public void searchTicketByFilter(String field, String value) {
+  @When("Operator search created ticket by {string} filter with values:")
+  public void searchTicketByFilter(String field, List<String> values) {
     recoveryTicketsPage.inFrame(() -> {
-      final String finalValue = resolveValue(value);
-      recoveryTicketsPage.filterByField(field, finalValue);
+      final List<String> finalValues = values.stream()
+          .map(StringUtils::trim)
+          .flatMap(s -> Arrays.stream(s.split(",")))
+          .collect(Collectors.toList());
+      recoveryTicketsPage.filterByField(field, resolveValues(finalValues));
     });
   }
 
@@ -457,10 +456,17 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator clicks Update Ticket button in Edit Ticket dialog")
-  public void clickUpdateTicket() {
+  @When("Operator clicks {string} button in Edit Ticket dialog")
+  public void clickUpdateTicket(String buttonName) {
     recoveryTicketsPage.inFrame(() -> {
-      recoveryTicketsPage.editTicketDialog.updateTicket.click();
+      switch (buttonName) {
+        case "Update Ticket":
+          recoveryTicketsPage.editTicketDialog.updateTicket.click();
+          break;
+        case "Cancel Ticket":
+          recoveryTicketsPage.editTicketDialog.cancelTicket.click();
+          break;
+      }
     });
   }
 
@@ -480,6 +486,207 @@ public class RecoveryTicketsSteps extends AbstractSteps {
       Assertions.assertThat(recoveryTicketsPage.editTicketDialog.changesAndComments.getText())
           .as("changes and comments recorded").isEqualTo(
               "Status change: From '" + oldStatus + "' to '" + newStatus + "' by " + operatorName);
+    });
+  }
+
+  @When("Operator edit the ticket with the following and verifies it:")
+  public void editTicketDetails(Map<String, String> map) {
+    recoveryTicketsPage.inFrame((page) -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      String ticketStatus = mapOfData.get("ticketStatus");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String assignTo = mapOfData.get("assignTo");
+      String enterNewInstruction = mapOfData.get("enterNewInstruction");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String investigatingDept = mapOfData.get("investigatingDept");
+      String customerZendeskID = mapOfData.get("customerZendeskID");
+      String shipperZendeskID = mapOfData.get("shipperZendeskID");
+      String ticketComments = mapOfData.get("ticketComments");
+
+      if ("GENERATED".equals(enterNewInstruction)) {
+        enterNewInstruction = f("This instruction is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+      if ("RANDOM".equals(customerZendeskID)) {
+        customerZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
+      }
+
+      if ("RANDOM".equals(shipperZendeskID)) {
+        shipperZendeskID = f(String.valueOf(System.currentTimeMillis() / 1000));
+      }
+
+      RecoveryTicket recoveryTicket = new RecoveryTicket();
+      recoveryTicket.setTicketStatus(ticketStatus);
+      recoveryTicket.setOrderOutcome(orderOutcome);
+      recoveryTicket.setAssignTo(assignTo);
+      recoveryTicket.setEnterNewInstruction(enterNewInstruction);
+      recoveryTicket.setTicketComments(ticketComments);
+      recoveryTicket.setInvestigatingDepartment(investigatingDept);
+      recoveryTicket.setInvestigatingHub(investigatingHub);
+      recoveryTicket.setCustZendeskId(customerZendeskID);
+      recoveryTicket.setShipperZendeskId(shipperZendeskID);
+
+      page.editTicket(recoveryTicket);
+      page.waitUntilInvisibilityOfToast();
+
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getTicketStatus());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getOrderOutcome());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getAssignTo());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingDepartment());
+      page.editTicketDialog.verifyTicketStatus(recoveryTicket.getInvestigatingHub());
+      Assertions.assertThat(page.editTicketDialog.customerZendeskId.getAttribute("value"))
+          .as("customer zendesk id").isEqualTo(recoveryTicket.getCustZendeskId());
+      Assertions.assertThat(page.editTicketDialog.shipperZendeskId.getAttribute("value"))
+          .as("shipper zendesk id").isEqualTo(recoveryTicket.getShipperZendeskId());
+      Assertions.assertThat(page.editTicketDialog.lastInstruction.getText()).as("last instruction")
+          .isEqualTo(recoveryTicket.getEnterNewInstruction());
+    });
+  }
+
+  @When("Operator verifies updated recovery ticket")
+  public void verifyEditTicketDetails(Map<String, String> map) {
+    recoveryTicketsPage.inFrame((page) -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      String ticketStatus = mapOfData.get("ticketStatus");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String assignTo = mapOfData.get("assignTo");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String investigatingDept = mapOfData.get("investigatingDept");
+
+      page.resultsTable.clickActionButton(1, page.resultsTable.ACTION_EDIT);
+      page.editTicketDialog.verifyTicketStatus(ticketStatus);
+      page.editTicketDialog.verifyTicketStatus(orderOutcome);
+      page.editTicketDialog.verifyTicketStatus(assignTo);
+      page.editTicketDialog.verifyTicketStatus(investigatingDept);
+      page.editTicketDialog.verifyTicketStatus(investigatingHub);
+    });
+  }
+
+
+  @Given("Operator clicks {string} button on Recovery Tickets Page")
+  public void operatorClicksButtonRecoveryTicketsPage(String buttonName) {
+    recoveryTicketsPage.inFrame(page -> {
+      switch (buttonName) {
+        case "Select All Shown":
+          page.resultsTable.actionButton.click();
+          page.resultsTable.selectAll.click();
+          break;
+        case "Clear all selections":
+          page.clearAllSelections.click();
+          break;
+        case "Bulk Update":
+          page.bulkUpdate.click();
+          break;
+        case "Edit Filter":
+          page.editFilter.click();
+          break;
+        case "Load Selection":
+          page.loadSelection.click();
+          break;
+      }
+    });
+  }
+
+  @When("Operator bulk update tickets on new page Recovery Tickets using data below:")
+  public void operatorBulkUpdateTickets(Map<String, String> map) {
+    recoveryTicketsPage.inFrame(() -> {
+      Map<String, String> mapOfData = resolveKeyValues(map);
+      String ticketStatus = mapOfData.get("ticketStatus");
+      String investigatingDepartment = mapOfData.get("investigatingDepartment");
+      String investigatingHub = mapOfData.get("investigatingHub");
+      String orderOutcome = mapOfData.get("orderOutcome");
+      String ticketComment = mapOfData.get("ticketComment");
+      String assignee = mapOfData.get("assignee");
+      String newInstruction = mapOfData.get("newInstruction");
+
+      if ("GENERATED".equals(ticketComment)) {
+        ticketComment = f("This ticket notes is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      if ("GENERATED".equals(newInstruction)) {
+        newInstruction = f("This instruction is created by automation at %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+      }
+
+      RecoveryTicket recoveryTicket = new RecoveryTicket();
+      recoveryTicket.setTicketStatus(ticketStatus);
+      recoveryTicket.setOrderOutcome(orderOutcome);
+      recoveryTicket.setInvestigatingDepartment(investigatingDepartment);
+      recoveryTicket.setInvestigatingHub(investigatingHub);
+      recoveryTicket.setTicketComments(ticketComment);
+      recoveryTicket.setEnterNewInstruction(newInstruction);
+      recoveryTicket.setAssignTo(assignee);
+      recoveryTicketsPage.bulkUpdate(recoveryTicket);
+    });
+  }
+
+  @When("Operator Add {string} filter")
+  public void operatorAddFilter(String filter) {
+    recoveryTicketsPage.inFrame(page -> {
+      page.addFilter.sendKeys(filter);
+      page.addFilter.sendKeys(Keys.RETURN);
+    });
+  }
+
+  @When("Operator close Edit Ticket Modal")
+  public void operatorCloseEditTicketModal() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.closeEditTicketModal();
+    });
+  }
+
+  @Then("Operator verifies Cancel Ticket dialog")
+  public void verifyCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.title.getText())
+          .as("cancel dialog title").isEqualTo("Confirm Cancel Ticket");
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.content.getText())
+          .as("cancel dialog content").isEqualTo("Do you want to cancel this ticket?");
+    });
+  }
+
+  @When("Operator clicks Delete button in Cancel Ticket dialog")
+  public void clickDeleteButtonInCancelDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.cancelTicketDialog.delete.click();
+      recoveryTicketsPage.waitUntilInvisibilityOfToast("Cancelled");
+    });
+  }
+
+  @Then("Operator verifies error toast message in recovery tickets page")
+  public void verifiesErrorToastMessage() {
+    recoveryTicketsPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfNotification("Invalid Selection");
+      Assertions.assertThat(page.getAntDescription()).as("toast description").isEqualTo(
+          "Selection must be of the same ticket type (e.g. Damaged only, Parcel Exception only) and not in RESOLVED or CANCELLED state");
+    });
+  }
+
+  @When("Operator clicks Cancel Tickets button on Bulk Edit dialog")
+  public void clickCancelOnBulkEdit() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.bulkEditDialog.cancelTickets.click();
+    });
+  }
+
+  @Then("Operator verifies bulk cancel tickets dialog")
+  public void verifyBulkCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.title.getText())
+          .as("bulk cancel dialog title").isEqualTo("Cancel Tickets");
+      Assertions.assertThat(recoveryTicketsPage.cancelTicketDialog.content.getText())
+          .as("bulk cancel dialog content").isEqualTo(
+              "Cancelled tickets will not be modifiable. Proceed to cancel the following tickets?");
+    });
+  }
+
+  @Then("Operator click Cancel Tickets on Cancel Tickets dialog")
+  public void clickOnCancelTicketDialog() {
+    recoveryTicketsPage.inFrame(() -> {
+      recoveryTicketsPage.cancelTicketDialog.cancelTickets.click();
+      recoveryTicketsPage.waitUntilVisibilityOfNotification("Success 2 tickets updated.");
     });
   }
 }

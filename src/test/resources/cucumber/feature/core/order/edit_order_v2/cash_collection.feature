@@ -14,23 +14,22 @@ Feature: Cash Collection
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnPickup | yes |
-      | amount       | 10  |
+      | cashOnPickup | yes   |
+      | amount       | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
-      | cop | COP SGD0.01 |
+      | cop | COP SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                           |
-      | description | Cash On Pickup changed from 0 to 0.01 |
+      | name        | UPDATE CASH                         |
+      | description | Cash On Pickup changed from 0 to 10 |
     And DB Core - verify orders record:
       | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | codId | not null                           |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then DB Core - verify cods record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
-      | goodsAmount  | 0.01                                   |
+      | goodsAmount  | 10.00                                  |
       | collectionAt | PP                                     |
 
   @happy-path
@@ -43,23 +42,22 @@ Feature: Cash Collection
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes |
-      | amount         | 10  |
+      | cashOnDelivery | yes   |
+      | amount         | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD SGD0.01 |
+      | cod | COD SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                             |
-      | description | Cash On Delivery changed from 0 to 0.01 |
+      | name        | UPDATE CASH                           |
+      | description | Cash On Delivery changed from 0 to 10 |
     And DB Core - verify orders record:
       | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | codId | not null                           |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then DB Core - verify cods record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
-      | goodsAmount  | 0.01                                   |
+      | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
   Scenario: Edit Cash Collection Details - Update Cash on Pickup
@@ -71,23 +69,22 @@ Feature: Cash Collection
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnPickup | yes |
-      | amount       | 10  |
+      | cashOnPickup | yes   |
+      | amount       | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
-      | cop | COP SGD0.01 |
+      | cop | COP SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                               |
-      | description | Cash On Pickup changed from 23.57 to 0.01 |
+      | name        | UPDATE CASH                             |
+      | description | Cash On Pickup changed from 23.57 to 10 |
     And DB Core - verify orders record:
       | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | codId | not null                           |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then DB Core - verify cods record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
-      | goodsAmount  | 0.01                                   |
+      | goodsAmount  | 10.00                                  |
       | collectionAt | PP                                     |
 
   @happy-path
@@ -100,23 +97,22 @@ Feature: Cash Collection
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes |
-      | amount         | 10  |
+      | cashOnDelivery | yes   |
+      | amount         | 10.00 |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD SGD0.01 |
+      | cod | COD SGD10 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                 |
-      | description | Cash On Delivery changed from 23.57 to 0.01 |
+      | name        | UPDATE CASH                               |
+      | description | Cash On Delivery changed from 23.57 to 10 |
     And DB Core - verify orders record:
       | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | codId | not null                           |
     When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then DB Core - verify cods record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
-      | goodsAmount  | 0.01                                   |
+      | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
   Scenario: Edit Cash Collection Details - Remove Cash on Pickup
@@ -131,7 +127,6 @@ Feature: Cash Collection
       | cashOnPickup | no |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     And Operator verify COP icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                            |
@@ -156,7 +151,6 @@ Feature: Cash Collection
       | cashOnDelivery | no |
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |

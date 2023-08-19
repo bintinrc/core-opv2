@@ -1067,12 +1067,12 @@ public class RouteLogsSteps extends AbstractSteps {
       boolean waitUntilInvisible = Boolean.parseBoolean(
           finalData.getOrDefault("waitUntilInvisible", "false"));
       long start = new Date().getTime();
-      pause3s();
       AntNotification toastInfo;
       do {
         try {
           toastInfo = routeLogsPage.noticeNotifications.stream().filter(toast -> {
             String actualTop = toast.message.getNormalizedText();
+            toast.message.moveToElement();
             LOGGER.info("Found notification: " + actualTop);
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
@@ -1089,6 +1089,7 @@ public class RouteLogsSteps extends AbstractSteps {
             value = finalData.get("bottom");
             if (StringUtils.isNotBlank(value)) {
               String actual = toast.description.getNormalizedText();
+              toast.description.moveToElement();
               LOGGER.info("Found description: " + actual);
               if (value.startsWith("^")) {
                 return actual.matches(value);
@@ -1107,7 +1108,9 @@ public class RouteLogsSteps extends AbstractSteps {
           .withFailMessage("Toast is not displayed: " + finalData)
           .isNotNull();
       if (toastInfo != null && waitUntilInvisible) {
-        toastInfo.waitUntilInvisible();
+        if (!toastInfo.waitUntilInvisible(20)) {
+          toastInfo.close.jsClick();
+        }
       }
     });
   }

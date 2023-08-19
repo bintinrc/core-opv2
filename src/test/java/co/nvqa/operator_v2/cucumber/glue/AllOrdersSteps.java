@@ -58,18 +58,10 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage = new AllOrdersPage(getWebDriver());
   }
 
-  @When("^Operator switch to Edit Order's window$")
-  public void operatorSwitchToEditOrderWindow() {
-    Long orderId = get(KEY_CREATED_ORDER_ID);
-    if (orderId == null) {
-      List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-      if (org.apache.commons.collections4.CollectionUtils.isEmpty(orders)) {
-        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_ORDERS is empty");
-      }
-      orderId = orders.get(orders.size() - 1).getId();
-    }
+  @When("Operator switch to Edit Order's window of {string}")
+  public void operatorSwitchToEditOrderWindow(String orderId) {
     String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
-    allOrdersPage.switchToEditOrderWindow(orderId);
+    allOrdersPage.switchToEditOrderWindow(Long.parseLong(resolveValue(orderId)));
     put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
   }
 
@@ -201,7 +193,6 @@ public class AllOrdersSteps extends AbstractSteps {
     List<String> listOfInvalidTrackingId = get("listOfInvalidTrackingId");
     allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
   }
-
 
 
   @When("^Operator Force Success orders with COD collection on All Orders page:$")

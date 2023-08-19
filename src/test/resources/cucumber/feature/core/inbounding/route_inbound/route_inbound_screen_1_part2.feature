@@ -45,15 +45,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_TRACKING_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
-      | wpPending   | 0                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 1                                  |
-      | wpTotal     | 1                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 0                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 1                                         |
+      | wpTotal     | 1                                         |
 
   @ArchiveRouteCommonV2
   Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id
@@ -81,15 +81,15 @@ Feature: Route Inbound Screen 1
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | routeId      | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
-      | wpPending   | 1                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 0                                  |
-      | wpTotal     | 1                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 1                                         |
     When Operator refresh page
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                            |
@@ -97,15 +97,15 @@ Feature: Route Inbound Screen 1
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | routeId      | {KEY_LIST_OF_CREATED_ROUTES[2].id}    |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-      | driverName  | {ninja-driver-name}                |
-      | hubName     | {hub-name}                         |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}   |
-      | wpPending   | 1                                  |
-      | wpPartial   | 0                                  |
-      | wpFailed    | 0                                  |
-      | wpCompleted | 0                                  |
-      | wpTotal     | 1                                  |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id}        |
+      | driverName  | {ninja-driver-name}                       |
+      | hubName     | {hub-name}                                |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[2].createdAt} |
+      | wpPending   | 1                                         |
+      | wpPartial   | 0                                         |
+      | wpFailed    | 0                                         |
+      | wpCompleted | 0                                         |
+      | wpTotal     | 1                                         |
 
   @ArchiveRouteCommonV2
   Scenario: Get Route Details by Tracking ID - Order is Not Routed
@@ -163,7 +163,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
       | driverName  | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hubName     | {hub-name}                                |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}          |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
       | wpPending   | 1                                         |
       | wpPartial   | 0                                         |
       | wpFailed    | 0                                         |
@@ -208,7 +208,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}        |
       | driverName  | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hubName     | {hub-name}                                |
-      | routeDate   | {gradle-current-date-yyyy-MM-dd}          |
+      | routeDate   | {KEY_LIST_OF_CREATED_ROUTES[1].createdAt} |
       | wpPending   | 1                                         |
       | wpPartial   | 0                                         |
       | wpFailed    | 0                                         |

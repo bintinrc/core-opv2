@@ -463,6 +463,7 @@ public class AllShippersStepV2 extends AbstractSteps {
             if (shipperData.get("Tracking type") != null) {
                 shipperCreatePage.basicSettingsForm.operationalSettings.trackingType.selectValue(
                         shipperData.get("Tracking type"));
+
             }
 
             if (shipperData.get("Prefix") != null) {
@@ -1241,6 +1242,14 @@ public class AllShippersStepV2 extends AbstractSteps {
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
             shipperCreatePage.tabs.selectTab("Marketplace");
         }, 1000, 3);
+    }
+
+    @When("Operator check prefix type {string} is disabled")
+    public void checkPrefixTypeStatus(String type) {
+        String value = resolveValue(type);
+        shipperCreatePage.basicSettingsForm.operationalSettings.trackingType.scrollIntoView();
+        boolean status = shipperCreatePage.basicSettingsForm.operationalSettings.trackingType.isValueDisabled(value);
+        Assertions.assertThat(status).as(f("check prefix enabled: %s", value)).isTrue();
     }
 
 }

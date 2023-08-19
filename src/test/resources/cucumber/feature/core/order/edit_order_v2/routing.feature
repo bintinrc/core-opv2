@@ -25,8 +25,7 @@ Feature: Routing
     And Operator click Pickup -> Pull from Route on Edit Order V2 page
     And Operator pull out parcel from route on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                             |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verify Pickup transaction on Edit Order V2 page using data below:
       | routeId |  |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -68,8 +67,7 @@ Feature: Routing
     And Operator click Delivery -> Pull from Route on Edit Order V2 page
     And Operator pull out parcel from route on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                             |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verify Delivery transaction on Edit Order V2 page using data below:
       | routeId |  |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -115,8 +113,7 @@ Feature: Routing
     And Operator click Return to sender -> Pull from route on Edit Order V2 page
     And Operator pull out parcel from route on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                             |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verify Delivery transaction on Edit Order V2 page using data below:
       | routeId |  |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -187,8 +184,7 @@ Feature: Routing
       | type    | Delivery                           |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                          |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -231,8 +227,7 @@ Feature: Routing
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                          |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -279,8 +274,7 @@ Feature: Routing
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                          |
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
     Then Operator verifies order details on Edit Order V2 page:
       | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:

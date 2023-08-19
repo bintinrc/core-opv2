@@ -98,6 +98,17 @@ public class AntDateTimeRangePicker extends AntAbstractFilterBox {
     ok.click();
   }
 
+  public void selectFromTime(String hours, String minutes) {
+    fromHoursInput.click();
+    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, hours))));
+    button.scrollIntoView();
+    button.jsClick();
+    button = new Button(webDriver, webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, minutes))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
   public void selectFromHours(long value) {
     selectFromHours(String.format("%02d", value));
   }
@@ -114,6 +125,17 @@ public class AntDateTimeRangePicker extends AntAbstractFilterBox {
   public void selectToHours(String value) {
     toHoursInput.click();
     Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, value))));
+    button.scrollIntoView();
+    button.jsClick();
+    ok.click();
+  }
+
+  public void selectToTime(String hours, String minutes) {
+    toHoursInput.click();
+    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, hours))));
+    button.scrollIntoView();
+    button.jsClick();
+    button = new Button(webDriver, webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, minutes))));
     button.scrollIntoView();
     button.jsClick();
     ok.click();

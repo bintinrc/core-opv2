@@ -20,6 +20,7 @@ import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
@@ -69,8 +70,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[./div[contains(text(),'Actions')]]")
   public AntMenuBar menuBar;
 
-  @FindBy(css = "div[loading-message='Loading events...'] md-menu")
-  public MdMenu eventsTableFilter;
+  @FindBy(css = "[data-testid='edit-order-testid.displaying-single-select']")
+  public AntSelect3 eventsTableFilter;
 
   @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
   public PageElement trackingId;
@@ -126,13 +127,16 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//iframe[contains(@src,'recovery')][2]")
   public PageElement recoveryFrame;
 
-  @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
+  @FindBy(xpath = "//iframe[contains(@src,'recovery')][1]")
+  public PageElement editRecoveryFrame;
+
+  @FindBy(xpath = ".//span[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
 
   @FindBy(css = ".ant-modal")
   public CreateTicketDialog createTicketDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditTicketDialog editTicketDialog;
 
   @FindBy(css = "[data-testid='edit-order-testid.order-summary-section.dvr-field.edit.icon']")
@@ -272,6 +276,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   public void openPage(long orderId) {
     getWebDriver().get(f("%s/%s/order-v2?id=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), orderId));
+    pause1s();
+    closeDialogIfVisible();
     pause1s();
     getWebDriver().switchTo().defaultContent();
     pageFrame.waitUntilVisible();
@@ -2023,27 +2029,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     }
   }
 
-  @FindBy(css = "[aria-label*='Order outcome']")
-  public List<PageElement> orderOutcomeDialog;
-
-  @FindBy(css = "button[aria-label='No']")
-  public PageElement noBtn;
-
-  @FindBy(css = "button[aria-label='Keep']")
-  public PageElement keepBtn;
-
-  public void chooseCurrentOrderOutcome(String value) {
-    if (orderOutcomeDialog.size() > 0) {
-      if (equalsAnyIgnoreCase(value, "keep", "yes")) {
-        keepBtn.click();
-      }
-      if (equalsIgnoreCase(value, "no")) {
-        noBtn.click();
-      }
-    }
-
-  }
-
   public static class ManuallyCompleteOrderDialog extends AntModal {
 
     @FindBy(css = "[data-testid='edit-order-testid.manually-complete-order.complete-order.button']")
@@ -2095,17 +2080,17 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.order-outcome.custom-field']")
     public AntSelect3 orderOutcome;
 
-    @FindBy(css = "[id^='commons.rts-reason']")
-    public MdSelect rtsReason;
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.rts-reason.single-select']")
+    public AntSelect3 rtsReason;
 
-    @FindBy(id = "parcelLocation")
-    public MdSelect parcelLocation;
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.parcel-location.custom-field']")
+    public AntSelect3 parcelLocation;
 
-    @FindBy(id = "liability")
-    public MdSelect liability;
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.liability.custom-field']")
+    public AntSelect3 liability;
 
-    @FindBy(id = "damageDescription")
-    public TextBox damageDescription;
+    @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.description.custom-field']")
+    public ForceClearTextBox damageDescription;
 
     @FindBy(id = "parcelDescription")
     public TextBox parcelDescription;
@@ -2129,6 +2114,43 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public Button createTicket;
 
     public CreateTicketDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class EditTicketDialog extends AntModal {
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='ticket_status']]")
+    public AntSelect3 ticketStatus;
+
+    @FindBy(xpath = "//button[.='Keep']")
+    public Button keep;
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='assignee']]")
+    public AntSelect3 assignTo;
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='order_outcome']]")
+    public AntSelect3 orderOutcome;
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//*[@id='rts_reason']]")
+    public AntSelect3 rtsReason;
+
+    @FindBy(id = "new_instruction")
+    public ForceClearTextBox newInstructions;
+
+    @FindBy(id = "customer_zendesk_id")
+    public ForceClearTextBox customerZendeskId;
+
+    @FindBy(id = "shipper_zendesk_id")
+    public ForceClearTextBox shipperZendeskId;
+
+    @FindBy(id = "comments")
+    public ForceClearTextBox ticketComments;
+
+    @FindBy(css = "[data-testid='btn-update-ticket']")
+    public Button updateTicket;
+
+    public EditTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

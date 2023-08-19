@@ -33,7 +33,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Staging Order
@@ -60,7 +60,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with On Hold Order
@@ -90,7 +90,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Pickup Fail Order
@@ -120,7 +120,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with En-Route To Sorting Hub Order
@@ -150,7 +150,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Pending Reschedule Order
@@ -180,7 +180,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | {KEY_STAMP_ID}      |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   Scenario: Update Stamp ID - Disallow Update Stamp ID with Completed Order
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -195,7 +195,8 @@ Feature: Update Stamp ID
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top | Not allowed to update order after completion. |
+      | top    | Status 200: Unknown                                              |
+      | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
   Scenario: Update Stamp ID - Disallow Update Stamp ID with Returned To Sender Order
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -210,7 +211,8 @@ Feature: Update Stamp ID
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top | Not allowed to update order after completion. |
+      | top    | Status 200: Unknown                                              |
+      | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID
@@ -232,7 +234,7 @@ Feature: Update Stamp ID
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | KEY_STAMP_ID        |
-    And Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that Have been Used Before

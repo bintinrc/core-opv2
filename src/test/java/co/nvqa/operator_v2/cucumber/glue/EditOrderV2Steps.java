@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -370,20 +371,29 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     String pickupInstruction = data.get("pickupInstruction");
     String deliveryInstruction = data.get("deliveryInstruction");
+    String orderInstruction = data.get("orderInstruction");
 
-    SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
-      if (StringUtils.isNotBlank(pickupInstruction)) {
+      if (StringUtils.isNotBlank(pickupInstruction) && !StringUtils
+          .equalsIgnoreCase(pickupInstruction, "-")) {
         String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
-        assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
-            .isEqualToIgnoringCase(pickupInstruction);
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, pickupInstruction));
       }
-      if (StringUtils.isNotBlank(deliveryInstruction)) {
+      if (StringUtils.isNotBlank(deliveryInstruction) && !StringUtils
+          .equalsIgnoreCase(deliveryInstruction, "-")) {
         String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
-        assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+            .isEqualToIgnoringCase(f("%s, %s", orderInstruction, deliveryInstruction));
+      }
+      if (orderInstruction == null || orderInstruction.isEmpty()) {
+        String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
+        Assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(pickupInstruction);
+        String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
+        Assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
             .isEqualToIgnoringCase(deliveryInstruction);
       }
-      assertions.assertAll();
     });
   }
 
@@ -784,36 +794,43 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verify order events on Edit Order V2 page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    page.inFrame(() -> data.forEach(eventData -> {
-      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-      OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
-          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-          .orElse(null);
-      if (actualEvent == null) {
-        pause5s();
-        page.refreshPage();
-        page.switchTo();
-        actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
-            .orElse(null);
-      }
-      Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
-          .isNotNull();
-      expectedEvent.compareWithActual(actualEvent);
-    }));
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      data.forEach(eventData -> {
+        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+        var foundEvents = actualEvents.get().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .collect(Collectors.toList());
+        if (foundEvents.isEmpty()) {
+          pause5s();
+          page.refreshPage();
+          page.switchTo();
+          actualEvents.set(page.eventsTable().readAllEntities());
+          foundEvents = actualEvents.get().stream()
+              .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+              .collect(Collectors.toList());
+        }
+        Assertions.assertThat(foundEvents)
+            .withFailMessage("There is no [%s] event on Edit Order V2 page",
+                expectedEvent.getName())
+            .isNotEmpty();
+        DataEntity.assertListContains(foundEvents, expectedEvent,
+            f("[%s] events", expectedEvent.getName()));
+      });
+    });
   }
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
   public void operatorVerifyOrderEventsNotPresentedOnEditOrderPage(List<String> data) {
-    List<OrderEvent> events = page.eventsTable().readAllEntities();
-    data = resolveValues(data);
-    SoftAssertions assertions = new SoftAssertions();
-    data.forEach(expected -> assertions.assertThat(
-        events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
-        .as("%s event was found").isFalse());
-    assertions.assertAll();
-    takesScreenshot();
+    List<String> resolvedData = resolveValues(data);
+    page.inFrame(() -> {
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      resolvedData.forEach(eventData -> Assertions
+          .assertThat(
+              actualEvents.get().stream().anyMatch(e -> equalsIgnoreCase(e.getName(), eventData)))
+          .as("%s event was found")
+          .isFalse());
+    });
   }
 
   @Then("Operator unmask Delivery details on Edit Order V2 page")
@@ -1367,11 +1384,11 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void deliveryIsIndicatedByIcon(String indicationValue) {
     page.inFrame(() -> {
       if (Objects.equals(indicationValue, "is")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isTrue();
       } else if (Objects.equals(indicationValue, "is not")) {
-        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayedFast())
+        Assertions.assertThat(page.deliveryDetailsBox.ninjaCollectTag.isDisplayed())
             .as("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page")
             .isFalse();
       }
@@ -1708,9 +1725,9 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.chatWithDriverDialog.waitUntilVisible();
   }
 
-  @When("Operator selects {string} in Events Filter menu on Edit Order V2 page")
+  @When("Operator selects {value} in Events Filter menu on Edit Order V2 page")
   public void selectEventsFilter(String option) {
-    page.eventsTableFilter.selectOption(resolveValue(option));
+    page.inFrame(() -> page.eventsTableFilter.selectValue(option));
   }
 
   @Then("Operator verify POD details on Edit Order V2 page:")
@@ -1726,48 +1743,54 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verifies ticket status is {value} on Edit Order V2 page")
   public void updateRecoveryTicket(String data) {
-    String status = page.recoveryTicket.getText();
-    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
-    Matcher m = p.matcher(status);
-    if (m.matches()) {
-      Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
-    } else {
-      Assertions.fail("Could not get ticket status from string: " + status);
-    }
+    page.inFrame(() -> {
+      String status = page.recoveryTicket.getText();
+      Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+      Matcher m = p.matcher(status);
+      if (m.matches()) {
+        Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
+      } else {
+        Assertions.fail("Could not get ticket status from string: " + status);
+      }
+    });
   }
 
   @Then("Operator updates recovery ticket on Edit Order V2 page:")
   public void updateRecoveryTicket(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    page.recoveryTicket.click();
-    page.editTicketDialog.waitUntilVisible();
-    pause5s();
-    if (data.containsKey("status")) {
-      page.editTicketDialog.ticketStatus.selectValue(data.get("status"));
-    }
-    pause5s();
-    if (data.containsKey("keepCurrentOrderOutcome")) {
-      page.chooseCurrentOrderOutcome(data.get("keepCurrentOrderOutcome"));
-    }
-    pause5s();
-    if (data.containsKey("outcome")) {
-      page.editTicketDialog.orderOutcome.selectValue(data.get("outcome"));
-    }
-    if (data.containsKey("assignTo")) {
-      page.editTicketDialog.assignTo.selectValue(data.get("assignTo"));
-    }
-    if (data.containsKey("rtsReason")) {
-      page.editTicketDialog.rtsReason.selectValue(data.get("rtsReason"));
-    }
-    if (data.containsKey("newInstructions")) {
-      String instruction = data.get("newInstructions");
-      if ("GENERATED".equals(instruction)) {
-        instruction = f("This damage description is created by automation at %s.",
-            DTF_CREATED_DATE.format(ZonedDateTime.now()));
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.recoveryTicket.click();
+      page.editRecoveryFrame.waitUntilVisible();
+      getWebDriver().switchTo().frame(page.editRecoveryFrame.getWebElement());
+      page.editTicketDialog.waitUntilVisible();
+      if (finalData.containsKey("status")) {
+        page.editTicketDialog.ticketStatus.selectValue(finalData.get("status"));
       }
-      page.editTicketDialog.newInstructions.setValue(instruction);
-    }
-    page.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
+      if (finalData.containsKey("keepCurrentOrderOutcome")) {
+        if (page.editTicketDialog.keep.waitUntilVisible(5)) {
+          page.editTicketDialog.keep.click();
+          page.editTicketDialog.keep.waitUntilInvisible();
+        }
+      }
+      if (finalData.containsKey("outcome")) {
+        page.editTicketDialog.orderOutcome.selectValue(finalData.get("outcome"));
+      }
+      if (finalData.containsKey("assignTo")) {
+        page.editTicketDialog.assignTo.selectValue(finalData.get("assignTo"));
+      }
+      if (finalData.containsKey("rtsReason")) {
+        page.editTicketDialog.rtsReason.selectValue(finalData.get("rtsReason"));
+      }
+      if (finalData.containsKey("newInstructions")) {
+        String instruction = finalData.get("newInstructions");
+        if ("GENERATED".equals(instruction)) {
+          instruction = f("This damage description is created by automation at %s.",
+              DTF_CREATED_DATE.format(ZonedDateTime.now()));
+        }
+        page.editTicketDialog.newInstructions.setValue(instruction);
+      }
+      page.editTicketDialog.updateTicket.click();
+    });
   }
 
   @When("^Operator create new recovery ticket on Edit Order V2 page:$")
