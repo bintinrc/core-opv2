@@ -591,7 +591,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | FSRModalName                                 | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | RESOLVED     |
 
-  @ForceSuccessOrder @Set1 @Debug
+  @ForceSuccessOrder @Set1
   Scenario Outline: Search Priority Parcel in Hub by Ticket Status (uid:ee55364a-d65e-4655-b037-f7915e243edb)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
