@@ -244,7 +244,7 @@ public class OrderBillingSteps extends AbstractSteps {
   public void operatorSearchesForScriptIdUsingSelectByScriptId(String scriptIdAndName) {
     try {
       orderBillingPage.scriptId.click();
-      orderBillingPage.scriptIdInput.selectValue(scriptIdAndName);
+      orderBillingPage.scriptIdInput.enterSearchTerm(scriptIdAndName);
     } catch (Exception ex) {
       LOGGER.info("Element not found");
     }
