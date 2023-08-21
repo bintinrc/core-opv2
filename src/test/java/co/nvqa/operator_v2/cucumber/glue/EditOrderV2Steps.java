@@ -111,6 +111,7 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void operatorVerifyDimensionInformation(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     SoftAssertions softAssertions = new SoftAssertions();
+    pause3s();
     page.inFrame(() -> {
       String expected = finalData.get("size");
       if (StringUtils.isNotBlank(expected)) {
