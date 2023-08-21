@@ -222,6 +222,7 @@ Feature: Manual Update Order Status
     Then Operator verifies order details on Edit Order V2 page:
       | status         | <status>         |
       | granularStatus | <granularStatus> |
+    When Operator refresh page
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | <pickupStatus> |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:

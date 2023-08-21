@@ -1748,7 +1748,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[text='container.order.edit.rts-hint'] p")
+    @FindBy(css = "[class='ant-alert-message']")
     public PageElement hint;
 
     @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.rts-reason.single-select']")
