@@ -7,7 +7,7 @@ Feature: Order Billing - Custom Template
     Given API Operator whitelist email "{order-billing-email}"
     Given API Gmail - Operator marks all gmail messages as read
 
-    #@nad
+
   @ArchiveRouteCommonV2  @HappyPath
   Scenario: Generate "ALL" Success Billing Report - All Shippers - Use Custom Template
     Given API Order - Shipper create multiple V4 orders using data below:

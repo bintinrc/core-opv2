@@ -38,7 +38,7 @@ Feature: Order Billing Parent Shipper
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[2].id}" with cod collected "true"
     Then DB Billing - Operator verifies order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}" is added to billing_qa_gl.priced_orders
 
-  @test
+
   @HappyPath
   Scenario: Generate "SHIPPER" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:9f788797-8cda-4fad-b87b-8e92009577b6)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -56,7 +56,7 @@ Feature: Order Billing Parent Shipper
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @test
+
   @HappyPath
   Scenario: Generate "ALL" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:0177a1b4-c964-43de-9e83-8f9d6d67c0a0)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -74,7 +74,7 @@ Feature: Order Billing Parent Shipper
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @test
+
   @HappyPath
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:56d32c3e-bb0f-4a7d-8c94-babe66f3e530)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -91,7 +91,7 @@ Feature: Order Billing Parent Shipper
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 
-  @test
+
   @HappyPath
   Scenario: Generate "SCRIPT" Success Billing Report - Selected By Parent Shipper - Marketplace Shipper (uid:398a38d3-c451-409b-8a7a-f9e015e0a0e3)
     Given Operator go to menu Finance Tools -> Order Billing
