@@ -319,7 +319,7 @@ Feature: Number of Parcels with Exception Cases
       | {hub-name-23} | {hub-id-23} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | CREATED      |
 
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Route Inbound Scanned Parcels with Exception Cases (uid:40bdc110-b89a-4e87-a185-a648e51765af)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

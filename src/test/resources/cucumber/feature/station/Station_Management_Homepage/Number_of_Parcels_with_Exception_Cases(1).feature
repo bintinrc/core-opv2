@@ -117,7 +117,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | CREATED      |
 
-  @ForceSuccessOrder @Happypath @HighPriority @Debug
+  @ForceSuccessOrder @Happypath @HighPriority
   Scenario Outline: View Pending Parcel Exception Ticket Type (uid:bd998ebc-4a85-4604-aca0-58f6ea49d81c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
