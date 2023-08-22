@@ -5,7 +5,7 @@ Feature: Number of Parcels with Exception Cases
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper Issue Ticket Type (uid:e4bc5e11-0ce4-4b9a-837c-557ab529319a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -36,6 +36,7 @@ Feature: Number of Parcels with Exception Cases
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -60,6 +61,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | CREATED      |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Parcel on Hold Ticket Type (uid:eb9b1948-329f-45e4-94ac-ce69dfdaacaf)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -90,6 +92,7 @@ Feature: Number of Parcels with Exception Cases
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -102,7 +105,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -114,7 +117,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | CREATED      |
 
-  @Happypath
+  @ForceSuccessOrder @Happypath @HighPriority @Debug
   Scenario Outline: View Pending Parcel Exception Ticket Type (uid:bd998ebc-4a85-4604-aca0-58f6ea49d81c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -134,20 +137,18 @@ Feature: Number of Parcels with Exception Cases
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And Operator go to menu Recovery -> Recovery Tickets
-    When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                   | ROUTE CLEANING     |
-      | investigatingDepartment       | Fleet (First Mile) |
-      | investigatingHub              | <HubName>          |
-      | ticketType                    | <TicketType>       |
-      | ticketSubType                 | <TicketSubType>    |
-      | orderOutcomeInaccurateAddress | RTS                |
-      | rtsReason                     | Nobody at address  |
-      | exceptionReason               | GENERATED          |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}              |
+      | investigatingHubId | <HubId>                                    |
+      | ticketType         | <TicketType>                               |
+      | subTicketType      | <TicketSubType>                            |
+      | orderOutcomeName   | <OrderOutcomeName>                         |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -160,18 +161,23 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
     And Operator verifies that the following details are displayed on the modal
       | Ticket Subtype | <TicketSubType> |
       | Ticket Status  | CREATED         |
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verifies that recovery tickets page is opened on clicking arrow button
+    And Operator verifies that the url for recovery tickets page is loaded with tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+
 
     Examples:
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | CREATED      |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View In-progress Shipper Issue Ticket Type (uid:06bcacaa-588f-464f-95f8-2ee71c5a40a0)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -214,6 +220,7 @@ Feature: Number of Parcels with Exception Cases
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -226,7 +233,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -237,6 +244,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | IN PROGRESS  |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View on Hold Shipper Issue Ticket Type (uid:a5af556b-3c65-469a-abe3-ed478990b0e7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -279,6 +287,7 @@ Feature: Number of Parcels with Exception Cases
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -291,7 +300,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -303,6 +312,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | PARCEL SCRAPPED | ON HOLD      |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper of Shipper Issue Ticket Type (uid:ae7d775e-4a1b-4df1-85b6-2a3c1d75780b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -345,6 +355,7 @@ Feature: Number of Parcels with Exception Cases
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
+    Given Operator loads Operator portal home page
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
@@ -357,7 +368,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -369,6 +380,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome                | TicketStatus    |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | REPACKED/RELABELLED TO SEND | PENDING SHIPPER |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View In-progress Parcel on Hold Ticket Type (uid:4e3e1b3f-679e-453e-9ff8-8cadb4fd21f3)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -423,7 +435,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -435,6 +447,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | IN PROGRESS  |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View on Hold Parcel on Hold Ticket Type (uid:378e02ba-3196-4a6d-b924-4f61c93bed8b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -489,7 +502,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -501,6 +514,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | ON HOLD      |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper Parcel on Hold Ticket Type (uid:f06876ed-3c73-443d-9266-0c96381ec64a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -555,7 +569,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -567,6 +581,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType     | TicketSubType   | OrderOutcomeName                | OrderOutcome    | TicketStatus    |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL ON HOLD | SHIPPER REQUEST | ORDER OUTCOME (SHIPPER REQUEST) | RESUME DELIVERY | PENDING SHIPPER |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View In-progress Parcel Exception Ticket Type (uid:b9e2d218-a25e-4a79-9ca5-82f086e7a2cd)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -621,7 +636,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -633,6 +648,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | IN PROGRESS  |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View on Hold Parcel Exception Ticket Type (uid:c550f630-678c-442e-8c87-a4db9adb3b02)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -687,7 +703,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -699,6 +715,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | ON HOLD      |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper Parcel Exception Ticket Type (uid:36ba42b6-ea60-4983-a890-313c1679fe57)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -753,7 +770,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator selects following filter criteria for the table column: "Ticket Subtype"
       | <TicketSubType> |
@@ -765,7 +782,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus    |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | PENDING SHIPPER |
 
-
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: Resolved Ticket of Shipper Issue Type Disappear (uid:ab9b8b45-4b3a-4f61-9fb2-d78abde35d5f)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -820,14 +837,14 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType    | TicketSubType    | OrderOutcomeName                 | OrderOutcome    | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | SHIPPER ISSUE | DUPLICATE PARCEL | ORDER OUTCOME (DUPLICATE PARCEL) | PARCEL SCRAPPED | RESOLVED     |
 
-  @Happypath
+  @ForceSuccessOrder @Happypath @HighPriority
   Scenario Outline: Resolved Ticket of Parcel Exception Type Disappear (uid:fc916a62-b9fe-4fb8-be97-915e29cc5b88)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -861,10 +878,11 @@ Feature: Number of Parcels with Exception Cases
     Then DB Recovery - get id from ticket_custom_fields table Hibernate
       | ticketId      | {KEY_CREATED_RECOVERY_TICKET_ID} |
       | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}   |
-    And  API Recovery - Operator update recovery ticket:
+    And API Recovery - Operator update recovery ticket:
       | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
       | status           | <TicketStatus>                           |
       | outcome          | <OrderOutcome>                           |
+      | rtsCustomFieldId | 24292253                                 |
       | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
       | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
       | reporterId       | {ticketing-creator-user-id}              |
@@ -882,13 +900,14 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
       | HubName      | HubId      | TileName                               | ModalName                    | TicketType       | TicketSubType      | OrderOutcomeName                   | OrderOutcome | TicketStatus |
       | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | RESOLVED     |
 
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: Resolved Ticket of on Hold Type Disappear (uid:1df65d62-727a-4531-9368-a9f2079cb0f5)
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
@@ -943,7 +962,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:

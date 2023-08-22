@@ -150,7 +150,7 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     |
       | Order Tags        |
     And Operator expects no results when searching for the orders by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
     Examples:
@@ -319,7 +319,7 @@ Feature: Number of Parcels with Exception Cases
       | {hub-name-23} | {hub-id-23} | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN | PARCEL EXCEPTION | INACCURATE ADDRESS | ORDER OUTCOME (INACCURATE ADDRESS) | RTS          | CREATED      |
 
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
   Scenario Outline: View Route Inbound Scanned Parcels with Exception Cases (uid:40bdc110-b89a-4e87-a185-a648e51765af)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -339,20 +339,32 @@ Feature: Number of Parcels with Exception Cases
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobAction       | FAIL                                                                                                                   |
+      | failureReasonId | 11                                                                                                                     |
+      | basePayload     | {"nonce_id":"RANDOM_UUID","num_photos":1}                                                                              |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | <HubName>              |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | <HubName>                          |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" on Route Inbound page
@@ -382,7 +394,7 @@ Feature: Number of Parcels with Exception Cases
     And Operator selects following filter criteria for the table column: "Last Scan"
       | <LastScannedEvent> |
     And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal under the table:"<ModalName>"
       | Last Scanned Time | {KEY_EVENT_TIME} |
@@ -402,7 +414,7 @@ Feature: Number of Parcels with Exception Cases
     And Operators sorts and verifies that the column:"Last Scanned Time" is in ascending order
 
     Examples:
-      | HubName      | HubId      | TileName                               | ModalName                    |
+      | HubName       | HubId       | TileName                               | ModalName                    |
       | {hub-name-23} | {hub-id-23} | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @KillBrowser @ShouldAlwaysRun
