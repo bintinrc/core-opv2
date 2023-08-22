@@ -315,7 +315,7 @@ Feature: Route Inbound
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id},"type":"DELIVERY"} |
     And Operator go to menu Inbounding -> Route Inbound (New)
-    When Station operator get Route Summary Details on Route Inbound page using data below:
+    When Station operator get Route Summary Details on Route Inbound page with multiple routes using data below:
       | hubName    | <HubName>                                  |
       | fetchBy    | TrackingId                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -635,7 +635,6 @@ Feature: Route Inbound
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id},"type":"DELIVERY"} |
-
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -653,7 +652,7 @@ Feature: Route Inbound
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
       | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Inbounding -> Route Inbound (New)
-    When Station operator get Route Summary Details on Route Inbound page using data below:
+    When Station operator get Route Summary Details on Route Inbound page with multiple routes using data below:
       | hubName    | <HubName>                                   |
       | fetchBy    | DriverName                                  |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
