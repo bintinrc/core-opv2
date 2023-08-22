@@ -25,8 +25,8 @@ public class RouteInboundNewSteps extends AbstractSteps {
     routeInboundNewPage = new RouteInboundNewPage(getWebDriver());
   }
 
-  @When("Station operator get Route Summary Details on Route Inbound page using data below:")
-  public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(
+  @When("Station operator get Route Summary Details on Route Inbound page with multiple routes using data below:")
+  public void operatorGetRouteDetailsOnRouteInboundPageWithMultipleRoutesUsingDataBelow(
       Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String hubName = mapOfData.get("hubName");
@@ -47,6 +47,27 @@ public class RouteInboundNewSteps extends AbstractSteps {
     pause2s();
     if (routeInboundNewPage.chooseRouteModal.size() > 0) {
       routeInboundNewPage.chooseRoute(routeId);
+    }
+  }
+
+  @When("Station operator get Route Summary Details on Route Inbound page using data below:")
+  public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(
+      Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String hubName = mapOfData.get("hubName");
+    String fetchBy = mapOfData.get("fetchBy");
+    String routeId = mapOfData.get("routeId");
+    String trackingId = mapOfData.get("trackingId");
+    String driverName = mapOfData.get("driverName");
+
+    if (StringUtils.isNotBlank(routeId) && fetchBy.equalsIgnoreCase("RouteId")) {
+      routeInboundNewPage.fetchRouteByRouteId(hubName, routeId);
+    }
+    if (StringUtils.isNotBlank(trackingId) && fetchBy.equalsIgnoreCase("TrackingId")) {
+      routeInboundNewPage.fetchRouteByTrackingId(hubName, trackingId);
+    }
+    if (StringUtils.isNotBlank(driverName) && fetchBy.equalsIgnoreCase("DriverName")) {
+      routeInboundNewPage.fetchRouteByDriver(hubName, driverName);
     }
   }
 

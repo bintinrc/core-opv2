@@ -36,7 +36,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   private static final String STATION_HOME_URL_PATH = "/station-homepage";
   private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
-  private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
+  private static final String STATION_RECOVERY_TICKETS_URL_PATH = "https://operatorv2-qa.ninjavan.co/#/sg/recovery-tickets-old/result?tracking_ids=%s";
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order-v2?id=%s";
   private static final String TILE_VALUE_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//div[@class='value']";
   private static final String PENDING_PICKUP_TILE_VALUE_XPATH = "//*[.='%s']/following-sibling::*";

@@ -47,7 +47,7 @@ Feature: Priority Parcel in Hub
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID                      | Order Tags |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PRIOR      |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName               |
@@ -817,7 +817,7 @@ Feature: Priority Parcel in Hub
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | - |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent |
@@ -878,7 +878,7 @@ Feature: Priority Parcel in Hub
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal
       | Committed ETA | {gradle-next-2-day-yyyy-MM-dd} |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
     Examples:
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
