@@ -5,7 +5,7 @@ Feature: Number of Missing Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @Happypath
+  @ForceSuccessOrder @Happypath @HighPriority
   Scenario Outline: View Pending Missing Ticket Type (uid:1b0879dc-9af9-428b-9d30-c27f3d772f81)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -47,16 +47,19 @@ Feature: Number of Missing Parcels
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | <TicketStatus> |
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verifies that recovery tickets page is opened on clicking arrow button
+    And Operator verifies that the url for recovery tickets page is loaded with tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
 
     Examples:
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | FOUND - INBOUND | CREATED      |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View In-progress Missing Ticket Type (uid:ad02e20f-0bf6-4408-a1b1-afb851693d30)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -119,7 +122,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | IN PROGRESS  |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View on Hold Missing Ticket Type (uid:32ed909f-4b6e-437a-959b-fc40d047606c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -182,7 +185,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | ON HOLD      |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper Missing Ticket Type (uid:8c5a1caf-308c-4916-ad93-aaa6137d6bc5)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -334,7 +337,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | OrderOutcomeName        | OrderOutcome    | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Missing parcels | Missing Parcels | Missing Parcels | MISSING    | ORDER OUTCOME (MISSING) | LOST - DECLARED | CREATED      |
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: Resolved Ticket of Missing Type Disappear (uid:9366a5d9-5245-4651-a799-146fbcdac30b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
