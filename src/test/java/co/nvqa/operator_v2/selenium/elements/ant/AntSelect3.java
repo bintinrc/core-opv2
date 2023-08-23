@@ -91,6 +91,8 @@ public class AntSelect3 extends PageElement {
         clickMenuItem(value);
         pause500ms();
         closeMenu();
+      } else {
+        selectValue(value);
       }
     }
   }
