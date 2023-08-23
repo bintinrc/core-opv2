@@ -74,7 +74,7 @@ Feature: Order Billing - Selected Shippers
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
     Then DB Billing - Operator gets the orders grouped by shipper and parcel size and weight from Billing database for Shipper ID "{shipper-v4-legacy-id}"
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the aggregated orders grouped by shipper and parcel size and weight
 
   @HappyPath

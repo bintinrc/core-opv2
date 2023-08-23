@@ -83,9 +83,8 @@ Feature: Order Billing - All Shippers
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the aggregated orders grouped by shipper and parcel size and weight
-
 
   @HappyPath
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)

@@ -67,7 +67,7 @@ Feature: Generate Success Billing - Select By Script ID
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     And DB Billing - Operator gets the orders grouped by shipper and parcel size and weight from Billing database for Script ID "{pricing-script-id-all}"
     Then Operator verifies the SSB CSV body only contains shippers with correct script ID
 

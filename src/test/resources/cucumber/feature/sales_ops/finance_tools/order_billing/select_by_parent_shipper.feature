@@ -87,7 +87,7 @@ Feature: Order Billing Parent Shipper
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {sub-shipper-sop-mktpl-v4-legacy-id} | {shipper-sop-mktpl-v4-legacy-id} |
 

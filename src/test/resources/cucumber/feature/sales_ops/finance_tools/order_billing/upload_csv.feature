@@ -221,7 +221,7 @@ Feature: Order Billing - Upload CSV
     And Operator opens Gmail and validates received order billing email
     Then Operator verifies zip is attached with one CSV file in received SSB email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
@@ -254,7 +254,7 @@ Feature: Order Billing - Upload CSV
     And Operator opens Gmail and validates received order billing email
     Then Operator verifies zip is attached with one CSV file in received SSB email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the SSB report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
