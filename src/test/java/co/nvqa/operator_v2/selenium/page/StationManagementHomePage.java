@@ -762,6 +762,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private PageElement arrowIcon;
 
   public void verifyRecoveryTicketsOnClickingArrowIcon() {
+    switchToStationHomeFrame();
     waitUntilVisibilityOfElementLocated(arrowIcon.getWebElement());
     arrowIcon.click();
     switchToNewWindow();
