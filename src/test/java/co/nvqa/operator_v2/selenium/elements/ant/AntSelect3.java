@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +15,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,14 +73,25 @@ public class AntSelect3 extends PageElement {
 
   public void selectValue(String value) {
     if (!StringUtils.equals(value, getValue())) {
-      if (isReadOnlySearch()) {
-        traverseItem(value);
-      } else {
-        enterSearchTerm(value);
-      }
+      enterSearchTerm(value);
       clickMenuItem(value);
       pause500ms();
       closeMenu();
+    }
+  }
+
+  public void selectValue(String value, boolean isTraverse) {
+    if (!StringUtils.equals(value, getValue())) {
+      if (isTraverse) {
+        if (isReadOnlySearch()) {
+          traverseItem(value);
+        } else {
+          enterSearchTerm(value);
+        }
+        clickMenuItem(value);
+        pause500ms();
+        closeMenu();
+      }
     }
   }
 
@@ -233,6 +242,7 @@ public class AntSelect3 extends PageElement {
   public boolean isReadOnlySearch() {
     return "true".equals(searchInput.getAttribute("readonly"));
   }
+
   public void enterSearchTerm(String value) {
     click();
     var readonly = searchInput.getAttribute("readonly");
@@ -241,6 +251,7 @@ public class AntSelect3 extends PageElement {
       waitUntilLoaded();
     }
   }
+
   public void traverseItem(String value) {
     click();
     String xpath = getItemContainsLocator(value);
@@ -323,9 +334,5 @@ public class AntSelect3 extends PageElement {
     if (spinner.waitUntilVisible(1)) {
       spinner.waitUntilInvisible();
     }
-  }
-
-  public void scrollIntoView() {
-    scrollIntoView(false);
   }
 }

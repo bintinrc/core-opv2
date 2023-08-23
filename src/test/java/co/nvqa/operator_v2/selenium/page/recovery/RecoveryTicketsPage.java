@@ -154,59 +154,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        //just for now check for specific case
-        if (recoveryTicket.getTicketSubType().equals("RESTRICTED ZONES")) {
-//          createTicketDialog.ticketSubtype.click();
-//          createTicketDialog.ticketSubtype.scrollIntoView() ;
-//          createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-          //can't send keys
-//          createTicketDialog.ticketSubtype.sendKeys(Keys.ARROW_DOWN);
-//          createTicketDialog.ticketSubtype.sendKeys(Keys.ARROW_UP);
-          //can't use robot
-//          Robot robot = new Robot();
-//          robot.setAutoDelay(100); // Delay between events
-//
-//          // Simulate scrolling down
-//          for (int i = 0; i < 5; i++) {
-//            robot.mouseWheel(1);
-//          }
-
-          createTicketDialog.ticketSubtype.click();
-          String lastSelectedItemText = "";
-          String currentLastItemText = "";
-          List<WebElement> options = findElementsBy(By.tagName("option"));
-          while (true) {
-            lastSelectedItemText = currentLastItemText;
-
-            // Traverse through the options
-            for (int i = 0; i < options.size(); i++) {
-              WebElement option = options.get(i);
-              String optionText = option.getText();
-
-              if (!option.isSelected()) {
-                currentLastItemText = optionText;
-                createTicketDialog.ticketSubtype.selectValue(optionText);
-              }
-
-              // Check if the list contains the desired string
-              if (optionText.contains("desired_string")) {
-                // If found, break the loop
-                break;
-              }
-            }
-
-            // If last item hasn't changed, exit loop
-            if (lastSelectedItemText.equals(currentLastItemText)) {
-              break;
-            }
-
-            // Click to open the dropdown again
-            createTicketDialog.ticketSubtype.click();
-
-          }
-        } else {
-          createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        }
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         createTicketDialog.orderOutcome.waitUntilVisible();
         createTicketDialog.orderOutcome
             .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
@@ -220,7 +168,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         String outcome = recoveryTicket.getOrderOutcome();
         if (StringUtils.isEmpty(outcome)) {
           outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
