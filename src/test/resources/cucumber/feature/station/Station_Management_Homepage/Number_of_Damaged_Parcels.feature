@@ -5,7 +5,7 @@ Feature: Number of Damaged Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: View Pending Damage Ticket Type (uid:c233aa39-f51d-410f-a833-944086363dd8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -47,16 +47,19 @@ Feature: Number of Damaged Parcels
       | Ticket Status     |
       | Order Tags        |
     And Operator searches for the order details in the table:"<TableName>" by applying the following filters:
-      | Tracking ID                     |
+      | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | CREATED |
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator verifies that recovery tickets page is opened on clicking arrow button
+    And Operator verifies that the url for recovery tickets page is loaded with tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
 
     Examples:
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Damaged parcels | Damaged Parcels | Damaged Parcels | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | CREATED      |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View In-progress Damage Ticket Type (uid:aaa0d5b4-ce79-44f3-86aa-01c902c0f34e)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -119,7 +122,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Damaged parcels | Damaged Parcels | Damaged Parcels | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | IN PROGRESS  |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View on Hold Damage Ticket Type (uid:88925961-4327-4688-9d3e-dd5e304baca3)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -182,7 +185,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |
       | {hub-name-6} | {hub-id-6} | Damaged parcels | Damaged Parcels | Damaged Parcels | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | ON HOLD      |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @MediumPriority
   Scenario Outline: View Pending Shipper of  Damage Ticket Type (uid:189f7c7b-515b-4d04-aba3-7ced3b87e8bf)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -244,7 +247,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TileName        | ModalName       | TableName       | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus    |
       | {hub-name-6} | {hub-id-6} | Damaged parcels | Damaged Parcels | Damaged Parcels | DAMAGED    | IMPROPER PACKAGING | ORDER OUTCOME (DAMAGED) | NV TO REPACK AND SHIP | PENDING SHIPPER |
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: Resolved Ticket of Damage Type Disappear (uid:ae510579-e438-4a1f-b609-160c93c96a8c)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
