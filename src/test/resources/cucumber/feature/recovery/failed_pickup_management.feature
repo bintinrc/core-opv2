@@ -145,7 +145,8 @@ Feature: Failed Pickup Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator go to menu Order -> All Orders
+    And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Pending" on Edit Order V2 page
     And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -453,9 +454,9 @@ Feature: Failed Pickup Management Page - Action Feature
       | dnr     | RESCHEDULING                             |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type   | DELIVERY                                 |
-      | status | CANCELLED                                |
-      | dnr    | CANCEL                                   |
+      | type   | DELIVERY                               |
+      | status | CANCELLED                              |
+      | dnr    | CANCEL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
@@ -469,7 +470,7 @@ Feature: Failed Pickup Management Page - Action Feature
       | dnr     | RESCHEDULING                             |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type   | DELIVERY                                 |
-      | status | CANCELLED                                |
-      | dnr    | CANCEL                                   |
+      | type   | DELIVERY                               |
+      | status | CANCELLED                              |
+      | dnr    | CANCEL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |

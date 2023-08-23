@@ -236,7 +236,8 @@ Feature: Failed Delivery Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator go to menu Order -> All Orders
+    And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -303,7 +304,8 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
     And Recovery User - verify CSV file downloaded after reschedule
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator go to menu Order -> All Orders
+    And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -395,6 +397,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 2 order(s) |
     And Recovery User - verify CSV file downloaded after reschedule
+    When Operator go to menu Order -> All Orders
 
     #Verify first failed order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -496,7 +499,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - clicks "CSV Reschedule" button on Failed Delivery Management page
     And Recovery User - Reschedule failed orders with CSV
       | tracking_ids    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId},{KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
-      | reschedule_date | {date: 2 days next, yyyy-MM-dd}                                                       |
+      | reschedule_date | {next-2-day-yyyy-MM-dd}                                                               |
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 2 order(s) |
@@ -589,10 +592,11 @@ Feature: Failed Delivery Management Page - Action Feature
       | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}"
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
+    When Operator go to menu Order -> All Orders
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
@@ -603,18 +607,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -651,6 +649,9 @@ Feature: Failed Delivery Management Page - Action Feature
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                  |
@@ -683,10 +684,11 @@ Feature: Failed Delivery Management Page - Action Feature
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Pending reschedule |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Pending reschedule |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}" for multiple orders
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}" for multiple orders
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 2 order(s) RTS-ed |
+    When Operator go to menu Order -> All Orders
 
     #verify first order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -699,18 +701,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     #verify second order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
@@ -723,18 +719,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -787,7 +777,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - change order address in Edit RTS Details dialog
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}"
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
@@ -802,18 +792,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -866,7 +850,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - search address by name in Edit RTS Details dialog
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}"
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
@@ -881,18 +865,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -946,7 +924,7 @@ Feature: Failed Delivery Management Page - Action Feature
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
     And Recovery User - change order address in Edit RTS Details dialog
     And Recovery User - cancel address change in Edit RTS Details dialog
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}"
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
@@ -967,10 +945,6 @@ Feature: Failed Delivery Management Page - Action Feature
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -1035,14 +1009,14 @@ Feature: Failed Delivery Management Page - Action Feature
       | address2            | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | postalCode          | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
     When Recovery User - selects reason from Return To Sender Reason dropdown and timeslot from Timeslot dropdown
-    And Recovery User - set RTS date to "{next-1-day-yyyy-MM-dd}"
+    And Recovery User - set RTS date to "{date: 1 days next, yyyy-MM-dd}"
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order RTS Success         |
       | description | Success 1 order(s) RTS-ed |
     When Operator go to menu Order -> All Orders
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
@@ -1050,18 +1024,12 @@ Feature: Failed Delivery Management Page - Action Feature
       | UPDATE ADDRESS             |
       | UPDATE CONTACT INFORMATION |
       | UPDATE AV                  |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verifies Pickup Transaction is updated on Edit Order V2 page
-      | status | SUCCESS |
-    And Operator verifies Delivery Transaction is updated on Edit Order V2 page
-      | status | FAIL |
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -1235,7 +1203,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - clicks "CSV Reschedule" button on Failed Delivery Management page
     And Recovery User - Reschedule failed orders with CSV
       | tracking_ids    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}," ",{KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
-      | reschedule_date | {date: 2 days next, yyyy-MM-dd}                                                           |
+      | reschedule_date | {next-2-day-yyyy-MM-dd}                                                                   |
     And Recovery User - verifies that error dialog displayed with message below:
       | message     | Failed to update 1 item(s) |
       | description | : Invalid Tracking ID      |

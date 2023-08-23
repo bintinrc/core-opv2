@@ -300,7 +300,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("Recovery User - set RTS date to {string}")
   public void setRTSDate(String date) {
     failedDeliveryManagementReactPage.inFrame((page) -> {
-      page.rtsDetailsDialog.setDate(resolveValue(date));
+      page.rtsDetailsDialog.setDate(date);
       page.rtsDetailsDialog.saveChanges.click();
     });
   }
@@ -308,7 +308,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("Recovery User - set RTS date to {string} for multiple orders")
   public void setRTSDateMultipleOrders(String date) {
     failedDeliveryManagementReactPage.inFrame(() -> {
-      failedDeliveryManagementReactPage.selectedToRTSDialog.setDate(resolveValue(date));
+      failedDeliveryManagementReactPage.selectedToRTSDialog.setDate(date);
       failedDeliveryManagementReactPage.selectedToRTSDialog.setToRTS.click();
     });
   }
