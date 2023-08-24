@@ -21,8 +21,8 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
   @FindBy(xpath = "//article[text()='Invoice ID']//parent::div//following-sibling::div//article")
   public PageElement invoiceId;
 
-  @FindBy(xpath = "//article[text()='Case ID']//parent::div//following-sibling::div//article")
-  private PageElement caseId;
+  @FindBy(xpath = "//article[text()='Case Number']//parent::div//following-sibling::div")
+  private PageElement caseNumber;
 
   @FindBy(xpath = "//article[text()='Date dispute filed']//parent::div//following-sibling::div//article")
   public PageElement disputeFiledDate;
@@ -60,8 +60,23 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
   @FindBy(id = "rc-tabs-0-tab-MANUAL")
   public PageElement manualResolutionTab;
 
+  @FindBy(id = "rc-tabs-0-tab-AUTO")
+  public PageElement automaticResolutionTab;
+
+  @FindBy(id = "rc-tabs-0-tab-INVALID")
+  public PageElement invalidTIDTab;
+
   @FindBy(id = "rc-tabs-0-tab-ERROR")
   public PageElement errorTIDTab;
+
+  @FindBy(xpath = "//span[text()='Download closure CSV']//parent::button//parent::div//preceding-sibling::div//button")
+  public PageElement closeCase;
+
+  @FindBy(xpath = "//span[text()='Cancel']//parent::button//following-sibling::button")
+  public PageElement confirmCloseCase;
+
+  @FindBy(xpath = "//article[text()='Shipper ID']//parent::div//following-sibling::div//a")
+  public PageElement shipperIdHyperlink;
 
   @FindBy(css = "div.ant-modal-content")
   public ManualResolutionDisputedOrderModal manualResolutionDisputedOrderModal;
@@ -73,6 +88,9 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
   String MANUAL_RESOLUTION_FINANCE_REVISED_COD_FEE = "//td[text()='%s']//following-sibling::td[4]";
   String MANUAL_RESOLUTION_FINANCE_DELTA_AMOUNT = "//td[text()='%s']//following-sibling::td[5]";
   String MANUAL_RESOLUTION_FINANCE_ACTION_BUTTON = "//td[text()='%s']//following-sibling::td[6]//descendant::button";
+  String AUTOMATIC_RESOLUTION_FINANCE_REVISED_WEIGHT_INPUT = "//td[text()='%s']//following-sibling::td[4]";
+  String AUTOMATIC_RESOLUTION_FINANCE_ACTION_BUTTON = "//td[text()='%s']//following-sibling::td[6]//descendant::button";
+  String INVALID_TID_REASON = "//td[text()='%s']//following-sibling::td[3]";
   String ERROR_TID_FINANCE_ACTION_BUTTON = "//td[text()='%s']//following-sibling::td[6]//descendant::button";
 
   public InvoiceDisputesDetailPage(WebDriver webDriver) {
@@ -86,7 +104,7 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
 
   public InvoiceDisputeDetails getInvoiceDisputeExtendedDetails() {
     InvoiceDisputeDetails invoiceDisputeDetails = new InvoiceDisputeDetails();
-    invoiceDisputeDetails.setCaseNumber(caseId.getText());
+    invoiceDisputeDetails.setCaseNumber(caseNumber.getText());
     invoiceDisputeDetails.setCaseStatus(caseStatus.getText());
     invoiceDisputeDetails.setDisputeFiledDate(disputeFiledDate.getText());
     invoiceDisputeDetails.setInvoiceId(invoiceId.getText());
@@ -127,12 +145,24 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
     return getText(f(MANUAL_RESOLUTION_FINANCE_REVISED_COD_FEE, tid));
   }
 
+  public String getDisputeRevisedWeightInput(String tid) {
+    return getText(f(AUTOMATIC_RESOLUTION_FINANCE_REVISED_WEIGHT_INPUT, tid));
+  }
+
   public String getDisputeDeltaAmount(String tid) {
     return getText(f(MANUAL_RESOLUTION_FINANCE_DELTA_AMOUNT, tid));
   }
 
+  public String getInvalidTIDReason(String tid) {
+    return getText(f(INVALID_TID_REASON, tid));
+  }
+
   public void clickActionButtonInManualResolutionTab(String tid) {
     click(f(MANUAL_RESOLUTION_FINANCE_ACTION_BUTTON, tid));
+  }
+
+  public void clickActionButtonInAutomaticResolutionTab(String tid) {
+    click(f(AUTOMATIC_RESOLUTION_FINANCE_ACTION_BUTTON, tid));
   }
 
   public void clickActionButtonInErrorTIDTab(String tid) {
