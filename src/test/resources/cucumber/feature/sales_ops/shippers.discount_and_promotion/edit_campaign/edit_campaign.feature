@@ -8,22 +8,22 @@ Feature: Edit Campaign
 
   Scenario: View Detail Campaign - Status Active
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Active campaign
+    And Operator clicks on first "Active" campaign
     And Operator verifies Campaign is Active
     And Operator verifies Archive this campaign button is not disabled
-    And Operator verifies Campaign name input field is not clickable
-    And Operator verifies Campaign ID input field is not clickable
-    And Operator verifies Campaign Description input field is not clickable
-    And Operator verifies Promotion type select field is not clickable
-    And Operator verifies Discount event counter select field is not clickable
-    And Operator verifies Discount fee type select field is not clickable
-    And Operator verifies Disbursement event counter select field is not clickable
-    And Operator verifies Start date picker field is not clickable
-    And Operator verifies End date picker field is not clickable
-    And Operator verifies Discount operator select field is not clickable
-    And Operator verifies Service type select field is not clickable
-    And Operator verifies Service level select field is not clickable
-    And Operator verifies Discount value picker field is not clickable
+    And Operator verifies "Campaign name" input field is "not clickable"
+    And Operator verifies "Campaign ID" input field is "not clickable"
+    And Operator verifies "Campaign Description" input field is "not clickable"
+    And Operator verifies "Promotion type" select field is "not clickable"
+    And Operator verifies "Discount event counter" select field is "not clickable"
+    And Operator verifies "Discount fee type" select field is "not clickable"
+    And Operator verifies "Disbursement event counter" select field is "not clickable"
+    And Operator verifies "Start date" picker field is "not clickable"
+    And Operator verifies "End date" picker field is "not clickable"
+    And Operator verifies "Discount operator" select field is "not clickable"
+    And Operator verifies "Service type" select field is "not clickable"
+    And Operator verifies "Service level" select field is "not clickable"
+    And Operator verifies "Discount value" picker field is "not clickable"
     And Operator verifies Add button is disabled
     And Operator verifies Download button is disabled
     And Operator verifies Add button is not disabled
@@ -33,21 +33,21 @@ Feature: Edit Campaign
 
   Scenario: View Detail Campaign - Status Pending
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Pending campaign
+    And Operator clicks on first "Pending" campaign
     And Operator verifies Campaign is Pending
-    And Operator verifies Campaign name input field is clickable
-    And Operator verifies Campaign ID input field is not clickable
-    And Operator verifies Campaign Description input field is clickable
-    And Operator verifies Promotion type select field is not clickable
-    And Operator verifies Discount event counter select field is not clickable
-    And Operator verifies Discount fee type select field is not clickable
-    And Operator verifies Disbursement event counter select field is not clickable
-    And Operator verifies Start date picker field is clickable
-    And Operator verifies End date picker field is clickable
-    And Operator verifies Discount operator select field is clickable
-    And Operator verifies Service type select field is clickable
-    And Operator verifies Service level select field is clickable
-    And Operator verifies Discount value picker field is clickable
+    And Operator verifies "Campaign name" input field is "clickable"
+    And Operator verifies "Campaign ID" input field is "not clickable"
+    And Operator verifies "Campaign Description" input field is "clickable"
+    And Operator verifies "Promotion type" select field is "not clickable"
+    And Operator verifies "Discount event counter" select field is "not clickable"
+    And Operator verifies "Discount fee type" select field is "not clickable"
+    And Operator verifies "Disbursement event counter" select field is "not clickable"
+    And Operator verifies "Start date" picker field is "clickable"
+    And Operator verifies "End date" picker field is "clickable"
+    And Operator verifies "Discount operator" select field is "clickable"
+    And Operator verifies "Service type" select field is "clickable"
+    And Operator verifies "Service level" select field is "clickable"
+    And Operator verifies "Discount value" picker field is "clickable"
     And Operator verifies Add button is not disabled
     And Operator verifies Download button is disabled
     And Operator verifies Add button is not disabled
@@ -57,21 +57,21 @@ Feature: Edit Campaign
 
   Scenario: View Detail Campaign - Status Archive
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Archived campaign
+    And Operator clicks on first "Archived" campaign
     And Operator verifies Campaign is Archived
-    And Operator verifies Campaign name input field is not clickable
-    And Operator verifies Campaign ID input field is not clickable
-    And Operator verifies Campaign Description input field is not clickable
-    And Operator verifies Promotion type select field is not clickable
-    And Operator verifies Discount event counter select field is not clickable
-    And Operator verifies Discount fee type select field is not clickable
-    And Operator verifies Disbursement event counter select field is not clickable
-    And Operator verifies Start date picker field is not clickable
-    And Operator verifies End date picker field is not clickable
-    And Operator verifies Discount operator select field is not clickable
-    And Operator verifies Service type select field is not clickable
-    And Operator verifies Service level select field is not clickable
-    And Operator verifies Discount value picker field is not clickable
+    And Operator verifies "Campaign name" input field is "not clickable"
+    And Operator verifies "Campaign ID" input field is "not clickable"
+    And Operator verifies "Campaign Description" input field is "not clickable"
+    And Operator verifies "Promotion type" select field is "not clickable"
+    And Operator verifies "Discount event counter" select field is "not clickable"
+    And Operator verifies "Discount fee type" select field is "not clickable"
+    And Operator verifies "Disbursement event counter" select field is "not clickable"
+    And Operator verifies "Start date" picker field is "not clickable"
+    And Operator verifies "End date" picker field is "not clickable"
+    And Operator verifies "Discount operator" select field is "not clickable"
+    And Operator verifies "Service type" select field is "not clickable"
+    And Operator verifies "Service level" select field is "not clickable"
+    And Operator verifies "Discount value" picker field is "not clickable"
     And Operator verifies Add button is disabled
     And Operator verifies Download button is disabled
     And Operator verifies Add button is disabled
@@ -81,21 +81,21 @@ Feature: Edit Campaign
 
   Scenario: View Detail Campaign - Status Expired
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Expired campaign
+    And Operator clicks on first "Expired" campaign
     And Operator verifies Campaign is Expired
-    And Operator verifies Campaign name input field is not clickable
-    And Operator verifies Campaign ID input field is not clickable
-    And Operator verifies Campaign Description input field is not clickable
-    And Operator verifies Promotion type select field is not clickable
-    And Operator verifies Discount event counter select field is not clickable
-    And Operator verifies Discount fee type select field is not clickable
-    And Operator verifies Disbursement event counter select field is not clickable
-    And Operator verifies Start date picker field is not clickable
-    And Operator verifies End date picker field is not clickable
-    And Operator verifies Discount operator select field is not clickable
-    And Operator verifies Service type select field is not clickable
-    And Operator verifies Service level select field is not clickable
-    And Operator verifies Discount value picker field is not clickable
+    And Operator verifies "Campaign name" input field is "not clickable"
+    And Operator verifies "Campaign ID" input field is "not clickable"
+    And Operator verifies "Campaign Description" input field is "not clickable"
+    And Operator verifies "Promotion type" select field is "not clickable"
+    And Operator verifies "Discount event counter" select field is "not clickable"
+    And Operator verifies "Discount fee type" select field is "not clickable"
+    And Operator verifies "Disbursement event counter" select field is "not clickable"
+    And Operator verifies "Start date" picker field is "not clickable"
+    And Operator verifies "End date" picker field is "not clickable"
+    And Operator verifies "Discount operator" select field is "not clickable"
+    And Operator verifies "Service type" select field is "not clickable"
+    And Operator verifies "Service level" select field is "not clickable"
+    And Operator verifies "Discount value" picker field is "not clickable"
     And Operator verifies Add button is disabled
     And Operator verifies Download button is disabled
     And Operator verifies Add button is disabled
@@ -107,8 +107,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -124,8 +124,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -142,8 +142,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -159,8 +159,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -176,8 +176,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -193,8 +193,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -210,8 +210,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -227,8 +227,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -243,8 +243,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -257,8 +257,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -272,8 +272,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -290,8 +290,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -307,8 +307,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType    | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel; | Standard;Express; | 10;12;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -323,8 +323,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -341,8 +341,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | Test Description    | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | Test Description    | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -359,8 +359,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-3-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-3-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -377,8 +377,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -394,8 +394,8 @@ Feature: Edit Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page

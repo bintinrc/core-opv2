@@ -12,6 +12,7 @@ Feature: Order Billing - All Shippers
     Given API Operator whitelist email "{order-billing-email}"
     Given API Gmail - Operator marks all gmail messages as read
 
+
   @HappyPath
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -37,7 +38,6 @@ Feature: Order Billing - All Shippers
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "PENDING_PICKUP"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Core - Operator create new route using data below:
@@ -84,7 +84,7 @@ Feature: Order Billing - All Shippers
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the aggregated orders grouped by shipper and parcel size and weight
 
 
@@ -110,7 +110,6 @@ Feature: Order Billing - All Shippers
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "PENDING_PICKUP"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]" with granular status "ARRIVED_AT_SORTING_HUB"
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "true"

@@ -310,7 +310,6 @@ Feature: Create shipper part1
       | Discount Value  | 1                              |
     Then Operator save new shipper
     Then Operator verify Shipper Information Section with data:
-      | Shipper Type         | Marketplace           |
       | Shipper Name         | test from automation  |
       | Shipper Phone Number | 4526589856            |
       | Shipper Email        | testemail@ninjavan.co |

@@ -7,7 +7,7 @@ Feature: Add Remove Shippers
 
   Scenario: Add Shippers - User Only Have View Access
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Pending campaign
+    And Operator clicks on first "Pending" campaign
     And Operator verifies Campaign is Pending
     When Operator clicks on Shippers Add button
     When Operator clicks on Search by Shipper tab
@@ -16,7 +16,7 @@ Feature: Add Remove Shippers
 
   Scenario: Remove Shippers - User Only Have View Access
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first Pending campaign
+    And Operator clicks on first "Pending" campaign
     And Operator verifies Campaign is Pending
     When Operator clicks on Shippers Remove button
     And Operator clicks on Search by Shipper tab

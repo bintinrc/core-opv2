@@ -56,6 +56,12 @@ public class AntDateRangePicker extends AntAbstractFilterBox {
 
   public void setFromDate(String from) {
     fromInput.click();
+    int count = 0;
+    while (webDriver.findElements(By.cssSelector(f(BY_TITLE_LOCATOR, from))).size() == 0
+        && count < 12) {
+      findElementByXpath("//button[@class='ant-picker-header-next-btn']").click();
+      count++;
+    }
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, from)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }

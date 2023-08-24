@@ -83,3 +83,10 @@ Feature: Create shipper part1
     When Operator select tracking type = "MultiDynamic" in shipper settings page
     When Operator fill multi shipper prefix "0" with = "ABC" in shipper settings page
     Then Operator check error message in multi shipper prefix "0" input is "Prefix already used"
+
+
+  Scenario: Create shipper - XB multidynamic disabled
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator click create new shipper button
+    When Operator switch to create new shipper tab
+    Then Operator check prefix type "XBMultiDynamic" is disabled

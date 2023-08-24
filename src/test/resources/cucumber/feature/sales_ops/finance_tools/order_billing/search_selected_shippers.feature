@@ -12,6 +12,7 @@ Feature: Order Billing - Selected Shippers
     Given API Operator whitelist email "{order-billing-email}"
     Given API Gmail - Operator marks all gmail messages as read
 
+
   @HappyPath
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -74,7 +75,7 @@ Feature: Order Billing - Selected Shippers
     And Operator opens Gmail and validates received order billing email
     Then Operator gets the success billing report entries from the zip file
     Then DB Billing - Operator gets the orders grouped by shipper and parcel size and weight from Billing database for Shipper ID "{shipper-v4-legacy-id}"
-    Then Operator verifies the SSB header using data {aggregated-ssb-headers}
+    Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the aggregated orders grouped by shipper and parcel size and weight
 
   @HappyPath
@@ -107,7 +108,7 @@ Feature: Order Billing - Selected Shippers
       | generateFile    | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
-    Then Operator chooses 'Selected Shippers' option and does not input a shipper ID
+    Then Operator chooses 'Selected Shipper' option and does not input a shipper ID
     Then Operator clicks Generate Success Billing Button
     Then Operator verifies error msg "At least 1 shippers must be selected." in Order Billing Page
 

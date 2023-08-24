@@ -74,6 +74,12 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "(//span[text()='Add']/parent::button)[1]")
   public PageElement addButton;
 
+  @FindBy(xpath = "(//input[@value='UNLIMITED'])[1]")
+  public PageElement unlimitedRadioButton;
+
+  @FindBy(xpath = "(//input[@value='TILL_END'])[1]")
+  public PageElement tillEndRadioButton;
+
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement antNotificationMessage;
 
@@ -177,6 +183,42 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
       serviceLevel.selectValue(option);
       i++;
     }
+  }
+
+  public void selectDiscountUsageQuantityPerShipper(String options) {
+    if (options.equalsIgnoreCase("Unlimited")) {
+      unlimitedRadioButton.click();
+    } else {
+      findElementBy(By.id("shipper_max_day")).sendKeys(options);
+    }
+  }
+
+  public String getDiscountUsageQuantityPerShipper() {
+    String returnValue = null;
+    if (getElementsCount("//input[@value='UNLIMITED' and @checked]") > 0) {
+      returnValue = "Unlimited";
+    } else {
+      returnValue = findElementBy(By.id("shipper_max_day")).getText();
+    }
+    return returnValue;
+  }
+
+  public void selectDiscountUsagePeriod(String options) {
+    if (options.equalsIgnoreCase("Till end of campaign")) {
+      tillEndRadioButton.click();
+    } else {
+      findElementBy(By.id("shipper_max_usage")).sendKeys(options);
+    }
+  }
+
+  public String getDiscountUsagePeriod() {
+    String returnValue = null;
+    if (getElementsCount("//input[@value='TILL_END' and @checked]") > 0) {
+      returnValue = "Till end of campaign";
+    } else {
+      returnValue = findElementBy(By.id("shipper_max_usage")).getText();
+    }
+    return returnValue;
   }
 
   public String getCampaignServiceLevelError() {
@@ -297,6 +339,11 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }
   }
 
+  public void closeFirstNotificaitonMessage() {
+    findElementByXpath(
+        CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH).click();
+  }
+
   public Boolean isShippersAddButtonDisplayed() {
     return shippersAddButton.isDisplayed();
   }
@@ -314,10 +361,11 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public void shipperModalDisplayed(String modalName) {
-    if(modalName.equalsIgnoreCase("Add shipper")){
-    addShipperModal.waitUntilVisible();}
-    else if(modalName.equalsIgnoreCase("Remove shipper")){
-      removeShipperModal.waitUntilVisible();}
+    if (modalName.equalsIgnoreCase("Add shipper")) {
+      addShipperModal.waitUntilVisible();
+    } else if (modalName.equalsIgnoreCase("Remove shipper")) {
+      removeShipperModal.waitUntilVisible();
+    }
   }
 
   public void addShipperSelectedTab(String tab) {
@@ -336,10 +384,11 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public void searchForTheShipper(String shipperName) {
     if (shipperName.equalsIgnoreCase("Invalid Shipper ID")) {
       searchByShipper.enterSearchTerm(shipperName);
-    }else if (shipperName.contains("id-")) {
+    } else if (shipperName.contains("id-")) {
       searchByShipper.enterSearchTerm(shipperName.substring(3));
-    }
-    else {
+    } else if (shipperName.contains("value-")) {
+      searchByShipper.selectValue(shipperName.substring(6));
+    } else {
       searchByShipper.selectValue(shipperName);
     }
   }
@@ -407,7 +456,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return shipperCount.getText();
   }
 
-  public void removeSelectedShipper(){
+  public void removeSelectedShipper() {
     removeShipperCloseButton.click();
   }
 }

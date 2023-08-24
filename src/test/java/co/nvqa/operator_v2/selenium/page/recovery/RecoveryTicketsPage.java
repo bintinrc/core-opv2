@@ -153,7 +153,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         createTicketDialog.orderOutcome.waitUntilVisible();
         createTicketDialog.orderOutcome
             .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
@@ -167,7 +167,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         String outcome = recoveryTicket.getOrderOutcome();
         if (StringUtils.isEmpty(outcome)) {
           outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
