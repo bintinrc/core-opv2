@@ -185,6 +185,7 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("^Operator create multiple routes using data below:$")
   public void operatorCreateMultipleRoutesUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
+    boolean checkToast = Boolean.parseBoolean(mapOfData.getOrDefault("checkToast", "true"));
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
     String createdDate = DTF_CREATED_DATE.format(ZonedDateTime.now());
 
@@ -203,6 +204,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded();
+      pause2s();
       routeLogsPage.createRoute.click();
       routeLogsPage.createRouteDialog.waitUntilVisible();
 
@@ -240,26 +242,29 @@ public class RouteLogsSteps extends AbstractSteps {
       }
 
       routeLogsPage.createRouteDialog.createRoutes.click();
-      routeLogsPage.waitUntilVisibilityOfNotification(routeParamsList.size() + " Route(s) Created");
-      String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
-      newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
-      String[] routeIds = toastBottom.split("\n");
+      if (checkToast) {
+        routeLogsPage.waitUntilVisibilityOfNotification(
+            routeParamsList.size() + " Route(s) Created");
+        String toastBottom = routeLogsPage.noticeNotifications.get(0).description.getText();
+        newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
+        String[] routeIds = toastBottom.split("\n");
 
-      for (int i = 0; i < routeParamsList.size(); i++) {
-        RouteLogsParams createRouteParams = routeParamsList.get(i);
-        createRouteParams.setId(routeIds[i].replaceAll("\\d+.+Route", "").trim());
-        Route createdRoute = new Route();
-        createdRoute.setId(Long.valueOf(createRouteParams.getId()));
-        createdRoute.setComments(createRouteParams.getComments());
-        Long createdRouteId = createdRoute.getId();
+        for (int i = 0; i < routeParamsList.size(); i++) {
+          RouteLogsParams createRouteParams = routeParamsList.get(i);
+          createRouteParams.setId(routeIds[i].replaceAll("\\d+.+Route", "").trim());
+          Route createdRoute = new Route();
+          createdRoute.setId(Long.valueOf(createRouteParams.getId()));
+          createdRoute.setComments(createRouteParams.getComments());
+          Long createdRouteId = createdRoute.getId();
 
-        put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
-        put(KEY_CREATED_ROUTE, createdRoute);
-        put(KEY_CREATED_ROUTE_ID, createdRouteId);
-        putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
-        putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
-        putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
-        writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
+          put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
+          put(KEY_CREATED_ROUTE, createdRoute);
+          put(KEY_CREATED_ROUTE_ID, createdRouteId);
+          putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
+          putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
+          putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
+          writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
+        }
       }
     });
   }
@@ -572,6 +577,14 @@ public class RouteLogsSteps extends AbstractSteps {
         page.archivedRoutesFilter.selectFilter(
             StringUtils.equalsAnyIgnoreCase(finalData.get("archiveRoutes"), "show", "true"));
       }
+      page.loadSelection.clickAndWaitUntilDone();
+      page.waitUntilLoaded();
+    });
+  }
+
+  @When("Operator click Load Selection on Route Logs page")
+  public void loadSelection() {
+    routeLogsPage.inFrame(page -> {
       page.loadSelection.clickAndWaitUntilDone();
       page.waitUntilLoaded();
     });
