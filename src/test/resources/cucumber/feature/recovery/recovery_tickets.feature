@@ -3629,7 +3629,6 @@ Feature: New Recovery Tickets
       | Dataset Name                          | ticketType       | ticketSubType      |
       | PARCEL_EXCEPTION / INACCURATE ADDRESS | PARCEL EXCEPTION | INACCURATE ADDRESS |
       | PARCEL ON HOLD / CUSTOMER REQUEST     | PARCEL ON HOLD   | CUSTOMER REQUEST   |
-      | SHIPPER ISSUE / REQUEST RECEIPT       | SHIPPER ISSUE    | REQUEST RECEIPT    |
 
   @CancelTicket
   Scenario Outline:Operator Update Bulk Ticket - Without Ticket_Subtype - Cancelled Tickets - <Dataset Name>
