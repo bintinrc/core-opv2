@@ -14,7 +14,9 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTES_COUNT;
@@ -739,20 +741,18 @@ public class InvoiceDisputesSteps extends AbstractSteps {
 
   @And("Operator click shipper ID hyperlink {string}")
   public void clickShipperIdHyperlink(String Url) {
-    SoftAssertions softAssertions = new SoftAssertions();
     invoiceDisputesDetailPage.inFrame(page -> {
       page.shipperIdHyperlink.click();
-      softAssertions.assertThat(page.getCurrentUrl()).as("Edit shipper page URL is correct")
+      Assertions.assertThat(page.getCurrentUrl()).as("Edit shipper page URL is correct")
           .isEqualTo(Url);
     });
   }
 
   @And("Operator click TID hyperlink {string}")
   public void clickTidHyperlink(String Url) {
-    SoftAssertions softAssertions = new SoftAssertions();
     invoiceDisputesDetailPage.inFrame(page -> {
       page.manualResolutionDisputedOrderModal.orderInfoTrackingId.click();
-      softAssertions.assertThat(page.getCurrentUrl()).as("Order detail page URL is correct")
+      Assertions.assertThat(page.getCurrentUrl()).as("Order detail page URL is correct")
           .isEqualTo(Url);
     });
   }
