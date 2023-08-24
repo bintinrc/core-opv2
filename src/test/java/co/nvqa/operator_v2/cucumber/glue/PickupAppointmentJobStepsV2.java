@@ -4,7 +4,6 @@ import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
-import com.beust.jcommander.Strings;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -498,6 +497,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void openJobDetails(String jobId) {
     pickupAppointmentJobPage.inFrame(() -> {
       pickupAppointmentJobPage.bulkSelect.filterTableUsing("pickupAppointmentJobId", jobId);
+      pickupAppointmentJobPage.showHideFiltersHeader.click();
       pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_DETAILS);
     });
   }
