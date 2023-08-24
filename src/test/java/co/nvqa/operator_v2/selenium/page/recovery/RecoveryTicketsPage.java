@@ -153,7 +153,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         createTicketDialog.orderOutcome.waitUntilVisible();
         createTicketDialog.orderOutcome
             .selectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
@@ -167,7 +167,7 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
       }
       case TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.waitUntilVisible();
-        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+        createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType(), true);
         String outcome = recoveryTicket.getOrderOutcome();
         if (StringUtils.isEmpty(outcome)) {
           outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
@@ -672,6 +672,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(xpath = "//button/span[.='Update']")
     public Button confirmationUpdate;
 
+    @FindBy(xpath = "//button/span[.='Cancel Tickets']")
+    public Button cancelTickets;
+
     public BulkEditDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -696,6 +699,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(xpath = "//button/span[.='Delete']")
     public Button delete;
+
+    @FindBy(xpath = "//button[@class='ant-btn ant-btn-link cancel']")
+    public PageElement cancelTickets;
 
     public ConfirmCancelTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

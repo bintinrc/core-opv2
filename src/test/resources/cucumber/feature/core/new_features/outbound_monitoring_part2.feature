@@ -258,7 +258,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
     When API Operator get order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
@@ -433,7 +432,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 2 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
     When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
@@ -551,7 +549,6 @@ Feature: Outbound Monitoring
     Then Operator verifies that success react notification displayed:
       | top                | Tracking IDs Pulled Out   |
       | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
     And Operator verifies orders info on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed      | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |

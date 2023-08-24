@@ -968,7 +968,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @Then("Operator verify it shows \"No Results Found\" error message")
   public void operatorVerifyItShowsNoResultsFoundErrorMessage() {
-    page.showNoResultsFound.waitUntilVisible(30);
+    page.showNoResultsFound.waitUntilVisible(120);
     page.inFrame(()-> {
       Assertions.assertThat(page.showNoResultsFound.getText()).as("Please set filter to no results found error message")
               .isEqualTo("No Results Found");

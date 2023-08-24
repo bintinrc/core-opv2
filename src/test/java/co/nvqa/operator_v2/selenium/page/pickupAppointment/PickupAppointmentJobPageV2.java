@@ -214,7 +214,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement clearReadyByTimeRange;
     public final String timeScrollBar = ".rc-virtual-list-scrollbar";
     public final String shipperListItem = "//div[@legacyshipperid='%s']";
-    public final String shipperAddressListItem = "//div[contains(@label,'%s')]";
+    public final String shipperAddressListItem = "//div[contains(text(),'%s')]";
 
     public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
 
@@ -339,32 +339,25 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void selectReadybyTime(String time) {
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
+      doWithRetry(() -> {
         scrollToTimeIfNeeded(time, "readyBy_list");
-      }, 1000, 5);
-
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         WebElement timeToPick = webDriver.findElement(
             By.xpath(
                 f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      }, 2000, 10);
-
+      }, "scrollIfNeeded", 2000, 5);
     }
 
     public void selectLatestbyTime(String time) {
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         latestByField.click();
-        scrollToTimeIfNeeded(time, "latestBy_list");
-      }, 1000, 5);
-
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      doWithRetry(() -> {
+        scrollToTimeIfNeeded(time, "readyBy_list");
         WebElement timeToPick = webDriver.findElement(
             By.xpath(
                 f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      }, 2000, 10);
+      }, "scrollIfNeeded", 2000, 5);
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {

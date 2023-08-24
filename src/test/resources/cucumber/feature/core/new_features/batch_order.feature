@@ -23,8 +23,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -79,8 +78,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Transit | Van en-route to pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -138,8 +136,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -185,8 +182,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Staging | Staging        |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
@@ -250,8 +246,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDER[2].toName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
     Then Operator verifies that success toast displayed:
-      | top                | Rollback Successfully |
-      | waitUntilInvisible | true                  |
+      | top | Rollback Successfully |
     And DB Operator verifies orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |

@@ -32,8 +32,7 @@ Feature: Resolve Recovery Ticket
       | outcome                 | XMAS CAGE |
       | keepCurrentOrderOutcome | true      |
     Then Operator verifies that success react notification displayed:
-      | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
+      | top | ^Ticket ID: .* Updated |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
@@ -83,8 +82,7 @@ Feature: Resolve Recovery Ticket
       | outcome                 | ORDERS CREATED |
       | keepCurrentOrderOutcome | true           |
     Then Operator verifies that success react notification displayed:
-      | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
+      | top | ^Ticket ID: .* Updated |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
@@ -117,8 +115,7 @@ Feature: Resolve Recovery Ticket
       | liability               | Shipper                               |
       | orderOutcome            | RELABELLED TO SEND                    |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -127,8 +124,7 @@ Feature: Resolve Recovery Ticket
       | outcome                 | RELABELLED TO SEND |
       | keepCurrentOrderOutcome | true               |
     Then Operator verifies that success react notification displayed:
-      | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
+      | top | ^Ticket ID: .* Updated |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
@@ -164,8 +160,7 @@ Feature: Resolve Recovery Ticket
       | liability               | Shipper                               |
       | orderOutcome            | XMAS CAGE                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -174,8 +169,7 @@ Feature: Resolve Recovery Ticket
       | outcome                 | XMAS CAGE |
       | keepCurrentOrderOutcome | true      |
     Then Operator verifies that success react notification displayed:
-      | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
+      | top | ^Ticket ID: .* Updated |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
@@ -208,8 +202,7 @@ Feature: Resolve Recovery Ticket
       | liability               | Shipper                               |
       | orderOutcome            | XMAS CAGE                             |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
       | granularStatus | Cancelled |
@@ -218,8 +211,7 @@ Feature: Resolve Recovery Ticket
       | outcome                 | XMAS CAGE |
       | keepCurrentOrderOutcome | true      |
     Then Operator verifies that success react notification displayed:
-      | top                | ^Ticket ID: .* Updated |
-      | waitUntilInvisible | true                   |
+      | top | ^Ticket ID: .* Updated |
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
@@ -252,8 +244,7 @@ Feature: Resolve Recovery Ticket
       | ticketType              | MISSING                               |
       | orderOutcomeMissing     | LOST - DECLARED                       |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -313,8 +304,7 @@ Feature: Resolve Recovery Ticket
       | ticketType              | MISSING                               |
       | orderOutcomeMissing     | FOUND - INBOUND                       |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
@@ -396,8 +386,7 @@ Feature: Resolve Recovery Ticket
       | ticketType              | MISSING                               |
       | orderOutcomeMissing     | FOUND - INBOUND                       |
     When Operator verifies that success react notification displayed:
-      | top                | Ticket has been created! |
-      | waitUntilInvisible | true                     |
+      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |

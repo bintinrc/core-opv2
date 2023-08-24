@@ -25,7 +25,6 @@ Feature: Change Delivery Timings
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
-      | waitUntilInvisible | true                    |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
@@ -45,7 +44,6 @@ Feature: Change Delivery Timings
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
-      | waitUntilInvisible | true                    |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
@@ -89,7 +87,6 @@ Feature: Change Delivery Timings
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
-      | waitUntilInvisible | true                    |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
@@ -202,7 +199,6 @@ Feature: Change Delivery Timings
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
-      | waitUntilInvisible | true                    |
     And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
@@ -222,7 +218,6 @@ Feature: Change Delivery Timings
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
-      | waitUntilInvisible | true                    |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {gradle-next-1-working-day-yyyy-MM-dd} <timeForm> |

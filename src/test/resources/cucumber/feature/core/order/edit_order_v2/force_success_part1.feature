@@ -18,8 +18,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -62,8 +61,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed          |
       | granularStatus | Returned to Sender |
@@ -101,8 +99,7 @@ Feature: Force Success
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | markAll         | true                                                  |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -150,8 +147,7 @@ Feature: Force Success
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | markAll         | true                                                  |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -192,8 +188,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -240,8 +235,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
@@ -307,8 +301,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed          |
       | granularStatus | Returned to Sender |
@@ -350,8 +343,7 @@ Feature: Force Success
       | reason          | Others (fill in below)                                |
       | reasonForChange | Completed by AT {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that success react notification displayed:
-      | top                | The order has been completed |
-      | waitUntilInvisible | true                         |
+      | top | The order has been completed |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |

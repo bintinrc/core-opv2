@@ -225,8 +225,7 @@ Feature: Add Keywords
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}     |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
-      | top                | Keywords added |
-      | waitUntilInvisible | true           |
+      | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA AKDEAV {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}       |

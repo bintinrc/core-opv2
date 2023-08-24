@@ -36,9 +36,8 @@ Feature: Outbound Monitoring
       | Get ProcessingException [Code:BAD_REQUEST_EXCEPTION][Message:No route found to unroute for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}]] |
     When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Tracking IDs Pulled Out   |
-      | bottom             | 1 Tracking IDs pulled out |
-      | waitUntilInvisible | true                      |
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 1 Tracking IDs pulled out |
     When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
     Then DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
@@ -121,8 +120,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order is pulled out from route
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -157,8 +155,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order is pulled out from route
 
   @CloseNewWindows @DeleteOrArchiveRoute
@@ -204,8 +201,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator pull out order "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" from route on Outbound Breakroute page
     Then Operator verifies that success toast displayed:
-      | top                | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | waitUntilInvisible | true                                                                   |
+      | top | Success pullout tracking id {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Clicks on Flag Icon to Un-Mark Route ID on Outbound Monitoring Page

@@ -60,6 +60,9 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
   @FindBy(id = "rc-tabs-0-tab-MANUAL")
   public PageElement manualResolutionTab;
 
+  @FindBy(id = "rc-tabs-0-tab-ERROR")
+  public PageElement errorTIDTab;
+
   @FindBy(css = "div.ant-modal-content")
   public ManualResolutionDisputedOrderModal manualResolutionDisputedOrderModal;
 
@@ -70,6 +73,7 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
   String MANUAL_RESOLUTION_FINANCE_REVISED_COD_FEE = "//td[text()='%s']//following-sibling::td[4]";
   String MANUAL_RESOLUTION_FINANCE_DELTA_AMOUNT = "//td[text()='%s']//following-sibling::td[5]";
   String MANUAL_RESOLUTION_FINANCE_ACTION_BUTTON = "//td[text()='%s']//following-sibling::td[6]//descendant::button";
+  String ERROR_TID_FINANCE_ACTION_BUTTON = "//td[text()='%s']//following-sibling::td[6]//descendant::button";
 
   public InvoiceDisputesDetailPage(WebDriver webDriver) {
     super(webDriver);
@@ -129,6 +133,10 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
 
   public void clickActionButtonInManualResolutionTab(String tid) {
     click(f(MANUAL_RESOLUTION_FINANCE_ACTION_BUTTON, tid));
+  }
+
+  public void clickActionButtonInErrorTIDTab(String tid) {
+    click(f(ERROR_TID_FINANCE_ACTION_BUTTON, tid));
   }
 
   public void verifyManualResolutionDisputedOrderIsDisplayed() {
@@ -238,9 +246,6 @@ public class InvoiceDisputesDetailPage extends SimpleReactPage<InvoiceDisputesDe
 
     @FindBy(xpath = "//span[text() = 'Revised weight input']//parent::div//following-sibling::div//descendant::span//input")
     public TextBox revisedWeightInput;
-
-    @FindBy(xpath = "//label[text() = 'NV original bill amount']//parent::div//following-sibling::div//descendant::input")
-    public TextBox nvOriginalBilledAmount;
 
     public ManualResolutionDisputedOrderModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
