@@ -12,6 +12,7 @@ Feature: Order Billing - All Shippers
     Given API Operator whitelist email "{order-billing-email}"
     Given API Gmail - Operator marks all gmail messages as read
 
+  @test
   @HappyPath
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Finance Tools -> Order Billing
@@ -86,6 +87,7 @@ Feature: Order Billing - All Shippers
     Then Operator verifies header for aggregated report using data {aggregated-ssb-headers}
     Then Operator verifies the aggregated orders grouped by shipper and parcel size and weight
 
+  @test
   @HappyPath
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)
     Given Operator go to menu Finance Tools -> Order Billing
