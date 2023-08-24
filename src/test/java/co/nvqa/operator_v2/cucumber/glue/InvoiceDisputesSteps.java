@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_INVOICE_DISPUTES_COUNT;
