@@ -905,9 +905,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = DP OVERSIZED                | DP OVERSIZED                |
       | ticket_subtype = INACCURATE ADDRESS          | INACCURATE ADDRESS          |
       | ticket_subtype = MAXIMUM ATTEMPTS (DELIVERY) | MAXIMUM ATTEMPTS (DELIVERY) |
-      | ticket_subtype = MAXIMUM ATTEMPTS (RTS)      | MAXIMUM ATTEMPTS (RTS)      |
       | ticket_subtype = RESTRICTED ZONES            | RESTRICTED ZONES            |
-      | ticket_subtype = WRONG AV/RACK/HUB           | WRONG AV/RACK/HUB           |
 
   @CreateTicket
   Scenario Outline: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - <Dataset Name>
@@ -962,7 +960,6 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO ORDER             | NO ORDER             |
       | ticket_subtype = OVERWEIGHT/OVERSIZED | OVERWEIGHT/OVERSIZED |
       | ticket_subtype = POOR LABELLING       | POOR LABELLING       |
-      | ticket_subtype = POOR PACKAGING       | POOR PACKAGING       |
       | ticket_subtype = REJECTED RETURN      | REJECTED RETURN      |
       | ticket_subtype = RESTRICTED GOODS     | RESTRICTED GOODS     |
 
@@ -3708,3 +3705,142 @@ Feature: New Recovery Tickets
       | DAMAGED         | DAMAGED         |
       | SLA BREACH      | SLA BREACH      |
       | SELF COLLECTION | SELF COLLECTION |
+
+  @CreateTicket
+  Scenario: Operator Create Single Ticket - Recovery Ticket - PARCEL EXCEPTION -MAXIMUM ATTEMPTS (RTS)
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                   | ROUTE INBOUNDING                      |
+      | investigatingDepartment       | Fleet (First Mile)                    |
+      | investigatingHub              | {hub-name}                            |
+      | ticketType                    | PARCEL EXCEPTION                      |
+      | ticketSubType                 | MAXIMUM ATTEMPTS (RTS)                |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
+      | exceptionReason               | GENERATED                             |
+      | custZendeskId                 | 1                                     |
+      | shipperZendeskId              | 1                                     |
+      | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | PARCEL EXCEPTION : MAXIMUM ATTEMPTS (RTS)    |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | 0                                            |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  @CreateTicket
+  Scenario: Operator Create Single Ticket - Recovery Ticket - SHIPPER ISSUE - POOR PACKAGING
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                 | ROUTE INBOUNDING                      |
+      | investigatingDepartment     | Fleet (First Mile)                    |
+      | investigatingHub            | {hub-name}                            |
+      | ticketType                  | SHIPPER ISSUE                         |
+      | ticketSubType               | POOR PACKAGING                        |
+      | orderOutcomeDuplicateParcel | NV NOT LIABLE - RETURN PARCEL         |
+      | rtsReason                   | Nobody at address                     |
+      | issueDescription            | GENERATED                             |
+      | custZendeskId               | 1                                     |
+      | shipperZendeskId            | 1                                     |
+      | ticketNotes                 | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | SHIPPER ISSUE : POOR PACKAGING               |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | 0                                            |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
+
+  @CreateTicket
+  Scenario: Operator Create Single Ticket - Recovery Ticket - PARCEL EXCEPTION - WRONG AV/RACK/HUB
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on new page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | entrySource                   | ROUTE INBOUNDING                      |
+      | investigatingDepartment       | Fleet (First Mile)                    |
+      | investigatingHub              | {hub-name}                            |
+      | ticketType                    | PARCEL EXCEPTION                      |
+      | ticketSubType                 | WRONG AV/RACK/HUB                     |
+      | orderOutcomeInaccurateAddress | FIXED AV                              |
+      | exceptionReason               | GENERATED                             |
+      | custZendeskId                 | 1                                     |
+      | shipperZendeskId              | 1                                     |
+      | ticketNotes                   | GENERATED                             |
+    And Operator clicks "Clear all selections" button on Recovery Tickets Page
+    When Operator search created ticket by "Tracking ID" filter with values:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    Then Operator verifies correct ticket details as following:
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | ticketType/subType  | PARCEL EXCEPTION : WRONG AV/RACK/HUB         |
+      | orderGranularStatus | On Hold                                      |
+      | ticketCreator       | QA Ninja                                     |
+      | shipper             | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
+      | redTickets          | False                                        |
+      | investigatingHub    | {hub-name}                                   |
+      | investigatingDept   | Recovery                                     |
+      | status              | PENDING                                      |
+      | daysSince           | 0                                            |
+      | created             | {date: 0 days next, yyyy-MM-dd}              |
+
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "On Hold" on Edit Order V2 page
+    And Operator verify order granular status is "On Hold" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | TICKET CREATED |
