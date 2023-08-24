@@ -43,8 +43,11 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
-    failedDeliveryManagementReactPage.inFrame(
-        page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId));
+      page.fdmTable.verifyTableisFiltered();
+    });
+
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")
@@ -297,7 +300,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("Recovery User - set RTS date to {string}")
   public void setRTSDate(String date) {
     failedDeliveryManagementReactPage.inFrame((page) -> {
-      page.rtsDetailsDialog.setDate(resolveValue(date));
+      page.rtsDetailsDialog.setDate(date);
       page.rtsDetailsDialog.saveChanges.click();
     });
   }
@@ -305,7 +308,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("Recovery User - set RTS date to {string} for multiple orders")
   public void setRTSDateMultipleOrders(String date) {
     failedDeliveryManagementReactPage.inFrame(() -> {
-      failedDeliveryManagementReactPage.selectedToRTSDialog.setDate(resolveValue(date));
+      failedDeliveryManagementReactPage.selectedToRTSDialog.setDate(date);
       failedDeliveryManagementReactPage.selectedToRTSDialog.setToRTS.click();
     });
   }

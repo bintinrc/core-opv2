@@ -438,6 +438,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
           .flatMap(s -> Arrays.stream(s.split(",")))
           .collect(Collectors.toList());
       recoveryTicketsPage.filterByField(field, resolveValues(finalValues));
+      recoveryTicketsPage.resultsTable.waitUntilPageLoaded();
     });
   }
 

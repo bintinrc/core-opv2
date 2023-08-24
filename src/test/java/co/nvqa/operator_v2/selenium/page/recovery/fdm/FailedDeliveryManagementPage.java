@@ -6,14 +6,13 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
-
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -71,6 +70,7 @@ public class FailedDeliveryManagementPage extends
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
   public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv";
+  private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table')]";
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -141,6 +141,11 @@ public class FailedDeliveryManagementPage extends
 
     public void filterTableByShipperName(String columName, String value) {
       filterTableByColumn(XPATH_SHIPPER_NAME_FILTER_INPUT, columName, value);
+    }
+
+    public void verifyTableisFiltered() {
+      Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
+          .as("End Of Table appear in Failed Delivery Management page").isTrue();
     }
 
     public void clearTIDFilter() {
@@ -256,8 +261,8 @@ public class FailedDeliveryManagementPage extends
     @FindBy(xpath = "//div[.='Shipper Instructions']//input[@class='ant-input ant-input-borderless']")
     public PageElement shipperInstructions;
 
-    @FindBy(xpath = "//div[@class='ant-picker-input']/input[@placeholder='Select date']")
-    public PageElement scheduleDate;
+    @FindBy(xpath = ".//div[./label[.='Date']]")
+    public AntCalendarPicker scheduleDate;
 
     @FindBy(xpath = "//div[.='Country']//input[@class='ant-input ant-input-borderless']")
     public PageElement country;
@@ -320,8 +325,7 @@ public class FailedDeliveryManagementPage extends
 
     public EditRTSDetailsDialog setDate(String value) {
       if (value != null) {
-        scheduleDate.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
-        scheduleDate.sendKeys(value + Keys.ENTER);
+        scheduleDate.setDate(value);
       }
       return this;
     }

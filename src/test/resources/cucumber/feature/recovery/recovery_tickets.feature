@@ -1574,7 +1574,6 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO ORDER - order_outcome = ORDERS CREATED                          | NO ORDER          | ORDERS CREATED                  | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE              | REJECTED RETURN   | DAMAGED - NV LIABLE             | Cancelled  | Cancelled              |
       | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV NOT LIABLE - PARCEL SCRAPPED | Completed  | Completed              |
-#      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
       | ticket_subtype = POOR LABELLING - order_outcome = RESUME PICKUP                     | POOR LABELLING    | RESUME PICKUP                   | Pending    | Pending Pickup         |
       | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV TO REPACK AND SHIP           | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | PARCEL SCRAPPED                 | Completed  | Completed              |
@@ -3629,7 +3628,6 @@ Feature: New Recovery Tickets
       | Dataset Name                          | ticketType       | ticketSubType      |
       | PARCEL_EXCEPTION / INACCURATE ADDRESS | PARCEL EXCEPTION | INACCURATE ADDRESS |
       | PARCEL ON HOLD / CUSTOMER REQUEST     | PARCEL ON HOLD   | CUSTOMER REQUEST   |
-      | SHIPPER ISSUE / REQUEST RECEIPT       | SHIPPER ISSUE    | REQUEST RECEIPT    |
 
   @CancelTicket
   Scenario Outline:Operator Update Bulk Ticket - Without Ticket_Subtype - Cancelled Tickets - <Dataset Name>
