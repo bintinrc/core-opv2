@@ -11,8 +11,8 @@ Feature: Order Billing - Upload CSV
     Given API Operator whitelist email "{order-billing-email}"
     Given API Gmail - Connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
     Given API Gmail - Operator marks all gmail messages as read
-@test
-@HappyPath
+
+  @HappyPath
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -82,7 +82,7 @@ Feature: Order Billing - Upload CSV
   Scenario: Search Shipper by Upload CSV -  Invalid File Type (uid:2c0617ed-a93e-4146-8a57-8743c472b050)
     Then Operator tries to upload a PDF and verifies that any other file except csv is not allowed
 
-  @test
+
   @ArchiveRouteCommonV2
   Scenario: Search Shipper by Upload CSV with two columns (uid:f404e9e5-70f8-4407-bfa7-3057d410a97f)
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -185,7 +185,7 @@ Feature: Order Billing - Upload CSV
       | top    | Network Request Error                                                                              |
       | bottom | the request can't be processed: No orders found for the report request ; no file will be generated |
 
-  @nadz
+
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:a3c83778-4a7d-4b14-b8a3-9a9ba1e03001)
     Given Operator selects Order Billing data as below
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
