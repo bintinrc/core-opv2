@@ -177,7 +177,6 @@ Feature: Failed Delivery Management Page - Action Feature
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}     |
       | dnr     | NORMAL                                 |
       | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
-#    And API Operator verify order info after failed delivery order rescheduled on next day
 
     Examples:
       | Dataset_Name | order_type | reason_id |
@@ -324,7 +323,6 @@ Feature: Failed Delivery Management Page - Action Feature
       | status | PENDING                                |
       | dnr    | NORMAL                                 |
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
-#    And API Operator verify order info after failed delivery order rescheduled on next 2 days
 
     Examples:
       | Dataset_Name | order_type | reason_id |
