@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies @CWF
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
 Feature: New Recovery Tickets
 
   Background:
@@ -1528,7 +1528,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = COMPLETED ORDER - order_outcome = RTS     | COMPLETED ORDER     | RTS          | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = DISPUTED ORDER INFO - order_outcome = RTS | DISPUTED ORDER INFO | RTS          | Transit    | Arrived at Sorting Hub |
 
-  @ResolveTicket @RT
+  @ResolveTicket
   Scenario Outline: Operator Resolve Ticket - ticket_type = SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
