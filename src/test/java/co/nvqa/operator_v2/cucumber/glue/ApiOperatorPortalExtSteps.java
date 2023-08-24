@@ -324,16 +324,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
 
-  //  TODO move to common-lighthouse
-  @After("@DeleteFilersPreset")
-  public void deleteFiltersPreset() {
-    Long presetId = get(ShipmentManagementSteps.KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
-    if (presetId != null) {
-      getTemplatesClient().deleteTemplate(presetId);
-    }
-  }
-
-
   //  TODO move to common-core
   @And("^API Operator get created Reservation Group params$")
   public void apiOperatorGetCreatedReservationGroupParams() {

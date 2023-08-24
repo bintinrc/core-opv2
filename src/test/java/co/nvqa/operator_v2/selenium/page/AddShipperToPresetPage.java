@@ -124,8 +124,6 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//tr[1]//td[contains(@class,'action')]/i[1]")
   public PageElement assignDriverButton;
 
-  @FindBy(className = "ant-modal-wrap")
-  public TripManagementPage.AssignTripModal assignDriverModal;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
   public PageElement successCreateRelation;
