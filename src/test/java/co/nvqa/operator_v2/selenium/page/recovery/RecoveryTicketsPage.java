@@ -180,6 +180,10 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
         }
         createTicketDialog.issueDescription.waitUntilVisible();
         createTicketDialog.issueDescription.sendKeys(recoveryTicket.getIssueDescription());
+        if (createTicketDialog.suspiciousReasonLabel.isDisplayed()) {
+          createTicketDialog.suspiciousReason.sendKeys("Ambiguous address" + Keys.ENTER);
+          createTicketDialog.investigationResult.sendKeys("Not Suspicious" + Keys.ENTER);
+        }
         break;
       }
       case TICKET_TYPE_SELF_COLLECTION: {
@@ -574,6 +578,12 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
     @FindBy(css = "[data-testid='recovery-ticket-testid.create-ticket-dialogue.description.custom-field']")
     public PageElement issueDescription;
 
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')]//input[@id='suspicious_reason']")
+    public PageElement suspiciousReason;
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')]//input[@id='investigation_results']")
+    public PageElement investigationResult;
+
     @FindBy(css = "[id^='customer_zendesk_id']")
     public PageElement customerZendeskId;
 
@@ -591,6 +601,9 @@ public class RecoveryTicketsPage extends SimpleReactPage<RecoveryTicketsPage> {
 
     @FindBy(css = "[data-testid='btn-create']")
     public PageElement createTicket;
+
+    @FindBy(xpath = "//label[.='Suspicious Reason']")
+    public PageElement suspiciousReasonLabel;
 
     public CreateTicketDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

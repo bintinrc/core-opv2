@@ -1,4 +1,4 @@
-@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies
+@NewRecoveryTicketsPage @OperatorV2 @ClearCache @ClearCookies @CWF
 Feature: New Recovery Tickets
 
   Background:
@@ -1528,7 +1528,7 @@ Feature: New Recovery Tickets
       | ticket_subtype = COMPLETED ORDER - order_outcome = RTS     | COMPLETED ORDER     | RTS          | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = DISPUTED ORDER INFO - order_outcome = RTS | DISPUTED ORDER INFO | RTS          | Transit    | Arrived at Sorting Hub |
 
-  @ResolveTicket
+  @ResolveTicket @RT
   Scenario Outline: Operator Resolve Ticket - ticket_type = SHIPPER ISSUE - <Dataset Name>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -1574,7 +1574,6 @@ Feature: New Recovery Tickets
       | ticket_subtype = NO ORDER - order_outcome = ORDERS CREATED                          | NO ORDER          | ORDERS CREATED                  | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = REJECTED RETURN - order_outcome = DAMAGED - NV LIABLE              | REJECTED RETURN   | DAMAGED - NV LIABLE             | Cancelled  | Cancelled              |
       | ticket_subtype = RESTRICTED GOODS - order_outcome = NV Not Liable - PARCEL SCRAPPED | RESTRICTED GOODS  | NV NOT LIABLE - PARCEL SCRAPPED | Completed  | Completed              |
-#      | ticket_subtype = REQUEST RECEIPT - order_outcome = SENT RECEIPT                     | REQUEST RECEIPT   | SENT RECEIPT                    | Completed  | Completed              |
       | ticket_subtype = POOR LABELLING - order_outcome = RESUME PICKUP                     | POOR LABELLING    | RESUME PICKUP                   | Pending    | Pending Pickup         |
       | ticket_subtype = POOR PACKAGING - order_outcome = NV to Repack and Ship             | POOR PACKAGING    | NV TO REPACK AND SHIP           | Transit    | Arrived at Sorting Hub |
       | ticket_subtype = SUSPICIOUS PARCEL - order_outcome = Parcel Scrapped                | SUSPICIOUS PARCEL | PARCEL SCRAPPED                 | Completed  | Completed              |
