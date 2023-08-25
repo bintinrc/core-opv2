@@ -100,9 +100,9 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     );
   }
 
-  @When("^Operator uploads bulk mapping$")
-  public void operatorUploadsBulkMapping() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  @When("Operator uploads bulk mapping for tracking ids:")
+  public void operatorUploadsBulkMapping(List<String> trackingIdsDataTable) {
+    List<String> trackingIds = resolveValues(trackingIdsDataTable);
     ThirdPartyOrderMapping shipperInfo = new ThirdPartyOrderMapping();
     thirdPartyOrderManagementPage.adjustAvailableThirdPartyShipperData(shipperInfo);
     List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
