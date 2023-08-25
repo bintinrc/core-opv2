@@ -172,6 +172,9 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
 
+  @FindBy(css = ".bulk-action-progress")
+  public PageElement bulkActionProgress;
+
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
 

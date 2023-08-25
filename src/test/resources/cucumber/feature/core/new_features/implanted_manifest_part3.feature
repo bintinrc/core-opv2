@@ -317,7 +317,7 @@ Feature: Implanted Manifest
       | jobType     | PICKUP_APPOINTMENT                              |
       | jobAction   | SUCCESS                                         |
       | jobMode     | PICK_UP                                         |
-      | basePayload | {"pickup_quantity":2,"commit_date": 1686402522} |
+      | basePayload | {"pickup_quantity":1,"commit_date": 1686402522} |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |

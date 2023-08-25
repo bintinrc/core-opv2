@@ -213,7 +213,9 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
         Object searchContext = FieldUtils.readField(locator, "searchContext", true);
         if (searchContext instanceof WebElement) {
           try {
-            FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+            if (FieldUtils.getField(searchContext.getClass(), "cachedElement") != null) {
+              FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
+            }
           } catch (Exception ex1) {
             NvLogger.warn("Error while handling StaleElementReferenceException", ex1);
           }

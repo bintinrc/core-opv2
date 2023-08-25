@@ -7,7 +7,6 @@ Feature: Parcel Sweeper Live
 
   @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Parcel Sweep Scans a Routed Parcel
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -31,16 +30,17 @@ Feature: Parcel Sweeper Live
       | hubId              | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}                                                              |
       | taskId             | 1                                                                                                |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verify order status is "Transit" on Edit Order V2 page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | PARCEL ROUTING SCAN                                |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
+      | name        | PARCEL ROUTING SCAN                                 |
+      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
       | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And Operator refresh page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | OUTBOUND SCAN                                      |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
+      | name        | OUTBOUND SCAN                                       |
+      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
       | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And DB Core - verify warehouse_sweeps record:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -56,7 +56,6 @@ Feature: Parcel Sweeper Live
 
   @ForceSuccessOrder
   Scenario: Operator Parcel Sweep Scans an Unrouted Parcel
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -75,11 +74,12 @@ Feature: Parcel Sweeper Live
       | taskId             | 1                                                                                                |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator refresh page
-    Then Operator verify order status is "Transit" on Edit Order V2 page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | PARCEL ROUTING SCAN                                |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}     |
+      | name        | PARCEL ROUTING SCAN                                 |
+      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
       | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And DB Core - verify warehouse_sweeps record:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |

@@ -64,6 +64,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public PageElement viewJobDetailButton;
   @FindBy(css = "[type='submit']")
   public PageElement loadSelection;
+  @FindBy(className = "ant-collapse-header")
+  public Button showHideFiltersHeader;
   @FindBy(xpath = "//button[.='Create / edit job']")
   public Button createEditJobButton;
   @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
