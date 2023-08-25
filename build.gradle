@@ -6,26 +6,14 @@ sourceCompatibility = JavaVersion.VERSION_11
 
 project.ext {
     defaultScenarioManager = "co.nvqa.operator_v2.cucumber.glue.ScenarioManager"
+    autoConfigGlue = true
     cucumberGluePackage = [
             "co.nvqa.operator_v2.cucumber.glue",
             "classpath:co.nvqa.commons.cucumber.glue",
             "classpath:co.nvqa.common.cucumber.glue",
-            "classpath:co.nvqa.common.ui.cucumber.glue.selenium",
             "classpath:co.nvqa.common.ordercreate.cucumber.glue",
-            "classpath:co.nvqa.common.corev2.cucumber.glue",
-            "classpath:co.nvqa.common.core.cucumber.glue",
-            "classpath:co.nvqa.common.dp.cucumber.glue",
-            "classpath:co.nvqa.common.shipper.cucumber.glue",
-            "classpath:co.nvqa.common.driver.cucumber.glue",
-            "classpath:co.nvqa.common.mm.cucumber.glue",
             "classpath:co.nvqa.commonauth.cucumber.glue",
-            "classpath:co.nvqa.commonsort.cucumber.glue",
-            "classpath:co.nvqa.common.pricing.cucumber.glue",
-            "classpath:co.nvqa.common.lighthouse.cucumber.glue",
-            "classpath:co.nvqa.common.sns.cucumber.glue",
-            "classpath:co.nvqa.common.recovery.cucumber.glue",
-            "classpath:co.nvqa.common.fm.cucumber.glue",
-            "classpath:co.nvqa.common.station.cucumber.glue"]
+            "classpath:co.nvqa.commonsort.cucumber.glue"]
 }
 
 repositories {
@@ -77,7 +65,7 @@ dependencies {
     implementation "co.nvqa:common-ordercreate:1.3.2"
     implementation "co.nvqa:common-driver:1.3.9"
     implementation "co.nvqa:common-corev2:1.2.14"
-    implementation "co.nvqa:common-core:1.3.18"
+    implementation "co.nvqa:common-core:1.3.19-RC5"
     implementation "co.nvqa:common-dp:1.3.25"
     implementation "co.nvqa:common-auth:1.3.1"
     implementation "co.nvqa:common-sort:1.3.16"

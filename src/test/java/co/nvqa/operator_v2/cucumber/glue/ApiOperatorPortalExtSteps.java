@@ -47,14 +47,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   @Getter
   private DriverManagementClient driverManagementClient;
 
-  private static final String HUB_CD_CD = "CD->CD";
-  private static final String HUB_CD_ITS_ST = "CD->its ST";
-  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
-  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
-  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
-  private static final String HUB_ST_ITS_CD = "ST->its CD";
-  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
-
   public ApiOperatorPortalExtSteps() {
   }
 
