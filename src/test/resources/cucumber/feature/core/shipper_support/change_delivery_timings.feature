@@ -32,10 +32,9 @@ Feature: Change Delivery Timings
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -57,9 +56,7 @@ Feature: Change Delivery Timings
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Tracking ID
-    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | INVALID_TRACKING_ID              |
@@ -70,7 +67,6 @@ Feature: Change Delivery Timings
 
   @ArchiveRouteCommonV2
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -106,7 +102,7 @@ Feature: Change Delivery Timings
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
 #Note: Seems the delivery timings can still updated event the csv not contain start date, so will let Dev know first and later will decide either deprecate this scenario or dev will fix it first
 #  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty
@@ -161,9 +157,7 @@ Feature: Change Delivery Timings
 #      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
 #      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Order Tagged to DP
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -175,7 +169,7 @@ Feature: Change Delivery Timings
       | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                       |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                               |
-    And API Operator tag "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order to "{dp-id}" DP
+    And API Operator tag "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order to "{dp-id}" DP
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -187,7 +181,6 @@ Feature: Change Delivery Timings
     And Operator click Close button on Change Delivery Timings page
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Past Date
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -203,9 +196,7 @@ Feature: Change Delivery Timings
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| cannot change delivery date before today's date |
     And Operator click Close button on Change Delivery Timings page
 
-
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -220,9 +211,9 @@ Feature: Change Delivery Timings
       | trackingId                            | startDate                        | endDate                        | timewindow |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | {gradle-current-date-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | 0          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | {gradle-current-date-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | 0          |
-    And Operator waits for 2 seconds
+    And Operator waits for 5 seconds
     And API Core - Operator delete order with order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    And Operator waits for 2 seconds
+    And Operator waits for 5 seconds
     And Operator submit uploaded CSV file on Change Delivery Timings page
     Then Operator verify errors on Change Delivery Timings page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Invalid tracking id |
@@ -233,7 +224,7 @@ Feature: Change Delivery Timings
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
     Given Operator go to menu Utilities -> QRCode Printing

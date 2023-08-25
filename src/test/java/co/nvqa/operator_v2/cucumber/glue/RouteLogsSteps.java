@@ -778,15 +778,19 @@ public class RouteLogsSteps extends AbstractSteps {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
         String value = finalData.get("top");
         if (StringUtils.isNotBlank(value)) {
-          String actual = toast.toastTop.getNormalizedText();
-          if (value.startsWith("^")) {
-            if (!actual.matches(value)) {
-              return false;
+          try {
+            String actual = toast.toastTop.getNormalizedText();
+            if (value.startsWith("^")) {
+              if (!actual.matches(value)) {
+                return false;
+              }
+            } else {
+              if (!StringUtils.equalsIgnoreCase(value, actual)) {
+                return false;
+              }
             }
-          } else {
-            if (!StringUtils.equalsIgnoreCase(value, actual)) {
-              return false;
-            }
+          } catch (Exception ex) {
+            LOGGER.warn("Could not read toast header", ex);
           }
         }
         value = finalData.get("bottom");
