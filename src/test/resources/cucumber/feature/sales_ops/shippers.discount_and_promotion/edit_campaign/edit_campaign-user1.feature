@@ -19,7 +19,9 @@ Feature: Edit Campaign
   @FailingDownloadButtonDisabled
   Scenario: Generate Shipper CSV - User Only Have View Access
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on campaign with name "QA-Automation-Campaign-16896918867762"
+    Given Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/discount-and-promotions?id=13581"
+    And Operator refresh page
+    And Operator verifies Campaign is Pending
     And Operator verifies "Campaign name" input field is "clickable"
     And Operator verifies "Campaign ID" input field is "not clickable"
     And Operator verifies "Campaign Description" input field is "clickable"
