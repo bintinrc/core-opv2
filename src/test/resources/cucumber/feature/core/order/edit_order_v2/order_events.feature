@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @OrderEvents @EditOrder1
+@OperatorV2 @Core @EditOrderV2 @OrderEvents
 Feature: Order Events
 
   Background:
