@@ -62,4 +62,9 @@ public class MainSteps extends AbstractSteps {
   public void toastIsDisplayed(String message) {
     mainPage.waitUntilInvisibilityOfToast(message, true);
   }
+
+  @Then("Operator waits for {int} seconds")
+  public void operatorWaitsForSeconds(int arg0) {
+    pause(arg0 * 1000L);
+  }
 }

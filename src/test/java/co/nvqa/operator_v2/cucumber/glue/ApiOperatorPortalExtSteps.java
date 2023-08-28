@@ -47,14 +47,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   @Getter
   private DriverManagementClient driverManagementClient;
 
-  private static final String HUB_CD_CD = "CD->CD";
-  private static final String HUB_CD_ITS_ST = "CD->its ST";
-  private static final String HUB_CD_ST_DIFF_CD = "CD->ST under another CD";
-  private static final String HUB_ST_ST_SAME_CD = "ST->ST under same CD";
-  private static final String HUB_ST_ST_DIFF_CD = "ST->ST under diff CD";
-  private static final String HUB_ST_ITS_CD = "ST->its CD";
-  private static final String HUB_ST_CD_DIFF_CD = "ST->another CD";
-
   public ApiOperatorPortalExtSteps() {
   }
 
@@ -321,16 +313,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     assertFalse("Driver longitude was not changed", Objects.equals(
         oldDriver.getZonePreferences().get(0).getLongitude(),
         newDriver.getZonePreferences().get(0).getLongitude()));
-  }
-
-
-  //  TODO move to common-lighthouse
-  @After("@DeleteFilersPreset")
-  public void deleteFiltersPreset() {
-    Long presetId = get(ShipmentManagementSteps.KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
-    if (presetId != null) {
-      getTemplatesClient().deleteTemplate(presetId);
-    }
   }
 
 
