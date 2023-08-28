@@ -274,7 +274,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   }
 
   public void openPage(long orderId) {
-    getWebDriver().get(f("%s/%s/order-v2?id=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), orderId));
     pause1s();
     closeDialogIfVisible();
