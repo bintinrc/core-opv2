@@ -1,4 +1,5 @@
-@OperatorV2 @Core @Analytics @Reports
+#TODO deprecate this once page is removed
+#@OperatorV2 @Core @Analytics @Reports
 Feature: Order Creation V4
 
   Background:

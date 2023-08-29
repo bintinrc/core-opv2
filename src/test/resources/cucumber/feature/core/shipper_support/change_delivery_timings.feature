@@ -32,7 +32,7 @@ Feature: Change Delivery Timings
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id
     Given Operator go to menu Utilities -> QRCode Printing
@@ -106,7 +106,7 @@ Feature: Change Delivery Timings
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
 #Note: Seems the delivery timings can still updated event the csv not contain start date, so will let Dev know first and later will decide either deprecate this scenario or dev will fix it first
 #  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty
@@ -144,23 +144,21 @@ Feature: Change Delivery Timings
 #      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
 #      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-# Note: Seems the delivery timings can still updated event the csv not contain start date/end date, so will let Dev know first and later will decide either deprecate this scenario or dev will fix it first
-#  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty
-#    Given Operator go to menu Utilities -> QRCode Printing
-#    Given API Order - Shipper create multiple V4 orders using data below:
-#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-#      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
-#    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file on Change Delivery Timings page using data below:
-#      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-#      | timewindow | 0                                          |
-#    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-#    Then Operator verify Delivery details on Edit order page using data below:
-#      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-#      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
-
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{gradle-next-2-day-yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
+    And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file on Change Delivery Timings page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | timewindow | 0                                          |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify Delivery details on Edit Order V2 page using data below:
+      | startDateTime | {gradle-next-2-day-yyyy-MM-dd} 09:00:00 |
+      | endDateTime   | {gradle-next-2-day-yyyy-MM-dd} 22:00:00 |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Order Tagged to DP
     Given Operator go to menu Utilities -> QRCode Printing
@@ -175,7 +173,6 @@ Feature: Change Delivery Timings
       | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                       |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                               |
-    And API Operator tag "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order to "{dp-id}" DP
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -203,7 +200,6 @@ Feature: Change Delivery Timings
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| cannot change delivery date before today's date |
     And Operator click Close button on Change Delivery Timings page
 
-
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -225,7 +221,7 @@ Feature: Change Delivery Timings
     And Operator waits for 2 seconds
     And Operator submit uploaded CSV file on Change Delivery Timings page
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Invalid tracking id |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Order id: {KEY_LIST_OF_CREATED_ORDERS[2].id} not found! |
     And Operator click Close button on Change Delivery Timings page
     Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated      |
@@ -233,7 +229,7 @@ Feature: Change Delivery Timings
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
 
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
     Given Operator go to menu Utilities -> QRCode Printing
