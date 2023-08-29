@@ -191,7 +191,7 @@ Feature: Change Delivery Timings
       | endDate    | {gradle-previous-2-day-yyyy-MM-dd}    |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| cannot change delivery date before today's date |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery date cannot be before today's date |
     And Operator click Close button on Change Delivery Timings page
 
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
@@ -214,7 +214,7 @@ Feature: Change Delivery Timings
     And Operator waits for 5 seconds
     And Operator submit uploaded CSV file on Change Delivery Timings page
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Order id: {KEY_LIST_OF_CREATED_ORDERS[2].id} not found! |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Invalid tracking id |
     And Operator click Close button on Change Delivery Timings page
     Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated      |
