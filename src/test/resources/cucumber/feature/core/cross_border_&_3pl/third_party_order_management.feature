@@ -6,11 +6,6 @@ Feature: Third Party Order Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Upload Single Third Party Order
-<<<<<<< HEAD
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-=======
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -18,31 +13,20 @@ Feature: Third Party Order Management
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
->>>>>>> master
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator uploads new mapping
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
     Then Operator verify the new mapping is created successfully
-<<<<<<< HEAD
-    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
-=======
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
->>>>>>> master
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | TRANSFERRED TO THIRD PARTY |
-<<<<<<< HEAD
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                              |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
-=======
     And Operator verify order event on Edit Order V2 page using data below:
       | tags        | MANUAL ACTION                                                                                                                                                            |
       | name        | UPDATE STATUS                                                                                                                                                            |
       | description | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
->>>>>>> master
 
   Scenario: Operator Edit Third Party Order
     Given Operator go to menu Utilities -> QRCode Printing
