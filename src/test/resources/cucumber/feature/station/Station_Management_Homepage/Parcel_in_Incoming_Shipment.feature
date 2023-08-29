@@ -5,7 +5,7 @@ Feature: Parcel in Incoming Shipment
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ArchiveRoute
+  @Happypath @ArchiveRoute @HighPriority
   Scenario Outline: View Parcel in Incoming Shipment (uid:e03d4b5c-4253-4f35-9e8a-87d7c912dcc2)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -58,7 +58,7 @@ Feature: Parcel in Incoming Shipment
       | OrigHubId   | OrigHubName   | DestHubId   | DestHubName   | Country | Comments  | TileName                     | TileName1 | TileName2 | ModalName                    | TableName1     | TableName2 |
       | {hub-id-10} | {hub-name-10} | {hub-id-11} | {hub-name-11} | sg      | GENERATED | Parcels in incoming shipment | Total     | Priority  | Parcels in Incoming Shipment | By Parcel Size | By Zone    |
 
-  @Happypath @ArchiveRoute
+  @Happypath @ArchiveRoute @HighPriority
   Scenario Outline: View Priority Parcel in Incoming Shipment (uid:17a93bac-e718-4f9b-8be7-b6d025f66434)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
