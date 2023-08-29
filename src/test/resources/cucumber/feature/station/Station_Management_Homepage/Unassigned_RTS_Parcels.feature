@@ -5,7 +5,7 @@ Feature: Unassigned RTS Parcels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: View Number of Unassigned RTS Parcels Parcels For Route (uid:6ff63ae8-93ba-45fe-857e-6dc05604fa1b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -47,7 +47,7 @@ Feature: Unassigned RTS Parcels
       | HubName       | HubId       | DestinationHubId | TileName  | ModalName                      |
       | {hub-name-14} | {hub-id-14} | {hub-id-14}      | For Route | RTS parcels not added to route |
 
-  @Happypath @ForceSuccessOrder
+  @Happypath @ForceSuccessOrder @HighPriority
   Scenario Outline: View Number of Unassigned RTS Parcels Parcels For Shipment (uid:657c1c0e-4954-440c-8114-39d2fb1c2865)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -89,7 +89,7 @@ Feature: Unassigned RTS Parcels
       | HubName       | HubId       | DestinationHubId | TileName     | ModalName                           |
       | {hub-name-14} | {hub-id-14} | {hub-id-8}       | For Shipment | Unassigned RTS parcels for shipment |
 
-  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Number of Unassigned RTS Parcels Parcels For Route - Add Parcel to Route (uid:c32c0f3b-21f7-4878-a826-b5bb0730858e)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -142,7 +142,7 @@ Feature: Unassigned RTS Parcels
       | HubName       | HubId       | DestinationHubId | TileName  | ModalName                      |
       | {hub-name-14} | {hub-id-14} | {hub-id-14}      | For Route | RTS parcels not added to route |
 
-  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Number of Unassigned RTS Parcels Parcels For Shipment - Add Parcel to Shipment (uid:71c7c0a5-92a3-4e78-9a32-8de413a3d8a5)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
