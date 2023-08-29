@@ -30,7 +30,6 @@ Feature: Order Creation V4
 
   @DeleteOrArchiveRoute
   Scenario: Generate Order Statuses Report - Less Than 4000 Tracking Ids
-    Given Operator go to menu Shipper Support -> Blocked Dates
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
