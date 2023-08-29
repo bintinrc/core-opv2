@@ -703,7 +703,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   }
 
   public void switchToEditOrderWindow(Long orderId) {
-    switchToOtherWindow("order-v2?id=" + orderId);
+    switchToOtherWindow("order/" + orderId);
     editOrderPage.waitWhilePageIsLoading(120);
   }
 
