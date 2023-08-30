@@ -98,6 +98,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
     retryIfAssertionErrorOccurred(() -> {
+      System.out.println("NADEERA:" + script.getName());
       searchTableDraftsByScriptName(script.getName());
       waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
@@ -446,8 +447,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     String xpathExpression = "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.name']";
     waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
-    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
-    sendKeys(xpathExpression, scriptName);
+    if (!getAttribute(xpathExpression, "value").equals(scriptName)) {
+      sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+      sendKeys(xpathExpression, scriptName);
+    }
   }
 
   public String getTextOnTableDrafts(int rowNumber, String columnDataClass) {
