@@ -74,7 +74,7 @@ Feature: Create Pricing Profile - PH
       | type               | PERCENTAGE                                          |
       | comments           | This is a test pricing script                       |
       | billingWeightLogic | Gross weight only                                   |
-    Then Operator waits for 2 seconds
+    Then  Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
 

@@ -646,15 +646,15 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     }
   }
 
-  @When("Operator verifies Save button is inactive")
-  public void operatorVerifiesSaveButtonIsInactive() {
+  @When("Operator verifies Save button is inactive in Pricing Script Page")
+  public void operatorVerifiesSaveButtonIsInactiveInPricingScriptPage() {
     pricingScriptsV2Page.switchToIframe();
     Assertions.assertThat(pricingScriptsV2Page.saveBtn.isDisabled()).as("Save Btn is disabled")
         .isTrue();
     getWebDriver().switchTo().defaultContent();
   }
 
-  @When("Operator verifies Save Draft button is inactive")
+  @When("Operator verifies Save Draft button is inactive in Pricing Script Page")
   public void operatorVerifiesSaveDraftButtonIsInactive() {
     pricingScriptsV2Page.switchToIframe();
     Assertions.assertThat(pricingScriptsV2CreateEditDraftPage.saveDraftBtn.isDisabled())

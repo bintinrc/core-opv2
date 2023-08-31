@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.ReportScheduleTemplate;
 import co.nvqa.operator_v2.selenium.page.ReportSchedulesPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.JavascriptExecutor;
+
+import static co.nvqa.common.utils.StandardTestUtils.replaceTokens;
 
 public class ReportSchedulesSteps extends AbstractSteps {
 
@@ -62,12 +66,15 @@ public class ReportSchedulesSteps extends AbstractSteps {
   private void setReportSchedulingData(Map<String, String> mapOfData) {
     SoftAssertions softAssertion = new SoftAssertions();
     mapOfData = resolveKeyValues(mapOfData);
+    Map<String, String> mapOfDynamicVariable = new HashMap<>();
+    mapOfDynamicVariable.put("6-random-digits", StandardTestUtils.generateRandomNumbersString(6));
+
     ReportScheduleTemplate template =
         Objects.nonNull(get(KEY_REPORT_SCHEDULE_TEMPLATE)) ? get(KEY_REPORT_SCHEDULE_TEMPLATE)
             : new ReportScheduleTemplate();
 
-    String name = mapOfData.get("name");
-    String description = mapOfData.get("description");
+    String name = replaceTokens(mapOfData.get("name"), mapOfDynamicVariable);
+    String description = replaceTokens(mapOfData.get("description"), mapOfDynamicVariable);
     String frequency = mapOfData.get("frequency");
     String day = mapOfData.get("day");
     String reportFor = mapOfData.get("reportFor");

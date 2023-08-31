@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedules @CreateReportSchedulesPH
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedulesPH @CreateReportSchedulesPH
 
 Feature: Create Report Schedules - PH
 
@@ -11,8 +11,8 @@ Feature: Create Report Schedules - PH
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}                                     |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}                         |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}                 |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}     |
       | frequency      | Weekly                                                                                 |
       | day            | Monday                                                                                 |
       | reportFor      | Select By Parent Shipper                                                               |
