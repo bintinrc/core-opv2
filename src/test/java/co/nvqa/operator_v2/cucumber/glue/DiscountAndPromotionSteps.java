@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.model.Campaign;
 import co.nvqa.operator_v2.selenium.page.CampaignCreateEditPage;
 import co.nvqa.operator_v2.selenium.page.DiscountAndPromotionPage;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -449,6 +448,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @And("Operator clicks on campaign with name {string}")
   public void operatorClicksOnCampaignWithName(String name) {
     discountAndPromotionsPage.inFrame(page -> {
+
       pause10s();
       pause10s();
       discountAndPromotionsPage.selectCampaignWithName(name);
@@ -477,12 +477,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @ParameterType("input|select|picker")
-  public String campaignFieldName(String campaignFieldName) {
-    return campaignFieldName;
-  }
-
-  @And("Operator verifies {string} {campaignFieldName} field is {string}")
+  @And("Operator verifies {string} (input)(select)(picker) field is {string}")
   public void operatorVerifiesValueIsDisabled(String fieldName, String fieldType,
       String isClickable) {
     discountAndPromotionsPage.inFrame(page -> {

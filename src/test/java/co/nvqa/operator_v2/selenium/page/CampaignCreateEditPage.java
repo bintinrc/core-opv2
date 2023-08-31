@@ -157,7 +157,6 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public void selectDiscountOperator(String option) {
-    discountOperator.scrollIntoView();
     AntSelect discountType = new AntSelect(getWebDriver(), discountOperator.getWebElement());
     discountType.selectValue(option, ITEM_CONTAINS_XPATH_FOR_DISCOUNT_OPERATOR);
   }
