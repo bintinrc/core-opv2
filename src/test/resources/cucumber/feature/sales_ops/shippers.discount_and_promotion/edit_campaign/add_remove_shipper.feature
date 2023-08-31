@@ -111,9 +111,9 @@ Feature: Add Remove Shippers
     When Operator clicks on Shippers Add button
     Then Operator verifies 'Add Shipper' modal is displayed
     And Operator verifies "Bulk upload" is default selected tab
-    And Operator verifies Browse button is not disabled
-    And Operator verifies Cancel button is not disabled
-    And Operator verifies Upload button is not disabled
+    And Operator verifies Browse button is not disabled in Campaign page
+    And Operator verifies Cancel button is not disabled in Campaign page
+    And Operator verifies Upload button is not disabled in Campaign page
     When Operator uploads csv file with "9999999"
     When Operator clicks on upload button
     Then Operator verifies toast message "No shipper was selected." in Campaign Page
@@ -133,9 +133,9 @@ Feature: Add Remove Shippers
     When Operator clicks on Shippers Remove button
     Then Operator verifies "Remove shipper" modal is displayed
     And Operator verifies "Bulk upload" is default selected tab
-    And Operator verifies Browse button is not disabled
-    And Operator verifies Cancel button is not disabled
-    And Operator verifies Upload button is not disabled
+    And Operator verifies Browse button is not disabled in Campaign page
+    And Operator verifies Cancel button is not disabled in Campaign page
+    And Operator verifies Upload button is not disabled in Campaign page
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
     When Operator clicks on upload button
     Then Operator verifies error message is "Error Message: unable to delete shipper(s) from campaign: invalid shipper(s)"
@@ -230,7 +230,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Active-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
     When Operator clicks on upload button
@@ -240,7 +241,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload - CSV file contains valid and invalid shipper
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Pending-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID};9999999"
     When Operator clicks on upload button
@@ -250,7 +252,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Pending-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator clicks on Search by Shipper tab
     Then Operator search using "Name" and select the created shipper

@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.ordercreate.util.OrderTestUtils.generateRandomNumbersString;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT_SNS_1;
 
@@ -52,6 +53,10 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     List<Campaign> campaignDetails = convertDataTableToListWhereDataTableHasListOfData(dt,
         Campaign.class);
     Campaign campaignDetail = campaignDetails.get(0);
+    if (Objects.nonNull(campaignDetail.getCampaignName())) {
+      campaignDetail.setCampaignName(campaignDetail.getCampaignName()
+          .replace("{{6-random-digits}}", generateRandomNumbersString(6)));
+    }
     put(KEY_OBJECT_OF_CREATED_CAMPAIGN, campaignDetail);
     put(KEY_CAMPAIGN_NAME_OF_CREATED_CAMPAIGN, campaignDetail.getCampaignName());
     setCampaignData(campaignDetail);

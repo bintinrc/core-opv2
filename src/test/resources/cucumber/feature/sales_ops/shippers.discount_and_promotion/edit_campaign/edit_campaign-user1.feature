@@ -12,8 +12,8 @@ Feature: Edit Campaign
     And Operator refresh page
     And Operator verifies Campaign is Pending
     Then Operator enter campaign details using data below:
-      | endDate                         |
-      | {gradle-next-10-day-yyyy-MM-dd} |
+      | endDate    |
+      | 2034-01-01 |
     When Operator clicks on publish button
     Then Operator verifies error message is "Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ALL_ACCESS, CAMPAIGN_ADMIN)"
 
