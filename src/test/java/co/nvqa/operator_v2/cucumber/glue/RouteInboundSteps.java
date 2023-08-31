@@ -626,16 +626,9 @@ public class RouteInboundSteps extends AbstractSteps {
     put(KEY_ROUTE_INBOUND_COMMENT, comment);
   }
 
-  @When("Operator verify route inbound comment on Route Inbound page")
-  public void operatorVerifyRouteInboundCommentOnRouteInboundPage() {
-    String expectedComment = get(KEY_ROUTE_INBOUND_COMMENT);
-    routeInboundPage.verifyRouteInboundComment(expectedComment);
-  }
-
-  @And("Operator scan a tracking ID of created order on Route Inbound page")
-  public void operatorScanATrackingIDOfCreatedOrderOnRouteInboundPage() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    routeInboundPage.scanTrackingId(trackingId);
+  @When("Operator verify route inbound comment on Route Inbound page is {string}")
+  public void operatorVerifyRouteInboundCommentOnRouteInboundPage(String comment) {
+    routeInboundPage.verifyRouteInboundComment(resolveValue(comment));
   }
 
   @And("Operator scan a tracking ID {value} on Route Inbound page")

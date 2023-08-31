@@ -27,7 +27,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage = new ThirdPartyOrderManagementPage(getWebDriver());
   }
 
-  @When("^Operator uploads new mapping$")
+  @When("Operator uploads new mapping")
   public void operatorUploadsNewMapping(Map<String, String> dataTableAsMap) {
     ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
