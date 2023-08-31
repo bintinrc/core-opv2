@@ -11,13 +11,13 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | ALL                                                            |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | abc@gmail.com                                                  |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}                                                      |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} -{{6-random-digits}} |
+      | frequency      | Monthly                                                                                                 |
+      | reportFor      | All Shippers                                                                                            |
+      | fileGroup      | ALL                                                                                                     |
+      | reportTemplate | {default-csv-template}                                                                                  |
+      | emails         | abc@gmail.com                                                                                           |
     And Operator verifies that error toast is displayed on Report Schedules page as below:
       | errorMessage | Please enter only ninjavan.co email(s). |
 
@@ -27,20 +27,20 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | ALL                                                            |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | ALL                                                                                |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
       | name           | {KEY_REPORT_SCHEDULE_TEMPLATE.name}                            |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
       | reportFor      | All Shippers                                                   |
       | fileGroup      | ALL                                                            |
       | reportTemplate | {default-csv-template}                                         |
@@ -55,13 +55,13 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | ALL                                                            |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | ALL                                                                                |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -71,16 +71,16 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency       | Weekly                                                         |
-      | day             | Monday                                                         |
-      | reportFor       | Select One Shipper                                             |
-      | shipperLegacyId | {shipper-v4-legacy-id}                                         |
-      | shipperName     | {shipper-v4-name}                                              |
-      | fileGroup       | ALL                                                            |
-      | reportTemplate  | {custom-csv-template}                                          |
-      | emails          | {qa-email-address}                                             |
+      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency       | Weekly                                                                             |
+      | day             | Monday                                                                             |
+      | reportFor       | Select One Shipper                                                                 |
+      | shipperLegacyId | {shipper-v4-legacy-id}                                                             |
+      | shipperName     | {shipper-v4-name}                                                                  |
+      | fileGroup       | ALL                                                                                |
+      | reportTemplate  | {custom-csv-template}                                                              |
+      | emails          | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -90,14 +90,14 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | Select By Script IDs                                           |
-      | scriptIds      | {pricing-script-id-weight} - {pricing-script-name-weight}      |
-      | fileGroup      | ALL                                                            |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | Select By Script IDs                                                               |
+      | scriptIds      | {pricing-script-id-weight} - {pricing-script-name-weight}                          |
+      | fileGroup      | ALL                                                                                |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -107,8 +107,8 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}                                                    |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}                                        |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}                                |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}                    |
       | frequency      | Weekly                                                                                                |
       | day            | Monday                                                                                                |
       | reportFor      | Select By Script IDs                                                                                  |
@@ -125,14 +125,14 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | Select By Parent Shipper                                       |
-      | parentShipper  | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name} |
-      | fileGroup      | SHIPPER                                                        |
-      | reportTemplate | {custom-csv-template}                                          |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | Select By Parent Shipper                                                           |
+      | parentShipper  | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name}                     |
+      | fileGroup      | SHIPPER                                                                            |
+      | reportTemplate | {custom-csv-template}                                                              |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -142,15 +142,15 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency       | Monthly                                                        |
-      | reportFor       | Select One Shipper                                             |
-      | shipperLegacyId | {shipper-v4-legacy-id}                                         |
-      | shipperName     | {shipper-v4-name}                                              |
-      | fileGroup       | SHIPPER                                                        |
-      | reportTemplate  | {default-csv-template}                                         |
-      | emails          | {qa-email-address}                                             |
+      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency       | Monthly                                                                            |
+      | reportFor       | Select One Shipper                                                                 |
+      | shipperLegacyId | {shipper-v4-legacy-id}                                                             |
+      | shipperName     | {shipper-v4-name}                                                                  |
+      | fileGroup       | SHIPPER                                                                            |
+      | reportTemplate  | {default-csv-template}                                                             |
+      | emails          | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -160,14 +160,14 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Weekly                                                         |
-      | day            | Monday                                                         |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | SHIPPER                                                        |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Weekly                                                                             |
+      | day            | Monday                                                                             |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | SHIPPER                                                                            |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -177,13 +177,13 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | SCRIPT                                                         |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | SCRIPT                                                                             |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -193,15 +193,15 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency       | Monthly                                                        |
-      | reportFor       | Select One Shipper                                             |
-      | shipperLegacyId | {shipper-v4-legacy-id}                                         |
-      | shipperName     | {shipper-v4-name}                                              |
-      | fileGroup       | SCRIPT                                                         |
-      | reportTemplate  | {default-csv-template}                                         |
-      | emails          | {qa-email-address}                                             |
+      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency       | Monthly                                                                            |
+      | reportFor       | Select One Shipper                                                                 |
+      | shipperLegacyId | {shipper-v4-legacy-id}                                                             |
+      | shipperName     | {shipper-v4-name}                                                                  |
+      | fileGroup       | SCRIPT                                                                             |
+      | reportTemplate  | {default-csv-template}                                                             |
+      | emails          | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -211,15 +211,15 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Weekly                                                         |
-      | day            | Monday                                                         |
-      | reportFor      | Select By Parent Shipper                                       |
-      | parentShipper  | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name} |
-      | fileGroup      | SCRIPT                                                         |
-      | reportTemplate | {custom-csv-template}                                          |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Weekly                                                                             |
+      | day            | Monday                                                                             |
+      | reportFor      | Select By Parent Shipper                                                           |
+      | parentShipper  | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name}                     |
+      | fileGroup      | SCRIPT                                                                             |
+      | reportTemplate | {custom-csv-template}                                                              |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -229,12 +229,12 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name        | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency   | Monthly                                                        |
-      | reportFor   | All Shippers                                                   |
-      | fileGroup   | AGGREGATED                                                     |
-      | emails      | {qa-email-address}                                             |
+      | name        | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency   | Monthly                                                                            |
+      | reportFor   | All Shippers                                                                       |
+      | fileGroup   | AGGREGATED                                                                         |
+      | emails      | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -244,14 +244,14 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name          | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description   | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency     | Weekly                                                         |
-      | day           | Monday                                                         |
-      | reportFor     | Select By Parent Shipper                                       |
-      | parentShipper | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name} |
-      | fileGroup     | AGGREGATED                                                     |
-      | emails        | {qa-email-address}                                             |
+      | name          | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description   | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency     | Weekly                                                                             |
+      | day           | Monday                                                                             |
+      | reportFor     | Select By Parent Shipper                                                           |
+      | parentShipper | {shipper-sop-mktpl-v4-legacy-id} - {shipper-sop-mktpl-v4-name}                     |
+      | fileGroup     | AGGREGATED                                                                         |
+      | emails        | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -261,15 +261,15 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency       | Weekly                                                         |
-      | day             | Monday                                                         |
-      | reportFor       | Select One Shipper                                             |
-      | shipperLegacyId | {shipper-v4-legacy-id}                                         |
-      | shipperName     | {shipper-v4-name}                                              |
-      | fileGroup       | AGGREGATED                                                     |
-      | emails          | {qa-email-address}                                             |
+      | name            | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description     | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency       | Weekly                                                                             |
+      | day             | Monday                                                                             |
+      | reportFor       | Select One Shipper                                                                 |
+      | shipperLegacyId | {shipper-v4-legacy-id}                                                             |
+      | shipperName     | {shipper-v4-name}                                                                  |
+      | fileGroup       | AGGREGATED                                                                         |
+      | emails          | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -279,13 +279,13 @@ Feature: Create Report Schedules
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name        | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency   | Weekly                                                         |
-      | day         | Monday                                                         |
-      | reportFor   | Select By Script IDs                                           |
-      | scriptIds   | {pricing-script-id-weight} - {pricing-script-name-weight}      |
-      | fileGroup   | AGGREGATED                                                     |
-      | emails      | {qa-email-address}                                             |
+      | name        | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency   | Weekly                                                                             |
+      | day         | Monday                                                                             |
+      | reportFor   | Select By Script IDs                                                               |
+      | scriptIds   | {pricing-script-id-weight} - {pricing-script-name-weight}                          |
+      | fileGroup   | AGGREGATED                                                                         |
+      | emails      | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully

@@ -50,6 +50,7 @@ public class UploadPaymentsSteps extends AbstractSteps {
         .collect(Collectors.joining("\n"));
     File csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, sb);
     uploadPaymentsPage.switchTo();
+    uploadPaymentsPage.waitUntilLoaded();
     uploadPaymentsPage.uploadFile(csvFile);
     LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());
   }

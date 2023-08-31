@@ -51,7 +51,7 @@ Feature: Number of Damaged Parcels
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator verifies that the following details are displayed on the modal under the table:"<TableName>"
       | Ticket Status | CREATED |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order/{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verifies that recovery tickets page is opened on clicking arrow button
     And Operator verifies that the url for recovery tickets page is loaded with tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
 
@@ -543,7 +543,7 @@ Feature: Number of Damaged Parcels
     And Operator searches for the order details in the table:"<ModalName>" by applying the following filters:
       | Tracking ID                                |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order/KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
     Examples:
       | HubName      | HubId      | TileName        | ModalName       | LastScannedEvent   | TicketType | TicketSubType      | OrderOutcomeName        | OrderOutcome          | TicketStatus |

@@ -491,7 +491,7 @@ Feature: Pricing Scripts V2
       | name        | empty                                                                                                                                                                                                                                                                                                                        |
       | description | empty                                                                                                                                                                                                                                                                                                                        |
       | source      | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
-    When Operator verifies Save Draft button is inactive
+    When Operator verifies Save Draft button is inactive in Pricing Script Page
     Then Operator clicks Check Syntax
     Then Operator clicks Verify Draft
     Then Operator verify error message
@@ -503,7 +503,7 @@ Feature: Pricing Scripts V2
       | name        | empty                                                                                                                                                                                                                                                                                                                        |
       | description | Test Script                                                                                                                                                                                                                                                                                                                  |
       | source      | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
-    When Operator verifies Save Draft button is inactive
+    When Operator verifies Save Draft button is inactive in Pricing Script Page
     Then Operator clicks Check Syntax
     Then Operator clicks Verify Draft
     Then Operator verify error message

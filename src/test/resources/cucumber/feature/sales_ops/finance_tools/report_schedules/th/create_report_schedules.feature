@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedules @CreateReportSchedulesTH
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedulesTH @CreateReportSchedulesTH
 
 Feature: Create Report Schedules - TH
 
@@ -11,13 +11,13 @@ Feature: Create Report Schedules - TH
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Weekly                                                         |
-      | day            | Monday                                                         |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | SHIPPER                                                        |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Weekly                                                                             |
+      | day            | Monday                                                                             |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | SHIPPER                                                                            |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully

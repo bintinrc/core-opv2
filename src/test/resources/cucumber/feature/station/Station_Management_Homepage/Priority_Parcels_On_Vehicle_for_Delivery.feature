@@ -5,7 +5,7 @@ Feature: Priority Parcels On Vehicle for Delivery
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @Happypath @ArchiveRoute
+  @ForceSuccessOrder @Happypath @ArchiveRoute @HighPriority
   Scenario Outline: View Priority Parcel on Vehicle for Delivery (uid:bd22c933-b02b-4302-b086-9336148dc9a8)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -53,7 +53,7 @@ Feature: Priority Parcels On Vehicle for Delivery
       | HubName      | HubId      | TileName                                 | ModalName                   |
       | {hub-name-5} | {hub-id-5} | Priority parcels on vehicle for delivery | Priority Parcels on Vehicle |
 
-  @ForceSuccessOrder @Happypath @ArchiveRoute
+  @ForceSuccessOrder @Happypath @ArchiveRoute @MediumPriority
   Scenario Outline: Priority Parcel on Vehicle for Delivery Number is Decreased (uid:01b34681-796b-432a-af31-33fb8c2cf930)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
