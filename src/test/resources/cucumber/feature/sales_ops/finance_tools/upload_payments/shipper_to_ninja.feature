@@ -315,14 +315,14 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 10 seconds
-#    # Create Payment
+    # Create Payment
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | netsuite_id  | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
       | <account_id> | {gradle-current-date-yyyy-MM-dd} | <amount> | <transaction_no>   | <type>           | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
     Then Operator verifies csv file is successfully uploaded on the Upload Payments page
     Then Operator waits for 10 seconds
-#    # Verify shipper 1
+    # Verify shipper 1
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
       | column            | expected_value                                                                             |
@@ -378,7 +378,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source          | <source> |
       | overall_balance | 0.0      |
       | logs            | 4.23,0.0 |
-   # Verify shipper 3
+    # Verify shipper 3
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
       | column            | expected_value                                                                             |
@@ -431,7 +431,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
-#Shipper 2
+    #Shipper 2
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |

@@ -98,7 +98,6 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
     retryIfAssertionErrorOccurred(() -> {
-      System.out.println("NADEERA:" + script.getName());
       searchTableDraftsByScriptName(script.getName());
       waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {

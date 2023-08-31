@@ -71,7 +71,6 @@ Feature: Order Billing - Non Terminated Orders
     Then Operator verifies the order with status 'Arrived at Distribution Point' is not displayed on SSB report
 
 
-  #@nad
   @ArchiveRouteCommonV2 @e2e
   Scenario: Selected Shipper - Generate "SHIPPER" Success Billing Report - `Arrived at Distribution Point` to `Completed` Order (uid:79e44d8c-6b4a-4ce7-86d4-b5a1525c36fb)
     Given API Order - Shipper create multiple V4 orders using data below:
