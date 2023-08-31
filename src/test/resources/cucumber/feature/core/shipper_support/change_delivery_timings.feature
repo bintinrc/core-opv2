@@ -187,8 +187,8 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-previous-2-day-yyyy-MM-dd}    |
-      | endDate    | {gradle-previous-2-day-yyyy-MM-dd}    |
+      | startDate  | {date: 2 days ago, YYYY-MM-dd}        |
+      | endDate    | {date: 2 days ago, YYYY-MM-dd}        |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery date cannot be before today's date |
