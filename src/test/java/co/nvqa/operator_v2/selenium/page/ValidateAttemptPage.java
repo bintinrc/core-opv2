@@ -355,17 +355,17 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   public void validateLatitudeLongitude(String latitude, String logitude) {
     String latitudeXpath = f(
-        "//div[text()='Attempt Lat Long']//parent::div//following-sibling::div[text()='%s']",
+        "//div[text()='Attempt Lat Long']//parent::div//following::div[text()='%s']",
         latitude);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(latitudeXpath)).isDisplayed())
         .as(f("Validation for latitude Text : %s", latitude))
         .isTrue();
 
     String logitudeXpath = f(
-        "//div[text()='Attempt Lat Long']//parent::div//following-sibling::div[text()='%s']",
+        "//div[text()='Attempt Lat Long']//parent::div//following::div[text()='%s']",
         logitude);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(logitudeXpath)).isDisplayed())
-        .as(f("Validation for logitude Text : %s", logitude))
+        .as(f("Validation for longitude Text : %s", logitude))
         .isTrue();
   }
 
@@ -386,17 +386,17 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   public void validateAddress(String address1, String address2, String postcode) {
     String address1Xpath = f(
-        "//div[text()='Full Address']//parent::div//following-sibling::div[text()='%s']", address1);
+        "//div[text()='Full Address']//parent::div//following::div[text()='%s']", address1);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(address1Xpath)).isDisplayed())
         .as(f("Validation for address1 Text : %s", address1))
         .isTrue();
     String address2Xpath = f(
-        "//div[text()='Full Address']//parent::div//following-sibling::div[text()='%s']", address2);
+        "//div[text()='Full Address']//parent::div//following::div[text()='%s']", address2);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(address2Xpath)).isDisplayed())
         .as(f("Validation for address1 Text : %s", address2))
         .isTrue();
     String postCodeXpath = f(
-        "//div[text()='Full Address']//parent::div//following-sibling::div[text()='%s']", postcode);
+        "//div[text()='Full Address']//parent::div//following::div[text()='%s']", postcode);
     Assertions.assertThat(getWebDriver().findElement(By.xpath(postCodeXpath)).isDisplayed())
         .as(f("Validation for postcode Text : %s", postcode))
         .isTrue();

@@ -176,7 +176,7 @@ Feature: Ageing Parcels In Hub
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID                      |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order-v2?id={KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" and edit order page is loaded with order id "order/{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
     Examples:
       | HubName       | HubId       | TileName              | ModalName             |
