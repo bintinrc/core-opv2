@@ -14,134 +14,134 @@ Feature: Change Delivery Timings
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-current-date-yyyy-MM-dd}      |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}        |
+      | startDate  | {date: 0 days next, YYYY-MM-dd}       |
+      | endDate    | {date: 1 days next, YYYY-MM-dd}       |
       | timewindow | 0                                     |
     Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated      |
       | bottom | Change delivery timings |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
+      | startDateTime | {date: 0 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-current-date-yyyy-MM-dd}      |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}        |
+      | startDate  | {date: 0 days next, YYYY-MM-dd}       |
+      | endDate    | {date: 1 days next, YYYY-MM-dd}       |
       | timewindow | null                                  |
     Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated      |
       | bottom | Change delivery timings |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
+      | startDateTime | {date: 0 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Tracking ID
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | trackingId | INVALID_TRACKING_ID              |
-      | startDate  | {gradle-current-date-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
-      | timewindow | -1                               |
+      | trackingId | INVALID_TRACKING_ID             |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} |
+      | endDate    | {date: 1 days next, YYYY-MM-dd} |
+      | timewindow | -1                              |
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
   @ArchiveRouteCommonV2
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State
     And API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 0 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator go to menu Shipper Support -> Change Delivery Timings
     And Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-current-date-yyyy-MM-dd}      |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}        |
+      | startDate  | {date: 0 days next, YYYY-MM-dd}       |
+      | endDate    | {date: 1 days next, YYYY-MM-dd}       |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Not allowed to update order after completion. |
     And Operator click Close button on Change Delivery Timings page
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00 |
+      | startDateTime | {date: 1 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{date: 0 days next, YYYY-MM-dd}","pickup_timeslot":{"start_time":"09:00","end_time":"22:00"},"delivery_start_date":"{date: 1 days next, YYYY-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
     And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | startDate  |                                            |
-      | endDate    | {gradle-current-date-yyyy-MM-dd}           |
+      | endDate    | {date: 0 days next, YYYY-MM-dd}            |
       | timewindow | 3                                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00 |
+      | startDateTime | {date: 1 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 0 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | startDate  | {gradle-next-2-day-yyyy-MM-dd}             |
-      | endDate    | {gradle-current-date-yyyy-MM-dd}           |
+      | startDate  | {date: 2 days next, YYYY-MM-dd}            |
+      | endDate    | {date: 0 days next, YYYY-MM-dd}            |
       | timewindow | 0                                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00 |
+      | startDateTime | {date: 1 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{gradle-next-2-day-yyyy-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{date: 1 days next, YYYY-MM-dd}","pickup_timeslot":{"start_time":"09:00","end_time":"22:00"},"delivery_start_date":"{date: 2 days next, YYYY-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
     And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
@@ -149,28 +149,28 @@ Feature: Change Delivery Timings
       | timewindow | 0                                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-next-2-day-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-2-day-yyyy-MM-dd} 22:00:00 |
+      | startDateTime | {date: 2 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 2 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Order Tagged to DP
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And API Core - Operator tag to dp for the order:
-      | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{gradle-next-1-day-yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{gradle-next-1-day-yyyy-MM-dd}", "end_date": "{gradle-next-1-day-yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{gradle-next-1-day-yyyy-MM-dd}" } } |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                       |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                               |
+      | request    | { "add_to_route": null, "dp_tag": { "dp_id": {dp-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, YYYY-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, YYYY-MM-dd}", "end_date": "{date: 1 days next, YYYY-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, YYYY-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                           |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                                   |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-current-date-yyyy-MM-dd}      |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}        |
+      | startDate  | {date: 0 days next, YYYY-MM-dd}       |
+      | endDate    | {date: 1 days next, YYYY-MM-dd}       |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is assigned to a DP! Not allowed to change delivery timings. |
@@ -178,15 +178,17 @@ Feature: Change Delivery Timings
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Past Date
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {gradle-previous-2-day-yyyy-MM-dd}    |
-      | endDate    | {gradle-previous-2-day-yyyy-MM-dd}    |
+      | startDate  | {date: 2 days ago, YYYY-MM-dd}        |
+      | endDate    | {date: 2 days ago, YYYY-MM-dd}        |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery date cannot be before today's date |
@@ -194,19 +196,19 @@ Feature: Change Delivery Timings
 
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads CSV file without submit on Change Delivery Timings page:
-      | trackingId                            | startDate                        | endDate                        | timewindow |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | {gradle-current-date-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | 0          |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | {gradle-current-date-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | 0          |
+      | trackingId                            | startDate                       | endDate                         | timewindow |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | {date: 0 days next, YYYY-MM-dd} | {date: 1 days next, YYYY-MM-dd} | 0          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | {date: 0 days next, YYYY-MM-dd} | {date: 1 days next, YYYY-MM-dd} | 0          |
     And Operator waits for 5 seconds
     And API Core - Operator delete order with order id "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator waits for 5 seconds
@@ -219,18 +221,18 @@ Feature: Change Delivery Timings
       | bottom | Change delivery timings |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 12:00:00   |
+      | startDateTime | {date: 0 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
