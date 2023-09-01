@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedules @CreateReportSchedulesID
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @ReportSchedulesID @CreateReportSchedulesID
 
 Feature: Create Report Schedules - ID
 
@@ -11,13 +11,13 @@ Feature: Create Report Schedules - ID
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | SHIPPER                                                        |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | SHIPPER                                                                            |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully
 
@@ -27,14 +27,14 @@ Feature: Create Report Schedules - ID
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Weekly                                                         |
-      | day            | Monday                                                         |
-      | reportFor      | Select By Script IDs                                           |
-      | scriptIds      | {pricing-script-id} - {pricing-script-name}                    |
-      | fileGroup      | SCRIPT                                                         |
-      | reportTemplate | {csv-template}                                                 |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Weekly                                                                             |
+      | day            | Monday                                                                             |
+      | reportFor      | Select By Script IDs                                                               |
+      | scriptIds      | {pricing-script-id} - {pricing-script-name}                                        |
+      | fileGroup      | SCRIPT                                                                             |
+      | reportTemplate | {csv-template}                                                                     |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     And Operator verify report schedule is created successfully

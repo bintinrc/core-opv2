@@ -446,8 +446,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     String xpathExpression = "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.name']";
     waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
-    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
-    sendKeys(xpathExpression, scriptName);
+    if (!getAttribute(xpathExpression, "value").equals(scriptName)) {
+      sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+      sendKeys(xpathExpression, scriptName);
+    }
   }
 
   public String getTextOnTableDrafts(int rowNumber, String columnDataClass) {
@@ -464,8 +466,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     String xpathExpression = "//div[@aria-hidden='false' and contains(@id,'active-scripts')]//input[@data-testid='searchInput.name']";
     waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
-    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
-    sendKeys(xpathExpression, scriptName);
+    if (!getAttribute(xpathExpression, "value").equals(scriptName)) {
+      sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+      sendKeys(xpathExpression, scriptName);
+    }
   }
 
   public void searchTableActiveScripts(String searchBy, String scriptName) {
@@ -483,8 +487,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
         searchBy);
     waitUntilVisibilityOfElementLocated(xpathExpression);
     click(xpathExpression);
-    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
-    sendKeys(xpathExpression, scriptName);
+    if (!getAttribute(xpathExpression, "value").equals(scriptName)) {
+      sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+      sendKeys(xpathExpression, scriptName);
+    }
   }
 
   public String getTextOnTableActiveScripts(int rowNumber, String columnDataClass) {

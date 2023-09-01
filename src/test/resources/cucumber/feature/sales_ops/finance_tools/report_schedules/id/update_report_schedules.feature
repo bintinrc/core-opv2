@@ -11,18 +11,18 @@ Feature: Update Report Schedules - ID
     And Operator clicks create new schedule button
     And Create report scheduling page is loaded
     Then Operator creates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | frequency      | Monthly                                                        |
-      | reportFor      | All Shippers                                                   |
-      | fileGroup      | ALL                                                            |
-      | reportTemplate | {default-csv-template}                                         |
-      | emails         | {qa-email-address}                                             |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}}             |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |
+      | frequency      | Monthly                                                                            |
+      | reportFor      | All Shippers                                                                       |
+      | fileGroup      | ALL                                                                                |
+      | reportTemplate | {default-csv-template}                                                             |
+      | emails         | {qa-email-address}                                                                 |
     And Operator verify create report schedule success message
     Then Operator search report schedule and got to edit page
     Then Operator updates report scheduling with below data
-      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-Update                                                                                      |
-      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-Update                                                                          |
+      | name           | Dummy-Report-{gradle-current-date-yyyyMMddHHmmsss}-Update-{{6-random-digits}}                                                                  |
+      | description    | Dummy-Report-Description-{gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} -Update                                                     |
       | frequency      | Weekly                                                                                                                                         |
       | day            | Monday                                                                                                                                         |
       | reportFor      | Select By Parent Shipper                                                                                                                       |

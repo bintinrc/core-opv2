@@ -308,7 +308,10 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
-    Then Operator waits for 1 seconds
+    Then Operator waits for 2 seconds
+    Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
+    Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is added to billing_qa_gl.priced_orders
+    Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[3]}" is added to billing_qa_gl.priced_orders
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 10 seconds
@@ -318,7 +321,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | netsuite_id  | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
       | <account_id> | {gradle-current-date-yyyy-MM-dd} | <amount> | <transaction_no>   | <type>           | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
     Then Operator verifies csv file is successfully uploaded on the Upload Payments page
-    Then Operator waits for 7 seconds
+    Then Operator waits for 10 seconds
     # Verify shipper 1
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
@@ -375,7 +378,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | source          | <source> |
       | overall_balance | 0.0      |
       | logs            | 4.23,0.0 |
-   # Verify shipper 3
+    # Verify shipper 3
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
       | column            | expected_value                                                                             |
@@ -427,7 +430,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
-     #Shipper 2
+    Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
+    #Shipper 2
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
@@ -443,6 +447,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
     Then Operator waits for 2 seconds
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
@@ -465,7 +470,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | {KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId} | {gradle-current-date-yyyy-MM-dd} | <amount>   | <transaction_no>   | <type>           | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
       | {KEY_LIST_OF_CREATED_SHIPPERS[3].legacyId} | {gradle-current-date-yyyy-MM-dd} | <amount_2> | <transaction_no_2> | <type_2>         | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
     Then Operator verifies csv file is successfully uploaded on the Upload Payments page
-    Then Operator waits for 6 seconds
+    Then Operator waits for 10 seconds
     # Verify shipper 1
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
