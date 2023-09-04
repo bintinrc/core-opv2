@@ -2,38 +2,45 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.driver.client.DriverManagementClient;
 import co.nvqa.common.driver.cucumber.DriverKeyStorage;
-import co.nvqa.common.utils.JsonUtils;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
-import co.nvqa.commons.model.core.*;
+import co.nvqa.commons.model.core.Cod;
+import co.nvqa.commons.model.core.CodInbound;
+import co.nvqa.commons.model.core.CreateDriverV2Request;
+import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.core.GetDriverResponse;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.SalesPerson;
+import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
-import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.driver.DriverFilter;
-import co.nvqa.commons.model.sort.nodes.Node;
-import co.nvqa.commons.model.sort.nodes.Node.NodeType;
 import co.nvqa.operator_v2.model.ContactType;
-import co.nvqa.operator_v2.model.VehicleType;
-import co.nvqa.operator_v2.model.*;
+import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.model.RouteCashInboundCod;
+import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import javax.inject.Inject;
 import lombok.Getter;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -54,41 +61,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void init() {
   }
 
-//  TODO move to common-driver
-  @After("@DeleteVehicleTypes")
-  public void deleteVehicleTypes() {
-    VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
-    if (vehicleType != null) {
-      if (vehicleType.getId() != null) {
-        try {
-          getVehicleTypeClient().delete(vehicleType.getId());
-        } catch (Throwable ex) {
-          LOGGER.warn(f("Could not delete Vehicle Type [%s]", ex.getMessage()));
-        }
-      } else {
-        LOGGER.warn(
-            f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
-      }
-    }
-  }
 
-  //  TODO move to common-shipper
-  @After("@DeleteAddress")
-  public void deleteAddress() {
-    Addressing addressing = get(KEY_CREATED_ADDRESSING);
-
-    if (addressing != null) {
-      try {
-        List<co.nvqa.commons.model.addressing.Address> addresses = getAddressingClient()
-            .searchAddresses(StandardTestConstants.NV_SYSTEM_ID, addressing.getBuildingNo());
-        if (CollectionUtils.isNotEmpty(addresses)) {
-          getAddressingClient().deleteAddress(addresses.get(0).getId());
-        }
-      } catch (Throwable ex) {
-        LOGGER.warn("Could not delete created address");
-      }
-    }
-  }
 
   //  TODO move to common-lighthouse
   @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
@@ -184,50 +157,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             contactType.getName()));
       }
     }
-  }
-
-  //  TODO move to common-dp
-  @Given("API Operator create new DP Partner with the following attributes:")
-  public void apiOperatorCreateNewDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
-    DpPartner dpPartner = new DpPartner(data);
-    Map<String, Object> responseBody = getDpClient().createPartner(toJsonSnakeCase(dpPartner));
-    dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
-    dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
-    put(KEY_DP_PARTNER, dpPartner);
-  }
-
-  //  TODO move to common-dp
-  @When("API Operator add new DP for the created DP Partner with the following attributes:")
-  public void operatorAddNewDpForTheDpPartnerWithTheFollowingAttributes(Map<String, String> data) {
-    Partner dpPartner = get(KEY_DP_PARTNER);
-    Map<String, String> mapOfDynamicVariable = new HashMap<>();
-    mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
-    mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
-    String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
-    Dp dp = new Dp();
-    dp.fromJson(JsonUtils.getDefaultSnakeCaseMapper(), json);
-    Map<String, Object> responseBody = getDpClient().createDp(dpPartner.getId(), json);
-    dp.setId(Long.parseLong(responseBody.get("id").toString()));
-    dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
-    put(KEY_DISTRIBUTION_POINT, dp);
-    put(KEY_NEWLY_CREATED_DP_ID, dp.getId());
-  }
-
-  //  TODO move to common-dp
-  @When("API Operator add new DP User for the created DP with the following attributes:")
-  public void operatorAddDpUserForTheCreatedDpWithTheFollowingAttributes(Map<String, String> data) {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
-    Dp dp = get(KEY_DISTRIBUTION_POINT);
-    Map<String, String> mapOfDynamicVariable = new HashMap<>();
-    mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
-    mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
-    String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
-    DpUser dpUser = new DpUser();
-    dpUser.fromJson(JsonUtils.getDefaultCamelCaseMapper(), json);
-    Map<String, Object> responseBody = getDpmsClient()
-        .createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);
-    dpUser.setId(Long.parseLong(responseBody.get("id").toString()));
-    put(KEY_DP_USER, dpUser);
   }
 
   //  TODO move to common-dp
@@ -346,47 +275,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     thirdPartyShipper.setId(apiData.getId());
   }
 
-
-  //  TODO move to common-driver
-  @Given("^API Operator gets data of created Vehicle Type$")
-  public void apiOperatorGetsDataOfCreatedVehicleType() {
-    VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
-    List<co.nvqa.commons.model.core.VehicleType> vehicleTypes = getVehicleTypeClient()
-        .getAllVehicleType().getData().getVehicleTypes();
-    co.nvqa.commons.model.core.VehicleType apiData = vehicleTypes.stream()
-        .filter(type -> StringUtils.equals(type.getName(), vehicleType.getName()))
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException(
-            f("Vehicle Type with name [%s] was not found", vehicleType.getName())));
-    vehicleType.setId(apiData.getId());
-  }
-
-
-  //  TODO to deprecate, not in use
-  @Given("^API Operator retrieve information about Bulk Order with ID \"(.+)\"$")
-  public void apiOperatorRetrieveBulkOrderIdInfo(long bulkId) {
-    BulkOrderInfo bulkOrderInfo = getOrderClient().retrieveBulkOrderInfo(bulkId);
-    put(KEY_CREATED_BULK_ORDER_INFO, bulkOrderInfo);
-  }
-
-
-  //  TODO to deprecate, not in use
-  @Given("API Operator enable Set Aside using data below:")
-  public void apiOperatorEnableSetAside(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    SetAsideRequest request = new SetAsideRequest();
-    request.fromMap(data);
-    getSetAsideClient().enable(request);
-  }
-
-  //  TODO to deprecate, not in use
-  @Given("API Operator retrieve information about Bulk Order")
-  public void apiOperatorRetrieveBatchOrderIdInfo() {
-    BatchOrderInfo batchOrderInfo = getOrderClient()
-        .retrieveBatchOrderInfo(Long.parseLong(get(KEY_CREATED_BATCH_ORDER_ID)));
-    put(KEY_CREATED_BATCH_ORDER_INFO, batchOrderInfo);
-  }
-
   // TODO move to common-lighthouse
   @Given("API Operator creates new Shipper Pickup Filter Template using data below:")
   public void apiOperatorCreatesShipperPickupFilterTemplate(Map<String, String> data) {
@@ -475,15 +363,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 
-  // TODO move to common-sort
-  @Given("^API Operator create Middle Tier sort node:$")
-  public void apiOperatorCreateSortNode(Map<String, String> data) {
-    Node node = new Node(resolveKeyValues(data));
-    node.setType(new NodeType(10));
-    node = getNodesClient().createMiddleTierNode(node);
-    put(KEY_CREATED_MIDDLE_TIER_NAME, node.getName());
-    put(KEY_CREATED_MIDDLE_TIER_NODE, node);
-  }
+
 
   // TODO move to common-core
   @Given("API Operator create sales person:")

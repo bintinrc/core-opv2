@@ -3,8 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
-import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +17,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +36,6 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
   @FindBy(css = ".ant-notification-notice")
   public List<AntNotification> noticeNotifications;
 
-  @FindBy(css = ".ant-message-notice")
-  public List<AntNotice> notices;
 
   public SimpleReactPage(WebDriver webDriver) {
     super(webDriver);
@@ -53,32 +47,6 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
 
   public void waitUntilLoaded() {
     waitUntilLoaded(10);
-  }
-
-  public String waitAndGetNoticeText(String message) {
-    return waitAndGetNoticeText(message, false);
-  }
-
-  public String waitAndGetNoticeText(String message, boolean waitUntilInvisible) {
-    Wait<List<AntNotice>> fWait = new FluentWait<>(notices)
-        .withTimeout(Duration.ofSeconds(15))
-        .pollingEvery(Duration.ofMillis(100))
-        .withMessage("Notice with [" + message + "] text was not found")
-        .ignoring(NoSuchElementException.class);
-    String result = fWait.until(notices -> notices.stream()
-        .map(AntNotice::getNoticeMessage)
-        .filter(noticeMessage -> noticeMessage.matches(message))
-        .findFirst()
-        .orElse(null));
-    if (waitUntilInvisible) {
-      try {
-        setImplicitTimeout(0);
-        fWait.until(notices -> notices.size() == 0);
-      } finally {
-        resetImplicitTimeout();
-      }
-    }
-    return result;
   }
 
   public void waitUntilLoaded(int timeoutInSeconds) {

@@ -14,7 +14,7 @@ import org.apache.commons.text.translate.CsvTranslators;
 /**
  * @author Sergey Mishanin
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public class ReservationInfo extends DataEntity<ReservationInfo> {
 
   private static final CsvTranslators.CsvEscaper CSV_ESCAPER = new CsvTranslators.CsvEscaper();
