@@ -9,7 +9,7 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 50;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 50;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
-    Then Operator verifies toast message "Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ALL_ACCESS, CAMPAIGN_ADMIN)" in Campaign Page
+    Then Operator verifies error message is "Access token verification failed: insufficient permissions (required scopes: INTERNAL_SERVICE, ALL_ACCESS, CAMPAIGN_ADMIN)"

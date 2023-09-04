@@ -10,8 +10,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -21,8 +21,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           |Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -32,8 +32,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue |discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10.5;         |Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10.5;         | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -43,8 +43,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType                                                     | serviceLevel                                                          | discountValue             |discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document | Standard;Express;Same Day;Next Day;Standard;Express;Same Day;Next Day | 5;1.2;3.2;2;3.1;4;1.9;2.2 | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType                                                     | serviceLevel                                                          | discountValue             | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document | Standard;Express;Same Day;Next Day;Standard;Express;Same Day;Next Day | 5;1.2;3.2;2;3.1;4;1.9;2.2 | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -53,8 +53,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on cancel button
     Then Operator verifies campaign is not created
 
@@ -70,8 +70,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription                             | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | {campaign-description-more-than-255-characters} | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription                             | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | {campaign-description-more-than-255-characters} | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     Then Operator verifies campaign description is not exceeded 255
 
   Scenario: Create New Campaign - Empty Campaign Name (uid:1dd4d130-d4ba-41e5-b991-57b80c19e2f8)
@@ -88,8 +88,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     And Operator clicks on cancel button
     And Operator click Create new campaign button in Discounts & Promotion Page
@@ -97,14 +97,14 @@ Feature: Create Campaign
       | campaignName                            | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
       | {KEY_CAMPAIGN_NAME_OF_CREATED_CAMPAIGN} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
-    Then Operator verifies toast error for duplicate campaigns
+    Then Operator verifies error message is "name already exists"
 
   Scenario: Create New Campaign - Not Select Start Date (uid:d471135c-961e-4501-aa0f-76f2f7063a35)
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   |           | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   |           | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-start-date-empty"
 
@@ -112,8 +112,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} |         | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} |         | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-end-date-empty"
 
@@ -121,8 +121,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-2-day-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-2-day-yyyy-MM-dd} | {gradle-next-1-day-yyyy-MM-dd} | Parcel;     | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-end-date-is-before-start-date"
 
@@ -130,8 +130,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} |             | Standard;    | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} |             | Standard;    | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-service-type-empty"
 
@@ -139,8 +139,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     |              | 5;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     |              | 5;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-service-level-empty"
 
@@ -148,8 +148,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    |               | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    |               | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-empty"
 
@@ -157,8 +157,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 1.111;        | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 1.111;        | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-more_than-2-decimal-points"
 
@@ -166,8 +166,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 0;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | 0;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-0"
 
@@ -175,8 +175,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | -;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | -;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-characters"
 
@@ -184,8 +184,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | e;            | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | e;            | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-alphabets"
 
@@ -193,8 +193,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | -1;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;     | Standard;    | -1;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-negative"
 
@@ -202,8 +202,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;     | Standard;    | 101;          | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;     | Standard;    | 101;          | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-discount-value-more-than-100%"
 
@@ -211,8 +211,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} |             |              |               | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} |             |              |               | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies validation error message for "campaign-service-type-empty"
     And Operator verifies validation error message for "campaign-service-level-empty"
@@ -222,8 +222,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | serviceType   | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;Parcel | Standard;Standard | 10;10         | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | serviceType   | serviceLevel      | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Parcel;Parcel | Standard;Standard | 10;10         | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     And Operator verifies validation error message for "campaign-same-rule"
 
@@ -232,8 +232,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType                                                      | serviceLevel                                                           | discountValue              | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document; | Standard;Express;Next Day;Same Day;Standard;Express;Same Day;Next Day; | 5;1.2;3.2;2;3.1;4;1.9;2.2; | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType                                                      | serviceLevel                                                           | discountValue              | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Percentage       | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document; | Standard;Express;Next Day;Same Day;Standard;Express;Same Day;Next Day; | 5;1.2;3.2;2;3.1;4;1.9;2.2; | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page

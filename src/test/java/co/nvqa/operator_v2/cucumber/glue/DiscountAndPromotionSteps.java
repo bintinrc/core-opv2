@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.model.Campaign;
 import co.nvqa.operator_v2.selenium.page.CampaignCreateEditPage;
 import co.nvqa.operator_v2.selenium.page.DiscountAndPromotionPage;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.ordercreate.util.OrderTestUtils.generateRandomNumbersString;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT_SNS_1;
 
@@ -51,6 +53,10 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     List<Campaign> campaignDetails = convertDataTableToListWhereDataTableHasListOfData(dt,
         Campaign.class);
     Campaign campaignDetail = campaignDetails.get(0);
+    if (Objects.nonNull(campaignDetail.getCampaignName())) {
+      campaignDetail.setCampaignName(campaignDetail.getCampaignName()
+          .replace("{{6-random-digits}}", generateRandomNumbersString(6)));
+    }
     put(KEY_OBJECT_OF_CREATED_CAMPAIGN, campaignDetail);
     put(KEY_CAMPAIGN_NAME_OF_CREATED_CAMPAIGN, campaignDetail.getCampaignName());
     setCampaignData(campaignDetail);
@@ -448,7 +454,6 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   @And("Operator clicks on campaign with name {string}")
   public void operatorClicksOnCampaignWithName(String name) {
     discountAndPromotionsPage.inFrame(page -> {
-
       pause10s();
       pause10s();
       discountAndPromotionsPage.selectCampaignWithName(name);
@@ -477,7 +482,12 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @And("Operator verifies {string} (input)(select)(picker) field is {string}")
+  @ParameterType("input|select|picker")
+  public String campaignFieldName(String campaignFieldName) {
+    return campaignFieldName;
+  }
+
+  @And("Operator verifies {string} {campaignFieldName} field is {string}")
   public void operatorVerifiesValueIsDisabled(String fieldName, String fieldType,
       String isClickable) {
     discountAndPromotionsPage.inFrame(page -> {
@@ -497,7 +507,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @And("^Operator verifies Campaign is (.+)$")
+  @And("Operator verifies Campaign is {word}")
   public void operatorVerifiesCampaignIs(String campaignStatus) {
     discountAndPromotionsPage.inFrame(page -> {
       String actualCampaignStatus = discountAndPromotionsPage.getCampaignStatus();
@@ -507,7 +517,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     });
   }
 
-  @And("^Operator verifies (.+) button is (.+)$")
+  @And("Operator verifies {} button is {} in Campaign page")
   public void operatorVerifiesButtonIs(String buttonName, String buttonStatus) {
     discountAndPromotionsPage.inFrame(page -> {
       Assertions.assertThat(discountAndPromotionsPage.verifyButtonStatus(buttonName, buttonStatus))

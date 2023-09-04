@@ -11,8 +11,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -28,8 +28,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -44,8 +44,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -62,8 +62,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -81,8 +81,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -103,17 +103,17 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
     When Operator clicks on Shippers Add button
     Then Operator verifies 'Add Shipper' modal is displayed
     And Operator verifies "Bulk upload" is default selected tab
-    And Operator verifies Browse button is not disabled
-    And Operator verifies Cancel button is not disabled
-    And Operator verifies Upload button is not disabled
+    And Operator verifies Browse button is not disabled in Campaign page
+    And Operator verifies Cancel button is not disabled in Campaign page
+    And Operator verifies Upload button is not disabled in Campaign page
     When Operator uploads csv file with "9999999"
     When Operator clicks on upload button
     Then Operator verifies toast message "No shipper was selected." in Campaign Page
@@ -125,20 +125,20 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
     When Operator clicks on Shippers Remove button
     Then Operator verifies "Remove shipper" modal is displayed
     And Operator verifies "Bulk upload" is default selected tab
-    And Operator verifies Browse button is not disabled
-    And Operator verifies Cancel button is not disabled
-    And Operator verifies Upload button is not disabled
+    And Operator verifies Browse button is not disabled in Campaign page
+    And Operator verifies Cancel button is not disabled in Campaign page
+    And Operator verifies Upload button is not disabled in Campaign page
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
     When Operator clicks on upload button
-    Then Operator verifies toast message "Error when removing shippers" in Campaign Page
+    Then Operator verifies error message is "Error Message: unable to delete shipper(s) from campaign: invalid shipper(s)"
     Then Operator verifies Shipper count is "0 Shippers"
 
   @DeleteCampaign @DeleteNewlyCreatedShipper
@@ -147,8 +147,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -171,8 +171,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -193,8 +193,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -215,8 +215,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -230,7 +230,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Active-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID}"
     When Operator clicks on upload button
@@ -240,7 +241,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Bulk Upload - CSV file contains valid and invalid shipper
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Pending-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator uploads csv file with "{KEY_LEGACY_SHIPPER_ID};9999999"
     When Operator clicks on upload button
@@ -250,7 +252,8 @@ Feature: Add Remove Shippers
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    And Operator clicks on first "Active" campaign
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Pending-URL}"
+    And Operator refresh page
     When Operator clicks on Shippers Add button
     When Operator clicks on Search by Shipper tab
     Then Operator search using "Name" and select the created shipper
@@ -273,8 +276,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -289,8 +292,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -305,8 +308,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -321,8 +324,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -338,8 +341,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -360,8 +363,8 @@ Feature: Add Remove Shippers
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create new campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
+      | campaignName                                                             | campaignDescription | startDate                      | endDate                        | discountOperator | serviceType | serviceLevel | discountValue | discountUsageQuantityPerShipper | discountUsagePeriod  |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss}-{{6-random-digits}} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-2-day-yyyy-MM-dd} | Flat rate        | Parcel;     | Standard;    | 10;           | Unlimited                       | Till end of campaign |
     When Operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -375,7 +378,7 @@ Feature: Add Remove Shippers
   Scenario: Partial Success Add Shippers when Campaign is active - Select Shippers - Bulk Upload
     Given API Operator create new 'normal' shipper
     Given Operator go to menu Shipper -> Discount & Promotions
-    Given Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/discount-and-promotions?id=12291"
+    Given Operator go to this URL "{QA-SO-Automation-Campaign-Active-URL}"
     And Operator refresh page
     And Operator verifies Campaign is Active
     When Operator clicks on Shippers Add button
@@ -384,7 +387,7 @@ Feature: Add Remove Shippers
     Then Operator verifies toast message "Error when adding 5653430: cannot add shipper: already exist in another campaign with overlapping date" in Campaign Page
     Then Operator verifies toast message "1 shippers have been successfully added. Error adding 1 shippers." in Campaign Page
 
-  @DeleteCampaign @DeleteNewlyCreatedShipper
+
   Scenario: Success Add Shippers when Campaign status is active - Select Shippers - Search by Shippers - Shipper Already in Another Pending Campaign - Start Date and End Date Not Overlapped
     Given Operator go to menu Shipper -> Discount & Promotions
     And Operator clicks on first "Active" campaign
