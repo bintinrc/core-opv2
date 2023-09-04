@@ -324,7 +324,17 @@ public class AllOrdersSteps extends AbstractSteps {
     } else {
       listOfTrackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     }
-    allOrdersPage.addToRoute(listOfTrackingIds, data.get("routeId"), data.get("tag"));
+    List<String> routeIds = splitAndNormalize(data.get("routeId"));
+    if (routeIds.size() == 1) {
+      allOrdersPage.addToRoute(listOfTrackingIds, routeIds.get(0), data.get("tag"));
+    } else {
+      allOrdersPage.fillAddToRouteForm(listOfTrackingIds, routeIds);
+      if (listOfTrackingIds.size() > 1) {
+        allOrdersPage.addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
+      } else {
+        allOrdersPage.addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+      }
+    }
   }
 
   @When("Operator fill Add Selected to Route form using Set To All:")

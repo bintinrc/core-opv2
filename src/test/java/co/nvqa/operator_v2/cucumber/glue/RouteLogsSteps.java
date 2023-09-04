@@ -1139,9 +1139,11 @@ public class RouteLogsSteps extends AbstractSteps {
     long start = new Date().getTime();
     boolean found;
     do {
+      LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
         String actualTop = toast.toastTop.getNormalizedText();
         String actualBottom = toast.toastBottom.getNormalizedText();
+        LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
         String expTop = finalData.get("top");
         if (StringUtils.isNotBlank(expTop)) {
           if (expTop.startsWith("^")) {
