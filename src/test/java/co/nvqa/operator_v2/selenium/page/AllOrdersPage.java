@@ -172,6 +172,9 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
 
+  @FindBy(css = ".bulk-action-progress")
+  public PageElement bulkActionProgress;
+
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
 
@@ -700,7 +703,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   }
 
   public void switchToEditOrderWindow(Long orderId) {
-    switchToOtherWindow("order-v2?id=" + orderId);
+    switchToOtherWindow("order/" + orderId);
     editOrderPage.waitWhilePageIsLoading(120);
   }
 

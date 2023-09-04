@@ -84,8 +84,9 @@ Feature: Cancel Order
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator uploads new mapping
-      | 3plShipperName | {3pl-shipper-name} |
-      | 3plShipperId   | {3pl-shipper-id}   |
+      | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | 3plShipperName | {3pl-shipper-name}                    |
+      | 3plShipperId   | {3pl-shipper-id}                      |
     When API Core - cancel order and check error:
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                                |
@@ -198,8 +199,8 @@ Feature: Cancel Order
     When Operator cancel order on Edit Order V2 page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) cancelled                        |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+      | top    | 1 order(s) cancelled                        |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page

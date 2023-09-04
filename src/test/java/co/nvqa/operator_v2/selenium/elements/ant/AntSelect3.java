@@ -80,6 +80,23 @@ public class AntSelect3 extends PageElement {
     }
   }
 
+  public void selectValue(String value, boolean isTraverse) {
+    if (!StringUtils.equals(value, getValue())) {
+      if (isTraverse) {
+        if (isReadOnlySearch()) {
+          traverseItem(value);
+        } else {
+          enterSearchTerm(value);
+        }
+        clickMenuItem(value);
+        pause500ms();
+        closeMenu();
+      } else {
+        selectValue(value);
+      }
+    }
+  }
+
   public void selectValues(Iterable<String> values) {
     clearValue();
     values.forEach(v -> {
@@ -163,6 +180,11 @@ public class AntSelect3 extends PageElement {
         + normalizeSpace(value) + "')]";
   }
 
+  private String getTailItemLocator() {
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']/div[contains(concat(' ',normalize-space(@class),' '),' ant-select-item ')][last()]";
+  }
+
   private String getItemValueLocator(String value) {
     return getListBoxLocator()
         + "//div[@class='rc-virtual-list-holder-inner']/div[div[contains(@class, 'ant-select-item-option-content')  and .//*[contains(text(), '"
@@ -218,12 +240,40 @@ public class AntSelect3 extends PageElement {
     }
   }
 
+
+  public boolean isReadOnlySearch() {
+    return "true".equals(searchInput.getAttribute("readonly"));
+  }
+
   public void enterSearchTerm(String value) {
     click();
     var readonly = searchInput.getAttribute("readonly");
     if (!"true".equals(readonly)) {
       searchInput.setValue(value);
       waitUntilLoaded();
+    }
+  }
+
+  public void traverseItem(String value) {
+    click();
+    String xpath = getItemContainsLocator(value);
+    String lastTailValue;
+    String currentTailValue = null;
+    while (true) {
+      lastTailValue = currentTailValue;
+      if (!isElementExistFast(xpath)) {
+        String tailXpath = getTailItemLocator();
+        WebElement tail = findElementByXpath(tailXpath);
+        currentTailValue = tail.getText();
+        if (currentTailValue.equals(lastTailValue)) {
+          break;
+        }
+        moveToElement(tail);
+      } else {
+        WebElement item = findElementByXpath(xpath);
+        moveToElement(item);
+        break;
+      }
     }
   }
 

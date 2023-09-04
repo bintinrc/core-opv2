@@ -169,7 +169,7 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
     WebElement notificationElement = findElementByXpath(notificationXpath);
     Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
         .isEqualTo(containsMessage);
-    waitUntilInvisibilityOfNotification(notificationXpath, false);
+    waitUntilInvisibilityOfNotification(containsMessage, false);
   }
 
   public static class AssignDriverModal extends AntModal {

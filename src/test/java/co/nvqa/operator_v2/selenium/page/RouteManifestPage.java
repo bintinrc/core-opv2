@@ -53,6 +53,13 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
   public PageElement routeId;
+  @FindBy(xpath = "//div[./div[.='Driver ID']]/div[2]")
+  public PageElement driverId;
+  @FindBy(xpath = "//div[./div[.='Driver Name']]/div[2]")
+  public PageElement driverName;
+
+  @FindBy(xpath = "//tr[./th[.='Pending']]/td")
+  public PageElement codCollectionPending;
 
   @FindBy(xpath = "//*[text()='Tracking ID(s)']/parent::th//input")
   public PageElement trackingIDFilter;

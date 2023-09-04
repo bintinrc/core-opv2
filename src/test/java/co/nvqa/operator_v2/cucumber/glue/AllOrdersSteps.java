@@ -521,6 +521,21 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.rtsMultipleOrderNextDay(resolveListOfTrackingIds);
   }
 
+  @When("Operator Mass-Revert RTS orders on All Orders Page:")
+  public void massRevertRts(List<String> listOfTrackingIds) {
+    List<String> resolveListOfTrackingIds = resolveValues(listOfTrackingIds);
+    if (CollectionUtils.isEmpty(resolveListOfTrackingIds)) {
+      throw new IllegalArgumentException(
+          "List of created Tracking Id should not be null or empty.");
+    }
+    allOrdersPage.clearFilterTableOrderByTrackingId();
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption("Mass-Revert RTS Selected");
+    if (allOrdersPage.bulkActionProgress.waitUntilVisible(5)) {
+      allOrdersPage.bulkActionProgress.waitUntilInvisible(5);
+    }
+  }
+
   @When("^Operator select 'Set RTS to Selected' action for found orders on All Orders page$")
   public void operatorSelectRtsActionForMultipleOrdersOnAllOrdersPage() {
     allOrdersPage.clearFilterTableOrderByTrackingId();
@@ -1005,6 +1020,14 @@ public class AllOrdersSteps extends AbstractSteps {
   public void downloadedCsvFileContainsCorrectOrdersAndMessage(String message) {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     allOrdersPage.verifyDownloadedCsv(trackingId, message);
+  }
+
+  @Then("Operator verify that revert_rts_tracking_ids CSV has correct details:")
+  public void verifyRevertRtsFile(List<String> trackingIds) {
+    String text = "Tracking ID\n" + StringUtils.join(resolveValues(trackingIds), "\n");
+    String fileName = "revert_rts_tracking_ids.csv";
+    String downloadedFile = allOrdersPage.getLatestDownloadedFilename(fileName);
+    allOrdersPage.verifyFileDownloadedSuccessfully(downloadedFile, text);
   }
 
   @Then("Operator apply Early pickup action and chooses {string} with {string}")

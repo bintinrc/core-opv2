@@ -33,7 +33,6 @@ import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -872,36 +871,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     if (data.containsKey("orderId")) {
       Assertions.assertThat(theLastInboundScan.getOrderId()).as("Order ID")
           .isEqualTo(Long.valueOf(data.get("orderId")));
-    }
-  }
-
-  @After(value = "@DeleteDpPartner")
-  public void deleteDpPartner() {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-    if (dpPartner != null) {
-      getDpJdbc().deleteDpPartner(dpPartner.getName());
-    }
-  }
-
-  @After(value = "@DeleteDpAndPartner")
-  public void deleteDp() {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-    if (dpPartner != null) {
-      getDpJdbc().deleteDp(dpPartner.getName());
-      getDpJdbc().deleteDpPartner(dpPartner.getName());
-    }
-  }
-
-  @After(value = "@DeleteDpUserDpAndPartner")
-  public void deleteDpUser() {
-    DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-    if (dpPartner != null) {
-      getDpJdbc().deleteDpUser(dpPartner.getName());
-      getDpJdbc().deleteDp(dpPartner.getName());
-      getDpJdbc().deleteDpPartner(dpPartner.getName());
     }
   }
 

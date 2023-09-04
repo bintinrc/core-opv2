@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Sergey Mishanin
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 @Getter
 @Setter
 @AllArgsConstructor

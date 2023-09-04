@@ -162,6 +162,18 @@ public class RouteManifestSteps extends AbstractSteps {
       assertions.assertThat(routeManifestPage.routeId.getText()).as("Route ID")
           .isEqualTo(data.get("routeId"));
     }
+    if (data.containsKey("codCollectionPending")) {
+      assertions.assertThat(routeManifestPage.codCollectionPending.getText()).as("COD Collection - Pending")
+          .isEqualTo(data.get("codCollectionPending"));
+    }
+    if (data.containsKey("driverId")) {
+      assertions.assertThat(routeManifestPage.driverId.getText()).as("Driver ID")
+          .isEqualTo(data.get("driverId"));
+    }
+    if (data.containsKey("driverName")) {
+      assertions.assertThat(routeManifestPage.driverName.getText()).as("Driver Name")
+          .isEqualTo(data.get("driverName"));
+    }
     assertions.assertAll();
   }
 
