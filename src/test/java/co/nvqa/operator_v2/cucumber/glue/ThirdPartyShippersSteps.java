@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 @ScenarioScoped
 public class ThirdPartyShippersSteps extends AbstractSteps {
 
+  private static final String KEY_CREATED_THIRD_PARTY_SHIPPER = "KEY_CREATED_THIRD_PARTY_SHIPPER";
+  private static final String KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED = "KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED";
   private ThirdPartyShippersPage thirdPartyShippersPage;
 
   public ThirdPartyShippersSteps() {
@@ -29,7 +31,7 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
         .left(String.valueOf(System.currentTimeMillis()), 8)); // Maximum character is 10.
   }
 
-  @When("^Operator create new Third Party Shippers$")
+  @When("Operator create new Third Party Shippers")
   public void operatorCreateNewThirdPartyShippers() {
     String uniqueString = StandardTestUtils.generateDateUniqueString();
     String name = f("TPS-%s", uniqueString);
@@ -45,13 +47,13 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
     put(KEY_CREATED_THIRD_PARTY_SHIPPER, thirdPartyShipper);
   }
 
-  @Then("^Operator verify the new Third Party Shipper is created successfully$")
+  @Then("Operator verify the new Third Party Shipper is created successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsCreatedSuccessfully() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyThirdPartyShipperIsCreatedSuccessfully(thirdPartyShipper);
   }
 
-  @When("^Operator update the new Third Party Shipper$")
+  @When("Operator update the new Third Party Shipper")
   public void operatorUpdateTheNewThirdPartyShipper() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
 
@@ -65,38 +67,38 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
     put(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED, thirdPartyShipperEdited);
   }
 
-  @Then("^Operator verify the new Third Party Shipper is updated successfully$")
+  @Then("Operator verify the new Third Party Shipper is updated successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsUpdatedSuccessfully() {
     ThirdPartyShipper thirdPartyShipperEdited = get(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED);
     thirdPartyShippersPage.verifyThirdPartyShipperIsUpdatedSuccessfully(thirdPartyShipperEdited);
   }
 
-  @When("^Operator delete the new Third Party Shipper$")
+  @When("Operator delete the new Third Party Shipper")
   public void operatorDeleteTheNewThirdPartyShipper() {
     ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
         KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.deleteThirdPartyShipper(thirdPartyShipper);
   }
 
-  @Then("^Operator verify the new Third Party Shipper is deleted successfully$")
+  @Then("Operator verify the new Third Party Shipper is deleted successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsDeletedSuccessfully() {
     ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
         KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyThirdPartyShipperIsDeletedSuccessfully(thirdPartyShipper);
   }
 
-  @Then("^Operator check all filters on Third Party Shippers page work fine$")
+  @Then("Operator check all filters on Third Party Shippers page work fine")
   public void operatorCheckAllFiltersOnThirdPartyShippersPageWork() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyAllFiltersWorkFine(thirdPartyShipper);
   }
 
-  @When("^Operator download Third Party Shippers CSV file$")
+  @When("Operator download Third Party Shippers CSV file")
   public void operatorDownloadThirdPartyShippersCsvFile() {
     thirdPartyShippersPage.downloadCsvFile();
   }
 
-  @When("^Operator verify Third Party Shippers CSV file downloaded successfully$")
+  @When("Operator verify Third Party Shippers CSV file downloaded successfully")
   public void operatorVerifyThirdPartyShippersCsvFileDownloadedSuccessfully() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyCsvFileDownloadedSuccessfully(thirdPartyShipper);

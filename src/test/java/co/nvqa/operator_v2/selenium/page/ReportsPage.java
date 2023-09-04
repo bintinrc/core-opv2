@@ -27,7 +27,7 @@ public class ReportsPage extends OperatorV2SimplePage {
   @FindBy(css = "nv-button-file-picker[ng-if='ctrl.orderStatusesReport.fileSelected.length <= 0']")
   public NvButtonFilePicker orderStatusesUploadCsv;
 
-  @FindBy(css = "md-card:nth-child(4) [name='container.reports.generate']")
+  @FindBy(css = "[ng-click='ctrl.orderStatusesReport.generate()']")
   public NvApiTextButton orderStatusesGenerateReport;
 
   @FindBy(css = "md-card:nth-child(1) [name='container.reports.generate']")

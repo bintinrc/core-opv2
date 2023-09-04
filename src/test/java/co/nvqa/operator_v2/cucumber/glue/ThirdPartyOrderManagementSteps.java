@@ -8,7 +8,6 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.api.Assertions;
 
 /**
@@ -17,6 +16,7 @@ import org.assertj.core.api.Assertions;
 @ScenarioScoped
 public class ThirdPartyOrderManagementSteps extends AbstractSteps {
 
+  private static final String KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS = "KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS";
   private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
   public ThirdPartyOrderManagementSteps() {
@@ -27,20 +27,11 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage = new ThirdPartyOrderManagementPage(getWebDriver());
   }
 
-  @When("^Operator uploads new mapping$")
+  @When("Operator uploads new mapping")
   public void operatorUploadsNewMapping(Map<String, String> dataTableAsMap) {
     ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    if (trackingId == null) {
-      List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
-      if (CollectionUtils.isEmpty(trackingIds)) {
-        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_TRACKING_IDS is empty");
-      }
-      trackingId = trackingIds.get(0);
-    }
-    if (trackingId == null) {
-      trackingId = resolveValue(dataTableAsMap.get("trackingId"));
-    }
+    String trackingId = resolveValue(dataTableAsMap.get("trackingId"));
+
     String shipperName = dataTableAsMap.get("3plShipperName");
     String shipperId = dataTableAsMap.get("3plShipperId");
 
@@ -52,7 +43,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     put(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMapping);
   }
 
-  @Then("^Operator verify the new mapping is created successfully$")
+  @Then("Operator verify the new mapping is created successfully")
   public void operatorVerifyTheNewMappingIsCreatedSuccessfully() {
     ThirdPartyOrderMapping expectedOrderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.verifyOrderMappingCreatedSuccessfully(expectedOrderMapping);
@@ -64,33 +55,33 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage.uploadSingleMappingDialog.waitUntilVisible();
     pause2s();
     Assertions.assertThat(
-            thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount())
+        thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount())
         .as("Number of Upload Results records").isEqualTo(1);
     ThirdPartyOrderMapping actual = thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable
         .readEntity(1);
     expected.compareWithActual(actual);
   }
 
-  @When("^Operator edit the new mapping with a new data$")
+  @When("Operator edit the new mapping with a new data")
   public void operatorEditTheNewMappingWithANewData() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     orderMapping.setThirdPlTrackingId(orderMapping.getThirdPlTrackingId() + "UPD");
     thirdPartyOrderManagementPage.editOrderMapping(orderMapping);
   }
 
-  @Then("^Operator verify the new edited data is updated successfully$")
+  @Then("Operator verify the new edited data is updated successfully")
   public void operatorVerifyTheNewEditedDataIsUpdatedSuccessfully() {
     ThirdPartyOrderMapping expectedOrderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.verifyOrderMappingRecord(expectedOrderMapping);
   }
 
-  @When("^Operator delete the new mapping$")
+  @When("Operator delete the new mapping")
   public void operatorDeleteTheNewMapping() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.deleteThirdPartyOrderMapping(orderMapping);
   }
 
-  @Then("^Operator verify the new mapping is deleted successfully$")
+  @Then("Operator verify the new mapping is deleted successfully")
   public void operatorVerifyTheNewMappingIsDeletedSuccessfully() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
@@ -100,9 +91,9 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     );
   }
 
-  @When("^Operator uploads bulk mapping$")
-  public void operatorUploadsBulkMapping() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  @When("Operator uploads bulk mapping for tracking ids:")
+  public void operatorUploadsBulkMapping(List<String> trackingIdsDataTable) {
+    List<String> trackingIds = resolveValues(trackingIdsDataTable);
     ThirdPartyOrderMapping shipperInfo = new ThirdPartyOrderMapping();
     thirdPartyOrderManagementPage.adjustAvailableThirdPartyShipperData(shipperInfo);
     List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
@@ -121,7 +112,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     put(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
   }
 
-  @Then("^Operator verify multiple new mapping is created successfully$")
+  @Then("Operator verify multiple new mapping is created successfully")
   public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully() {
     List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = get(
         KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
@@ -129,7 +120,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
         .verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
   }
 
-  @When("^Operator complete the new mapping order$")
+  @When("Operator complete the new mapping order")
   public void operatorCompleteTheNewMappingOrder() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.completeThirdPartyOrder(orderMapping);
@@ -144,12 +135,12 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     );
   }
 
-  @When("^Operator download CSV file on Third Party Order Management page$")
+  @When("Operator download CSV file on Third Party Order Management page")
   public void operatorDownloadCsvFile() {
     thirdPartyOrderManagementPage.downloadCsvFile.click();
   }
 
-  @Then("^3pl-orders CSV file is downloaded successfully$")
+  @Then("3pl-orders CSV file is downloaded successfully")
   public void ordersCsvFileIsDownloadedSuccessfully() {
     thirdPartyOrderManagementPage.verifyFileDownloadedSuccessfully("3pl-orders.csv",
         "\"Tracking ID\",\"3PL Provider\",\"3PL Tracking ID\",\"Transferred to 3PL date\",\"Working days since transferred\",\"NV Order Status\"");

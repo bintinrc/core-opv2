@@ -97,12 +97,6 @@ public class VanInboundSteps extends AbstractSteps {
     editOrderPage.verifyInboundIsSucceed();
   }
 
-  @And("Operator click on start route after van inbounding")
-  public void startRoute() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    vanInboundPage.startRoute(trackingId);
-  }
-
   @And("Operator click on start route for tid {string} after van inbounding")
   public void startRoute(String tid) {
     vanInboundPage.startRoute(resolveValue(tid));
@@ -191,14 +185,6 @@ public class VanInboundSteps extends AbstractSteps {
     }
   }
 
-  @Then("Operator verifies Parcel is not available in the modal")
-  public void operatorVerifiesParcelIsNotAvailableInTheModal() {
-    Assert.assertFalse(f("Assert that the tracking id: %s is shown in the modal",
-        get(KEY_CREATED_ORDER_TRACKING_ID).toString()),
-        vanInboundPage.unScannedParcelsDialog.trackingId.isDisplayed());
-    takesScreenshot();
-  }
-
   @And("Operator clicks the Hub Inbound Shipment button")
   public void operatorClicksTheHubInboundShipmentButton() {
     vanInboundPage.clickHubInboundShipmentButton();
@@ -214,10 +200,4 @@ public class VanInboundSteps extends AbstractSteps {
     vanInboundPage.clickViewButton();
   }
 
-  @Then("Operator verifies edit order page is displayed on clicking the view button")
-  public void operatorVerifiesEditOrderPageIsDisplayedOnClickingTheViewButton() {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    vanInboundPage.verifyNavigationToEditOrderScreen(trackingId);
-    takesScreenshot();
-  }
 }

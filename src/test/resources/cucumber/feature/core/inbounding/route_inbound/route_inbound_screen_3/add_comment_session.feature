@@ -47,4 +47,4 @@ Feature: Add Comment Session
     And Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator add route inbound comment "Test route inbound comment {gradle-current-date-yyyyMMddHHmmsss}"  on Route Inbound page
-    Then Operator verify route inbound comment on Route Inbound page
+    Then Operator verify route inbound comment on Route Inbound page is "{KEY_ROUTE_INBOUND_COMMENT}"
