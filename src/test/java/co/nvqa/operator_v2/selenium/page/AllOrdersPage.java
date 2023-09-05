@@ -23,6 +23,10 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.OrdersTable.OrderInfo;
+import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.ManuallyCompleteOrderDialog;
+import co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.CancelSelectedDialog;
+import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage.ApplyActionsMenu.AllOrdersAction;
+import co.nvqa.operator_v2.selenium.page.RouteLogsPage.SelectionErrorDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
@@ -570,7 +574,11 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   public void addToRoute(List<String> listOfExpectedTrackingId, String routeId, String tag) {
     fillAddToRouteFormUsingSetToAll(listOfExpectedTrackingId, routeId, tag);
-    addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
+    if (listOfExpectedTrackingId.size() > 1) {
+      addToRouteDialog.addSelectedToRoutes.clickAndWaitUntilDone();
+    } else {
+      addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+    }
   }
 
   public void fillAddToRouteFormUsingSetToAll(List<String> listOfExpectedTrackingId, String routeId,
@@ -592,6 +600,27 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
       addToRouteDialog.routeFinder.click();
       addToRouteDialog.routeTags.get(0).selectValues(ImmutableList.of(tag));
       addToRouteDialog.suggestRoutes.clickAndWaitUntilDone();
+    }
+  }
+
+  public void fillAddToRouteForm(List<String> listOfExpectedTrackingId, List<String> routeIds) {
+    clearFilterTableOrderByTrackingId();
+    selectAllShown();
+    actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
+    addToRouteDialog.waitUntilVisible();
+    List<String> actualTrackingId = addToRouteDialog.trackingIds.stream().map(PageElement::getText)
+        .collect(Collectors.toList());
+
+    Assertions.assertThat(actualTrackingId).as("Expected Tracking ID not found.").has(
+        new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Has Expected tracking id"));
+
+    for (int i = 0; i < listOfExpectedTrackingId.size(); i++) {
+      for (int j = 0; j < listOfExpectedTrackingId.size(); j++) {
+        String trackingId = addToRouteDialog.trackingIds.get(j).getNormalizedText();
+        if (trackingId.equals(listOfExpectedTrackingId.get(i))){
+          addToRouteDialog.routeInputs.get(j).setValue(routeIds.get(i));
+        }
+      }
     }
   }
 
@@ -896,6 +925,8 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
     @FindBy(name = "container.order.edit.add-selected-to-routes")
     public NvApiTextButton addSelectedToRoutes;
+    @FindBy(name = "container.order.edit.add-to-route")
+    public NvApiTextButton addToRoute;
 
     public AddToRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
