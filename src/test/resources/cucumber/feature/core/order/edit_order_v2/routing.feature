@@ -302,6 +302,7 @@ Feature: Routing
       | orderType | routeType |
       | Return    | Pickup    |
 
+
   Scenario: Block Add to Route for Cancelled Order on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -315,3 +316,50 @@ Feature: Routing
       | status         | Cancelled |
       | granularStatus | Cancelled |
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
+
+  @DeleteRoutes
+  Scenario: Operator Pull Out Merged Delivery Order from a Route
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                               |
+      | generateFrom        | INDEX-0                                                                                                                                                                                                                                                                                                                         |
+      | generateTo          | INDEX-1                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator click Delivery -> Pull from Route on Edit Order V2 page
+    And Operator pull out parcel from route on Edit Order V2 page
+    Then Operator verifies that success react notification displayed:
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+    Then Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | routeId |  |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                |
+      | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    And DB Core - verify route_waypoint records are hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId} |
+      | routeId | null                         |
+      | seqNo   | null                         |
+      | status  | Pending                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | routeId  | null                         |
+      | seqNo    | null                         |
+      | status   | Pending                      |
