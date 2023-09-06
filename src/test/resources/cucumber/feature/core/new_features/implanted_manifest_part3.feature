@@ -49,7 +49,7 @@ Feature: Implanted Manifest
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    And Operator clicks "Filter Jobs" button on Pickup Jobs page
     And Operator open Job Details for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" job on Pickup Jobs page
     Then Operator verify Job Details values on Pickup Jobs page:
       | status                | SUCCESS                               |
