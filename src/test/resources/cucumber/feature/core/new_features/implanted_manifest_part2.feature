@@ -71,7 +71,7 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
     Then Operator verifies that error react notification displayed:
-      | top    | Error                                                     |
+      | top    | Error             |
       | bottom | No POD available! |
 
 
@@ -146,8 +146,9 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" barcode on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}" reservation on Implanted Manifest page
-    When Operator creates manifest for "{KEY_LIST_OF_CREATED_RESERVATIONS[2].id}" reservation on Implanted Manifest page
-    # Verify Order 1
+    Then Operator verifies that success react notification displayed:
+      | top | Manifest has been created |
+        # Verify Order 1
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
@@ -158,8 +159,8 @@ Feature: Implanted Manifest
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags         | name                    | description                                                                                                                                                                                                  |
-      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
+      | tags         | name                    | description                                                                                                                                                                                                                                                         |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     # Verify Order 2
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
@@ -171,9 +172,18 @@ Feature: Implanted Manifest
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags         | name                    | description                                                                                                                                                                                                  |
-      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
-    And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
+      | tags         | name                    | description                                                                                                                                                                                                                                                         |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    And DB Core - Operator verifies inbound_scans record:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}                     |
+      | type     | 1                                                      |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                     |
+      | location | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddress} |
+    And DB Core - Operator verifies inbound_scans record:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id}                     |
+      | type     | 1                                                      |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                     |
+      | location | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddress} |
 
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID
@@ -220,7 +230,6 @@ Feature: Implanted Manifest
       | trackingId                          | scannedAt                           | destination                                                                           | rackSector                                 | addressee                              |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
-
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Invalid Tracking Id
     Given Operator go to menu Utilities -> QRCode Printing
