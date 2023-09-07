@@ -159,8 +159,8 @@ Feature: Implanted Manifest
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags         | name                    | description                                                                                                                                                                                                                                                         |
-      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | name                    | description                                                                                                                                                                                                                                                         |
+      | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     # Verify Order 2
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
@@ -172,8 +172,8 @@ Feature: Implanted Manifest
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags         | name                    | description                                                                                                                                                                                                                                                         |
-      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | name                    | description                                                                                                                                                                                                                                                         |
+      | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     And DB Core - Operator verifies inbound_scans record:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}                     |
       | type     | 1                                                      |
