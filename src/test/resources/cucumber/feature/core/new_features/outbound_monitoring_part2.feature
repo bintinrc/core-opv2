@@ -5,562 +5,671 @@ Feature: Outbound Monitoring
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Filters Single Route on Outbound Monitoring Page by Pull Out button
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | status     | TRANSIT                                    |
+    Then API Core -  Wait for following order state:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | status     | TRANSIT                                    |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_CREATED_ROUTE_ID} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies 1 total selected Route IDs shown on Outbound Breakroute V2 page
-    And Operator verifies "{gradle-current-date-yyyy-MM-dd}" date shown on Outbound Breakroute V2 page
+    And Operator verifies "{date: 0 days next, YYYY-MM-dd}" date shown on Outbound Breakroute V2 page
     And Operator verifies orders info on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Searches Order of Multiple Routes on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcels to the route using data below:
-      | orderId                           | addParcelToRouteRequest |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} | { "type":"DD" }         |
-    Given API Operator create new route using data below:
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcels to the route using data below:
-      | orderId                           | addParcelToRouteRequest |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"DD" }         |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"DD" }         |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
-    And Operator verifies "{gradle-current-date-yyyy-MM-dd}" date shown on Outbound Breakroute V2 page
+    And Operator verifies "{date: 0 days next, YYYY-MM-dd}" date shown on Outbound Breakroute V2 page
     When Operator filter orders table on Outbound Breakroute V2 page:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | granularStatus | Arrived at Sorting Hub |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | lastScannedHub | {hub-name} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | routeDate | {gradle-current-date-yyyy-MM-dd} |
+      | routeDate | {date: 0 days next, YYYY-MM-dd} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | driverId | {ninja-driver-id} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | driverName | {ninja-driver-name} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | driverType | {default-driver-type-name} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | address | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} |
+      | address | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | lastScanType | inbound_scan |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
       | orderDeliveryType | STANDARD |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Able to Show Pending State and Non-Pending State Delivery Order on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver deliver the created parcel successfully
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    Given API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                     |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                             |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
+      | routes     | KEY_DRIVER_ROUTES                                                                      |
     When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verifies orders info on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed              | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed              | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Unable to Show Pending State and Non-Pending State Pickup Order on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound parcel
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                               |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                               |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"PICKUP"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                    |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver pickup the created parcel successfully
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                       |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                |
+      | jobType    | TRANSACTION                                                                      |
+      | jobAction  | SUCCESS                                                                          |
+      | jobMode    | PICK_UP                                                                          |
     When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
-      | routeId                           | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | routeId                            | trackingId                            |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Tracking IDs Pulled Out   |
-      | bottom             | 1 Tracking IDs pulled out |
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 1 Tracking IDs pulled out |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
-    When API Operator get order details
-    Then DB Operator verify Delivery waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies transaction route id is null
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | routeId  | null                                                       |
+      | seqNo    | null                                                       |
+      | status   | Pending                                                    |
+    And DB Core - verify transactions record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | routeId | null                                               |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
 
-    And DB Operator verifies route_monitoring_data is hard-deleted
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE    |
-      | routeId | KEY_CREATED_ROUTE_ID |
-
-  #   TODO DISABLED
-  #scenario is disabled because causing db inconsistent data
-#  Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V2 Page - Route is Soft Deleted (uid:48deac7d-dde2-4e28-a637-3a08b1ae1a47)
-#    Given Operator go to menu Utilities -> QRCode Printing
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    And API Operator get order details
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add parcel to the route using data below:
-#      | addParcelToRouteRequest | { "type":"DD" } |
-#    When Operator go to menu New Features -> Outbound Load Monitoring
-#    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
-#    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-#      | zoneName | {zone-name} |
-#      | hubName  | {hub-name}  |
-#    And Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-#      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-#    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
-#    And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
-#      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-#    Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
-#      | routeId                           | trackingId                                 |
-#      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-#    When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
-#    Then Operator verifies that success react notification displayed:
-#      | top                | Tracking IDs Pulled Out   |
-#      | bottom             | 1 Tracking IDs pulled out |
-#      | waitUntilInvisible | true                      |
-#    And Operator verifies orders table is empty on Outbound Breakroute V2 page
-#    When API Operator get order details
-#    Then DB Operator verify Delivery waypoint of the created order using data below:
-#      | status | PENDING |
-#    And DB Operator verifies transaction route id is null
-#    And DB Operator verifies waypoint status is "PENDING"
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#
-#    And DB Operator verifies route_monitoring_data is hard-deleted
-#    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-#    Then Operator verify order event on Edit order page using data below:
-#      | name    | PULL OUT OF ROUTE    |
-#      | routeId | KEY_CREATED_ROUTE_ID |
-
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Shows Multiple Same Tracking IDs of Different Routes on Outbound Breakrout V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
-    And API Operator reschedule failed delivery order
-    And API Operator create new route using data below:
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    Given API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":139}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | DELIVERY                                                                                             |
+      | failureReasonId | 139                                                                                                  |
+    And API Core - Operator reschedule order:
+      | orderId           | {KEY_LIST_OF_CREATED_ORDERS[1].id}        |
+      | rescheduleRequest | {"date":"{date: 0 days ago, yyyy-MM-dd}"} |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                                                                                    |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
     When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     And Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus          | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus          | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Shows a Route that has Multiple Tracking IDs on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    Given API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_CREATED_ROUTE_ID} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies orders info on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus          | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | On Vehicle for Delivery | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus          | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Pull Out Multiple Delivery Orders from Multiple Routes on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
-      | routeId                           | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | routeId                            | trackingId                            |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Tracking IDs Pulled Out   |
-      | bottom             | 2 Tracking IDs pulled out |
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 2 Tracking IDs pulled out |
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
-    When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
-    Then DB Operator verify Delivery waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies transaction route id is null
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_monitoring_data is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE                 |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order details
-    Then DB Operator verify Delivery waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies transaction route id is null
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_monitoring_data is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE                 |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id} |
+      | status  | Pending              |
+      | routeId | null                 |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId} |
+      | status  | Pending                      |
+      | routeId | null                         |
+      | seqNo   | null                         |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id} |
+      | status  | Pending              |
+      | routeId | null                 |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId} |
+      | status  | Pending                      |
+      | routeId | null                         |
+      | seqNo   | null                         |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Unable to Pull Out Non-Pending State Delivery Order on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
     And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                    |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver successfully deliver created parcels with numbers: 1
-    And API Driver failed the delivery of parcels with numbers: 2
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
+      | routes     | KEY_DRIVER_ROUTES                                                                 |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":139}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | DELIVERY                                                                                             |
+      | failureReasonId | 139                                                                                                  |
     Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
-      | routeId                           | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | routeId                            | trackingId                            |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
     Then Operator verifies errors in Processing modal on Outbound Breakroute V2 page:
-      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[1]}] is not in pending state] |
-      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}] is not in pending state] |
+      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDERS[1].id}] is not in pending state] |
+      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDERS[2].id}] is not in pending state] |
     When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
     And Operator verifies orders info on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus     | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed          | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Pending Reschedule | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | trackingId                            | granularStatus     | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed          | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Pending Reschedule | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Pending State & Non-Pending State Delivery
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    # 1st Order/Route
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                    |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver deliver the created parcel successfully
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
+      | routes     | KEY_DRIVER_ROUTES                                                                 |
+    # 2nd Order/Route
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
       | hubName  | {hub-name}  |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
-      | routeId                           | trackingId                                 |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | routeId                            | trackingId                            |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
     Then Operator verifies errors in Processing modal on Outbound Breakroute V2 page:
-      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDER_ID[2]}] is not in pending state] |
+      | Get ProcessingException [Code:ORDER_COMPLETED_EXCEPTION][Message:Transaction for [OrderID:{KEY_LIST_OF_CREATED_ORDERS[1].id}] is not in pending state] |
     When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | Tracking IDs Pulled Out   |
-      | bottom             | 1 Tracking IDs pulled out |
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 1 Tracking IDs pulled out |
     And Operator verifies orders info on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus | lastScannedHub | routeId                | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Completed      | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-    When API Operator get "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order details
-    Then DB Operator verify Delivery waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies transaction route id is null
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_monitoring_data is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE                 |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | trackingId                            | granularStatus | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed      | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id} |
+      | status  | Pending              |
+      | routeId | null                 |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId} |
+      | status  | Pending                      |
+      | routeId | null                         |
+      | seqNo   | null                         |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |

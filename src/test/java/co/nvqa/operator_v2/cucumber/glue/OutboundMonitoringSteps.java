@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.NvWait;
+import co.nvqa.common.utils.NvWait;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakroutePage.OrderInfo;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
@@ -40,7 +40,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     outboundMonitoringPage = new OutboundMonitoringPage(getWebDriver());
   }
 
-  @When("^Operator click on 'Load Selection' Button on Outbound Monitoring Page$")
+  @When("Operator click on 'Load Selection' Button on Outbound Monitoring Page")
   public void clickLoadSelection() {
     outboundMonitoringPage.loadSelection.clickAndWaitUntilDone();
     if (outboundMonitoringPage.loadSelection.isDisplayedFast()) {
@@ -55,15 +55,17 @@ public class OutboundMonitoringSteps extends AbstractSteps {
         .isEqualTo(expected);
   }
 
-  @And("^Operator search on Route ID Header Table on Outbound Monitoring Page$")
-  public void searchRouteId() {
-    long routeId = get(KEY_CREATED_ROUTE_ID);
+  @And("Operator search on Route ID Header Table on Outbound Monitoring Page:")
+  public void searchRouteId(Map<String, String> dataTableRaw) {
+    final Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
+    long routeId = Long.parseLong(dataTable.get("routeId"));
     outboundMonitoringPage.searchTableByRouteId(routeId);
   }
 
-  @Then("^Operator verify the route ID is exist on Outbound Monitoring Page$")
-  public void verifyRouteIdExists() {
-    long routeId = get(KEY_CREATED_ROUTE_ID);
+  @Then("Operator verify the route ID is exist on Outbound Monitoring Page:")
+  public void verifyRouteIdExists(Map<String, String> dataTableRaw) {
+    final Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
+    long routeId = Long.parseLong(dataTable.get("routeId"));
     outboundMonitoringPage.searchTableByRouteId(routeId);
     outboundMonitoringPage.verifyRouteIdExists(String.valueOf(routeId));
   }
@@ -196,23 +198,23 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify the In Progress Outbound Status on Outbound Monitoring Page$")
+  @Then("Operator verify the In Progress Outbound Status on Outbound Monitoring Page")
   public void verifyStatusInProgress() {
     outboundMonitoringPage.verifyStatusInProgress();
   }
 
-  @Then("^Operator verify the Complete Outbound Status on Outbound Monitoring Page$")
+  @Then("Operator verify the Complete Outbound Status on Outbound Monitoring Page")
   public void verifyStatusComplete() {
     outboundMonitoringPage.verifyStatusComplete();
   }
 
-  @And("^Operator click on flag icon on chosen route ID on Outbound Monitoring Page$")
+  @And("Operator click on flag icon on chosen route ID on Outbound Monitoring Page")
   public void clickFlagButton() {
     outboundMonitoringPage.routesTable.clickActionButton(1, ACTION_FLAG);
     pause10s();
   }
 
-  @And("^Operator verifies route record on Outbound Monitoring page:$")
+  @And("Operator verifies route record on Outbound Monitoring page:")
   public void clickFlagButton(Map<String, String> map) {
     RouteInfo expected = new RouteInfo(resolveKeyValues(map));
     List<RouteInfo> actual = outboundMonitoringPage.routesTable.readAllEntities();
@@ -231,24 +233,24 @@ public class OutboundMonitoringSteps extends AbstractSteps {
         .contains(expected);
   }
 
-  @Then("^Operator verifies the Outbound status on the chosen route ID is changed$")
+  @Then("Operator verifies the Outbound status on the chosen route ID is changed")
   public void verifyStatusMarked() {
     retryIfAssertionErrorOccurred(outboundMonitoringPage::verifyStatusMarked,
         "Verify Status is Marked");
   }
 
 
-  @And("^Operator click on comment icon on chosen route ID on Outbound Monitoring Page$")
+  @And("Operator click on comment icon on chosen route ID on Outbound Monitoring Page")
   public void clickCommentButtonAndSubmit() {
     outboundMonitoringPage.clickCommentButtonAndSubmit();
   }
 
-  @Then("^Operator verifies the comment table on the chosen route ID is changed$")
+  @Then("Operator verifies the comment table on the chosen route ID is changed")
   public void verifyCommentIsRight() {
     outboundMonitoringPage.verifyCommentIsRight();
   }
 
-  @When("^Operator select filter and click Load Selection on Outbound Monitoring page using data below:$")
+  @When("Operator select filter and click Load Selection on Outbound Monitoring page using data below:")
   public void selectFiltersAndClickLoadSelection(Map<String, String> data) {
     data = resolveKeyValues(data);
     if (data.containsKey("zoneName")) {
