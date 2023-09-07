@@ -184,7 +184,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @wip
   Scenario: Operator Able to Show Pending State and Non-Pending State Delivery Order on Outbound Breakroute V2 Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -201,7 +201,7 @@ Feature: Outbound Monitoring
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
