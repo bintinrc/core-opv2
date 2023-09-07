@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @StampDisassociation @NewFeatures2
+@OperatorV2 @Core @NewFeatures @StampDisassociation
 Feature: Stamp Disassociation
 
   Background:

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
+@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate
 Feature: Order Parcel Size Update
 
   Background:
