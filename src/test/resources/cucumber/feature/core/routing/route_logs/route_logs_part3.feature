@@ -93,7 +93,7 @@ Feature: Route Logs
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
+  Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
