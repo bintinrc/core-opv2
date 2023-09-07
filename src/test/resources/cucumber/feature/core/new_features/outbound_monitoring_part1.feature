@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart1 @NewFeatures1
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart1
 Feature: Outbound Monitoring
 
   Background:

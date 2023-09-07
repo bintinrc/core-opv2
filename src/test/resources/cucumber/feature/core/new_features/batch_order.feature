@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @BatchOrder @NewFeatures2
+@OperatorV2 @Core @NewFeatures @BatchOrder
 Feature: Batch Order
 
   Background:

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
+@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate
 Feature: Order Parcel Size Update
 
   Background:
@@ -25,11 +25,13 @@ Feature: Order Parcel Size Update
     When Operator clicks Upload button on Order Parcel Size Update page
     Then Operator verifies that success react notification displayed:
       | top | Parcel size update success |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verifies dimensions information on Edit Order page:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verifies order details on Edit Order V2 page:
       | size | MEDIUM |
-    And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verifies dimensions information on Edit Order page:
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE DIMENSION |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verifies order details on Edit Order V2 page:
       | size | LARGE |
-    And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE DIMENSION |

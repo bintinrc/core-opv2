@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OrderWeightUpdate @NewFeatures2
+@OperatorV2 @Core @NewFeatures @OrderWeightUpdate
 Feature: Order Weight Update V2
 
   Background:

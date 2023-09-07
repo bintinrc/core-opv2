@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.model.address.Address;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -34,6 +35,7 @@ import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage
 @ScenarioScoped
 public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
+  private static final String KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES = "KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES";
   private UpdateDeliveryAddressWithCsvPage page;
 
   @Override
@@ -41,13 +43,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     page = new UpdateDeliveryAddressWithCsvPage(getWebDriver());
   }
 
-  @When("^Operator update delivery address of created orders on Update Delivery Address with CSV page$")
-  public void operatorUpdateDeliveryAddresses() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
-    operatorUpdateDeliveryAddresses(trackingIds);
-  }
-
-  @When("^Operator update delivery addresses of given orders on Update Delivery Address with CSV page:$")
+  @When("Operator update delivery addresses of given orders on Update Delivery Address with CSV page:")
   public void operatorUpdateDeliveryAddresses(List<String> trackingIds) {
     List<Map<String, String>> data = CollectionUtils.isEmpty(trackingIds) ?
         new ArrayList<>() :
@@ -56,7 +52,13 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     operatorUpdateDeliveryAddresses2(data);
   }
 
-  @When("^Operator update delivery addresses on Update Delivery Address with CSV page:$")
+  @When("Operator update delivery addresses of with empty CSV file:")
+  public void operatorUpdateDeliveryAddressesEmptyCsv() {
+    List<String> emptyTids = new ArrayList<>();
+    operatorUpdateDeliveryAddresses(emptyTids);
+  }
+
+  @When("Operator update delivery addresses on Update Delivery Address with CSV page:")
   public void operatorUpdateDeliveryAddresses2(List<Map<String, String>> data) {
     List<UpdateDeliveryAddressRecord> records = data.stream()
         .map(map -> {
@@ -79,7 +81,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     put(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES, records);
   }
 
-  @When("^Operator verify updated addresses on Update Delivery Address with CSV page$")
+  @When("Operator verify updated addresses on Update Delivery Address with CSV page")
   public void operatorVerifyUpdatedAddresses() {
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
 
@@ -97,7 +99,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
   }
 
-  @When("^Operator verify validation statuses on Update Delivery Address with CSV page:$")
+  @When("Operator verify validation statuses on Update Delivery Address with CSV page:")
   public void operatorVerifyValidationStatuses(List<Map<String, String>> dataList) {
     Map<String, String> data = dataList.stream().collect(Collectors.toMap(
         map -> resolveValue(map.get("trackingId")),
@@ -120,7 +122,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator confirm addresses update on Update Delivery Address with CSV page$")
+  @When("Operator confirm addresses update on Update Delivery Address with CSV page")
   public void operatorConfirmAddressesUpdate() {
     page.inFrame(() -> {
       page.confirmUpdatesButton.click();
@@ -130,11 +132,11 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator verify addresses were updated successfully on Update Delivery Address with CSV page$")
+  @When("Operator verify addresses were updated successfully on Update Delivery Address with CSV page")
   public void operatorVerifyAddressesUpdatedSuccessfully() {
     List<UpdateDeliveryAddressRecord> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
     page.inFrame(() -> {
-      retryIfAssertionErrorOccurred(
+      doWithRetry(
           () -> Assertions.assertThat(page.tableDescription.getText())
               .as("Number of updated addresses")
               .isEqualTo(f("All %d records updated", addresses.size())),
@@ -142,16 +144,16 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     });
   }
 
-  @And("^Operator verify created orders info after address update$")
+  @And("Operator verify created orders info after address update")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate() {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
     apiOperatorVerifyOrdersInfoAfterAddressUpdate(trackingIds);
   }
 
-  @And("^Operator verify orders info after address update:$")
+  @And("Operator verify orders info after address update:")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate(List<String> values) {
     List<String> trackingIds = resolveValues(values);
-    List<Order> orders = getList(KEY_LIST_OF_ORDER_DETAILS, Order.class);
+    List<Order> orders = getList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS, Order.class);
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
     expected = expected.stream().filter(exp -> trackingIds.contains(exp.getTrackingId()))
         .collect(Collectors.toList());
