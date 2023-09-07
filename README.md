@@ -1,28 +1,30 @@
-# Introduction
+## Running the tests
 
-## run command 
-`gradle clean runCucumber -Penvironment=corev2-qa-sg -Ptags="@CWF and (@ShouldAlwaysRun or @RT)"`
+<hr>
 
-further read: [confluence](https://confluence.ninjavan.co/display/NVQA/Run+an+automation+project)
-
-feature's structure:
+From terminal:
 
 ```
-root
-|
-|__ sort
-|  |
-|  |__ inbounding
-|  |   |__ global_inbound.feature 
-|  |   |__ facilities_management.feature
-|__ core
-|  |
-|  |__ inbounding
-|  |   |
-|  |   |__ global_inbound.feature 
-|__ dash
-|  |
-|  |__ shipper
-|  |   |
-|  |   |__ 
+$ ./gradlew runCucumber -Ptags="@wip"
 ```
+
+From IntelliJ Run/Debug Configuration:
+
+```
+runCucumber -Ptags="@wip"
+```
+
+## Tips
+
+<hr>
+
+For running test in **local**, these environment variables can help you by adding them to
+the `.env` file:*
+
+```
+QA_PARALLEL=1
+QA_ENV=core-qa-sg
+QA_HEADLESS=<true/false>
+```
+
+*but, **please don't commit and push them**
