@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;

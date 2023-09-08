@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.elements;
 
-import co.nvqa.commons.util.NvLogger;
 import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -26,8 +25,12 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomFieldDecorator extends DefaultFieldDecorator {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomFieldDecorator.class);
 
   private WebDriver webDriver;
   private SearchContext searchContext;
@@ -217,7 +220,7 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
               FieldUtils.writeDeclaredField(searchContext, "cachedElement", null, true);
             }
           } catch (Exception ex1) {
-            NvLogger.warn("Error while handling StaleElementReferenceException", ex1);
+            LOGGER.warn("Error while handling StaleElementReferenceException", ex1);
           }
         }
         element = locator.findElement();

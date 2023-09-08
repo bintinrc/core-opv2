@@ -1,13 +1,10 @@
 package co.nvqa.operator_v2.selenium.elements.md;
 
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;

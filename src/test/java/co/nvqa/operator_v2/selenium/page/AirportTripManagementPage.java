@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -11,6 +11,18 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -25,15 +37,10 @@ import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.*;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_ASSIGN_DRIVER;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_DELETE;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_DISABLED_BUTTON;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
 
 /**
  * @author Meganathan Ramasamy
@@ -667,16 +674,21 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
         Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
                 .isFalse();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 2)).contains(airport.getAirport_code())).as("Airport Code is same")
-                .isTrue();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 3)).contains(airport.getAirport_name())).as("Airport Name is same")
-                .isTrue();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 4)).contains(airport.getCity())).as("Airport city is same")
-                .isTrue();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 5)).contains(airport.getRegion())).as("Airport region is same")
-                .isTrue();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 6)).contains(airport.getLatitude().toString() + ", " + airport.getLongitude().toString())).as("Airport latitude & longitude is same")
-                .isTrue();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 2)))
+            .as("Airport Code is same")
+            .contains(airport.getAirport_code());
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 3)))
+            .as("Airport Name is same")
+            .contains(airport.getAirport_name());
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 4)))
+            .as("Airport city is same")
+            .contains(airport.getCity());
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 5)))
+            .as("Airport region is same")
+            .contains(airport.getRegion());
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 6)))
+            .as("Airport latitude & longitude is same")
+            .contains(airport.getLatitude().toString() + ", " + airport.getLongitude().toString());
     }
 
     public List<String> ListOfItems(String xpath) {
@@ -1020,7 +1032,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         retryIfAssertionErrorOrRuntimeExceptionOccurred(()->{
             String actMessage = getAntTopText();
             Assertions.assertThat(actMessage).as("Success message is same").contains(message);
-            Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed()).as("View Details link is visible");
+            Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed())
+                .as("View Details link is visible").isTrue();
         },"Verify Airport creation message", 500, 2);
     }
 

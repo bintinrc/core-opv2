@@ -1,12 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;

@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -19,11 +18,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 public class GlobalInboundPage extends SimpleReactPage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(GlobalInboundPage.class);
 
   @FindBy(xpath = "//div/*[self::h2]")
   public PageElement destinationHub;
@@ -245,11 +248,11 @@ public class GlobalInboundPage extends SimpleReactPage {
       if (StringUtils.isNotBlank(rackColor)) {
         String xpath = "//div[contains(@class, 'rack-sector')]";
         String actualStyle = getAttribute(xpath, "style");
-        NvLogger.infof("Actual Style: %s", actualStyle);
+        LOGGER.info("Actual Style: {}", actualStyle);
         String colorString = actualStyle.replace("background:", "").replaceAll(";", "").trim();
-        NvLogger.infof("Color       : %s", colorString);
+        LOGGER.info("Color       : {}", colorString);
         Color color = Color.fromString(colorString);
-        NvLogger.infof("Color as Hex: %s", color.asHex());
+        LOGGER.info("Color as Hex: {}", color.asHex());
         Assertions.assertThat(color.asHex()).as("Unexpected Rack Sector color")
             .isEqualToIgnoringCase(rackColor);
       }
