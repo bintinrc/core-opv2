@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.BlockedDatesPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 
 /**
  * @author Soewandi Wirjawan
@@ -23,22 +23,22 @@ public class BlockedDatesSteps extends AbstractSteps {
     blockedDatesPage = new BlockedDatesPage(getWebDriver());
   }
 
-  @When("^Operator adds Blocked Date$")
+  @When("Operator adds Blocked Date")
   public void operatorAddsBlockedDate() {
     blockedDatesPage.addBlockedDate();
   }
 
-  @Then("^Operator verifies new Blocked Date is added successfully$")
+  @Then("Operator verifies new Blocked Date is added successfully")
   public void operatorVerifiesNewBlockedDateIsAddedSuccessfully() {
     blockedDatesPage.verifyBlockedDateAddedSuccessfully();
   }
 
-  @When("^Operator removes Blocked Date$")
+  @When("Operator removes Blocked Date")
   public void operatorRemovesBlockedDate() {
     blockedDatesPage.removeBlockedDate();
   }
 
-  @Then("^Operator verifies Blocked Date is removed successfully$")
+  @Then("Operator verifies Blocked Date is removed successfully")
   public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
     blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
   }
