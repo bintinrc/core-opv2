@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.operator_v2.selenium.page.StampDisassociationPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 
@@ -25,9 +25,10 @@ public class StampDisassociationSteps extends AbstractSteps {
     stampDisassociationPage = new StampDisassociationPage(getWebDriver());
   }
 
-  @Then("^Operator verify order details on Stamp Disassociation page$")
-  public void operatorVerifyOrderDetailsOnStampDisassociationPage() {
-    Order order = get(KEY_CREATED_ORDER);
+
+  @Then("Operator verify order details on Stamp Disassociation page for order {string}")
+  public void operatorVerifyOrderDetailsOnStampDisassociationPage(String orderObject) {
+    Order order = resolveValue(orderObject);
     String expectedOrderId = String.format("#%d - %s", order.getId(), order.getTrackingId());
     Assertions.assertThat(stampDisassociationPage.orderId.getText()).as("Order ID")
         .isEqualTo(expectedOrderId);
@@ -35,7 +36,7 @@ public class StampDisassociationSteps extends AbstractSteps {
         .as("Delivery Address").isEqualTo(order.buildCompleteToAddress());
   }
 
-  @Then("^Operator verify the label says \"([^\"]*)\" on Stamp Disassociation page$")
+  @Then("Operator verify the label says {string} on Stamp Disassociation page")
   public void operatorVerifyTheLabelSaysOnStampDisassociationPage(String labelText) {
     Assertions.assertThat(stampDisassociationPage.stampLabel.getText()).as("Label Text")
         .isEqualTo(resolveValue(labelText));
@@ -47,7 +48,7 @@ public class StampDisassociationSteps extends AbstractSteps {
     stampDisassociationPage.stampIdInput.setValue(resolveValue(value).toString() + Keys.ENTER);
   }
 
-  @Then("^Operator will get the ([^\"]*) alert on Stamp Disassociation page")
+  @Then("Operator will get the {string} alert on Stamp Disassociation page")
   public void operatorWillGetTheAlertOfMessageShown(String alert) {
     Assertions.assertThat(stampDisassociationPage.alertLabel.getText()).as("Not Found Alert")
         .isEqualTo(resolveValue(alert));
