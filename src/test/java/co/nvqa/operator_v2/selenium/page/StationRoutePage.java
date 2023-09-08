@@ -208,7 +208,7 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
       clickActionButton(index, ACTION_EDIT);
       new AntSelect3(getWebDriver(),
           f("//div[@role='row'][%d]//div[contains(@data-testid,'assign-driver-field')]",
-              index)).selectValue(driverName);
+              index)).fillSearchTermAndEnter(driverName);
     }
 
     public boolean isRowRemoved(int index) {
