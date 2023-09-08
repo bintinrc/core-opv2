@@ -1,17 +1,17 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.common.core.model.order.Order;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.page.ReportsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -91,8 +91,8 @@ public class ReportsSteps extends AbstractSteps {
           }
         })
         .collect(Collectors.toList());
-    Assertions.assertThat(actualData.size()).as("Number of records in order status report")
-        .isEqualTo(data.size());
+    Assertions.assertThat(actualData).as("Number of records in order status report")
+        .hasSameSizeAs(data);
     for (int i = 0; i < expectedData.size(); i++) {
       expectedData.get(i).compareWithActual(actualData.get(i));
     }

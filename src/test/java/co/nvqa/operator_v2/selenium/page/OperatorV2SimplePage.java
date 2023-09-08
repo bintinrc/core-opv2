@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.ui.page.SimpleWebPage;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvAllure;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;

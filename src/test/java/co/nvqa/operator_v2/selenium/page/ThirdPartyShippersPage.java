@@ -1,16 +1,19 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class ThirdPartyShippersPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ThirdPartyShippersPage.class);
 
   private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
   private static final String CSV_FILENAME = "third-party-shipper.csv";
@@ -77,7 +80,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
         int id = Integer.parseInt(idAsString);
         thirdPartyShipper.setId(id);
       } catch (NullPointerException | NumberFormatException ex) {
-        NvLogger.warn("Failed to parse ID to Integer.", ex);
+        LOGGER.warn("Failed to parse ID to Integer.", ex);
       }
     } else {
       String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);

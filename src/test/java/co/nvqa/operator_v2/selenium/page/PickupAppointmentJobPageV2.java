@@ -35,12 +35,11 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
-
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.LoggerFactory;
 
 public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmentJobPageV2> {
 
-  static Logger LOGGER = getLogger(PickupAppointmentJobPageV2.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PickupAppointmentJobPageV2.class);
 
   public PickupAppointmentJobPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -507,7 +506,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
       String downloadedCsvFile = getLatestDownloadedFilename(
           fileName);
-      Assertions.assertThat(fileName.equals(downloadedCsvFile));
+      Assertions.assertThat(fileName.equals(downloadedCsvFile)).isTrue();
     }
 
     public void clickOnSecondPickUpProofButton() {

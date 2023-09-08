@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.Locale;

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.util;
 
 import co.nvqa.common.ui.support.CommonUiTestUtils;
-import co.nvqa.commons.util.JsonUtils;
+import co.nvqa.common.utils.JsonUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;

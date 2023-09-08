@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
 import co.nvqa.commons.model.order_create.v4.Timeslot;
 import co.nvqa.commons.support.JsonHelper;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;

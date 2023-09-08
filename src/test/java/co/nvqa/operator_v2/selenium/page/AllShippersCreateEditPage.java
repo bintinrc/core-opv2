@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.address.Address;
 import co.nvqa.common.model.address.MilkrunSettings;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
@@ -21,8 +22,6 @@ import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -59,6 +58,8 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 import static co.nvqa.common.utils.StandardTestUtils.convertToDate;
@@ -68,6 +69,8 @@ import static co.nvqa.common.utils.StandardTestUtils.convertToDate;
  */
 @SuppressWarnings("WeakerAccess")
 public class AllShippersCreateEditPage extends OperatorV2SimplePage {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AllShippersCreateEditPage.class);
 
   @FindBy(name = "ctrl.basicForm")
   public BasicSettingsForm basicSettingsForm;
@@ -229,12 +232,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     createNewShipperSteps(shipper);
     if (errorSaveDialog.isDisplayed()) {
       String errorMessage = errorSaveDialog.message.getText();
-      NvLogger.info(f("Error dialog is displayed : %s ", errorMessage));
+      LOGGER.info(f("Error dialog is displayed : %s ", errorMessage));
       if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
           .contains("DB constraints")) {
         errorSaveDialog.forceClose();
         if (Objects.nonNull(getToast())) {
-          NvLogger.info(f("Toast msg is displayed :  %s ", getToast().getText()));
+          LOGGER.info(f("Toast msg is displayed :  %s ", getToast().getText()));
           closeToast();
         }
         createShipper.click();
@@ -748,7 +751,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     waitUntilShipperCreateEditPageIsLoaded();
     clickTabItem("More Settings");
     int looping = 0;
-    while (!noResultText.isDisplayedFast() && looping < DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE) {
+    while (!noResultText.isDisplayedFast()
+        && looping < DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE) {
       deleteService.click();
       looping++;
     }
@@ -883,7 +887,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     OrderCreate orderCreate = shipper.getOrderCreate();
     Assertions.assertThat(actualOcVersion).as("OC Version").isEqualTo(orderCreate.getVersion());
     Assertions.assertThat(listOfActualServices).as("Services Available")
-        .is(new Condition<>(m -> m.containsAll(orderCreate.getServicesAvailable()), "Available services"));
+        .is(new Condition<>(m -> m.containsAll(orderCreate.getServicesAvailable()),
+            "Available services"));
     Assertions.assertThat(actualTrackingType).as("Tracking Type")
         .isEqualTo(orderCreate.getTrackingType());
     Assertions.assertThat(actualPrefix).as("Prefix").isEqualTo(orderCreate.getPrefix());
@@ -1431,7 +1436,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         setMdDatepickerById(LOCATOR_START_DATE,
             ZonedDateTime.ofInstant(effectiveDate.toInstant(), ZoneId.systemDefault()));
       } catch (InvalidElementStateException ex) {
-        NvLogger.info("Start Date is already filled");
+        LOGGER.info("Start Date is already filled");
       }
     }
     Date endDate = pricing.getContractEndDate();
@@ -1933,7 +1938,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public TextBox shipperPhoneNumber;
     @FindBy(id = "shipper-email")
     public TextBox shipperEmail;
-    @FindBy(css ="button[aria-label='Create dash account']")
+    @FindBy(css = "button[aria-label='Create dash account']")
     public Button createDashAccount;
     @FindBy(id = "dashUsername")
     public TextBox dashUsername;

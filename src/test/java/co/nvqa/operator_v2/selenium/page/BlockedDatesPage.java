@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,12 +10,15 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 public class BlockedDatesPage extends OperatorV2SimplePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlockedDatesPage.class);
   private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
   public BlockedDatesPage(WebDriver webDriver) {
@@ -130,7 +132,7 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
       int month = cal.get(Calendar.MONTH) + 1;
       monthText = month < 10 ? "0" + month : "" + month;
     } catch (Exception ex) {
-      NvLogger.warnf("Failed to get month. Cause: %s", ex.getMessage());
+      LOGGER.warn("Failed to get month. Cause: {}", ex.getMessage());
     }
 
     return monthText;
