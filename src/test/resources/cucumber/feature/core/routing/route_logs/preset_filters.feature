@@ -5,44 +5,44 @@ Feature: Route Logs - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @wip
   Scenario: Operator Save A New Preset on Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
-      | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
-      | routeDateTo    | {gradle-current-date-dd/MM/yyyy}   |
-      | hub            | {hub-name}                         |
-      | driver         | {ninja-driver-name}                |
-      | archivedRoutes | true                               |
+      | routeDateFrom  | {date: 1 days ago, dd/MM/yyyy}  |
+      | routeDateTo    | {date: 0 days next, dd/MM/yyyy} |
+      | hub            | {hub-name}                      |
+      | driver         | {ninja-driver-name}             |
+      | archivedRoutes | true                            |
     And Operator selects "Save Current As Preset" preset action on Route Logs page
     Then Operator verifies Save Preset dialog on Route Logs page contains filters:
-      | Route date: {gradle-previous-1-day-yyyy-MM-dd} to {gradle-current-date-yyyy-MM-dd} |
-      | Hub: (1) {hub-name}                                                                |
-      | Driver: (1) {ninja-driver-name}                                                    |
-      | Archived routes: Show archived routes                                              |
+      | Route date: {date: 1 days ago, YYYY-MM-dd} to {date: 0 days next, YYYY-MM-dd} |
+      | Hub: (1) {hub-name}                                                           |
+      | Driver: (1) {ninja-driver-name}                                               |
+      | Archived routes: Show archived routes                                         |
     And Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required
     And Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled
     And Operator verifies Save button in Save Preset dialog on Route Logs page is disabled
-    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Route Logs page
+    When Operator enters "PRESET {date: 0 days next, yyyyMMddHHmmssSSSS}" Preset Name in Save Preset dialog on Route Logs page
     And Operator verifies Save button in Save Preset dialog on Route Logs page is enabled
     When Operator clicks Save button in Save Preset dialog on Route Logs page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 filter preset created                |
-      | bottom             | Name: {KEY_ROUTES_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                   |
-    And Operator verifies selected Filter Preset name is "{KEY_ROUTES_FILTERS_PRESET_NAME}" on Route Logs page
-    And DB Operator verifies filter preset record:
-      | id        | {KEY_ROUTES_FILTERS_PRESET_ID}   |
-      | namespace | routes                           |
-      | name      | {KEY_ROUTES_FILTERS_PRESET_NAME} |
+      | top                | 1 filter preset created               |
+      | bottom             | Name: {KEY_ROUTE_FILTERS_PRESET_NAME} |
+      | waitUntilInvisible | true                                  |
+    And Operator verifies selected Filter Preset name is "{KEY_ROUTE_FILTERS_PRESET_NAME}" on Route Logs page
+    And DB Lighthouse - verify preset_filters record:
+      | id        | {KEY_ROUTE_FILTERS_PRESET_ID}   |
+      | namespace | routes                          |
+      | name      | {KEY_ROUTE_FILTERS_PRESET_NAME} |
     When Operator refresh page
-    And Operator selects "{KEY_ROUTES_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
+    And Operator selects "{KEY_ROUTE_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     Then Operator verifies selected filters on Route Logs page:
-      | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
-      | routeDateTo    | {gradle-current-date-dd/MM/yyyy}   |
-      | hub            | {hub-name}                         |
-      | driver         | {ninja-driver-name}                |
-      | archivedRoutes | true                               |
+      | routeDateFrom  | {date: 1 days ago, dd/MM/yyyy}  |
+      | routeDateTo    | {date: 0 days next, dd/MM/yyyy} |
+      | hub            | {hub-name}                      |
+      | driver         | {ninja-driver-name}             |
+      | archivedRoutes | true                            |
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Route Logs Page

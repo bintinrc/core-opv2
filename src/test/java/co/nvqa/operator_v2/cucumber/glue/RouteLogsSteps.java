@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.RouteLogsParams;
@@ -819,7 +820,7 @@ public class RouteLogsSteps extends AbstractSteps {
       Long presetId = Long.valueOf(m.group(1));
       String presetName = m.group(2);
       Assertions.assertThat(presetName).as("Preset Name").isEqualTo(finalExpected);
-      put(KEY_ROUTES_FILTERS_PRESET_ID, presetId);
+      put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID, presetId);
     });
     takesScreenshot();
   }
@@ -916,7 +917,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       routeLogsPage.savePresetDialog.presetName.setValue(finalPresetName);
-      put(KEY_ROUTES_FILTERS_PRESET_NAME, finalPresetName);
+      put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_NAME, finalPresetName);
     });
   }
 

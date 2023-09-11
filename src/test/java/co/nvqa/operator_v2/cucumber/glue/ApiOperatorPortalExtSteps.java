@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.driver.client.DriverManagementClient;
 import co.nvqa.common.driver.cucumber.DriverKeyStorage;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -62,7 +63,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
 
-
   //  TODO move to common-lighthouse
   @After("@DeleteShipperPickupFilterTemplate or @DeleteFilterTemplate")
   public void deleteShipperPickupFilterTemplate() {
@@ -113,7 +113,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       LOGGER.warn("Could not delete Filter Preset", ex);
     }
     try {
-      Long presetId = get(KEY_ROUTES_FILTERS_PRESET_ID);
+      Long presetId = get(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID);
       if (presetId != null) {
         getShipperPickupFilterTemplatesClient()
             .deleteRoutesFilterTemplate(presetId);
@@ -305,8 +305,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
         .createRoutesFilerTemplate(shipperPickupFilterTemplate);
-    put(KEY_ROUTES_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(KEY_ROUTES_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
+    put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_NAME,
+        shipperPickupFilterTemplate.getName());
   }
 
   // TODO move to common-lighthouse
@@ -362,7 +363,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
-
 
 
   // TODO move to common-core
