@@ -7,16 +7,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Sergey Mishanin
  */
 public class AddOrderToRouteSteps extends AbstractSteps {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AddOrderToRouteSteps.class);
-
 
   private AddOrderToRoutePage addOrderToRoutePage;
 
