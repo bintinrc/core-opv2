@@ -7,11 +7,16 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Sergey Mishanin
  */
 public class AddOrderToRouteSteps extends AbstractSteps {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddOrderToRouteSteps.class);
+
 
   private AddOrderToRoutePage addOrderToRoutePage;
 
@@ -23,17 +28,17 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage = new AddOrderToRoutePage(getWebDriver());
   }
 
-  @When("^Operator set \"(.+)\" route id on Add Order to Route page$")
+  @When("Operator set {string} route id on Add Order to Route page")
   public void operatorAddTheRoute(String routeId) {
     addOrderToRoutePage.routeId.setValue(resolveValue(routeId));
   }
 
-  @When("^Operator set \"(.+)\" transaction type on Add Order to Route page$")
+  @When("Operator set {string} transaction type on Add Order to Route page")
   public void operatorSetTransactionType(String transactionType) {
     addOrderToRoutePage.transactionType.selectValue(resolveValue(transactionType));
   }
 
-  @When("^Operator add \"(.+)\" prefix on Add Order to Route page$")
+  @When("Operator add {string} prefix on Add Order to Route page")
   public void operatorAddPrefix(String prefix) {
     addOrderToRoutePage.addPrefix(resolveValue(prefix));
   }
@@ -47,13 +52,13 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage.addPrefix(prefix);
   }
 
-  @And("^Operator enters \"(.+)\" tracking id on Add Order to Route page$")
+  @And("Operator enters {string} tracking id on Add Order to Route page")
   public void operatorEntersTrackingId(String trackingId) {
     trackingId = resolveValue(trackingId);
     addOrderToRoutePage.trackingId.setValue(trackingId + Keys.ENTER);
   }
 
-  @Then("^Operator verifies the last scanned tracking id is \"(.+)\"$")
+  @Then("Operator verifies the last scanned tracking id is {string}")
   public void operatorVerifiesTheLastScannedTrackingId(String expectedTrackingId) {
     Assertions.assertThat(addOrderToRoutePage.lastScannedTrackingId.getText())
         .as("Last scanned tracking id").isEqualTo(resolveValue(expectedTrackingId));
