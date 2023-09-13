@@ -146,7 +146,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   }
 
   public void verifyPresetByNameNotInList(String presetName) {
-    HashMap keys = new HashMap();
+    HashMap<String, String> keys = new HashMap<>();
     presetFilters.sendKeys(Keys.ARROW_UP);
     while (true) {
       String name = webDriver.findElement(
