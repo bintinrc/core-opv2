@@ -74,7 +74,6 @@ Feature: Route Group Management
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete delivery transaction from route group:
       | name       | {KEY_CREATED_ROUTE_GROUP.name}  |

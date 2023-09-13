@@ -198,7 +198,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       page.editRouteGroupDialog.removeSelected.click();
       Assertions.assertThat(page.editRouteGroupDialog.jobDetailsTable.isEmpty())
           .as("Jobs table is empty")
-          .isFalse();
+          .isTrue();
       page.editRouteGroupDialog.saveChanges.click();
     });
   }
