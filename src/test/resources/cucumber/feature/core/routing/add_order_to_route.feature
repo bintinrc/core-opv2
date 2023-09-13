@@ -96,7 +96,7 @@ Feature: Add Order To Route
     #      | top | Order INVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "INVALIDTRACKINGID"
 
-  @DeleteOrArchiveRoute @routing-refactor @wip
+  @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Non-ID Country
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
