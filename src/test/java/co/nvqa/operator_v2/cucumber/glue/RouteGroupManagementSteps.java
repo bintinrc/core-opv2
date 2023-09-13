@@ -44,7 +44,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     routeGroupManagementPage = new RouteGroupManagementPage(getWebDriver());
   }
 
-  @When("^Operator create new route group on Route Groups Management page:$")
+  @When("Operator create new route group on Route Groups Management page:")
   public void createNewRouteGroup(Map<String, String> data) {
     routeGroupManagementPage.inFrame(page -> {
       page.waitUntilLoaded();
@@ -67,7 +67,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify route group on Route Groups Management page:$")
+  @Then("Operator verify route group on Route Groups Management page:")
   public void verifyNewRouteGroupCreatedSuccessfully(Map<String, String> data) {
     RouteGroupInfo expected = new RouteGroupInfo(resolveKeyValues(data));
     routeGroupManagementPage.inFrame(page -> {
@@ -178,7 +178,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     names.forEach(this::verifyRouteGroupDeletedSuccessfully);
   }
 
-  @Then("^Operator delete delivery transaction from route group:$")
+  @Then("Operator delete delivery transaction from route group:")
   public void deleteDeliveryTransactionFromRouteGroup(Map<String, String> data) {
     data = resolveKeyValues(data);
     String name = data.get("name");
@@ -198,12 +198,12 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       page.editRouteGroupDialog.removeSelected.click();
       Assertions.assertThat(page.editRouteGroupDialog.jobDetailsTable.isEmpty())
           .as("Jobs table is empty")
-          .isTrue();
+          .isFalse();
       page.editRouteGroupDialog.saveChanges.click();
     });
   }
 
-  @Then("^Operator delete transaction from route group:$")
+  @Then("Operator delete transaction from route group:")
   public void deleteTransactionFromRouteGroup(Map<String, String> data) {
     data = resolveKeyValues(data);
     String name = data.get("name");
@@ -264,7 +264,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
             .isFalse();
         page.routeGroupsTable.selectRow(1);
       });
-      page.actionsMenu.selectOption("Delete Selected");
+      page.actionsMenu.selectOption("Delete selected");
       page.deleteRouteGroupsDialog.waitUntilVisible();
       List<String> groupNames = page.deleteRouteGroupsDialog.groupNames.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());

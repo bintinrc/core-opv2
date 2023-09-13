@@ -24,7 +24,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManagementPage> {
 
-  @FindBy(xpath = "//button[.='Create Route Group']")
+  @FindBy(xpath = "//button[.='Create route group']")
   public Button createRouteGroup;
 
   @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
@@ -57,7 +57,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
 
   public static class EditRouteGroupDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Save Changes']")
+    @FindBy(xpath = ".//button[.='Save changes']")
     public Button saveChanges;
 
     @FindBy(xpath = ".//button[.='Remove Selected']")
@@ -69,7 +69,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(xpath = ".//button[.='Download Selected']")
     public Button downloadSelected;
 
-    @FindBy(xpath = ".//span[./input[@placeholder='Group Name']]")
+    @FindBy(xpath = ".//span[./input[@placeholder='Group name']]")
     public AntTextBox groupName;
 
     @FindBy(xpath = ".//span[./input[@placeholder='Description']]")
@@ -143,7 +143,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(xpath = ".//div[contains(.,'Password')]//input")
     public TextBox password;
 
-    @FindBy(xpath = ".//button[.='Delete Route Group(s)']")
+    @FindBy(xpath = ".//button[.='Delete route group(s)']")
     public Button delete;
   }
 
@@ -183,7 +183,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//div[./div/label[contains(text(),'Group Name')]]//input")
+    @FindBy(xpath = ".//div[./div/label[contains(text(),'Group name')]]//input")
     public TextBox groupName;
 
     @FindBy(xpath = ".//div[./div/label[contains(text(),'Description')]]//input")
@@ -192,7 +192,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(xpath = ".//div[.//label[contains(text(),'Hub')]]//div[contains(@class,'ant-select')]")
     public AntSelect3 hub;
 
-    @FindBy(xpath = ".//button[.='Create Route Group & Add Transactions']")
+    @FindBy(xpath = ".//button[.='Create route group & add transactions']")
     public Button create;
   }
 
