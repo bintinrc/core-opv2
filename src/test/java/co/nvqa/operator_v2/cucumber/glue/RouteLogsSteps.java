@@ -776,6 +776,7 @@ public class RouteLogsSteps extends AbstractSteps {
     ToastInfo toastInfo;
     do {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
+        toast.moveToElement();
         String value = finalData.get("top");
         if (StringUtils.isNotBlank(value)) {
           try {
@@ -1134,13 +1135,13 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verifies that error toast displayed:")
   public void operatorVerifyErrorToast(Map<String, String> data) {
-
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
+        toast.moveToElement();
         String actualTop = toast.toastTop.getNormalizedText();
         String actualBottom = toast.toastBottom.getNormalizedText();
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
@@ -1227,8 +1228,8 @@ public class RouteLogsSteps extends AbstractSteps {
       Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText()).as("Process")
           .isEqualTo(resolveValue(process));
 
-      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
-          .as("Number Of routes").isEqualTo(data.size());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds)
+          .as("Number Of routes").hasSameSizeAs(data);
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));
