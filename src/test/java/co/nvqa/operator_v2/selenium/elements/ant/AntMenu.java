@@ -24,7 +24,7 @@ public class AntMenu extends PageElement {
   public void selectOption(String option) {
     openMenu();
     getItemElement(option).click();
-    pause100ms();
+    pause1s();
   }
 
   public Button getItemElement(String option) {
