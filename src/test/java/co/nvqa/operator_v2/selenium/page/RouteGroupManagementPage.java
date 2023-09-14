@@ -30,7 +30,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
   @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
   public AntMenu actionsMenu;
 
-  @FindBy(xpath = "//div[./label[.='Creation Date']]/div")
+  @FindBy(xpath = "//div[./label[.='Creation date']]/div")
   public AntRangePicker creationDate;
 
   @FindBy(css = "div.ant-modal")
@@ -172,7 +172,7 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     @FindBy(css = "input[type='password']")
     public TextBox password;
 
-    @FindBy(xpath = ".//button[.='Clear Route Group(s)']")
+    @FindBy(xpath = ".//button[.='Clear route group(s)']")
     public Button clear;
 
   }
