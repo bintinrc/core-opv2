@@ -22,8 +22,8 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[2]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that success toast displayed:
-#      | top | Order {KEY_CREATED_ORDER.requestedTrackingId} added to route {KEY_CREATED_ROUTE_ID} |
+    Then Operator verifies that success toast displayed:
+      | top | Order {KEY_CREATED_ORDER.requestedTrackingId} added to route {KEY_CREATED_ROUTE_ID} |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -59,9 +59,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                       |
-#      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                       |
+      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -73,7 +73,6 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
@@ -96,9 +95,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                       |
-#      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                       |
+      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -132,9 +131,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                       |
-#      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                       |
+      | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -206,9 +205,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                                       |
-#      | bottom | ^.*Error Code: 103088.*Error Message: Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                                       |
+      | bottom | ^.*Error Code: 103088.*Error Message: Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -243,9 +242,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                                   |
-#      | bottom | ^.*Error Code: 103088.*Error Message: Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} has the status ARCHIVED.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                                   |
+      | bottom | ^.*Error Code: 103088.*Error Message: Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} has the status ARCHIVED.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -279,9 +278,9 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that error toast displayed:
-#      | top    | Network Request Error                                                                                   |
-#      | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                                                   |
+      | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
@@ -324,8 +323,8 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Pickup" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-#    Then Operator verifies that success toast displayed:
-#      | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies that success toast displayed:
+      | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
