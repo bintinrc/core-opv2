@@ -9,11 +9,11 @@ Feature: Route Group Management
   Scenario: Operator Creates Route Group
     Given Operator go to menu Routing -> 2. Route Group Management
     When Operator create new route group on Route Groups Management page:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG3-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
       | hub         | {hub-name}                                                                                                   |
     Then Operator verify route group on Route Groups Management page:
-      | name                 | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name                 | ARG3-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description          | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
       | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*                                                                          |
       | noTransactions       | 0                                                                                                            |
@@ -26,20 +26,19 @@ Feature: Route Group Management
   Scenario: Operator Updates Route Group Details
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG4-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator update created route group on Route Group Management page:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}-EDITED                        |
+      | name        | ARG4-{gradle-current-date-yyyyMMddHHmmsss}-EDITED                        |
       | description | This Route Group is created by automation test from Operator V2. EDITED |
       | hubName     | {hub-name-2}                                                            |
     Then Operator verifies that success react notification displayed:
       | top                | Id: {KEY_CREATED_ROUTE_GROUP.id} |
       | bottom             | 1 Route Group Updated            |
-      | waitUntilInvisible | true                             |
     Then Operator verify route group on Route Groups Management page:
       | id                   | {KEY_CREATED_ROUTE_GROUP.id}                                            |
-      | name                 | ARG-{gradle-current-date-yyyyMMddHHmmsss}-EDITED                        |
+      | name                 | ARG4-{gradle-current-date-yyyyMMddHHmmsss}-EDITED                        |
       | description          | This Route Group is created by automation test from Operator V2. EDITED |
       | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*                                     |
       | noTransactions       | 0                                                                       |
@@ -52,21 +51,20 @@ Feature: Route Group Management
   Scenario: Operator Deletes Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG5-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete "{KEY_CREATED_ROUTE_GROUP.name}" route group on Route Group Management page
     Then Operator verifies that success react notification displayed:
       | top                | {KEY_CREATED_ROUTE_GROUP.name} |
       | bottom             | 1 Route Group Deleted          |
-      | waitUntilInvisible | true                           |
     Then Operator verify "{KEY_CREATED_ROUTE_GROUP.name}" route group was deleted on Route Group Management page
 
   @DeleteRouteGroups
   Scenario: Delete Transactions From Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG6-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -97,7 +95,6 @@ Feature: Route Group Management
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
     Then Operator verifies that success react notification displayed:
       | top                | 2 Route Group(s) Deleted |
-      | waitUntilInvisible | true                     |
     And Operator verify route groups were deleted on Route Group Management page:
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
@@ -106,12 +103,11 @@ Feature: Route Group Management
   Scenario: Delete A Route Group From Edit Route Group Modal
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG7-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete "{KEY_CREATED_ROUTE_GROUP.name}" route group from Edit Route Group modal on Route Group Management page
     Then Operator verifies that success react notification displayed:
       | top                | {KEY_CREATED_ROUTE_GROUP.name} |
       | bottom             | 1 Route Group Deleted          |
-      | waitUntilInvisible | true                           |
     Then Operator verify "{KEY_CREATED_ROUTE_GROUP.name}" route group was deleted on Route Group Management page

@@ -288,7 +288,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
             .isFalse();
         page.routeGroupsTable.selectRow(1);
       });
-      page.actionsMenu.selectOption("Clear Selected");
+      page.actionsMenu.selectOption("Clear selected");
       page.clearRouteGroupsDialog.waitUntilVisible();
       List<String> groupNames = page.clearRouteGroupsDialog.groupNames.stream()
           .map(PageElement::getNormalizedText).collect(Collectors.toList());

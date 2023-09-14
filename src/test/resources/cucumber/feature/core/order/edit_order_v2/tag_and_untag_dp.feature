@@ -224,7 +224,7 @@ Feature: Tag & Untag DP
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                                                                                                                                                                                                                                                                                                                       |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                                                                                                                                                                                               |
     And API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG-{uniqueString}                                                                                           |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                                                   |
