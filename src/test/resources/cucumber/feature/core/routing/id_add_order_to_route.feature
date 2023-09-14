@@ -261,7 +261,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @wip
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Hub Id is not Whitelisted
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

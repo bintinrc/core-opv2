@@ -1138,7 +1138,11 @@ public class RouteLogsSteps extends AbstractSteps {
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
+    takesScreenshot();
+    LOGGER.info("LOG 1");
     pause3s();
+    LOGGER.info("LOG 2");
+    takesScreenshot();
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
