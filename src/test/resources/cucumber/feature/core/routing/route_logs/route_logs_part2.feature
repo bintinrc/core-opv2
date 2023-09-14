@@ -87,7 +87,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Address Verify Route on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:

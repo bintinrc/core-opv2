@@ -163,7 +163,9 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
   }
 
   public void setJobTags(String jobTags) {
-    setJobTags(splitAndNormalize(jobTags));
+    if (jobTags != null) {
+      setJobTags(splitAndNormalize(jobTags));
+    }
   }
 
   @Override
@@ -178,12 +180,13 @@ public class RouteGroupJobDetails extends DataEntity<RouteGroupJobDetails> {
     setAddress(getValueIfIndexExists(values, 6));
     setRouteId(getValueIfIndexExists(values, 7));
     setStatus(getValueIfIndexExists(values, 8));
-    setPriorityLevel(getValueIfIndexExists(values, 9));
-    setStartDateTime(getValueIfIndexExists(values, 10));
-    setEndDateTime(getValueIfIndexExists(values, 11));
-    setDp(getValueIfIndexExists(values, 12));
-    setPickupSize(getValueIfIndexExists(values, 13));
-    setComments(getValueIfIndexExists(values, 14));
+    setJobTags(getValueIfIndexExists(values, 9));
+    setPriorityLevel(getValueIfIndexExists(values, 10));
+    setStartDateTime(getValueIfIndexExists(values, 11));
+    setEndDateTime(getValueIfIndexExists(values, 12));
+    setDp(getValueIfIndexExists(values, 13));
+    setPickupSize(getValueIfIndexExists(values, 14));
+    setComments(getValueIfIndexExists(values, 15));
   }
 
 }

@@ -67,7 +67,6 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
@@ -141,7 +140,6 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |

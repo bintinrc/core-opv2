@@ -414,8 +414,8 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     Assertions.assertThat(actual.size()).as("Number of records in " + CSV_FILE_NAME)
         .isEqualTo(expected.size());
 
-    for (int i = 0; i < expected.size(); i++) {
-      expected.get(i).compareWithActual(actual.get(i));
+    for (RouteGroupJobDetails routeGroupJobDetails : expected) {
+      DataEntity.assertListContains(actual, routeGroupJobDetails, "Job Details in CSV");
     }
   }
 }

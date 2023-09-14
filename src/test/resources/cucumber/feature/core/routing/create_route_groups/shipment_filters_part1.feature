@@ -281,7 +281,7 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentType                   | AIR_HAUL                           |
       | shipmentStatus                 | Completed                          |
       | shipmentCompletionDateTimeFrom | {gradle-previous-1-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd}     |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}     |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                 | type                 | shipper                                  | address                                                     | status                 |
