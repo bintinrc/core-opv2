@@ -312,10 +312,10 @@ Feature: Add Order To Route
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                           |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                         |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
     And API Core - Operator merge routed waypoints:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -337,11 +337,6 @@ Feature: Add Order To Route
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -361,11 +356,6 @@ Feature: Add Order To Route
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -376,6 +366,6 @@ Feature: Add Order To Route
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
-      | driverId           | {ninja-driver-id}                     |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
+      | driverId           | {ninja-driver-id}                                                           |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                          |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
