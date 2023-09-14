@@ -774,10 +774,9 @@ public class RouteLogsSteps extends AbstractSteps {
         finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
     ToastInfo toastInfo;
-    pause2s();
+    pause3s();
     do {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
-        toast.moveToElement();
         String value = finalData.get("top");
         if (StringUtils.isNotBlank(value)) {
           try {
@@ -1139,11 +1138,10 @@ public class RouteLogsSteps extends AbstractSteps {
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
-    pause2s();
+    pause3s();
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
-        toast.moveToElement();
         String actualTop = toast.toastTop.getNormalizedText();
         String actualBottom = toast.toastBottom.getNormalizedText();
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
