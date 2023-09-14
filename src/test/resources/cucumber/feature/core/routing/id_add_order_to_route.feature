@@ -277,7 +277,7 @@ Feature: Add Order To Route
     When Operator go to menu Routing -> Add Order to Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
-    And Operator waits for 20 seconds
+    And Operator waits for 40 seconds
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                                   |
