@@ -256,43 +256,6 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-
-    And DB Operator verifies waypoint status is "ROUTED"
-    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies route_monitoring_data record
-
-  @DeleteOrArchiveRoute @routing-refactor @wip
-  Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Hub Id is not Whitelisted
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator get order details
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-3}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
-    And Operator set "Delivery" transaction type on Add Order to Route page
-    And Operator waits for 40 seconds
-    And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                   |
-      | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
-    And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
-    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order event on Edit Order V2 page using data below:
-      | name    | ADD TO ROUTE                      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status  | PENDING                           |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    And DB Operator verify Delivery waypoint of the created order using data below:
-      | status | ROUTED |
-    And DB Operator verifies transaction routed to new route id
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
