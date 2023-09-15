@@ -774,6 +774,7 @@ public class RouteLogsSteps extends AbstractSteps {
         finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
     ToastInfo toastInfo;
+    pause3s();
     do {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
         toast.moveToElement();
@@ -801,8 +802,8 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       }).findFirst().orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
-    Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed")
-        .isTrue();
+    Assertions.assertThat(toastInfo).as("Toast " + finalData + " is displayed")
+        .isNotNull();
     if (waitUntilInvisible) {
       toastInfo.waitUntilInvisible();
     }
@@ -1138,6 +1139,9 @@ public class RouteLogsSteps extends AbstractSteps {
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
+    takesScreenshot();
+    pause3s();
+    takesScreenshot();
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
@@ -1170,7 +1174,8 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       });
     } while (!found && new Date().getTime() - start < 30000);
-    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
+    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed")
+        .isTrue();
     Assertions.assertThat(finalData.toString())
         .withFailMessage("Toast is not displayed: " + finalData)
         .isNotNull();
@@ -1243,7 +1248,8 @@ public class RouteLogsSteps extends AbstractSteps {
             break;
           }
         }
-        Assertions.assertThat(routeIndex >= 0).as(f("Route %s found", routeId)).isTrue();
+        Assertions.assertThat(routeIndex).as(f("Route %s found", routeId))
+            .isNotNegative();
         Assertions.assertThat(routeLogsPage.selectionErrorDialog.reasons.get(i).getText())
             .as(f("Reason for route %s", routeId)).isEqualTo(reason);
       }
