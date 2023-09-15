@@ -186,6 +186,7 @@ Feature: Create Route Groups
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                                      |
       | routeGrouping | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | shipper       | {filter-shipper-name}                      |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Groups page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
