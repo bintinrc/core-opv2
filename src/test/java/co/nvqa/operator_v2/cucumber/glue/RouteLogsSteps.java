@@ -1143,7 +1143,8 @@ public class RouteLogsSteps extends AbstractSteps {
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
         toast.moveToElement();
         String actualTop = toast.toastTop.getNormalizedText();
-        String actualBottom = toast.toastBottom.getNormalizedText();
+        String actualBottom =
+            toast.toastBottom.isDisplayedFast() ? toast.toastBottom.getNormalizedText() : "";
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
         String expTop = finalData.get("top");
         if (StringUtils.isNotBlank(expTop)) {

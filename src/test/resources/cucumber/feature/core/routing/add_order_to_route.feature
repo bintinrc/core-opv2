@@ -47,8 +47,8 @@ Feature: Add Order To Route
     And Operator set "Delivery" transaction type on Add Order to Route page
     When Operator add "TEST" prefix on Add Order to Route page
     And Operator enters "INVALIDTRACKINGID" tracking id on Add Order to Route page
-    #    Then Operator verifies that error toast displayed:
-    #      | top | Order TESTINVALIDTRACKINGID not found! |
+    Then Operator verifies that error toast displayed:
+      | top | Order TESTINVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "TESTINVALIDTRACKINGID"
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
