@@ -777,6 +777,7 @@ public class RouteLogsSteps extends AbstractSteps {
     pause3s();
     do {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
+        toast.moveToElement();
         String value = finalData.get("top");
         if (StringUtils.isNotBlank(value)) {
           try {
@@ -1144,6 +1145,7 @@ public class RouteLogsSteps extends AbstractSteps {
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
+        toast.moveToElement();
         String actualTop = toast.toastTop.getNormalizedText();
         String actualBottom = toast.toastBottom.getNormalizedText();
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
