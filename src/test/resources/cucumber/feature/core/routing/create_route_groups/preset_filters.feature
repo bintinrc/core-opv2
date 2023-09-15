@@ -73,7 +73,7 @@ Feature: Create Route Groups - Preset Filters
       | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00     |
       | Shipment Status: (1) At Transit Hub                                                             |
       | Shipment Type: (1) AIR_HAUL                                                                     |
-      | Shipper: (1) 183815-core-opv2-shipper                                                           |
+      | Shipper: (1) {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})                         |
       | Show Reservation: Show                                                                          |
       | Show Shipment: Show                                                                             |
       | Show Transaction: Show                                                                          |
@@ -106,7 +106,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                     |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                     |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                     |
-      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name}                           |
+      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})         |
       | routed            | Show                                                               |
       | masterShipper     | {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name} |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
@@ -173,7 +173,7 @@ Feature: Create Route Groups - Preset Filters
     Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     Then Operator verifies selected General Filters on Create Route Groups page:
-      | shipper       | {shipper-v4-legacy-id}-{shipper-v4-name}                           |
+      | shipper       | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})         |
       | routed        | Show                                                               |
       | masterShipper | {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name} |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
@@ -300,7 +300,7 @@ Feature: Create Route Groups - Preset Filters
       | Start Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                |
       | End Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                  |
       | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00     |
-      | Shipper: (1) {shipper-v4-legacy-id}-{shipper-v4-name}                                           |
+      | Shipper: (1) {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})                         |
       | Routed: Show                                                                                    |
       | Master Shipper: (1) {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name}          |
       | Granular Order Status: (1) Arrived at Sorting Hub                                               |
@@ -345,7 +345,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                     |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                     |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                     |
-      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name}                           |
+      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})         |
       | routed            | Show                                                               |
       | masterShipper     | {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name} |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
@@ -452,7 +452,7 @@ Feature: Create Route Groups - Preset Filters
       | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd}                                     |
       | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                     |
       | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                     |
-      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name}                           |
+      | shipper           | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})         |
       | routed            | Show                                                               |
       | masterShipper     | {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name} |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
@@ -515,7 +515,7 @@ Feature: Create Route Groups - Preset Filters
     Then Operator verifies that success react notification displayed:
       | top | Added successfully |
     Then Operator verifies selected General Filters on Create Route Groups page:
-      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id}) |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
       | orderServiceType | Parcel Delivery  |
       | deliveryType     | 3 Days - Anytime |
@@ -547,7 +547,7 @@ Feature: Create Route Groups - Preset Filters
     Then Operator verifies that success react notification displayed:
       | top | Added successfully |
     And Operator verifies selected General Filters on Create Route Groups page:
-      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} |
+      | shipper | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id}) |
     And Operator verifies selected Transactions Filters on Create Route Groups page:
       | orderServiceType | Parcel Delivery  |
       | deliveryType     | 3 Days - Anytime |

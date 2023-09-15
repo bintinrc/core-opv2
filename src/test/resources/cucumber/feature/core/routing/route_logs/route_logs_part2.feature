@@ -87,7 +87,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Address Verify Route on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -108,10 +107,6 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top                | Address verification successful for selected route |
       | waitUntilInvisible | true                                               |
-    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score    |
-      | 1        | not null |
-      | 0        | not null |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>

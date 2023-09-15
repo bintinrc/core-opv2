@@ -135,7 +135,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Multiple Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -149,7 +148,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies that success react notification displayed:
-      | top                | 2 Route(s) Deleted |
+      | top                | 2 route(s) deleted |
       | waitUntilInvisible | true               |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
