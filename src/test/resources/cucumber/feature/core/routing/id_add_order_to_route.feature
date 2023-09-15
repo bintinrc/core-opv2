@@ -224,7 +224,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @ArchiveRouteCommonV2 @wip
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Add Merged Pickup Routed Order to a New Route - New Route Date and Hub Same to Existing Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
