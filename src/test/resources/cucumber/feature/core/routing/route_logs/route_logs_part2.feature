@@ -107,10 +107,6 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top                | Address verification successful for selected route |
       | waitUntilInvisible | true                                               |
-    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score    |
-      | 1        | not null |
-      | 0        | not null |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>

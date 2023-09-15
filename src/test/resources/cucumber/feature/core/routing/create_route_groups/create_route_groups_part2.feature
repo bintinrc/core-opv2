@@ -73,7 +73,7 @@ Feature: Create Route Groups
     Then Operator verify Transactions/Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping  - Empty Route Group
+  Scenario: Operator Filter Route Grouping - Empty Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
