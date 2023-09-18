@@ -141,8 +141,8 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Delete Routes with Reservation on Route Logs
+  @DeleteOrArchiveRoute @DeletePickupAppointmentJob
+  Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -151,6 +151,14 @@ Feature: Route Logs
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {shipper-v4-paj-id} |
+      | generateAddress | RANDOM              |
+    And API Control - Operator create pickup appointment job with data below:
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    When API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -181,3 +189,11 @@ Feature: Route Logs
       | type       | 3                                   |
       | pickupType | 1                                   |
       | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CONTROL_CREATED_PA_JOBS[1].id}             |
+      | userId     | 397                                             |
+      | userName   | AUTOMATION EDITED                               |
+      | userEmail  | qa@ninjavan.co                                  |
+      | type       | 3                                               |
+      | pickupType | 2                                               |
+      | data       | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}} |
