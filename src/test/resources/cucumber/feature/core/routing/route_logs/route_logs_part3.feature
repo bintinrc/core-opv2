@@ -92,7 +92,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute @deletePickupJob
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     # RETURN ORDER
