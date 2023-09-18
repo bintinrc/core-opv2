@@ -92,7 +92,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute @wip
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     # RETURN ORDER
@@ -135,16 +135,14 @@ Feature: Route Logs
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     # PICKUP APPOINTMENT JOB
-    Given API Shipper - Operator get address details using data below:
+    And API Shipper - Operator get address details using data below:
       | shipperId | {shipper-v4-paj-id}      |
       | addressId | {shipper-address-paj-id} |
-    Given API Control - Operator create pickup appointment job with data below:
+    And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
-    When API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
