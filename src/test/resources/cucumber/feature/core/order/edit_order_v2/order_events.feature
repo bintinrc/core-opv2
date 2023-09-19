@@ -272,7 +272,7 @@ Feature: Order Events
       | name        | ADDED TO RESERVATION                             |
       | description | Reservation ID: {KEY_LIST_OF_RESERVATION_IDS[1]} |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Applies Filter on Events Table
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
