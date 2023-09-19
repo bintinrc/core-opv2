@@ -364,22 +364,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
 
-
-  // TODO move to common-core
-  @Given("API Operator create sales person:")
-  public void apiOperatorCreateSalesPerson(Map<String, String> data) {
-    SalesPerson salesPerson = new SalesPerson(resolveKeyValues(data));
-    String uniqueString = generateDateUniqueString();
-    if (StringUtils.endsWithIgnoreCase(salesPerson.getName(), "{uniqueString}")) {
-      salesPerson.setName(salesPerson.getName().replace("{uniqueString}", uniqueString));
-    }
-    if (StringUtils.endsWithIgnoreCase(salesPerson.getCode(), "{uniqueString}")) {
-      salesPerson.setCode(salesPerson.getCode().replace("{uniqueString}", uniqueString));
-    }
-    salesPerson = getSalesClient().createSalesPerson(salesPerson);
-    putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
-  }
-
   //TODO move to common-driver
   @Given("API Driver - Operator create new Driver using data below:")
   public void operatorCreateNewDriver(Map<String, String> mapOfData) {

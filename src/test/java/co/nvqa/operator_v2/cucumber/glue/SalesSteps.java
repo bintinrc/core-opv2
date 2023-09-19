@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.miscellanous.SalesPerson;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SalesPage;
@@ -18,7 +19,6 @@ import org.assertj.core.api.Assertions;
 @ScenarioScoped
 public class SalesSteps extends AbstractSteps {
 
-  private static final String KEY_LIST_OF_SALES_PERSON = "KEY_LIST_OF_SALES_PERSON";
   private static final String COLUMN_CODE = "code";
   private static final String COLUMN_NAME = "name";
   private static final String ACTION_EDIT = "edit";
@@ -61,7 +61,7 @@ public class SalesSteps extends AbstractSteps {
     }
 
     salesPage.uploadCsvSales(listOfSalesPerson);
-    putAllInList(KEY_LIST_OF_SALES_PERSON, listOfSalesPerson);
+    putAllInList(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON, listOfSalesPerson);
   }
 
   @When("Operator upload CSV with following Sales Persons data on Sales page:")
@@ -81,7 +81,7 @@ public class SalesSteps extends AbstractSteps {
         .collect(Collectors.toList());
 
     salesPage.uploadCsvSales(salesPersons);
-    putAllInList(KEY_LIST_OF_SALES_PERSON, salesPersons);
+    putAllInList(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON, salesPersons);
   }
 
   @When("Operator verifies that Upload CSV dialog contains following error records:")
@@ -96,7 +96,7 @@ public class SalesSteps extends AbstractSteps {
   @And("Operator verifies all sales persons parameters on Sales page")
   @Then("Operator verifies all Sales Persons created successfully")
   public void operatorVerifiesAllSalesPersonsCreatedSuccessfully() {
-    List<SalesPerson> listOfSalesPerson = get(KEY_LIST_OF_SALES_PERSON);
+    List<SalesPerson> listOfSalesPerson = get(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON);
     listOfSalesPerson.forEach(expected -> {
       salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, expected.getCode());
       SalesPerson actual = salesPage.salesPersonsTable.readEntity(1);
@@ -106,7 +106,7 @@ public class SalesSteps extends AbstractSteps {
 
   @Then("Operator verifies all filters on Sales page works fine")
   public void operatorVerifiesAllFiltersOnSalesPageWorksFine() {
-    List<SalesPerson> salesPersons = get(KEY_LIST_OF_SALES_PERSON);
+    List<SalesPerson> salesPersons = get(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON);
     salesPersons.forEach(expected -> {
       salesPage.waitWhilePageIsLoading();
       salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, expected.getCode());
@@ -126,9 +126,9 @@ public class SalesSteps extends AbstractSteps {
     String oldCode = resolveValue(code);
     SalesPerson newSalesPerson = new SalesPerson(resolveKeyValues(data));
     if (StringUtils.isNotEmpty(newSalesPerson.getCode())) {
-      putInList(KEY_LIST_OF_SALES_PERSON, newSalesPerson);
+      putInList(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON, newSalesPerson);
     }
-    List<SalesPerson> salesPersons = get(KEY_LIST_OF_SALES_PERSON);
+    List<SalesPerson> salesPersons = get(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_SALES_PERSON);
     salesPersons.stream()
         .filter(person -> StringUtils.equalsIgnoreCase(oldCode, person.getCode()))
         .findFirst()

@@ -37,12 +37,12 @@ Feature: Sales
     When Operator go to menu Shipper -> Sales
     And Operator upload CSV with following Sales Persons data on Sales page:
       | code                               | name                 |
-      | {KEY_LIST_OF_SALES_PERSON[1].code} | Dummy-{uniqueString} |
+      | {KEY_CORE_LIST_OF_SALES_PERSON[1].code} | Dummy-{uniqueString} |
     Then Operator verifies that Upload CSV dialog contains following error records:
-      | 1.Sales {KEY_LIST_OF_SALES_PERSON[2].name}: The sales person with code - {KEY_LIST_OF_SALES_PERSON[2].code} already exists |
+      | 1.Sales {KEY_CORE_LIST_OF_SALES_PERSON[2].name}: The sales person with code - {KEY_CORE_LIST_OF_SALES_PERSON[2].code} already exists |
     And Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                            |
-      | bottom | ^.*400 Unknown.*The sales person with code - {KEY_LIST_OF_SALES_PERSON[2].code} already exists.* |
+      | bottom | ^.*400 Unknown.*The sales person with code - {KEY_CORE_LIST_OF_SALES_PERSON[2].code} already exists.* |
 
   @DeleteCreatedSalesPerson
   Scenario: Operator Update a Sales Person
@@ -51,8 +51,8 @@ Feature: Sales
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |
     When Operator go to menu Shipper -> Sales
-    And Operator edit "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page using data below:
-      | name | {KEY_LIST_OF_SALES_PERSON[1].name}EDITED |
+    And Operator edit "{KEY_CORE_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page using data below:
+      | name | {KEY_CORE_LIST_OF_SALES_PERSON[1].name}EDITED |
     Then Operator verifies all sales persons parameters on Sales page
 
   @DeleteCreatedSalesPerson
@@ -62,7 +62,7 @@ Feature: Sales
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |
     When Operator go to menu Shipper -> Sales
-    And Operator deletes "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page
+    And Operator deletes "{KEY_CORE_LIST_OF_SALES_PERSON[1].code}" sales person on Sales page
     Then Operator verifies that success toast displayed:
-      | top | Deleted salesperson {KEY_LIST_OF_SALES_PERSON[1].name} ({KEY_LIST_OF_SALES_PERSON[1].code}) |
-    And Operator verifies "{KEY_LIST_OF_SALES_PERSON[1].code}" sales person was deleted on Sales page
+      | top | Deleted salesperson {KEY_CORE_LIST_OF_SALES_PERSON[1].name} ({KEY_CORE_LIST_OF_SALES_PERSON[1].code}) |
+    And Operator verifies "{KEY_CORE_LIST_OF_SALES_PERSON[1].code}" sales person was deleted on Sales page
