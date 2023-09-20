@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart1 @current
+@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart1
 Feature: Cancel Order
 
   Background:
@@ -81,7 +81,7 @@ Feature: Cancel Order
       | tags          | name          | description                                                                                                                                                                                                                                                 |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Pending Pickup New Granular Status: Cancelled Old Order Status: Pending New Order Status: Cancelled Reason: CANCEL |
 
-  @ArchiveRouteCommonV2 @wip
+  @ArchiveRouteCommonV2
   Scenario: Cancel Order - Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
