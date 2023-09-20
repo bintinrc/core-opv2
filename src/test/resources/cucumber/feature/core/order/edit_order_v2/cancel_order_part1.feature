@@ -38,8 +38,8 @@ Feature: Cancel Order
     When Operator cancel order on Edit Order V2 page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) cancelled                        |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) cancelled                        |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
@@ -78,8 +78,8 @@ Feature: Cancel Order
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                     |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Pending\nNew Order Status: Cancelled\n\nReason: CANCEL |
+      | tags          | name          | description                                                                                                                                                                                                                                                 |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Pending Pickup New Granular Status: Cancelled Old Order Status: Pending New Order Status: Cancelled Reason: CANCEL |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Pickup Fail
@@ -115,8 +115,8 @@ Feature: Cancel Order
     When Operator cancel order on Edit Order V2 page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) cancelled                        |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) cancelled                        |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
     And Operator verify order summary on Edit Order V2 page using data below:
@@ -172,8 +172,8 @@ Feature: Cancel Order
     When Operator cancel order on Edit Order V2 page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) cancelled                        |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) cancelled                        |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
@@ -218,8 +218,8 @@ Feature: Cancel Order
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                             |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Van en-route to pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Transit\nNew Order Status: Cancelled\n\nReason: CANCEL |
+      | tags          | name          | description                                                                                                                                                                                                                                                         |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Van en-route to pickup New Granular Status: Cancelled Old Order Status: Transit New Order Status: Cancelled Reason: CANCEL |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
@@ -239,8 +239,8 @@ Feature: Cancel Order
     And Operator cancel order on Edit Order V2 page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) cancelled                        |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) cancelled                        |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Then Operator verify order status is "Cancelled" on Edit Order V2 page
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
@@ -270,8 +270,8 @@ Feature: Cancel Order
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                              |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Staging\nNew Granular Status: Cancelled\n\nOld Order Status: Staging\nNew Order Status: Cancelled\n\nReason: CANCEL |
+      | tags          | name          | description                                                                                                                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Staging New Pickup Status: Cancelled Old Delivery Status: Staging New Delivery Status: Cancelled Old Granular Status: Staging New Granular Status: Cancelled Old Order Status: Staging New Order Status: Cancelled Reason: CANCEL |
 
   Scenario: Cancel Order - En-route to Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:

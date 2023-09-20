@@ -344,7 +344,7 @@ Feature: Resolve Recovery Ticket
       | PARCEL ROUTING SCAN |
       | TICKET RESOLVED     |
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Resolve MISSING PETS Ticket upon Route Inbound
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
