@@ -60,7 +60,7 @@ public class RouteCashInboundSteps extends AbstractSteps {
     routeCashInboundCod.setReceiptNumber(receiptNumber);
 
     routeCashInboundPage.inFrame(() -> {
-      routeCashInboundPage.waitUntilLoaded(2);
+      routeCashInboundPage.waitUntilLoaded(60);
       routeCashInboundPage.addCod.click();
       routeCashInboundPage.addCodDialog.waitUntilVisible();
       routeCashInboundPage.addCodDialog.routeId.setValue(routeCashInboundCod.getRouteId());
