@@ -44,7 +44,7 @@ Feature: Reschedule
       | pickupDate    | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot      | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
@@ -162,7 +162,7 @@ Feature: Reschedule
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot         | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
@@ -294,18 +294,18 @@ Feature: Reschedule
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
     And Operator reschedule Delivery on Edit Order V2 page:
-      | recipientName    | test recipient name            |
-      | recipientContact | +9727894434                    |
-      | recipientEmail   | test@mail.com                  |
-      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | timeslot         | 9AM - 12PM                     |
-      | country          | Singapore                      |
-      | city             | Singapore                      |
-      | address1         | 116 Keng Lee Rd                |
-      | address2         | 15                             |
-      | postalCode       | 308402                         |
+      | recipientName    | test recipient name             |
+      | recipientContact | +9727894434                     |
+      | recipientEmail   | test@mail.com                   |
+      | deliveryDate     | {date: 0 days next, yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                      |
+      | country          | Singapore                       |
+      | city             | Singapore                       |
+      | address1         | 116 Keng Lee Rd                 |
+      | address2         | 15                              |
+      | postalCode       | 308402                          |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -321,9 +321,9 @@ Feature: Reschedule
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | status    | PENDING                        |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status    | PENDING                         |
+      | startDate | {date: 0 days next, yyyy-MM-dd} |
+      | endDate   | {date: 0 days next, yyyy-MM-dd} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -432,18 +432,18 @@ Feature: Reschedule
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
     And Operator reschedule Delivery on Edit Order V2 page:
-      | recipientName    | test recipient name            |
-      | recipientContact | +9727894434                    |
-      | recipientEmail   | test@mail.com                  |
-      | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | timeslot         | 9AM - 12PM                     |
-      | country          | Singapore                      |
-      | city             | Singapore                      |
-      | address1         | 116 Keng Lee Rd                |
-      | address2         | 15                             |
-      | postalCode       | 308402                         |
+      | recipientName    | test recipient name             |
+      | recipientContact | +9727894434                     |
+      | recipientEmail   | test@mail.com                   |
+      | deliveryDate     | {date: 0 days next, yyyy-MM-dd} |
+      | timeslot         | 9AM - 12PM                      |
+      | country          | Singapore                       |
+      | city             | Singapore                       |
+      | address1         | 116 Keng Lee Rd                 |
+      | address2         | 15                              |
+      | postalCode       | 308402                          |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -459,9 +459,9 @@ Feature: Reschedule
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | status    | PENDING                        |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status    | PENDING                         |
+      | startDate | {date: 0 days next, yyyy-MM-dd} |
+      | endDate   | {date: 0 days next, yyyy-MM-dd} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -569,7 +569,7 @@ Feature: Reschedule
       | address2      | 15                             |
       | postalCode    | 308402                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | RESCHEDULE     |
@@ -701,7 +701,7 @@ Feature: Reschedule
       | address2         | 15                             |
       | postalCode       | 308402                         |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -842,7 +842,7 @@ Feature: Reschedule
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | deliveryTimeslot | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
-      | top                | Order rescheduled successfully |
+      | top | Order rescheduled successfully |
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
