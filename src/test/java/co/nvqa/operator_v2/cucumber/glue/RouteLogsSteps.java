@@ -364,6 +364,40 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator edits route details:")
+  public void operatorEditRouteDetails(Map<String, String> data) {
+    routeLogsPage.inFrame(() -> {
+      RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
+
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, newParams.getId());
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
+      routeLogsPage.editDetailsDialog.waitUntilVisible();
+
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeLogsPage.editDetailsDialog.routeDate.setValue(newParams.getDate());
+      }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.editDetailsDialog.zone.selectValue(newParams.getZone());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeLogsPage.editDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeLogsPage.editDetailsDialog.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeLogsPage.editDetailsDialog.comments.setValue(newParams.getComments());
+      }
+      routeLogsPage.editDetailsDialog.saveChanges.click();
+    });
+  }
+
   @When("Operator verify Edit Details button is disabled on Route Logs page")
   public void clickCheckAssignmentIsDisabled() {
     routeLogsPage.inFrame(() -> {

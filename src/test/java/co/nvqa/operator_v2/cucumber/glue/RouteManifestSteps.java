@@ -163,7 +163,8 @@ public class RouteManifestSteps extends AbstractSteps {
           .isEqualTo(data.get("routeId"));
     }
     if (data.containsKey("codCollectionPending")) {
-      assertions.assertThat(routeManifestPage.codCollectionPending.getText()).as("COD Collection - Pending")
+      assertions.assertThat(routeManifestPage.codCollectionPending.getText())
+          .as("COD Collection - Pending")
           .isEqualTo(data.get("codCollectionPending"));
     }
     if (data.containsKey("driverId")) {
@@ -175,6 +176,13 @@ public class RouteManifestSteps extends AbstractSteps {
           .isEqualTo(data.get("driverName"));
     }
     assertions.assertAll();
+  }
+
+  @When("Operator verifies COD is not displayed on Route Manifest page")
+  public void verifyCodIsNotDisplayed() {
+    Assertions.assertThat(routeManifestPage.codCollectionPending.isDisplayedFast())
+        .withFailMessage("Unexpected COD is displayed")
+        .isFalse();
   }
 
   @When("Operator click view POA/POH button on Route Manifest page")
