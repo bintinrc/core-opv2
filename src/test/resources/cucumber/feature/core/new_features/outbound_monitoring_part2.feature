@@ -673,3 +673,68 @@ Feature: Outbound Monitoring
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+
+  @CloseNewWindows @ArchiveRouteCommonV2
+  Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Delivery Order is Pulled Out
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, YYYY-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, YYYY-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    When Operator go to menu New Features -> Outbound Load Monitoring
+    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
+    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
+      | zoneName | {zone-name} |
+      | hubName  | {hub-name}  |
+    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
+      | routeId                            | trackingId                            |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    And API Core - Operator pull order from route:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type    | DELIVERY                           |
+    When Operator clicks Pull Out in Confirm Pull Out modal on Outbound Breakroute V2 page
+    Then Operator verifies errors in Processing modal on Outbound Breakroute V2 page:
+      | Get ProcessingException [Code:BAD_REQUEST_EXCEPTION][Message:No route found to unroute for [OrderID:{KEY_LIST_OF_CREATED_ORDERS[2].id}]] |
+    When Operator clicks Cancel in Processing modal on Outbound Breakroute V2 page
+    Then Operator verifies that success react notification displayed:
+      | top    | Tracking IDs Pulled Out   |
+      | bottom | 1 Tracking IDs pulled out |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id} |
+      | status  | Pending              |
+      | routeId | null                 |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId} |
+      | status  | Pending                      |
+      | routeId | null                         |
+      | seqNo   | null                         |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_TRANSACTION.waypointId} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order event on Edit Order V2 page using data below:
+      | name    | PULL OUT OF ROUTE                  |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
