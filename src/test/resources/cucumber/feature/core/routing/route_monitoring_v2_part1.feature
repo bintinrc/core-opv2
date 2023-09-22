@@ -279,8 +279,12 @@ Feature: Route Monitoring V2
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Then API Shipper tags multiple parcels as per the below tag
-      | orderTag | {order-tag-prior-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | orderTag | {order-tag-prior-id}               |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
@@ -316,8 +320,12 @@ Feature: Route Monitoring V2
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Then API Shipper tags multiple parcels as per the below tag
-      | orderTag | {order-tag-prior-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-prior-id}               |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | orderTag | {order-tag-prior-id}               |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:

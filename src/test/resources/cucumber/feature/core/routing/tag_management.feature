@@ -28,13 +28,13 @@ Feature: Tag Management
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     And Operator update created tag on Tag Management page:
-      | name        | AAC                             |
-      | description | AAC tag is for testing [EDITED] |
+      | name        | UPT                             |
+      | description | UPT tag is for testing [EDITED] |
     Then Operator verifies that success react notification displayed:
       | top | Tag successfully edited |
     Then Operator verifies tag on Tag Management page:
-      | name        | AAC                             |
-      | description | AAC tag is for testing [EDITED] |
+      | name        | UPT                             |
+      | description | UPT tag is for testing [EDITED] |
 
   @DeleteRouteTags
   Scenario: Operator Search Created Tag on Tag Management Page
