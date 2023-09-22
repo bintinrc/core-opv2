@@ -1248,7 +1248,7 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     And API Route - delete routes:
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
@@ -1256,8 +1256,8 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top | Driver has exceeded total cod |
+    Then Operator verifies that success toast displayed:
+      | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -1676,7 +1676,7 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @RestoreSystemParams @DeleteDriver @DeleteRoutes
-  Scenario: Operator Allow Add Order to Driver Route  with Removed COD on Edit Order
+  Scenario: Operator Allow Add Order to Driver Route with Removed COD on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
       | value | 1                           |
@@ -1757,7 +1757,7 @@ Feature: ID - Order COD Limit
       | cod       | 0                                  |
 
   @RestoreSystemParams @DeleteDriver @DeleteRoutes
-  Scenario: Operator Allow Add Order to Driver Route  with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
+  Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
       | value | 1                           |
