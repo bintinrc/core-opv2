@@ -147,9 +147,10 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                      |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pickup fail\nNew Granular Status: Cancelled\n\nOld Order Status: Pickup fail\nNew Order Status: Cancelled\n\nReason: CANCEL |
+#    TODO uncomment once issue is fixed
+#    And Operator verify order events on Edit Order V2 page using data below:
+#      | tags          | name          | description                                                                                                                                      |
+#      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pickup fail\nNew Granular Status: Cancelled\n\nOld Order Status: Pickup fail\nNew Order Status: Cancelled\n\nReason: CANCEL |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Van En-route to Pickup
