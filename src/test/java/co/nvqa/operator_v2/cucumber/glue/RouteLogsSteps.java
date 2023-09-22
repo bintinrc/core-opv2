@@ -364,7 +364,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator edits route details:$")
+  @When("Operator edits route details:")
   public void operatorEditRouteDetails(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
