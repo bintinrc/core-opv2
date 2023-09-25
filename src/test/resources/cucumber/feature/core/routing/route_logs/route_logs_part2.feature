@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart2
+@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart2 @current
 Feature: Route Logs
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Add Tag to a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
