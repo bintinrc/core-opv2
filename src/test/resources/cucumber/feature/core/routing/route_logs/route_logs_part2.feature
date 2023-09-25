@@ -17,8 +17,9 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     And Operator adds tag "{route-tag-name}" to created route
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Tagged |
-      | waitUntilInvisible | true              |
+      | top                | 1 route(s) tagged                                         |
+      | bottom             | Route {KEY_CREATED_ROUTE_ID} tagged with {route-tag-name} |
+#      | waitUntilInvisible | true                                                      |
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
