@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart1 @current
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart1
 Feature: Route Manifest
 
   Background:
@@ -121,8 +121,7 @@ Feature: Route Manifest
       | serviceTime    | not null                                 |
     And DB Operator verifies waypoint status is "SUCCESS"
 
-#  @DeleteOrArchiveRoute @happy-path
-  @wip2
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

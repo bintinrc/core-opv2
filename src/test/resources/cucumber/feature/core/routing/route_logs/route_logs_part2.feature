@@ -1,11 +1,11 @@
-@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart2 @current
+@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart2
 Feature: Route Logs
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Add Tag to a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -16,7 +16,6 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top    | 1 route(s) tagged                                         |
       | bottom | Route {KEY_CREATED_ROUTE_ID} tagged with {route-tag-name} |
-#      | waitUntilInvisible | true                                                      |
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
