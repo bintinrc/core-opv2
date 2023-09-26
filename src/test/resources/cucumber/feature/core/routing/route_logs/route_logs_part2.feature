@@ -11,14 +11,11 @@ Feature: Route Logs
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator adds tag "{route-tag-name}" to created route
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Tagged |
-      | waitUntilInvisible | true              |
+      | top    | 1 route(s) tagged                                         |
+      | bottom | Route {KEY_CREATED_ROUTE_ID} tagged with {route-tag-name} |
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |

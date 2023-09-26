@@ -144,27 +144,27 @@ Feature: Route Manifest
       | pickup.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.status        | Fail                          |
       | pickup.failureReason | 9                             |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Pickup Fail" on Edit Order page
-    And Operator verify order granular status is "Pickup Fail" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Pickup Fail" on Edit Order V2 page
+    And Operator verify order granular status is "Pickup Fail" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | FAIL |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | FAIL |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED FAILURE |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                        |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute @happy-path
@@ -188,25 +188,25 @@ Feature: Route Manifest
       | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: ADMIN_UPDATE_WAYPOINT |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute @happy-path
@@ -235,25 +235,25 @@ Feature: Route Manifest
       | delivery.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status        | Fail                          |
       | delivery.failureReason | 1                             |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Delivery Fail" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | FAIL |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | FAIL |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED FAILURE |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                         |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute @happy-path
@@ -279,23 +279,23 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Completed" on Edit Order V2 page
+    And Operator verify order granular status is "Completed" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Completed\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
