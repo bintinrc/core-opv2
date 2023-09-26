@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.PendingTaskBlock;
@@ -31,46 +32,54 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage = new ReservationPresetManagementPage(getWebDriver());
   }
 
-  @When("^Operator create new Reservation Group on Reservation Preset Management page using data below:$")
+  @When("Operator create new Reservation Group on Reservation Preset Management page using data below:")
   public void operatorCreateNewReservationGroupOnReservationPresetManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
     ReservationGroup reservationGroup = new ReservationGroup();
     reservationGroup.fromMap(resolveKeyValues(mapOfData));
     reservationPresetManagementPage.addNewGroup(reservationGroup);
-    put(KEY_CREATED_RESERVATION_GROUP, reservationGroup);
+    putInList(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP, reservationGroup);
   }
 
-  @Then("^Operator verify created Reservation Group properties on Reservation Preset Management page$")
-  public void operatorVerifyANewReservationGroupIsCreatedSuccessfullyOnPageReservationPresetManagement() {
-    ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
+  @Then("Operator verify created Reservation Group properties on Reservation Preset Management page:")
+  public void operatorVerifyANewReservationGroupIsCreatedSuccessfullyOnPageReservationPresetManagement(
+      Map<String, String> mapOfData) {
+    ReservationGroup reservationGroup = new ReservationGroup();
+    reservationGroup.fromMap(resolveKeyValues(mapOfData));
     reservationPresetManagementPage
         .verifyGroupProperties(reservationGroup.getName(), reservationGroup);
   }
 
-  @When("^Operator edit created Reservation Group on Reservation Preset Management page using data below:$")
+  @When("Operator edit {string} Reservation Group on Reservation Preset Management page with data below:")
   public void operatorEditCreatedReservationGroupOnHubsGroupManagementPageUsingDataBelow(
-      Map<String, String> mapOfData) {
-    ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
-    String reservationGroupName = reservationGroup.getName();
-    reservationGroup.fromMap(mapOfData);
-    reservationPresetManagementPage.editGroup(reservationGroupName, reservationGroup);
+      String reservationGroupName, Map<String, String> mapOfData) {
+    String resolvedReservationGroupName = resolveValue(reservationGroupName);
+    ReservationGroup editReservationGroup = new ReservationGroup();
+    editReservationGroup.fromMap(resolveKeyValues(mapOfData));
+
+    editReservationGroup.setName(editReservationGroup.getName() + "-Edited");
+
+    putInList(ScenarioStorageKeys.KEY_EDITED_RESERVATION_GROUP_NAME,
+        editReservationGroup.getName());
+
+    reservationPresetManagementPage.editGroup(resolvedReservationGroupName, editReservationGroup);
   }
 
-  @When("^Operator delete created Reservation Group on Reservation Preset Management page$")
+  @When("Operator delete created Reservation Group on Reservation Preset Management page")
   public void operatorDeleteCreatedReservationGroupOnReservationPresetManagementPage() {
-    ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
+    ReservationGroup reservationGroup = get(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
     reservationPresetManagementPage.deleteGroup(reservationGroup.getName());
   }
 
-  @Then("^Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page$")
+  @Then("Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page")
   public void operatorVerifyCreatedReservationGroupWasDeletedSuccessfullyOnReservationPresetManagementPage() {
-    ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
+    ReservationGroup reservationGroup = get(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
     reservationPresetManagementPage.verifyGroupDeleted(reservationGroup.getName());
-    remove(KEY_CREATED_RESERVATION_GROUP);
-    remove(KEY_CREATED_RESERVATION_GROUP_ID);
+    remove(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
+    remove(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP_ID);
   }
 
-  @Then("^Operator assign pending task on Reservation Preset Management page:$")
+  @Then("Operator assign pending task on Reservation Preset Management page:")
   public void assignPendingTask(Map<String, String> data) {
     data = resolveKeyValues(data);
     String shipper = data.get("shipper");
@@ -87,7 +96,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.assignShipperDialog.assignShipper.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator uploads CSV on Reservation Preset Management page:$")
+  @Then("Operator uploads CSV on Reservation Preset Management page:")
   public void assignPendingTask(List<Map<String, String>> data) {
     data = resolveListOfMaps(data);
     List<String> rows = new ArrayList<>();
@@ -114,7 +123,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.moreActions.selectOption("Download Sample CSV");
   }
 
-  @Then("^sample CSV file on Reservation Preset Management page is downloaded successfully$")
+  @Then("sample CSV file on Reservation Preset Management page is downloaded successfully")
   public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
     reservationPresetManagementPage.verifyFileDownloadedSuccessfully("bulk-milkrun-action.csv",
         "shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time\n"
@@ -125,7 +134,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
             + "109,909,delete,32133,,,\n");
   }
 
-  @Then("^Operator unassign pending task on Reservation Preset Management page:$")
+  @Then("Operator unassign pending task on Reservation Preset Management page:")
   public void unassignPendingTask(Map<String, String> data) {
     data = resolveKeyValues(data);
     String shipper = data.get("shipper");
@@ -140,7 +149,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.unassignShipperDialog.unassignShipper.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator route pending reservations on Reservation Preset Management page:$")
+  @Then("Operator route pending reservations on Reservation Preset Management page:")
   public void routePendingReservations(Map<String, String> data) {
     data = resolveKeyValues(data);
     String group = data.get("group");
@@ -158,7 +167,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.createRouteDialog.confirm.clickAndWaitUntilDone();
   }
 
-  @Then("^Operator create route on Reservation Preset Management page:$")
+  @Then("Operator create route on Reservation Preset Management page:")
   public void createRoute(Map<String, String> data) {
     data = resolveKeyValues(data);
     String group = data.get("group");

@@ -7,33 +7,51 @@ Feature: Reservation Preset Management
 
   @DeleteDriverV2 @DeleteReservationGroup
   Scenario: Operator Create New Group to Assign Driver on Reservation Preset Management Page
-    And API Driver - Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}-{{TIMESTAMP}}", "display_name":"{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRI1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
-    Then Operator verify created Reservation Group properties on Reservation Preset Management page
-    And API Operator get created Reservation Group params
+    Then Operator verify created Reservation Group properties on Reservation Preset Management page:
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
+      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
+      | hub    | {hub-name}                                |
+    And API Route - Operator get created Reservation Group params:
+      | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
 
   @DeleteDriverV2 @DeleteReservationGroup
   Scenario: Operator Edit Reservation Group on Reservation Preset Management Page
-    And API Driver - Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}-{{TIMESTAMP}}", "display_name":"{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRI1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
-    Then Operator verify created Reservation Group properties on Reservation Preset Management page
-    And API Operator get created Reservation Group params
-    When Operator edit created Reservation Group on Reservation Preset Management page using data below:
-      | name | GENERATED    |
-      | hub  | {hub-name-2} |
-    Then Operator verify created Reservation Group properties on Reservation Preset Management page
+    Then Operator verify created Reservation Group properties on Reservation Preset Management page:
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
+      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
+      | hub    | {hub-name}                                |
+    And API Route - Operator get created Reservation Group params:
+      | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
+    When Operator edit "{KEY_CREATED_RESERVATION_GROUP[1].name}" Reservation Group on Reservation Preset Management page with data below:
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
+      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
+      | hub    | {hub-name-2}                              |
+    And API Route - Operator get created Reservation Group params:
+      | reservationGroupName | {KEY_EDITED_RESERVATION_GROUP_NAME[1]} |
 
-  @DeleteDriverV2 @DeleteReservationGroup
+  @DeleteDriverV2 @DeleteReservationGroup @wip
   Scenario: Operator Delete Reservation Group on Reservation Preset Management Page
     And API Driver - Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}-{{TIMESTAMP}}", "display_name":"{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRI1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
