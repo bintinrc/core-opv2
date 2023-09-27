@@ -103,33 +103,39 @@ Feature: Create Recovery Ticket
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Delivery fail      |
-      | granularStatus | Pending Reschedule |
-    And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status | FAIL |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-      | UPDATE STATUS  |
-      | RESCHEDULE     |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Delivery fail                      |
+      | granularStatus | Pending Reschedule                 |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | subTicketType      | INACCURATE ADDRESS                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | ticketSubType      | INACCURATE ADDRESS                         |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_OLD_TRANSACTION"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -180,33 +186,39 @@ Feature: Create Recovery Ticket
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Pickup fail |
-      | granularStatus | Pickup fail |
-    And Operator verify Pickup transaction on Edit Order V2 page using data below:
-      | status | FAIL |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-      | UPDATE STATUS  |
-      | RESCHEDULE     |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Pickup fail                        |
+      | granularStatus | Pickup fail                        |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | subTicketType      | INACCURATE ADDRESS                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | ticketSubType      | INACCURATE ADDRESS                         |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_OLD_TRANSACTION"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
@@ -237,37 +249,47 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                     |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: HUB_INBOUND |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                  |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Transit                            |
+      | granularStatus | Arrived at Sorting Hub             |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                          |
+      | eventType | UPDATE_STATUS                                                                                                                                                               |
+      | eventData | {"granular_status":{"old_value":"Pending Pickup","new_value":"Arrived at Sorting Hub"},"order_status":{"old_value":"Pending","new_value":"Transit"},"reason":"HUB_INBOUND"} |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | subTicketType      | INACCURATE ADDRESS                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | ticketSubType      | INACCURATE ADDRESS                         |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                       |
+      | eventType | UPDATE_STATUS                                                                                                                                                            |
+      | eventData | {"granular_status":{"old_value":"Arrived at Sorting Hub","new_value":"On Hold"},"order_status":{"old_value":"Transit","new_value":"On Hold"},"reason":"TICKET_CREATION"} |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Route Inbound Scan
@@ -303,35 +325,42 @@ Feature: Create Recovery Ticket
       | hubId               | {hub-id}                                                                                                                                             |
       | routeId             | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                   |
       | routeInboundRequest | {"scan": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","inbound_type": "SORTING_HUB","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"hub_id":{hub-id}} |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name               |
-      | TICKET CREATED     |
-      | ROUTE INBOUND SCAN |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                  |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Transit                            |
+      | granularStatus | Arrived at Sorting Hub             |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | subTicketType      | INACCURATE ADDRESS                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | ticketSubType      | INACCURATE ADDRESS                         |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                       |
+      | eventType | UPDATE_STATUS                                                                                                                                                            |
+      | eventData | {"granular_status":{"old_value":"Arrived at Sorting Hub","new_value":"On Hold"},"order_status":{"old_value":"Transit","new_value":"On Hold"},"reason":"TICKET_CREATION"} |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Outbound Scan
@@ -356,43 +385,53 @@ Feature: Create Recovery Ticket
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                            |
       | hubId              | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}                                                              |
       | taskId             | 1                                                                                                |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name        | PARCEL ROUTING SCAN                                 |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
-      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name        | OUTBOUND SCAN                                       |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
-      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource             | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment | Recovery                              |
-      | investigatingHub        | {hub-name}                            |
-      | ticketType              | MISSING                               |
-      | orderOutcomeMissing     | FOUND - INBOUND                       |
-      | parcelDescription       | GENERATED                             |
-      | custZendeskId           | 1                                     |
-      | shipperZendeskId        | 1                                     |
-      | ticketNotes             | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                  |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name    | PULL OUT OF ROUTE                  |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Transit                            |
+      | granularStatus | Arrived at Sorting Hub             |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                               |
+      | eventType | PARCEL_ROUTING_SCAN                                                                                                                              |
+      | eventData | {"hub_id": {KEY_SORT_LIST_OF_HUBS_DB[1].hubId},"hub_location_types": ["DESTINATION"],"scan_value": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"} |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}              |
+      | eventType | OUTBOUND_SCAN                                   |
+      | eventData | {"hub_id": {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}} |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | MISSING                                    |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)                    |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | MISSING                                    |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                       |
+      | eventType | UPDATE_STATUS                                                                                                                                                            |
+      | eventData | {"granular_status":{"old_value":"Arrived at Sorting Hub","new_value":"On Hold"},"order_status":{"old_value":"Transit","new_value":"On Hold"},"reason":"TICKET_CREATION"} |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}               |
+      | eventType | PULL_OUT_OF_ROUTE                                |
+      | eventData | {"route_id": {KEY_LIST_OF_CREATED_ROUTES[1].id}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Core - verify transactions record:
@@ -400,11 +439,9 @@ Feature: Create Recovery Ticket
       | status  | Pending                     |
       | routeId | null                        |
     Then DB Route - verify waypoints record:
-      | legacyId | {KEY_DD_OLD_TRANSACTION.waypointId} |
+      | legacyId | {KEY_DD_NEW_TRANSACTION.waypointId} |
       | status   | Pending                             |
       | routeId  | null                                |
-    When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -416,43 +453,51 @@ Feature: Create Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And DB Sort - get hub by hub name "{KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}"
     And API Sort - Operator parcel sweep
-      | parcelSweepRequest | {"hubId" : {hub-id}, "scan": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"} |
-      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                 |
-      | hubId              | {hub-id}                                                              |
-      | taskId             | 1                                                                     |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                |
-      | granularStatus | Arrived at Sorting Hub |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name        | PARCEL ROUTING SCAN      |
-      | hubName     | {hub-name}               |
-      | description | Scanned at hub: {hub-id} |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource             | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment | Recovery                              |
-      | investigatingHub        | {hub-name}                            |
-      | ticketType              | MISSING                               |
-      | orderOutcomeMissing     | FOUND - INBOUND                       |
-      | parcelDescription       | GENERATED                             |
-      | custZendeskId           | 1                                     |
-      | shipperZendeskId        | 1                                     |
-      | ticketNotes             | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                  |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+      | parcelSweepRequest | {"hubId" : {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}, "scan": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"} |
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                            |
+      | hubId              | {KEY_SORT_LIST_OF_HUBS_DB[1].hubId}                                                              |
+      | taskId             | 1                                                                                                |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Transit                            |
+      | granularStatus | Arrived at Sorting Hub             |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                               |
+      | eventType | PARCEL_ROUTING_SCAN                                                                                                                              |
+      | eventData | {"hub_id": {KEY_SORT_LIST_OF_HUBS_DB[1].hubId},"hub_location_types": ["DESTINATION"],"scan_value": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"} |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | MISSING                                    |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)                    |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | MISSING                                    |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                       |
+      | eventType | UPDATE_STATUS                                                                                                                                                            |
+      | eventData | {"granular_status":{"old_value":"Arrived at Sorting Hub","new_value":"On Hold"},"order_status":{"old_value":"Transit","new_value":"On Hold"},"reason":"TICKET_CREATION"} |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
@@ -485,37 +530,48 @@ Feature: Create Recovery Ticket
       | jobType    | RESERVATION                                                                                                               |
       | jobAction  | SUCCESS                                                                                                                   |
       | jobMode    | PICK_UP                                                                                                                   |
-    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Transit                 |
-      | granularStatus | En-route to Sorting Hub |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: BATCH_POD_UPDATE |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name    | DRIVER PICKUP SCAN                 |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | On hold |
-      | granularStatus | On Hold |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name           |
-      | TICKET CREATED |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                   |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Then DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | Transit                            |
+      | granularStatus | En-route to Sorting Hub            |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                |
+      | eventType | UPDATE_STATUS                                                                                                                                                                     |
+      | eventData | {"granular_status":{"old_value":"Pending Pickup","new_value":"En-route to Sorting Hub"},"order_status":{"old_value":"Pending","new_value":"Transit"},"reason":"BATCH_POD_UPDATE"} |
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}               |
+      | eventType | DRIVER_PICKUP_SCAN                               |
+      | eventData | {"route_id": {KEY_LIST_OF_CREATED_ROUTES[1].id}} |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | subTicketType      | INACCURATE ADDRESS                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     When API Recovery - Operator search recovery ticket:
-      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"]} |
+      | request | {"tracking_ids":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"]} |
+    Then API Recovery - verify ticket details:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketId           | {KEY_RECOVERY_SEARCH_TICKET_RESULT[1].id}  |
+      | status             | PENDING                                    |
+      | ticketType         | PARCEL EXCEPTION                           |
+      | ticketSubType      | INACCURATE ADDRESS                         |
+      | investigatingParty | Recovery                                   |
+      | sourceOfEntry      | CUSTOMER COMPLAINT                         |
+    And DB Core - verify orders record:
+      | id             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | status         | On Hold                            |
+      | granularStatus | On Hold                            |
+    And API Core - Operator verify that "TICKET_CREATED" event is published for order id "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And API Core - Operator verify that event is published with correct details:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                        |
+      | eventType | UPDATE_STATUS                                                                                                                                                             |
+      | eventData | {"granular_status":{"old_value":"En-route to Sorting Hub","new_value":"On Hold"},"order_status":{"old_value":"Transit","new_value":"On Hold"},"reason":"TICKET_CREATION"} |
