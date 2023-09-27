@@ -11,7 +11,7 @@ Feature: Cash Collection
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operatogit chkr get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnPickup | yes   |
