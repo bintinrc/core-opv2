@@ -24,7 +24,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Operator Updates Route Group Details
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG4-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -49,7 +48,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Operator Deletes Route Group
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG5-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -62,7 +60,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Delete Transactions From Route Group
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG6-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -82,7 +79,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Bulk Delete Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -101,7 +97,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Delete A Route Group From Edit Route Group Modal
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG7-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |

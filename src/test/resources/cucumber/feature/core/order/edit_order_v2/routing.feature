@@ -317,7 +317,7 @@ Feature: Routing
       | granularStatus | Cancelled |
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
 
-  @DeleteRoutes
+  @ArchiveRouteCommonV2
   Scenario: Operator Pull Out Merged Delivery Order from a Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -343,15 +343,14 @@ Feature: Routing
     And Operator pull out parcel from route on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
       | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-    Then Operator verify Pickup transaction on Edit Order V2 page using data below:
+    Then Operator verify Delivery transaction on Edit Order V2 page using data below:
       | routeId |  |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
-    And DB Core - verify route_waypoint records are hard-deleted:
       | {KEY_TRANSACTION.waypointId} |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
@@ -363,3 +362,22 @@ Feature: Routing
       | routeId  | null                         |
       | seqNo    | null                         |
       | status   | Pending                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id}               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_TRANSACTION.waypointId}       |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+

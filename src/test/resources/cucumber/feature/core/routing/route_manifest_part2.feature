@@ -11,13 +11,15 @@ Feature: Route Manifest
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id-2} |
+    And API Core - Operator bulk tags parcel with below tag:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | orderTag | {order-tag-id-2}                   |
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -102,14 +104,14 @@ Feature: Route Manifest
       | transactionMode   | PICKUP                      |
       | expectedCodAmount | {KEY_CASH_ON_PICKUP_AMOUNT} |
       | driverId          | {ninja-driver-id}           |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -135,18 +137,18 @@ Feature: Route Manifest
       | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And DB Operator verify the collected sum stored in cod_collections using data below:
       | transactionMode   | PICKUP            |
       | expectedCodAmount | 0.00              |
       | driverId          | {ninja-driver-id} |
-    And Operator verify Pickup details on Edit order page using data below:
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -174,22 +176,22 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order V2 page
+    And Operator verify order granular status is "Completed" on Edit Order V2 page
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And DB Operator verify the collected sum stored in cod_collections using data below:
       | transactionMode   | DELIVERY                      |
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
       | driverId          | {ninja-driver-id}             |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -217,22 +219,22 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order V2 page
+    And Operator verify order granular status is "Completed" on Edit Order V2 page
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And DB Operator verify the collected sum stored in cod_collections using data below:
       | transactionMode   | DELIVERY          |
       | expectedCodAmount | 0.00              |
       | driverId          | {ninja-driver-id} |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -262,25 +264,25 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Returned to Sender" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Completed" on Edit Order V2 page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order V2 page
+    And Operator verify Pickup details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                     |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Returned to Sender\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
-    And Operator verify order event on Edit order page using data below:
+    And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And DB Operator verify core_qa_sg/cod_collections record is NOT created:
       | driverId        | {ninja-driver-id} |
@@ -289,7 +291,7 @@ Feature: Route Manifest
       | orderId      | {KEY_CREATED_ORDER_ID} |
       | codValue     | 23.57                  |
       | codCollected | 0                      |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -323,17 +325,17 @@ Feature: Route Manifest
       | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status     | Success                       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Returned to Sender" on Edit Order page
-    And Operator verify Delivery transaction on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Completed" on Edit Order V2 page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order V2 page
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | PRICING CHANGE |
       | FORCED SUCCESS |
       | UPDATE STATUS  |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
@@ -369,14 +371,14 @@ Feature: Route Manifest
       | delivery.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
       | delivery.status        | Fail                          |
       | delivery.failureReason | 1                             |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Delivery Fail" on Edit Order page
-    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
-    And Operator verify Delivery transaction on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Delivery Fail" on Edit Order V2 page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order V2 page
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | FAIL |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | FORCED FAILURE |
       | UPDATE STATUS  |
-    And Operator verify Delivery details on Edit order page using data below:
+    And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |

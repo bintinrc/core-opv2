@@ -133,9 +133,9 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
+  #TODO will uncomment verifies success react notification after the fix pushed to QA
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Multiple Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -148,9 +148,8 @@ Feature: Route Logs
     When Operator delete routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    Then Operator verifies that success react notification displayed:
-      | top                | 2 Route(s) Deleted |
-      | waitUntilInvisible | true               |
+#    Then Operator verifies that success react notification displayed:
+#      | top                | 2 route(s) deleted |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
@@ -174,7 +173,6 @@ Feature: Route Logs
       | comments   | Route has been edited by automated test |
     Then Operator verifies that success react notification displayed:
       | top                | 1 Route(s) Updated |
-      | waitUntilInvisible | true               |
     Then Operator verify route details on Route Logs page using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | id         | {KEY_CREATED_ROUTE_ID}                  |

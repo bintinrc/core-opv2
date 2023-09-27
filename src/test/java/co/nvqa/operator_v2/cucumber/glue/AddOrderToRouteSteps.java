@@ -58,4 +58,14 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     Assertions.assertThat(addOrderToRoutePage.lastScannedTrackingId.getText())
         .as("Last scanned tracking id").isEqualTo(resolveValue(expectedTrackingId));
   }
+
+  @Then("Operator verifies that {value} does not equal {value}")
+  public void valueDoesNotEqual(String actual, String expected) {
+    Assertions.assertThat(actual).isNotEqualTo(expected);
+  }
+
+  @Then("Operator verifies that {value} equals {value}")
+  public void valueEquals(String actual, String expected) {
+    Assertions.assertThat(actual).isEqualTo(expected);
+  }
 }

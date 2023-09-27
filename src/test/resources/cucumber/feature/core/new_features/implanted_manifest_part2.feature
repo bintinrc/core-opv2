@@ -236,7 +236,8 @@ Feature: Implanted Manifest
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
-    And Operator scans "INVALIDTRACKINGID" barcode on Implanted Manifest page
+    And Operator scan barcodes on Implanted Manifest page:
+      | INVALIDTRACKINGID |
     Then Operator verifies that error react notification displayed:
       | top    | Error               |
       | bottom | Unknown Tracking ID |
