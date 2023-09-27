@@ -65,15 +65,19 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.editGroup(resolvedReservationGroupName, editReservationGroup);
   }
 
-  @When("Operator delete created Reservation Group on Reservation Preset Management page")
-  public void operatorDeleteCreatedReservationGroupOnReservationPresetManagementPage() {
-    ReservationGroup reservationGroup = get(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
+  @When("Operator delete created Reservation Group on Reservation Preset Management page:")
+  public void operatorDeleteCreatedReservationGroupOnReservationPresetManagementPage(
+      Map<String, String> mapOfData) {
+    ReservationGroup reservationGroup = new ReservationGroup();
+    reservationGroup.fromMap(resolveKeyValues(mapOfData));
     reservationPresetManagementPage.deleteGroup(reservationGroup.getName());
   }
 
-  @Then("Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page")
-  public void operatorVerifyCreatedReservationGroupWasDeletedSuccessfullyOnReservationPresetManagementPage() {
-    ReservationGroup reservationGroup = get(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
+  @Then("Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page:")
+  public void operatorVerifyCreatedReservationGroupWasDeletedSuccessfullyOnReservationPresetManagementPage(
+      Map<String, String> mapOfData) {
+    ReservationGroup reservationGroup = new ReservationGroup();
+    reservationGroup.fromMap(resolveKeyValues(mapOfData));
     reservationPresetManagementPage.verifyGroupDeleted(reservationGroup.getName());
     remove(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP);
     remove(ScenarioStorageKeys.KEY_CREATED_RESERVATION_GROUP_ID);
