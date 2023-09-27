@@ -252,7 +252,7 @@ Feature: Route Manifest
       | name | FORCED FAILURE |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                         |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending\nNew Delivery Status: Fail\n\Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending\nNew Delivery Status: Fail\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
