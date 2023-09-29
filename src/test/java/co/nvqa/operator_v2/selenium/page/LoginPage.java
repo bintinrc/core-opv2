@@ -65,7 +65,9 @@ public class LoginPage extends OperatorV2SimplePage {
       LOGGER.info("Inserting TnC Popup acceptance");
       LocalStorage ls = ((WebStorage) getWebDriver()).getLocalStorage();
       ls.setItem("acceptedTnC", "true");
-      assertNotNull(ls.getItem("acceptedTnC"));
+      Assertions.assertThat(ls.getItem("acceptedTnC"))
+          .as("acceptedTnc is true")
+          .isEqualTo("true");
     } catch (Exception ex) {
       LOGGER.error(ex.getMessage());
     }
