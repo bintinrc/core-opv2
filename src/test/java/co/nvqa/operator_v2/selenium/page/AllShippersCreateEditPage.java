@@ -802,21 +802,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     backToShipperList();
   }
 
-  public void unsetPickupAddressesAsMilkrun(Shipper shipper) {
+  public void unsetPickupAddressesAsMilkrun(Address shipperPickupAddress) {
     waitUntilShipperCreateEditPageIsLoaded();
     clickTabItem("More Settings");
-    if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
-      shipper.getPickup().getReservationPickupAddresses().stream().filter(a -> !a.getMilkRun())
-          .forEach(address ->
-          {
-            searchTableCustom1("contact", address.getContact());
-            milkrun.click();
-            unsetAsMilkrunDialog.waitUntilVisible();
-            unsetAsMilkrunDialog.delete.click();
-            unsetAsMilkrunDialog.waitUntilInvisible();
-            pause1s();
-          });
-    }
+
+    searchTableCustom1("contact", shipperPickupAddress.getContact());
+    milkrun.click();
+    unsetAsMilkrunDialog.waitUntilVisible();
+    unsetAsMilkrunDialog.delete.click();
+    unsetAsMilkrunDialog.waitUntilInvisible();
+    pause1s();
+
     clickNvIconTextButtonByName("Save Changes");
     waitUntilInvisibilityOfToast("All changes saved successfully");
     backToShipperList();
