@@ -142,22 +142,15 @@ public class AllShippersSteps extends AbstractSteps {
   @When("Operator verify pickup address on Edit Shipper page:")
   public void verifyPickupAddress(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String shipperId = data.get("shipperId");
-    Shipper shipper;
-    if (StringUtils.isNotBlank(shipperId)) {
-      List<Shipper> shippers = get(KEY_LIST_OF_CREATED_SHIPPERS);
-      shipper = shippers.stream().filter(s -> s.getLegacyId().equals(Long.valueOf(shipperId)))
-          .findFirst().orElseThrow(() -> new IllegalArgumentException(
-              "Shipper with legacyId " + shipperId + " was not found"));
-    } else {
-      shipper = get(KEY_CREATED_SHIPPER);
-    }
-    List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
+    List<Address> shipperPickupAddresses = fromJsonToList(data.get("shipperPickupAddresses"),
+        Address.class);
     allShippersPage.allShippersCreateEditPage.clickTabItem("More Settings");
-    if (CollectionUtils.isNotEmpty(addresses)) {
-      for (int i = 0; i < addresses.size(); i++) {
-        fillMilkrunReservationsProperties(addresses.get(i), i + 1, resolveKeyValues(data));
-        allShippersPage.allShippersCreateEditPage.verifyPickupAddress(addresses.get(i));
+    if (CollectionUtils.isNotEmpty(shipperPickupAddresses)) {
+      for (int i = 0; i < shipperPickupAddresses.size(); i++) {
+        fillMilkrunReservationsProperties(shipperPickupAddresses.get(i), i + 1,
+            resolveKeyValues(data));
+        allShippersPage.allShippersCreateEditPage.verifyPickupAddress(
+            shipperPickupAddresses.get(i));
       }
     }
   }
@@ -337,7 +330,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.verifyNewShipperIsCreatedSuccessfully(shipper);
   }
 
-  @Then("Operator open Edit Shipper Page of shipper \"(.+)\"")
+  @Then("Operator open Edit Shipper Page of shipper {string}")
   public void operatorOpenEditShipperPageOfShipper(String shipperName) {
     shipperName = resolveValue(shipperName);
     allShippersPage.searchShipper(shipperName);

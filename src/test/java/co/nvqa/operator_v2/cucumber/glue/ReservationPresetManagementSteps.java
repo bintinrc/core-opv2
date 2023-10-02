@@ -106,9 +106,11 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     List<String> rows = new ArrayList<>();
     rows.add("shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time");
     data.forEach(map -> {
-      rows.add(map.getOrDefault("shipperId", "") + "," + map.getOrDefault("addressId", "") + ","
+      rows.add(map.getOrDefault("shipperId", "") + ","
+          + map.getOrDefault("addressId", "") + ","
           + map.getOrDefault("action", "") + ","
-          + map.getOrDefault("milkrunGroupId", "") + "," + map.getOrDefault("days", "") + ","
+          + map.getOrDefault("milkrunGroupId", "") + ","
+          + map.getOrDefault("days", "") + ","
           + map.getOrDefault("startTime", "") + ","
           + map.getOrDefault("endTime", ""));
     });
