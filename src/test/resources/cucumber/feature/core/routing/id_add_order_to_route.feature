@@ -267,8 +267,8 @@ Feature: Add Order To Route
     Then Operator verifies that "{KEY_PICKUP_A_AFTER.waypointId}" does not equal "{KEY_PICKUP_A_BEFORE.waypointId}"
     Then Operator verifies that "{KEY_PICKUP_B_AFTER.waypointId}" equals "{KEY_PICKUP_B_BEFORE.waypointId}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -292,10 +292,9 @@ Feature: Add Order To Route
       | driverId           | {ninja-driver-id}                     |
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    Then Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
@@ -364,8 +363,8 @@ Feature: Add Order To Route
     Then Operator verifies that "{KEY_DELIVERY_A_AFTER.waypointId}" does not equal "{KEY_DELIVERY_A_BEFORE.waypointId}"
     Then Operator verifies that "{KEY_DELIVERY_B_AFTER.waypointId}" equals "{KEY_DELIVERY_B_BEFORE.waypointId}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verify Delivery transaction on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -392,8 +391,8 @@ Feature: Add Order To Route
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    Then Operator verify Delivery transaction on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
