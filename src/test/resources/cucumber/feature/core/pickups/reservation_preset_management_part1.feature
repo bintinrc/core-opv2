@@ -299,7 +299,7 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name} \(.*\) has been unlink from {KEY_CREATED_RESERVATION_GROUP[1].name} group! |
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @wip
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Has Not Assign to Milkrun and Has Not Added to Milkrun Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Driver - Operator create new Driver using data below:
