@@ -299,7 +299,7 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name} \(.*\) has been unlink from {KEY_CREATED_RESERVATION_GROUP[1].name} group! |
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @wip
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Has Not Assign to Milkrun and Has Not Added to Milkrun Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Driver - Operator create new Driver using data below:
@@ -316,7 +316,7 @@ Feature: Reservation Preset Management
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
-      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"is_milk_run":false} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}"
     And API Core - Operator create reservation using data below:
