@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
+import co.nvqa.operator_v2.model.CoreV2PickupJobsParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.PickupAppointmentJobPageV2;
 import io.cucumber.java.en.And;
@@ -44,6 +45,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
+    pickupAppointmentJobPage.refreshPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
       doWithRetry(() -> {
         pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
@@ -79,7 +81,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isDeleteButtonByJobIdDisplayed(jobId))
+              .isDeleteButtonByJobIdDisplayed(jobId))
           .as("Delete Button in Job with id = " + jobId + " is not displayed").isFalse();
     });
   }
@@ -89,7 +91,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isEditButtonByJobIdDisplayed(jobId))
+              .isEditButtonByJobIdDisplayed(jobId))
           .as("Delete Button in Job with id = " + jobId + " displayed").isTrue();
     });
   }
@@ -99,7 +101,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isEditButtonByJobIdDisplayed(jobId))
+              .isEditButtonByJobIdDisplayed(jobId))
           .as("Delete Button in Job with id = " + jobId + " is not displayed").isFalse();
     });
   }
@@ -124,7 +126,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       Assertions.assertThat(page.deletePickupJobModal.getFieldTextOnDeleteJobModal("Shipper name:"))
           .as("Shipper name is correct").isEqualTo(shipperName);
       Assertions.assertThat(
-          page.deletePickupJobModal.getFieldTextOnDeleteJobModal("Shipper address:"))
+              page.deletePickupJobModal.getFieldTextOnDeleteJobModal("Shipper address:"))
           .as("Shipper address is correct").contains(shipperAddress);
       Assertions.assertThat(page.deletePickupJobModal.getFieldTextOnDeleteJobModal("Ready by:"))
           .as("Ready by is correct").isEqualTo(readyBy);
@@ -218,27 +220,27 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String formattedDate = "[" + resolvedDate + "]";
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(
-          page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
+              page.viewJobDetailModal.getJobDetailItemsXpath("Shipper Name & Contact")).
           as("Shipper Contact & Name are correct").isEqualToIgnoringCase("Shipper Name & Contact");
       Assertions.assertThat(page.viewJobDetailModal.getJobDetailItemsXpath("Pickup Address")).
           as("Pick Up Address Title is correct").isEqualToIgnoringCase("Pickup Address");
       Assertions.assertThat(
-          page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("waypointId"))).
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("waypointId"))).
           as("Waypoint Id is correct").isEqualToIgnoringCase(resolvedData.get("waypointId"));
       Assertions.assertThat(
-          page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("shipperId"))).
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("shipperId"))).
           as("Shipper Id is correct").isEqualToIgnoringCase(resolvedData.get("shipperId"));
       Assertions.assertThat(
-          page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("jobId"))).
           as("Job Id is correct").isEqualToIgnoringCase(resolvedData.get("jobId"));
       Assertions.assertThat(
-          page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("status"))).
+              page.viewJobDetailModal.getJobDetailItemsXpath(resolvedData.get("status"))).
           as("Status is correct").isEqualToIgnoringCase(resolvedData.get("status"));
       Assertions.assertThat(
-          page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
+              page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Parcel List")).
           as("Download Parcel List Button is Clickable").isTrue();
       Assertions.assertThat(
-          page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
+              page.viewJobDetailModal.getButtonsOnJobDetailsPage("Download Signature")).
           as("Download Signature Button is Click").isTrue();
     });
   }
@@ -301,7 +303,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper name:"))
             .as("Shipper name is correct").isEqualTo(shipperName);
         Assertions.assertThat(
-            page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper address:"))
+                page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper address:"))
             .as("Shipper address is correct").contains(shipperAddress);
         Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Ready by:"))
             .as("Ready by is correct").isEqualTo(readyBy);
@@ -446,13 +448,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       }
       if (finalData.containsKey("removedTid")) {
         assertions.assertThat(
-            pickupAppointmentJobPage.jobDetailsModal.removedTid.getNormalizedText())
+                pickupAppointmentJobPage.jobDetailsModal.removedTid.getNormalizedText())
             .as("Removed TID")
             .isEqualTo(finalData.get("removedTid"));
       }
       if (finalData.containsKey("scannedAtShipperCount")) {
         assertions.assertThat(
-            pickupAppointmentJobPage.jobDetailsModal.scannedAtShipperCount.getNormalizedText())
+                pickupAppointmentJobPage.jobDetailsModal.scannedAtShipperCount.getNormalizedText())
             .as("Scanned at Shipper Count")
             .isEqualTo(finalData.get("scannedAtShipperCount"));
       }
@@ -464,7 +466,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
               .isEmpty();
         } else {
           var actual = pickupAppointmentJobPage.jobDetailsModal.scannedAtShippers.stream().map(
-              PageElement::getNormalizedText)
+                  PageElement::getNormalizedText)
               .collect(Collectors.toList());
           assertions.assertThat(actual)
               .as("Scanned at Shipper's")
@@ -553,7 +555,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     String notificationMessage = resolveValue(message);
     Assertions.assertThat(
-        pickupAppointmentJobPage.pickupPageErrorNotification.toastBottom.getText())
+            pickupAppointmentJobPage.pickupPageErrorNotification.toastBottom.getText())
         .as(f("Job Created error contains: %s", notificationMessage)).contains(notificationMessage);
 
   }
@@ -656,62 +658,62 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void operatorVerifiesTableOnPickupJobsPage() {
     pickupAppointmentJobPage.inFrame(() -> {
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupAppointmentJobId")).isEnabled()).as("Job ID is display and can be sorted")
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupAppointmentJobId")).isEnabled()).as("Job ID is display and can be sorted")
           .isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "status"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "status"))
           .isEnabled()).as("Job status is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "tagNames"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "tagNames"))
           .isEnabled()).as("Job tags is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "priorityLevel"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "priorityLevel"))
           .isEnabled()).as("Priority level is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "legacyShipperId"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "legacyShipperId"))
           .isEnabled()).as("Shipper ID is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "shipperInfo"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "shipperInfo"))
           .isEnabled()).as("Shipper name & contact is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "pickupAddress"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "pickupAddress"))
           .isEnabled()).as("Pickup address is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "driverName"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "driverName"))
           .isEnabled()).as("Driver name is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "routeId"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "routeId"))
           .isEnabled()).as("Route ID is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupReadyDatetimeStr")).isEnabled()).as("Ready by is display and can be sorted")
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupReadyDatetimeStr")).isEnabled()).as("Ready by is display and can be sorted")
           .isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupLatestDatetimeStr")).isEnabled()).as("Latest by is display and can be sorted")
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupLatestDatetimeStr")).isEnabled()).as("Latest by is display and can be sorted")
           .isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          "//div[@data-testid = 'tableHeaderTitle.historicalSize']").isEnabled())
+              "//div[@data-testid = 'tableHeaderTitle.historicalSize']").isEnabled())
           .as("Historical size breakdown is display").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupApproxVolume")).isEnabled()).as("Approx vol is display and can be sorted")
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupApproxVolume")).isEnabled()).as("Approx vol is display and can be sorted")
           .isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupServiceLevel")).isEnabled())
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupServiceLevel")).isEnabled())
           .as("Job service level is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "pickupServiceType"))
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH, "pickupServiceType"))
           .isEnabled()).as("Job service type is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "failureReasonDescription")).isEnabled())
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "failureReasonDescription")).isEnabled())
           .as("Failure reason is display and can be sorted").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.findElementByXpath(
-          f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
-              "pickupInstructions")).isEnabled()).as("Comments is display and can be sorted")
+              f(pickupAppointmentJobPage.PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,
+                  "pickupInstructions")).isEnabled()).as("Comments is display and can be sorted")
           .isTrue();
     });
   }
@@ -731,12 +733,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       Assertions.assertThat(pickupAppointmentJobPage.existingUpcomingJob.timeRange.isEnabled())
           .as("Existing upcoming job time range is display").isTrue();
       Assertions.assertThat(
-          pickupAppointmentJobPage.existingUpcomingJob.useExistingTimeslot.isEnabled())
+              pickupAppointmentJobPage.existingUpcomingJob.useExistingTimeslot.isEnabled())
           .as("Existing upcoming job Apply existing time slots is display").isTrue();
       Assertions.assertThat(pickupAppointmentJobPage.existingUpcomingJob.pickupTag.isEnabled())
           .as("Existing upcoming job pickup tag is display").isTrue();
       Assertions.assertThat(
-          pickupAppointmentJobPage.existingUpcomingJob.submit.getAttribute("disabled"))
+              pickupAppointmentJobPage.existingUpcomingJob.submit.getAttribute("disabled"))
           .as("Existing upcoming job submit is disabled").isEqualTo("true");
     });
   }
@@ -807,8 +809,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       if (resolvedData.get("errorMessage") != null) {
         pickupAppointmentJobPage.jobCreatedModal.title.waitUntilVisible();
         Assertions.assertThat(pickupAppointmentJobPage.isElementExist(
-            f(pickupAppointmentJobPage.jobCreatedModal.ERROR_MESSAGE_XPATH,
-                resolvedData.get("errorMessage"))))
+                f(pickupAppointmentJobPage.jobCreatedModal.ERROR_MESSAGE_XPATH,
+                    resolvedData.get("errorMessage"))))
             .as("Error mesaage is the same").isTrue();
       }
       if (data.get("readyBy") != null) {
@@ -863,7 +865,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String status = resolveValue(Status);
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isStarByJobIdDisplayed(jobId, status))
+              .isStarByJobIdDisplayed(jobId, status))
           .as("Star in Job with id = " + jobId + " is displayed").isTrue();
     });
   }
@@ -874,7 +876,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isTagDisplayed(tagName))
+              .isTagDisplayed(tagName))
 
           .as(f("%s tag is displayed", tagName)).isTrue();
     });
@@ -885,7 +887,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     doWithRetry(() -> {
       pickupAppointmentJobPage.inFrame(page -> {
         Assertions.assertThat(
-            page.createOrEditJobPage.isSaveButtonDisabled())
+                page.createOrEditJobPage.isSaveButtonDisabled())
             .as("Save button enable state")
             .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
       });
@@ -931,7 +933,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       doWithRetry(() -> {
         Assertions.assertThat(page.createOrEditJobPage
-            .isStarByJobIdDisplayed(jobId, status))
+                .isStarByJobIdDisplayed(jobId, status))
             .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
       }, "", 1000, 5);
     });
@@ -944,7 +946,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     pickupAppointmentJobPage.inFrame(page -> {
       Assertions.assertThat(page.createOrEditJobPage
-          .isTagDisplayed(tagName))
+              .isTagDisplayed(tagName))
 
           .as(f("No %s tag is displayed", tagName)).isFalse();
     });
@@ -1123,24 +1125,24 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       if (listOfOptions.get("Route ID") != null) {
         Assertions.assertThat(
-            page.bulkSelect.verifyBulkSelectOption("Route ID", listOfOptions.get("Route ID"))).
+                page.bulkSelect.verifyBulkSelectOption("Route ID", listOfOptions.get("Route ID"))).
             as("Route ID status is the same").isTrue();
       }
       if (listOfOptions.get("Success job") != null) {
         Assertions.assertThat(
-            page.bulkSelect.verifyBulkSelectOption("Success job",
-                listOfOptions.get("Success job"))).
+                page.bulkSelect.verifyBulkSelectOption("Success job",
+                    listOfOptions.get("Success job"))).
             as("Success job status is the same").isTrue();
       }
       if (listOfOptions.get("Remove route") != null) {
         Assertions.assertThat(
-            page.bulkSelect.verifyBulkSelectOption("Remove route",
-                listOfOptions.get("Remove route"))).
+                page.bulkSelect.verifyBulkSelectOption("Remove route",
+                    listOfOptions.get("Remove route"))).
             as("Remove route status is the same").isTrue();
       }
       if (listOfOptions.get("Fail job") != null) {
         Assertions.assertThat(
-            page.bulkSelect.verifyBulkSelectOption("Fail job", listOfOptions.get("Fail job"))).
+                page.bulkSelect.verifyBulkSelectOption("Fail job", listOfOptions.get("Fail job"))).
             as("Fail job status is the same").isTrue();
       }
     });
@@ -1302,7 +1304,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     doWithRetry(() -> {
       pickupAppointmentJobPage.inFrame(() -> {
         Assertions.assertThat(
-            pickupAppointmentJobPage.bulkFailJobsModal.checkCannotFailedErrorMessageForJob(jobId))
+                pickupAppointmentJobPage.bulkFailJobsModal.checkCannotFailedErrorMessageForJob(jobId))
             .as("check error message in bulk fail").isTrue();
       });
     }, "", 1000, 3);
@@ -1313,7 +1315,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     doWithRetry(() -> {
       pickupAppointmentJobPage.inFrame(() -> {
         Assertions.assertThat(
-            pickupAppointmentJobPage.bulkFailJobsModal.submitButton.isEnabled())
+                pickupAppointmentJobPage.bulkFailJobsModal.submitButton.isEnabled())
             .as("check Submit button disabled in bulk fail").isFalse();
       });
     }, "", 1000, 3);
@@ -1576,6 +1578,41 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
             getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
   }
 
+
+  @When("Operator verify jobs table details on Pickup Jobs page:")
+  public void verifyReservationDetails(List<Map<String, String>> data, boolean checkCount) {
+    pickupAppointmentJobPage.inFrame(() -> {
+      List<Map<String, String>> resolvedData = resolveListOfMaps(data);
+      int count = pickupAppointmentJobPage.bulkSelect.getRowsCount();
+
+      if (checkCount) {
+        Assertions.assertThat(count)
+            .as("Number of reservation")
+            .isEqualTo(resolvedData.size());
+      }
+
+      resolvedData.forEach(row -> {
+        CoreV2PickupJobsParams expected = new CoreV2PickupJobsParams(row);
+        if (StringUtils.isNotBlank(expected.getId())) {
+          pickupAppointmentJobPage.bulkSelect.filterByColumn("pickupAppointmentJobId",
+              expected.getId());
+          if (pickupAppointmentJobPage.bulkSelect.isEmpty()) {
+            Assertions.fail("Job ID " + expected.getId() + " was not found");
+          }
+        } else if (StringUtils.isNotBlank(expected.getPickupAddress())) {
+          pickupAppointmentJobPage.bulkSelect.filterByColumn("pickupAddress",
+              expected.getPickupAddress());
+          if (pickupAppointmentJobPage.bulkSelect.isEmpty()) {
+            Assertions.fail(
+                "Job with Pickup Address " + expected.getPickupAddress()
+                    + " was not found");
+          }
+        }
+        CoreV2PickupJobsParams actual = pickupAppointmentJobPage.bulkSelect.readEntity(1);
+        expected.compareWithActual(actual);
+      });
+    });
+  }
 }
 
 
