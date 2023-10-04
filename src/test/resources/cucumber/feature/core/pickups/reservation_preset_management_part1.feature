@@ -80,8 +80,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -115,8 +114,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
       | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
       | status    | False                                |
@@ -174,8 +172,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
       | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
       | status    | False                                |
@@ -222,8 +219,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
       | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
       | status    | False                                |
@@ -270,8 +266,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
       | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
       | status    | False                                |
@@ -322,8 +317,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
-      | timeout   | 100                                  |
+      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
       | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
       | status    | False                                |
