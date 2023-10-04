@@ -20,7 +20,7 @@ Feature: Route Logs
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Delete a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

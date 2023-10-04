@@ -153,7 +153,7 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @DeleteOrArchiveRoute @DeletePickupAppointmentJob @wip
+  @DeleteOrArchiveRoute @DeletePickupAppointmentJob
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
