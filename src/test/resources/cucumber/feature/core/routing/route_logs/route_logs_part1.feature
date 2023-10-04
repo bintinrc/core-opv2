@@ -133,7 +133,6 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  #TODO will uncomment verifies success react notification after the fix pushed to QA
   @DeleteOrArchiveRoute @wip
   Scenario: Operator Delete Multiple Routes from Route Logs Page
     And API Operator create new route using data below:
