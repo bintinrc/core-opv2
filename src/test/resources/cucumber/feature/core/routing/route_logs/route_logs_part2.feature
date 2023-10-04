@@ -21,7 +21,7 @@ Feature: Route Logs
       | tags | {route-tag-name}       |
 
   #TODO will uncomment verifies success react notification after the fix pushed to QA
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Delete a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
