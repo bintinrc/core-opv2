@@ -149,7 +149,8 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies that success react notification displayed:
-      | top                | 2 route(s) deleted/n/Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | top    | 2 route(s) deleted                                                         |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
@@ -172,7 +173,7 @@ Feature: Route Logs
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Updated |
+      | top | 1 Route(s) Updated |
     Then Operator verify route details on Route Logs page using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | id         | {KEY_CREATED_ROUTE_ID}                  |

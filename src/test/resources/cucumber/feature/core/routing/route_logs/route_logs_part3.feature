@@ -154,7 +154,7 @@ Feature: Route Logs
     And Operator verifies created routes are printed successfully
 
   #TODO will uncomment verifies success react notification after the fix pushed to QA
-  @DeleteOrArchiveRoute @DeletePickupAppointmentJob @wip
+  @DeleteOrArchiveRoute @DeletePickupAppointmentJob @wip2
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
