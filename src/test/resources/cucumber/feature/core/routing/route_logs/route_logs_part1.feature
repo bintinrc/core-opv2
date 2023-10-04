@@ -148,8 +148,8 @@ Feature: Route Logs
     When Operator delete routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-#    Then Operator verifies that success react notification displayed:
-#      | top                | 2 route(s) deleted |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 route(s) deleted/n/Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |

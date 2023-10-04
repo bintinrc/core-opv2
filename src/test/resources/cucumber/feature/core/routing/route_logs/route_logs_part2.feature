@@ -33,7 +33,7 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     And Operator deletes created route on Route Logs page
 #    Then Operator verifies that success react notification displayed:
-#      | top                | 1 Route(s) Deleted |
+#      | top                | 1 Route(s) Deleted/n/Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
 
