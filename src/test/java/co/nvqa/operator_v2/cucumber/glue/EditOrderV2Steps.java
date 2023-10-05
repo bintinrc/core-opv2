@@ -1761,8 +1761,8 @@ public class EditOrderV2Steps extends AbstractSteps {
     Map<String, String> finalData = resolveKeyValues(data);
     page.inFrame(() -> {
       page.recoveryTicket.click();
-      page.editRecoveryFrame.waitUntilVisible();
-      getWebDriver().switchTo().frame(page.editRecoveryFrame.getWebElement());
+      page.createAndEditRecoveryFrame.waitUntilVisible();
+      getWebDriver().switchTo().frame(page.createAndEditRecoveryFrame.getWebElement());
       page.editTicketDialog.waitUntilVisible();
       if (finalData.containsKey("status")) {
         page.editTicketDialog.ticketStatus.selectValue(finalData.get("status"));
