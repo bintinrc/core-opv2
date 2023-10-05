@@ -141,7 +141,7 @@ Feature: Route Logs
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -153,7 +153,6 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  #TODO will uncomment verifies success react notification after the fix pushed to QA
   @DeleteOrArchiveRoute @DeletePickupAppointmentJob
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
@@ -179,8 +178,9 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator deletes created route on Route Logs page
-#    Then Operator verifies that success react notification displayed:
-#      | top                | 1 Route(s) Deleted |
+    Then Operator verifies that success react notification displayed:
+      | top    | 1 Route(s) Deleted                      |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And DB Route - verify route_logs record:
