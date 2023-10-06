@@ -1535,7 +1535,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           break;
         case "approx vol":
           page.bulkSelect.filterTableUsing("pickupApproxVolume", resolveValue(searchString));
-
           break;
         case "create time":
           page.bulkSelect.filterTableUsing("jobCreationTimeStr", resolveValue(searchString));
@@ -1580,35 +1579,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
 
   @When("Operator verify jobs table details on Pickup Jobs page:")
-  public void verifyReservationDetails(List<Map<String, String>> data, boolean checkCount) {
-    pickupAppointmentJobPage.inFrame(() -> {
-      List<Map<String, String>> resolvedData = resolveListOfMaps(data);
-      int count = pickupAppointmentJobPage.bulkSelect.getRowsCount();
-
-      if (checkCount) {
-        Assertions.assertThat(count)
-            .as("Number of reservation")
-            .isEqualTo(resolvedData.size());
-      }
-
+  public void verifyReservationDetails(List<Map<String, String>> data) {
+    List<Map<String, String>> resolvedData = resolveListOfMaps(data);
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.showHideFiltersHeader.click();
       resolvedData.forEach(row -> {
         CoreV2PickupJobsParams expected = new CoreV2PickupJobsParams(row);
-        if (StringUtils.isNotBlank(expected.getId())) {
-          pickupAppointmentJobPage.bulkSelect.filterByColumn("pickupAppointmentJobId",
-              expected.getId());
-          if (pickupAppointmentJobPage.bulkSelect.isEmpty()) {
-            Assertions.fail("Job ID " + expected.getId() + " was not found");
-          }
-        } else if (StringUtils.isNotBlank(expected.getPickupAddress())) {
-          pickupAppointmentJobPage.bulkSelect.filterByColumn("pickupAddress",
-              expected.getPickupAddress());
-          if (pickupAppointmentJobPage.bulkSelect.isEmpty()) {
-            Assertions.fail(
-                "Job with Pickup Address " + expected.getPickupAddress()
-                    + " was not found");
-          }
-        }
-        CoreV2PickupJobsParams actual = pickupAppointmentJobPage.bulkSelect.readEntity(1);
+        CoreV2PickupJobsParams actual = page.bulkSelect.readEntity(1);
         expected.compareWithActual(actual);
       });
     });
