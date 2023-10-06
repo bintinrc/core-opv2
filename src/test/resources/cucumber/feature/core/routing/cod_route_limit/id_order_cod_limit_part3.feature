@@ -1,4 +1,4 @@
-@OperatorV2 @Core @RoutingID @DriverCodLimitIDPart3
+@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverCodLimitIDPart3
 Feature: ID - Order COD Limit
 
   Background:
