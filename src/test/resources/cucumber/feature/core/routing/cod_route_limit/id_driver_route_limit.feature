@@ -5,7 +5,7 @@ Feature: ID - Driver Route Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Create <3 Driver Routes in a Day on Route Logs
     Given API Core - set system parameter:
       | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
@@ -47,7 +47,7 @@ Feature: ID - Driver Route Limit
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | id                                 |
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Partial Allow to Create >3 Driver Routes in a Day on Route Logs
     Given API Core - set system parameter:
       | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
@@ -94,7 +94,7 @@ Feature: ID - Driver Route Limit
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].legacyId} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} |
 
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Create >3 Driver Routes in a Day on Route Logs
     Given API Core - set system parameter:
       | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |

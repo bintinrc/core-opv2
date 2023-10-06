@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -76,7 +76,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -111,7 +111,7 @@ Feature: ID - Order COD Limit
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Driver Route on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -215,7 +215,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Single Driver Route on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -263,7 +263,7 @@ Feature: ID - Order COD Limit
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Multiple Driver Routes on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -380,7 +380,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -431,7 +431,7 @@ Feature: ID - Order COD Limit
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route - 1 Route is Archived
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -482,7 +482,7 @@ Feature: ID - Order COD Limit
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route - 1 Route is Deleted
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |

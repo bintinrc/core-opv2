@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -88,7 +88,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -134,7 +134,7 @@ Feature: ID - Order COD Limit
       | top    | Status 400: Unknown                               |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Removed COD on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -215,7 +215,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 0                                  |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -307,7 +307,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 40000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -364,7 +364,7 @@ Feature: ID - Order COD Limit
       | top    | Status 400: Unknown                               |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Edit COD of Routed Order with COD <30 Millions on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -422,7 +422,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Edit COD of Routed Order with COD >30 Millions on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -460,7 +460,7 @@ Feature: ID - Order COD Limit
       | top    | Status 400: Unknown                               |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Remove COD of Routed Order with COD >30 Millions on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -517,7 +517,7 @@ Feature: ID - Order COD Limit
       | cod       | 0                                  |
 
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD <30 Millions on Route Logs
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -595,7 +595,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-next-1-day-yyyy-MM-dd}     |
       | cod       | 30000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD >30 Millions on Route Logs
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -655,7 +655,7 @@ Feature: ID - Order COD Limit
       | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Driver has Edited COD <30 Millions on Route Logs
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -744,7 +744,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @RestoreSystemParams @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Driver has Edited COD >30 Millions on Route Logs
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
