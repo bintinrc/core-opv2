@@ -260,6 +260,13 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   }
 
   public void waitIsNotEmpty(int timeoutInSeconds) {
-    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000, "Table is empty");
+    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000L, "Table is empty");
+  }
+
+  public PageElement getCell(String columnId, int index) {
+    String columnDataClass = getColumnLocators().get(columnId);
+    String xpath =
+        columnDataClass.startsWith("/") ? f(columnDataClass, index) : f(CELL_LOCATOR_PATTERN, index, columnDataClass);
+    return new PageElement(getWebDriver(), xpath);
   }
 }

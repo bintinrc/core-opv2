@@ -1,6 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.TaggedOrderParams;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
@@ -11,16 +14,19 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class ViewTaggedOrdersPage extends OperatorV2SimplePage {
+public class ViewTaggedOrdersPage extends SimpleReactPage<ViewTaggedOrdersPage> {
 
-  @FindBy(css = "nv-filter-box[item-types='Order Tag(s)']")
-  public NvFilterBox orderTagsFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-select')][.//*[@id='orderTagOptions']]")
+  public AntSelect3 orderTagsFilter;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
-  public NvFilterBox granularStatusFilter;
+  @FindBy(xpath = "//div[contains(@class,'ant-select')][.//*[@id='granularStatusOptions']]")
+  public AntSelect3 granularStatusFilter;
 
-  @FindBy(xpath = "//*[@on-click='ctrl.loadResult()' or @on-click='ctrl.goToResult()']")
-  public NvIconTextButton loadSelection;
+  @FindBy(name = "container.view-tagged-orders.load-selection")
+  public Button loadSelection;
+
+  @FindBy(xpath = "//button[.='Clear Selection']")
+  public Button clearSelection;
 
   @FindBy(css = "md-dialog")
 
