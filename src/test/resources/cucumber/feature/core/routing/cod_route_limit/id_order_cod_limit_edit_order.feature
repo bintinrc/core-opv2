@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -64,7 +64,7 @@ Feature: ID - Order COD Limit
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Edit Order
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |

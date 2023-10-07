@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Single Orders with COD <30 Millions to Single Driver Route on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -76,7 +76,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 10000000                           |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Single Orders with COD >30 Millions to Single Driver Route on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -111,7 +111,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Driver has exceeded total cod |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Driver Route on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -212,7 +212,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >30 Millions to Single Driver Route on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -299,7 +299,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 15000000                           |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Multiple Driver Routes on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -412,7 +412,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -501,7 +501,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 15000000                           |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders - 1 Route is Archived
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
@@ -552,7 +552,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Driver has exceeded total cod |
 
-  @RestoreSystemParams1 @DeleteDriver @DeleteRoutes
+  @RestoreSystemParams @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders - 1 route is Deleted
     Given API Core - set system parameter:
       | key   | IS_DRIVER_COD_LIMIT_APPLIED |
