@@ -7,32 +7,59 @@ Feature: Resolve Recovery Ticket
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = XMAS CAGE
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_STAMP_ID}     |
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Recovery           |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | SHIPPER ISSUE      |
-      | ticketSubType           | NO ORDER           |
-      | orderOutcome            | XMAS CAGE          |
-      | issueDescription        | GENERATED          |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_CORE_STAMP_ID}            |
+      | ticketType         | SHIPPER ISSUE                  |
+      | subTicketType      | NO ORDER                       |
+      | entrySource        | CUSTOMER COMPLAINT             |
+      | investigatingParty | 456                            |
+      | investigatingHubId | {hub-id}                       |
+      | shipperZendeskId   | 1                              |
+      | custZendeskId      | 1                              |
+      | ticketNotes        | GENERATED                      |
+      | orderOutcomeName   | ORDER OUTCOME (NO ORDER)       |
+      | creatorUserId      | {ticketing-creator-user-id}    |
+      | creatorUserName    | {ticketing-creator-user-name}  |
+      | creatorUserEmail   | {ticketing-creator-user-email} |
+    #And Operator go to menu Recovery -> Recovery Tickets
+#    And Operator create new ticket on page Recovery Tickets using data below:
+#      | trackingId              | {KEY_STAMP_ID}     |
+#      | entrySource             | CUSTOMER COMPLAINT |
+#      | investigatingDepartment | Recovery           |
+#      | investigatingHub        | {hub-name}         |
+#      | ticketType              | SHIPPER ISSUE      |
+#      | ticketSubType           | NO ORDER           |
+#      | orderOutcome            | XMAS CAGE          |
+#      | issueDescription        | GENERATED          |
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                               |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                           |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "requested_tracking_number":"{KEY_TRACKING_NUMBER}","service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "requested_tracking_number":"{KEY_CORE_STAMP_TRACKING_NUMBER}","service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
-      | status         | Pending        |
-      | granularStatus | Pending Pickup |
-    When Operator updates recovery ticket on Edit Order V2 page:
-      | status                  | RESOLVED  |
-      | outcome                 | XMAS CAGE |
-      | keepCurrentOrderOutcome | true      |
-    Then Operator verifies that success react notification displayed:
-      | top | ^Ticket ID: .* Updated |
+      | status         | On hold |
+      | granularStatus | On Hold |
+    When DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
+    And API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | status           | RESOLVED                                 |
+      | outcome          | XMAS CAGE                                |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
+#    When Operator updates recovery ticket on Edit Order V2 page:
+#      | status                  | RESOLVED  |
+#      | outcome                 | XMAS CAGE |
+#      | keepCurrentOrderOutcome | true      |
+#    Then Operator verifies that success react notification displayed:
+#      | top | ^Ticket ID: .* Updated |
+    When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
@@ -54,7 +81,7 @@ Feature: Resolve Recovery Ticket
       | CANCEL          |
       | TICKET UPDATED  |
       | TICKET RESOLVED |
-
+    
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = ORDERS CREATED
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
     And Operator go to menu Recovery -> Recovery Tickets
