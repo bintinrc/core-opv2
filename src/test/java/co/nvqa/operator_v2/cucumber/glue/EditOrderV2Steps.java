@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.exception.NvTestCoreOrderKafkaLagException;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.common.utils.NvTestEnvironmentException;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
@@ -187,7 +187,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         }
         softAssertions.assertAll();
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             "Order details is not update yet because of Kafka lag");
       }
     });
@@ -554,7 +554,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         Assertions.assertThat(page.status.getText()).as("Status")
             .isEqualToIgnoringCase(expectedValue);
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             "Order status is not updated yet because of Kafka lag");
       }
     });
@@ -584,7 +584,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         Assertions.assertThat(page.granular.getText()).as("Granular Status")
             .isEqualToIgnoringCase(expectedValue);
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             "Order granular status is not updated yet because of Kafka lag");
       }
     });
@@ -821,7 +821,7 @@ public class EditOrderV2Steps extends AbstractSteps {
 
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException("Order event not updated yet because of Kafka lag");
+        throw new NvTestCoreOrderKafkaLagException("Order event not updated yet because of Kafka lag");
       }
     });
   }
@@ -854,7 +854,7 @@ public class EditOrderV2Steps extends AbstractSteps {
               f("[%s] events", expectedEvent.getName()));
         });
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException("Order event is not updated yet because of kafka lag");
+        throw new NvTestCoreOrderKafkaLagException("Order event is not updated yet because of kafka lag");
       }
     });
   }
@@ -976,7 +976,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         }
         assertions.assertAll();
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             "Delivery detail is not updated yet because of Kafka lag");
       }
     });
@@ -1087,7 +1087,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         }
         assertions.assertAll();
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             "Pickup detail is not updated yet because of Kafka lag");
       }
     });
@@ -1148,7 +1148,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
         expected.compareWithActual(actual);
       } catch (Throwable t) {
-        throw new NvTestEnvironmentException(
+        throw new NvTestCoreOrderKafkaLagException(
             transactionType + " transaction is not updated yet because of Kafka lag");
       }
     });
