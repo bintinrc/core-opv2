@@ -1,11 +1,14 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @CRG3
 Feature: Create Route Groups - Priority Parcel Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142867
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Service Level on Create Route Groups - <serviceLevel>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902057
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
@@ -40,6 +43,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | EXPRESS      |
 
   Scenario: Operator Filter Excluded Shipper and Non Excluded Shipper on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902146
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -63,6 +67,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | bottom | ^.*Error Message: Same shipper ids are both included and excluded: {filter-shipper-name}.* |
 
   Scenario: Operator Filter Excluded Shipper on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902128
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -96,6 +101,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | status     | Pending Pickup                                            |
 
   Scenario: Operator Filter Hub Inbound Datetime with Start Datetime and End Datetime on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6968575
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -123,6 +129,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | status     | Arrived at Sorting Hub                                    |
 
   Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902120
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -150,6 +157,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | status     | Arrived at Sorting Hub                                    |
 
   Scenario: Operator Filter Original Transaction End Time on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6936912
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |

@@ -1,11 +1,14 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ReservationFilters @CRG4
 Feature: Create Route Groups - Reservation Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142861
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Pickup Size Create Route Groups - Reservation Filters - Pickup Size = <pickupSize>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/6906069
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -33,6 +36,7 @@ Feature: Create Route Groups - Reservation Filters
       | Trolley Required     |
 
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Cancel - Reservation Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/6908319
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -54,6 +58,7 @@ Feature: Create Route Groups - Reservation Filters
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Fail - Reservation Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/6908317
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new shipper address V2 using data below:
@@ -86,6 +91,7 @@ Feature: Create Route Groups - Reservation Filters
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Success - Reservation Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/6908313
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -127,6 +133,7 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | SUCCESS | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   Scenario: Operator Filter Reservation Status on Create Route Groups - Reservation Status = Pending - Reservation Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/6908299
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -146,6 +153,7 @@ Feature: Create Route Groups - Reservation Filters
       | {KEY_CREATED_RESERVATION.id} | Reservation | {KEY_CREATED_ADDRESS.name} | {KEY_CREATED_ADDRESS.to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_CREATED_RESERVATION.getLocalizedReadyDatetime} | {KEY_CREATED_RESERVATION.getLocalizedLatestDatetime} |
 
   Scenario Outline: Operator Filter Reservation Type on Create Route Groups - Reservation Filters - <Note>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142861/scenarios/5214758
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
