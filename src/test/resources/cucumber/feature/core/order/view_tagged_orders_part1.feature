@@ -6,16 +6,19 @@ Feature: View Tagged Orders
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
-      | granularStatus | Pending Pickup   |
+      | granularStatus | PENDING_PICKUP   |
     Then Operator verifies tagged order params on View Tagged Orders page:
       | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID} |
       | tags                 | {order-tag-name}                |
