@@ -21,16 +21,6 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}    |
       | creatorUserName    | {ticketing-creator-user-name}  |
       | creatorUserEmail   | {ticketing-creator-user-email} |
-    #And Operator go to menu Recovery -> Recovery Tickets
-#    And Operator create new ticket on page Recovery Tickets using data below:
-#      | trackingId              | {KEY_STAMP_ID}     |
-#      | entrySource             | CUSTOMER COMPLAINT |
-#      | investigatingDepartment | Recovery           |
-#      | investigatingHub        | {hub-name}         |
-#      | ticketType              | SHIPPER ISSUE      |
-#      | ticketSubType           | NO ORDER           |
-#      | orderOutcome            | XMAS CAGE          |
-#      | issueDescription        | GENERATED          |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                      |
@@ -53,12 +43,6 @@ Feature: Resolve Recovery Ticket
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status                  | RESOLVED  |
-#      | outcome                 | XMAS CAGE |
-#      | keepCurrentOrderOutcome | true      |
-#    Then Operator verifies that success react notification displayed:
-#      | top | ^Ticket ID: .* Updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -84,7 +68,6 @@ Feature: Resolve Recovery Ticket
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = ORDERS CREATED
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
-#    And Operator go to menu Recovery -> Recovery Tickets
     When API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_CORE_STAMP_ID}            |
       | ticketType         | SHIPPER ISSUE                  |
@@ -99,15 +82,6 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}    |
       | creatorUserName    | {ticketing-creator-user-name}  |
       | creatorUserEmail   | {ticketing-creator-user-email} |
-#    And Operator create new ticket on page Recovery Tickets using data below:
-#      | trackingId              | {KEY_STAMP_ID}     |
-#      | entrySource             | CUSTOMER COMPLAINT |
-#      | investigatingDepartment | Recovery           |
-#      | investigatingHub        | {hub-name}         |
-#      | ticketType              | SHIPPER ISSUE      |
-#      | ticketSubType           | NO ORDER           |
-#      | orderOutcome            | ORDERS CREATED     |
-#      | issueDescription        | GENERATED          |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                      |
@@ -130,12 +104,6 @@ Feature: Resolve Recovery Ticket
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status                  | RESOLVED       |
-#      | outcome                 | ORDERS CREATED |
-#      | keepCurrentOrderOutcome | true           |
-#    Then Operator verifies that success react notification displayed:
-#      | top | ^Ticket ID: .* Updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -173,27 +141,10 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
-#    When Operator create new recovery ticket on Edit Order V2 page:
-#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-#      | entrySource             | CUSTOMER COMPLAINT                    |
-#      | investigatingDepartment | Recovery                              |
-#      | investigatingHub        | {hub-name}                            |
-#      | ticketType              | PARCEL EXCEPTION                      |
-#      | ticketSubType           | COMPLETED ORDER                       |
-#      | liability               | Shipper                               |
-#      | orderOutcome            | RELABELLED TO SEND                    |
-#    When Operator verifies that success react notification displayed:
-#      | top | Ticket has been created! |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status                  | RESOLVED           |
-#      | outcome                 | RELABELLED TO SEND |
-#      | keepCurrentOrderOutcome | true               |
-#    Then Operator verifies that success react notification displayed:
-#      | top | ^Ticket ID: .* Updated |
     When DB Recovery - get id from ticket_custom_fields table Hibernate
       | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
@@ -246,27 +197,10 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
-#    When Operator create new recovery ticket on Edit Order V2 page:
-#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-#      | entrySource             | CUSTOMER COMPLAINT                    |
-#      | investigatingDepartment | Recovery                              |
-#      | investigatingHub        | {hub-name}                            |
-#      | ticketType              | PARCEL EXCEPTION                      |
-#      | ticketSubType           | COMPLETED ORDER                       |
-#      | liability               | Shipper                               |
-#      | orderOutcome            | XMAS CAGE                             |
-#    When Operator verifies that success react notification displayed:
-#      | top | Ticket has been created! |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Completed |
       | granularStatus | Completed |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status                  | RESOLVED  |
-#      | outcome                 | XMAS CAGE |
-#      | keepCurrentOrderOutcome | true      |
-#    Then Operator verifies that success react notification displayed:
-#      | top | ^Ticket ID: .* Updated |
     When DB Recovery - get id from ticket_custom_fields table Hibernate
       | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
@@ -316,17 +250,6 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
-#    When Operator create new recovery ticket on Edit Order V2 page:
-#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-#      | entrySource             | CUSTOMER COMPLAINT                    |
-#      | investigatingDepartment | Recovery                              |
-#      | investigatingHub        | {hub-name}                            |
-#      | ticketType              | PARCEL EXCEPTION                      |
-#      | ticketSubType           | CANCELLED ORDER                       |
-#      | liability               | Shipper                               |
-#      | orderOutcome            | XMAS CAGE                             |
-#    When Operator verifies that success react notification displayed:
-#      | top | Ticket has been created! |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Cancelled |
@@ -343,12 +266,6 @@ Feature: Resolve Recovery Ticket
       | reporterId       | {ticketing-creator-user-id}              |
       | reporterName     | {ticketing-creator-user-name}            |
       | reporterEmail    | {ticketing-creator-user-email}           |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status                  | RESOLVED  |
-#      | outcome                 | XMAS CAGE |
-#      | keepCurrentOrderOutcome | true      |
-#    Then Operator verifies that success react notification displayed:
-#      | top | ^Ticket ID: .* Updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -380,7 +297,6 @@ Feature: Resolve Recovery Ticket
     When API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | ticketType         | MISSING                                    |
-      #| subTicketType      | CANCELLED ORDER                            |
       | entrySource        | CUSTOMER COMPLAINT                         |
       | investigatingParty | 456                                        |
       | investigatingHubId | {hub-id}                                   |
@@ -391,15 +307,6 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
-#    When Operator create new recovery ticket on Edit Order V2 page:
-#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-#      | entrySource             | CUSTOMER COMPLAINT                    |
-#      | investigatingDepartment | Recovery                              |
-#      | investigatingHub        | {hub-name}                            |
-#      | ticketType              | MISSING                               |
-#      | orderOutcomeMissing     | LOST - DECLARED                       |
-#    When Operator verifies that success react notification displayed:
-#      | top | Ticket has been created! |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
@@ -453,7 +360,6 @@ Feature: Resolve Recovery Ticket
     When API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | ticketType         | MISSING                                    |
-      #| subTicketType      | CANCELLED ORDER                            |
       | entrySource        | CUSTOMER COMPLAINT                         |
       | investigatingParty | 456                                        |
       | investigatingHubId | {hub-id}                                   |
@@ -464,15 +370,6 @@ Feature: Resolve Recovery Ticket
       | creatorUserId      | {ticketing-creator-user-id}                |
       | creatorUserName    | {ticketing-creator-user-name}              |
       | creatorUserEmail   | {ticketing-creator-user-email}             |
-#    When Operator create new recovery ticket on Edit Order V2 page:
-#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-#      | entrySource             | CUSTOMER COMPLAINT                    |
-#      | investigatingDepartment | Recovery                              |
-#      | investigatingHub        | {hub-name}                            |
-#      | ticketType              | MISSING                               |
-#      | orderOutcomeMissing     | FOUND - INBOUND                       |
-#    When Operator verifies that success react notification displayed:
-#      | top | Ticket has been created! |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
@@ -541,9 +438,6 @@ Feature: Resolve Recovery Ticket
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE STATUS |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status  | RESOLVED      |
-#      | outcome | RESUME PICKUP |
     When DB Recovery - get id from ticket_custom_fields table Hibernate
       | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
@@ -628,9 +522,6 @@ Feature: Resolve Recovery Ticket
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE STATUS |
-#    When Operator updates recovery ticket on Edit Order V2 page:
-#      | status  | RESOLVED      |
-#      | outcome | RESUME PICKUP |
     When DB Recovery - get id from ticket_custom_fields table Hibernate
       | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
       | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
