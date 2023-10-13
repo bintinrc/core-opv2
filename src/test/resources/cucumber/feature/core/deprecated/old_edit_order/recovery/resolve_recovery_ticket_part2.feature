@@ -293,77 +293,120 @@ Feature: Resolve Recovery Ticket
       | TICKET RESOLVED     |
 
   Scenario: Resolve MISSING PETS Ticket upon Route Inbound
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | MISSING                                    |
+      #| subTicketType      | CANCELLED ORDER                            |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)                    |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail delivery waypoint from Route Manifest page
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    When Operator create new recovery ticket on Edit Order page:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Recovery           |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | MISSING            |
-      | orderOutcomeMissing     | FOUND - INBOUND    |
-      | parcelDescription       | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":18}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 18                                                                                                  |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+#    When API Recovery - Operator create recovery ticket:
+#      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+#      | ticketType         | MISSING                                    |
+#      #| subTicketType      | CANCELLED ORDER                            |
+#      | entrySource        | CUSTOMER COMPLAINT                         |
+#      | investigatingParty | 456                                        |
+#      | investigatingHubId | {hub-id}                                   |
+#      | shipperZendeskId   | 1                                          |
+#      | custZendeskId      | 1                                          |
+#      | ticketNotes        | GENERATED                                  |
+#      | orderOutcomeName   | ORDER OUTCOME (MISSING)                    |
+#      | creatorUserId      | {ticketing-creator-user-id}                |
+#      | creatorUserName    | {ticketing-creator-user-name}              |
+#      | creatorUserEmail   | {ticketing-creator-user-email}             |
+#    When Operator create new recovery ticket on Edit Order V2 page:
+#      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+#      | entrySource             | CUSTOMER COMPLAINT                    |
+#      | investigatingDepartment | Recovery                              |
+#      | investigatingHub        | {hub-name}                            |
+#      | ticketType              | MISSING                               |
+#      | orderOutcomeMissing     | FOUND - INBOUND                       |
+#    When Operator verifies that success react notification displayed:
+#      | top | Ticket has been created! |
     When Operator refresh page
-    Then Operator verify order status is "On Hold" on Edit Order page
-    And Operator verify order granular status is "On Hold" on Edit Order page
-    And Operator verify order events with description on Edit order page using data below:
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | On hold |
+      | granularStatus | On Hold |
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                   |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: On Hold Old Order Status: Delivery fail New Order Status: On Hold Reason: TICKET_CREATION |
-    And Operator verify order events on Edit order page using data below:
-      | name       |
-      | RESCHEDULE |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+      | hubName      | {hub-name}                         |
+      | fetchBy      | FETCH_BY_ROUTE_ID                  |
+      | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
-    And Operator scan a tracking ID of created order on Route Inbound page
+    And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | parcelProcessedScans       | 1 |
       | parcelProcessedTotal       | 1 |
       | failedDeliveriesValidScans | 1 |
       | failedDeliveriesValidTotal | 1 |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verifies ticket status is "RESOLVED" on Edit Order page
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify transaction on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | PICKUP  |
       | status | SUCCESS |
-    And Operator verify transaction on Edit order page using data below:
+    And Operator verify transaction on Edit Order V2 page using data below:
       | type   | DELIVERY |
       | status | PENDING  |
-    And API Operator get order details
-    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
-    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
-    And Operator verify order events with description on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
-    And Operator verify order events on Edit order page using data below:
+    And Operator verify order events on Edit Order V2 page using data below:
       | name            |
-#  need to enable once issue is fixed
-#      | ROUTE INBOUND  SCAN |
       | TICKET RESOLVED |
 
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
