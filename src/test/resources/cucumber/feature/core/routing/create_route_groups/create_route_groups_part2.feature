@@ -1,12 +1,15 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CreateRouteGroupsPart2 @CRG1
 Feature: Create Route Groups
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/1593801
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
   Scenario: Operator Filter Route Grouping on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214757
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -40,6 +43,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
   Scenario: Download CSV of Route Group Information on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5165473
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -74,6 +78,7 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups
   Scenario: Operator Filter Route Grouping - Empty Route Group
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452174
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -96,7 +101,8 @@ Feature: Create Route Groups
     Then Operator verifies results table is empty on Create Route Groups
 
   @DeleteFilterTemplate
-  Scenario: Operator Filter Master Shipper by Apply Filter Preset on Create Route Groups Page
+  Scenario: Operator Filter Master Shipper by Apply Filter Preset on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452124
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
       | shipperClientSecret | {shipper-v4-marketplace-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -124,6 +130,7 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups
   Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Transactions
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452177
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -165,7 +172,8 @@ Feature: Create Route Groups
       | {KEY_CREATED_RESERVATION.id} |
 
   @DeleteRouteGroupsV2
-  Scenario: Operator Filter Route Grouping - Include Only Reservations
+  Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Reservations
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452193
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -199,7 +207,8 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   |
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping - Include Only Shipment
+  Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Shipment
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452194
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
