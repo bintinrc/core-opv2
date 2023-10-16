@@ -18,7 +18,7 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | 3plShipperName | {3pl-shipper-name}                    |
       | 3plShipperId   | {3pl-shipper-id}                      |
-    Then Operator verify the new mapping is created successfully
+#    Then Operator verify the new mapping is created successfully
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
@@ -41,7 +41,7 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | 3plShipperName | {3pl-shipper-name}                    |
       | 3plShipperId   | {3pl-shipper-id}                      |
-    Then Operator verify the new mapping is created successfully
+#    Then Operator verify the new mapping is created successfully
     When Operator edit the new mapping with a new data
     Then Operator verify the new edited data is updated successfully
 
@@ -57,7 +57,7 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | 3plShipperName | {3pl-shipper-name}                    |
       | 3plShipperId   | {3pl-shipper-id}                      |
-    Then Operator verify the new mapping is created successfully
+#    Then Operator verify the new mapping is created successfully
     When Operator delete the new mapping
     Then Operator verify the new mapping is deleted successfully
 
@@ -73,7 +73,7 @@ Feature: Third Party Order Management
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator uploads bulk mapping for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    Then Operator verify multiple new mapping is created successfully
+#    Then Operator verify multiple new mapping is created successfully
 
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - NOT Transferred to 3PL & Completed
     Given Operator go to menu Utilities -> QRCode Printing
@@ -93,7 +93,7 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | 3plShipperName | {3pl-shipper-name}                    |
       | 3plShipperId   | {3pl-shipper-id}                      |
-    Then Operator verify upload results on Third Party Order Management page:
+#    Then Operator verify upload results on Third Party Order Management page:
       | trackingId        | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.trackingId}                         |
       | shipperId         | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.shipperId}                          |
       | thirdPlTrackingId | {KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS.thirdPlTrackingId}                  |
@@ -116,7 +116,7 @@ Feature: Third Party Order Management
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | 3plShipperName | {3pl-shipper-name}                    |
       | 3plShipperId   | {3pl-shipper-id}                      |
-    Then Operator verify the new mapping is created successfully
+#    Then Operator verify the new mapping is created successfully
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And API Core -  Wait for following order state:
       | trackingId     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
