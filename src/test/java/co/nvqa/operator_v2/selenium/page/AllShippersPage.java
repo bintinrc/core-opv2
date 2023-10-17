@@ -139,12 +139,10 @@ public class AllShippersPage extends OperatorV2SimplePage {
     allShippersCreateEditPage.setPickupAddressesAsMilkrun(shipper);
   }
 
-  public void unsetPickupAddressesAsMilkrun(Shipper shipper) {
-    searchShipper(shipper.getName());
-    Shipper actualShipper = shippersTable.readEntity(1);
-    shipper.setLegacyId(actualShipper.getLegacyId());
+  public void unsetPickupAddressesAsMilkrun(String shipperName, Address shipperPickupAddress) {
+    searchShipper(shipperName);
     openEditShipperPage();
-    allShippersCreateEditPage.unsetPickupAddressesAsMilkrun(shipper);
+    allShippersCreateEditPage.unsetPickupAddressesAsMilkrun(shipperPickupAddress);
   }
 
   public void removeMilkrunReservarion(Shipper shipper, int addressIndex,

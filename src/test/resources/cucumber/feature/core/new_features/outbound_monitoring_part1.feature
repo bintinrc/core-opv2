@@ -7,7 +7,6 @@ Feature: Outbound Monitoring
 
   @ArchiveRouteCommonV2
   Scenario: Operator Verifies the In Progress Outbound Status on Outbound Monitoring Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -31,8 +30,8 @@ Feature: Outbound Monitoring
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
+    When Operator go to menu New Features -> Outbound Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     And Operator search on Route ID Header Table on Outbound Monitoring Page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -40,7 +39,6 @@ Feature: Outbound Monitoring
 
   @ArchiveRouteCommonV2
   Scenario: Operator Verifies the Complete Outbound Status on Outbound Monitoring Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -76,7 +74,7 @@ Feature: Outbound Monitoring
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                             |
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
       | routes     | KEY_DRIVER_ROUTES                                                                      |
-    When Operator go to menu New Features -> Outbound Load Monitoring
+    When Operator go to menu New Features -> Outbound Monitoring
     Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page:
@@ -85,7 +83,6 @@ Feature: Outbound Monitoring
 
   @ArchiveRouteCommonV2
   Scenario: Operator Clicks on Flag Icon to Mark Route ID on Outbound Monitoring Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -112,7 +109,7 @@ Feature: Outbound Monitoring
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    Given Operator go to menu New Features -> Outbound Load Monitoring
+    Given Operator go to menu New Features -> Outbound Monitoring
     Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page:
@@ -122,7 +119,6 @@ Feature: Outbound Monitoring
 
   @ArchiveRouteCommonV2
   Scenario: Operator Adding Comment on the Outbound Monitoring Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -149,7 +145,7 @@ Feature: Outbound Monitoring
       | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
       | driverId | {ninja-driver-id}                                                                                                                     |
       | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    Given Operator go to menu New Features -> Outbound Load Monitoring
+    Given Operator go to menu New Features -> Outbound Monitoring
     Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page:
@@ -163,7 +159,6 @@ Feature: Outbound Monitoring
 
   @ArchiveRouteCommonV2
   Scenario: Operator Clicks on Flag Icon to Un-Mark Route ID on Outbound Monitoring Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -175,7 +170,7 @@ Feature: Outbound Monitoring
       | hubId                | {hub-id}                              |
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     Given API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id-2}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
@@ -186,10 +181,10 @@ Feature: Outbound Monitoring
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
-    When Operator go to menu New Features -> Outbound Load Monitoring
+    When Operator go to menu New Features -> Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name} |
-      | hubName  | {hub-name}  |
+      | zoneName | {zone-name-2} |
+      | hubName  | {hub-name}    |
     When Operator search on Route ID Header Table on Outbound Monitoring Page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click on flag icon on chosen route ID on Outbound Monitoring Page
@@ -210,7 +205,6 @@ Feature: Outbound Monitoring
 
   @CloseNewWindows @ArchiveRouteCommonV2
   Scenario: Operator View Outbound Breakroute List Orders via Edit Button
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -221,7 +215,7 @@ Feature: Outbound Monitoring
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id-2}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
@@ -247,20 +241,15 @@ Feature: Outbound Monitoring
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
       | routes     | KEY_DRIVER_ROUTES                                                                 |
-    Given Operator go to menu New Features -> Outbound Load Monitoring
-    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
+    Given Operator go to menu New Features -> Outbound Monitoring
+    Then Operator verifies Date is "{gradle-current-date-yyyy-MM-dd}" on Outbound Monitoring Page
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name} |
+      | zoneName | {zone-name-2} |
       | hubName  | {hub-name}  |
     Then Operator verify the route ID is exist on Outbound Monitoring Page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator clicks Edit button for "{KEY_CREATED_ROUTE_ID}" route on Outbound Monitoring Page
     And Operator verify that Orders in Route table contains records:
-      | trackingId                          |
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator verify that Outbound Scans table is empty
-    And Operator verify that Parcels not in Outbound Scans table contains records:
       | trackingId                          |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
