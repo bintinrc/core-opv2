@@ -1,4 +1,4 @@
-@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitID @current
+@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitID
 Feature: ID - Driver Route Limit
 
   Background:
@@ -126,7 +126,7 @@ Feature: ID - Driver Route Limit
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver has more than 3 routes for date.* |
 
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes @wip
+  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Create <3 Driver Routes in a Day on Zonal Routing
     Given API Core - set system parameter:
       | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
@@ -179,4 +179,39 @@ Feature: ID - Driver Route Limit
       | legacyId | {KEY_LIST_OF_CREATED_ROUTES[3].id} |
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | id                                 |
-
+#    verify waypoint 1 routed
+    And DB Core - verify transactions record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                 |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    #    verify waypoint 2 routed
+    And DB Core - verify transactions record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                 |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+    #    verify waypoint 3 routed
+    And DB Core - verify transactions record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].id} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[3].id}                 |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
