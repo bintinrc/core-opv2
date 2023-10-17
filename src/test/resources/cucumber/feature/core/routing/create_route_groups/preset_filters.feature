@@ -1,12 +1,15 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PresetFiltersCRG @CRG2
 Feature: Create Route Groups - Preset Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247900
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteFilterTemplate
-  Scenario: Operator Save A New Preset on Create Route Groups Page - All Search Filters
+  Scenario: Operator Save A New Preset on Create Route Groups Page
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091632
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -141,7 +144,8 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplate
-  Scenario: Operator Apply Filter Preset on Create Route Groups Page - All Search Filters
+  Scenario: Operator Apply Existing Filter Preset on Create Route Groups Page
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091631
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -200,7 +204,8 @@ Feature: Create Route Groups - Preset Filters
       | shipmentType   | AIR_HAUL       |
 
   @DeleteFilterTemplate
-  Scenario: Operator Delete Preset on Create Route Groups Page - All Search Filters
+  Scenario: Operator Delete Preset on Create Route Groups Page
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091645
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -237,7 +242,8 @@ Feature: Create Route Groups - Preset Filters
     And DB Lighthouse - verify preset_filters id "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" record is deleted:
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - All Search Filters
+  Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091635
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -380,7 +386,8 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplateV2
-  Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - All Search Filters
+  Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091636
     And API Lighthouse - creates new Route Groups Filter Template:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
@@ -487,7 +494,8 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteRouteGroups @DeleteFilterTemplateV2
-  Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset on Create Route Groups
+  Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247899
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -521,7 +529,8 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType     | 3 Days - Anytime |
 
   @DeleteRouteGroups @DeleteFilterTemplateV2
-  Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset on Create Route Groups
+  Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247900
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |

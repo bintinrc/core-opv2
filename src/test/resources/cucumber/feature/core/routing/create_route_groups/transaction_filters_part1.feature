@@ -1,11 +1,14 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart1 @CRG6
 Feature: Create Route Groups - Transaction Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142860
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214759
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -31,6 +34,7 @@ Feature: Create Route Groups - Transaction Filters
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter RTS on Create Route Groups - Transaction Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214755
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -64,6 +68,7 @@ Feature: Create Route Groups - Transaction Filters
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
 
   Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Groups - Transaction Filters - PP/DD Leg = <ppDdLeg>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905921
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -90,6 +95,7 @@ Feature: Create Route Groups - Transaction Filters
       | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   |
 
   Scenario Outline: Operator Filter Granular Order Status on Create Route Groups - Transaction Filters - Granular Order Status = <granularStatus>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905706
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
@@ -136,7 +142,8 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      |
       | Van en-route to pickup               | Parcel      |
 
-  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters
+  Scenario: Operator Filter Order Zone on Create Route Groups - Transaction Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905747
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -163,7 +170,8 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Pending Pickup                                            |
 
-  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters (uid:4a5cc769-9638-471a-be6c-6a1b6eb5fdca)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905898
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -192,6 +200,7 @@ Feature: Create Route Groups - Transaction Filters
       | status     | Pending Pickup                                           |
 
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905850
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

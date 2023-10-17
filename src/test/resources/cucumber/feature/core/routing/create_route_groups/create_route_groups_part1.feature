@@ -1,12 +1,15 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CreateRouteGroupsPart1 @CRG1
 Feature: Create Route Groups
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/1593801
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
   Scenario: Operator Add Transaction to Route Group on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214754
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                   |
@@ -34,6 +37,7 @@ Feature: Create Route Groups
 
   @DeleteRouteGroups
   Scenario: Operator Add Reservation to Route Group on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7160757
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -68,6 +72,7 @@ Feature: Create Route Groups
       | noRoutedReservations | 0                                   |
 
   Scenario: Operator Filter Master Shipper on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/6905698
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -96,6 +101,7 @@ Feature: Create Route Groups
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Routed Transaction on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214756
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -124,6 +130,7 @@ Feature: Create Route Groups
       | endDateTime   | {KEY_LIST_OF_CREATED_ORDER[1].pickupEndDate} 15:00:00      |
 
   Scenario: Operator Filter DP Order on Create Route Groups
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214760
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                        |

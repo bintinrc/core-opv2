@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.address.Address;
-import co.nvqa.common.shipper.model.Shipper;
 import co.nvqa.common.ui.cucumber.glue.selenium.CommonSeleniumAbstractSteps;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import java.util.ArrayList;
@@ -32,9 +31,6 @@ public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<Scenario
     return orders;
   }
 
-  public Shipper getShipperOfCreatedOrder() {
-    return this.get(KEY_SHIPPER_OF_CREATED_ORDER);
-  }
 
   public Address getToAddress(Order order) {
     Address address = new Address();
