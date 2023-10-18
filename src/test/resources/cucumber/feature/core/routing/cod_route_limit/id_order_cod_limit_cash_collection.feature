@@ -7,12 +7,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -90,12 +84,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -136,12 +124,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Removed COD on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -217,12 +199,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -309,12 +285,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -366,12 +336,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Edit COD of Routed Order with COD <30 Millions on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -424,12 +388,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow Edit COD of Routed Order with COD >30 Millions on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -462,12 +420,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow Remove COD of Routed Order with COD >30 Millions on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -519,12 +471,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD <30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -597,12 +543,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD >30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -657,12 +597,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Driver has Edited COD <30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -746,13 +680,7 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Driver has Edited COD >30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
-    When API Driver Management - Operator create new driver with data below:
+    Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                               |
       | contacts               | [{"active":true,"type":"Mobile Phone","details":"+62 65745455"}]                                                                                                                                                                                                                                                                                                                                                                                                                                            |
