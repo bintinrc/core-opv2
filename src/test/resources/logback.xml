@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- Send debug messages to System.out -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %thread - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %C{1.} %thread - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="RP" class="com.epam.reportportal.logback.appender.ReportPortalAppender">
         <encoder>
-            <!--Best practice: don't put time and logging level to the final message. Appender do this for you-->
-            <pattern>%d{HH:mm:ss.SSS} [%t] %highlight%-5level - %msg%n</pattern>
-            <pattern>[%t] - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %C{1.} [%t] %-5level - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -28,9 +24,7 @@
     <logger name="co.nvqa.common.utils.NvRetry" level="INFO"/>
     <logger name="co.nvqa.common.ui.support.CommonUiNvRetry" level="INFO"/>
     <logger name="co.nvqa.common.reporter.cucumber.client" level="WARN"/>
-    <logger name="co.nvqa.common.reporter.cucumber.formatter.CustomNvReporter" level="OFF"/>
     <logger name="co.nvqa.common.ui.support.AndroidSupport" level="INFO"/>
-    <logger name="co.nvqa.common.utils.CustomLogger" level="DEBUG" />
     <logger name="co.nvqa.commons.client.BaseApiClient.NvRequestLogger" level="DEBUG" />
     <logger name="com.epam.reportportal.service" level="OFF"/>
     <logger name="com.epam.reportportal.utils" level="OFF"/>
@@ -43,7 +37,6 @@
     <logger name="io.netty" level="WARN" />
     <logger name="com.zaxxer.hikari" level="WARN" />
 
-    <!-- By default, the level of the root level is set to DEBUG -->
     <root level="DEBUG">
         <appender-ref ref="RP"/>
         <appender-ref ref="STDOUT"/>
