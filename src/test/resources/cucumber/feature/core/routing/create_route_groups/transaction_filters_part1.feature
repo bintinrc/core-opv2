@@ -66,7 +66,7 @@ Feature: Create Route Groups - Transaction Filters
       | status        | Arrived at Sorting Hub                                     |
       | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                    |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
-
+    
   Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Groups - Transaction Filters - PP/DD Leg = <ppDdLeg>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905921
     Given Operator go to menu Utilities -> QRCode Printing
