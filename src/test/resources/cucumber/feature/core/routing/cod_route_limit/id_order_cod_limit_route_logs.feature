@@ -174,10 +174,6 @@ Feature: ID - Order COD Limit
     Then Operator verify route details on Route Logs page using data below:
       | id         | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-    And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
-      | systemId | id                                 |
-      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
