@@ -45,7 +45,7 @@ public class ViewTaggedOrdersPage extends SimpleReactPage<ViewTaggedOrdersPage> 
     }
   }
 
-  public static class TaggedOrdersTable extends MdVirtualRepeatTable<TaggedOrderParams> {
+  public static class TaggedOrdersTable extends AntTableV2<TaggedOrderParams> {
 
     public static final String COLUMN_DRIVER = "driver";
     public static final String COLUMN_ROUTE = "route";
@@ -54,17 +54,16 @@ public class ViewTaggedOrdersPage extends SimpleReactPage<ViewTaggedOrdersPage> 
     public TaggedOrdersTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("trackingId", "tracking-id")
-          .put(COLUMN_TAGS, "order-tags")
-          .put(COLUMN_DRIVER, "driver-and-route")
-          .put(COLUMN_ROUTE, "driver-and-route")
-          .put("destinationHub", "destination-hub")
-          .put("lastAttempt", "last-attempt")
-          .put("daysFromFirstInbound", "days-from-first-inbound")
-          .put("granularStatus", "granular-status")
+          .put("trackingId", "tracking_id")
+          .put(COLUMN_TAGS, "order_tags")
+          .put(COLUMN_DRIVER, "driver_route")
+          .put(COLUMN_ROUTE, "driver_route")
+          .put("destinationZone", "destination_zone")
+          .put("lastAttempt", "last_attempt")
+          .put("daysFromFirstInbound", "days_from_first_inbound")
+          .put("granularStatus", "granular_status")
           .build()
       );
-      setMdVirtualRepeat("data in getTableData()");
       setColumnValueProcessors(ImmutableMap.of(
           COLUMN_DRIVER,
           value -> value == null ? null : StringUtils.normalizeSpace(value.split(" - ")[0]),

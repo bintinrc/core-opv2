@@ -18,160 +18,196 @@ Feature: View Tagged Orders
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
-      | granularStatus | PENDING_PICKUP   |
+      | granularStatus | Pending Pickup   |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | tags                 | {order-tag-name}                |
-      | driver               | No Driver                       |
-      | route                | No Route                        |
-      | lastAttempt          | No Attempt                      |
-      | daysFromFirstInbound | Not Inbounded                   |
-      | granularStatus       | Pending Pickup                  |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | No Driver                             |
+      | route                | No Route                              |
+      | lastAttempt          | No Attempt                            |
+      | daysFromFirstInbound | Not Inbounded                         |
+      | granularStatus       | Pending Pickup                        |
 
-  @DeleteOrArchiveRoute
+  @DeleteRoutes
   Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id}]
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
+    And API Route - set tags to route:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | tagIds  | {route-tag-id}                     |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Core - van inbound order:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                      |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":18}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 18                                                                                                  |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}   |
       | granularStatus | Pending Reschedule |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID}     |
-      | tags                 | {order-tag-name}                    |
-      | driver               | {ninja-driver-name}                 |
-      | route                | {KEY_CREATED_ROUTE_ID}              |
-      | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | daysFromFirstInbound | 1                                   |
-      | granularStatus       | Pending Reschedule                  |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | {ninja-driver-name}                   |
+      | route                | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
+      | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.*   |
+      | daysFromFirstInbound | 1                                     |
+      | granularStatus       | Pending Reschedule                    |
 
   Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id, No Attempt
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}       |
       | granularStatus | Arrived at Sorting Hub |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | tags                 | {order-tag-name}                |
-      | driver               | No Driver                       |
-      | route                | No Route                        |
-      | lastAttempt          | No Attempt                      |
-      | daysFromFirstInbound | 1                               |
-      | granularStatus       | Arrived at Sorting Hub          |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | No Driver                             |
+      | route                | No Route                              |
+      | lastAttempt          | No Attempt                            |
+      | daysFromFirstInbound | 1                                     |
+      | granularStatus       | Arrived at Sorting Hub                |
 
   Scenario: View Tagged Orders - Staging, No Route Id, No Attempt, No Inbound Days
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                             |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                         |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
       | granularStatus | Staging          |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | tags                 | {order-tag-name}                |
-      | driver               | No Driver                       |
-      | route                | No Route                        |
-      | lastAttempt          | No Attempt                      |
-      | daysFromFirstInbound | Not Inbounded                   |
-      | granularStatus       | Staging                         |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | No Driver                             |
+      | route                | No Route                              |
+      | lastAttempt          | No Attempt                            |
+      | daysFromFirstInbound | Not Inbounded                         |
+      | granularStatus       | Staging                               |
 
   Scenario: View Tagged Orders - On Hold, No Route Id, No Attempt, No Inbound Days
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
-      | granularStatus | On Hold                           |
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | granularStatus | On Hold                            |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
       | granularStatus | On Hold          |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | tags                 | {order-tag-name}                |
-      | driver               | No Driver                       |
-      | route                | No Route                        |
-      | lastAttempt          | No Attempt                      |
-      | daysFromFirstInbound | Not Inbounded                   |
-      | granularStatus       | On Hold                         |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | No Driver                             |
+      | route                | No Route                              |
+      | lastAttempt          | No Attempt                            |
+      | daysFromFirstInbound | Not Inbounded                         |
+      | granularStatus       | On Hold                               |
 
-  @DeleteOrArchiveRoute
+  @DeleteRoutes
   Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point
-    When Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator bulk tags parcel with below tag:
-      | orderId  | {KEY_CREATED_ORDER_ID} |
-      | orderTag | {order-tag-id}         |
-    Given Operator go to menu Distribution Points -> DP Tagging
-    And Operator wait for DP tagging page to load
-    When Operator tags single order to DP with DPMS ID = "{dpms-id}"
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | orderTag | {order-tag-id}                     |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator pulled out parcel "DELIVERY" from route
-    And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | DELIVERY |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver deliver the created parcel successfully
+    And API Core - Operator pull order from route:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | DELIVERY                           |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | DELIVERY                                                                        |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}              |
       | granularStatus | Arrived at Distribution Point |
     Then Operator verifies tagged order params on View Tagged Orders page:
-      | trackingId           | {KEY_CREATED_ORDER_TRACKING_ID}     |
-      | tags                 | {order-tag-name}                    |
-      | driver               | {ninja-driver-name}                 |
-      | route                | {KEY_CREATED_ROUTE_ID}              |
-      | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | daysFromFirstInbound | 1                                   |
-      | granularStatus       | Arrived at Distribution Point       |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | tags                 | {order-tag-name}                      |
+      | driver               | {ninja-driver-name}                   |
+      | route                | {KEY_CREATED_ROUTE_ID}                |
+      | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.*   |
+      | daysFromFirstInbound | 1                                     |
+      | granularStatus       | Arrived at Distribution Point         |

@@ -821,7 +821,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException("Order event not updated yet because of Kafka lag");
+        throw new NvTestCoreOrderKafkaLagException(
+            "Order event not updated yet because of Kafka lag");
       }
     });
   }
@@ -854,7 +855,8 @@ public class EditOrderV2Steps extends AbstractSteps {
               f("[%s] events", expectedEvent.getName()));
         });
       } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException("Order event is not updated yet because of kafka lag");
+        throw new NvTestCoreOrderKafkaLagException(
+            "Order event is not updated yet because of kafka lag");
       }
     });
   }

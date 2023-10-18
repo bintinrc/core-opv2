@@ -39,7 +39,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
       }
 
       page.loadSelection.click();
-      page.waitUntilPageLoaded();
+      page.waitUntilLoaded();
     });
   }
 
@@ -48,13 +48,14 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
   public void operatorVerifyTaggedOrderParams(Map<String, String> data) {
     data = resolveKeyValues(data);
     TaggedOrderParams expected = new TaggedOrderParams(data);
-    page.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
-    Assertions.assertThat(page.taggedOrdersTable.isEmpty())
-        .as("Tagged orders table is empty")
-        .isFalse();
-    TaggedOrderParams actual = page.taggedOrdersTable.readEntity(1);
-    expected.compareWithActual(actual);
-    takesScreenshot();
+    page.inFrame(() -> {
+      page.taggedOrdersTable.filterByColumn("trackingId", expected.getTrackingId());
+      Assertions.assertThat(page.taggedOrdersTable.isEmpty())
+          .as("Tagged orders table is empty")
+          .isFalse();
+      TaggedOrderParams actual = page.taggedOrdersTable.readEntity(1);
+      expected.compareWithActual(actual);
+    });
   }
 
 }
