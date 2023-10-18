@@ -7,12 +7,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -66,12 +60,6 @@ Feature: ID - Order COD Limit
 
    @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Edit Order
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
