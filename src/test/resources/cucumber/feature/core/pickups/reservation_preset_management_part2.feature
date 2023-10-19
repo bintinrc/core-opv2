@@ -227,7 +227,7 @@ Feature: Reservation Preset Management
     And Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute @wip
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     # Create 2 drivers
@@ -292,6 +292,11 @@ Feature: Reservation Preset Management
       | waypointStatus | Routed                             |
       | routeId        | not null                           |
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+    And DB Route - get latest route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
+      | status   | Routed                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId} |
     #  Route 2nd reservation, route it, and force Success using 2nd driver
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
@@ -299,14 +304,18 @@ Feature: Reservation Preset Management
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[2].id} } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
-      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[2].id}       |
     And API Core - Operator success reservation for id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verify shipper_pickup_search record:
       | reservationId  | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | status         | SUCCESS                                  |
       | waypointStatus | Success                                  |
-      | routeId        | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | routeId        | {KEY_LIST_OF_CREATED_ROUTES[2].id}       |
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}       |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
+      | status   | Routed                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
     And Operator refresh page
     # Create Route and 3rd Reservation for Tomorrow
     When Operator create route on Reservation Preset Management page:
@@ -344,5 +353,9 @@ Feature: Reservation Preset Management
       | reservationId  | {KEY_LIST_OF_RESERVATIONS[3].id}   |
       | status         | PENDING                            |
       | waypointStatus | Routed                             |
-      | routeId        | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | routeId        | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_RESERVATIONS[3].waypointId} |
+      | status   | Routed                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
