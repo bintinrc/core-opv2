@@ -133,17 +133,18 @@ Feature: Route Manifest
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail pickup waypoint from Route Manifest page
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_CREATED_ORDER_TRACKING_ID}"
+      | Failure Reason          | I didn't attempt the pick up - Return |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Return         |
     And Operator refresh page
     Then Operator verify waypoint at Route Manifest using data below:
-      | status               | Fail                          |
-      | deliveriesCount      | 0                             |
-      | pickupsCount         | 1                             |
-      | trackingIds          | KEY_CREATED_ORDER_TRACKING_ID |
-      | comments             | KEY_FAILURE_REASON            |
-      | pickup.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
-      | pickup.status        | Fail                          |
-      | pickup.failureReason | 9                             |
+      | status            | Fail                          |
+      | deliveriesCount   | 0                             |
+      | pickupsCount      | 1                             |
+      | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
+      | comments          | KEY_FAILURE_REASON            |
+      | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status     | Fail                          |
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify order status is "Pickup Fail" on Edit Order V2 page
     And Operator verify order granular status is "Pickup Fail" on Edit Order V2 page
@@ -162,8 +163,8 @@ Feature: Route Manifest
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED FAILURE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                        |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Pending Pickup New Granular Status: Pickup fail Old Order Status: Pending New Order Status: Pickup fail Reason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
@@ -251,7 +252,7 @@ Feature: Route Manifest
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED FAILURE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                         |
+      | tags          | name          | description                                                                                                                                                                                                                                    |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending\nNew Delivery Status: Fail\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
