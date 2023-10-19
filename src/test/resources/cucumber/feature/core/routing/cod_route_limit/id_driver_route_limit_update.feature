@@ -1,4 +1,4 @@
-@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimit2ID
+@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitIDPart2
 Feature: ID - Order COD Limit
 
   Background:
@@ -6,7 +6,7 @@ Feature: ID - Order COD Limit
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver @DeleteRoutes
-  Scenario: Operator assigns driver to an empty route with < 3 routes on Route Logs page
+  Scenario: Operator Allow to Edit Driver Route to Another <3 Driver Routes in a Day on Route Logs
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -33,7 +33,7 @@ Feature: ID - Order COD Limit
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
 
   @DeleteDriver @DeleteRoutes
-  Scenario: Operator not allowed to assign driver to an empty route with > 3 Routes on Route Logs page
+  Scenario: Operator Disallow to Edit Driver Route to Another >3 Driver Routes in a Day on Route Logs
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
