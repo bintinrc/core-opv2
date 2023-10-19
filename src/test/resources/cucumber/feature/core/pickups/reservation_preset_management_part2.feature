@@ -227,7 +227,7 @@ Feature: Reservation Preset Management
     And Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute @wip
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     # Create 2 drivers
