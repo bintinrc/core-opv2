@@ -170,7 +170,7 @@ Feature: Reservation Preset Management
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @wip
+  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Create Route for Pickup Reservation - Route Date = Today
     Given Operator go to menu Utilities -> QRCode Printing
     And API Driver - Operator create new Driver using data below:
