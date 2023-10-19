@@ -412,9 +412,14 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     public MdSelect chooseFailureReason;
 
     public void selectFailureReasonDetails(int index, String reason) {
-      String xpath = f(
-          "(.//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')])[%d]",
-          index);
+      String xpath;
+      if (index == 1) {
+        xpath = ".//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')]";
+      } else {
+        xpath = f(
+            ".//md-select[contains(@id, 'container.route-manifest.failure-reason-detail-%s')]",
+            index);
+      }
       new MdSelect(this, xpath).selectValue(reason);
     }
   }

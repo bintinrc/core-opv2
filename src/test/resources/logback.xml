@@ -7,12 +7,6 @@
         </encoder>
     </appender>
 
-    <appender name="RP" class="com.epam.reportportal.logback.appender.ReportPortalAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %C{1.} [%t] %-5level - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <!--'additivity' flag is important! Without it logback will double-log log messages-->
     <logger name="binary_data_logger" level="TRACE" additivity="false">
         <appender-ref ref="RP"/>
@@ -36,9 +30,9 @@
     <logger name="org.asynchttpclient.netty" level="WARN"/>
     <logger name="io.netty" level="WARN" />
     <logger name="com.zaxxer.hikari" level="WARN" />
+    <logger name="co.nvqa.common.utils.CustomLogger" level="ALL" />
 
     <root level="DEBUG">
-        <appender-ref ref="RP"/>
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

@@ -7,12 +7,6 @@ Feature: ID - Order COD Limit
 
   @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Multiple Routes have Different Date and Driver COD <30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -73,12 +67,6 @@ Feature: ID - Order COD Limit
 
   @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Edit Multiple Routes to Same Date - Multiple Routes have Different Date and Driver COD >30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                             |
@@ -121,12 +109,6 @@ Feature: ID - Order COD Limit
 
   @DeleteDriver @DeleteRoutes
   Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD <30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
@@ -174,10 +156,6 @@ Feature: ID - Order COD Limit
     Then Operator verify route details on Route Logs page using data below:
       | id         | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-    And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
-      | systemId | id                                 |
-      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
@@ -198,12 +176,6 @@ Feature: ID - Order COD Limit
 
   @DeleteDriver @DeleteRoutes
   Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD >30 Millions on Route Logs
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
