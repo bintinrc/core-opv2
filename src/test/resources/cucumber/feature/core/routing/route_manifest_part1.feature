@@ -121,7 +121,7 @@ Feature: Route Manifest
       | serviceTime    | not null                                 |
     And DB Operator verifies waypoint status is "SUCCESS"
 
-  @DeleteOrArchiveRoute @happy-path @wip
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
