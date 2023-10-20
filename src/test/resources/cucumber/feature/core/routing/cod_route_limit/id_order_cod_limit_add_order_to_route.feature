@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -27,7 +27,7 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
@@ -70,7 +70,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -92,14 +92,14 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Driver Route on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -130,7 +130,7 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
@@ -197,7 +197,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Single Driver Route on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -228,7 +228,7 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
@@ -239,7 +239,7 @@ Feature: ID - Order COD Limit
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Multiple Driver Routes on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -272,13 +272,13 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[2]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[2].id}" route id on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} added to route {KEY_LIST_OF_CREATED_ROUTES[2].id} |
@@ -350,7 +350,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -383,19 +383,19 @@ Feature: ID - Order COD Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[2]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[2].id}" route id on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route - 1 Route is Archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -433,14 +433,14 @@ Feature: ID - Order COD Limit
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
       | top | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
-   @DeleteDriver @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Add Order To Route - 1 Route is Deleted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -478,7 +478,7 @@ Feature: ID - Order COD Limit
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
     When Operator go to menu Routing -> Add Order to Route
-    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that success toast displayed:
