@@ -138,13 +138,17 @@ Feature: Route Manifest
       | Failure Reason Detail 1 | Cannot Make It (CMI) - Return         |
     And Operator refresh page
     Then Operator verify waypoint at Route Manifest using data below:
-      | status            | Fail                          |
-      | deliveriesCount   | 0                             |
-      | pickupsCount      | 1                             |
-      | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
-      | comments          | KEY_FAILURE_REASON            |
-      | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
-      | pickup.status     | Fail                          |
+      | status               | Fail                          |
+      | deliveriesCount      | 0                             |
+      | pickupsCount         | 1                             |
+      | trackingIds          | KEY_CREATED_ORDER_TRACKING_ID |
+      | comments             | KEY_FAILURE_REASON            |
+      | pickup.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status        | Fail                          |
+    # | pickup.failureReason | 9                             |
+    # TODO: Was commented because known issue in old page
+    #  When migrating to Route Manifest V2, please restore assert the failure reason
+    # is displayed correctly
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator verify order status is "Pickup Fail" on Edit Order V2 page
     And Operator verify order granular status is "Pickup Fail" on Edit Order V2 page
