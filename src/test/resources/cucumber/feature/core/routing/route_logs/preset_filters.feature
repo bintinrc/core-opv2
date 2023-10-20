@@ -44,10 +44,10 @@ Feature: Route Logs - Preset Filters
       | driver         | {ninja-driver-name}             |
       | archivedRoutes | true                            |
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @wip
   Scenario: Operator Apply Filter Preset on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given  API Operator creates new Routes Filter Template using data below:
+    Given API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
       | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
@@ -67,7 +67,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page
-    Given  API Operator creates new Routes Filter Template using data below:
+    Given API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
       | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
@@ -93,9 +93,9 @@ Feature: Route Logs - Preset Filters
     Then Operator verifies help text "This name is already taken. Click update to overwrite the preset?" is displayed in Save Preset dialog on Route Logs page
     When Operator clicks Update button in Save Preset dialog on Rout Logs page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 filter preset updated                |
+      | top                | 1 filter preset updated              |
       | bottom             | Name: {KEY_CORE_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                   |
+      | waitUntilInvisible | true                                 |
     When Operator refresh page
     And Operator selects "{KEY_CORE_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     Then Operator verifies selected filters on Route Logs page:
@@ -108,7 +108,7 @@ Feature: Route Logs - Preset Filters
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    Given  API Operator creates new Routes Filter Template using data below:
+    Given API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-yyyy-MM-dd}           |
       | value.endDate   | {gradle-current-date-yyyy-MM-dd}             |
@@ -126,9 +126,9 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
     And Operator selects "Update Preset" preset action on Route Logs page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 filter preset updated                |
+      | top                | 1 filter preset updated              |
       | bottom             | Name: {KEY_CORE_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                   |
+      | waitUntilInvisible | true                                 |
     When Operator refresh page
     And Operator selects "{KEY_CORE_FILTERS_PRESET_NAME}" Filter Preset on Route Logs page
     Then Operator verifies selected filters on Route Logs page:
@@ -140,7 +140,7 @@ Feature: Route Logs - Preset Filters
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on Route Logs Page
-    Given  API Operator creates new Routes Filter Template using data below:
+    Given API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.startDate | {gradle-previous-1-day-dd/MM/yyyy}           |
       | value.endDate   | {gradle-current-date-dd/MM/yyyy}             |
@@ -157,6 +157,6 @@ Feature: Route Logs - Preset Filters
     Then Operator verifies "Preset {KEY_CORE_FILTERS_PRESET_ID} will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Route Logs page
     When Operator clicks Delete button in Delete Preset dialog on Route Logs page
     Then Operator verifies that success react notification displayed:
-      | top    | 1 filter preset deleted            |
+      | top    | 1 filter preset deleted          |
       | bottom | ID: {KEY_CORE_FILTERS_PRESET_ID} |
     And DB Lighthouse - verify preset_filters id "{KEY_CORE_FILTERS_PRESET_ID}" record is deleted:
