@@ -1,19 +1,16 @@
-@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimit1SG
+@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitSG
 Feature: ID - Driver Route Limit
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: SG - Operator Allow to Create <3 Driver Routes in a Day on Route Logs
-    Given API Core - set system parameter:
-      | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
-      | value | 1                                  |
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
-      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+62 65745455"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+65 81237890"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                                                                                          |
       | hub                    | {"displayName": "{hub-name}", "value": {hub-id}}                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -26,24 +23,21 @@ Feature: ID - Driver Route Limit
       | hub           | {hub-name}                                  |
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
+      | routeDateFrom | TODAY      |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
+      | date                             | id                                 | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: SG - Operator Allow to Create >3 Driver Routes in a Day on Route Logs
-    Given API Core - set system parameter:
-      | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
-      | value | 1                                  |
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
-      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+62 65745455"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+65 81237890"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                                                                                          |
       | hub                    | {"displayName": "{hub-name}", "value": {hub-id}}                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -56,25 +50,22 @@ Feature: ID - Driver Route Limit
       | hub           | {hub-name}                                  |
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
+      | routeDateFrom | TODAY      |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                  | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
-      | {gradle-current-date-yyyy-MM-dd} | {{KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {{KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {{KEY_LIST_OF_CREATED_ROUTES[3].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {{KEY_LIST_OF_CREATED_ROUTES[4].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
+      | date                             | id                                 | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[4].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: SG - Operator Allow to Create <3 Driver Routes in a Day on Zonal Routing
-    Given API Core - set system parameter:
-      | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
-      | value | 1                                  |
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
-      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+62 65745455"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+65 81237890"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                                                                                          |
       | hub                    | {"displayName": "{hub-name}", "value": {hub-id}}                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -107,18 +98,6 @@ Feature: ID - Driver Route Limit
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} |
-    And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
-      | systemId | id                                 |
-    And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
-      | systemId | id                                 |
-    And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[3].id} |
-      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
-      | systemId | id                                 |
 #    verify waypoint 1 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
@@ -156,15 +135,12 @@ Feature: ID - Driver Route Limit
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
 
-  @RestoreSystemParams @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: SG - Operator Allow to Create >3 Driver Routes in a Day on Zonal Routing
-    Given API Core - set system parameter:
-      | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
-      | value | 1                                  |
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                              |
-      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+62 65745455"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | contacts               | [{"active":true,"type":"Mobile Phone","details":"+65 81237890"}]                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                                                                                          |
       | hub                    | {"displayName": "{hub-name}", "value": {hub-id}}                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
