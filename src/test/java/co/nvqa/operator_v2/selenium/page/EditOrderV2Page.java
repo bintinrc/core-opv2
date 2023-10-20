@@ -120,11 +120,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::div")
   public PageElement dimensions;
 
-  @FindBy(xpath = "//iframe[contains(@src,'recovery')][2]")
-  public PageElement recoveryFrame;
-
   @FindBy(xpath = "//iframe[contains(@src,'recovery')][1]")
-  public PageElement editRecoveryFrame;
+  public PageElement createAndEditRecoveryFrame;
 
   @FindBy(xpath = ".//span[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
@@ -1816,8 +1813,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   }
 
   public void createTicket(RecoveryTicket recoveryTicket) {
-    recoveryFrame.waitUntilVisible();
-    getWebDriver().switchTo().frame(recoveryFrame.getWebElement());
+    createAndEditRecoveryFrame.waitUntilVisible();
+    getWebDriver().switchTo().frame(createAndEditRecoveryFrame.getWebElement());
     String trackingId = recoveryTicket.getTrackingId();
     String ticketType = recoveryTicket.getTicketType();
 

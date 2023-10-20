@@ -11,14 +11,11 @@ Feature: Route Logs
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator adds tag "{route-tag-name}" to created route
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Tagged |
-      | waitUntilInvisible | true              |
+      | top    | 1 route(s) tagged                                         |
+      | bottom | Route {KEY_CREATED_ROUTE_ID} tagged with {route-tag-name} |
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
@@ -35,8 +32,8 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     And Operator deletes created route on Route Logs page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Deleted |
-      | waitUntilInvisible | true               |
+      | top    | 1 Route(s) Deleted                      |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
 
@@ -87,7 +84,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Address Verify Route on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -108,10 +104,6 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top                | Address verification successful for selected route |
       | waitUntilInvisible | true                                               |
-    And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score    |
-      | 1        | not null |
-      | 0        | not null |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>

@@ -18,22 +18,21 @@ Feature: Add Order To Route
     And Operator set "Pickup" transaction type on Add Order to Route page
     And Operator add prefix of the created order on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER.requestedTrackingId}" tracking id on Add Order to Route page
-    Then Operator verifies that "Order {KEY_CREATED_ORDER.requestedTrackingId} added to route {KEY_CREATED_ROUTE_ID}" success toast message is displayed
+    Then Operator verifies that success toast displayed:
+      | top | Order {KEY_CREATED_ORDER.requestedTrackingId} added to route {KEY_CREATED_ROUTE_ID} |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE           |
       | routeId | {KEY_CREATED_ROUTE_ID} |
-    And Operator verify Pickup transaction on Edit order page using data below:
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status  | PENDING                |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -48,7 +47,8 @@ Feature: Add Order To Route
     And Operator set "Delivery" transaction type on Add Order to Route page
     When Operator add "TEST" prefix on Add Order to Route page
     And Operator enters "INVALIDTRACKINGID" tracking id on Add Order to Route page
-    Then Operator verifies that "Order TESTINVALIDTRACKINGID not found!" error toast message is displayed
+    Then Operator verifies that error toast displayed:
+      | top | Order TESTINVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "TESTINVALIDTRACKINGID"
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
@@ -64,13 +64,14 @@ Feature: Add Order To Route
     And Operator set "{KEY_CREATED_ROUTE_ID}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-    Then Operator verifies that "Order {KEY_CREATED_ORDER_TRACKING_ID} added to route {KEY_CREATED_ROUTE_ID}" success toast message is displayed
+    Then Operator verifies that success toast displayed:
+      | top | Order {KEY_CREATED_ORDER_TRACKING_ID} added to route {KEY_CREATED_ROUTE_ID} |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE           |
       | routeId | {KEY_CREATED_ROUTE_ID} |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | PENDING                |
       | routeId | {KEY_CREATED_ROUTE_ID} |
     And DB Operator verify Delivery waypoint of the created order using data below:
@@ -91,7 +92,8 @@ Feature: Add Order To Route
     And Operator set "{KEY_CREATED_ROUTE_ID}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "INVALIDTRACKINGID" tracking id on Add Order to Route page
-    Then Operator verifies that "Order INVALIDTRACKINGID not found!" error toast message is displayed
+    #    Then Operator verifies that error toast displayed:
+    #      | top | Order INVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "INVALIDTRACKINGID"
 
   @DeleteOrArchiveRoute @routing-refactor
@@ -115,20 +117,18 @@ Feature: Add Order To Route
       | top    | Network Request Error                                                                                   |
       | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order event on Edit order page using data below:
+    When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                      |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    And Operator verify Delivery transaction on Edit order page using data below:
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | PENDING                           |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly

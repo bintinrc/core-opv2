@@ -23,17 +23,17 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage = new AddOrderToRoutePage(getWebDriver());
   }
 
-  @When("^Operator set \"(.+)\" route id on Add Order to Route page$")
+  @When("Operator set {string} route id on Add Order to Route page")
   public void operatorAddTheRoute(String routeId) {
     addOrderToRoutePage.routeId.setValue(resolveValue(routeId));
   }
 
-  @When("^Operator set \"(.+)\" transaction type on Add Order to Route page$")
+  @When("Operator set {string} transaction type on Add Order to Route page")
   public void operatorSetTransactionType(String transactionType) {
     addOrderToRoutePage.transactionType.selectValue(resolveValue(transactionType));
   }
 
-  @When("^Operator add \"(.+)\" prefix on Add Order to Route page$")
+  @When("Operator add {string} prefix on Add Order to Route page")
   public void operatorAddPrefix(String prefix) {
     addOrderToRoutePage.addPrefix(resolveValue(prefix));
   }
@@ -47,15 +47,25 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage.addPrefix(prefix);
   }
 
-  @And("^Operator enters \"(.+)\" tracking id on Add Order to Route page$")
+  @And("Operator enters {string} tracking id on Add Order to Route page")
   public void operatorEntersTrackingId(String trackingId) {
     trackingId = resolveValue(trackingId);
     addOrderToRoutePage.trackingId.setValue(trackingId + Keys.ENTER);
   }
 
-  @Then("^Operator verifies the last scanned tracking id is \"(.+)\"$")
+  @Then("Operator verifies the last scanned tracking id is {string}")
   public void operatorVerifiesTheLastScannedTrackingId(String expectedTrackingId) {
     Assertions.assertThat(addOrderToRoutePage.lastScannedTrackingId.getText())
         .as("Last scanned tracking id").isEqualTo(resolveValue(expectedTrackingId));
+  }
+
+  @Then("Operator verifies that {value} does not equal {value}")
+  public void valueDoesNotEqual(String actual, String expected) {
+    Assertions.assertThat(actual).isNotEqualTo(expected);
+  }
+
+  @Then("Operator verifies that {value} equals {value}")
+  public void valueEquals(String actual, String expected) {
+    Assertions.assertThat(actual).isEqualTo(expected);
   }
 }

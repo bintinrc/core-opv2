@@ -12,7 +12,6 @@ import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
@@ -61,6 +60,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   @Override
   public void init() {
   }
+
 
 
   //  TODO move to common-lighthouse
@@ -246,7 +246,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
 
   //  TODO move to common-core
-  @And("^API Operator get created Reservation Group params$")
+  @And("API Operator get created Reservation Group params")
   public void apiOperatorGetCreatedReservationGroupParams() {
     ReservationGroup reservationGroup = get(
         ReservationPresetManagementSteps.KEY_CREATED_RESERVATION_GROUP);
@@ -263,7 +263,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
 
   //  TODO move to common-core
-  @Given("^API Operator gets data of created Third Party shipper$")
+  @Given("API Operator gets data of created Third Party shipper")
   public void apiOperatorGetsDataOfCreatedThirdPartyShipper() {
     ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
     List<ThirdPartyShippers> thirdPartyShippers = getThirdPartyShippersClient().getAll();
@@ -364,21 +364,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     put(KEY_CASH_ON_DELIVERY_AMOUNT, codGoodsAmount);
   }
 
-
-  // TODO move to common-core
-  @Given("API Operator create sales person:")
-  public void apiOperatorCreateSalesPerson(Map<String, String> data) {
-    SalesPerson salesPerson = new SalesPerson(resolveKeyValues(data));
-    String uniqueString = generateDateUniqueString();
-    if (StringUtils.endsWithIgnoreCase(salesPerson.getName(), "{uniqueString}")) {
-      salesPerson.setName(salesPerson.getName().replace("{uniqueString}", uniqueString));
-    }
-    if (StringUtils.endsWithIgnoreCase(salesPerson.getCode(), "{uniqueString}")) {
-      salesPerson.setCode(salesPerson.getCode().replace("{uniqueString}", uniqueString));
-    }
-    salesPerson = getSalesClient().createSalesPerson(salesPerson);
-    putInList(KEY_LIST_OF_SALES_PERSON, salesPerson);
-  }
 
   //TODO move to common-driver
   @Given("API Driver - Operator create new Driver using data below:")

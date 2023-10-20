@@ -209,7 +209,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   }
 
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:")
-  public void dbOperatorVerifyJaroScoresOdFeliveryTransaction(List<Map<String, String>> data) {
+  public void dbOperatorVerifyJaroScoresOfDeliveryTransaction(List<Map<String, String>> data) {
     Order order = get(KEY_ORDER_DETAILS);
     String trackingId = order.getTrackingId();
 

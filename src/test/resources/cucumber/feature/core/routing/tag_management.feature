@@ -10,8 +10,8 @@ Feature: Tag Management
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     And Operator create new route tag on Tag Management page:
-      | name        | AAA                                                                               |
-      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
+      | name        | AAA                         |
+      | description | This tag AAA is for testing |
     Then Operator verifies that success react notification displayed:
       | top | Tag created |
     When Operator refresh page
@@ -23,26 +23,25 @@ Feature: Tag Management
   Scenario: Operator Update Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
-      | name        | ABC                                                                               |
-      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
+      | name        | ABC                    |
+      | description | ABC tag is for testing |
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     And Operator update created tag on Tag Management page:
-      | name        | AAC                                                                                        |
-      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. [EDITED] |
+      | name        | UPT                             |
+      | description | UPT tag is for testing [EDITED] |
     Then Operator verifies that success react notification displayed:
-      | top                | Tag successfully edited |
-      | waitUntilInvisible | true                    |
+      | top | Tag successfully edited |
     Then Operator verifies tag on Tag Management page:
-      | name        | AAC                                                                                        |
-      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. [EDITED] |
+      | name        | UPT                             |
+      | description | UPT tag is for testing [EDITED] |
 
   @DeleteRouteTags
   Scenario: Operator Search Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
-      | name        | ABE                                                                               |
-      | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
+      | name        | ABE                    |
+      | description | ABE tag is for testing |
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     Then Operator search tag on Tag Management page:

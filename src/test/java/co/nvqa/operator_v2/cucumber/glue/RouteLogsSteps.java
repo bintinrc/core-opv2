@@ -365,6 +365,40 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator edits route details:")
+  public void operatorEditRouteDetails(Map<String, String> data) {
+    routeLogsPage.inFrame(() -> {
+      RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
+
+      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, newParams.getId());
+      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
+      routeLogsPage.editDetailsDialog.waitUntilVisible();
+
+      if (StringUtils.isNotBlank(newParams.getDate())) {
+        routeLogsPage.editDetailsDialog.routeDate.setValue(newParams.getDate());
+      }
+      if (CollectionUtils.isNotEmpty(newParams.getTags())) {
+        routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.editDetailsDialog.zone.selectValue(newParams.getZone());
+      }
+      if (StringUtils.isNotBlank(newParams.getHub())) {
+        routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());
+      }
+      if (StringUtils.isNotBlank(newParams.getDriverName())) {
+        routeLogsPage.editDetailsDialog.assignedDriver.selectValue(newParams.getDriverName());
+      }
+      if (StringUtils.isNotBlank(newParams.getVehicle())) {
+        routeLogsPage.editDetailsDialog.vehicle.selectValue(newParams.getVehicle());
+      }
+      if (StringUtils.isNotBlank(newParams.getComments())) {
+        routeLogsPage.editDetailsDialog.comments.setValue(newParams.getComments());
+      }
+      routeLogsPage.editDetailsDialog.saveChanges.click();
+    });
+  }
+
   @When("Operator verify Edit Details button is disabled on Route Logs page")
   public void clickCheckAssignmentIsDisabled() {
     routeLogsPage.inFrame(() -> {
@@ -775,8 +809,10 @@ public class RouteLogsSteps extends AbstractSteps {
         finalData.getOrDefault("waitUntilInvisible", "false"));
     long start = new Date().getTime();
     ToastInfo toastInfo;
+    pause3s();
     do {
       toastInfo = routeLogsPage.toastSuccess.stream().filter(toast -> {
+        toast.moveToElement();
         String value = finalData.get("top");
         if (StringUtils.isNotBlank(value)) {
           try {
@@ -801,8 +837,8 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       }).findFirst().orElse(null);
     } while (toastInfo == null && new Date().getTime() - start < 20000);
-    Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed")
-        .isTrue();
+    Assertions.assertThat(toastInfo).as("Toast " + finalData + " is displayed")
+        .isNotNull();
     if (waitUntilInvisible) {
       toastInfo.waitUntilInvisible();
     }
@@ -1135,15 +1171,19 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verifies that error toast displayed:")
   public void operatorVerifyErrorToast(Map<String, String> data) {
-
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
+    takesScreenshot();
+    pause3s();
+    takesScreenshot();
     do {
       LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
+        toast.moveToElement();
         String actualTop = toast.toastTop.getNormalizedText();
-        String actualBottom = toast.toastBottom.getNormalizedText();
+        String actualBottom =
+            toast.toastBottom.isDisplayedFast() ? toast.toastBottom.getNormalizedText() : "";
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
         String expTop = finalData.get("top");
         if (StringUtils.isNotBlank(expTop)) {
@@ -1170,7 +1210,8 @@ public class RouteLogsSteps extends AbstractSteps {
         return true;
       });
     } while (!found && new Date().getTime() - start < 30000);
-    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
+    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed")
+        .isTrue();
     Assertions.assertThat(finalData.toString())
         .withFailMessage("Toast is not displayed: " + finalData)
         .isNotNull();
@@ -1228,8 +1269,8 @@ public class RouteLogsSteps extends AbstractSteps {
       Assertions.assertThat(routeLogsPage.selectionErrorDialog.process.getText()).as("Process")
           .isEqualTo(resolveValue(process));
 
-      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds.size())
-          .as("Number Of routes").isEqualTo(data.size());
+      Assertions.assertThat(routeLogsPage.selectionErrorDialog.routeIds)
+          .as("Number Of routes").hasSameSizeAs(data);
 
       for (int i = 0; i < data.size(); i++) {
         Map<String, String> expected = resolveKeyValues(data.get(i));
@@ -1243,7 +1284,8 @@ public class RouteLogsSteps extends AbstractSteps {
             break;
           }
         }
-        Assertions.assertThat(routeIndex >= 0).as(f("Route %s found", routeId)).isTrue();
+        Assertions.assertThat(routeIndex).as(f("Route %s found", routeId))
+            .isNotNegative();
         Assertions.assertThat(routeLogsPage.selectionErrorDialog.reasons.get(i).getText())
             .as(f("Reason for route %s", routeId)).isEqualTo(reason);
       }

@@ -11,6 +11,8 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.html5.WebStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +57,22 @@ public class LoginPage extends OperatorV2SimplePage {
     } while (!loaded);
   }
 
+  /**
+   * Inserting 'acceptedTnC' key into local storage to handle the Terms and Condition popup on opv2
+   */
+  private void handleTncPopup() {
+    try {
+      LOGGER.info("Inserting TnC Popup acceptance");
+      LocalStorage ls = ((WebStorage) getWebDriver()).getLocalStorage();
+      ls.setItem("acceptedTnC", "true");
+      Assertions.assertThat(ls.getItem("acceptedTnC"))
+          .as("acceptedTnc is true")
+          .isEqualTo("true");
+    } catch (Exception ex) {
+      LOGGER.error(ex.getMessage());
+    }
+  }
+
   public void forceLogin(String operatorBearerToken) {
     LOGGER.info("FORCE LOGIN BY INJECTING COOKIES TO BROWSER");
 
@@ -71,17 +89,16 @@ public class LoginPage extends OperatorV2SimplePage {
       executeScript("window.open()");
       final String currentWindowHandle = getWebDriver().getWindowHandle();
       String newWindowHandle = null;
-
+      handleTncPopup();
       for (String windowHandle : getWebDriver().getWindowHandles()) {
         if (!windowHandle.equals(currentWindowHandle)) {
           newWindowHandle = windowHandle;
           break;
         }
       }
-
       getWebDriver().close();
       getWebDriver().switchTo().window(newWindowHandle);
-      getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
+      getWebDriver().get(TestConstants.OPERATOR_PORTAL_ALL_ORDER_URL);
     } catch (UnsupportedEncodingException ex) {
       throw new NvTestRuntimeException(ex);
     } finally {

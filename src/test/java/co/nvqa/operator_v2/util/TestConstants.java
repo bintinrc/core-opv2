@@ -11,6 +11,8 @@ public final class TestConstants extends CommonUiTestConstants {
   public static final String OPERATOR_PORTAL_BASE_URL;
   public static final String DASH_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_LOGIN_URL;
+
+  public static final String OPERATOR_PORTAL_ALL_ORDER_URL;
   public static final String OPERATOR_PORTAL_UID;
   public static final String OPERATOR_PORTAL_PWD;
   public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
@@ -61,6 +63,7 @@ public final class TestConstants extends CommonUiTestConstants {
     OPERATOR_PORTAL_BASE_URL = NV_API_BASE.replace("api", "operatorv2") + "/#";
     DASH_PORTAL_BASE_URL = getString("dash-portal-base-url");
     OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
+    OPERATOR_PORTAL_ALL_ORDER_URL = OPERATOR_PORTAL_BASE_URL + "/order";
     OPERATOR_PORTAL_UID = getString("operator-portal-uid");
     OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
 

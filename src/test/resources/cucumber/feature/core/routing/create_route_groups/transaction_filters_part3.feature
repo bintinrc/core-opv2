@@ -1,11 +1,14 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart3 @CRG7
 Feature: Create Route Groups - Transaction Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142860
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Transaction Timeslot on Create Route Groups - Transaction Filters - Timeslot = <timeslots>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905987
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -35,6 +38,7 @@ Feature: Create Route Groups - Transaction Filters
       | Day       | 09:00     | 18:00   |
 
   Scenario Outline: Operator Filter Parcel Size on Create Route Groups - Transaction Filters - Parcel Size = <parcelSize>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905933
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                            |
@@ -65,6 +69,7 @@ Feature: Create Route Groups - Transaction Filters
       | Extra Small | XS   |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579892
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -93,6 +98,7 @@ Feature: Create Route Groups - Transaction Filters
       | Corporate   |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Return
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579894
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -121,6 +127,7 @@ Feature: Create Route Groups - Transaction Filters
       | Corporate Return |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Document
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579900
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
@@ -149,6 +156,7 @@ Feature: Create Route Groups - Transaction Filters
       | Corporate Document |
 
   Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate AWB
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6410540
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator generate 2 Corporate AWB Tracking Id
     And API Shipper set Shipper V4 using data below:

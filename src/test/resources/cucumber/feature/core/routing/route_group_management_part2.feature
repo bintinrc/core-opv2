@@ -7,7 +7,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Clear Transaction of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -17,7 +16,7 @@ Feature: Route Group Management
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG8-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
@@ -27,15 +26,13 @@ Feature: Route Group Management
     And Operator clear selected route groups on Route Group Management page:
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route Group(s) Cleared |
-      | waitUntilInvisible | true                     |
+      | top | 1 Route Group(s) Cleared |
     And Operator verifies "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was cleared on Route Group Management page
 
   @DeleteRouteGroups
   Scenario: Filter Route Groups Based on Creation Date
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG9-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator apply filters on Route Group Management page:
@@ -43,38 +40,42 @@ Feature: Route Group Management
       | toDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies route groups table is filtered by "^{gradle-current-date-yyyy-MM-dd}.*" date on Route Group Management page
 
-  @DeleteRouteGroups
+  @DeleteRouteGroupsV2
   Scenario: Download CSV File of Transactions of a Route Group
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new Route Group:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    When API Route - create route group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
-      | trackingId                                 | type     |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | PICKUP   |
+    When API Route - add references to Route Group:
+      | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                                                   |
+      | requestBody  | {"transactionIds":[{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id}]} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator download jobs of "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group on Edit Route Group modal on Route Group Management page
     Then Operator verify route group jobs CSV file on Route Group Management page
 
   @DeleteRouteGroups
   Scenario: Delete Reservations From Route Group
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG11-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add Reservation to Route Group with ID = "{KEY_CREATED_ROUTE_GROUP.id}"
     When Operator go to menu Routing -> 2. Route Group Management
@@ -93,22 +94,20 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Clear Reservations of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG12-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add Reservation to Route Group with ID = "{KEY_CREATED_ROUTE_GROUP.id}"
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator clear selected route groups on Route Group Management page:
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route Group(s) Cleared |
-      | waitUntilInvisible | true                     |
+      | top | 1 Route Group(s) Cleared |
     And Operator verifies "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was cleared on Route Group Management page
     And DB Route - verify route_groups_references record:
       | routeGroupId | {KEY_CREATED_ROUTE_GROUP.id} |
@@ -117,7 +116,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroups
   Scenario: Operator Deletes Route Group with Transaction & Reservation Assigned
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -127,7 +125,7 @@ Feature: Route Group Management
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new Route Group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG13-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
@@ -136,9 +134,8 @@ Feature: Route Group Management
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete "{KEY_CREATED_ROUTE_GROUP.name}" route group on Route Group Management page
     Then Operator verifies that success react notification displayed:
-      | top                | {KEY_CREATED_ROUTE_GROUP.name} |
-      | bottom             | 1 Route Group Deleted          |
-      | waitUntilInvisible | true                           |
+      | top    | {KEY_CREATED_ROUTE_GROUP.name} |
+      | bottom | 1 Route Group Deleted          |
     Then Operator verify "{KEY_CREATED_ROUTE_GROUP.name}" route group was deleted on Route Group Management page
     And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
     And DB Route - verify route_groups record:
@@ -153,63 +150,64 @@ Feature: Route Group Management
       | referenceId  | {KEY_TRANSACTION.id}         |
       | deletedAt    | not null                     |
 
-  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
-  Scenario: Operator View Route Group with PA Job Tag
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
-    When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
-    And DB Control - get pickup tag id for tag name = "{tag-name-1}"
-    When API Control - Operator add tags pickup appointment job with data below:
-      | jobId                        | {KEY_CONTROL_CREATED_PA_JOBS[1].id}        |
-      | pickupAppointmentTagsRequest | {"tags":[{KEY_CONTROL_PICKUP_TAGS[1].id}]} |
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
-    When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
-    And DB Control - get pickup tag id for tag name = "{tag-name-2}"
-    When API Control - Operator add tags pickup appointment job with data below:
-      | jobId                        | {KEY_CONTROL_CREATED_PA_JOBS[2].id}        |
-      | pickupAppointmentTagsRequest | {"tags":[{KEY_CONTROL_PICKUP_TAGS[2].id}]} |
-    When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
-      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
-    When API Route - add references to Route Group:
-      | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
-      | requestBody  | {"pickupAppointmentJobIds":[{KEY_CONTROL_CREATED_PA_JOBS[1].id},{KEY_CONTROL_CREATED_PA_JOBS[2].id}]} |
-    Given Operator go to menu Routing -> 2. Route Group Management
-    And Route Groups Management page is loaded
-    Then Operator verify route group on Route Groups Management page:
-      | name           | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
-      | noPaJobs       | 2                                          |
-      | noRoutedPaJobs | 0                                          |
-    When Operator open Edit Rout Group dialog for "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group
-    Then Operator verify job record in Edit Route Group modal on Route Group Management page:
-      | id      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | type    | Pickup Appointment Job              |
-      | jobTags | {tag-name-1}                        |
-    Then Operator verify job record in Edit Route Group modal on Route Group Management page:
-      | id      | {KEY_CONTROL_CREATED_PA_JOBS[2].id} |
-      | type    | Pickup Appointment Job              |
-      | jobTags | {tag-name-2}                        |
-    When Operator filter job records in Edit Route Group modal on Route Group Management page:
-      | jobTags | {tag-name-1} |
-    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
-      | jobTags      |
-      | {tag-name-1} |
-    When Operator filter job records in Edit Route Group modal on Route Group Management page:
-      | jobTags | {tag-name-2} |
-    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
-      | jobTags      |
-      | {tag-name-2} |
-    When Operator clear jobs table filters in Edit Route Group modal on Route Group Management page
-    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
-      | jobTags      |
-      | {tag-name-1} |
-      | {tag-name-2} |
+  #TODO will uncomment this scenario if first mile team has fix the PA job search endpoint
+#  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
+#  Scenario: Operator View Route Group with PA Job Tag
+#    Given Operator go to menu Utilities -> QRCode Printing
+#    Given API Shipper - Operator create new shipper address using data below:
+#      | shipperId       | {shipper-v4-paj-id} |
+#      | generateAddress | RANDOM              |
+#    When API Control - Operator create pickup appointment job with data below:
+#      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+#    And DB Control - get pickup tag id for tag name = "{tag-name-1}"
+#    When API Control - Operator add tags pickup appointment job with data below:
+#      | jobId                        | {KEY_CONTROL_CREATED_PA_JOBS[1].id}        |
+#      | pickupAppointmentTagsRequest | {"tags":[{KEY_CONTROL_PICKUP_TAGS[1].id}]} |
+#    Given API Shipper - Operator create new shipper address using data below:
+#      | shipperId       | {shipper-v4-paj-id} |
+#      | generateAddress | RANDOM              |
+#    When API Control - Operator create pickup appointment job with data below:
+#      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+#    And DB Control - get pickup tag id for tag name = "{tag-name-2}"
+#    When API Control - Operator add tags pickup appointment job with data below:
+#      | jobId                        | {KEY_CONTROL_CREATED_PA_JOBS[2].id}        |
+#      | pickupAppointmentTagsRequest | {"tags":[{KEY_CONTROL_PICKUP_TAGS[2].id}]} |
+#    When API Route - create route group:
+#      | name        | ARG-{uniqueString}                                                                  |
+#      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+#    When API Route - add references to Route Group:
+#      | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
+#      | requestBody  | {"pickupAppointmentJobIds":[{KEY_CONTROL_CREATED_PA_JOBS[1].id},{KEY_CONTROL_CREATED_PA_JOBS[2].id}]} |
+#    Given Operator go to menu Routing -> 2. Route Group Management
+#    And Route Groups Management page is loaded
+#    Then Operator verify route group on Route Groups Management page:
+#      | name           | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+#      | noPaJobs       | 2                                          |
+#      | noRoutedPaJobs | 0                                          |
+#    When Operator open Edit Rout Group dialog for "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group
+#    Then Operator verify job record in Edit Route Group modal on Route Group Management page:
+#      | id      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+#      | type    | Pickup Appointment Job              |
+#      | jobTags | {tag-name-1}                        |
+#    Then Operator verify job record in Edit Route Group modal on Route Group Management page:
+#      | id      | {KEY_CONTROL_CREATED_PA_JOBS[2].id} |
+#      | type    | Pickup Appointment Job              |
+#      | jobTags | {tag-name-2}                        |
+#    When Operator filter job records in Edit Route Group modal on Route Group Management page:
+#      | jobTags | {tag-name-1} |
+#    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
+#      | jobTags      |
+#      | {tag-name-1} |
+#    When Operator filter job records in Edit Route Group modal on Route Group Management page:
+#      | jobTags | {tag-name-2} |
+#    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
+#      | jobTags      |
+#      | {tag-name-2} |
+#    When Operator clear jobs table filters in Edit Route Group modal on Route Group Management page
+#    Then Operator verify only job records presented in Edit Route Group modal on Route Group Management page:
+#      | jobTags      |
+#      | {tag-name-1} |
+#      | {tag-name-2} |
 
   @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
   Scenario: Operator Filters Total PA Job of Route Groups
@@ -225,7 +223,7 @@ Feature: Route Group Management
     When API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG-{uniqueString}                                                                                           |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
@@ -260,7 +258,7 @@ Feature: Route Group Management
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[2].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG-{uniqueString}                                                                                           |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
@@ -287,7 +285,7 @@ Feature: Route Group Management
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[2].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG-{uniqueString}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                               |
@@ -322,7 +320,7 @@ Feature: Route Group Management
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | ARG-{uniqueString}                                                                |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                               |

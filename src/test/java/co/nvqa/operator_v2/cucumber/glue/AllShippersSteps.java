@@ -127,7 +127,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.clearBrowserCacheAndReloadPage();
   }
 
-  @When("^Operator create new Shipper with basic settings using data below:$")
+  @When("Operator create new Shipper with basic settings using data below:")
   public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(
       Map<String, String> mapOfData) {
     Shipper shipper = prepareShipperData(mapOfData);
@@ -139,25 +139,18 @@ public class AllShippersSteps extends AbstractSteps {
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
 
-  @When("^Operator verify pickup address on Edit Shipper page:$")
+  @When("Operator verify pickup address on Edit Shipper page:")
   public void verifyPickupAddress(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String shipperId = data.get("shipperId");
-    Shipper shipper;
-    if (StringUtils.isNotBlank(shipperId)) {
-      List<Shipper> shippers = get(KEY_LIST_OF_CREATED_SHIPPERS);
-      shipper = shippers.stream().filter(s -> s.getLegacyId().equals(Long.valueOf(shipperId)))
-          .findFirst().orElseThrow(() -> new IllegalArgumentException(
-              "Shipper with legacyId " + shipperId + " was not found"));
-    } else {
-      shipper = get(KEY_CREATED_SHIPPER);
-    }
-    List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
+    List<Address> shipperPickupAddresses = fromJsonToList(data.get("shipperPickupAddresses"),
+        Address.class);
     allShippersPage.allShippersCreateEditPage.clickTabItem("More Settings");
-    if (CollectionUtils.isNotEmpty(addresses)) {
-      for (int i = 0; i < addresses.size(); i++) {
-        fillMilkrunReservationsProperties(addresses.get(i), i + 1, resolveKeyValues(data));
-        allShippersPage.allShippersCreateEditPage.verifyPickupAddress(addresses.get(i));
+    if (CollectionUtils.isNotEmpty(shipperPickupAddresses)) {
+      for (int i = 0; i < shipperPickupAddresses.size(); i++) {
+        fillMilkrunReservationsProperties(shipperPickupAddresses.get(i), i + 1,
+            resolveKeyValues(data));
+        allShippersPage.allShippersCreateEditPage.verifyPickupAddress(
+            shipperPickupAddresses.get(i));
       }
     }
   }
@@ -330,14 +323,14 @@ public class AllShippersSteps extends AbstractSteps {
     address.setMilkrunSettings(milkrunSettings);
   }
 
-  @Then("^Operator verify the new Shipper is created successfully$")
+  @Then("Operator verify the new Shipper is created successfully")
   public void operatorVerifyTheNewShipperIsCreatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.verifyNewShipperIsCreatedSuccessfully(shipper);
   }
 
-  @Then("^Operator open Edit Shipper Page of shipper \"(.+)\"$")
+  @Then("Operator open Edit Shipper Page of shipper {string}")
   public void operatorOpenEditShipperPageOfShipper(String shipperName) {
     shipperName = resolveValue(shipperName);
     allShippersPage.searchShipper(shipperName);
@@ -352,7 +345,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.openPage(legacyId);
   }
 
-  @Then("^Operator login to Ninja Dash as shipper \"(.+)\" from All Shippers page$")
+  @Then("Operator login to Ninja Dash as shipper \"(.+)\" from All Shippers page")
   public void loginToDash(String shipperName) {
     shipperName = resolveValue(shipperName);
     allShippersPage.quickSearchShipper(shipperName);
@@ -380,14 +373,14 @@ public class AllShippersSteps extends AbstractSteps {
     openSpecificShipperEditPage(String.valueOf(shipper.getLegacyId()));
   }
 
-  @Then("^Operator open Edit Pricing Profile dialog on Edit Shipper Page$")
+  @Then("Operator open Edit Pricing Profile dialog on Edit Shipper Page")
   public void operatorOpenEditPricingProfileDialogOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     allShippersPage.allShippersCreateEditPage.pricingAndBillingForm.editPendingProfile.click();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilVisible();
   }
 
-  @Then("^Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:$")
+  @Then("Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:")
   public void operatorVerifyEditPricingProfileDialogOnEditShipperPage(Map<String, String> data) {
     data = resolveKeyValues(data);
 
@@ -681,13 +674,13 @@ public class AllShippersSteps extends AbstractSteps {
         .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog").isFalse();
   }
 
-  @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
+  @Then("Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page")
   public void operatorSaveChangesPricingProfileOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
   }
 
-  @Then("^Operator save changes on Edit Shipper Page$")
+  @Then("Operator save changes on Edit Shipper Page")
   public void operatorSaveChangesOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
     allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
@@ -697,7 +690,7 @@ public class AllShippersSteps extends AbstractSteps {
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }
 
-  @Then("^Operator save changes on Edit Shipper Page and gets saved pricing profile values$")
+  @Then("Operator save changes on Edit Shipper Page and gets saved pricing profile values")
   public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue() {
     try {
       retryIfRuntimeExceptionOccurred(() -> {
@@ -760,14 +753,14 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator go back to Shipper List page")
+  @Then("Operator go back to Shipper List page")
   public void operatorGoBackToShipperListPage() {
     allShippersPage.allShippersCreateEditPage.backToShipperList();
     pause3s();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }
 
-  @Then("^Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:$")
+  @Then("Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:")
   public void operatorVerifyErrorMessagesNewPricingProfileOnEditShipperPage(
       Map<String, String> data) {
     pause1s();
@@ -777,12 +770,12 @@ public class AllShippersSteps extends AbstractSteps {
         expectedErrorMsg);
   }
 
-  @Then("^Operator verify the new Shipper is updated successfully$")
+  @Then("Operator verify the new Shipper is updated successfully")
   public void operatorVerifyTheNewShipperIsUpdatedSuccessfully() {
     operatorVerifyTheNewShipperIsCreatedSuccessfully();
   }
 
-  @When("^Operator update Shipper's basic settings$")
+  @When("Operator update Shipper's basic settings")
   public void operatorUpdateShipperBasicSettings() {
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -847,7 +840,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
   }
 
-  @Then("^Operator verify Shipper's basic settings is updated successfully$")
+  @Then("Operator verify Shipper's basic settings is updated successfully")
   public void operatorVerifyShipperBasicSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     Shipper oldShipper = get(KEY_UPDATED_SHIPPER);
@@ -855,7 +848,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.verifyShipperIsUpdatedSuccessfully(oldShipper, shipper);
   }
 
-  @When("^Operator update Shipper's Label Printer settings$")
+  @When("Operator update Shipper's Label Printer settings")
   public void operatorUpdateShipperLabelPrinterSettings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -867,14 +860,14 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperLabelPrinterSettings(shipper);
   }
 
-  @Then("^Operator verify Shipper's Label Printer settings is updated successfully$")
+  @Then("Operator verify Shipper's Label Printer settings is updated successfully")
   public void operatorVerifyShipperLabelPrinterSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     allShippersPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(shipper);
   }
 
-  @When("^Operator update Shipper's Returns settings$")
+  @When("Operator update Shipper's Returns settings")
   public void operatorUpdateShipperReturnsSettings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -895,7 +888,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperReturnsSettings(shipper);
   }
 
-  @When("^Operator update Sub Shippers Default settings:$")
+  @When("Operator update Sub Shippers Default settings:")
   public void operatorUpdateSubShippersDefaultSettings(Map<String, String> data) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     setSubShipperDefaults(shipper, resolveKeyValues(data));
@@ -905,7 +898,7 @@ public class AllShippersSteps extends AbstractSteps {
         "All changes saved successfully", true);
   }
 
-  @When("^Operator verifies Basic Settings on Edit Shipper page:$")
+  @When("Operator verifies Basic Settings on Edit Shipper page:")
   public void operatorVerifyBasicSettings(Map<String, String> data) {
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Basic Settings");
     ShipperBasicSettings expected = new ShipperBasicSettings(resolveKeyValues(data));
@@ -913,7 +906,7 @@ public class AllShippersSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @When("^Operator verifies Pricing And Billing Settings on Edit Shipper page:$")
+  @When("Operator verifies Pricing And Billing Settings on Edit Shipper page:")
   public void operatorVerifyPricingAndBillingSettings(Map<String, String> data) {
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     PricingAndBillingSettings expected = new PricingAndBillingSettings(resolveKeyValues(data));
@@ -921,13 +914,13 @@ public class AllShippersSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @Then("^Operator verify Shipper's Returns settings is updated successfully$")
+  @Then("Operator verify Shipper's Returns settings is updated successfully")
   public void operatorVerifyShipperReturnsSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperReturnsSettingsIsUpdatedSuccessfully(shipper);
   }
 
-  @When("^Operator update Shipper's Distribution Point settings$")
+  @When("Operator update Shipper's Distribution Point settings")
   public void operatorUpdateShipperDistributionPointSettings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -947,13 +940,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperDistributionPointSettings(shipper);
   }
 
-  @Then("^Operator verify Shipper's Distribution Point settings is updated successfully$")
+  @Then("Operator verify Shipper's Distribution Point settings is updated successfully")
   public void operatorVerifyShipperDistributionPointSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(shipper);
   }
 
-  @When("^Operator update Shipper's Qoo10 settings$")
+  @When("Operator update Shipper's Qoo10 settings")
   public void operatorUpdateShipperQoo10Settings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -967,13 +960,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperQoo10Settings(shipper);
   }
 
-  @Then("^Operator verify Shipper's Qoo10 settings is updated successfully$")
+  @Then("Operator verify Shipper's Qoo10 settings is updated successfully")
   public void operatorVerifyShipperQoo10SettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperQoo10SettingsIsUpdatedSuccessfully(shipper);
   }
 
-  @When("^Operator update Shipper's Shopify settings$")
+  @When("Operator update Shipper's Shopify settings")
   public void operatorUpdateShipperShopifySettings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -993,13 +986,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperShopifySettings(shipper);
   }
 
-  @Then("^Operator verify Shipper's Shopify settings is updated successfully$")
+  @Then("Operator verify Shipper's Shopify settings is updated successfully")
   public void operatorVerifyShipperShopifySettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperShopifySettingsIsUpdatedSuccessfuly(shipper);
   }
 
-  @When("^Operator update Shipper's Magento settings$")
+  @When("Operator update Shipper's Magento settings")
   public void operatorUpdateShipperMagentoSettings() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
 
@@ -1014,13 +1007,13 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.updateShipperMagentoSettings(shipper);
   }
 
-  @Then("^Operator verify Shipper's Magento settings is updated successfully$")
+  @Then("Operator verify Shipper's Magento settings is updated successfully")
   public void operatorVerifyShipperMagentoSettingsIsUpdatedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperMagentoSettingsIsUpdatedSuccessfuly(shipper);
   }
 
-  @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
+  @When("Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:")
   public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(
       Map<String, String> mapOfData) {
     String reservationDays = mapOfData.get("reservationDays");
@@ -1069,13 +1062,13 @@ public class AllShippersSteps extends AbstractSteps {
     put(KEY_CREATED_ADDRESS, createdAddress);
   }
 
-  @Then("^Operator verify the shipper is deleted successfully$")
+  @Then("Operator verify the shipper is deleted successfully")
   public void operatorVerifyTheShipperIsDeletedSuccessfully() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     allShippersPage.verifyShipperIsDeletedSuccessfully(shipper);
   }
 
-  @When("^Operator login to created Shipper's Dashboard from All Shipper page$")
+  @When("Operator login to created Shipper's Dashboard from All Shipper page")
   public void operatorLoginAsCreatedShipperFromAllShipperPage() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     String mainWindowHandle = getWebDriver().getWindowHandle();
@@ -1083,7 +1076,7 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.loginToShipperDashboard(shipper);
   }
 
-  @When("^Operator set pickup addresses of the created shipper using data below:$")
+  @When("Operator set pickup addresses of the created shipper using data below:")
   public void operatorSetPickupAddressesOfTheCreatedShipperUsingDataBelow(
       Map<String, String> mapOfData) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -1096,17 +1089,16 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.setPickupAddressesAsMilkrun(shipper);
   }
 
-  @When("^Operator unset pickup addresses of the created shipper$")
-  public void operatorUnsetPickupAddressesOfTheCreatedShipper() {
-    Shipper shipper = get(KEY_CREATED_SHIPPER);
-    List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
-    if (CollectionUtils.isNotEmpty(addresses)) {
-      addresses.forEach(address -> address.setMilkRun(false));
-    }
-    allShippersPage.unsetPickupAddressesAsMilkrun(shipper);
+  @When("Operator unset pickup addresses of the created shipper:")
+  public void operatorUnsetPickupAddressesOfTheCreatedShipper(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    String shipperName = resolvedData.get("shipperName");
+    Address shipperPickupAddress = fromJson(resolvedData.get("shipperPickupAddress"),
+        Address.class);
+    allShippersPage.unsetPickupAddressesAsMilkrun(shipperName, shipperPickupAddress);
   }
 
-  @And("^Operator unset milkrun reservation \"(\\d+)\" form pickup address \"(\\d+)\" for created shipper$")
+  @And("Operator unset milkrun reservation \"(\\d+)\" form pickup address \"(\\d+)\" for created shipper")
   public void operatorUnsetMilkrunReservationFormPickupAddressForCreatedShipper(
       int milkrunReservationIndex, int addressIndex) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -1118,7 +1110,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
   }
 
-  @And("^Operator unset all milkrun reservations form pickup address \"(\\d+)\" for created shipper$")
+  @And("Operator unset all milkrun reservations form pickup address \"(\\d+)\" for created shipper")
   public void operatorUnsetAllMilkrunReservationsFormPickupAddressForCreatedShipper(
       int addressIndex) {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
@@ -1128,7 +1120,7 @@ public class AllShippersSteps extends AbstractSteps {
     address.setMilkRun(false);
   }
 
-  @Then("^Operator verifies All Shippers Page is displayed$")
+  @Then("Operator verifies All Shippers Page is displayed")
   public void operatorVerifiesAllOrdersPageIsDispalyed() {
     allShippersPage.waitUntilPageLoaded();
   }

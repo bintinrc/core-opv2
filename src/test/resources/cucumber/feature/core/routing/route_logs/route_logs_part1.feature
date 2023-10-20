@@ -135,7 +135,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Multiple Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -149,8 +148,8 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies that success react notification displayed:
-      | top                | 2 Route(s) Deleted |
-      | waitUntilInvisible | true               |
+      | top    | 2 route(s) deleted                                                         |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
@@ -173,8 +172,7 @@ Feature: Route Logs
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Updated |
-      | waitUntilInvisible | true               |
+      | top | 1 Route(s) Updated |
     Then Operator verify route details on Route Logs page using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | id         | {KEY_CREATED_ROUTE_ID}                  |

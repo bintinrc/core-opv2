@@ -39,9 +39,11 @@ public class TextBox extends PageElement {
   public void setValue(String value) {
     if (value != null) {
       try {
+        forceClear();
         clearAndSendKeys(value);
       } catch (InvalidElementStateException ex) {
         click();
+        forceClear();
         clearAndSendKeys(value);
       }
     }

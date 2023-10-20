@@ -1,11 +1,14 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart4 @CRG7
 Feature: Create Route Groups - Transaction Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2142860
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace International
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564410
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -33,6 +36,7 @@ Feature: Create Route Groups - Transaction Filters
       | Marketplace International | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace International","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": false,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}, "international":{"portation":"import"}} |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564402
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -59,6 +63,7 @@ Feature: Create Route Groups - Transaction Filters
       | Market Place | Pending Pickup | DELIVERY Transaction | {"service_type": "Marketplace","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": true,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}} | uid:3f17fe40-7fb8-44f5-ae5e-86639de78feb |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Document
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579889
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                |
@@ -83,6 +88,7 @@ Feature: Create Route Groups - Transaction Filters
       | Document     | Pending Pickup | DELIVERY Transaction | { "service_type":"Document", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Ninja Pack
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6400330
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator generate 2 Ninja Pack Tracking Id
     And API Shipper create multiple V4 orders using data below:
@@ -106,6 +112,7 @@ Feature: Create Route Groups - Transaction Filters
       | Ninja Pack   | Pending Pickup | DELIVERY Transaction | { "requested_tracking_number":"{KEY_NINJA_PACK_TRACKING_LIST[1].trackingId}","service_type":"Ninja Pack","service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - International
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564412
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -133,6 +140,7 @@ Feature: Create Route Groups - Transaction Filters
       | International | Pending Pickup | DELIVERY Transaction | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
 
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - <Note>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6396180
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}     |
       | shipperClientSecret | {shipper-v4-client-secret} |

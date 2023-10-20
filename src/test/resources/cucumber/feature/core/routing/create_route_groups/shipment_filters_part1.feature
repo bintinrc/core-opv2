@@ -1,12 +1,15 @@
 @OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ShipmentFiltersPart1 @CRG5
 Feature: Create Route Groups - Shipment Filters
 
+  https://studio.cucumber.io/projects/208144/test-plan/folders/2096344
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment
   Scenario Outline: Operator Filter Shipment Type on Create Route Group - Shipment Filters - Shipment Type = <name>
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907884
     And API Operator create new shipment with type "<shipmentType>" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -43,6 +46,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Last Inbound Hub on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907937
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -82,6 +86,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment MAWB on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907940
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -114,6 +119,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Start Hub on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907938
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -144,6 +150,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment ETA (Date Time) on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907853
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -176,6 +183,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment End Hub on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907939
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -206,6 +214,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Transit Date Time on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907888
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -246,6 +255,7 @@ Feature: Create Route Groups - Shipment Filters
 
   @DeleteCreatedShipments
   Scenario: Operator Filter Shipment Completion Date on Create Route Group - Shipment Filters
+    # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907943
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -281,7 +291,7 @@ Feature: Create Route Groups - Shipment Filters
       | shipmentType                   | AIR_HAUL                           |
       | shipmentStatus                 | Completed                          |
       | shipmentCompletionDateTimeFrom | {gradle-previous-1-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd}     |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}     |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                 | type                 | shipper                                  | address                                                     | status                 |
