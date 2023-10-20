@@ -113,7 +113,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       LOGGER.warn("Could not delete Filter Preset", ex);
     }
     try {
-      Long presetId = get(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID);
+      Long presetId = get(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_ID);
       if (presetId != null) {
         getShipperPickupFilterTemplatesClient()
             .deleteRoutesFilterTemplate(presetId);
@@ -305,8 +305,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
     shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
         .createRoutesFilerTemplate(shipperPickupFilterTemplate);
-    put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_NAME,
+    put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
+    put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_NAME,
         shipperPickupFilterTemplate.getName());
   }
 

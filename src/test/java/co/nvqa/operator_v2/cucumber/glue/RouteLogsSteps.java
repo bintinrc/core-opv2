@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
-import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.support.DateUtil;
+import co.nvqa.operator_v2.model.Route;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
@@ -11,6 +10,7 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
+import co.nvqa.operator_v2.util.DateUtil;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -183,7 +183,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator create multiple routes using data below:$")
+  @When("Operator create multiple routes using data below:")
   public void operatorCreateMultipleRoutesUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     boolean checkToast = Boolean.parseBoolean(mapOfData.getOrDefault("checkToast", "true"));
@@ -330,7 +330,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator edits details of created route using data below:$")
+  @When("Operator edits details of created route using data below:")
   public void operatorEditDetailsMultipleRouteUsingDataBelow(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
@@ -422,7 +422,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator merge transactions of created routes$")
+  @When("Operator merge transactions of created routes")
   public void operatorMergeTransactionsOfMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
       List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -478,7 +478,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verifies created routes are optimised successfully$")
+  @Then("Operator verifies created routes are optimised successfully")
   public void operatorVerifyMultipleRoutesIsOptimisedSuccessfully() {
     routeLogsPage.inFrame(() -> {
       List<Long> listOfCreateRouteParams = get(KEY_LIST_OF_CREATED_ROUTE_ID);
@@ -817,7 +817,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (StringUtils.isNotBlank(value)) {
           try {
             String actual = toast.toastTop.getNormalizedText();
-            if (value.startsWith("^")) {
+            if (value.startsWith("")) {
               if (!actual.matches(value)) {
                 return false;
               }
@@ -856,7 +856,7 @@ public class RouteLogsSteps extends AbstractSteps {
       Long presetId = Long.valueOf(m.group(1));
       String presetName = m.group(2);
       Assertions.assertThat(presetName).as("Preset Name").isEqualTo(finalExpected);
-      put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_ID, presetId);
+      put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_ID, presetId);
     });
     takesScreenshot();
   }
@@ -870,7 +870,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator verifies selected filters on Route Logs page:$")
+  @When("Operator verifies selected filters on Route Logs page:")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
 
@@ -953,7 +953,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       routeLogsPage.savePresetDialog.presetName.setValue(finalPresetName);
-      put(CoreScenarioStorageKeys.KEY_ROUTE_FILTERS_PRESET_NAME, finalPresetName);
+      put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_NAME, finalPresetName);
     });
   }
 
@@ -978,7 +978,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> routeLogsPage.savePresetDialog.update.click());
   }
 
-  @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
+  @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only")
   public void loadWaypointsOfSelectedRoute() {
     routeLogsPage.inFrame(() -> {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
@@ -1030,7 +1030,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator deletes created route on Route Logs page$")
+  @When("Operator deletes created route on Route Logs page")
   public void opDeleteDeleteRoute() {
     routeLogsPage.inFrame(() -> {
       Long routeId = get(KEY_CREATED_ROUTE_ID);
@@ -1130,7 +1130,7 @@ public class RouteLogsSteps extends AbstractSteps {
             LOGGER.info("Found notification: " + actualTop);
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
-              if (value.startsWith("^")) {
+              if (value.startsWith("")) {
                 if (!actualTop.matches(value)) {
                   return false;
                 }
@@ -1145,7 +1145,7 @@ public class RouteLogsSteps extends AbstractSteps {
               String actual = toast.description.getNormalizedText();
               toast.description.moveToElement();
               LOGGER.info("Found description: " + actual);
-              if (value.startsWith("^")) {
+              if (value.startsWith("")) {
                 return actual.matches(value);
               } else {
                 return StringUtils.equalsIgnoreCase(value, actual);
@@ -1187,7 +1187,7 @@ public class RouteLogsSteps extends AbstractSteps {
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
         String expTop = finalData.get("top");
         if (StringUtils.isNotBlank(expTop)) {
-          if (expTop.startsWith("^")) {
+          if (expTop.startsWith("")) {
             if (!actualTop.matches(expTop)) {
               return false;
             }
@@ -1201,7 +1201,7 @@ public class RouteLogsSteps extends AbstractSteps {
         String expBottom = finalData.get("bottom");
         if (StringUtils.isNotBlank(expBottom)) {
           LOGGER.info("Found description: " + actualBottom);
-          if (expBottom.startsWith("^")) {
+          if (expBottom.startsWith("")) {
             return actualBottom.matches(expBottom);
           } else {
             return StringUtils.equalsIgnoreCase(expBottom, actualBottom);
@@ -1233,7 +1233,7 @@ public class RouteLogsSteps extends AbstractSteps {
         value = finalData.get("bottom");
         if (StringUtils.isNotBlank(value)) {
           String actual = toast.toastBottom.getNormalizedText();
-          if (value.startsWith("^")) {
+          if (value.startsWith("")) {
             return actual.matches(value);
           } else {
             return StringUtils.equalsIgnoreCase(value, actual);
@@ -1245,7 +1245,7 @@ public class RouteLogsSteps extends AbstractSteps {
     Assertions.assertThat(found).as("Toast " + finalData + " is displayed").isTrue();
   }
 
-  @Then("^Operator verify the route is started after van inbounding using data below:$")
+  @Then("Operator verify the route is started after van inbounding using data below:")
   public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
     long routeId = get(KEY_CREATED_ROUTE_ID);
     Date routeDateFrom = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateFrom"));
