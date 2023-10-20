@@ -506,7 +506,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
       String downloadedCsvFile = getLatestDownloadedFilename(
           fileName);
-      Assertions.assertThat(fileName).isEqualTo(downloadedCsvFile);
+      Assertions.assertThat(fileName.equals(downloadedCsvFile)).isTrue();
     }
 
     public void clickOnSecondPickUpProofButton() {
