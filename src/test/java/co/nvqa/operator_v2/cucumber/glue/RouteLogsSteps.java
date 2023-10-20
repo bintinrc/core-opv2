@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
-import co.nvqa.operator_v2.model.Route;
 import co.nvqa.operator_v2.model.RouteLogsParams;
+import co.nvqa.operator_v2.model.RouteLogsUi;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
@@ -10,12 +10,12 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
-import co.nvqa.operator_v2.util.DateUtil;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,7 +116,7 @@ public class RouteLogsSteps extends AbstractSteps {
       newParams.setId(toastBottom.replaceAll("\\d+.+Route", "").trim());
     });
 
-    Route createdRoute = new Route();
+    RouteLogsUi createdRoute = new RouteLogsUi();
     createdRoute.setId(Long.valueOf(newParams.getId()));
     createdRoute.setComments(newParams.getComments());
     Long createdRouteId = createdRoute.getId();
@@ -253,7 +253,7 @@ public class RouteLogsSteps extends AbstractSteps {
         for (int i = 0; i < routeParamsList.size(); i++) {
           RouteLogsParams createRouteParams = routeParamsList.get(i);
           createRouteParams.setId(routeIds[i].replaceAll("\\d+.+Route", "").trim());
-          Route createdRoute = new Route();
+          RouteLogsUi createdRoute = new RouteLogsUi();
           createdRoute.setId(Long.valueOf(createRouteParams.getId()));
           createdRoute.setComments(createRouteParams.getComments());
           Long createdRouteId = createdRoute.getId();
@@ -1248,8 +1248,9 @@ public class RouteLogsSteps extends AbstractSteps {
   @Then("Operator verify the route is started after van inbounding using data below:")
   public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
     long routeId = get(KEY_CREATED_ROUTE_ID);
-    Date routeDateFrom = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateFrom"));
-    Date routeDateTo = DateUtil.SDF_YYYY_MM_DD.parse(mapOfData.get("routeDateTo"));
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date routeDateFrom = sdf.parse(mapOfData.get("routeDateFrom"));
+    Date routeDateTo = sdf.parse(mapOfData.get("routeDateTo"));
     String hubName = mapOfData.get("hubName");
 
     routeLogsPage.inFrame(() -> {
