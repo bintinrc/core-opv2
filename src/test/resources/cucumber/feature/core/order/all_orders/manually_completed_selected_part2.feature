@@ -37,8 +37,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |
@@ -78,8 +78,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |
@@ -150,9 +150,6 @@ Feature: All Orders - Manually Completed Selected
       | name | PRICING CHANGE |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Completed Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[3].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -180,8 +177,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
   Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - With RTS Normal Parcel
     Given Operator go to menu Utilities -> QRCode Printing
@@ -212,8 +209,8 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                                               |
       | description | Reason: Others - Force success from automated test RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
   Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS
     Given Operator go to menu Utilities -> QRCode Printing
@@ -288,8 +285,8 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS |
       | description | <description>  |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     Examples:
       | reason                                | description                                                                                                                                                                                                                                             |
       | 3PL completed delivery                | Reason: 3PL completed delivery RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                |

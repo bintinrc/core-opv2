@@ -39,9 +39,9 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
   @happy-path
   Scenario: Operator Force Success Multiple Orders on All Orders Page
@@ -82,9 +82,9 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     # Verify 2nd Order
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator unmask edit order V2 page
@@ -109,9 +109,9 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
@@ -178,8 +178,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
     Given Operator go to menu Utilities -> QRCode Printing
@@ -216,8 +216,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
@@ -256,8 +256,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |
@@ -303,8 +303,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |
