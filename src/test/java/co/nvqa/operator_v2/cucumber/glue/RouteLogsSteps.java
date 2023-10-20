@@ -817,7 +817,7 @@ public class RouteLogsSteps extends AbstractSteps {
         if (StringUtils.isNotBlank(value)) {
           try {
             String actual = toast.toastTop.getNormalizedText();
-            if (value.startsWith("")) {
+            if (value.startsWith("^")) {
               if (!actual.matches(value)) {
                 return false;
               }
@@ -1130,7 +1130,7 @@ public class RouteLogsSteps extends AbstractSteps {
             LOGGER.info("Found notification: " + actualTop);
             String value = finalData.get("top");
             if (StringUtils.isNotBlank(value)) {
-              if (value.startsWith("")) {
+              if (value.startsWith("^")) {
                 if (!actualTop.matches(value)) {
                   return false;
                 }
@@ -1145,7 +1145,7 @@ public class RouteLogsSteps extends AbstractSteps {
               String actual = toast.description.getNormalizedText();
               toast.description.moveToElement();
               LOGGER.info("Found description: " + actual);
-              if (value.startsWith("")) {
+              if (value.startsWith("^")) {
                 return actual.matches(value);
               } else {
                 return StringUtils.equalsIgnoreCase(value, actual);
@@ -1187,7 +1187,7 @@ public class RouteLogsSteps extends AbstractSteps {
         LOGGER.debug("Error toast: " + actualTop + "\n" + actualBottom);
         String expTop = finalData.get("top");
         if (StringUtils.isNotBlank(expTop)) {
-          if (expTop.startsWith("")) {
+          if (expTop.startsWith("^")) {
             if (!actualTop.matches(expTop)) {
               return false;
             }
@@ -1201,7 +1201,7 @@ public class RouteLogsSteps extends AbstractSteps {
         String expBottom = finalData.get("bottom");
         if (StringUtils.isNotBlank(expBottom)) {
           LOGGER.info("Found description: " + actualBottom);
-          if (expBottom.startsWith("")) {
+          if (expBottom.startsWith("^")) {
             return actualBottom.matches(expBottom);
           } else {
             return StringUtils.equalsIgnoreCase(expBottom, actualBottom);
@@ -1233,7 +1233,7 @@ public class RouteLogsSteps extends AbstractSteps {
         value = finalData.get("bottom");
         if (StringUtils.isNotBlank(value)) {
           String actual = toast.toastBottom.getNormalizedText();
-          if (value.startsWith("")) {
+          if (value.startsWith("^")) {
             return actual.matches(value);
           } else {
             return StringUtils.equalsIgnoreCase(value, actual);
