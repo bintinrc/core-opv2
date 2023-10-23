@@ -5,6 +5,7 @@ Feature: All Orders - Manually Completed Selected
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -46,6 +47,7 @@ Feature: All Orders - Manually Completed Selected
       | note        | cod_amount | collected_amount | collected |
       | Collect COD | 23.57      | 23.57            | true      |
 
+  @MediumPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -87,6 +89,7 @@ Feature: All Orders - Manually Completed Selected
       | note        | cod_amount | collected_amount | collected |
       | Collect COD | 23.57      | 0                | false     |
 
+  @MediumPriority
   Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -180,6 +183,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - With RTS Normal Parcel
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -212,6 +216,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -234,6 +239,7 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                               |
       | description | Reason: Others - Force success from automated test RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
+  @MediumPriority
   Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -251,6 +257,7 @@ Feature: All Orders - Manually Completed Selected
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Order id={KEY_LIST_OF_CREATED_ORDERS[1].id} has active PETS ticket. Please resolve PETS ticket to update status. |
 
+  @MediumPriority
   Scenario Outline: Operator Force Success Order by Select Reason on All Orders Page - <reason>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -295,6 +302,7 @@ Feature: All Orders - Manually Completed Selected
       | Lazada returns                        | Reason: Lazada returns RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                        |
       | XB fulfilment storage                 | Reason: XB fulfilment storage RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                 |
 
+  @MediumPriority
   Scenario: Operator Force Success Order by Input Reason on All Orders Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

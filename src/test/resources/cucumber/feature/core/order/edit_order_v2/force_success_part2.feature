@@ -5,6 +5,7 @@ Feature: Force Success
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - Without RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -37,6 +38,7 @@ Feature: Force Success
       | name          | tags          | description                                                                                                                                                                                              |
       | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - With RTS Normal Parcel
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -75,6 +77,7 @@ Feature: Force Success
       | name          | tags          | description                                                                                                                                                                                                               |
       | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @MediumPriority
   Scenario: Disable Force Success On Hold Order with Active PETS Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -88,6 +91,7 @@ Feature: Force Success
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify menu item "Order Settings" > "Manually Complete Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario Outline: Operator Force Success Order by Select Reason on Edit Order Page - <reason>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -130,6 +134,7 @@ Feature: Force Success
       | Lazada returns                        | Reason: Lazada returns RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                        |
       | XB fulfilment storage                 | Reason: XB fulfilment storage RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                 |
 
+  @MediumPriority
   Scenario: Operator Force Success Order by Input Reason on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -168,6 +173,7 @@ Feature: Force Success
       | UPDATE STATUS  | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS                                                                        |
       | FORCED SUCCESS | MANUAL ACTION | Reason: Other - Completed by AT {gradle-current-date-yyyyMMddHHmmsss} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - Resolved PETS Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -215,6 +221,7 @@ Feature: Force Success
       | UPDATE STATUS  | MANUAL ACTION | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION                                                                                      |
       | FORCED SUCCESS | MANUAL ACTION | Reason: TICKET_RESOLUTION RTS: false Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
+  @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - With RTS PETS Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
