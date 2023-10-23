@@ -299,18 +299,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
   // TODO move to common-lighthouse
-  @Given("API Operator creates new Routes Filter Template using data below:")
-  public void apiOperatorCreatesRoutesFilterTemplate(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
-    shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
-        .createRoutesFilerTemplate(shipperPickupFilterTemplate);
-    put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_NAME,
-        shipperPickupFilterTemplate.getName());
-  }
-
-  // TODO move to common-lighthouse
   @Given("API Operator creates new Route Groups Filter Template using data below:")
   public void apiOperatorCreatesRouteGroupsFilterTemplate(Map<String, String> data) {
     data = resolveKeyValues(data);
