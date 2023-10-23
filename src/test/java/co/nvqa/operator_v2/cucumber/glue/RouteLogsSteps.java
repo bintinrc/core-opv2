@@ -1245,6 +1245,32 @@ public class RouteLogsSteps extends AbstractSteps {
     Assertions.assertThat(found).as("Toast " + finalData + " is displayed").isTrue();
   }
 
+  @And("Operator verifies that error toast message contains following message:")
+  public void operatorVeriyContainsMessage(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    long start = new Date().getTime();
+    boolean found;
+    do {
+      LOGGER.debug("Error toasts: " + routeLogsPage.toastErrors.size());
+      found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
+        toast.moveToElement();
+        String actualBottom =
+            toast.toastBottom.isDisplayedFast() ? toast.toastBottom.getNormalizedText() : "";
+        String expBottom = finalData.get("message");
+        if (StringUtils.isNotBlank(expBottom)) {
+          LOGGER.info("Found description: " + actualBottom);
+          return StringUtils.containsIgnoreCase(expBottom, actualBottom);
+        }
+        return true;
+      });
+    } while (!found && new Date().getTime() - start < 30000);
+    Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed")
+        .isTrue();
+    Assertions.assertThat(finalData.toString())
+        .withFailMessage("Toast is not displayed: " + finalData)
+        .isNotNull();
+  }
+
   @Then("Operator verify the route is started after van inbounding using data below:")
   public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
     long routeId = get(KEY_CREATED_ROUTE_ID);

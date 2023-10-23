@@ -206,10 +206,8 @@ Feature: Add Order To Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    TODO uncomment bottom message
-    Then Operator verifies that error toast displayed:
-      | top | Network Request Error |
-#      | bottom | ^.*Error Code: 103088.*Error Message: Cannot update Waypoint={KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} (newRouteId={KEY_LIST_OF_CREATED_ROUTE_ID[1]}) | [Get ProcessingException [Code:INTERNAL_SERVER_ERROR][Message:Cannot update Waypoint's Route | Exception stack : {\"error\":{\"application_exception_code\":173000,\"title\":\"REQUEST_ERR\",\"message\":\"[routeID={KEY_LIST_OF_CREATED_ROUTE_ID[1]}][status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status\"}}].* |
+    Then Operator verifies that error toast message contains following message:
+      | message | routeID={KEY_LIST_OF_CREATED_ROUTE_ID[1]}][status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status |
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order V2 page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit Order V2 page using data below:
