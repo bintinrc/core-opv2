@@ -5,46 +5,44 @@ Feature: All Orders - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-#    TODO DISABLED
-#  @DeleteFilterTemplate
-#  Scenario: Operator Save A New Preset on All Orders Page
-#    When Operator go to menu Order -> All Orders
-#    And Operator selects filters on All Orders page:
-#      | status            | Transit                            |
-#      | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}     |
-#      | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}     |
-#      | shipperName       | {filter-shipper-name}              |
-#      | masterShipperName | {shipper-v4-marketplace-legacy-id} |
-#    And Operator selects "Save Current as Preset" preset action on All Orders page
-#    Then Operator verifies Save Preset dialog on All Orders page contains filters:
-#      | Status: Transit                                                                                   |
-#      | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 04:00:00 to {gradle-next-1-day-yyyy-MM-dd} 04:00:00 |
-#      | Shipper: {shipper-v4-legacy-id}-{shipper-v4-name}                                                 |
-#      | Master Shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name}                  |
-#    And Operator verifies Preset Name field in Save Preset dialog on All Orders page is required
-#    And Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled
-#    And Operator verifies Save button in Save Preset dialog on All Orders page is disabled
-#    When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on All Orders page
-#    Then Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it
-#    And Operator verifies Save button in Save Preset dialog on All Orders page is enabled
-#    When Operator clicks Save button in Save Preset dialog on All Orders page
-#    Then Operator verifies that success toast displayed:
-#      | top                | 1 filter preset created                    |
-#      | bottom             | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
-#      | waitUntilInvisible | true                                       |
-#    And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" on All Orders page
-#    And DB Operator verifies filter preset record:
-#      | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
-#      | namespace | orders                               |
-#      | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
-#    When Operator refresh page
-#    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
-#    Then Operator verifies selected filters on All Orders page:
-#      | status            | Transit                                                          |
-#      | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd}                                   |
-#      | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd}                                   |
-#      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
-#      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+  @DeleteFilterTemplate
+  Scenario: Operator Save A New Preset on All Orders Page
+    When Operator go to menu Order -> All Orders
+    And Operator selects filters on All Orders page:
+      | status            | Transit                            |
+      | creationTimeFrom  | {date: 0 days next, yyyy-MM-dd}    |
+      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd}    |
+      | shipperName       | {filter-shipper-name}              |
+      | masterShipperName | {shipper-v4-marketplace-legacy-id} |
+    And Operator selects "Save Current as Preset" preset action on All Orders page
+    Then Operator verifies Save Preset dialog on All Orders page contains filters:
+      | commons.status: Transit                                                                                     |
+      | commons.creation-time: {date: 0 days next, yyyy-MM-dd} 04:00:00 to {date: 1 days next, yyyy-MM-dd} 04:00:00 |
+      | commons.shipper: {shipper-v4-name}                                                                          |
+      | commons.master-shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name}                    |
+    And Operator verifies Preset Name field in Save Preset dialog on All Orders page is required
+    And Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled
+    And Operator verifies Save button in Save Preset dialog on All Orders page is disabled
+    When Operator enters "PRESET {date: 0 days next, yyyyMMddHHmmss}" Preset Name in Save Preset dialog on All Orders page
+    Then Operator verifies Preset Name field in Save Preset dialog on All Orders page has green checkmark on it
+    And Operator verifies Save button in Save Preset dialog on All Orders page is enabled
+    When Operator clicks Save button in Save Preset dialog on All Orders page
+    Then Operator verifies that success toast displayed:
+      | top    | 1 filter preset created                    |
+      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
+    And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" on All Orders page
+    And DB Operator verifies filter preset record:
+      | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
+      | namespace | orders                               |
+      | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
+    When Operator refresh page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    Then Operator verifies selected filters on All Orders page:
+      | status            | Transit                                                          |
+      | creationTimeFrom  | {date: 0 days next, yyyy-MM-dd}                                  |
+      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd}                                  |
+      | shipperName       | {shipper-v4-name}                         |
+      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on All Orders Page
@@ -58,7 +56,7 @@ Feature: All Orders - Preset Filters
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit                                                          |
-      | shipperName       | {shipper-v4-legacy-id}-{shipper-v4-name}                         |
+      | shipperName       | {shipper-v4-name}                                                |
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate

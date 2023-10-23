@@ -16,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
@@ -42,6 +43,7 @@ import org.assertj.core.api.Condition;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -76,8 +78,12 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   @FindBy(css = "span[ng-click='onMaskClick()']")
   public PageElement mask;
-  @FindBy(css = "nv-filter-box[main-title='Status']")
-  public NvFilterBox statusFilter;
+
+  @FindBy(xpath = "//nv-filter-box[@item-types='Status']")
+  public NvFilterBox statusFilterBox;
+
+  @FindBy(xpath = "//nv-autocomplete[@item-types='Status']")
+  public NvAutocomplete statusFilter;
 
   @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
   public Button disablePendingPickup;
@@ -109,10 +115,13 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(css = "nv-filter-time-box")
   public NvFilterTimeBox creationTimeFilter;
 
-  @FindBy(css = "nv-filter-box[main-title='Master Shipper']")
-  public NvFilterBox masterShipperFilter;
+  @FindBy(xpath = "//nv-filter-box[@item-types='Master Shipper']")
+  public NvFilterBox masterShipperFilterBox;
 
-  @FindBy(css = "nv-filter-autocomplete[main-title='Shipper']")
+  @FindBy(xpath = "//nv-autocomplete[@item-types='Master Shipper']")
+  public NvAutocomplete masterShipperFilter;
+
+  @FindBy(xpath = "//nv-filter-autocomplete[@item-types='Shipper']")
   public NvFilterAutocomplete shipperFilter;
 
   @FindBy(css = "md-autocomplete[md-input-name='searchTerm']")
@@ -175,7 +184,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(css = ".bulk-action-progress")
   public PageElement bulkActionProgress;
 
-  @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
+  @FindBy(xpath = "//md-autocomplete[@placeholder='Select Filter']")
   public MdAutocomplete addFilter;
 
   @FindBy(css = "[id^='commons.preset.load-filter-preset']")
@@ -613,7 +622,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     for (int i = 0; i < listOfExpectedTrackingId.size(); i++) {
       for (int j = 0; j < listOfExpectedTrackingId.size(); j++) {
         String trackingId = addToRouteDialog.trackingIds.get(j).getNormalizedText();
-        if (trackingId.equals(listOfExpectedTrackingId.get(i))){
+        if (trackingId.equals(listOfExpectedTrackingId.get(i))) {
           addToRouteDialog.routeInputs.get(j).setValue(routeIds.get(i));
         }
       }
@@ -1021,6 +1030,13 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     click(xpathClearAllSelection);
     pause2s();
     click("//div[contains(text(),'Load Selection')]/parent::button");
+  }
+
+  @FindBy(xpath = "//button[@aria-label='commons.clear-all-selections']")
+  public Button clearAllSelections;
+
+  public void clearAllSelections() {
+    clearAllSelections.click();
   }
 
   public void applyAction(String trackingId) {

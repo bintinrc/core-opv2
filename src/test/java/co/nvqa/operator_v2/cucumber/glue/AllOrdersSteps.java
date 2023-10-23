@@ -36,8 +36,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.MANUALLY_COMPLETE_ERROR_CSV_FILENAME;
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.SELECTION_ERROR_CSV_FILENAME;
@@ -618,34 +620,23 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyLatestEvent(createdOrder, latestEvent);
   }
 
-  @When("^Operator selects filters on All Orders page:$")
+  @When("Operator selects filters on All Orders page:")
   public void operatorSelectsFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-
     allOrdersPage.waitUntilPageLoaded();
+    allOrdersPage.clearAllSelections();
 
     if (data.containsKey("status")) {
-      if (!allOrdersPage.statusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Status");
-      }
-      allOrdersPage.statusFilter.clearAll();
-      allOrdersPage.statusFilter.selectFilter(data.get("status"));
-    } else {
-      if (allOrdersPage.statusFilter.isDisplayedFast()) {
-        allOrdersPage.statusFilter.clearAll();
-      }
+      allOrdersPage.addFilter("Status");
+      allOrdersPage.statusFilterBox.clearAll.click();
+      allOrdersPage.statusFilter.moveAndClick();
+      allOrdersPage.statusFilter.selectValue(data.get("status"));
     }
 
     if (data.containsKey("granularStatus")) {
-      if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Granular Status");
-      }
-      allOrdersPage.granularStatusFilter.clearAll();
+      allOrdersPage.addFilter("Granular Status");
+      allOrdersPage.granularStatusFilter.moveAndClick();
       allOrdersPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
-    } else {
-      if (allOrdersPage.granularStatusFilter.isDisplayedFast()) {
-        allOrdersPage.granularStatusFilter.clearAll();
-      }
     }
 
     if (data.containsKey("creationTimeTo")) {
@@ -679,28 +670,14 @@ public class AllOrdersSteps extends AbstractSteps {
     }
 
     if (data.containsKey("shipperName")) {
-      if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Shipper");
-      }
-      allOrdersPage.shipperFilter.clearAll();
+      allOrdersPage.addFilter("Shipper");
+      allOrdersPage.shipperFilter.moveAndClick();
       allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
-    } else {
-      if (allOrdersPage.shipperFilter.isDisplayedFast()) {
-        allOrdersPage.shipperFilter.clearAll();
-      }
     }
 
     if (data.containsKey("masterShipperName")) {
-      if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Master Shipper");
-        allOrdersPage.masterShipperFilter.waitUntilLoaded();
-      }
-      allOrdersPage.masterShipperFilter.clearAll();
-      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
-    } else {
-      if (allOrdersPage.masterShipperFilter.isDisplayedFast()) {
-        allOrdersPage.masterShipperFilter.clearAll();
-      }
+      allOrdersPage.addFilter("Master Shipper");
+      allOrdersPage.masterShipperFilter.selectValue(data.get("masterShipperName"));
     }
   }
 
@@ -714,8 +691,8 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.statusFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Status");
       }
-      allOrdersPage.statusFilter.clearAll();
-      allOrdersPage.statusFilter.selectFilter(splitAndNormalize(data.get("status")));
+      allOrdersPage.statusFilterBox.clearAll();
+      allOrdersPage.statusFilterBox.selectFilter(splitAndNormalize(data.get("status")));
     }
 
     if (data.containsKey("granularStatus")) {
@@ -757,8 +734,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Master Shipper");
       }
-      allOrdersPage.masterShipperFilter.clearAll();
-      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+      allOrdersPage.masterShipperFilter.selectValue(data.get("masterShipperName"));
     }
   }
 
@@ -773,7 +749,8 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Status filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.statusFilter.getSelectedValues()).as("Status items")
+        assertions.assertThat(allOrdersPage.statusFilterBox.getSelectedValues())
+            .as("Status items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
       }
     }
@@ -824,7 +801,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Master Shipper filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.masterShipperFilter.getSelectedValues())
+        assertions.assertThat(allOrdersPage.masterShipperFilterBox.getSelectedValues())
             .as("Master Shipper items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipperName")));
       }
@@ -839,7 +816,7 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @When("Operator verifies Save Preset dialog on All Orders page contains filters:")
-  public void verifySelectedFiltersForPreset(List<String> expected) {
+  public void verifySelectedFiltersForPreset(List<String> expected) throws InterruptedException {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     List<String> actual = allOrdersPage.savePresetDialog.selectedFilters.stream()
         .map(PageElement::getNormalizedText).collect(Collectors.toList());
@@ -1016,8 +993,13 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")
-  public void operatorClicksClearAllSelectionsOnAllOrdersPage() {
+  public void operatorClicksClearAllSelectionsAndLoadSelectionOnAllOrdersPage() {
     allOrdersPage.clearAllSelectionsAndLoadSelection();
+  }
+
+  @When("Operator clicks Clear All Selections on All Orders Page")
+  public void operatorClicksClearAllSelections() {
+    allOrdersPage.clearAllSelections();
   }
 
   @And("Operator apply Regular pickup action")
