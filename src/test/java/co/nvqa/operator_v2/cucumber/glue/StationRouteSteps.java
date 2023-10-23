@@ -419,6 +419,15 @@ public class StationRouteSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verify parcels table not contains {value} value in {value} column on Station Route page")
+  public void checkParcelsTableColumnNotShow(String value, String columnId) {
+    page.inFrame(() -> {
+      page.parcelsTable.filterByColumn(columnId, value);
+      List<String> actual = page.parcelsTable.readColumn(columnId);
+      assertThat(actual).as("List of %s column values", columnId).isEmpty();
+    });
+  }
+
   @When("Operator verify parcels table row {int} marked as removed on Station Route page")
   public void checkRemovedParcel(int index) {
     page.inFrame(() -> assertThat(page.parcelsTable.isRowRemoved(index)).withFailMessage(
