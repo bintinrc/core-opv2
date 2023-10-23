@@ -109,7 +109,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(xpath = "//td[@class='column-checkbox']//md-checkbox")
   public PageElement buttonCheckboxOrder;
 
-  @FindBy(css = "nv-filter-box[main-title='Granular Status']")
+  @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
   public NvFilterBox granularStatusFilter;
 
   @FindBy(css = "nv-filter-time-box")

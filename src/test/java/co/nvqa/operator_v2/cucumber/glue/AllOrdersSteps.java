@@ -691,6 +691,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.statusFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Status");
       }
+      allOrdersPage.statusFilter.moveAndClick();
       allOrdersPage.statusFilterBox.clearAll();
       allOrdersPage.statusFilterBox.selectFilter(splitAndNormalize(data.get("status")));
     }
@@ -699,6 +700,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Granular Status");
       }
+      allOrdersPage.granularStatusFilter.moveAndClick();
       allOrdersPage.granularStatusFilter.clearAll();
       allOrdersPage.granularStatusFilter.selectFilter(
           splitAndNormalize(data.get("granularStatus")));
@@ -726,6 +728,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Shipper");
       }
+      allOrdersPage.shipperFilter.moveAndClick();
       allOrdersPage.shipperFilter.clearAll();
       allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
     }
@@ -741,8 +744,8 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator verifies selected filters on All Orders page:$")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-
     SoftAssertions assertions = new SoftAssertions();
+    pause2s();
 
     if (data.containsKey("status")) {
       boolean isDisplayed = allOrdersPage.statusFilter.isDisplayedFast();
@@ -756,7 +759,7 @@ public class AllOrdersSteps extends AbstractSteps {
     }
 
     if (data.containsKey("granularStatus")) {
-      boolean isDisplayed = allOrdersPage.granularStatusFilter.isDisplayedFast();
+      boolean isDisplayed = allOrdersPage.granularStatusFilter.isDisplayed();
       if (!isDisplayed) {
         assertions.fail("Granular Status filter is not displayed");
       } else {
