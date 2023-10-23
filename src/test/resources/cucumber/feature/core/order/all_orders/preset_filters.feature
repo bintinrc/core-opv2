@@ -114,7 +114,7 @@ Feature: All Orders - Preset Filters
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
 
-  @DeleteFilterTemplate @wip
+  @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset on All Orders Page - via Update Preset Button
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
