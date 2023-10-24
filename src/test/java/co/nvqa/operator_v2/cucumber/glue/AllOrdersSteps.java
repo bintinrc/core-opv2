@@ -36,10 +36,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.MANUALLY_COMPLETE_ERROR_CSV_FILENAME;
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.SELECTION_ERROR_CSV_FILENAME;
@@ -273,10 +271,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorForceSuccessOrders(Map<String, String> data) {
     data = resolveKeyValues(data);
     String trackingIdsString = data.get("trackingIds");
-    final List<String> trackingIds = Arrays
-        .stream(trackingIdsString.split(","))
-        .map(StringUtils::trim)
-        .map(tidKey -> (String) resolveValue(tidKey))
+    final List<String> trackingIds = Arrays.stream(trackingIdsString.split(","))
+        .map(StringUtils::trim).map(tidKey -> (String) resolveValue(tidKey))
         .collect(Collectors.toList());
     String reason = data.getOrDefault("reason", "Others (fill in below)");
     String reasonDescription = data.getOrDefault("reasonDescription",
@@ -752,8 +748,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Status filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.statusFilterBox.getSelectedValues())
-            .as("Status items")
+        assertions.assertThat(allOrdersPage.statusFilterBox.getSelectedValues()).as("Status items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
       }
     }
