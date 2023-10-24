@@ -105,6 +105,7 @@ public class StationRouteSteps extends AbstractSteps {
         page.additionalTids.setValue(finalData.get("additionalTids").replace(",", "\n"));
       }
     });
+    takesScreenshot();
   }
 
   @When("Operator click Assign drivers button on Station Route page")
