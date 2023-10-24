@@ -126,7 +126,7 @@ Feature: Implanted Manifest
     And Operator open Job Details for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" job on Pickup Jobs page
     Then Operator verify no Proof of Pickup details in Job Details modal on Pickup Jobs page
 
-  @DeletePickupAppointmentJob @ArchiveRouteCommonV2
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2 @wip
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid PA Job Status - Failed PA Job
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -174,9 +174,10 @@ Feature: Implanted Manifest
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     And Operator open Job Details for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" job on Pickup Jobs page
     Then Operator verify Job Details values on Pickup Jobs page:
-      | status                | FAIL |
-      | scannedAtShipperCount | 0    |
-      | scannedAtShippers     |      |
+      | status               | FAIL |
+      | failedAtShipperCount | 0    |
+      | failedAtShippers     |      |
+
 
   @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup - PA Job without POD Pickup

@@ -1101,11 +1101,17 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = ".//div[./span[.='Scanned at Shipper Count']]/span[2]")
     public PageElement scannedAtShipperCount;
 
+    @FindBy(xpath = ".//div[./span[.='Failed at Shipper Count']]/span[2]")
+    public PageElement failedAtShipperCount;
+
     @FindBy(xpath = ".//span[.='No details yet']")
     public PageElement noDetailsYet;
 
     @FindBy(xpath = ".//div[./span[.=\"Scanned at Shipper's\"]]/span[position()>1]")
     public List<PageElement> scannedAtShippers;
+
+    @FindBy(xpath = ".//div[./span[.=\"Failed at Shipper's\"]]/span[position()>1]")
+    public List<PageElement> failedAtShippers;
 
     @FindBy(xpath = ".//button[.='Download Parcel List']")
     public Button downloadParcelList;
