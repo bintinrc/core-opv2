@@ -251,6 +251,7 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
 
+  @HighPriority
   Scenario: Operator Create and Search Recovery Ticket For Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -266,8 +267,8 @@ Feature: Create Recovery Ticket
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                     |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: HUB_INBOUND |
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: Arrived at Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: HUB_INBOUND |
     And API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | ticketType         | PARCEL EXCEPTION                           |
@@ -300,8 +301,8 @@ Feature: Create Recovery Ticket
       | name           |
       | TICKET CREATED |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                  |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+      | tags          | name          | description                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Route Inbound Scan
