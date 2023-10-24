@@ -814,7 +814,7 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @When("Operator verifies Save Preset dialog on All Orders page contains filters:")
-  public void verifySelectedFiltersForPreset(List<String> expected) throws InterruptedException {
+  public void verifySelectedFiltersForPreset(List<String> expected) {
     allOrdersPage.savePresetDialog.waitUntilVisible();
     List<String> actual = allOrdersPage.savePresetDialog.selectedFilters.stream()
         .map(PageElement::getNormalizedText).collect(Collectors.toList());
