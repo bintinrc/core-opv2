@@ -35,7 +35,8 @@ Feature: All Orders - Preset Filters
       | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
       | namespace | orders                               |
       | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
-    When Operator refresh page
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit                                                          |
