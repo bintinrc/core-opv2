@@ -174,9 +174,10 @@ Feature: Implanted Manifest
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     And Operator open Job Details for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" job on Pickup Jobs page
     Then Operator verify Job Details values on Pickup Jobs page:
-      | status                | FAIL |
-      | scannedAtShipperCount | 0    |
-      | scannedAtShippers     |      |
+      | status               | FAIL |
+      | failedAtShipperCount | 0    |
+      | failedAtShippers     |      |
+
 
   @DeletePickupAppointmentJob @ArchiveRouteCommonV2
   Scenario: Operator Failed to Create Implanted Manifest Pickup - PA Job without POD Pickup
