@@ -588,5 +588,5 @@ Feature: Create Recovery Ticket
       | name           |
       | TICKET CREATED |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                   |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
