@@ -271,10 +271,8 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorForceSuccessOrders(Map<String, String> data) {
     data = resolveKeyValues(data);
     String trackingIdsString = data.get("trackingIds");
-    final List<String> trackingIds = Arrays
-        .stream(trackingIdsString.split(","))
-        .map(StringUtils::trim)
-        .map(tidKey -> (String) resolveValue(tidKey))
+    final List<String> trackingIds = Arrays.stream(trackingIdsString.split(","))
+        .map(StringUtils::trim).map(tidKey -> (String) resolveValue(tidKey))
         .collect(Collectors.toList());
     String reason = data.getOrDefault("reason", "Others (fill in below)");
     String reasonDescription = data.getOrDefault("reasonDescription",
@@ -618,34 +616,23 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyLatestEvent(createdOrder, latestEvent);
   }
 
-  @When("^Operator selects filters on All Orders page:$")
+  @When("Operator selects filters on All Orders page:")
   public void operatorSelectsFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-
     allOrdersPage.waitUntilPageLoaded();
+    allOrdersPage.clearAllSelections();
 
     if (data.containsKey("status")) {
-      if (!allOrdersPage.statusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Status");
-      }
-      allOrdersPage.statusFilter.clearAll();
-      allOrdersPage.statusFilter.selectFilter(data.get("status"));
-    } else {
-      if (allOrdersPage.statusFilter.isDisplayedFast()) {
-        allOrdersPage.statusFilter.clearAll();
-      }
+      allOrdersPage.addFilter("Status");
+      allOrdersPage.statusFilterBox.clearAll.click();
+      allOrdersPage.statusFilter.moveAndClick();
+      allOrdersPage.statusFilter.selectValue(data.get("status"));
     }
 
     if (data.containsKey("granularStatus")) {
-      if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Granular Status");
-      }
-      allOrdersPage.granularStatusFilter.clearAll();
+      allOrdersPage.addFilter("Granular Status");
+      allOrdersPage.granularStatusFilter.moveAndClick();
       allOrdersPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
-    } else {
-      if (allOrdersPage.granularStatusFilter.isDisplayedFast()) {
-        allOrdersPage.granularStatusFilter.clearAll();
-      }
     }
 
     if (data.containsKey("creationTimeTo")) {
@@ -679,28 +666,14 @@ public class AllOrdersSteps extends AbstractSteps {
     }
 
     if (data.containsKey("shipperName")) {
-      if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Shipper");
-      }
-      allOrdersPage.shipperFilter.clearAll();
+      allOrdersPage.addFilter("Shipper");
+      allOrdersPage.shipperFilter.moveAndClick();
       allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
-    } else {
-      if (allOrdersPage.shipperFilter.isDisplayedFast()) {
-        allOrdersPage.shipperFilter.clearAll();
-      }
     }
 
     if (data.containsKey("masterShipperName")) {
-      if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Master Shipper");
-        allOrdersPage.masterShipperFilter.waitUntilLoaded();
-      }
-      allOrdersPage.masterShipperFilter.clearAll();
-      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
-    } else {
-      if (allOrdersPage.masterShipperFilter.isDisplayedFast()) {
-        allOrdersPage.masterShipperFilter.clearAll();
-      }
+      allOrdersPage.addFilter("Master Shipper");
+      allOrdersPage.masterShipperFilter.selectValue(data.get("masterShipperName"));
     }
   }
 
@@ -714,14 +687,16 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.statusFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Status");
       }
-      allOrdersPage.statusFilter.clearAll();
-      allOrdersPage.statusFilter.selectFilter(splitAndNormalize(data.get("status")));
+      allOrdersPage.statusFilter.moveAndClick();
+      allOrdersPage.statusFilterBox.clearAll();
+      allOrdersPage.statusFilterBox.selectFilter(splitAndNormalize(data.get("status")));
     }
 
     if (data.containsKey("granularStatus")) {
       if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Granular Status");
       }
+      allOrdersPage.granularStatusFilter.moveAndClick();
       allOrdersPage.granularStatusFilter.clearAll();
       allOrdersPage.granularStatusFilter.selectFilter(
           splitAndNormalize(data.get("granularStatus")));
@@ -749,6 +724,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.shipperFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Shipper");
       }
+      allOrdersPage.shipperFilter.moveAndClick();
       allOrdersPage.shipperFilter.clearAll();
       allOrdersPage.shipperFilter.selectFilter(data.get("shipperName"));
     }
@@ -757,29 +733,28 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!allOrdersPage.masterShipperFilter.isDisplayedFast()) {
         allOrdersPage.addFilter("Master Shipper");
       }
-      allOrdersPage.masterShipperFilter.clearAll();
-      allOrdersPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
+      allOrdersPage.masterShipperFilter.selectValue(data.get("masterShipperName"));
     }
   }
 
   @When("^Operator verifies selected filters on All Orders page:$")
   public void operatorVerifiesSelectedFilters(Map<String, String> data) {
     data = resolveKeyValues(data);
-
     SoftAssertions assertions = new SoftAssertions();
+    pause2s();
 
     if (data.containsKey("status")) {
       boolean isDisplayed = allOrdersPage.statusFilter.isDisplayedFast();
       if (!isDisplayed) {
         assertions.fail("Status filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.statusFilter.getSelectedValues()).as("Status items")
+        assertions.assertThat(allOrdersPage.statusFilterBox.getSelectedValues()).as("Status items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("status")));
       }
     }
 
     if (data.containsKey("granularStatus")) {
-      boolean isDisplayed = allOrdersPage.granularStatusFilter.isDisplayedFast();
+      boolean isDisplayed = allOrdersPage.granularStatusFilter.isDisplayed();
       if (!isDisplayed) {
         assertions.fail("Granular Status filter is not displayed");
       } else {
@@ -824,7 +799,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Master Shipper filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.masterShipperFilter.getSelectedValues())
+        assertions.assertThat(allOrdersPage.masterShipperFilterBox.getSelectedValues())
             .as("Master Shipper items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("masterShipperName")));
       }
@@ -1016,8 +991,13 @@ public class AllOrdersSteps extends AbstractSteps {
   }
 
   @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")
-  public void operatorClicksClearAllSelectionsOnAllOrdersPage() {
+  public void operatorClicksClearAllSelectionsAndLoadSelectionOnAllOrdersPage() {
     allOrdersPage.clearAllSelectionsAndLoadSelection();
+  }
+
+  @When("Operator clicks Clear All Selections on All Orders Page")
+  public void operatorClicksClearAllSelections() {
+    allOrdersPage.clearAllSelections();
   }
 
   @And("Operator apply Regular pickup action")

@@ -5,6 +5,7 @@ Feature: All Orders - Manually Completed Selected
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Force Success Order on All Orders Page - End State = Completed
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -39,11 +40,11 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Force Success Multiple Orders on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -82,9 +83,9 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     # Verify 2nd Order
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator unmask edit order V2 page
@@ -109,10 +110,11 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | tags        | MANUAL ACTION                                                                                                                                          |
-      | name        | UPDATE STATUS                                                                                                                                          |
-      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags        | MANUAL ACTION                                                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                                                            |
+      | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @MediumPriority
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -142,6 +144,7 @@ Feature: All Orders - Manually Completed Selected
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -178,9 +181,10 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @HighPriority
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -216,10 +220,10 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -256,8 +260,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |
@@ -266,7 +270,7 @@ Feature: All Orders - Manually Completed Selected
       | note        | cod_amount | collected_amount | collected |
       | Collect COD | 23.57      | 23.57            | true      |
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -303,8 +307,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | collectedSum | <collected_amount>                                         |

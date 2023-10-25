@@ -473,6 +473,27 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(value));
         }
       }
+      if (finalData.containsKey("failedAtShipperCount")) {
+        assertions.assertThat(
+                pickupAppointmentJobPage.jobDetailsModal.failedAtShipperCount.getNormalizedText())
+            .as("Failed at Shipper Count")
+            .isEqualTo(finalData.get("failedAtShipperCount"));
+      }
+      if (finalData.containsKey("failedAtShippers")) {
+        String value = finalData.get("failedAtShippers");
+        if (value == null) {
+          assertions.assertThat(pickupAppointmentJobPage.jobDetailsModal.failedAtShippers)
+              .withFailMessage("Failed at Shipper's list is not empty")
+              .isEmpty();
+        } else {
+          var actual = pickupAppointmentJobPage.jobDetailsModal.failedAtShippers.stream().map(
+                  PageElement::getNormalizedText)
+              .collect(Collectors.toList());
+          assertions.assertThat(actual)
+              .as("Failed at Shipper's")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(value));
+        }
+      }
     });
   }
 

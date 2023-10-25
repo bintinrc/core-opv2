@@ -163,6 +163,12 @@ Feature: Reservation Preset Management
       | routeDate | {date: 1 days next, yyyy-MM-dd}         |
     Then Operator verifies that info toast displayed:
       | top | 1 reservations added to route |
+    And DB Route - get latest route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | status   | Routed                                           |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
+
 
   @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Create Route for Pickup Reservation - Route Date = Today
@@ -183,7 +189,11 @@ Feature: Reservation Preset Management
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
-      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[{"start_time":"09:00","end_time":"22:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+    And API Shipper - Operator update shipper setting using data below:
+      | shipperId               | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                          |
+      | shipperSettingNamespace | order_create                                                                                                  |
+      | shipperSettingRequest   | {"same_day_pickup_cutoff_time": "22:00", "pickup_cutoff_time": "22:00", "sunday_pickup_cutoff_time": "22:00"} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}"
     And API Core - Operator create reservation using data below:
@@ -210,6 +220,15 @@ Feature: Reservation Preset Management
       | routeDate | {date: 0 days next, yyyy-MM-dd}         |
     And Operator verifies that success toast displayed:
       | top | Routes have been created for all groups! |
+    And DB Route - get latest route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
+    And DB Route - verify route_logs record:
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId} |
+      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}       |
+      | date     | {date: 0 days next, yyyy-MM-dd}          |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | status   | Routed                                           |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
   @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Create Route for Pickup Reservation - Route Date = Tomorrow
@@ -231,6 +250,10 @@ Feature: Reservation Preset Management
       | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
       | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+    And API Shipper - Operator update shipper setting using data below:
+      | shipperId               | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                          |
+      | shipperSettingNamespace | order_create                                                                                                  |
+      | shipperSettingRequest   | {"same_day_pickup_cutoff_time": "22:00", "pickup_cutoff_time": "22:00", "sunday_pickup_cutoff_time": "22:00"} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}"
     And API Core - Operator create reservation using data below:
@@ -257,6 +280,15 @@ Feature: Reservation Preset Management
       | routeDate | {date: 1 days next, yyyy-MM-dd}         |
     And Operator verifies that success toast displayed:
       | top | Routes have been created for all groups! |
+    And DB Route - get latest route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
+    And DB Route - verify route_logs record:
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId} |
+      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}       |
+      | date     | {date: 1 days next, yyyy-MM-dd}          |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | status   | Routed                                           |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
   @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup
   Scenario: Unassign a Shipper Milkrun Address from a Milkrun Group
@@ -326,8 +358,8 @@ Feature: Reservation Preset Management
       | shipperSettingNamespace | pickup                                                                                                                                                                                                                                                                                                                      |
       | shipperSettingRequest   | {"address_limit":10,"allow_premium_pickup_on_sunday":true,"allow_standard_pickup_on_sunday":true,"premium_pickup_daily_limit":100,"milk_run_pickup_limit":10,"default_start_time":"09:00","default_end_time":"22:00","service_type_level":[{"type":"Scheduled","level":"Standard"},{"type":"Scheduled","level":"Premium"}]} |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                  |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                |
       | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"is_milk_run":false} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}"

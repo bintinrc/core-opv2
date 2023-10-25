@@ -5,6 +5,7 @@ Feature: Force Success
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Force Success Order on Edit Order Page - End State = Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -39,9 +40,10 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @HighPriority
   Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -82,9 +84,10 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                                               |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
+  @HighPriority
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -120,14 +123,14 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_DD_TRANSACTION.waypointId} |
       | collectedSum | 23.57                           |
       | driverId     | null                            |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Force Success Order on Edit Order page - Routed Order Delivery with COD - Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -168,13 +171,14 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_DD_TRANSACTION.waypointId} |
       | collectedSum | 23.57                           |
       | driverId     | {ninja-driver-id}               |
 
+  @MediumPriority
   Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Do not Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -209,14 +213,14 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_DD_TRANSACTION.waypointId} |
       | collectedSum | 0                               |
       | driverId     | null                            |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Force Success Order on Edit Order page - Routed Order Delivery with COD - Do not Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -256,13 +260,14 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_DD_TRANSACTION.waypointId} |
       | collectedSum | 0                               |
       | driverId     | {ninja-driver-id}               |
 
+  @MediumPriority
   Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -281,6 +286,7 @@ Feature: Force Success
     Then Operator verify 'COD Collected' checkbox is disabled in Manually complete order dialog on Edit Order V2 page
     And Operator verify Complete order button is disabled in Manually complete order dialog on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Do not Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -322,14 +328,14 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                                               |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Core - Operator verifies cod_collections record:
       | waypointId   | {KEY_DD_TRANSACTION.waypointId} |
       | collectedSum | 0                               |
       | driverId     | null                            |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Manually Complete Order on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -364,5 +370,5 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                           |
-      | UPDATE STATUS | MANUAL ACTION | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                              |
+      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |

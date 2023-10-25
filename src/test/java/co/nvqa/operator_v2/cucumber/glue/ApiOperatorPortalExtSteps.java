@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.driver.client.DriverManagementClient;
 import co.nvqa.common.driver.cucumber.DriverKeyStorage;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -112,7 +113,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       LOGGER.warn("Could not delete Filter Preset", ex);
     }
     try {
-      Long presetId = get(KEY_ROUTES_FILTERS_PRESET_ID);
+      Long presetId = get(CoreScenarioStorageKeys.KEY_CORE_FILTERS_PRESET_ID);
       if (presetId != null) {
         getShipperPickupFilterTemplatesClient()
             .deleteRoutesFilterTemplate(presetId);
@@ -295,17 +296,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         .createOrdersFilerTemplate(shipperPickupFilterTemplate);
     put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
     put(KEY_ALL_ORDERS_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
-  }
-
-  // TODO move to common-lighthouse
-  @Given("API Operator creates new Routes Filter Template using data below:")
-  public void apiOperatorCreatesRoutesFilterTemplate(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
-    shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient()
-        .createRoutesFilerTemplate(shipperPickupFilterTemplate);
-    put(KEY_ROUTES_FILTERS_PRESET_ID, shipperPickupFilterTemplate.getId());
-    put(KEY_ROUTES_FILTERS_PRESET_NAME, shipperPickupFilterTemplate.getName());
   }
 
   // TODO move to common-lighthouse

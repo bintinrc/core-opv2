@@ -105,6 +105,7 @@ public class StationRouteSteps extends AbstractSteps {
         page.additionalTids.setValue(finalData.get("additionalTids").replace(",", "\n"));
       }
     });
+    takesScreenshot();
   }
 
   @When("Operator click Assign drivers button on Station Route page")
@@ -416,6 +417,15 @@ public class StationRouteSteps extends AbstractSteps {
       List<String> actual = page.parcelsTable.readColumn(columnId);
       assertThat(actual).as("List of %s column values", columnId).isNotEmpty()
           .allSatisfy(val -> assertThat(val).containsIgnoringCase(value));
+    });
+  }
+
+  @When("Operator verify parcels table not contains {value} value in {value} column on Station Route page")
+  public void checkParcelsTableColumnNotShow(String value, String columnId) {
+    page.inFrame(() -> {
+      page.parcelsTable.filterByColumn(columnId, value);
+      List<String> actual = page.parcelsTable.readColumn(columnId);
+      assertThat(actual).as("List of %s column values", columnId).isEmpty();
     });
   }
 
