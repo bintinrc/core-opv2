@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1
+@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1 @runnow
 Feature: Route Logs
 
   Background:
@@ -116,7 +116,7 @@ Feature: Route Logs
       | top | Downloaded file routes_password.pdf... |
     Then Operator verify printed passwords of selected routes info is correct
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
