@@ -32,21 +32,21 @@ import static co.nvqa.operator_v2.selenium.page.RouteManifestPage.WaypointsTable
 @ScenarioScoped
 public class RouteManifestSteps extends AbstractSteps {
 
-  private RouteManifestPage routeManifestPage;
+  private RouteManifestPage page;
 
   public RouteManifestSteps() {
   }
 
   @Override
   public void init() {
-    routeManifestPage = new RouteManifestPage(getWebDriver());
+    page = new RouteManifestPage(getWebDriver());
   }
 
   @When("^Operator go to created Route Manifest$")
   public void operatorGoToCreatedRouteManifest() {
     Route route = get(KEY_CREATED_ROUTE);
     getWebDriver().navigate()
-        .to(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
+        .to(f("%s/%s/route-manifest-v2/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
             TestConstants.NV_SYSTEM_ID, route.getId()).toLowerCase());
   }
 
@@ -54,7 +54,7 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorVerify1DeliverySuccessAtRouteManifest() {
     Route route = get(KEY_CREATED_ROUTE);
     Order order = get(KEY_ORDER_DETAILS);
-    routeManifestPage.verify1DeliverySuccessAtRouteManifest(route, order);
+    page.verify1DeliverySuccessAtRouteManifest(route, order);
   }
 
   @Then("^Operator verify 1 delivery fail at Route Manifest$")
@@ -62,25 +62,51 @@ public class RouteManifestSteps extends AbstractSteps {
     Route route = get(KEY_CREATED_ROUTE);
     Order order = get(KEY_ORDER_DETAILS);
     FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
-    routeManifestPage.verify1DeliveryFailAtRouteManifest(route, order, selectedFailureReason);
+    page.verify1DeliveryFailAtRouteManifest(route, order, selectedFailureReason);
+  }
+
+  @Then("Operator verify Route summary Parcel count on Route Manifest page:")
+  public void verifyParcelCount(Map<String, Map<String, String>> data) {
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      data.forEach((type, map) ->
+          resolveKeyValues(map).forEach((status, value) ->
+              assertions.assertThat(page.getParcelCountValue(type, status))
+                  .as("%s %s", type, status)
+                  .isEqualTo(value)
+          )
+      );
+    });
+    assertions.assertAll();
+  }
+
+  @Then("Operator verify Route summary Waypoint type on Route Manifest page:")
+  public void verifyWaypointType(Map<String, Map<String, String>> data) {
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      data.forEach((type, map) ->
+          resolveKeyValues(map).forEach((status, value) ->
+              assertions.assertThat(page.getWpTypeValue(type, status))
+                  .as("%s %s", type, status)
+                  .isEqualTo(value)
+          )
+      );
+    });
+    assertions.assertAll();
   }
 
   @Then("^Operator verify waypoint at Route Manifest using data below:$")
   public void operatorVerifyWaypointAtRouteManifest(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-
-    RouteManifestWaypointDetails waypointDetails = new RouteManifestWaypointDetails();
-    waypointDetails.fromMap(mapOfData);
-
-    routeManifestPage.verifyWaypointDetails(waypointDetails);
+    page.inFrame(() -> page.verifyWaypointDetails(
+        new RouteManifestWaypointDetails(resolveKeyValues(mapOfData))));
   }
 
   @Then("^Operator verify waypoint tags at Route Manifest using data below:$")
   public void operatorVerifyWaypointTagsAtRouteManifest(Map<String, String> data) {
     data = resolveKeyValues(data);
     data.forEach((tag, expected) -> {
-      routeManifestPage.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
-      List<String> actual = routeManifestPage.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
+      page.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
+      List<String> actual = page.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
       Assertions.assertThat(actual).as("List of Tracking IDs for tag " + tag)
           .contains(splitAndNormalize(expected).toArray(new String[0]));
     });
@@ -90,38 +116,44 @@ public class RouteManifestSteps extends AbstractSteps {
   public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType) {
     String mode = FAILURE_REASON_PICKUP.equalsIgnoreCase(waypointType) ? FAILURE_REASON_PICKUP
         : FAILURE_REASON_DELIVERY;
-    FailureReason failureReason = FailureReasonFactory.findAdvance(FAILURE_REASON_TYPE_NORMAL, mode,
+    String type = FAILURE_REASON_PICKUP.equalsIgnoreCase(waypointType) ? "Return"
+        : FAILURE_REASON_TYPE_NORMAL;
+    FailureReason failureReason = FailureReasonFactory.findAdvance(type, mode,
         FAILURE_REASON_CODE_ID_ALL, FAILURE_REASON_INDEX_MODE_FIRST);
-    routeManifestPage.failDeliveryWaypoint(failureReason);
-    put(KEY_SELECTED_FAILURE_REASON, failureReason);
+    page.inFrame(() -> {
+      var reason = page.failDeliveryWaypoint(failureReason);
+      put(KEY_SELECTED_FAILURE_REASON, reason);
+    });
   }
 
   @When("Operator fail waypoint from Route Manifest page with following details in the row {string}")
   public void operatorFailWaypointFromRouteManifestPageWithFollowingDetails(
       String trackingID, Map<String, String> mapOfData) {
     trackingID = resolveValue(trackingID);
-    routeManifestPage.failWaypointWithFailureDetails(mapOfData, trackingID);
+    page.failWaypointWithFailureDetails(mapOfData, trackingID);
     takesScreenshot();
   }
 
   @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
   public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType) {
-    switch (waypointType) {
-      case "reservation":
-        routeManifestPage.successReservationWaypoint();
-        break;
-      default:
-        routeManifestPage.successDeliveryWaypoint();
-    }
+    page.inFrame(() -> {
+      switch (waypointType) {
+        case "reservation":
+          page.successReservationWaypoint();
+          break;
+        default:
+          page.successDeliveryWaypoint();
+      }
+    });
   }
 
   @When("^Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:$")
   public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType,
       List<Map<String, String>> data) {
-    routeManifestPage.clickActionButtonOnTable(1, RouteManifestPage.ACTION_BUTTON_EDIT);
-    routeManifestPage.chooseAnOutcomeForTheWaypointDialog.success.click();
-    routeManifestPage.codCollectionDialog.waitUntilVisible();
-    int count = routeManifestPage.codCollectionDialog.trackingId.size();
+    page.clickActionButtonOnTable(1, RouteManifestPage.ACTION_BUTTON_EDIT);
+    page.chooseAnOutcomeForTheWaypointDialog.success.click();
+    page.codCollectionDialog.waitUntilVisible();
+    int count = page.codCollectionDialog.trackingId.size();
     data.forEach(entry -> {
       entry = resolveKeyValues(entry);
       String trackingId = entry.get("trackingId");
@@ -129,9 +161,9 @@ public class RouteManifestSteps extends AbstractSteps {
       boolean found = false;
       for (int i = 0; i < count; i++) {
         if (StringUtils.equals(
-            routeManifestPage.codCollectionDialog.trackingId.get(i).getNormalizedText(),
+            page.codCollectionDialog.trackingId.get(i).getNormalizedText(),
             trackingId)) {
-          routeManifestPage.codCollectionDialog.collected.get(i).setValue(collected);
+          page.codCollectionDialog.collected.get(i).setValue(collected);
           found = true;
           break;
         }
@@ -139,19 +171,16 @@ public class RouteManifestSteps extends AbstractSteps {
       Assertions.assertThat(found)
           .as("Tracking id " + trackingId + " was not found in COD collection dialog").isTrue();
     });
-    routeManifestPage.codCollectionDialog.ok.clickAndWaitUntilDone();
-    routeManifestPage.confirmationDialog.waitUntilVisible();
-    routeManifestPage.confirmationDialog.proceed.click();
-    routeManifestPage.confirmationDialog.waitUntilInvisible();
+    page.codCollectionDialog.ok.clickAndWaitUntilDone();
+    page.confirmationDialog.waitUntilVisible();
+    page.confirmationDialog.proceed.click();
+    page.confirmationDialog.waitUntilInvisible();
   }
 
   @When("^Operator open Route Manifest page for route ID \"(.+)\"$")
   public void operatorOpenRouteManifestPage(String routeId) {
     routeId = resolveValue(routeId);
-    routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
-    if (routeManifestPage.loadMoreData.waitUntilVisible(5)) {
-      routeManifestPage.loadMoreData.waitUntilInvisible(60);
-    }
+    page.openPage(Long.parseLong(StringUtils.trim(routeId)));
   }
 
   @When("Operator verifies route details on Route Manifest page:")
@@ -159,20 +188,20 @@ public class RouteManifestSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     SoftAssertions assertions = new SoftAssertions();
     if (data.containsKey("routeId")) {
-      assertions.assertThat(routeManifestPage.routeId.getText()).as("Route ID")
+      assertions.assertThat(page.routeId.getText()).as("Route ID")
           .isEqualTo(data.get("routeId"));
     }
     if (data.containsKey("codCollectionPending")) {
-      assertions.assertThat(routeManifestPage.codCollectionPending.getText())
+      assertions.assertThat(page.codCollectionPending.getText())
           .as("COD Collection - Pending")
           .isEqualTo(data.get("codCollectionPending"));
     }
     if (data.containsKey("driverId")) {
-      assertions.assertThat(routeManifestPage.driverId.getText()).as("Driver ID")
+      assertions.assertThat(page.driverId.getText()).as("Driver ID")
           .isEqualTo(data.get("driverId"));
     }
     if (data.containsKey("driverName")) {
-      assertions.assertThat(routeManifestPage.driverName.getText()).as("Driver Name")
+      assertions.assertThat(page.driverName.getText()).as("Driver Name")
           .isEqualTo(data.get("driverName"));
     }
     assertions.assertAll();
@@ -180,19 +209,19 @@ public class RouteManifestSteps extends AbstractSteps {
 
   @When("Operator verifies COD is not displayed on Route Manifest page")
   public void verifyCodIsNotDisplayed() {
-    Assertions.assertThat(routeManifestPage.codCollectionPending.isDisplayedFast())
+    Assertions.assertThat(page.codCollectionPending.isDisplayedFast())
         .withFailMessage("Unexpected COD is displayed")
         .isFalse();
   }
 
   @When("Operator click view POA/POH button on Route Manifest page")
   public void clickViewPoaPoh() {
-    routeManifestPage.clickViewPoaPoH();
+    page.clickViewPoaPoH();
   }
 
   @Then("Operator verify POA/POH button is disabled on Route Manifest page")
   public void verifyViewPoaPohDisabled() {
-    Assertions.assertThat(routeManifestPage.isViewPoaPohDisabled());
+    Assertions.assertThat(page.isViewPoaPohDisabled());
   }
 
   @Then("Operator verifies Proof of Arrival table for the row number {string} on Route Manifest page:")
@@ -206,13 +235,13 @@ public class RouteManifestSteps extends AbstractSteps {
     expected.setVerifiedByGps(expectedVerifiedByGps);
     expected.setDistanceFromSortHub(expectedDistanceFromSortHub);
 
-    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+    page.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfArrivalTable.verifyPoAInfo(expected, index));
   }
 
   @When("Operator click View on Map")
   public void clickViewOnMapButton() {
-    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+    page.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfArrivalTable.clickViewOnMap());
   }
 
@@ -233,35 +262,35 @@ public class RouteManifestSteps extends AbstractSteps {
     expected.setSortHubName(expectedCSortHubName);
     expected.setStaffUsername(expectedStaffUsername);
 
-    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+    page.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfHandoverTable.verifyPoHInfo(expected, index));
   }
 
   @When("Operator click View Photo")
   public void clickViewPhotoButton() {
-    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+    page.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfHandoverTable.clickViewPhoto());
   }
 
   @Then("Operator verifies route detail information below on Route Manifest page:")
   public void operatorVerifiesRouteDetailInformation(Map<String, String> dataTable) {
     Map<String, String> resolvedData = resolveKeyValues(dataTable);
-    routeManifestPage.waitUntilPageLoaded();
+    page.waitUntilPageLoaded();
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       if (resolvedData.get("Route ID") != null) {
-        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Route ID")).
+        Assertions.assertThat(page.getRouteDetailItem("Route ID")).
             as("Route Id is the same").isEqualToIgnoringCase(resolvedData.get("Route ID"));
       }
       if (resolvedData.get("Driver ID") != null) {
-        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver ID")).
+        Assertions.assertThat(page.getRouteDetailItem("Driver ID")).
             as("Driver ID is the same").isEqualToIgnoringCase(resolvedData.get("Driver ID"));
       }
       if (resolvedData.get("Driver Name") != null) {
-        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver Name")).
+        Assertions.assertThat(page.getRouteDetailItem("Driver Name")).
             as("Driver Name is the same").isEqualToIgnoringCase(resolvedData.get("Driver Name"));
       }
       if (resolvedData.get("Date") != null) {
-        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Date")).
+        Assertions.assertThat(page.getRouteDetailItem("Date")).
             as("Date is the same").isEqualToIgnoringCase(resolvedData.get("Date"));
       }
     }, 2000, 3);

@@ -188,7 +188,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         softAssertions.assertAll();
       } catch (Throwable t) {
         throw new NvTestCoreOrderKafkaLagException(
-            "Order details is not update yet because of Kafka lag");
+            "Order details is not update yet because of Kafka lag", t);
       }
     });
   }
@@ -856,7 +856,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
       } catch (Throwable t) {
         throw new NvTestCoreOrderKafkaLagException(
-            "Order event is not updated yet because of kafka lag");
+            "Order event is not updated yet because of kafka lag", t);
       }
     });
   }

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,10 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
   private Reservation reservation;
   private Pickup pickup;
   private Delivery delivery;
+
+  public RouteManifestWaypointDetails(Map<String, ?> data) {
+    super(data);
+  }
 
   public void setId(Long id) {
     this.id = id;

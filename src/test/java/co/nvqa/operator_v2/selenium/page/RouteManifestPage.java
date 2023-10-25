@@ -9,11 +9,12 @@ import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class RouteManifestPage extends OperatorV2SimplePage {
+public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
   public static final String COLUMN_STATUS = "status";
   public static final String COLUMN_COUNT_DELIVERY = "count-d";
@@ -45,7 +46,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//md-dialog[contains(@class, 'proof-of-arrival-and-handover')]")
   public ProofOfArrivalAndHandoverDialog proofOfArrivalAndHandoverDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
 
   @FindBy(css = "md-dialog")
@@ -64,7 +65,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//*[text()='Tracking ID(s)']/parent::th//input")
   public PageElement trackingIDFilter;
 
-  @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
+  @FindBy(xpath = "//div[contains(@class,'ant-modal ')][contains(.,'Are you sure?')]")
   public ConfirmationDialog confirmationDialog;
 
   @FindBy(xpath = "//button[contains(text(),'View POA/POH')]")
@@ -77,15 +78,40 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   }
 
   public void openPage(long routeId) {
-    getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    getWebDriver().get(f("%s/%s/route-manifest-v2/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), routeId));
-    waitUntilPageLoaded();
+    inFrame(() -> waitUntilLoaded());
   }
 
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
     waitUntilInvisibilityOfElementLocated(
         "//md-progress-circular/following-sibling::div[text()='Loading...']");
+  }
+
+  public String getParcelCountValue(String type, String status) {
+    String xpath =
+        "//div[translate(., ' ','')='" + StringUtils.capitalize(type.toLowerCase())
+            + "']/following-sibling::div[%d]";
+    int index;
+    switch (status.toLowerCase()) {
+      case "pending":
+        index = 1;
+        break;
+      case "success":
+        index = 2;
+        break;
+      case "failure":
+        index = 3;
+        break;
+      default:
+        index = 4;
+    }
+    return new PageElement(getWebDriver(), f(xpath, index)).getText();
+  }
+
+  public String getWpTypeValue(String type, String status) {
+    return getParcelCountValue(type, status);
   }
 
   public void verify1DeliverySuccessAtRouteManifest(Route route, Order order) {
@@ -199,10 +225,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     }
   }
 
-  public void failDeliveryWaypoint(FailureReason failureReason) {
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+  public String failDeliveryWaypoint(FailureReason failureReason) {
+    waypointsTable.clickActionButton(1, "edit");
     chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
-    pause1s();
     chooseAnOutcomeForTheWaypointDialog.failure.click();
 
     Stack<FailureReason> stackOfFailureReason = new Stack<>();
@@ -215,14 +240,16 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     while (pointer != null);
 
     FailureReason failureReasonGrandParent = stackOfFailureReason.pop();
+    String description = failureReasonGrandParent.getDescription();
     chooseAnOutcomeForTheWaypointDialog.chooseFailureReason
         .selectValue(failureReasonGrandParent.getDescription());
     int stackSize = stackOfFailureReason.size();
 
     for (int i = 1; i <= stackSize; i++) {
       FailureReason childFailureReason = stackOfFailureReason.pop();
-      chooseAnOutcomeForTheWaypointDialog
-          .selectFailureReasonDetails(i, childFailureReason.getDescription());
+      chooseAnOutcomeForTheWaypointDialog.failureReasonDetail.selectValue(
+          childFailureReason.getDescription());
+      description = childFailureReason.getDescription();
     }
 
     chooseAnOutcomeForTheWaypointDialog.update.click();
@@ -230,6 +257,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     confirmationDialog.proceed.click();
     confirmationDialog.waitUntilInvisible();
     chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
+    return description;
   }
 
   public void failWaypointWithFailureDetails(Map<String, String> mapOfData, String trackingID) {
@@ -256,7 +284,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   }
 
   public void successDeliveryWaypoint() {
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+    waypointsTable.clickActionButton(1, "edit");
     chooseAnOutcomeForTheWaypointDialog.success.click();
     confirmationDialog.waitUntilVisible();
     confirmationDialog.proceed.click();
@@ -265,7 +293,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   }
 
   public void successReservationWaypoint() {
-    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+    waypointsTable.clickActionButton(1, "edit");
     chooseAnOutcomeForTheWaypointDialog.success.click();
     confirmationDialog.waitUntilVisible();
     confirmationDialog.proceed.click();
@@ -364,7 +392,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class WaypointsTable extends MdVirtualRepeatTable<RouteManifestWaypointDetails> {
+  public static class WaypointsTable extends AntTableV2<RouteManifestWaypointDetails> {
 
     public static final String COLUMN_ORDER_TAGS = "orderTags";
     public static final String COLUMN_TRACKING_IDS = "trackingIds";
@@ -372,44 +400,46 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     public WaypointsTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("address", "address")
-          .put("status", "status")
-          .put(COLUMN_ORDER_TAGS, "order-tags")
+          .put("address", "_address")
+          .put("status", "_status")
+          .put(COLUMN_ORDER_TAGS, "_orderTags")
           .put("id", "id")
-          .put("deliveriesCount", "count-d")
-          .put("pickupsCount", "count-p")
-          .put("comments", "comments")
-          .put(COLUMN_TRACKING_IDS, "tracking-ids")
-          .put("contact", "contact")
+          .put("deliveriesCount", "_countD")
+          .put("pickupsCount", "_countP")
+          .put("comments", "_comments")
+          .put(COLUMN_TRACKING_IDS, "_trackingIds")
+          .put("contact", "_contact")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of("details", "Waypoint Details", "edit",
-          "container.route-manifest.choose-outcome-for-waypoint"));
-      setMdVirtualRepeat("waypoint in getTableData()");
+          "Choose an outcome for the waypoint"));
       setEntityClass(RouteManifestWaypointDetails.class);
     }
   }
 
-  public static class ChooseAnOutcomeForTheWaypointDialog extends MdDialog {
+  public static class ChooseAnOutcomeForTheWaypointDialog extends AntModal {
 
     public ChooseAnOutcomeForTheWaypointDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "commons.success")
-    public NvIconTextButton success;
+    @FindBy(css = "[data-testid='route-manifest-testid.choose-waypoint-outcome.success.button']")
+    public Button success;
 
-    @FindBy(name = "commons.failure")
-    public NvIconTextButton failure;
+    @FindBy(css = "[data-testid='route-manifest-testid.choose-waypoint-outcome.failure.button']")
+    public Button failure;
 
-    @FindBy(name = "commons.go-back")
-    public NvIconTextButton goBack;
+    @FindBy(css = "[data-pa-label='Go back']")
+    public Button goBack;
 
-    @FindBy(name = "commons.update")
-    public NvIconTextButton update;
+    @FindBy(css = "[data-pa-label='Update']")
+    public Button update;
 
-    @FindBy(css = "[id^='container.route-manifest.choose-failure-reason']")
-    public MdSelect chooseFailureReason;
+    @FindBy(css = "[data-testid='route-manifest-testid.choose-waypoint-outcome.failure-reason.field-0']")
+    public AntSelect3 chooseFailureReason;
+
+    @FindBy(css = "[data-testid='route-manifest-testid.choose-waypoint-outcome.failure-reason.field-1']")
+    public AntSelect3 failureReasonDetail;
 
     public void selectFailureReasonDetails(int index, String reason) {
       String xpath = f(
@@ -438,13 +468,13 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     public NvApiTextButton ok;
   }
 
-  public static class ConfirmationDialog extends MdDialog {
+  public static class ConfirmationDialog extends AntModal {
 
     public ConfirmationDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[aria-label='Proceed']")
+    @FindBy(xpath = ".//button[.='Proceed']")
     public Button proceed;
   }
 
