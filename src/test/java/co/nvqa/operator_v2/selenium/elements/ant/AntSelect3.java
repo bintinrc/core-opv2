@@ -101,6 +101,7 @@ public class AntSelect3 extends PageElement {
     clearValue();
     values.forEach(v -> {
       enterSearchTerm(v);
+      pause1s();
       clickMenuItem(v);
     });
     closeMenu();
