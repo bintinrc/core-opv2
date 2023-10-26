@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.model.PoaInfo;
 import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
@@ -49,7 +50,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   @FindBy(css = ".ant-modal")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public CodCollectionDialog codCollectionDialog;
 
   @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
@@ -189,6 +190,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
     waitUntilPageLoaded();
 
+    waypointsTable.clearColumnFilters();
     if (StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds())) {
       waypointsTable
           .filterByColumn("trackingIds", String.valueOf(expectedWaypointDetails.getTrackingIds()));
@@ -454,23 +456,23 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     }
   }
 
-  public static class CodCollectionDialog extends MdDialog {
+  public static class CodCollectionDialog extends AntModal {
 
     public CodCollectionDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[1]")
+    @FindBy(xpath = ".//tr[@class='simple-table-row'][position()>=2]/td[1]")
     public List<PageElement> trackingId;
 
-    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[2]")
+    @FindBy(xpath = ".//tr[@class='simple-table-row'][position()>=2]/td[2]")
     public List<PageElement> amount;
 
-    @FindBy(xpath = ".//tr[@ng-repeat='orderCod in ctrl.orderCods']/td[3]/md-checkbox")
-    public List<MdCheckbox> collected;
+    @FindBy(xpath = ".//tr[@class='simple-table-row'][position()>=2]/td[3]//input")
+    public List<CheckBox> collected;
 
-    @FindBy(name = "commons.ok")
-    public NvApiTextButton ok;
+    @FindBy(css = "[data-pa-label='Ok']")
+    public Button ok;
   }
 
   public static class ConfirmationDialog extends AntModal {

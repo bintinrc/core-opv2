@@ -103,13 +103,12 @@ public class RouteManifestSteps extends AbstractSteps {
 
   @Then("^Operator verify waypoint tags at Route Manifest using data below:$")
   public void operatorVerifyWaypointTagsAtRouteManifest(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    data.forEach((tag, expected) -> {
+    page.inFrame(() -> resolveKeyValues(data).forEach((tag, expected) -> {
       page.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
       List<String> actual = page.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
       Assertions.assertThat(actual).as("List of Tracking IDs for tag " + tag)
           .contains(splitAndNormalize(expected).toArray(new String[0]));
-    });
+    }));
   }
 
   @When("^Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page$")
@@ -150,31 +149,33 @@ public class RouteManifestSteps extends AbstractSteps {
   @When("^Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:$")
   public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType,
       List<Map<String, String>> data) {
-    page.clickActionButtonOnTable(1, RouteManifestPage.ACTION_BUTTON_EDIT);
-    page.chooseAnOutcomeForTheWaypointDialog.success.click();
-    page.codCollectionDialog.waitUntilVisible();
-    int count = page.codCollectionDialog.trackingId.size();
-    data.forEach(entry -> {
-      entry = resolveKeyValues(entry);
-      String trackingId = entry.get("trackingId");
-      boolean collected = Boolean.parseBoolean(entry.get("collected"));
-      boolean found = false;
-      for (int i = 0; i < count; i++) {
-        if (StringUtils.equals(
-            page.codCollectionDialog.trackingId.get(i).getNormalizedText(),
-            trackingId)) {
-          page.codCollectionDialog.collected.get(i).setValue(collected);
-          found = true;
-          break;
+    page.inFrame(() -> {
+      page.waypointsTable.clickActionButton(1, "edit");
+      page.chooseAnOutcomeForTheWaypointDialog.success.click();
+      page.codCollectionDialog.waitUntilVisible();
+      int count = page.codCollectionDialog.trackingId.size();
+      data.forEach(entry -> {
+        entry = resolveKeyValues(entry);
+        String trackingId = entry.get("trackingId");
+        boolean collected = Boolean.parseBoolean(entry.get("collected"));
+        boolean found = false;
+        for (int i = 0; i < count; i++) {
+          if (StringUtils.equals(
+              page.codCollectionDialog.trackingId.get(i).getNormalizedText(),
+              trackingId)) {
+            page.codCollectionDialog.collected.get(i).setValue(collected);
+            found = true;
+            break;
+          }
         }
-      }
-      Assertions.assertThat(found)
-          .as("Tracking id " + trackingId + " was not found in COD collection dialog").isTrue();
+        Assertions.assertThat(found)
+            .as("Tracking id " + trackingId + " was not found in COD collection dialog").isTrue();
+      });
+      page.codCollectionDialog.ok.click();
+      page.confirmationDialog.waitUntilVisible();
+      page.confirmationDialog.proceed.click();
+      page.confirmationDialog.waitUntilInvisible();
     });
-    page.codCollectionDialog.ok.clickAndWaitUntilDone();
-    page.confirmationDialog.waitUntilVisible();
-    page.confirmationDialog.proceed.click();
-    page.confirmationDialog.waitUntilInvisible();
   }
 
   @When("^Operator open Route Manifest page for route ID \"(.+)\"$")
