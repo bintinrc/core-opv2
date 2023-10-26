@@ -821,7 +821,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
         expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException("Order event not updated yet because of Kafka lag");
+        throw new NvTestCoreOrderKafkaLagException(
+            "Order event not updated yet because of Kafka lag");
       }
     });
   }
@@ -829,33 +830,34 @@ public class EditOrderV2Steps extends AbstractSteps {
   @Then("Operator verify order events on Edit Order V2 page using data below:")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
     page.inFrame(() -> {
-      try {
-
-        var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
-        data.forEach(eventData -> {
-          OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-          var foundEvents = actualEvents.get().stream()
+      var actualEvents = new AtomicReference<>(page.eventsTable().readAllEntities());
+      data.forEach(eventData -> {
+        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
+        var foundEvents = actualEvents.get().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .collect(Collectors.toList());
+        if (foundEvents.isEmpty()) {
+          pause5s();
+          page.refreshPage();
+          page.switchTo();
+          actualEvents.set(page.eventsTable().readAllEntities());
+          foundEvents = actualEvents.get().stream()
               .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
               .collect(Collectors.toList());
-          if (foundEvents.isEmpty()) {
-            pause5s();
-            page.refreshPage();
-            page.switchTo();
-            actualEvents.set(page.eventsTable().readAllEntities());
-            foundEvents = actualEvents.get().stream()
-                .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-                .collect(Collectors.toList());
-          }
+        }
+        try {
+          //noinspection MaskedAssertion
           Assertions.assertThat(foundEvents)
               .withFailMessage("There is no [%s] event on Edit Order V2 page",
                   expectedEvent.getName())
               .isNotEmpty();
-          DataEntity.assertListContains(foundEvents, expectedEvent,
-              f("[%s] events", expectedEvent.getName()));
-        });
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException("Order event is not updated yet because of kafka lag");
-      }
+        } catch (AssertionError t) {
+          throw new NvTestCoreOrderKafkaLagException(
+              "Order event is not updated yet because of kafka lag");
+        }
+        DataEntity.assertListContains(foundEvents, expectedEvent,
+            f("[%s] events", expectedEvent.getName()));
+      });
     });
   }
 
