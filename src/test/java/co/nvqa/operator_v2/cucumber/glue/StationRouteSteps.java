@@ -71,7 +71,6 @@ public class StationRouteSteps extends AbstractSteps {
       if (finalData.containsKey("driversOnLeave")) {
         page.driversOnLeave.clearValue();
         page.driversOnLeave.selectValues(splitAndNormalize(finalData.get("driversOnLeave")));
-        takesScreenshot();
       }
       if (finalData.containsKey("shipmentType")) {
         page.shipmentType.clearValue();
