@@ -122,15 +122,15 @@ public class AntSelect3 extends PageElement {
 
   public void clickMenuItem(String value) {
     String xpath = getItemEqualsLocator(value);
-    if (isElementVisible(xpath, 2)) {
+    if (isElementVisible(xpath, 1)) {
       click(xpath);
     } else {
       xpath = getItemIgnoreCaseLocator(value);
-      if (isElementVisible(xpath, 2)) {
+      if (isElementVisible(xpath, 1)) {
         click(xpath);
       } else {
         xpath = getItemContainsLocator(value);
-        if (isElementVisible(xpath, 2)) {
+        if (isElementVisible(xpath, 1)) {
           click(xpath);
         } else {
           xpath = getItemValueLocator(value);
