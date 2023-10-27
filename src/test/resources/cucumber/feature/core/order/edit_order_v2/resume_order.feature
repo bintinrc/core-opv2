@@ -5,7 +5,7 @@ Feature: Resume Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -19,8 +19,8 @@ Feature: Resume Order
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator resume order on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) resumed                          |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) resumed                          |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify order status is "Pending" on Edit Order V2 page
     And Operator verify order granular status is "Pending Pickup" on Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
@@ -32,9 +32,9 @@ Feature: Resume Order
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                   |
-      | MANUAL ACTION | RESUME        |                                                                                                                                               |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                                       |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id    | {KEY_TRANSACTION.id} |
@@ -52,6 +52,7 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
+  @MediumPriority
   Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -83,7 +84,7 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -118,15 +119,15 @@ Feature: Resume Order
       | granularStatus | Cancelled |
     When Operator resume order on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) resumed                          |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) resumed                          |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                   |
-      | MANUAL ACTION | RESUME        |                                                                                                                                               |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                               |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -152,7 +153,7 @@ Feature: Resume Order
       | routeId | null                         |
       | seqNo   | null                         |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -192,15 +193,15 @@ Feature: Resume Order
       | granularStatus | Cancelled |
     When Operator resume order on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) resumed                          |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) resumed                          |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                   |
-      | MANUAL ACTION | RESUME        |                                                                                                                                               |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                           |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                       |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -212,6 +213,7 @@ Feature: Resume Order
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
 
+  @MediumPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With NO Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -229,15 +231,15 @@ Feature: Resume Order
       | granularStatus | Cancelled |
     When Operator resume order on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) resumed                          |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) resumed                          |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                   |
-      | MANUAL ACTION | RESUME        |                                                                                                                                               |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                               |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:

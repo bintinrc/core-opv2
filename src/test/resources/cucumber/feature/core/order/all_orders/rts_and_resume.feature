@@ -137,6 +137,7 @@ Feature: All Orders - RTS & Resume
       | id  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | rts | 1                                  |
 
+  @MediumPriority
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -163,10 +164,10 @@ Feature: All Orders - RTS & Resume
     And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                                       |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -199,8 +200,8 @@ Feature: All Orders - RTS & Resume
     And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                                       |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
