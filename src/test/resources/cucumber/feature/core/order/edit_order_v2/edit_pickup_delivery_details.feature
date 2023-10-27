@@ -255,4 +255,4 @@ Feature: Edit Order Details
       | address2      | 15                           |
       | postcode      | 308402                       |
       | country       | Singapore                    |
-      | routingZoneId | -1                           |
+      | routingZoneId | null                         |
