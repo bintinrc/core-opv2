@@ -152,8 +152,7 @@ Feature: Search Tracking IDs on Station Route
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
       | hub                        | {hub-name-6}                                                          |
-      | driversOnLeave             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                    |
-      | driversOnLeave             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                                    |
+      | driversOnLeave             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id},{KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
       | shipmentType               | AIR_HAUL                                                              |
       | shipmentDateFrom           | {date: 0 days next, yyyy-MM-dd}                                       |
       | shipmentDateTo             | {date: 1 days next, yyyy-MM-dd}                                       |
