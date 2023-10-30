@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart1
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart1 @current
 Feature: Search Tracking IDs on Station Route
 
   Background:
@@ -114,7 +114,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @wip
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword - Primary Driver and Fallback Driver on Leave
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
