@@ -114,8 +114,8 @@ public class AntSelect3 extends PageElement {
     clearValue();
     values.forEach(v -> {
       enterSearchTerm(v);
-      clickMenuItem(v);
       pause(100);
+      clickMenuItem(v);
       final byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(
           OutputType.BYTES);
       NvAllure.addAttachment("Screenshot", "image/png", new ByteArrayInputStream(screenshot),
@@ -351,7 +351,7 @@ public class AntSelect3 extends PageElement {
   }
 
   private void waitUntilLoaded() {
-    if (spinner.waitUntilVisible(1)) {
+    if (spinner.isDisplayedFast()) {
       spinner.waitUntilInvisible();
     }
   }
