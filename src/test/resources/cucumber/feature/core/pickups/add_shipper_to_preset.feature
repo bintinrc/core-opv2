@@ -99,7 +99,7 @@ Feature: Add Shipper To Preset
 #    Then Operator verifies filter parameters on Shipper Pickups page using data below:
 #      | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
-  @done
+  
   Scenario: Operator Failed to Select Shipper Creation Date more than 7 Days Range on Add Shipper to Preset Page
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
@@ -109,7 +109,7 @@ Feature: Add Shipper To Preset
       | shipperCreationDateTo   | {gradle-next-10-day-dd/MM/yyyy} |
     Then Operator verifies wrong dates toast is shown on Add Shipper To Preset page
 
-  @done
+  
   Scenario: Check Shipper Selection in Add Shipper to Preset Page
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
@@ -128,7 +128,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Clear Current Selection on Add Shipper To Preset page
     Then Operator verify all rows are unselected on Add Shipper To Preset page
 
-  @done
+  
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download All Shown
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -136,7 +136,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows @done
+  @CloseNewWindows
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Filtered Shipper
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -145,7 +145,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows @done
+  @DeleteShipper @CloseNewWindows
   Scenario: Operator Filter All Shippers on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -200,7 +200,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows @done
+  @DeleteShipper @CloseNewWindows 
   Scenario: Operator Filter Active Shipper on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -255,7 +255,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows @done
+  @DeleteShipper @CloseNewWindows 
   Scenario: Operator Filter Inactive Shipper on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -313,7 +313,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper @done
+  @DeleteShipper 
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Inactive Shipper
     Given API Shipper - Operator create new shipper using data below:
       | shipperType | Normal |
@@ -330,7 +330,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @done
+  
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
