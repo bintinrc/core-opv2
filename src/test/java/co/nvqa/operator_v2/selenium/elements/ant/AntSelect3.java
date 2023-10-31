@@ -110,15 +110,11 @@ public class AntSelect3 extends PageElement {
     closeMenu();
   }
 
-  public void selectValuesWithPause(Iterable<String> values) {
+  public void selectValuesWithEnter(Iterable<String> values) {
     searchInput.click();
     values.forEach(v -> {
       searchInput.clearValue();
       fillSearchTermAndEnter(v);
-      final byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(
-          OutputType.BYTES);
-      NvAllure.addAttachment("Screenshot", "image/png", new ByteArrayInputStream(screenshot),
-          ".png");
     });
     closeMenu();
   }
