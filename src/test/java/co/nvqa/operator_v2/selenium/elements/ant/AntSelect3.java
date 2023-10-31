@@ -106,6 +106,16 @@ public class AntSelect3 extends PageElement {
     closeMenu();
   }
 
+  public void selectValuesWithPause(Iterable<String> values) {
+    clearValue();
+    values.forEach(v -> {
+      enterSearchTerm(v);
+      clickMenuItem(v);
+      pause(100);
+    });
+    closeMenu();
+  }
+
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);
