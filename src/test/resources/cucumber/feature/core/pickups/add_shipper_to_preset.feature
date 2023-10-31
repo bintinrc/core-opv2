@@ -5,72 +5,48 @@ Feature: Add Shipper To Preset
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-#    TODO There is no Shipper Pickups page anymore
+#  TODO There is no Shipper Pickups page anymore
 #  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
 #  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - All Shippers
-#    Given API Operator creates new Shipper Pickup Filter Template using data below:
-#      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
-#      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
-#      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
-#      | value.typeIds             | 0                                                 |
-#      | value.waypointStatuses    | Pending,Routed                                    |
-#    And Operator go to menu Shipper -> All Shippers
-#    And Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                  |
-#      | shipperType                  | Normal                |
-#      | ocVersion                    | v4                    |
-#      | services                     | STANDARD              |
-#      | trackingType                 | Fixed                 |
-#      | isAllowCod                   | false                 |
-#      | isAllowCashPickup            | true                  |
-#      | isPrepaid                    | true                  |
-#      | isAllowStagedOrders          | false                 |
-#      | isMultiParcelShipper         | false                 |
-#      | isDisableDriverAppReschedule | false                 |
-#      | pricingScriptName            | {pricing-script-name} |
-#      | industryName                 | {industry-name}       |
-#      | salesPerson                  | {sales-person}        |
-#    And API Operator reload shipper's cache
-#    And API Operator fetch id of the created shipper
-#    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
-#    And API Operator create new shipper address V2 using data below:
-#      | shipperId       | {KEY_CREATED_SHIPPER.id} |
-#      | generateAddress | RANDOM                   |
-#    And API Operator create V2 reservation using data below:
-#      | reservationRequest | { "legacy_shipper_id":{KEY_CREATED_SHIPPER.legacyId}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+#    Given API Lighthouse - Create Preset Filter For Pickup Appointment Job with data below:
+#      | createPresetFiltersRequest | {"name":"PAJ_TEMPLATE_{date: 0 days next, yyyyMMddHHmmss}","value":{"priority":{"value":"All","label":"All"},"shippers":[],"master_shippers":[],"zones":[],"job_status":[{"value":"ready-for-routing","label":"Ready for Routing"},{"value":"routed","label":"Routed"}],"service_level":[],"service_type":[{"value":"Scheduled","label":"Scheduled"}]}} |
+#    Given API Shipper - Operator create new shipper using data below:
+#      | shipperType | Normal |
+#    And API Shipper - Operator wait until shipper available to search using data below:
+#      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
+#    And API Shipper - Operator edit shipper value of pickup appointment using below data:
+#      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
+#      | status    | False                                |
+#    And API Shipper - Operator update shipper setting using data below:
+#      | shipperId               | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                        |
+#      | shipperSettingNamespace | pickup                                                                                                                                                                                                                                                                                                                      |
+#      | shipperSettingRequest   | {"address_limit":10,"allow_premium_pickup_on_sunday":true,"allow_standard_pickup_on_sunday":true,"premium_pickup_daily_limit":100,"milk_run_pickup_limit":10,"default_start_time":"09:00","default_end_time":"22:00","service_type_level":[{"type":"Scheduled","level":"Standard"},{"type":"Scheduled","level":"Premium"}]} |
+#    Given API Shipper - Operator create new shipper address using data below:
+#      | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
+#      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
+#      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[1].email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+#    And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}"
+#    And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}"
+#    And API Core - Operator create reservation using data below:
+#      | reservationRequest | {"legacy_shipper_id":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 0 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 0 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+#    ####
 #    When Operator go to menu Pick Ups -> Add Shipper To Preset
 #    And Add Shipper To Preset page is loaded
 #    Then Operator validates filter values on Add Shipper To Preset page using data below:
-#      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-#      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+#      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+#      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
 #    When Operator clicks Load Selection on Add Shipper To Preset page
-#    And Operator applies "UP" sorting to "Creation Date" column on Add Shipper To Preset page
-#    Then Operator verify "UP" sorting is applied to "Creation Date" column on Add Shipper To Preset page
-#    And Operator applies "DOWN" sorting to "Creation Date" column on Add Shipper To Preset page
-#    Then Operator verify "DOWN" sorting is applied to "Creation Date" column on Add Shipper To Preset page
-#    And Operator applies "UP" sorting to "Shipper Address" column on Add Shipper To Preset page
-#    Then Operator verify "UP" sorting is applied to "Shipper Address" column on Add Shipper To Preset page
-#    And Operator applies "DOWN" sorting to "Shipper Address" column on Add Shipper To Preset page
-#    Then Operator verify "DOWN" sorting is applied to "Shipper Address" column on Add Shipper To Preset page
-#    When Operator applies "UP" sorting to "Shipper Name" column on Add Shipper To Preset page
-#    Then Operator verify "UP" sorting is applied to "Shipper Name" column on Add Shipper To Preset page
-#    And Operator applies "DOWN" sorting to "Shipper Name" column on Add Shipper To Preset page
-#    Then Operator verify "DOWN" sorting is applied to "Shipper Name" column on Add Shipper To Preset page
-#    When Operator applies "UP" sorting to "Shipper Id" column on Add Shipper To Preset page
-#    Then Operator verify "UP" sorting is applied to "Shipper Id" column on Add Shipper To Preset page
-#    And Operator applies "DOWN" sorting to "Shipper Id" column on Add Shipper To Preset page
-#    Then Operator verify "DOWN" sorting is applied to "Shipper Id" column on Add Shipper To Preset page
-#    When Operator applies "{KEY_CREATED_SHIPPER.name}" filter to "Shipper Name" column on Add Shipper To Preset page
+#    When Operator applies "{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}" filter to "Shipper Name" column on Add Shipper To Preset page
 #    Then Operator verify records on Add Shipper To Preset page using data below:
-#      | createdAt                        | name                       | legacyId                       |
-#      | {gradle-current-date-yyyy-MM-dd} | {KEY_CREATED_SHIPPER.name} | {KEY_CREATED_SHIPPER.legacyId} |
+#      | createdAt                       | name                                   | legacyId                                   |
+#      | {date: 0 days next, yyyy-MM-dd} | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].name} | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId} |
 #    When Operator adds shipper to preset on Add Shipper To Preset page using data below:
-#      | shipperName | {KEY_CREATED_SHIPPER.name}                        |
-#      | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
-#    And Operator go to menu Pick Ups -> Shipper Pickups
-#    And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
-#    Then Operator verifies filter parameters on Shipper Pickups page using data below:
-#      | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
+#      | shipperName | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}              |
+#      | presetName  | {KEY_LIGHTHOUSE_CREATED_PRESET_PAJOBS[1].data.name} |
+#    And Operator goes to Pickup Jobs Page
+#    And Operator select Preset with name = "{KEY_LIGHTHOUSE_CREATED_PRESET_PAJOBS[1].data.name}" in pickup appointment
+#    And Operator verifies selected filters on Pickup Jobs page:
+#      | shippers | [{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}-{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}] |
 
 #    TODO There is no Shipper Pickups page anymore
 #  @DeleteShipper @@DeleteFilterTemplate @CloseNewWindows
@@ -129,8 +105,8 @@ Feature: Add Shipper To Preset
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator applies filters on Add Shipper To Preset page using data below:
-      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-      | shipperCreationDateTo   | {gradle-next-10-day-dd/MM/yyyy}  |
+      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+      | shipperCreationDateTo   | {gradle-next-10-day-dd/MM/yyyy} |
     Then Operator verifies wrong dates toast is shown on Add Shipper To Preset page
 
   @done
@@ -194,8 +170,8 @@ Feature: Add Shipper To Preset
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     Then Operator validates filter values on Add Shipper To Preset page using data below:
-      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
     When Operator clicks Load Selection on Add Shipper To Preset page
     And Operator applies "UP" sorting to "Creation Date" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Creation Date" column on Add Shipper To Preset page
@@ -249,8 +225,8 @@ Feature: Add Shipper To Preset
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     Then Operator validates filter values on Add Shipper To Preset page using data below:
-      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
     When Operator clicks Load Selection on Add Shipper To Preset page
     And Operator applies "UP" sorting to "Creation Date" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Creation Date" column on Add Shipper To Preset page
@@ -307,8 +283,8 @@ Feature: Add Shipper To Preset
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     Then Operator validates filter values on Add Shipper To Preset page using data below:
-      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
     When Operator clicks Load Selection on Add Shipper To Preset page
     And Operator applies "UP" sorting to "Creation Date" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Creation Date" column on Add Shipper To Preset page
@@ -354,7 +330,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @done @wip
+  @done
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
@@ -403,8 +379,8 @@ Feature: Add Shipper To Preset
 #    When Operator go to menu Pick Ups -> Add Shipper To Preset
 #    And Add Shipper To Preset page is loaded
 #    Then Operator validates filter values on Add Shipper To Preset page using data below:
-#      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-#      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+#      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+#      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
 #    When Operator clicks Load Selection on Add Shipper To Preset page
 #    And Operator applies "Inactive" filter to "Is Active" column on Add Shipper To Preset page
 #    When Operator adds shipper to preset on Add Shipper To Preset page using data below:
@@ -451,8 +427,8 @@ Feature: Add Shipper To Preset
 #    When Operator go to menu Pick Ups -> Add Shipper To Preset
 #    And Add Shipper To Preset page is loaded
 #    Then Operator validates filter values on Add Shipper To Preset page using data below:
-#      | shipperCreationDateFrom | {gradle-current-date-dd/MM/yyyy} |
-#      | shipperCreationDateTo   | {gradle-current-date-dd/MM/yyyy} |
+#      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+#      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
 #    When Operator clicks Load Selection on Add Shipper To Preset page
 #    And Operator applies "Active" filter to "Is Active" column on Add Shipper To Preset page
 #    When Operator adds shipper to preset on Add Shipper To Preset page using data below:
