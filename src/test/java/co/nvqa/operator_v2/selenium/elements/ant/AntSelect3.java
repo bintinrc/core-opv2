@@ -1,15 +1,19 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.common.utils.NvAllure;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -113,6 +117,10 @@ public class AntSelect3 extends PageElement {
       enterSearchTerm(v);
       clickMenuItem(v);
       pause(100);
+      final byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(
+          OutputType.BYTES);
+      NvAllure.addAttachment("Screenshot", "image/png", new ByteArrayInputStream(screenshot),
+          ".png");
     });
     closeMenu();
   }
