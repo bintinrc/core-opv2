@@ -337,9 +337,6 @@ Feature: Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     And Operator clicks Load Selection on Add Shipper To Preset page
     And Operator applies "Active" filter to "Is Active" column on Add Shipper To Preset page
-    And Operator saves displayed shipper results
-      | shipperCreationDateFrom | {date: 0 days next, yyyy-MM-dd}T16:00:00Z |
-      | shipperCreationDateTo   | {date: 1 days next, yyyy-MM-dd}T15:59:59Z |
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
