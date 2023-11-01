@@ -106,6 +106,15 @@ public class AntSelect3 extends PageElement {
     closeMenu();
   }
 
+  public void selectValuesWithEnter(Iterable<String> values) {
+    searchInput.click();
+    values.forEach(v -> {
+      searchInput.clearValue();
+      fillSearchTermAndEnter(v);
+    });
+    closeMenu();
+  }
+
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);
@@ -333,7 +342,7 @@ public class AntSelect3 extends PageElement {
   }
 
   private void waitUntilLoaded() {
-    if (spinner.waitUntilVisible(1)) {
+    if (spinner.isDisplayedFast()) {
       spinner.waitUntilInvisible();
     }
   }
