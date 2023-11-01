@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage -  Area [ G H I ], Area Variation [ A B C ], Keyword [ A B C ] [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -60,7 +60,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Little" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Little" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ G H I ] Match To Overlapping Single Coverage - Area [ A B C ], Area Variation [ G H I ], Keyword [ A B C ]  [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -115,7 +115,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Lorong" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Lorong" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To  Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -178,7 +178,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Maritime" is displayed on 1 position on Station Route page
     And Operator verify keyword match "Square" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ]  & Coverage 2:  Area [ A B C ], Empty Area Variation, Keyword [ G H I ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -241,7 +241,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Tannery" is displayed on 1 position on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Partial Matched with Address - Area is Missing First Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -295,7 +295,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Partial Matched with Address - Area is Missing First and Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -349,7 +349,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Partial Matched with Address - Area is Missing Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -403,7 +403,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Variation Partial Matched with Address - Area Variation is Missing First Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -457,7 +457,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Variation Partial Matched with Address - Area Variation is Missing Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -507,7 +507,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Area Variation Partial Matched with Address - Area Variation is Missing First and Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-10}"
     Given API Order - Shipper create multiple V4 orders using data below:
