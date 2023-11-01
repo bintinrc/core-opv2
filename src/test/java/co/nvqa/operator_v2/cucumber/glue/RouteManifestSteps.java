@@ -186,33 +186,37 @@ public class RouteManifestSteps extends AbstractSteps {
 
   @When("Operator verifies route details on Route Manifest page:")
   public void verifyRouteDetails(Map<String, String> data) {
-    data = resolveKeyValues(data);
     SoftAssertions assertions = new SoftAssertions();
-    if (data.containsKey("routeId")) {
-      assertions.assertThat(page.routeId.getText()).as("Route ID")
-          .isEqualTo(data.get("routeId"));
-    }
-    if (data.containsKey("codCollectionPending")) {
-      assertions.assertThat(page.codCollectionPending.getText())
-          .as("COD Collection - Pending")
-          .isEqualTo(data.get("codCollectionPending"));
-    }
-    if (data.containsKey("driverId")) {
-      assertions.assertThat(page.driverId.getText()).as("Driver ID")
-          .isEqualTo(data.get("driverId"));
-    }
-    if (data.containsKey("driverName")) {
-      assertions.assertThat(page.driverName.getText()).as("Driver Name")
-          .isEqualTo(data.get("driverName"));
-    }
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      if (finalData.containsKey("routeId")) {
+        assertions.assertThat(page.routeId.getText()).as("Route ID")
+            .isEqualTo(finalData.get("routeId"));
+      }
+      if (finalData.containsKey("codCollectionPending")) {
+        assertions.assertThat(page.codCollectionPending.getText())
+            .as("COD Collection - Pending")
+            .isEqualTo(finalData.get("codCollectionPending"));
+      }
+      if (finalData.containsKey("driverId")) {
+        assertions.assertThat(page.driverId.getText()).as("Driver ID")
+            .isEqualTo(finalData.get("driverId"));
+      }
+      if (finalData.containsKey("driverName")) {
+        assertions.assertThat(page.driverName.getText()).as("Driver Name")
+            .isEqualTo(finalData.get("driverName"));
+      }
+    });
     assertions.assertAll();
   }
 
   @When("Operator verifies COD is not displayed on Route Manifest page")
   public void verifyCodIsNotDisplayed() {
-    Assertions.assertThat(page.codCollectionPending.isDisplayedFast())
-        .withFailMessage("Unexpected COD is displayed")
-        .isFalse();
+    page.inFrame(() ->
+        Assertions.assertThat(page.codCollectionPending.isDisplayedFast())
+            .withFailMessage("Unexpected COD is displayed")
+            .isFalse()
+    );
   }
 
   @When("Operator click view POA/POH button on Route Manifest page")
