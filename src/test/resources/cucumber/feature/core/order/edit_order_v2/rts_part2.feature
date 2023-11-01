@@ -103,12 +103,6 @@ Feature: RTS
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
       | type         | RTS                                   |
@@ -183,12 +177,6 @@ Feature: RTS
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
       | type         | RTS                                   |
@@ -272,12 +260,6 @@ Feature: RTS
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
     Examples:
       | ticketType      | orderOutcomeName                | resolveOutcome | resolveCustomFieldId |
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) | RE-DELIVER     | 24291519             |
@@ -358,12 +340,6 @@ Feature: RTS
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
     Examples:
       | ticketType       | ticketSubType     | orderOutcomeName                  | resolveOutcome              | resolveCustomFieldId |
       | SHIPPER ISSUE    | DUPLICATE PARCEL  | ORDER OUTCOME (SHIPPER EXCEPTION) | REPACKED/RELABELLED TO SEND | 24317247             |

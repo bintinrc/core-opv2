@@ -70,7 +70,12 @@ public class StationRouteSteps extends AbstractSteps {
       }
       if (finalData.containsKey("driversOnLeave")) {
         page.driversOnLeave.clearValue();
-        page.driversOnLeave.selectValues(splitAndNormalize(finalData.get("driversOnLeave")));
+        page.driversOnLeave.selectValuesWithEnter(
+            splitAndNormalize(finalData.get("driversOnLeave")));
+        List<String> drivers = page.driversOnLeave.getValues();
+        Assertions.assertThat(drivers.size())
+            .isEqualTo(
+                splitAndNormalize(finalData.get("driversOnLeave")).size());
       }
       if (finalData.containsKey("shipmentType")) {
         page.shipmentType.clearValue();
@@ -96,6 +101,28 @@ public class StationRouteSteps extends AbstractSteps {
         value = finalData.get("shipmentCompletionTimeTo");
         if (StringUtils.isNotBlank(value)) {
           page.shipmentCompletionTime.setToDate(value);
+        }
+      }
+      if (finalData.containsKey("shipmentDateFromTypeManual") || finalData.containsKey(
+          "shipmentDateToTypeManual")) {
+        value = finalData.get("shipmentDateFromTypeManual");
+        if (StringUtils.isNotBlank(value)) {
+          page.shipmentDate.clearAndSetFromDate(value);
+        }
+        value = finalData.get("shipmentDateToTypeManual");
+        if (StringUtils.isNotBlank(value)) {
+          page.shipmentDate.clearAndSetToDate(value);
+        }
+      }
+      if (finalData.containsKey("shipmentCompletionTimeFromTypeManual") || finalData.containsKey(
+          "shipmentCompletionTimeToTypeManual")) {
+        value = finalData.get("shipmentCompletionTimeFromTypeManual");
+        if (StringUtils.isNotBlank(value)) {
+          page.shipmentCompletionTime.clearAndSetFromDate(value);
+        }
+        value = finalData.get("shipmentCompletionTimeToTypeManual");
+        if (StringUtils.isNotBlank(value)) {
+          page.shipmentCompletionTime.clearAndSetToDate(value);
         }
       }
       if (finalData.containsKey("alsoSearchInHub")) {

@@ -149,8 +149,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     HashMap<String, String> keys = new HashMap<>();
     presetFilters.sendKeys(Keys.ARROW_UP);
     while (true) {
-      String name = webDriver.findElement(
-          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
+      String name = webDriver.findElement(By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
       if (name.equalsIgnoreCase(presetName)) {
         throw new java.util.NoSuchElementException("the preset name is in the list");
 
@@ -268,8 +267,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
       try {
-        return webDriver.findElement(By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId)))
-            .isDisplayed();
+        return webDriver.findElement(
+            By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId))).isDisplayed();
       } catch (NoSuchElementException noSuchElementException) {
         return false;
       }
@@ -310,10 +309,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       selectDateRange.click();
       waitUntilVisibilityOfElementLocated(webDriver.findElement(
           By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
-      webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-          .click();
-      webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
-          .click();
+      webDriver.findElement(
+          By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))).click();
+      webDriver.findElement(
+          By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd))).click();
     }
 
     public void selectTimeRange(String timeRange) {
@@ -331,7 +330,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public void selectTagInJobTagsField(String tag) {
       tagsField.click();
       tagsField.sendKeys(tag);
-      WebElement tagElement = webDriver.findElement(By.cssSelector(f(JOB_TAG_FILTER_LOCATOR, tag)));
+      WebElement tagElement = webDriver.findElement(
+          By.cssSelector(f(JOB_TAG_FILTER_LOCATOR, tag)));
 
       tagElement.click();
       tagsField.sendKeys(Keys.ESCAPE);
@@ -341,9 +341,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       readyByField.click();
       doWithRetry(() -> {
         scrollToTimeIfNeeded(time, "readyBy_list");
-        WebElement timeToPick = webDriver.findElement(
-            By.xpath(
-                f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+        WebElement timeToPick = webDriver.findElement(By.xpath(
+            f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
       }, "scrollIfNeeded", 2000, 5);
     }
@@ -352,9 +351,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       latestByField.click();
       doWithRetry(() -> {
         scrollToTimeIfNeeded(time, "readyBy_list");
-        WebElement timeToPick = webDriver.findElement(
-            By.xpath(
-                f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+        WebElement timeToPick = webDriver.findElement(By.xpath(
+            f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
       }, "scrollIfNeeded", 2000, 5);
     }
@@ -363,19 +361,21 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
       String lastElementTime = webDriver.findElement(
-          By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+              By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST))
+          .getAttribute("label");
       Integer lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
       Integer tempLastTime = -1;
       while (lastTime <= neededTime && lastTime != tempLastTime) {
         tempLastTime = lastTime;
 
-        WebElement timeToScroll = webDriver.findElement(
-            By.xpath(f(Time_LIST_LOCATR, listName) + f(JOB_CUSTOM_TIME_FILTER_LOCATOR,
+        WebElement timeToScroll = webDriver.findElement(By.xpath(
+            f(Time_LIST_LOCATR, listName) + f(JOB_CUSTOM_TIME_FILTER_LOCATOR,
                 lastElementTime)));
         scrollIntoView(timeToScroll, true);
 
         lastElementTime = webDriver.findElement(
-            By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+                By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST))
+            .getAttribute("label");
         lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
 
       }
@@ -409,8 +409,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public boolean isTagDisplayed(String tag) {
       try {
-        return webDriver.findElement(By.xpath(f(TAG_IN_CALENDAR_LOCATOR, tag)))
-            .isDisplayed();
+        return webDriver.findElement(By.xpath(f(TAG_IN_CALENDAR_LOCATOR, tag))).isDisplayed();
       } catch (NoSuchElementException noSuchElementException) {
         return false;
       }
@@ -504,8 +503,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
-      String downloadedCsvFile = getLatestDownloadedFilename(
-          fileName);
+      String downloadedCsvFile = getLatestDownloadedFilename(fileName);
       Assertions.assertThat(fileName.equals(downloadedCsvFile)).isTrue();
     }
 
@@ -552,7 +550,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public String getFieldTextOnJobCreatedModal(String fieldName) {
       waitUntilVisibilityOfElementLocated(
           webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))));
-      return webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))).getText();
+      return webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName)))
+          .getText();
     }
 
     public String getErrorMessageWithText(String message) {
@@ -561,7 +560,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       return webDriver.findElement(By.xpath(f(ALERT_TEXT, message))).getText();
     }
   }
-
 
   public static class PickupPageNotification extends AntNotification {
 
@@ -662,16 +660,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
-      setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_TAGS, "tagNames")
-          .put(COLUMN_STATUS, "status")
-          .put(COLUMN_ID, "pickupAppointmentJobId")
-          .put(COLUMN_ROUTE, "routeId")
-          .build()
-      );
+      setColumnLocators(ImmutableMap.<String, String>builder().put(COLUMN_TAGS, "tagNames")
+          .put(COLUMN_STATUS, "status").put(COLUMN_ID, "pickupAppointmentJobId")
+          .put(COLUMN_ROUTE, "routeId").build());
       setEntityClass(CoreV2PickupJobsParams.class);
-      setActionButtonsLocators(ImmutableMap.of(
-          ACTION_EDIT,
+      setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT,
           "//div[@role='row'][%d]//div[@role='gridcell']//button[@data-testid='resultTable.editButton']",
           ACTION_DETAILS,
           "//div[@role='row'][%d]//div[@role='gridcell']//button[contains(@data-testid,'showDetailButton')]",
@@ -680,14 +673,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public List<String> getTagsListWithName(String name) {
-      return findElementsByXpath(f(PICKUP_JOB_ROW_TAGS, name)).stream()
-          .map(WebElement::getText)
+      return findElementsByXpath(f(PICKUP_JOB_ROW_TAGS, name)).stream().map(WebElement::getText)
           .collect(Collectors.toList());
     }
 
     public List<String> getRouteListWithId(String id) {
-      return findElementsByXpath(f(PICKUP_JOB_ROW_ROUTE, id)).stream()
-          .map(WebElement::getText)
+      return findElementsByXpath(f(PICKUP_JOB_ROW_ROUTE, id)).stream().map(WebElement::getText)
           .collect(Collectors.toList());
     }
 
@@ -707,20 +698,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 //      List<String> colSelector1 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_TEXT, value)).stream()
 //          .map(WebElement::getText)
 //          .collect(Collectors.toList());
-      List<String> colSelector2 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
-          .map(WebElement::getText)
+      List<String> colSelector2 = findElementsByXpath(
+          f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream().map(WebElement::getText)
           .collect(Collectors.toList());
       List<String> colSelector3 = findElementsByXpath(f(PICKUP_JOB_ROW_COL, value)).stream()
-          .map(WebElement::getText)
-          .collect(Collectors.toList());
+          .map(WebElement::getText).collect(Collectors.toList());
       Stream.of(colSelector2, colSelector3).forEach(resultList::addAll);
       return resultList;
     }
 
     public List<String> getRouteListByValue(String value) {
       return findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
-          .map(WebElement::getText)
-          .collect(Collectors.toList());
+          .map(WebElement::getText).collect(Collectors.toList());
     }
 
 
@@ -774,8 +763,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     String ShowingResults = bulkSelect.rowCount.getText();
     String selectedRows = bulkSelect.selectedRowCount.getText();
     char SPACE_CHAR = ' ';
-    String numberOfSelectedRows = selectedRows.substring(0, selectedRows.lastIndexOf(SPACE_CHAR))
-        .trim();
+    String numberOfSelectedRows = selectedRows.substring(0,
+        selectedRows.lastIndexOf(SPACE_CHAR)).trim();
     Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
         .contains(numberOfSelectedRows);
     KEY_LAST_SELECTED_ROWS_COUNT = numberOfSelectedRows;
@@ -910,7 +899,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
-
   public static class BulkFailJobsModal extends AntModal {
 
     public BulkFailJobsModal(WebDriver webDriver, WebElement webElement) {
@@ -935,7 +923,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public boolean checkCannotFailedErrorMessageForJob(String jobId) {
-      return webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_ERROR_MESSAGE, jobId))).isDisplayed();
+      return webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_ERROR_MESSAGE, jobId)))
+          .isDisplayed();
     }
 
   }
@@ -969,10 +958,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
 
     public void selectRouteForJob(String routeName, String jobId) {
-      webDriver.findElement(
-          By.xpath(f(JOB_ROUTE_SELECT_INPUT, jobId))).click();
-      webDriver.findElement(
-          By.xpath(f(JOB_ROUTE_SELECT_INPUT, jobId) + "//input")).sendKeys(routeName);
+      webDriver.findElement(By.xpath(f(JOB_ROUTE_SELECT_INPUT, jobId))).click();
+      webDriver.findElement(By.xpath(f(JOB_ROUTE_SELECT_INPUT, jobId) + "//input"))
+          .sendKeys(routeName);
       webDriver.findElement(By.xpath((f(ROUTE_OPTION, jobId, routeName)))).click();
     }
   }
@@ -1052,7 +1040,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public String getErrorMessage(String jobId) {
       waitUntilVisibilityOfElementLocated(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId));
-      String errorMessage = findElementByXpath(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId)).getText();
+      String errorMessage = findElementByXpath(
+          f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId)).getText();
       return errorMessage;
     }
   }

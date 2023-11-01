@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage - Area [ G H I ], Area Variation [ A B C ], Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -60,7 +60,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Terrace" is displayed on 2 position on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Single Coverage - Area [ A B C ], Empty Area Variation, Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -114,7 +114,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Jurong" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Avenue" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ]  Match To Overlapping Single Coverage - Area [ A B C ] [ D E F ],  Area Variation [ A B C ], Keyword [ A B C ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -169,7 +169,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Hill Point" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Hill Point" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ]  Match To Overlapping Single Coverage - Area  [ A B C ],  Area Variation  [ A B C ] [ D E F ], Keyword  [ A B C ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -228,7 +228,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Estate" is displayed on 1 position on Station Route page
     And Operator verify area match "Estate" is displayed on 2 position on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Single Coverage - Area [ A B C ], Empty Area Variation, Keyword [ A B C ] [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -286,7 +286,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "Way" is displayed in row 3 on Station Route page
     And Operator verify keyword match "Way" is displayed in row 4 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ G H I ] Match To Overlapping Single Coverage - Area [ A B C ], Area Variation [ G H I ], Keyword [ A B C ]  [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -345,7 +345,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "Court" is displayed in row 4 on Station Route page
     And Operator verify keyword match "Keng" is displayed in row 5 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -413,7 +413,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "Airport" is displayed in row 3 on Station Route page
     And Operator verify keyword match "Airport" is displayed in row 4 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ G H I ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -477,7 +477,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Sun" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Sun" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ]  Match To Overlapping Single Coverage - Area  [ A B C ], Empty Area Variation, Keyword  [ A B C ] [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -531,7 +531,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Eunos" is displayed on 2 position on Station Route page
     And Operator verify keyword match "Eunos" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage -  Area [ A B C ], Area Variation [ G H I ], Keyword [ A B C ] [ D E F ] - Have > 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-9}"
     Given API Order - Shipper create multiple V4 orders using data below:

@@ -1427,10 +1427,11 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @When("Operator select Preset with name = {string} in pickup appointment")
   public void operatorSelectPresetInPAM(String name) {
+    String presetName = resolveValue(name);
     doWithRetry(() -> {
       pickupAppointmentJobPage.inFrame(() -> {
         pickupAppointmentJobPage.presetFilters.click();
-        pickupAppointmentJobPage.choosePresetByName(name);
+        pickupAppointmentJobPage.choosePresetByName(presetName);
       });
     }, "", 5000, 5);
 
