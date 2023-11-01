@@ -818,9 +818,6 @@ Feature: ID - Order COD Limit
     Then Operator verifies order details on Edit Order V2 page:
       | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | ADD TO ROUTE                       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[2].id |
     And Operator verify order event on Edit Order V2 page using data below:
