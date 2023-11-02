@@ -238,3 +238,49 @@ Feature: Add Order To Route
       | driverId           | {ninja-driver-id}                     |
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Add Order to a Route - Pickup return order, route archived
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator archives routes below:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+
+    When Operator go to menu Routing -> Add Order to Route
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
+    And Operator set "Pickup" transaction type on Add Order to Route page
+    And Operator add prefix of the created order on Add Order to Route page
+    And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                            |
+      | bottom | ^.*cannot add waypoint if route not in \[PENDING IN_PROGRESS\].* |
+    And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+
+  @DeleteOrArchiveRoute
+  Scenario: Add Order to a Route - Delivery, route archived
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator archives routes below:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+
+    When Operator go to menu Routing -> Add Order to Route
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
+    And Operator set "Delivery" transaction type on Add Order to Route page
+    And Operator add prefix of the created order on Add Order to Route page
+    And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                            |
+      | bottom | ^.*cannot add waypoint if route not in \[PENDING IN_PROGRESS\].* |
+    And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
