@@ -4,12 +4,6 @@ Feature: ID - Order COD Limit
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
 
   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single New Driver Route on Station Route
