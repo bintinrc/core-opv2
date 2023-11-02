@@ -46,9 +46,6 @@ Feature: ID - Driver Route Limit
 
   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Partial Allow to Create >3 Driver Routes in a Day on Route Logs
-    Given API Core - set system parameter:
-      | key   | APPLY_DRIVER_NUMBER_OF_ROUTE_LIMIT |
-      | value | 1                                  |
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "DSN-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                                |

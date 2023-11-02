@@ -4,12 +4,6 @@ Feature: ID - Order COD Limit
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Core - set system parameter:
-      | key   | IS_DRIVER_COD_LIMIT_APPLIED |
-      | value | 1                           |
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 30000000               |
 
   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order
@@ -49,11 +43,9 @@ Feature: ID - Order COD Limit
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
       | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-
     And Operator verify order event on Edit Order V2 page using data below:
-      | name | ADD TO ROUTE |
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -165,11 +157,9 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
       | waitUntilInvisible | true                                                                                                          |
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-
     And Operator verify order event on Edit Order V2 page using data below:
-      | name | ADD TO ROUTE |
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -204,7 +194,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 0                                  |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @RestoreSystemParams
   Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -254,11 +244,10 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
       | waitUntilInvisible | true                                                                                                          |
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
     And Operator verify order event on Edit Order V2 page using data below:
-      | name | ADD TO ROUTE |
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -293,7 +282,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 40000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @RestoreSystemParams
   Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -825,8 +814,6 @@ Feature: ID - Order COD Limit
       | waitUntilInvisible | true               |
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    Then Operator verifies order details on Edit Order V2 page:
-      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[2].id |
