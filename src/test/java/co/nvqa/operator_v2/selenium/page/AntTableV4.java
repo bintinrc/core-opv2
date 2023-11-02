@@ -63,13 +63,19 @@ public class AntTableV4<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
+    getActionButton(rowNumber, actionId).click();
+  }
+
+  public Button getActionButton(int rowNumber, String actionId) {
     String actionButtonLocator = getActionButtonsLocators().get(actionId);
-    String xpath = actionButtonLocator.startsWith("/") ? f(actionButtonLocator, rowNumber)
-        : f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
+    String xpath =
+        StringUtils.startsWithAny(actionButtonLocator, "/", "(/") ? f(actionButtonLocator,
+            rowNumber)
+            : f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    new Button(getWebDriver(), xpath).click();
+    return new Button(getWebDriver(), xpath);
   }
 
   @Override

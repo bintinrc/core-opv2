@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
@@ -9,6 +11,7 @@ import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
@@ -21,6 +24,8 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -924,6 +930,34 @@ public class AllOrdersSteps extends AbstractSteps {
         .as("Cancel button is enabled").isTrue();
   }
 
+  @When("Operator generates order statuses report on All Orders page:")
+  public void generateOrderStatusesReport(List<String> trackingIds) {
+    allOrdersPage.orderStatusesReport.click();
+    allOrdersPage.orderStatusesReportDialog.waitUntilVisible();
+    String csvContents = resolveValues(trackingIds).stream()
+        .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    File csvFile = allOrdersPage.createFile(
+        String.format("order-statuses-find_%s.csv", allOrdersPage.generateDateUniqueString()),
+        csvContents);
+    allOrdersPage.orderStatusesReportDialog.file.setValue(csvFile);
+    allOrdersPage.orderStatusesReportDialog.generate.click();
+  }
+
+  @When("Operator downloads order statuses report sample CSV on All Orders page")
+  public void downloadOrderStatusesReportSampleCsv() {
+    allOrdersPage.orderStatusesReport.click();
+    allOrdersPage.orderStatusesReportDialog.waitUntilVisible();
+    allOrdersPage.orderStatusesReportDialog.downloadSample.click();
+  }
+
+  @Then("Operator verify order statuses report sample CSV file downloaded successfully")
+  public void operatorVerifySampleCsvFileDownloadedSuccessfully() {
+    allOrdersPage.verifyFileDownloadedSuccessfully("order-statuses-find.csv",
+        "NVSGNINJA000000001\n"
+            + "NVSGNINJA000000002\n"
+            + "NVSGNINJA000000003\n");
+  }
+
   @When("Operator verifies Delete button in Delete Preset dialog on All Orders page is enabled")
   public void verifyDeleteIsEnabled() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();
@@ -1099,5 +1133,35 @@ public class AllOrdersSteps extends AbstractSteps {
   public void unmaskPage() {
     List<WebElement> elements = getWebDriver().findElements(By.xpath(MaskedPage.MASKING_XPATH));
     allOrdersPage.operatorClickMaskingText(elements);
+  }
+
+  @When("Operator verifies order statuses report file contains following data:")
+  public void operatorVerifyOrderStatusesReportFile(List<Map<String, String>> data) {
+    String fileName = allOrdersPage.getLatestDownloadedFilename("results.csv");
+    allOrdersPage.verifyFileDownloadedSuccessfully(fileName);
+    String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    List<OrderStatusReportEntry> actualData = DataEntity
+        .fromCsvFile(OrderStatusReportEntry.class, pathName, true);
+    List<OrderStatusReportEntry> expectedData = data.stream()
+        .map(entry -> new OrderStatusReportEntry(resolveKeyValues(entry)))
+        .peek(o -> {
+          final List<Order> createdOrders = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS);
+          final Optional<Order> orderOpt = createdOrders.stream()
+              .filter(co -> co.getTrackingId().equalsIgnoreCase(o.getTrackingId()))
+              .findFirst();
+          if (orderOpt.isPresent()) {
+            final String rawDeliveryDate = orderOpt.get().getTransactions().get(1).getEndTime();
+            final String formattedDeliveryDate = LocalDate.parse(rawDeliveryDate,
+                DateUtil.ISO8601_LITE_FORMATTER).toString();
+            o.setEstimatedDeliveryDate(formattedDeliveryDate);
+          }
+        })
+        .collect(Collectors.toList());
+    Assertions.assertThat(actualData).as("Number of records in order status report")
+        .hasSameSizeAs(data);
+    for (int i = 0; i < expectedData.size(); i++) {
+      expectedData.get(i).compareWithActual(actualData.get(i));
+    }
+
   }
 }

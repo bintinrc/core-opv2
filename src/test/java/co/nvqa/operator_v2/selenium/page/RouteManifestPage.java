@@ -12,10 +12,8 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
-import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.time.LocalDateTime;
@@ -42,7 +40,11 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   public static final String ACTION_BUTTON_EDIT = "container.route-manifest.choose-outcome-for-waypoint";
   private static final String MD_VIRTUAL_REPEAT = "waypoint in getTableData()";
   public static final String ROUTE_DETAIL_ITEMS_XPATH = "//div[text()='%s']/following-sibling::div";
-  private final WaypointDetailsDialog waypointDetailsDialog;
+
+  @FindBy(css = "span.nv-mask")
+  public PageElement mask;
+  @FindBy(css = ".ant-modal")
+  public WaypointDetailsDialog waypointDetailsDialog;
   public final WaypointsTable waypointsTable;
   @FindBy(xpath = "//md-dialog[contains(@class, 'proof-of-arrival-and-handover')]")
   public ProofOfArrivalAndHandoverDialog proofOfArrivalAndHandoverDialog;
@@ -52,6 +54,12 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
   @FindBy(css = ".ant-modal")
   public CodCollectionDialog codCollectionDialog;
+
+  @FindBy(css = ".ant-modal")
+  public ProofOfPickupDialog proofOfPickupDialog;
+
+  @FindBy(css = ".ant-modal")
+  public ProofOfDeliveryDialog proofOfDeliveryDialog;
 
   @FindBy(xpath = "//div[.='Route ID']/following-sibling::div")
   public PageElement routeId;
@@ -74,7 +82,6 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
   public RouteManifestPage(WebDriver webDriver) {
     super(webDriver);
-    waypointDetailsDialog = new WaypointDetailsDialog(webDriver);
     waypointsTable = new WaypointsTable(webDriver);
   }
 
@@ -331,64 +338,94 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   /**
    * Accessor for Waypoint Details dialog
    */
-  public static class WaypointDetailsDialog extends OperatorV2SimplePage {
+  public static class WaypointDetailsDialog extends AntModal {
 
-    public static final String DIALOG_TITLE = "Waypoint Details";
+    @FindBy(xpath = ".//label[.='Waypoint ID']/following-sibling::div")
+    public PageElement waypointId;
+
+    @FindBy(xpath = ".//label[.='Waypoint status']/following-sibling::div")
+    public PageElement waypointStatus;
+
+    @FindBy(xpath = ".//label[.='Highest priority']/following-sibling::div")
+    public PageElement highestPriority;
+
+    @FindBy(xpath = ".//label[.='Service type(s)']/following-sibling::div")
+    public PageElement serviceTypes;
+
+    @FindBy(xpath = ".//label[.='Addressee']/following-sibling::div")
+    public PageElement addressee;
+
+    @FindBy(xpath = ".//label[.='Contact']/following-sibling::div")
+    public PageElement contact;
+
+    @FindBy(xpath = ".//label[.='Recipient']/following-sibling::div")
+    public PageElement recipient;
+
+    @FindBy(xpath = ".//label[.='Relationship']/following-sibling::div")
+    public PageElement relationship;
+
     public ReservationsTable reservationsTable;
     public PickupsTable pickupsTable;
     public DeliveryTable deliveryTable;
 
-    public WaypointDetailsDialog(WebDriver webDriver) {
-      super(webDriver);
+    public WaypointDetailsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
       reservationsTable = new ReservationsTable(webDriver);
       pickupsTable = new PickupsTable(webDriver);
       deliveryTable = new DeliveryTable(webDriver);
     }
 
-    public WaypointDetailsDialog waitUntilVisible() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
-
     public static class ReservationsTable extends
-        NgRepeatTable<RouteManifestWaypointDetails.Reservation> {
+        AntTableV4<RouteManifestWaypointDetails.Reservation> {
 
       public ReservationsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "id", "/td[2]",
-            "status", "/td[3]",
-            "failureReason", "/td[6]"
+            "id", "1",
+            "status", "2",
+            "expectedNo", "3",
+            "collectedNo", "4",
+            "failureReason", "5"
         ));
-        setNgRepeat("reservation in fields.reservations track by $index");
+        setActionButtonsLocators(Map.of(
+            "view pop",
+            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='6'])[%d]//button[@data-pa-label='View POP']")
+        );
         setEntityClass(RouteManifestWaypointDetails.Reservation.class);
       }
     }
 
-    public static class PickupsTable extends NgRepeatTable<RouteManifestWaypointDetails.Pickup> {
+    public static class PickupsTable extends AntTableV4<RouteManifestWaypointDetails.Pickup> {
 
       public PickupsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "trackingId", "/td[2]",
-            "status", "/td[3]",
-            "failureReason", "/td[4]"
+            "trackingId", "1",
+            "status", "2",
+            "failureReason", "3"
         ));
-        setNgRepeat("pickup in fields.pickups track by $index");
+        setActionButtonsLocators(Map.of(
+            "view pop",
+            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='4'])[%d]//button[@data-pa-label='View POP']")
+        );
         setEntityClass(RouteManifestWaypointDetails.Pickup.class);
       }
     }
 
-    public static class DeliveryTable extends NgRepeatTable<RouteManifestWaypointDetails.Delivery> {
+    public static class DeliveryTable extends AntTableV4<RouteManifestWaypointDetails.Delivery> {
 
       public DeliveryTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "trackingId", "/td[2]",
-            "status", "/td[3]",
-            "failureReason", "/td[5]"
+            "trackingId", "1",
+            "status", "2",
+            "codCollected", "3",
+            "failureReason", "4"
         ));
-        setNgRepeat("delivery in fields.deliveries track by $index");
+        setActionButtonsLocators(Map.of(
+            "view pod",
+            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='5'])[%d]//button[@data-pa-label='View POD']")
+        );
         setEntityClass(RouteManifestWaypointDetails.Delivery.class);
       }
     }
@@ -413,7 +450,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
           .put("contact", "_contact")
           .build()
       );
-      setActionButtonsLocators(ImmutableMap.of("details", "Waypoint Details", "edit",
+      setActionButtonsLocators(ImmutableMap.of("details", "Waypoint details", "edit",
           "Choose an outcome for the waypoint"));
       setEntityClass(RouteManifestWaypointDetails.class);
     }
@@ -650,5 +687,91 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   public String getRouteDetailItem(String itemName) {
     waitUntilVisibilityOfElementLocated(f(ROUTE_DETAIL_ITEMS_XPATH, itemName));
     return findElementByXpath(f(ROUTE_DETAIL_ITEMS_XPATH, itemName)).getText();
+  }
+
+  public static class ProofOfPickupDialog extends AntModal {
+
+    @FindBy(xpath = ".//span[contains(.,'Reservation ID')]")
+    public PageElement reservationId;
+
+    @FindBy(xpath = ".//span[contains(.,'Pickup appointment job ID:')]")
+    public PageElement pickupAppointmentJobId;
+
+    @FindBy(xpath = ".//span[contains(.,'Tracking ID:')]")
+    public PageElement trackingId;
+
+    @FindBy(xpath = ".//label[.='Shipper']/following-sibling::div")
+    public PageElement shipper;
+
+    @FindBy(xpath = ".//label[.='Phone']/following-sibling::div")
+    public PageElement phone;
+
+    @FindBy(xpath = ".//label[.='Email']/following-sibling::div")
+    public PageElement email;
+
+    @FindBy(xpath = ".//span[contains(.,'Status')]/span")
+    public PageElement status;
+
+    @FindBy(xpath = ".//label[.='Received from']/following-sibling::div")
+    public PageElement receivedFrom;
+
+    @FindBy(xpath = ".//label[.='Relationship']/following-sibling::div")
+    public PageElement relationship;
+
+    @FindBy(xpath = ".//label[.='Receipt date/time']/following-sibling::div")
+    public PageElement receiptDateTime;
+
+    @FindBy(xpath = ".//label[.='Pickup quantity']/following-sibling::div")
+    public PageElement pickupQuantity;
+
+    @FindBy(css = "[data-pa-label='Download Signature']")
+    public Button downloadSignature;
+
+    @FindBy(xpath = "//tr[position()>1]/td[2]")
+    public List<PageElement> trackingIds;
+
+    public ProofOfPickupDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ProofOfDeliveryDialog extends AntModal {
+
+    @FindBy(xpath = ".//span[contains(.,'Tracking ID:')]")
+    public PageElement trackingId;
+
+    @FindBy(xpath = ".//label[.='Phone']/following-sibling::div")
+    public PageElement phone;
+
+    @FindBy(xpath = ".//label[.='Email']/following-sibling::div")
+    public PageElement email;
+
+    @FindBy(xpath = ".//span[contains(.,'Status')]/span")
+    public PageElement status;
+
+    @FindBy(xpath = ".//label[.='Received by']/following-sibling::div")
+    public PageElement receivedBy;
+
+    @FindBy(xpath = ".//label[.='Relationship']/following-sibling::div")
+    public PageElement relationship;
+
+    @FindBy(xpath = ".//label[.='Code']/following-sibling::div")
+    public PageElement code;
+
+    @FindBy(xpath = ".//label[.='Hidden location']/following-sibling::div")
+    public PageElement hiddenLocation;
+
+    @FindBy(xpath = ".//label[.='Receipt date/time']/following-sibling::div")
+    public PageElement receiptDateTime;
+
+    @FindBy(xpath = ".//label[.='Delivery quantity']/following-sibling::div")
+    public PageElement deliveryQuantity;
+
+    @FindBy(css = "[data-pa-label='Download Signature']")
+    public Button downloadSignature;
+
+    public ProofOfDeliveryDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

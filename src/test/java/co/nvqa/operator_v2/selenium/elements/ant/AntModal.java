@@ -47,4 +47,11 @@ public class AntModal extends PageElement {
       spinner.waitUntilInvisible();
     }
   }
+
+  public void closeDialogIfVisible(){
+    if (isDisplayed()){
+      close.click();
+    }
+  }
+
 }
