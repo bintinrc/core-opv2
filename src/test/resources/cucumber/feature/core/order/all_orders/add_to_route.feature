@@ -5,7 +5,7 @@ Feature: All Orders - Add To Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @routing-refactor @happy-path
+  @ArchiveRouteCommonV2 @routing-refactor @happy-path @HighPriority
   Scenario: Operator Add Multiple Orders to Route on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

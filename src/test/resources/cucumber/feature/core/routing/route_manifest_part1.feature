@@ -64,7 +64,7 @@ Feature: Route Manifest
       | delivery.status        | Fail                          |
       | delivery.failureReason | 6                             |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -93,7 +93,7 @@ Feature: Route Manifest
       | failureReason  | {KEY_SELECTED_FAILURE_REASON.description} |
     And DB Operator verifies waypoint status is "FAIL"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -121,7 +121,7 @@ Feature: Route Manifest
       | serviceTime    | not null                                 |
     And DB Operator verifies waypoint status is "SUCCESS"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -172,7 +172,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -214,7 +214,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -261,7 +261,7 @@ Feature: Route Manifest
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

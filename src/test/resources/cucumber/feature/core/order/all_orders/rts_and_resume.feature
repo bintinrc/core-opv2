@@ -61,7 +61,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE CONTACT INFORMATION |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator RTS Multiple Orders on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

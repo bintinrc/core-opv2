@@ -82,7 +82,7 @@ Feature: End Route Inbound Session
       | cashCollected | cashOnDelivery |
       | 23.57         | 23.57          |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario Outline: End a Route Inbound Session : Completed Scans
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Order - Shipper create multiple V4 orders using data below:

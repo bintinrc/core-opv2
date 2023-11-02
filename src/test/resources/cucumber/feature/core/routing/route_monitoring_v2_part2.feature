@@ -351,7 +351,7 @@ Feature: Route Monitoring V2
     And Operator check there are 0 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

@@ -32,7 +32,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | PP                                     |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Edit Cash Collection Details - Add Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -87,7 +87,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | PP                                     |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Edit Cash Collection Details - Update Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -138,7 +138,7 @@ Feature: Cash Collection
       | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
       | deletedAt | not null                               |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
