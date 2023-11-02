@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Area
     Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -97,7 +97,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "34B Lorong Mambong" is displayed in row 1 on Station Route page
     And Operator verify keyword match "court {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Keyword
     Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -189,7 +189,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2
+  @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Valid Orders - Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -230,7 +230,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "12 West Coast" is displayed in row 1 on Station Route page
     And Operator verify keyword match "walk {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2
+  @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Valid Orders - Parcel Sweep Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -276,7 +276,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "31 Kaki Bukit" is displayed in row 1 on Station Route page
     And Operator verify keyword match "place {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Shipment Filters
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -344,7 +344,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "50 Jalan Sultan" is displayed in row 1 on Station Route page
     And Operator verify keyword match "centre {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - No Active Driver
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -387,7 +387,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - No Orders Found
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
@@ -402,7 +402,7 @@ Feature: Search Tracking IDs on Station Route
     Then Operator verifies that error react notification displayed:
       | top | No orders found |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Invalid Additional Tracking IDs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -433,7 +433,7 @@ Feature: Search Tracking IDs on Station Route
     Then Operator verifies that error react notification displayed:
       | top | These tracking IDs are invalid: {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}, {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
 
-  @ArchiveRouteCommonV2 @DeleteCreatedShipments
+  @ArchiveRouteCommonV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Invalid Additional Tracking IDs and No Orders Found
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -467,7 +467,7 @@ Feature: Search Tracking IDs on Station Route
     Then Operator verifies that error react notification displayed:
       | top | No orders found |
 
-  @ArchiveRouteCommonV2 @DeleteCreatedShipments @DeleteDriverV2
+  @ArchiveRouteCommonV2 @DeleteCreatedShipments @DeleteDriverV2 @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Invalid Orders
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-7}"
     Given API Order - Shipper create multiple V4 orders using data below:

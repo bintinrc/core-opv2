@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -59,7 +59,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage  - Match Area and Match Keyword - Primary Driver on Leave
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -114,7 +114,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @@MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword - Primary Driver and Fallback Driver on Leave
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -169,7 +169,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Additional Tracking IDs Added to Shipment
     Given API MM - Operator creates multiple 2 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -251,7 +251,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Additional Tracking IDs Not Added to Shipment
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -320,7 +320,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Do Not Match To Single Coverage
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -363,7 +363,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -417,7 +417,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Keyword
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -471,7 +471,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Area and Duplicate keyword - Transfer keyword
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:
@@ -547,7 +547,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Multiple Coverages - Duplicate Area and Duplicate keyword - Not Transfer keyword
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-6}"
     And API Order - Shipper create multiple V4 orders using data below:

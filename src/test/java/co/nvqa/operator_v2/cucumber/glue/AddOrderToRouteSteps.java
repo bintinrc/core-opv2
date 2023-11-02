@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.AddOrderToRoutePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 
@@ -40,9 +41,19 @@ public class AddOrderToRouteSteps extends AbstractSteps {
 
   @When("Operator add prefix of the created order on Add Order to Route page")
   public void operatorAddPrefix() {
+    String requestedId;
+    String trackingId;
     Order order = get(KEY_CREATED_ORDER);
-    String requestedId = order.getRequestedTrackingId();
-    String trackingId = order.getTrackingId();
+    if (order != null) {
+      requestedId = order.getRequestedTrackingId();
+      trackingId = order.getTrackingId();
+    } else {
+      co.nvqa.common.core.model.order.Order comOrder = ((List<co.nvqa.common.core.model.order.Order>) get(
+          KEY_LIST_OF_CREATED_ORDERS)).get(0);
+      requestedId = comOrder.getRequestedTrackingId();
+      trackingId = comOrder.getTrackingId();
+    }
+
     String prefix = trackingId.replace(requestedId, "");
     addOrderToRoutePage.addPrefix(prefix);
   }

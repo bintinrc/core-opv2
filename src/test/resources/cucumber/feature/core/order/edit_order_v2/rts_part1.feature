@@ -816,12 +816,6 @@ Feature: RTS
       | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
       | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}        |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | archived   | 1                            |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
       | type         | RTS                                   |

@@ -72,7 +72,7 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000.00                               |
+      | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
@@ -155,8 +155,8 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
-      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-
+      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+      | waitUntilInvisible | true                                                                                                          |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -231,16 +231,19 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
-      | bottom | ^.*Error Message: Driver has exceeded total cod.* |
+      | top                | Status 400: Unknown                               |
+      | bottom             | ^.*Error Message: Driver has exceeded total cod.* |
+      | waitUntilInvisible | true                                              |
 
     Given API Core - set system parameter:
       | key   | DRIVER_DAILY_COD_LIMIT |
       | value | 40000000               |
 
-    And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies that success react notification displayed:
+      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+      | waitUntilInvisible | true                                                                                                          |
 
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
@@ -271,7 +274,7 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 40,000,000.00                               |
+      | codCollectionPending | 40,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
@@ -374,7 +377,7 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000.00                               |
+      | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
@@ -522,13 +525,13 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000.00                               |
+      | codCollectionPending | 20,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
@@ -659,13 +662,13 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000.00                               |
+      | codCollectionPending | 20,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And API Core - verify driver's total cod:
@@ -839,13 +842,13 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000.00                               |
+      | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:

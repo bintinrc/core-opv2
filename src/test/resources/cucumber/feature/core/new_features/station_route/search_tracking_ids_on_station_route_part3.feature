@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Duplicate Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -49,7 +49,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "21 Kian Teck" is displayed in row 1 on Station Route page
     And Operator verify keyword match "way {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - No Duplicate Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -104,7 +104,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Richfield Technologies" is displayed in row 1 on Station Route page
     And Operator verify keyword match "koon {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Download Search Tracking IDs on Station Route
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -152,7 +152,7 @@ Feature: Search Tracking IDs on Station Route
       | trackingId                                 | address                                                                                                   |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | 29 Forum Shopping {date: 0 days next, yyyyMMddHHmmss} mally {date: 0 days next, yyyyMMddHHmmss} 159363 SG |
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage - VN Special Characters - Area, Keyword, and Address in VN
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -206,7 +206,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "135 Đ Nam Kỳ Khởi Nghĩa Phường Bến Thành Quận 1 Thàn" is displayed in row 1 on Station Route page
     And Operator verify keyword match "phố Hồ" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address Match To Single Coverage - VN Special Characters - Area and Keyword in VN, Address in EN
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -260,7 +260,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "848 Đ Gia Phú Phường 3 Quận 6 Thành" is displayed in row 1 on Station Route page
     And Operator verify keyword match "hố Hồ Chí Minh Việt Nam 159" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address Does Match To Single Coverage - VN Special Characters - Area and Keyword in EN, Address in VN
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -314,7 +314,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "948 Đường Chùa Nghèo An Đông An Dươn" is displayed in row 1 on Station Route page
     And Operator verify keyword match "Hải Phòng" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Allow RTS Orders
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -374,7 +374,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "31 Gul Drive" is displayed in row 1 on Station Route page
     And Operator verify keyword match "bldg {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Disallow RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -407,7 +407,7 @@ Feature: Search Tracking IDs on Station Route
       | shownOnlyMatchingArea | false                                      |
     Then Operator verify parcels table not contains "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" value in "trackingId" column on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ]  Match To Overlapping Single Coverage - Area [ A B C ],  Empty Area Variation, Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -461,7 +461,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Sewon" is displayed on 2 position on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage -  Area [ A B C ] , Area Variation [ G H I ], Keyword [ A B C ] [ D E F ] - Have <= 2 Occurrence
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-8}"
     Given API Order - Shipper create multiple V4 orders using data below:

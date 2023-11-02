@@ -53,14 +53,14 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   @FindBy(css = ".ant-modal")
   public CodCollectionDialog codCollectionDialog;
 
-  @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
+  @FindBy(xpath = "//div[.='Route ID']/following-sibling::div")
   public PageElement routeId;
-  @FindBy(xpath = "//div[./div[.='Driver ID']]/div[2]")
+  @FindBy(xpath = "//div[.='Driver ID']/following-sibling::div")
   public PageElement driverId;
-  @FindBy(xpath = "//div[./div[.='Driver Name']]/div[2]")
+  @FindBy(xpath = "//div[.='Driver name']/following-sibling::div")
   public PageElement driverName;
 
-  @FindBy(xpath = "//tr[./th[.='Pending']]/td")
+  @FindBy(xpath = "//div[@class='header'][.='Pending']/following-sibling::div")
   public PageElement codCollectionPending;
 
   @FindBy(xpath = "//*[text()='Tracking ID(s)']/parent::th//input")
