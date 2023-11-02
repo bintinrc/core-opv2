@@ -28,8 +28,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.model.DataEntity.toDateTime;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_ID;
@@ -41,8 +39,6 @@ import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTab
  */
 @ScenarioScoped
 public class CreateRouteGroupsSteps extends AbstractSteps {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(CreateRouteGroupsSteps.class);
 
   public static final String LIST_OF_TXN_RSVN = "LIST_OF_TXN_RSVN";
   public static final String CSV_FILE_NAME = "createRouteGroups.csv";
