@@ -52,40 +52,56 @@ Feature: Route Manifest
       | pickupsCount    | 0                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeleteOrArchiveRoute
   Scenario: Operator Load Route Manifest of a Driver Failed Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the delivery of the created parcel using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
-    And API Operator get order details
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Core - van inbound order:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                      |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                         |
+      | routes          | KEY_DRIVER_ROUTES                                                                                  |
+      | jobType         | TRANSACTION                                                                                        |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":6}] |
+      | jobAction       | FAIL                                                                                               |
+      | jobMode         | DELIVERY                                                                                           |
+      | failureReasonId | 6                                                                                                  |
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And Operator verify Route summary Parcel count on Route Manifest page:
+      |            | Pending | Success | Failure | All |
+      | Deliveries | 0       | 0       | 1       | 1   |
+      | Total      | 0       | 0       | 1       | 1   |
+    And Operator verify Route summary Waypoint type on Route Manifest page:
+      |        | Pending | Success | Failure | All |
+      | Normal | 0       | 0       | 1       | 1   |
     Then Operator verify waypoint at Route Manifest using data below:
-      | status                 | Fail                          |
-      | deliveriesCount        | 1                             |
-      | pickupsCount           | 0                             |
-      | comments               | KEY_FAILURE_REASON            |
-      | trackingIds            | KEY_CREATED_ORDER_TRACKING_ID |
-      | delivery.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
-      | delivery.status        | Fail                          |
-      | delivery.failureReason | 6                             |
+      | status          | Fail                                  |
+      | deliveriesCount | 1                                     |
+      | pickupsCount    | 0                                     |
+      | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest
