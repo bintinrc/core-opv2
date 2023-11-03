@@ -5,7 +5,7 @@ Feature: Routing
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Pull Out Parcel from a Route - PICKUP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -47,7 +47,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -209,7 +209,7 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <orderType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
@@ -256,7 +256,7 @@ Feature: Routing
       | Normal    |
       | Return    |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <orderType> - <routeType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |

@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Create COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -46,7 +46,7 @@ Feature: Route Cash Inbound
       | amountCollected | {KEY_LIST_OF_CREATED_ORDERS[1].cod.goodsAmount} |
 
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Update COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -85,7 +85,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Delete COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

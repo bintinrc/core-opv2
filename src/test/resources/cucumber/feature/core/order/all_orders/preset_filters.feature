@@ -10,16 +10,16 @@ Feature: All Orders - Preset Filters
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
       | status            | Transit                            |
-      | creationTimeFrom  | {date: 0 days next, yyyy-MM-dd}    |
+      | creationTimeFrom  | {date: 1 days ago, yyyy-MM-dd}     |
       | creationTimeTo    | {date: 1 days next, yyyy-MM-dd}    |
       | shipperName       | {filter-shipper-name}              |
       | masterShipperName | {shipper-v4-marketplace-legacy-id} |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
-      | commons.status: Transit                                                                                     |
-      | commons.creation-time: {date: 0 days next, yyyy-MM-dd} 04:00:00 to {date: 1 days next, yyyy-MM-dd} 04:00:00 |
-      | commons.shipper: {shipper-v4-name}                                                                          |
-      | commons.master-shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name}                    |
+      | commons.status: Transit                                                                                    |
+      | commons.creation-time: {date: 1 days ago, yyyy-MM-dd} 12:00:00 to {date: 1 days next, yyyy-MM-dd} 12:00:00 |
+      | commons.shipper: {shipper-v4-name}                                                                         |
+      | commons.master-shipper: {shipper-v4-marketplace-name}                                                      |
     And Operator verifies Preset Name field in Save Preset dialog on All Orders page is required
     And Operator verifies Cancel button in Save Preset dialog on All Orders page is enabled
     And Operator verifies Save button in Save Preset dialog on All Orders page is disabled
@@ -39,35 +39,35 @@ Feature: All Orders - Preset Filters
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
-      | status            | Transit                                                          |
-      | creationTimeFrom  | {date: 0 days next, yyyy-MM-dd}                                  |
-      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd}                                  |
-      | shipperName       | {shipper-v4-name}                                                |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | status            | Transit                         |
+      | creationTimeFrom  | {date: 1 days ago, yyyy-MM-dd}  |
+      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd} |
+      | shipperName       | {shipper-v4-name}               |
+      | masterShipperName | {shipper-v4-marketplace-name}   |
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
-      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.statusIds  | 2                                            |
-      | value.shipperIds | {shipper-v4-legacy-id}                       |
-      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+      | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
+      | value.statusIds  | 2                                          |
+      | value.shipperIds | {shipper-v4-legacy-id}                     |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}         |
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
-      | status            | Transit                                                          |
-      | shipperName       | {shipper-v4-name}                                                |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | status            | Transit                       |
+      | shipperName       | {shipper-v4-name}             |
+      | masterShipperName | {shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate
   Scenario: Operator Delete Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
-      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.statusIds  | 2                                            |
-      | value.shipperIds | {shipper-v4-legacy-id}                       |
-      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+      | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
+      | value.statusIds  | 2                                          |
+      | value.shipperIds | {shipper-v4-legacy-id}                     |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}         |
     When Operator go to menu Order -> All Orders
     And Operator selects "Delete Preset" preset action on All Orders page
     Then Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled
@@ -84,10 +84,10 @@ Feature: All Orders - Preset Filters
   Scenario: Operator Update Existing Preset on All Orders Page - via Save Current As Preset Button
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
-      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.statusIds  | 2                                            |
-      | value.shipperIds | {shipper-v4-legacy-id}                       |
-      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+      | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
+      | value.statusIds  | 2                                          |
+      | value.shipperIds | {shipper-v4-legacy-id}                     |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}         |
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     And Operator updates filters on All Orders page:
@@ -95,10 +95,10 @@ Feature: All Orders - Preset Filters
       | granularStatus | Cancelled          |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
-      | Status: Cancelled, Transit                                                       |
-      | Granular Status: Cancelled                                                       |
-      | Shipper: {shipper-v4-name}                                                       |
-      | Master Shipper: {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | Status: Cancelled, Transit                    |
+      | Granular Status: Cancelled                    |
+      | Shipper: {shipper-v4-name}                    |
+      | Master Shipper: {shipper-v4-marketplace-name} |
     When Operator enters "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Preset Name in Save Preset dialog on All Orders page
     Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on All Orders page
     When Operator clicks Update button in Save Preset dialog on All Orders page
@@ -109,20 +109,20 @@ Feature: All Orders - Preset Filters
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
-      | status            | Transit, Cancelled                                               |
-      | granularStatus    | Cancelled                                                        |
-      | shipperName       | {shipper-v4-name}                                                |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | status            | Transit, Cancelled            |
+      | granularStatus    | Cancelled                     |
+      | shipperName       | {shipper-v4-name}             |
+      | masterShipperName | {shipper-v4-marketplace-name} |
 
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset on All Orders Page - via Update Preset Button
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
-      | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.statusIds  | 2                                            |
-      | value.shipperIds | {shipper-v4-legacy-id}                       |
-      | value.undefined  | {shipper-v4-marketplace-legacy-id}           |
+      | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
+      | value.statusIds  | 2                                          |
+      | value.shipperIds | {shipper-v4-legacy-id}                     |
+      | value.undefined  | {shipper-v4-marketplace-legacy-id}         |
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     And Operator updates filters on All Orders page:
@@ -130,14 +130,14 @@ Feature: All Orders - Preset Filters
       | granularStatus | Cancelled          |
     And Operator selects "Update Preset" preset action on All Orders page
     Then Operator verifies that success toast displayed:
-      | top                | 1 filter preset updated                    |
-      | bottom             | Name: {KEY_ALL_ORDERS_FILTERS_PRESET.name} |
+      | top    | 1 filter preset updated                    |
+      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET.name} |
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
-      | status            | Transit, Cancelled                                               |
-      | granularStatus    | Cancelled                                                        |
-      | shipperName       | {shipper-v4-name}                                                |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
+      | status            | Transit, Cancelled            |
+      | granularStatus    | Cancelled                     |
+      | shipperName       | {shipper-v4-name}             |
+      | masterShipperName | {shipper-v4-marketplace-name} |
 

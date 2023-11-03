@@ -82,7 +82,7 @@ Feature: Delete Order
     Then Operator verifies that error react notification displayed:
       | top | Invalid Password |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Delete Order - Status = Pending Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

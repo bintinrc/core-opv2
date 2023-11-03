@@ -104,7 +104,7 @@ Feature: Implanted Manifest
       | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | pods[1].shipperScansQuantity | 0                                        |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

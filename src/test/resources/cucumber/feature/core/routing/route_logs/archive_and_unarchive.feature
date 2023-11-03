@@ -5,7 +5,7 @@ Feature: Route Logs - Archive & Unarchive
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Archive Multiple Routes from Route Logs Page
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -50,7 +50,7 @@ Feature: Route Logs - Archive & Unarchive
       | id                                | status      |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:

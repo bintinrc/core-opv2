@@ -5,7 +5,7 @@ Feature: Route Inbound Expected Scans
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Pending Deliveries
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -167,7 +167,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -260,7 +260,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -350,7 +350,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -409,7 +409,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Reservation Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
