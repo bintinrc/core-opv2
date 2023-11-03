@@ -17,7 +17,7 @@ Feature: All Orders - Preset Filters
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
       | commons.status: Transit                                                                                    |
-      | commons.creation-time: {date: 1 days ago, yyyy-MM-dd} 04:00:00 to {date: 1 days next, yyyy-MM-dd} 04:00:00 |
+      | commons.creation-time: {date: 1 days ago, yyyy-MM-dd} 12:00:00 to {date: 1 days next, yyyy-MM-dd} 12:00:00 |
       | commons.shipper: {shipper-v4-name}                                                                         |
       | commons.master-shipper: {shipper-v4-marketplace-name}                                                      |
     And Operator verifies Preset Name field in Save Preset dialog on All Orders page is required
