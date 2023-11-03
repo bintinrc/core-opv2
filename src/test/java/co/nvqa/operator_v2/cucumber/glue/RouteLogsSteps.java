@@ -1095,8 +1095,9 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verify route details on Route Logs page using data below:")
   public void operatorVerifyRouteDetails(Map<String, String> data) {
+    final Map<String, String> resolvedData = resolveKeyValues(data);
     routeLogsPage.inFrame(() -> {
-      RouteLogsParams expected = new RouteLogsParams(resolveKeyValues(data));
+      RouteLogsParams expected = new RouteLogsParams(resolvedData);
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, expected.getId());
       pause2s();
       RouteLogsParams actual = routeLogsPage.routesTable.readEntity(1);

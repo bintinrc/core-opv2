@@ -9,46 +9,46 @@ Feature: Route Logs
   Scenario: Operator Create a Single Route from Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd} |
-      | tags       | {route-tag-name}                 |
-      | zone       | {zone-name}                      |
-      | hub        | {hub-name}                       |
-      | driverName | {ninja-driver-name}              |
+      | date       | {date: 0 days next, yyyy-MM-dd} |
+      | tags       | {route-tag-name}                |
+      | zone       | {zone-name}                     |
+      | hub        | {hub-name}                      |
+      | driverName | {ninja-driver-name}             |
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     Then Operator verify route details on Route Logs page using data below:
-      | date           | {gradle-current-date-yyyy-MM-dd} |
-      | id             | {KEY_CREATED_ROUTE_ID}           |
-      | driverName     | {ninja-driver-name}              |
-      | hub            | {hub-name}                       |
-      | zone           | {zone-name}                      |
-      | driverTypeName | {default-driver-type-name}       |
-      | comments       | {KEY_CREATED_ROUTE.comments}     |
-      | tags           | {route-tag-name}                 |
+      | date           | {date: 0 days next, yyyy-MM-dd}          |
+      | id             | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | driverName     | {ninja-driver-name}                      |
+      | hub            | {hub-name}                               |
+      | zone           | {zone-name}                              |
+      | driverTypeName | {default-driver-type-name}               |
+      | comments       | {KEY_LIST_OF_CREATED_ROUTES[1].comments} |
+      | tags           | {route-tag-name}                         |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute | 2                                |
-      | date          | {gradle-current-date-yyyy-MM-dd} |
-      | tags          | {route-tag-name}                 |
-      | zone          | {zone-name}                      |
-      | hub           | {hub-name}                       |
-      | driverName    | {ninja-driver-name}              |
+      | numberOfRoute | 2                               |
+      | date          | {date: 0 days next, yyyy-MM-dd} |
+      | tags          | {route-tag-name}                |
+      | zone          | {zone-name}                     |
+      | hub           | {hub-name}                      |
+      | driverName    | {ninja-driver-name}             |
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName          | hub        | zone        | driverTypeName             | comments                                 | tags             |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
+      | date                            | id                                 | driverName          | hub        | zone        | driverTypeName             | comments                                 | tags             |
+      | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
+      | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip2
   Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -61,7 +61,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator bulk edits details of created routes using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | date       | {date: 0 days next, yyyy-MM-dd}         |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name-2}                           |
       | hub        | {hub-name-2}                            |
@@ -71,9 +71,9 @@ Feature: Route Logs
       | top                | 2 Route(s) Updated |
       | waitUntilInvisible | true               |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName            | zone          | hub          | comments                                | tags             |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
+      | date                            | id                                 | driverName            | zone          | hub          | comments                                | tags             |
+      | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
+      | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Multiple Routes from Route Logs Page
