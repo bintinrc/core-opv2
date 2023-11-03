@@ -13,7 +13,7 @@ public class TaggedOrderParams extends DataEntity<TaggedOrderParams> {
   private List<String> tags;
   private String driver;
   private String route;
-  private String destinationHub;
+  private String destinationZone;
   private String lastAttempt;
   private String daysFromFirstInbound;
   private String granularStatus;
@@ -61,12 +61,13 @@ public class TaggedOrderParams extends DataEntity<TaggedOrderParams> {
     this.route = route;
   }
 
-  public String getDestinationHub() {
-    return destinationHub;
+  public String getDestinationZone() {
+    return destinationZone;
   }
 
-  public void setDestinationHub(String destinationHub) {
-    this.destinationHub = destinationHub;
+  public TaggedOrderParams setDestinationZone(String destinationZone) {
+    this.destinationZone = destinationZone;
+    return this;
   }
 
   public String getLastAttempt() {

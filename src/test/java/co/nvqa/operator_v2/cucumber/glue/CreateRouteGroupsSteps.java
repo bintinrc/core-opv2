@@ -1490,7 +1490,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @Given("^Operator save records from Transactions/Reservations table on Create Route Groups page$")
   public void operatorSaveTableOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
-      List<TxnRsvn> records = page.txnRsvnTable.readFirstEntities(5);
+      List<TxnRsvn> records = page.txnRsvnTable.readFirstEntities(3);
       put(LIST_OF_TXN_RSVN, records);
     });
   }
@@ -1626,8 +1626,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
   @Then("^Operator verifies Reservation records on Create Route Groups page using data below:$")
   public void operatorVerifyReservationRecordOnCreateRouteGroupPageUsingDataBelow(
       List<Map<String, String>> data) {
-    createRouteGroupsPage.inFrame(page -> data.forEach(entry -> {
-      TxnRsvn expected = new TxnRsvn(resolveKeyValues(entry));
+    final List<Map<String, String>> resolvedData = resolveListOfMaps(data);
+    createRouteGroupsPage.inFrame(page -> resolvedData.forEach(entry -> {
+      TxnRsvn expected = new TxnRsvn(entry);
 
       if (expected.getId() == null) {
         throw new IllegalArgumentException("id value was not defined");

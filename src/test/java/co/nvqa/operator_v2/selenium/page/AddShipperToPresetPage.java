@@ -137,6 +137,9 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   @FindBy(xpath = ".//button[.//span[contains(., 'Download CSV')]]")
   public AntButton downloadCsv;
 
+  @FindBy(xpath = "//div[contains(@class, 'table-stats')]//span")
+  public PageElement tableStats;
+
   //endregion
 
   public ShippersTable shippersTable;

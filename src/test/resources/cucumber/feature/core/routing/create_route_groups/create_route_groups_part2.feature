@@ -188,7 +188,6 @@ Feature: Create Route Groups
     And API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                                                                                                               |
       | requestBody  | {"transactionIds":[{KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id},{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}],"reservationIds":[{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}]} |
-
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:

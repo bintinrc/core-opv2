@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -44,11 +46,13 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String value = data.get("shipperCreationDateFrom");
     if (StringUtils.isNotBlank(value)) {
-     Assertions.assertThat(          addShipperToPresetPage.shipperCreationDateFilter.getValueFrom()).as("Shipper Creation Date from").isEqualTo(value);
+      Assertions.assertThat(addShipperToPresetPage.shipperCreationDateFilter.getValueFrom())
+          .as("Shipper Creation Date from").isEqualTo(value);
     }
     value = data.get("shipperCreationDateTo");
     if (StringUtils.isNotBlank(value)) {
-     Assertions.assertThat(          addShipperToPresetPage.shipperCreationDateFilter.getValueTo()).as("Shipper Creation Date to").isEqualTo(value);
+      Assertions.assertThat(addShipperToPresetPage.shipperCreationDateFilter.getValueTo())
+          .as("Shipper Creation Date to").isEqualTo(value);
     }
   }
 
@@ -97,7 +101,7 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   @When("Operator verify records on Add Shipper To Preset page using data below:")
   public void operatorVerifyRecords(List<Map<String, String>> listOfData) {
     List<ShipperInfo> actual = addShipperToPresetPage.shippersTable.readAllEntities();
-   Assertions.assertThat(actual.size()).as("Number of records").isEqualTo(listOfData.size());
+    Assertions.assertThat(actual.size()).as("Number of records").isEqualTo(listOfData.size());
     for (Map<String, String> listOfDatum : listOfData) {
       Map<String, String> data = resolveKeyValues(listOfDatum);
       ShipperInfo expected = new ShipperInfo(data);
@@ -128,7 +132,8 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     } else {
       actualValues.sort(Collections.reverseOrder());
     }
-   Assertions.assertThat(actualValues).as(f("values of %s column", columnName)).isEqualTo(expectedValues);
+    Assertions.assertThat(actualValues).as(f("values of %s column", columnName))
+        .isEqualTo(expectedValues);
   }
 
   @When("Operator adds shipper to preset on Add Shipper To Preset page using data below:")
@@ -199,7 +204,8 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   public void operatorVerifyAllRowsAreChecked() {
     int rowsCount = addShipperToPresetPage.shippersTable.getRowsCount();
     for (int i = 1; i <= rowsCount; i++) {
-     Assertions.assertThat(addShipperToPresetPage.shippersTable.isRowSelected(i)).as("Is row" + i + " selected").isTrue();
+      Assertions.assertThat(addShipperToPresetPage.shippersTable.isRowSelected(i))
+          .as("Is row" + i + " selected").isTrue();
     }
   }
 
@@ -207,7 +213,8 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   public void operatorVerifyAllRowsAreUnselected() {
     int rowsCount = addShipperToPresetPage.shippersTable.getRowsCount();
     for (int i = 1; i <= rowsCount; i++) {
-     Assertions.assertThat(          addShipperToPresetPage.shippersTable.isRowSelected(i)).as("Is row" + i + " selected").isFalse();
+      Assertions.assertThat(addShipperToPresetPage.shippersTable.isRowSelected(i))
+          .as("Is row" + i + " selected").isFalse();
     }
   }
 
@@ -247,5 +254,27 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     for (int i = 0; i < expected.size(); i++) {
       expected.get(i).compareWithActual("Shipper Result " + (i + 1), actual.get(i));
     }
+  }
+
+  @When("Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page")
+  public void operatorVerifyCsvFileLenghth() {
+    String tableStatsText = addShipperToPresetPage.tableStats.getText();
+    Pattern pattern = Pattern.compile("(Showing )(.*?)( of )(.*?)( results)");
+    Matcher matcher = pattern.matcher(tableStatsText);
+    int showing = 0;
+    if (matcher.find()) {
+      showing = Integer.parseInt(matcher.group(2));
+    }
+
+    String fileName = addShipperToPresetPage
+        .getLatestDownloadedFilename("add-shipper-to-preset.csv");
+    addShipperToPresetPage.verifyFileDownloadedSuccessfully(fileName);
+    String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    List<ShipperInfo> actual = ShipperInfo
+        .fromCsvFile(ShipperInfo.class, pathName, true);
+    FileUtils.deleteQuietly(new File(pathName));
+
+    Assertions.assertThat(actual).as("Number of lines in CSV match displayed rows")
+        .hasSizeGreaterThanOrEqualTo(showing);
   }
 }

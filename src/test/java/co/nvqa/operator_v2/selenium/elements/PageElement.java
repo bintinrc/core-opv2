@@ -88,6 +88,13 @@ public class PageElement extends SimpleWebPage {
         .perform();
   }
 
+  public void dragAndDropTo(PageElement target) {
+    Actions actions = new Actions(getWebDriver());
+    actions
+        .dragAndDrop(getWebElement(), target.getWebElement())
+        .perform();
+  }
+
   public void jsClick() {
     executeScript("arguments[0].click()", getWebElement());
   }
