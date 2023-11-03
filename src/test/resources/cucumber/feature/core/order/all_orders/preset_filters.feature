@@ -5,7 +5,6 @@ Feature: All Orders - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on All Orders Page
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
