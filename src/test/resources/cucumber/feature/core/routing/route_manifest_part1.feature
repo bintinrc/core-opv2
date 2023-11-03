@@ -103,53 +103,66 @@ Feature: Route Manifest
       | pickupsCount    | 0                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeleteOrArchiveRoute @happy-path @HighPriority
-  Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator create new route using data below:
+  @happy-path @HighPriority
+  Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail reservation waypoint from Route Manifest page
-    And Operator refresh page
     And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                               |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
-    And API Core - van inbound order:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                      |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
-    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator verify Route summary Parcel count on Route Manifest page:
-      |            | Pending | Success | Failure | All |
-      | Deliveries | 0       | 1       | 0       | 1   |
-      | Total      | 0       | 1       | 0       | 1   |
-    And Operator verify Route summary Waypoint type on Route Manifest page:
-      |        | Pending | Success | Failure | All |
-      | Normal | 0       | 1       | 0       | 1   |
+      |         | Pending | Success | Failure | All |
+      | Pickups | 1       | 0       | 0       | 1   |
+      | Total   | 1       | 0       | 0       | 1   |
+    And Operator fail pickup waypoint from Route Manifest page
+    Then Operator verifies that success react notification displayed:
+      | top | Updated waypoint {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} successfully |
+    And Operator refresh page
+    And Operator verify Route summary Parcel count on Route Manifest page:
+      |         | Pending | Success | Failure | All |
+      | Pickups | 0       | 0       | 1       | 1   |
+      | Total   | 0       | 0       | 1       | 1   |
     Then Operator verify waypoint at Route Manifest using data below:
-      | status          | Success                               |
-      | deliveriesCount | 1                                     |
-      | pickupsCount    | 0                                     |
+      | status          | Fail                                  |
+      | deliveriesCount | 0                                     |
+      | pickupsCount    | 1                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | comments        | {KEY_SELECTED_FAILURE_REASON}         |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pickup fail |
+      | granularStatus | Pickup fail |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
+      | status | FAIL |
+    And Operator verify Delivery details on Edit Order V2 page using data below:
+      | status | PENDING |
+    And Operator verify Pickup transaction on Edit Order V2 page using data below:
+      | status | FAIL |
+    And DB Core - verify waypoints record:
+      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | status | Fail                                                       |
+    And Operator verify Delivery transaction on Edit Order V2 page using data below:
+      | status | PENDING |
+    And DB Core - verify waypoints record:
+      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status | Pending                                                    |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | FORCED FAILURE |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: ADMIN_UPDATE_WAYPOINT |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
+
 
   @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest
