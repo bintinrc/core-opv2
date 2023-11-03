@@ -18,20 +18,39 @@ Feature: Route Manifest
       | globalInboundRequest | { "hubId":{hub-id} }                  |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator set tags of the new created route to [{route-tag-id}]
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver deliver the created parcel successfully
-    And API Operator get order details
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    Then Operator verify 1 delivery success at Route Manifest
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Core - van inbound order:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                      |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes     | KEY_DRIVER_ROUTES                                                               |
+      | jobType    | TRANSACTION                                                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction  | SUCCESS                                                                         |
+      | jobMode    | DELIVERY                                                                        |
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And Operator verify Route summary Parcel count on Route Manifest page:
+      |            | Pending | Success | Failure | All |
+      | Deliveries | 0       | 1       | 0       | 1   |
+      | Total      | 0       | 1       | 0       | 1   |
+    And Operator verify Route summary Waypoint type on Route Manifest page:
+      |        | Pending | Success | Failure | All |
+      | Normal | 0       | 1       | 0       | 1   |
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status          | Success                               |
+      | deliveriesCount | 1                                     |
+      | pickupsCount    | 0                                     |
+      | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Load Route Manifest of a Driver Failed Delivery
