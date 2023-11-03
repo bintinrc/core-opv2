@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @EditPickupDeliveryDetails
+@OperatorV2 @Core @EditOrderV2 @EditPickupDeliveryDetails @NV-11387
 Feature: Edit Order Details
 
   Background:
