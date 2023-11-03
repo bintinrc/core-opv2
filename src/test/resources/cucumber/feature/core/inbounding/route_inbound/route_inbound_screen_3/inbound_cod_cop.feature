@@ -5,7 +5,7 @@ Feature: Inbound COD & COP
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario Outline: Inbound Cash for COD - <Title>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Order - Shipper create multiple V4 orders using data below:

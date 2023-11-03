@@ -5,7 +5,7 @@ Feature: Order Tag Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Add Tags to Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -29,7 +29,7 @@ Feature: Order Tag Management
       | {order-tag-name-2} |
       | {order-tag-name-3} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Remove Tags from Order
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

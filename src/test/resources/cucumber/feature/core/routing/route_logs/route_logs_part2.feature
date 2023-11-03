@@ -82,7 +82,7 @@ Feature: Route Logs
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Address Verify Route on Route Logs Page
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

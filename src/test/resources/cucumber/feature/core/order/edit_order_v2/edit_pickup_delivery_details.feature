@@ -5,7 +5,7 @@ Feature: Edit Order Details
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -88,7 +88,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Edit Pickup Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
