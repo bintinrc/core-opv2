@@ -354,7 +354,7 @@ Feature: Route Manifest
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
-    
+
   @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
