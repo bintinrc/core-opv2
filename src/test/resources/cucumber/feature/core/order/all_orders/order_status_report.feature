@@ -5,7 +5,7 @@ Feature: All Orders - Order Status Report
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Add Multiple Orders to Route on All Orders Page
+  Scenario: Generate Order Statuses Report With Various Order Statuses
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
