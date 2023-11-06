@@ -537,7 +537,7 @@ Feature: Route Manifest
       | deliveryQuantity | 1                                         |
     And Operator is able to download signature in POD details dialog on Route Manifest page
 
-  Scenario: Operator View POD for Success Normal Delivery on Route Manifest
+  Scenario: Operator View POD for Success Normal Delivery with COD on Route Manifest
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
