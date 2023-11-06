@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV @UpdateDeliveryAddressWithCSVPart2 @NV-11387
+@OperatorV2 @Core @NewFeatures @UpdateDeliveryAddressWithCSV @UpdateDeliveryAddressWithCSVPart2
 Feature: Update Delivery Address with CSV
 
   Background:
@@ -55,6 +55,7 @@ Feature: Update Delivery Address with CSV
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu New Features -> Update Delivery Address with CSV
+    And Operator waits for 5 seconds
     And Operator update delivery addresses on Update Delivery Address with CSV page:
       | trackingId                            | toAddressLatitude | toAddressLongitude |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | <lat>             | <long>             |
@@ -118,7 +119,7 @@ Feature: Update Delivery Address with CSV
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status   | Routed                                                     |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @wip
   Scenario: Bulk Update Order Delivery Address with CSV - RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
