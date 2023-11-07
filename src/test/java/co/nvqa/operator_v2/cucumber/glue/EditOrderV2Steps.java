@@ -895,8 +895,6 @@ public class EditOrderV2Steps extends AbstractSteps {
         resolveKeyValues(data));
 
     page.inFrame(() -> {
-      try {
-
         SoftAssertions assertions = new SoftAssertions();
         if (expectedData.containsKey("status")) {
           assertions.assertThat(page.deliveryDetailsBox.status.getText())
@@ -982,10 +980,6 @@ public class EditOrderV2Steps extends AbstractSteps {
               .isInSameSecondAs(expectedDateTime);
         }
         assertions.assertAll();
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            "Delivery detail is not updated yet because of Kafka lag");
-      }
     });
   }
 
@@ -1006,8 +1000,6 @@ public class EditOrderV2Steps extends AbstractSteps {
         resolveKeyValues(data));
 
     page.inFrame(() -> {
-      try {
-
         SoftAssertions assertions = new SoftAssertions();
         if (expectedData.containsKey("status")) {
           assertions.assertThat(page.pickupDetailsBox.status.getText())
@@ -1093,10 +1085,6 @@ public class EditOrderV2Steps extends AbstractSteps {
               .isInSameSecondAs(expectedDateTime);
         }
         assertions.assertAll();
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            "Pickup detail is not updated yet because of Kafka lag");
-      }
     });
   }
 
@@ -1151,13 +1139,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     var expected = new TransactionInfo(resolveKeyValues(data));
     page.inFrame(() -> {
-      try {
         TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
         expected.compareWithActual(actual);
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            transactionType + " transaction is not updated yet because of Kafka lag");
-      }
     });
   }
 
