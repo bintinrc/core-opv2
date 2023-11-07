@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.external.PdfUtils;
-import co.nvqa.common.external.PdfUtils.RouteLogsRoutePassword;
+import co.nvqa.common.external.model.PdfRoutePassword;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -167,14 +167,14 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
       List<RouteLogsParams> listOfCreateRouteParams) {
     String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("routes_password");
     verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
-    List<RouteLogsRoutePassword> listOfRoutePassword = PdfUtils
+    List<PdfRoutePassword> listOfRoutePassword = PdfUtils
         .getRouteLogsRoutePassword(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf);
 
     for (RouteLogsParams createRouteParams : listOfCreateRouteParams) {
       long expectedRouteId = Long.parseLong(createRouteParams.getId());
-      RouteLogsRoutePassword selectedRoutePassword = null;
+      PdfRoutePassword selectedRoutePassword = null;
 
-      for (RouteLogsRoutePassword routePassword : listOfRoutePassword) {
+      for (PdfRoutePassword routePassword : listOfRoutePassword) {
         if (routePassword.getRouteId() != null && expectedRouteId == routePassword.getRouteId()) {
           selectedRoutePassword = routePassword;
           break;

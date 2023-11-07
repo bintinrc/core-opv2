@@ -48,12 +48,12 @@ Feature: Route Logs
       | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
       | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
-  @DeleteOrArchiveRoute @wip2
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -75,17 +75,17 @@ Feature: Route Logs
       | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
       | {date: 0 days next, yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Optimise Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator add multiple parcels to multiple routes using data below:
@@ -98,12 +98,12 @@ Feature: Route Logs
     And Operator optimise created routes
     Then Operator verifies created routes are optimised successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -116,12 +116,12 @@ Feature: Route Logs
       | top | Downloaded file routes_password.pdf... |
     Then Operator verify printed passwords of selected routes info is correct
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -133,11 +133,11 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Delete Multiple Routes from Route Logs Page
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -145,19 +145,19 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     When Operator delete routes on Route Logs page:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies that success react notification displayed:
-      | top    | 2 route(s) deleted                                                         |
-      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | top    | 2 route(s) deleted                                                           |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verify routes are deleted successfully:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @DeleteOrArchiveRoute @happy-path @HighPriority
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Edit Details of a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
@@ -165,7 +165,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | date       | {date: 0 days next, yyyy-MM-dd}         |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name-2}                           |
       | hub        | {hub-name-2}                            |
@@ -174,8 +174,8 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top | 1 Route(s) Updated |
     Then Operator verify route details on Route Logs page using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | id         | {KEY_CREATED_ROUTE_ID}                  |
+      | date       | {date: 0 days next, yyyy-MM-dd}         |
+      | id         | {KEY_LIST_OF_CREATED_ROUTES[1].id}      |
       | status     | PENDING                                 |
       | driverName | {ninja-driver-2-name}                   |
       | hub        | {hub-name-2}                            |
