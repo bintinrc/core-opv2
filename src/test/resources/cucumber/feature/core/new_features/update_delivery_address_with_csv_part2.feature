@@ -119,7 +119,7 @@ Feature: Update Delivery Address with CSV
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status   | Routed                                                     |
 
-  @ArchiveRouteCommonV2 @wip
+  @ArchiveRouteCommonV2
   Scenario: Bulk Update Order Delivery Address with CSV - RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
