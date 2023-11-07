@@ -5,7 +5,7 @@ Feature: Route Logs - Merge Transactions
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

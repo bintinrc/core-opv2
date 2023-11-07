@@ -106,6 +106,15 @@ public class AntSelect3 extends PageElement {
     closeMenu();
   }
 
+  public void selectValuesWithEnter(Iterable<String> values) {
+    searchInput.click();
+    values.forEach(v -> {
+      searchInput.clearValue();
+      fillSearchTermAndEnter(v);
+    });
+    closeMenu();
+  }
+
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);
@@ -175,9 +184,13 @@ public class AntSelect3 extends PageElement {
   }
 
   private String getItemContainsLocator(String value) {
-    return getListBoxLocator()
-        + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
-        + normalizeSpace(value) + "')]";
+    return value.contains("'") ?
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),\""
+            + normalizeSpace(value) + "\")]" :
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
+            + normalizeSpace(value) + "')]";
   }
 
   private String getTailItemLocator() {
@@ -192,16 +205,25 @@ public class AntSelect3 extends PageElement {
   }
 
   private String getItemEqualsLocator(String value) {
-    return getListBoxLocator()
-        + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(@title)='"
-        + normalizeSpace(
-        value) + "']";
+    return value.contains("'") ?
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(@title)=\""
+            + normalizeSpace(
+            value) + "\"]" :
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(@title)='"
+            + normalizeSpace(
+            value) + "']";
   }
 
   private String getItemIgnoreCaseLocator(String value) {
-    return getListBoxLocator()
-        + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(translate(@title, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))='"
-        + normalizeSpace(value.toLowerCase(Locale.ROOT)) + "']";
+    return value.contains("'") ?
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(translate(@title, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))=\""
+            + normalizeSpace(value.toLowerCase(Locale.ROOT)) + "\"]" :
+        getListBoxLocator()
+            + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(translate(@title, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))='"
+            + normalizeSpace(value.toLowerCase(Locale.ROOT)) + "']";
   }
 
   private String getListBoxLocator() {
@@ -333,7 +355,7 @@ public class AntSelect3 extends PageElement {
   }
 
   private void waitUntilLoaded() {
-    if (spinner.waitUntilVisible(1)) {
+    if (spinner.isDisplayedFast()) {
       spinner.waitUntilInvisible();
     }
   }

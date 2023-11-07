@@ -24,7 +24,7 @@ Feature: Cancel Order
       | statusCode | 500                                |
       | message    | Order is On Hold!                  |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Cancel Order - Pending Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

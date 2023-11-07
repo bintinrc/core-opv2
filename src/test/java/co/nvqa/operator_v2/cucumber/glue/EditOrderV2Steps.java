@@ -112,84 +112,89 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void operatorVerifyDimensionInformation(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     page.inFrame(() -> {
-      try {
-        SoftAssertions softAssertions = new SoftAssertions();
-        pause3s();
-        String expected = finalData.get("size");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.size.getText()).as("Parcel size")
-              .isEqualToIgnoringCase(expected);
-        }
-        expected = finalData.get("weight");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.getWeight()).as("Parcel weight")
-              .isEqualTo(Double.parseDouble(expected));
-        }
-        expected = finalData.get("length");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.getLength()).as("Parcel length")
-              .isEqualTo(Double.parseDouble(expected));
-        }
-        expected = finalData.get("width");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.getWidth()).as("Parcel width")
-              .isEqualTo(Double.parseDouble(expected));
-        }
-        expected = finalData.get("height");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.getHeighth()).as("Parcel height")
-              .isEqualTo(Double.parseDouble(expected));
-        }
-        expected = finalData.get("deliveryVerificationType");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.deliveryVerificationType.getText())
-              .as("Delivery verification required").isEqualTo(expected);
-        }
-        expected = finalData.get("insuredValue");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.insuredValue.getText()).as("Insured value")
-              .isEqualTo(expected);
-        }
-        expected = finalData.get("deliveryType");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.deliveryType.getText()).as("Delivery type")
-              .isEqualTo(expected);
-        }
-        expected = finalData.get("cop");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.copValue.getText()).as("COP").isEqualTo(expected);
-        }
-        expected = finalData.get("cod");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.codValue.getText()).as("COD").isEqualTo(expected);
-        }
-        expected = finalData.get("status");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.status.getText()).as("Status").isEqualTo(expected);
-        }
-        expected = finalData.get("granularStatus");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.granular.getText()).as("Granular status")
-              .isEqualTo(expected);
-        }
-        expected = finalData.get("zone");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
-        }
-        expected = finalData.get("zone");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
-        }
-        expected = finalData.get("latestRouteId");
-        if (StringUtils.isNotBlank(expected)) {
-          softAssertions.assertThat(page.latestRouteId.getText()).as("Latest Route ID")
-              .isEqualTo(expected);
-        }
-        softAssertions.assertAll();
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            "Order details is not update yet because of Kafka lag");
+      SoftAssertions softAssertions = new SoftAssertions();
+      pause3s();
+      String expected = finalData.get("size");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.size.getText()).as("Parcel size")
+            .isEqualToIgnoringCase(expected);
       }
+      expected = finalData.get("weight");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getWeight()).as("Parcel weight")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("length");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getLength()).as("Parcel length")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("width");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getWidth()).as("Parcel width")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("height");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getHeighth()).as("Parcel height")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("deliveryVerificationType");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.deliveryVerificationType.getText())
+            .as("Delivery verification required").isEqualTo(expected);
+      }
+      expected = finalData.get("insuredValue");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.insuredValue.getText()).as("Insured value")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("deliveryType");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.deliveryType.getText()).as("Delivery type")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("cop");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.copValue.getText()).as("COP").isEqualTo(expected);
+      }
+      expected = finalData.get("cod");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.codValue.getText()).as("COD").isEqualTo(expected);
+      }
+      expected = finalData.get("status");
+      if (StringUtils.isNotBlank(expected)) {
+        try {
+          Assertions.assertThat(page.status.getText()).as("Status").isEqualTo(expected);
+        } catch (AssertionError t) {
+          throw new NvTestCoreOrderKafkaLagException(
+              "Order status is not updated yet because of kafka lag");
+        }
+      }
+      expected = finalData.get("granularStatus");
+      if (StringUtils.isNotBlank(expected)) {
+        try {
+        Assertions.assertThat(page.granular.getText()).as("Granular status")
+            .isEqualTo(expected);
+        } catch (AssertionError t) {
+          throw new NvTestCoreOrderKafkaLagException(
+              "Order granular status is not updated yet because of kafka lag");
+        }
+      }
+      expected = finalData.get("zone");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("zone");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.zone.getText()).as("Zone").isEqualTo(expected);
+      }
+      expected = finalData.get("latestRouteId");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.latestRouteId.getText()).as("Latest Route ID")
+            .isEqualTo(expected);
+      }
+      softAssertions.assertAll();
     });
   }
 
@@ -1440,7 +1445,9 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void operatorUnTagOrderFromDP() {
     page.inFrame(() -> {
       page.dpDropOffSettingDialog.waitUntilVisible();
+      pause2s();
       page.dpDropOffSettingDialog.dropOffDp.clearValue();
+      pause2s();
       page.dpDropOffSettingDialog.saveChanges.click();
     });
   }

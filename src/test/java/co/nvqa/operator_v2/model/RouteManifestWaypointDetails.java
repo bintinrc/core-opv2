@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,10 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
   private Reservation reservation;
   private Pickup pickup;
   private Delivery delivery;
+
+  public RouteManifestWaypointDetails(Map<String, ?> data) {
+    super(data);
+  }
 
   public void setId(Long id) {
     this.id = id;
@@ -105,8 +110,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
     private Long id;
     private String status;
+    private String expectedNo;
+    private String collectedNo;
     private String failureReason;
-
 
     public void setId(Long id) {
       this.id = id;
@@ -116,7 +122,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
       setId(Long.parseLong(id));
     }
 
-
+    public Reservation(Map<String, ?> data) {
+      super(data);
+    }
   }
 
   @Getter
@@ -129,6 +137,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     private String status;
     private String failureReason;
 
+    public Pickup(Map<String, ?> data) {
+      super(data);
+    }
   }
 
   @Getter
@@ -139,7 +150,11 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
     private String trackingId;
     private String status;
+    private String codCollected;
     private String failureReason;
 
+    public Delivery(Map<String, ?> data) {
+      super(data);
+    }
   }
 }

@@ -10,10 +10,10 @@ public interface MaskedPage {
   Logger LOGGER = LoggerFactory.getLogger(MaskedPage.class);
 
 
-  public final static String MASKING_XPATH = "//span[contains(text(), 'Click to reveal (tracked)')]";
+  String MASKING_XPATH = "//span[contains(text(), 'Click to reveal (tracked)')]";
 
 
-  default public void operatorClickMaskingText(List<WebElement> masking) {
+  default void operatorClickMaskingText(List<WebElement> masking) {
     masking.forEach(m -> {
       try {
         m.click();

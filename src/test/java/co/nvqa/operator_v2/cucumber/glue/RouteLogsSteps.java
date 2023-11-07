@@ -40,6 +40,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_OPTIMISE_SE
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PRINT_PASSWORDS_OF_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PRINT_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_UNARCHIVE_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.EDIT_ROUTES_OF_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_EDIT_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_EDIT_ROUTE;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_OPTIMIZE_ROUTE;
@@ -396,6 +397,28 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.editDetailsDialog.comments.setValue(newParams.getComments());
       }
       routeLogsPage.editDetailsDialog.saveChanges.click();
+    });
+  }
+
+  @When("Operator selects 'Edit routes of selected' on Route Logs page:")
+  public void editRoutesOfSelected(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    routeLogsPage.inFrame(() -> {
+      List<String> routeIds = splitAndNormalize(finalData.get("routeIds"));
+      boolean selectedOnly = Boolean.parseBoolean(finalData.getOrDefault("selectedOnly", "true"));
+
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(EDIT_ROUTES_OF_SELECTED);
+      routeLogsPage.editRoutesDialog.waitUntilVisible();
+      if (selectedOnly) {
+        routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
+      } else {
+        routeLogsPage.editRoutesDialog.loadSelectedRoutesAndUnroutedWps.click();
+      }
+      routeLogsPage.switchToOtherWindowUrlContains("edit-routes");
     });
   }
 
@@ -882,7 +905,8 @@ public class RouteLogsSteps extends AbstractSteps {
         if (!isDisplayed) {
           assertions.fail("Route Date filter is not displayed");
         } else {
-          assertions.assertThat(routeLogsPage.routeDateFilter.getValueFrom()).as("Route Date from")
+          assertions.assertThat(routeLogsPage.routeDateFilter.getValueFrom())
+              .as("Route Date from")
               .isEqualTo(data.get("routeDateFrom"));
         }
       }
@@ -1285,7 +1309,8 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
       String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,
           RoutesTable.COLUMN_STATUS);
-      Assertions.assertThat(actualRouteStatus).as("Track is not routed.").isEqualTo("IN_PROGRESS");
+      Assertions.assertThat(actualRouteStatus).as("Track is not routed.")
+          .isEqualTo("IN_PROGRESS");
     });
   }
 

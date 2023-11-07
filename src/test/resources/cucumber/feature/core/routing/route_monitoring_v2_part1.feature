@@ -272,7 +272,7 @@ Feature: Route Monitoring V2
       | Valid Failed   | 7                   | 100                  | 0                | 1              | uid:528bb29f-1f4f-4d52-b029-7787030289f1 |
       | Invalid Failed | 9                   | 0                    | 1                | 0              | uid:a320bc69-a868-46ba-a9b4-0e073ed84d24 |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -313,7 +313,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:

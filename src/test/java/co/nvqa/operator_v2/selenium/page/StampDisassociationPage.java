@@ -1,33 +1,33 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Sergey Mishanin
  */
-public class StampDisassociationPage extends OperatorV2SimplePage {
+public class StampDisassociationPage extends SimpleReactPage<StampDisassociationPage> {
 
-  @FindBy(name = "stampId")
+  @FindBy(css = "[data-testid='stamp-id-input']")
   public TextBox stampIdInput;
 
-  @FindBy(xpath = "//md-card//nv-tag/span")
+  @FindBy(css = ".ant-tag")
   public PageElement stampLabel;
 
-  @FindBy(xpath = "//div[contains(@class, 'order-details-container flex-100')]")
+  @FindBy(css = ".not-found")
   public PageElement alertLabel;
 
-  @FindBy(xpath = "//md-card//h5")
+  @FindBy(css = ".ant-card-body h5")
   public PageElement orderId;
 
-  @FindBy(xpath = "//md-card-content/div[5]")
+  @FindBy(css = ".ant-card-body div:nth-of-type(6)")
   public PageElement deliveryAddress;
 
-  @FindBy(name = "Disassociate Stamp")
-  public NvApiTextButton disassociateStamp;
+  @FindBy(css = "[data-testid='stamp-disassociation-button']")
+  public Button disassociateStamp;
 
   public StampDisassociationPage(WebDriver webDriver) {
     super(webDriver);

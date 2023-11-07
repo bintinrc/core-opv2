@@ -134,6 +134,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   public static final String ACTION_PRINT_PASSWORDS_OF_SELECTED = "Print passwords of selected";
   public static final String ACTION_PRINT_SELECTED = "Print selected";
   public static final String ACTION_DELETE_SELECTED = "Delete selected";
+  public static final String EDIT_ROUTES_OF_SELECTED = "Edit routes of selected";
 
   public RouteLogsPage(WebDriver webDriver) {
     super(webDriver);

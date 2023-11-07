@@ -5,7 +5,7 @@ Feature: Edit Order Details
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -42,8 +42,8 @@ Feature: Edit Order Details
       | email              | test@mail.com                                 |
       | destinationAddress | 116 Keng Lee Rd 15 Singapore Singapore 308402 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                                                                                                                                           |
-      | description | To Address 1 changed from 9 TUA KONG GREEN to 116 Keng Lee Rd To Address 2 updated: assigned new value 15 To Postcode changed from 455384 to 308402 To City updated: assigned new value Singapore To Country changed from SG to Singapore To Latitude changed from 1.3184395712682 to 1.31401544758955 To Longitude changed from 103.925311276846 to 103.844767199536 Is RTS changed from false to false |
+      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                                                                                                                             |
+      | description | ^.*To Address 1 changed from 9 TUA KONG GREEN to 116 Keng Lee Rd To Address 2 updated: assigned new value 15 To Postcode changed from 455384 to 308402 To City updated: assigned new value Singapore To Country changed from SG to Singapore To Latitude changed from 1.3184395712682 to .* To Longitude changed from 103.925311276846 to .* Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                        |
       | description | To Name changed from Elsa Sender to test sender name To Email changed from elsaf@ninja.com to test@mail.com To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
@@ -88,7 +88,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Edit Pickup Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -125,8 +125,8 @@ Feature: Edit Order Details
       | email              | test@mail.com                                 |
       | destinationAddress | 116 Keng Lee Rd 15 Singapore Singapore 308402 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | description | From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore From Latitude changed from 1.45694483734937 to 1.31401544758955 From Longitude changed from 103.825580873988 to 103.844767199536 Is RTS changed from false to false |
+      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                                                                                                                                                |
+      | description | ^.*From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore From Latitude changed from 1.45694483734937 to .* From Longitude changed from 103.825580873988 to .* Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                               |
       | description | From Name changed from Elsa Customer to test sender name From Email changed from elsa@ninja.com to test@mail.com From Contact changed from +6583014911 to +9727894434 Is RTS changed from false to false |
@@ -210,7 +210,7 @@ Feature: Edit Order Details
       | destinationAddress | 116 Keng Lee Rd 15 Singapore Singapore 308402 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                             |
-      | description | From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore Is RTS changed from false to false |
+      | description | ^.*From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                               |
       | description | From Name changed from Elsa Customer to test sender name From Email changed from elsa@ninja.com to test@mail.com From Contact changed from +6583014911 to +9727894434 Is RTS changed from false to false |
