@@ -103,7 +103,7 @@ Feature: Route Manifest
       | pickupsCount    | 0                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -163,7 +163,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -220,7 +220,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -281,7 +281,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

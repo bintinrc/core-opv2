@@ -110,8 +110,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
     private Long id;
     private String status;
+    private String expectedNo;
+    private String collectedNo;
     private String failureReason;
-
 
     public void setId(Long id) {
       this.id = id;
@@ -121,7 +122,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
       setId(Long.parseLong(id));
     }
 
-
+    public Reservation(Map<String, ?> data) {
+      super(data);
+    }
   }
 
   @Getter
@@ -134,6 +137,9 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
     private String status;
     private String failureReason;
 
+    public Pickup(Map<String, ?> data) {
+      super(data);
+    }
   }
 
   @Getter
@@ -144,7 +150,11 @@ public class RouteManifestWaypointDetails extends DataEntity<RouteManifestWaypoi
 
     private String trackingId;
     private String status;
+    private String codCollected;
     private String failureReason;
 
+    public Delivery(Map<String, ?> data) {
+      super(data);
+    }
   }
 }

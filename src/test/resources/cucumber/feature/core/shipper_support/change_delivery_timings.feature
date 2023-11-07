@@ -10,7 +10,7 @@ Feature: Change Delivery Timings
     When Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample
     Then Operator verify CSV file of Change Delivery Timings' sample
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

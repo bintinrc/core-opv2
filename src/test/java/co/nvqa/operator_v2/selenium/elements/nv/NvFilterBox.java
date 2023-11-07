@@ -51,7 +51,10 @@ public class NvFilterBox extends AbstractFilterBox {
   }
 
   public void selectFilter(Iterable<String> values) {
-    values.forEach(this::selectFilter);
+    values.forEach(value -> {
+      pause1s();
+      this.selectFilter(value);
+    });
   }
 
   public void strictlySelectFilter(Iterable<String> values) {

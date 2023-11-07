@@ -5,7 +5,7 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Create a Single Route from Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
@@ -154,7 +154,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Edit Details of a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

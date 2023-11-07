@@ -61,7 +61,7 @@ Feature: Third Party Order Management
     When Operator delete the new mapping
     Then Operator verify the new mapping is deleted successfully
 
-  @happy-path
+  @happy-path @HighPriority
   Scenario: Operator Upload Bulk Third Party Orders Successfully
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

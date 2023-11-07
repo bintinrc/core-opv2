@@ -5,7 +5,7 @@ Feature: Van Inbound
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |

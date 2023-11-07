@@ -8,6 +8,7 @@ import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverColle
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
@@ -102,6 +103,9 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(name = "commons.load-selection")
   public NvApiTextButton loadSelection;
 
+  @FindBy(name = "container.reports.order-statuses-report")
+  public NvIconTextButton orderStatusesReport;
+
   @FindBy(xpath = "//nv-search-input-filter[@search-text='filter.trackingId']//input")
   public TextBox trackingIdFilter;
 
@@ -176,6 +180,9 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   @FindBy(css = "md-dialog")
   public SelectionErrorDialog selectionErrorDialog;
+
+  @FindBy(css = "md-dialog")
+  public OrderStatusesReportDialog orderStatusesReportDialog;
 
   @FindBy(css = "div.navigation md-menu")
   public MdMenu actionsMenu;
@@ -1340,6 +1347,22 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
       public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
       }
+    }
+  }
+
+  public static class OrderStatusesReportDialog extends MdDialog {
+
+    @FindBy(id = "file-1")
+    public FileInput file;
+
+    @FindBy(xpath = ".//a[.='here']")
+    public Button downloadSample;
+
+    @FindBy(name = "container.reports.generate")
+    public NvApiTextButton generate;
+
+    public OrderStatusesReportDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }
