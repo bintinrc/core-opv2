@@ -803,8 +803,6 @@ public class EditOrderV2Steps extends AbstractSteps {
   @Then("Operator verify order event on Edit Order V2 page using data below:")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
     page.inFrame(() -> {
-      try {
-
         page.waitUntilLoaded();
         OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
         OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
@@ -819,6 +817,7 @@ public class EditOrderV2Steps extends AbstractSteps {
               .findFirst()
               .orElse(null);
         }
+        try {
         Assertions.assertThat(actualEvent)
             .withFailMessage("There is no [%s] event on Edit Order V2 page",
                 expectedEvent.getName())
