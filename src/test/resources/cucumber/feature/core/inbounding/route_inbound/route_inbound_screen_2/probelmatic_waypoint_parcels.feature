@@ -5,7 +5,7 @@ Feature: Problematic Waypoints/Parcels
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Problematic Parcels
     Given Operator go to menu Shipper Support -> Blocked Dates
     # Create 1st order - Return
@@ -106,7 +106,7 @@ Feature: Problematic Waypoints/Parcels
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString}   | Delivery (Normal) | Pending                                               |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | {shipper-v4-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildFromAddressString} | Pick Up (Return)  | Pending                                               |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Problematic Waypoints
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Core - Operator create new route using data below:

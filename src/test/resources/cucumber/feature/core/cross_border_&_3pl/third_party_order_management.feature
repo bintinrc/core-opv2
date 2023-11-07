@@ -5,6 +5,7 @@ Feature: Third Party Order Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Upload Single Third Party Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -29,6 +30,7 @@ Feature: Third Party Order Management
       | name        | UPDATE STATUS                                                                                                                                                            |
       | description | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
 
+  @MediumPriority
   Scenario: Operator Edit Third Party Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -45,6 +47,7 @@ Feature: Third Party Order Management
     When Operator edit the new mapping with a new data
     Then Operator verify the new edited data is updated successfully
 
+  @MediumPriority
   Scenario: Operator Delete Third Party Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -75,6 +78,7 @@ Feature: Third Party Order Management
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     Then Operator verify multiple new mapping is created successfully
 
+  @MediumPriority
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - NOT Transferred to 3PL & Completed
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -103,6 +107,7 @@ Feature: Third Party Order Management
       | status         | COMPLETED                             |
       | granularStatus | COMPLETED                             |
 
+  @MediumPriority
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - Transferred to 3PL & Completed
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -136,6 +141,7 @@ Feature: Third Party Order Management
       | status         | COMPLETED                             |
       | granularStatus | COMPLETED                             |
 
+  @MediumPriority
   Scenario: Operator Download and Verify Third Party Shipper Orders CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management

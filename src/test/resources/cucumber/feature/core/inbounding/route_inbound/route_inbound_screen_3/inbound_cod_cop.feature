@@ -73,7 +73,7 @@ Feature: Inbound COD & COP
       | Inbound Credit Only              |               | 23.57           | 123       | 23.57          |
       | Inbound Split Into Cash & Credit | 10.0          | 13.57           | 123       | 23.57          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Inbound Cash for COP - <Title>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Order - Shipper create multiple V4 orders using data below:

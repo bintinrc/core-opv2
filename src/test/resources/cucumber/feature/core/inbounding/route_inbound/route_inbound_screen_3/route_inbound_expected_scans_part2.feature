@@ -5,7 +5,7 @@ Feature: Route Inbound Expected Scans
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Return Pickup Success
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -91,7 +91,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Reservation Pickup Success
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -179,7 +179,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Failed Delivery (Valid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -276,7 +276,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Failed Delivery (Invalid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -373,7 +373,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Multiple Global Inbounds on Attempted Pickup & Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:

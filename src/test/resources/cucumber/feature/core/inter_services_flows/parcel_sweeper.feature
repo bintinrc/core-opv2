@@ -5,7 +5,7 @@ Feature: Parcel Sweeper Live
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @ForceSuccessOrder
+  @DeleteOrArchiveRoute @ForceSuccessOrder @HighPriority
   Scenario: Operator Parcel Sweep Scans a Routed Parcel
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -54,7 +54,7 @@ Feature: Parcel Sweeper Live
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id}  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}  |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @HighPriority
   Scenario: Operator Parcel Sweep Scans an Unrouted Parcel
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
