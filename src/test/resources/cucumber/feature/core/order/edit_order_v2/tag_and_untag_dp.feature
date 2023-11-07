@@ -15,6 +15,7 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
+    And Operator waits for 5 seconds
     And Operator refresh page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator unmask Edit Order V2 page
@@ -71,7 +72,7 @@ Feature: Tag & Untag DP
       | postcode | 238880                                                     |
       | city     | SG                                                         |
       | country  | SG                                                         |
-
+    
   Scenario: Operator Untag/Remove Order from DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -84,6 +85,7 @@ Feature: Tag & Untag DP
     And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
+    And Operator waits for 5 seconds
     And Operator refresh page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order events on Edit Order V2 page using data below:
@@ -156,7 +158,9 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
+    And Operator waits for 5 seconds
     And Operator refresh page
+    And Operator unmask Edit Order V2 page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
@@ -189,6 +193,7 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
+    And Operator waits for 5 seconds
     And Operator refresh page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
@@ -240,6 +245,7 @@ Feature: Tag & Untag DP
     And Operator untags order from DP on Edit Order V2 page
     And Operator refresh page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
     And Operator verify order event on Edit Order V2 page using data below:

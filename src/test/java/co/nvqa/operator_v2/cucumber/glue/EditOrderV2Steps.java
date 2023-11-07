@@ -1445,7 +1445,9 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void operatorUnTagOrderFromDP() {
     page.inFrame(() -> {
       page.dpDropOffSettingDialog.waitUntilVisible();
+      pause2s();
       page.dpDropOffSettingDialog.dropOffDp.clearValue();
+      pause2s();
       page.dpDropOffSettingDialog.saveChanges.click();
     });
   }
