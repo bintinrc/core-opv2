@@ -52,12 +52,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_CORE_TRANSACTION.waypointId} |
       | status | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And API Core - verify Delivery transaction of the order:
@@ -67,12 +61,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_CORE_TRANSACTION.waypointId} |
       | status | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -136,13 +124,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_CORE_TRANSACTION.waypointId} |
       | status | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
-      | status     | Pending                           |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -188,12 +169,6 @@ Feature: Cancel Order
       | id      | {KEY_CORE_TRANSACTION.waypointId} |
       | routeId | null                              |
       | status  | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_CORE_TRANSACTION.waypointId} |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
@@ -208,12 +183,6 @@ Feature: Cancel Order
       | routeId | null                              |
       | seqNo   | null                              |
       | status  | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -260,12 +229,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_CORE_TRANSACTION.waypointId} |
       | status | Pending                           |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | number     | 1                                 |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
-      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:

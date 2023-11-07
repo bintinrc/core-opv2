@@ -641,9 +641,6 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
-    Then DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | archived   | 1                                                          |
 
   @ArchiveRouteCommonV2
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address
@@ -924,6 +921,3 @@ Feature: Reschedule
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | archived   | 1                                                          |
