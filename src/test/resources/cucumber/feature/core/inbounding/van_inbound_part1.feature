@@ -55,7 +55,7 @@ Feature: Van Inbound
       | type    | 4                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Van Inbounds with Invalid Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -65,7 +65,7 @@ Feature: Van Inbound
     And Operator fill the tracking ID "INVALID_TRACKING_ID" on Van Inbound Page then click enter
     Then Operator verify the tracking ID "INVALID_TRACKING_ID" that has been input on Van Inbound Page is invalid
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Van Inbounds with Empty Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -75,7 +75,7 @@ Feature: Van Inbound
     And Operator fill the empty tracking ID on Van Inbound Page
     Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -123,7 +123,7 @@ Feature: Van Inbound
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].toContact} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | On Vehicle for Delivery | Transit |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].toContact} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | Arrived at Sorting Hub  | Transit |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -204,7 +204,7 @@ Feature: Van Inbound
       | id     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status | IN_PROGRESS                        |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

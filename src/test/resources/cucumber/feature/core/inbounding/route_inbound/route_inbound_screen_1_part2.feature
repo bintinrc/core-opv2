@@ -5,7 +5,7 @@ Feature: Route Inbound Screen 1
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: Only 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -55,7 +55,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 1                                         |
       | wpTotal     | 1                                         |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -107,7 +107,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 0                                         |
       | wpTotal     | 1                                         |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Tracking ID - Order is Not Routed
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -125,7 +125,7 @@ Feature: Route Inbound Screen 1
       | errorCode    | 103096                     |
       | errorMessage | Order is not on any route! |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Tracking ID - Order Not Found
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details of Invalid Data on Route Inbound page using data below:
@@ -137,7 +137,7 @@ Feature: Route Inbound Screen 1
       | errorCode    | 103014           |
       | errorMessage | Order not found! |
 
-  @ArchiveRouteCommonV2 @DeleteDriverV2
+  @ArchiveRouteCommonV2 @DeleteDriverV2 @HighPriority
   Scenario: Get Route Details by Driver Name - Number of Route_Id = 1
     Given Operator go to menu Utilities -> QRCode Printing
     And API Driver - Operator create new Driver using data below:
@@ -170,7 +170,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 0                                         |
       | wpTotal     | 1                                         |
 
-  @ArchiveRouteCommonV2 @DeleteDriverV2
+  @ArchiveRouteCommonV2 @DeleteDriverV2 @HighPriority
   Scenario: Get Route Details by Driver Name - Number of Route_Id > 1
     Given Operator go to menu Utilities -> QRCode Printing
     And API Driver - Operator create new Driver using data below:

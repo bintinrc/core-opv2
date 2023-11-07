@@ -74,7 +74,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -479,7 +479,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:

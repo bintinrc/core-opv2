@@ -5,7 +5,7 @@ Feature: Waypoint Performance
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Pending Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -68,7 +68,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress}   | Delivery (Normal) | Pending | 0        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineFromAddress} | Pick Up (Return)  | Pending | 0        | Inbounded          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Success Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -175,7 +175,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithSpaceDelimiter} | Pick Up (Reservation) | Success | 0        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} |         | {KEY_LIST_OF_CREATED_ORDERS[3].to1LineToAddress}                    | Delivery (Normal)     | Success | 0        | Inbounded          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Failed Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -273,7 +273,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineFromAddress} | Pick Up (Return)  | Failed | 1        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineToAddress}   | Delivery (Normal) | Failed | 1        | Inbounded          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Total Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
@@ -402,7 +402,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | null    | {KEY_LIST_OF_CREATED_ORDERS[3].to1LineToAddress}                | Delivery (Normal)     | Success | 0        | null               |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | null    | {KEY_LIST_OF_CREATED_ORDERS[4].to1LineFromAddress}              | Pick Up (Return)      | Pending | 0        | Inbounded          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Partial Waypoints on Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:

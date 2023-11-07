@@ -5,7 +5,7 @@ Feature: End Route Inbound Session
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: End a Route Inbound Session : Incomplete Scans
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Order - Shipper create multiple V4 orders using data below:

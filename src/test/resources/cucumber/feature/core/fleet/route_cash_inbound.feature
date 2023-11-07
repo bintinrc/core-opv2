@@ -127,7 +127,7 @@ Feature: Route Cash Inbound
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Fetch COD Inbound with Date Range Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -167,7 +167,7 @@ Feature: Route Cash Inbound
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Download and Verify Cash Inbound CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

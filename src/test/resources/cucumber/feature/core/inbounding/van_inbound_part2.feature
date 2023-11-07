@@ -5,7 +5,7 @@ Feature: Van Inbound
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Publish Update Status Event For Van Inbound and Start Route Return Pickup Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -41,7 +41,8 @@ Feature: Van Inbound
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                       |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Van en-route to pickup\n\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: START_ROUTE |
-    
+
+  @HighPriority
   Scenario: Operator Van Inbounds And Starts Route with Tagged Order - Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -99,6 +100,7 @@ Feature: Van Inbound
       | driverId             | {ninja-driver-id}                  |
       | parcelGranularStatus | On Vehicle for Delivery            |
 
+  @HighPriority
   Scenario: Operator Van Inbounds And Starts Route with Tagged Order - Return Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -145,7 +147,7 @@ Feature: Van Inbound
       | driverId             | {ninja-driver-id}                  |
       | parcelGranularStatus | Van en-route to pickup             |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Publish Reservation Event on Start Route
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
