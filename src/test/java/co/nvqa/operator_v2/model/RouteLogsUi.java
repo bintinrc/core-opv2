@@ -22,5 +22,5 @@ public class RouteLogsUi {
   private String hub;
   private String zone;
   private String driverTypeName;
-  private String Comments;
+  private String comments;
 }
