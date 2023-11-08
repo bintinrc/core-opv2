@@ -174,8 +174,8 @@ public class EditOrderV2Steps extends AbstractSteps {
       expected = finalData.get("granularStatus");
       if (StringUtils.isNotBlank(expected)) {
         try {
-        Assertions.assertThat(page.granular.getText()).as("Granular status")
-            .isEqualTo(expected);
+          Assertions.assertThat(page.granular.getText()).as("Granular status")
+              .isEqualTo(expected);
         } catch (AssertionError t) {
           throw new NvTestCoreOrderKafkaLagException(
               "Order granular status is not updated yet because of kafka lag");
@@ -803,32 +803,30 @@ public class EditOrderV2Steps extends AbstractSteps {
   @Then("Operator verify order event on Edit Order V2 page using data below:")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
     page.inFrame(() -> {
-      try {
-
-        page.waitUntilLoaded();
-        OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
-        OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
+      page.waitUntilLoaded();
+      OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
+      OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
+          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
+          .orElse(null);
+      if (actualEvent == null) {
+        pause5s();
+        page.refreshPage();
+        page.switchTo();
+        actualEvent = page.eventsTable().readAllEntities().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .findFirst()
             .orElse(null);
-        if (actualEvent == null) {
-          pause5s();
-          page.refreshPage();
-          page.switchTo();
-          actualEvent = page.eventsTable().readAllEntities().stream()
-              .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
-              .findFirst()
-              .orElse(null);
-        }
+      }
+      try {
         Assertions.assertThat(actualEvent)
             .withFailMessage("There is no [%s] event on Edit Order V2 page",
                 expectedEvent.getName())
             .isNotNull();
-
-        expectedEvent.compareWithActual(actualEvent);
       } catch (Throwable t) {
         throw new NvTestCoreOrderKafkaLagException(
             "Order event not updated yet because of Kafka lag");
       }
+      expectedEvent.compareWithActual(actualEvent);
     });
   }
 
@@ -895,97 +893,91 @@ public class EditOrderV2Steps extends AbstractSteps {
         resolveKeyValues(data));
 
     page.inFrame(() -> {
-      try {
-
-        SoftAssertions assertions = new SoftAssertions();
-        if (expectedData.containsKey("status")) {
-          assertions.assertThat(page.deliveryDetailsBox.status.getText())
-              .as("Delivery Details - Status")
-              .isEqualTo(f("Status: %s", expectedData.get("status")));
-        }
-        if (expectedData.containsKey("name")) {
-          assertions.assertThat(page.deliveryDetailsBox.to.getNormalizedText())
-              .as("Delivery Details - Name")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
-        }
-        if (expectedData.containsKey("contact")) {
-          assertions.assertThat(page.deliveryDetailsBox.toContact.getNormalizedText())
-              .as("Delivery Details - Contact")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
-        }
-        if (expectedData.containsKey("email")) {
-          assertions.assertThat(page.deliveryDetailsBox.toEmail.getNormalizedText())
-              .as("Delivery Details - Email")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
-        }
-        if (expectedData.containsKey("address")) {
-          assertions.assertThat(page.deliveryDetailsBox.toAddress.getNormalizedText())
-              .as("Delivery Details - address")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
-        }
-        if (expectedData.containsKey("startDate")) {
-          String actual = page.deliveryDetailsBox.startDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-              .isInSameDayAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("startDateTime")) {
-          String actual = page.deliveryDetailsBox.startDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-                expectedData.get("startDateTime"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-              .isInSameSecondAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("endDate")) {
-          String actual = page.deliveryDetailsBox.endDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-              .isInSameDayAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("endDateTime")) {
-          String actual = page.deliveryDetailsBox.endDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-                expectedData.get("endDateTime"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-              .isInSameSecondAs(expectedDateTime);
-        }
-        assertions.assertAll();
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            "Delivery detail is not updated yet because of Kafka lag");
+      SoftAssertions assertions = new SoftAssertions();
+      if (expectedData.containsKey("status")) {
+        assertions.assertThat(page.deliveryDetailsBox.status.getText())
+            .as("Delivery Details - Status")
+            .isEqualTo(f("Status: %s", expectedData.get("status")));
       }
+      if (expectedData.containsKey("name")) {
+        assertions.assertThat(page.deliveryDetailsBox.to.getNormalizedText())
+            .as("Delivery Details - Name")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+      }
+      if (expectedData.containsKey("contact")) {
+        assertions.assertThat(page.deliveryDetailsBox.toContact.getNormalizedText())
+            .as("Delivery Details - Contact")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+      }
+      if (expectedData.containsKey("email")) {
+        assertions.assertThat(page.deliveryDetailsBox.toEmail.getNormalizedText())
+            .as("Delivery Details - Email")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
+      }
+      if (expectedData.containsKey("address")) {
+        assertions.assertThat(page.deliveryDetailsBox.toAddress.getNormalizedText())
+            .as("Delivery Details - address")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
+      }
+      if (expectedData.containsKey("startDate")) {
+        String actual = page.deliveryDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("startDateTime")) {
+        String actual = page.deliveryDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("startDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDate")) {
+        String actual = page.deliveryDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDateTime")) {
+        String actual = page.deliveryDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("endDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      assertions.assertAll();
     });
   }
 
@@ -1006,97 +998,91 @@ public class EditOrderV2Steps extends AbstractSteps {
         resolveKeyValues(data));
 
     page.inFrame(() -> {
-      try {
-
-        SoftAssertions assertions = new SoftAssertions();
-        if (expectedData.containsKey("status")) {
-          assertions.assertThat(page.pickupDetailsBox.status.getText())
-              .as("Pickup Details - Status")
-              .isEqualTo(f("Status: %s", expectedData.get("status")));
-        }
-        if (expectedData.containsKey("name")) {
-          assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
-              .as("Pickup Details - Name")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
-        }
-        if (expectedData.containsKey("contact")) {
-          assertions.assertThat(page.pickupDetailsBox.fromContact.getNormalizedText())
-              .as("Pickup Details - Contact")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
-        }
-        if (expectedData.containsKey("email")) {
-          assertions.assertThat(page.pickupDetailsBox.fromEmail.getNormalizedText())
-              .as("Pickup Details - Email")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
-        }
-        if (expectedData.containsKey("address")) {
-          assertions.assertThat(page.pickupDetailsBox.fromAddress.getNormalizedText())
-              .as("Pickup Details - address")
-              .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
-        }
-        if (expectedData.containsKey("startDate")) {
-          String actual = page.pickupDetailsBox.startDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
-              .isInSameDayAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("startDateTime")) {
-          String actual = page.pickupDetailsBox.startDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-                expectedData.get("startDateTime"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
-              .isInSameSecondAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("endDate")) {
-          String actual = page.pickupDetailsBox.endDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
-              .isInSameDayAs(expectedDateTime);
-        }
-        if (expectedData.containsKey("endDateTime")) {
-          String actual = page.pickupDetailsBox.endDateTime.getText();
-          Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(
-                  ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
-          Date expectedDateTime = null;
-          try {
-            expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-                expectedData.get("endDateTime"));
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
-          Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
-              .isInSameSecondAs(expectedDateTime);
-        }
-        assertions.assertAll();
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            "Pickup detail is not updated yet because of Kafka lag");
+      SoftAssertions assertions = new SoftAssertions();
+      if (expectedData.containsKey("status")) {
+        assertions.assertThat(page.pickupDetailsBox.status.getText())
+            .as("Pickup Details - Status")
+            .isEqualTo(f("Status: %s", expectedData.get("status")));
       }
+      if (expectedData.containsKey("name")) {
+        assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
+            .as("Pickup Details - Name")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+      }
+      if (expectedData.containsKey("contact")) {
+        assertions.assertThat(page.pickupDetailsBox.fromContact.getNormalizedText())
+            .as("Pickup Details - Contact")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+      }
+      if (expectedData.containsKey("email")) {
+        assertions.assertThat(page.pickupDetailsBox.fromEmail.getNormalizedText())
+            .as("Pickup Details - Email")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
+      }
+      if (expectedData.containsKey("address")) {
+        assertions.assertThat(page.pickupDetailsBox.fromAddress.getNormalizedText())
+            .as("Pickup Details - address")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
+      }
+      if (expectedData.containsKey("startDate")) {
+        String actual = page.pickupDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("startDateTime")) {
+        String actual = page.pickupDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("startDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDate")) {
+        String actual = page.pickupDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDateTime")) {
+        String actual = page.pickupDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+            DateUtil.DATE_TIME_FORMATTER.withZone(
+                ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("endDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      assertions.assertAll();
     });
   }
 
@@ -1151,13 +1137,8 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     var expected = new TransactionInfo(resolveKeyValues(data));
     page.inFrame(() -> {
-      try {
-        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-        expected.compareWithActual(actual);
-      } catch (Throwable t) {
-        throw new NvTestCoreOrderKafkaLagException(
-            transactionType + " transaction is not updated yet because of Kafka lag");
-      }
+      TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
+      expected.compareWithActual(actual);
     });
   }
 
