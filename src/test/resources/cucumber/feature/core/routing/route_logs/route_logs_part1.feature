@@ -77,19 +77,32 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Optimise Multiple Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                            |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                       |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    And API Operator add multiple parcels to multiple routes using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                               |
+      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id-2}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" with type "DELIVERY" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[4].id} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY    |
@@ -100,8 +113,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -118,8 +130,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -135,7 +146,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2
   Scenario: Operator Delete Multiple Routes from Route Logs Page
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -156,8 +167,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Edit Details of a Single Route on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'

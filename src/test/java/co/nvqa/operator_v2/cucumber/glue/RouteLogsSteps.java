@@ -157,13 +157,14 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator verifies {value} Driver is shown in Create Route modal on Route Logs page")
   public void verifyValidDriver(String value) {
+     String resolvedValue = resolveValue(value);
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
       CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
-          .get(
-              0);
+          .get(0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
-      retryIfRuntimeExceptionOccurred(() -> routeDetailsForm.assignedDriver.selectValue(value), 5);
+      doWithRetry(() -> routeDetailsForm.assignedDriver.selectValue(resolvedValue),
+          "Verify driver name is available for selection");
     });
   }
 
@@ -528,11 +529,11 @@ public class RouteLogsSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("Operator print created routes")
-  public void operatorPrintMultipleRoutes() {
+  @When("Operator print created routes:")
+  public void operatorPrintMultipleRoutes(List<String> routeIds) {
+    List<String> resolvedRouteIds = resolveValues(routeIds);
     routeLogsPage.inFrame(() -> {
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-      routeIds.forEach(routeId -> {
+      resolvedRouteIds.forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.selectRow(1);
       });
@@ -1002,7 +1003,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> routeLogsPage.savePresetDialog.update.click());
   }
 
-  @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only")
+  @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'")
   public void loadWaypointsOfSelectedRoute() {
     routeLogsPage.inFrame(() -> {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
@@ -1069,7 +1070,7 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @And("Operator open Route Manifest of created route from Route Logs page")
+  @And("Operator open Route Manifest V2 of created route from Route Logs page")
   public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     routeLogsPage.inFrame(() -> {
@@ -1077,7 +1078,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
     });
-    routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
+    routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest-v2/" + routeId);
     pause2s();
     routeLogsPage.waitUntilPageLoaded();
     pause2s();
