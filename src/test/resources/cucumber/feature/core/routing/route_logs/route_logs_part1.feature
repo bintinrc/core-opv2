@@ -139,7 +139,8 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator print created routes
+    And Operator print created routes:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
