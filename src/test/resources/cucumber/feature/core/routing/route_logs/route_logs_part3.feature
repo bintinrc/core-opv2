@@ -5,7 +5,7 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @CloseNewWindows @done
+  @ArchiveRouteCommonV2 @CloseNewWindows
   Scenario: Operator Redirected to Route Manifest from Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -19,14 +19,14 @@ Feature: Route Logs
 #    Then Operator verifies route details on Route Manifest page:
 #      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @done
+
   Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
     Given DB Operator find drivers with ended employment
     When Operator go to menu Routing -> Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
 
-  @DeleteDriverV2 @done
+  @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
@@ -38,7 +38,7 @@ Feature: Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
 
-  @DeleteDriverV2 @done
+  @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Has No Employment Date
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
@@ -51,7 +51,7 @@ Feature: Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
 
-  @ArchiveRouteCommonV2 @DeleteDriverV2 @done
+  @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Employment End Date => Today's Date
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
@@ -70,7 +70,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
     Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
 
-  @ArchiveRouteCommonV2 @DeleteDriverV2 @done
+  @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Has No Employment Date
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
@@ -89,7 +89,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
 
-  @ArchiveRouteCommonV2 @done
+  @ArchiveRouteCommonV2
   Scenario: Operator Not Allowed To See Driver List on Update Route if Driver Employment End Date < Today's Date
     Given DB Operator find drivers with ended employment
     And API Core - Operator create new route using data below:
@@ -102,7 +102,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
-  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @done
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     # RETURN & NORMAL ORDER
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -154,7 +154,7 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @done
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:

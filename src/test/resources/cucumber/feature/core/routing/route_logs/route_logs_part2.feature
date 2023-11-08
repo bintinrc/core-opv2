@@ -35,7 +35,7 @@ Feature: Route Logs
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @CloseNewWindows @done
+  @ArchiveRouteCommonV2 @CloseNewWindows
   Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -47,7 +47,7 @@ Feature: Route Logs
     And Operator click 'Edit Route' and then click 'Load Waypoints of Selected Routes Only'
     Then Operator is redirected to this page "sg/edit-routes?cluster=true&ids={KEY_LIST_OF_CREATED_ROUTES[1].id}&unrouted=false"
 
-  @ArchiveRouteCommonV2 @done
+  @ArchiveRouteCommonV2
   Scenario: Operator Filters Route by Route Id on Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -62,7 +62,7 @@ Feature: Route Logs
       | zone           | {zone-name}                        |
       | driverTypeName | {default-driver-type-name}         |
 
-  @ArchiveRouteCommonV2 @done
+  @ArchiveRouteCommonV2
   Scenario: Operator Remove Tag of a Single Route on Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -77,7 +77,7 @@ Feature: Route Logs
       | id   | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | tags | {route-tag-name}                   |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority @done
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Address Verify Route on Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -102,7 +102,7 @@ Feature: Route Logs
       | top                | Address verification successful for selected route |
       | waitUntilInvisible | true                                               |
 
-  @DeleteOrArchiveRoute @done
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -131,7 +131,7 @@ Feature: Route Logs
       | With Space    | {KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | With No Space | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}  |
 
-  @DeleteOrArchiveRoute @done
+  @DeleteOrArchiveRoute
   Scenario: Operator Optimise Single Route from Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
