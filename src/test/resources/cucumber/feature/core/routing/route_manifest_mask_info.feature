@@ -23,16 +23,16 @@ Feature: Mask Route Manifest Info
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
-      | status      | Pending                                                                                   |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                |
-      | contact     | Click to reveal (tracked) 4435                                                            |
-      | address     | Click to reveal (tracked) D MANDAI SQUARE 116 Click to reveal (tracked) g Timur SG 308412 |
-    When Operator refresh page
+      | status      | Pending                                                                                 |
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                              |
+      | contact     | Click to reveal (tracked)4435                                                           |
+      | address     | Click to reveal (tracked)D MANDAI SQUARE 116 Click to reveal (tracked)g Timur 308412 SG |
+    When Operator reveals masked information
     Then Operator verify waypoint at Route Manifest using data below:
       | status      | Pending                                                   |
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
       | contact     | +9727894435                                               |
-      | address     | 49 MANDALAY ROAD MANDAI SQUARE 116 Kilang Timur SG 308412 |
+      | address     | 49 MANDALAY ROAD MANDAI SQUARE 116 Kilang Timur 308412 SG |
 
   @DeleteOrArchiveRoute
   Scenario: Operator View Mask Order for DP Delivery on Route Manifest
@@ -54,16 +54,16 @@ Feature: Mask Route Manifest Info
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
-      | status      | Pending                                                                         |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                      |
-      | contact     | Click to reveal (tracked) 4435                                                  |
-      | address     | Click to reveal (tracked) AD, SG, 238880 Click to reveal (tracked) SG SG 238880 |
-    When Operator refresh page
+      | status      | Pending                                                                        |
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                     |
+      | contact     | Click to reveal (tracked)4435                                                  |
+      | address     | Click to reveal (tracked)AD, SG, 238880 Click to reveal (tracked) SG 238880 SG |
+    When Operator reveals masked information
     Then Operator verify waypoint at Route Manifest using data below:
       | status      | Pending                                        |
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}     |
       | contact     | +9727894435                                    |
-      | address     | 501, ORCHARD ROAD, SG, 238880 3-4 SG SG 238880 |
+      | address     | 501, ORCHARD ROAD, SG, 238880 3-4 SG 238880 SG |
 
   @DeleteOrArchiveRoute
   Scenario: Operator View Mask Order for Return Pickup on Route Manifest
@@ -79,16 +79,16 @@ Feature: Mask Route Manifest Info
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
-      | status      | Pending                                                               |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                            |
-      | contact     | Click to reveal (tracked) 4434                                        |
-      | address     | Click to reveal (tracked) Click to reveal (tracked) g Barat SG 308402 |
-    When Operator refresh page
+      | status      | Pending                                                              |
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                           |
+      | contact     | Click to reveal (tracked)4434                                        |
+      | address     | Click to reveal (tracked) Click to reveal (tracked)g Barat 308402 SG |
+    When Operator reveals masked information
     Then Operator verify waypoint at Route Manifest using data below:
       | status      | Pending                                    |
       | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | contact     | +9727894434                                |
-      | address     | Keng Lee Rd Kilang Barat SG 308402         |
+      | address     | Keng Lee Rd Kilang Barat 308402 SG         |
 
   @DeleteOrArchiveRoute
   Scenario: Operator View Unmask Order for Reservation on Route Manifest
@@ -105,12 +105,12 @@ Feature: Mask Route Manifest Info
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Pending                                                                                                                                                                        |
-      | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} |
+      | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} |
 
   @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute
   Scenario: Operator View Unmask Order for PA Job on Route Manifest
     Given API Shipper - Operator get address details using data below:
-      | shipperId | {shipper-v4-paj-id} |
+      | shipperId | {shipper-v4-paj-id}      |
       | addressId | {shipper-address-paj-id} |
     Given API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
@@ -122,17 +122,4 @@ Feature: Mask Route Manifest Info
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Pending                                                                                                                                                                        |
-      | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} |
-
-
-
-
-
-
-
-
-
-
-
-
-
+      | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} |
