@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrderV2 @EditOrderPage
+@OperatorV2 @Core @EditOrderV2 @EditOrderPage @current
 Feature: Edit Order Details
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @wip
   Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <delivery_verification_mode> to <new_delivery_verification_mode>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
