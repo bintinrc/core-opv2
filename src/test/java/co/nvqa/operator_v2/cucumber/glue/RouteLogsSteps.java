@@ -157,7 +157,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator verifies {value} Driver is shown in Create Route modal on Route Logs page")
   public void verifyValidDriver(String value) {
-     String resolvedValue = resolveValue(value);
+    String resolvedValue = resolveValue(value);
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
       CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
@@ -1070,15 +1070,15 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @And("Operator open Route Manifest V2 of created route from Route Logs page")
-  public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage() {
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
+  @And("Operator open Route Manifest V2 page of route {string} from Route Logs page")
+  public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage(String routeId) {
     routeLogsPage.inFrame(() -> {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
-      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
+      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, resolveValue(routeId));
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
     });
-    routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest-v2/" + routeId);
+    routeLogsPage.switchToOtherWindowAndWaitWhileLoading(
+        "route-manifest-v2/" + resolveValue(routeId));
     pause2s();
     routeLogsPage.waitUntilPageLoaded();
     pause2s();

@@ -14,7 +14,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator open Route Manifest V2 of created route from Route Logs page
+    And Operator open Route Manifest V2 page of route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Route Logs page
 # TODO: migrate step to Route Manifest V2 page
 #    Then Operator verifies route details on Route Manifest page:
 #      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
