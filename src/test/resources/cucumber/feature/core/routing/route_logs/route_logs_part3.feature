@@ -5,70 +5,81 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @ArchiveRouteCommonV2 @CloseNewWindows
   Scenario: Operator Redirected to Route Manifest from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
-    Then Operator verifies route details on Route Manifest page:
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator open Route Manifest V2 page of route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Route Logs page
+# TODO: migrate step to Route Manifest V2 page
+#    Then Operator verifies route details on Route Manifest page:
+#      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+
 
   Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And DB Operator find drivers with ended employment
+    Given DB Operator find drivers with ended employment
     When Operator go to menu Routing -> Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
 
   @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name":"{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRL1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date":"{gradle-next-0-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
-    And Operator waits for 100 seconds
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
     When Operator go to menu Routing -> Route Logs
     And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
+    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
 
   @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Has No Employment Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name":"{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRL1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
     And Operator waits for 10 seconds
     When Operator go to menu Routing -> Route Logs
     And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
+    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
 
-  @DeleteOrArchiveRoute @DeleteDriverV2
+  @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Employment End Date => Today's Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name":"{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRL1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date":"{gradle-next-0-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
-    And Operator waits for 100 seconds
-    And API Operator create new route using data below:
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
+    And Operator waits for 10 seconds
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
-    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Edit Route Details modal on Route Logs page
+    And Operator opens Edit Details dialog for route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
+    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute @DeleteDriverV2
+  @ArchiveRouteCommonV2 @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Has No Employment Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name":"{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRL1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
-    And Operator waits for 100 seconds
-    And API Operator create new route using data below:
+    Given API Driver Management - Operator create new driver with data below:
+      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
+      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
+      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
+      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
+      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
+    And Operator waits for 10 seconds
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
@@ -76,13 +87,12 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
-    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Edit Route Details modal on Route Logs page
+    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute
+  @ArchiveRouteCommonV2
   Scenario: Operator Not Allowed To See Driver List on Update Route if Driver Employment End Date < Today's Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And DB Operator find drivers with ended employment
-    And API Operator create new route using data below:
+    Given DB Operator find drivers with ended employment
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
@@ -92,86 +102,82 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute @DeletePickupAppointmentJob
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    # RETURN ORDER
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    # NORMAL ORDER
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    # RETURN & NORMAL ORDER
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                              |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     # RESERVATION
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator add reservation pick-up to the route
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator add reservation pick-up to the route
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                         |
+      | shipperAddressRequest | {"name":"{shipper-v4-name}","contact":"{shipper-v4-contact}","email":"{shipper-v4-email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"no_of_reservation":1}],"is_milk_run":false} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     # PICKUP APPOINTMENT JOB
     And API Shipper - Operator get address details using data below:
       | shipperId | {shipper-v4-paj-id}      |
       | addressId | {shipper-address-paj-id} |
     And API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{date: 0 days next, yyyy-MM-dd}T09:00:00+08:00","latest":"{date: 0 days next, yyyy-MM-dd}T18:00:00+08:00"}} |
+    # ADD TO ROUTES
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                  |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":true} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator print created routes
+    And Operator print created routes:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @DeleteOrArchiveRoute @DeletePickupAppointmentJob
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    # RESERVATION
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                         |
+      | shipperAddressRequest | {"name":"{shipper-v4-name}","contact":"{shipper-v4-contact}","email":"{shipper-v4-email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"no_of_reservation":1}],"is_milk_run":false} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
       | generateAddress | RANDOM              |
+    # PICKUP APPOINTMENT JOB
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    And API Operator add reservation pick-up to the route
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
@@ -179,28 +185,28 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     And Operator deletes created route on Route Logs page
     Then Operator verifies that success react notification displayed:
-      | top    | 1 Route(s) Deleted                      |
-      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | top    | 1 Route(s) Deleted                       |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify routes are deleted successfully:
-      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Route - verify route_logs record:
-      | legacyId  | {KEY_CREATED_ROUTE_ID} |
-      | deletedAt | not null               |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_WAYPOINT_ID} |
-      | seqNo   | null              |
-      | routeId | null              |
+      | legacyId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | deletedAt | not null                           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | seqNo    | null                                             |
+      | routeId  | null                                             |
     And DB Core - verify shipper_pickup_search record:
-      | reservationId | {KEY_CREATED_RESERVATION_ID} |
-      | routeId       | null                         |
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | null                                     |
     And DB Events - verify pickup_events record:
-      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
-      | userId     | 397                                 |
-      | userName   | AUTOMATION EDITED                   |
-      | userEmail  | qa@ninjavan.co                      |
-      | type       | 3                                   |
-      | pickupType | 1                                   |
-      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
+      | pickupId   | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}        |
+      | userId     | 397                                             |
+      | userName   | AUTOMATION EDITED                               |
+      | userEmail  | qa@ninjavan.co                                  |
+      | type       | 3                                               |
+      | pickupType | 1                                               |
+      | data       | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}} |
     And DB Events - verify pickup_events record:
       | pickupId   | {KEY_CONTROL_CREATED_PA_JOBS[1].id}             |
       | userId     | 397                                             |
