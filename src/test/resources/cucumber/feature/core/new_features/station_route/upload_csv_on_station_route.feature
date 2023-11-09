@@ -5,7 +5,7 @@ Feature: Upload CSV on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - CSV file from Downloaded CSV
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-12}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -64,7 +64,7 @@ Feature: Upload CSV on Station Route
       | parcelSize | Small                                                                                                  |
       | driverId   | Unassigned                                                                                             |
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Valid Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -104,7 +104,7 @@ Feature: Upload CSV on Station Route
       | parcelSize | Small                                                                                                         |
       | driverId   | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} - {KEY_DRIVER_LIST_OF_DRIVERS[2].firstName}                                |
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Invalid Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -133,7 +133,7 @@ Feature: Upload CSV on Station Route
     When Operator click Cancel button in Invalid Input dialog on Station Route page
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Invalid TIDs, Invalid Driver with Invalid Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -162,6 +162,7 @@ Feature: Upload CSV on Station Route
     When Operator click Cancel button in Invalid Input dialog on Station Route page
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
+  @MediumPriority
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Invalid CSV Format
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator open Upload CSV tab on Station Route page
@@ -175,7 +176,7 @@ Feature: Upload CSV on Station Route
       | bottom | Invalid CSV data |
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Duplicate TIDs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -197,7 +198,7 @@ Feature: Upload CSV on Station Route
       | bottom | Duplicated TIDs - {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
-  @DeleteCreatedHubs
+  @DeleteCreatedHubs @MediumPriority
   Scenario: Operator Disallow To Select Hub with Disabled Status on Station Route
     And API Sort - Operator creates 1 new hubs with data below:
       | name         | GENERATED |
@@ -213,7 +214,7 @@ Feature: Upload CSV on Station Route
     And Operator open Upload CSV tab on Station Route page
     And Operator cannot select "{KEY_SORT_LIST_OF_CREATED_HUBS[1].name}" hub on Station Route page
 
-  @DeleteDriverV2
+  @DeleteDriverV2 @MediumPriority
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV After Update Selected Hub on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -247,6 +248,7 @@ Feature: Upload CSV on Station Route
     When Operator click Cancel button in Invalid Input dialog on Station Route page
     Then Operator verify Assign Drivers button is disabled on Station Route page
 
+  @MediumPriority
   Scenario: Operator Disallow Assign More Than 10.000 Orders to Suggested Driver by Upload CSV on Station Route
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator open Upload CSV tab on Station Route page
