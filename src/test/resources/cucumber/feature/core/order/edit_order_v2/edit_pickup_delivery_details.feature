@@ -88,7 +88,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @wip
   Scenario: Operator Edit Pickup Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -171,6 +171,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
+  @wip
   Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
