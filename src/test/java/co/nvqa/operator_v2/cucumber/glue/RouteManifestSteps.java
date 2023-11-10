@@ -99,6 +99,14 @@ public class RouteManifestSteps extends AbstractSteps {
         new RouteManifestWaypointDetails(resolveKeyValues(mapOfData))));
   }
 
+  @When("Operator reveals masked information")
+  public void operatorRevealsMaskedInfo() {
+    page.inFrame(() -> {
+      page.waypointsTable.addressReveal.click();
+      page.waypointsTable.contactReveal.click();
+    });
+  }
+
   @Then("Operator open {value} waypoint details on Route Manifest page")
   public void operatorOpenWaypointDetails(String waypointId) {
     page.inFrame(() -> {

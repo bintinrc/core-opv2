@@ -435,6 +435,11 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
     public static final String COLUMN_ORDER_TAGS = "orderTags";
     public static final String COLUMN_TRACKING_IDS = "trackingIds";
+    @FindBy(xpath = "//div[@data-datakey='_address']//span[.='Click to reveal (tracked)']")
+    public PageElement addressReveal;
+
+    @FindBy(xpath = "//div[@data-datakey='_contact']//span[.='Click to reveal (tracked)']")
+    public PageElement contactReveal;
 
     public WaypointsTable(WebDriver webDriver) {
       super(webDriver);
