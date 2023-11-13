@@ -118,7 +118,7 @@ Feature: Route Manifest
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |         | Pending | Success | Failure | All |
       | Pickups | 1       | 0       | 0       | 1   |
@@ -178,7 +178,7 @@ Feature: Route Manifest
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"PICKUP"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |         | Pending | Success | Failure | All |
       | Pickups | 1       | 0       | 0       | 1   |
@@ -239,7 +239,7 @@ Feature: Route Manifest
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY "} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
       | Deliveries | 1       | 0       | 0       | 1   |
@@ -300,12 +300,12 @@ Feature: Route Manifest
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY "} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
       | Deliveries | 1       | 0       | 0       | 1   |
       | Total      | 1       | 0       | 0       | 1   |
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator success delivery waypoint from Route Manifest page
     Then Operator verifies that success react notification displayed:
       | top | Updated waypoint {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} successfully |
