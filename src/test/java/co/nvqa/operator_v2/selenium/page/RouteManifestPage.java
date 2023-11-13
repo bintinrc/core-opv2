@@ -86,7 +86,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
   }
 
   public void openPage(long routeId) {
-    getWebDriver().get(f("%s/%s/route-manifest-v2/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), routeId));
     inFrame(() -> waitUntilLoaded());
   }
