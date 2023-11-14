@@ -91,7 +91,9 @@ Feature: Implanted Manifest
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator success reservation waypoint from Route Manifest page
+    And API Core - Operator force success waypoint via route manifest:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
