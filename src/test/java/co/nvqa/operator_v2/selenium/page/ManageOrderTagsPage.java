@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Tag;
+import co.nvqa.common.core.model.order.Tag;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -71,7 +71,7 @@ public class ManageOrderTagsPage extends SimpleReactPage<ManageOrderTagsPage> {
     }
   }
 
-  public static class TagsTable extends AntTableV2<co.nvqa.common.core.model.order.Tag> {
+  public static class TagsTable extends AntTableV2<Tag> {
 
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_DELETE = "Delete";
@@ -85,7 +85,7 @@ public class ManageOrderTagsPage extends SimpleReactPage<ManageOrderTagsPage> {
       );
       setActionButtonsLocators(ImmutableMap.of(ACTION_DELETE,
           "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button"));
-      setEntityClass(co.nvqa.common.core.model.order.Tag.class);
+      setEntityClass(Tag.class);
     }
   }
 }
