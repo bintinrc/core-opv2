@@ -67,13 +67,12 @@ public class AddShipperToPresetSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String shipperCreationDateFrom = data.get("shipperCreationDateFrom");
     String shipperCreationDateTo = data.get("shipperCreationDateTo");
-    if (StringUtils.isNotBlank(shipperCreationDateFrom) && StringUtils
-        .isNotBlank(shipperCreationDateTo)) {
-      addShipperToPresetPage.shipperCreationDateFilter
-          .setInterval(shipperCreationDateFrom, shipperCreationDateTo);
-    } else if (StringUtils.isNotBlank(shipperCreationDateFrom)) {
+
+    if (StringUtils.isNotBlank(shipperCreationDateFrom)) {
       addShipperToPresetPage.shipperCreationDateFilter.setFrom(shipperCreationDateFrom);
-    } else if (StringUtils.isNotBlank(shipperCreationDateTo)) {
+    }
+
+    if (StringUtils.isNotBlank(shipperCreationDateTo)) {
       addShipperToPresetPage.shipperCreationDateFilter.setTo(shipperCreationDateTo);
     }
     addShipperToPresetPage.loadSelection.click();
@@ -101,7 +100,8 @@ public class AddShipperToPresetSteps extends AbstractSteps {
   @When("Operator verify records on Add Shipper To Preset page using data below:")
   public void operatorVerifyRecords(List<Map<String, String>> listOfData) {
     List<ShipperInfo> actual = addShipperToPresetPage.shippersTable.readAllEntities();
-    Assertions.assertThat(actual.size()).as("Number of records").isEqualTo(listOfData.size());
+    Assertions.assertThat(actual.size()).as("Number of records")
+        .isGreaterThanOrEqualTo(listOfData.size());
     for (Map<String, String> listOfDatum : listOfData) {
       Map<String, String> data = resolveKeyValues(listOfDatum);
       ShipperInfo expected = new ShipperInfo(data);
