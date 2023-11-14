@@ -143,7 +143,6 @@ public class ManageOrderTagsSteps extends AbstractSteps {
 
   @When("Operator verifies that {string} tag has been deleted on Manage Order Tags page")
   public void verifyTagHasBeenDeleted(String tagName) {
-    //Tag tag = get(KEY_CREATED_ORDER_TAG);
     String tagNameValue = resolveValue(tagName);
     manageOrderTagsPage.inFrame(page -> {
       page.tagsTable.filterByColumn(COLUMN_NAME, tagNameValue);
