@@ -88,7 +88,7 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
-  @happy-path @HighPriority @wip
+  @happy-path @HighPriority 
   Scenario: Operator Edit Pickup Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -171,7 +171,6 @@ Feature: Edit Order Details
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
 
-  @wip
   Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -211,7 +210,7 @@ Feature: Edit Order Details
       | destinationAddress | 116 Keng Lee Rd 15 Singapore Singapore 308402 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                                             |
-      | description | ^.*From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore                                 |
+      | description | ^.*From Address 1 changed from 233E ST. JOHN'S ROAD to 116 Keng Lee Rd From Address 2 updated: assigned new value 15 From Postcode changed from 757995 to 308402 From City updated: assigned new value Singapore From Country changed from SG to Singapore Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                               |
       | description | From Name changed from Elsa Customer to test sender name From Email changed from elsa@ninja.com to test@mail.com From Contact changed from +6583014911 to +9727894434 Is RTS changed from false to false |
