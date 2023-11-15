@@ -51,13 +51,13 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000.00                               |
+      | codCollectionPending | 20,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
@@ -160,13 +160,13 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000.00                               |
+      | codCollectionPending | 20,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And API Core - verify driver's total cod:

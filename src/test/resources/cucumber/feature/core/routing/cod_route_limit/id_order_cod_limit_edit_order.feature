@@ -54,7 +54,7 @@ Feature: ID - Order COD Limit
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 10,000,000.00                               |
+      | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
 
