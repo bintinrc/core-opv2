@@ -5,6 +5,7 @@ Feature: Batch Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pending Pickup
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
@@ -50,7 +51,7 @@ Feature: Batch Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
@@ -105,7 +106,7 @@ Feature: Batch Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
@@ -163,6 +164,7 @@ Feature: Batch Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
+  @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Staging
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
@@ -202,6 +204,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
+  @MediumPriority
   Scenario: Rollback Order - Invalid Batch Id
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Batch Order
@@ -210,6 +213,7 @@ Feature: Batch Order
       | top    | Network Request Error                                         |
       | bottom | ^.*Error Message: Order batch with batch id 1111 not found!.* |
 
+  @MediumPriority
   Scenario: Rollback Order - Valid Batch Id, Order Not Allowed to be Deleted
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates a batch
@@ -229,6 +233,7 @@ Feature: Batch Order
       | top    | Network Request Error                                                                                                                                                                                                                      |
       | bottom | ^.*Error Message: Can't delete order {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} in Arrived at Sorting Hub state. Order can only be deleted if in the following states : \[Staging, Pending Pickup, Van en-route to pickup, Pickup fail\].* |
 
+  @HighPriority
   Scenario: Rollback Order - Order has Invoice Amount
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:

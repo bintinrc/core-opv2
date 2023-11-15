@@ -5,7 +5,7 @@ Feature: Implanted Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -38,7 +38,7 @@ Feature: Implanted Manifest
       | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | pods[1].shipperScansQuantity | 0                                        |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -75,7 +75,7 @@ Feature: Implanted Manifest
       | bottom | No POD available! |
 
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Total Scanned Orders != Total of POD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -186,6 +186,7 @@ Feature: Implanted Manifest
       | location | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddress} |
 
 
+  @HighPriority
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -208,6 +209,7 @@ Feature: Implanted Manifest
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
 
+  @MediumPriority
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Using Prefix - Multiple TID
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -231,6 +233,7 @@ Feature: Implanted Manifest
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[2].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[2].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[2].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} |
 
+  @MediumPriority
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Invalid Tracking Id
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Implanted Manifest
@@ -249,6 +252,7 @@ Feature: Implanted Manifest
       | stamp      | INVALIDTRACKINGID |
 
 
+  @MediumPriority
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Duplicate Tracking Id
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -276,6 +280,7 @@ Feature: Implanted Manifest
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] | ^{gradle-current-date-yyyy-MM-dd}.* | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} | {KEY_LIST_OF_CREATED_ORDERS[1].rackSector} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} |
 
 
+  @MediumPriority
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page with Non-Pending Order
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
