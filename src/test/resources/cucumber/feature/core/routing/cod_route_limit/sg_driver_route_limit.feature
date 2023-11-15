@@ -1,4 +1,4 @@
-@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitSG @wip2
+@OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverRouteLimitSG
 Feature: ID - Driver Route Limit
 
   Background:
