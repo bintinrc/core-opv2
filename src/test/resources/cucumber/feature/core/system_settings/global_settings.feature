@@ -54,7 +54,7 @@ Feature: Global Settings
     And API Operator fetch id of the created shipper
     When Operator go to menu System Settings -> Global Settings
     And Operator check 'Enable Van Inbound SMS Shipper Ids' checkbox on Global Settings page
-    And Operator add "{KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name}" shipper to Exempted Shippers from Van Inbound SMS on Global Settings page
+    And Operator add " {KEY_CREATED_SHIPPER.name} " shipper to Exempted Shippers from Van Inbound SMS on Global Settings page
     And Operator clicks 'Update SMS Settings' button on Global Settings page
     Then Operator verifies that success toast displayed:
       | top | Updated |
@@ -85,7 +85,7 @@ Feature: Global Settings
     And API Operator fetch id of the created shipper
     When Operator go to menu System Settings -> Global Settings
     And Operator check 'Enable Return Pickup SMS Shipper Ids' checkbox on Global Settings page
-    And Operator add "{KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name}" shipper to Exempted Shippers from Return Pickup SMS on Global Settings page
+    And Operator add " {KEY_CREATED_SHIPPER.name} " shipper to Exempted Shippers from Return Pickup SMS on Global Settings page
     And Operator clicks 'Update SMS Settings' button on Global Settings page
     Then Operator verifies that success toast displayed:
       | top | Updated |
