@@ -27,4 +27,6 @@ bin/
 .project
 .classpath/
 
+*.py
+
 
