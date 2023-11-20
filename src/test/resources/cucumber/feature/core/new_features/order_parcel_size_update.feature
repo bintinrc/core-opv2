@@ -5,11 +5,13 @@ Feature: Order Parcel Size Update
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator download sample CSV file for Order Parcel Size Update
     Given Operator go to menu New Features -> Order Parcel Size Update
     When Operator download sample CSV file for 'Find Orders with CSV' on Order Parcel Size Update page
     Then sample CSV file for 'Find Orders with CSV' on Order Parcel Size Update page is downloaded successfully
 
+  @HighPriority
   Scenario: Operator update order parcel size by upload CSV file with Multiple Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

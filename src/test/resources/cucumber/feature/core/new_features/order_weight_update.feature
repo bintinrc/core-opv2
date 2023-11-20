@@ -5,11 +5,13 @@ Feature: Order Weight Update V2
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Download Sample CSV file for Order Weight Update
     Given Operator go to menu New Features -> Order Weight Update
     When Operator download sample CSV file for 'Find Orders with CSV' on Order Weight Update page
     Then Operator verify sample CSV file is downloaded successfully on Order Weight Update page
 
+  @HighPriority
   Scenario: Operator Update Order Weight by Upload CSV - Single Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                       |
@@ -38,6 +40,7 @@ Feature: Order Weight Update V2
       | type    | 16                                                                                                         |
       | data    | ^.*"weight":\{"old_value":5\.0,"new_value":4\.5\},"pricing_weight":\{"old_value":5\.0,"new_value":4\.5\}.* |
 
+  @HighPriority
   Scenario: Operator Update Order Weight by Upload CSV - Multiple Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                       |
