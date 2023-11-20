@@ -5,7 +5,7 @@ Feature: Outbound Monitoring
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Verifies the In Progress Outbound Status on Outbound Monitoring Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -37,7 +37,7 @@ Feature: Outbound Monitoring
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the In Progress Outbound Status on Outbound Monitoring Page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Verifies the Complete Outbound Status on Outbound Monitoring Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -81,7 +81,7 @@ Feature: Outbound Monitoring
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the Complete Outbound Status on Outbound Monitoring Page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Clicks on Flag Icon to Mark Route ID on Outbound Monitoring Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -117,7 +117,7 @@ Feature: Outbound Monitoring
     When Operator click on flag icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the Outbound status on the chosen route ID is changed
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Adding Comment on the Outbound Monitoring Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -157,7 +157,7 @@ Feature: Outbound Monitoring
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies the comment table on the chosen route ID is changed
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Clicks on Flag Icon to Un-Mark Route ID on Outbound Monitoring Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -203,7 +203,7 @@ Feature: Outbound Monitoring
       | systemId | sg                                 |
       | isOk     | 0                                  |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator View Outbound Breakroute List Orders via Edit Button
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
