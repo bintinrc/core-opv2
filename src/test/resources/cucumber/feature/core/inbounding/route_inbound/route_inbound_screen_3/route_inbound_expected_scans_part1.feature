@@ -7,7 +7,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Pending Deliveries
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -76,7 +75,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -169,7 +167,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -262,7 +259,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Return Pickups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -352,7 +348,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -411,7 +406,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Reservation Pickups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:
@@ -481,7 +475,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:

@@ -7,7 +7,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Return Pickup Success
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -93,7 +92,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Reservation Pickup Success
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:
@@ -181,7 +179,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Failed Delivery (Valid)
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -278,7 +275,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Failed Delivery (Invalid)
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -375,7 +371,6 @@ Feature: Route Inbound Expected Scans
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Multiple Global Inbounds on Attempted Pickup & Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
