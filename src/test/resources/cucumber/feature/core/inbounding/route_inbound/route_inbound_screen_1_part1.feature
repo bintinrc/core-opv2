@@ -7,7 +7,6 @@ Feature: Route Inbound Screen 1
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator get route details by - <Note>
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -62,7 +61,6 @@ Feature: Route Inbound Screen 1
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Route ID - Route with Waypoints
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
 #    Add  waypoints to success
@@ -145,7 +143,6 @@ Feature: Route Inbound Screen 1
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Route ID - Route with No Waypoints
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Route Inbound
@@ -160,7 +157,6 @@ Feature: Route Inbound Screen 1
 
   @MediumPriority
   Scenario: Get Route Details by Route ID - Route doesn't Exist
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details of Invalid Data on Route Inbound page using data below:
       | hubName | {hub-name}        |
@@ -173,7 +169,6 @@ Feature: Route Inbound Screen 1
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Route ID - Route not Assigned to a Driver
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id} } |
     Given Operator go to menu Inbounding -> Route Inbound

@@ -141,7 +141,7 @@ Feature: Change Delivery Timings
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{date: 1 days next, YYYY-MM-dd}","pickup_timeslot":{"start_time":"09:00","end_time":"22:00"},"delivery_start_date":"{date: 2 days next, YYYY-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Nextday","parcel_job":{"is_pickup_required":false,"pickup_date":"{date: 1 days next, YYYY-MM-dd}","pickup_timeslot":{"start_time":"09:00","end_time":"22:00"},"delivery_start_date":"{date: 1 days next, YYYY-MM-dd}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{from-address}, "to":{to-address}} |
     And API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
@@ -149,8 +149,8 @@ Feature: Change Delivery Timings
       | timewindow | 0                                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify Delivery details on Edit Order V2 page using data below:
-      | startDateTime | {date: 2 days next, YYYY-MM-dd} 09:00:00 |
-      | endDateTime   | {date: 2 days next, YYYY-MM-dd} 22:00:00 |
+      | startDateTime | {date: 1 days next, YYYY-MM-dd} 09:00:00 |
+      | endDateTime   | {date: 1 days next, YYYY-MM-dd} 22:00:00 |
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 

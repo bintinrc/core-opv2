@@ -7,7 +7,6 @@ Feature: Waypoint Performance
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Pending Waypoints on Route Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:
@@ -70,7 +69,6 @@ Feature: Waypoint Performance
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Success Waypoints on Route Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -177,7 +175,6 @@ Feature: Waypoint Performance
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Failed Waypoints on Route Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:
@@ -275,7 +272,6 @@ Feature: Waypoint Performance
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Total Waypoints on Route Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:
@@ -404,7 +400,6 @@ Feature: Waypoint Performance
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Partial Waypoints on Route Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Order - Shipper create multiple V4 orders using data below:

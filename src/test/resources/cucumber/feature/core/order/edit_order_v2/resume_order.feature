@@ -125,9 +125,9 @@ Feature: Resume Order
       | status         | Pending        |
       | granularStatus | Pending Pickup |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                               |
-      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                                  |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -237,9 +237,9 @@ Feature: Resume Order
       | status         | Pending        |
       | granularStatus | Pending Pickup |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                               |
-      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                                  |
+      | MANUAL ACTION | RESUME        |                                                                                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:

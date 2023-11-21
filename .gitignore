@@ -13,6 +13,7 @@ hs_err_pid*
 */build
 .allure
 out
+pyvenv.cfg
 
 .idea
 *.iml
@@ -26,7 +27,5 @@ bin/
 .classpath
 .project
 .classpath/
-
-*.py
 
 

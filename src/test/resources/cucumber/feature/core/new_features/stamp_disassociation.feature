@@ -5,6 +5,7 @@ Feature: Stamp Disassociation
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Should not be Able to Disassociate Order that Has no Stamp ID
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -20,11 +21,13 @@ Feature: Stamp Disassociation
       | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                       |
       | deliveryAddress | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss},, SG 159363 |
 
+  @MediumPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Invalid Stamp Id
     When Operator go to menu New Features -> Stamp Disassociation
     And Operator enters "INVALID_STAMP_ID" value into 'Scan Stamp ID' field on Stamp Disassociation page
     Then Operator will get the "Not Found" alert on Stamp Disassociation page
 
+  @HighPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Valid Stamp Id
     Given New Stamp ID was generated
     And API Order - Shipper create multiple V4 orders using data below:
@@ -45,6 +48,7 @@ Feature: Stamp Disassociation
       | searchLogic | contains            |
       | searchTerm  | KEY_CORE_STAMP_ID   |
 
+  @MediumPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Invalid Tracking Id
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -56,6 +60,7 @@ Feature: Stamp Disassociation
     And Operator enters "INVALID_TRACKING_ID" value into 'Scan Stamp ID' field on Stamp Disassociation page
     Then Operator will get the "Not Found" alert on Stamp Disassociation page
 
+  @HighPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Valid Tracking Id
     Given New Stamp ID was generated
     And API Order - Shipper create multiple V4 orders using data below:

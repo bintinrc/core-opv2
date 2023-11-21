@@ -7,7 +7,6 @@ Feature: Collection Summary
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Cash Collection
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
@@ -60,7 +59,6 @@ Feature: Collection Summary
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Failed Parcels
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -144,7 +142,6 @@ Feature: Collection Summary
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Return Parcels
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -227,7 +224,6 @@ Feature: Collection Summary
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Reservations
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper - Operator create new shipper address using data below:
