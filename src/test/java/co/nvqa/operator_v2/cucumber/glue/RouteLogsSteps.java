@@ -1078,7 +1078,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
     });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading(
-        "route-manifest-v2/" + resolveValue(routeId));
+        "route-manifest/" + resolveValue(routeId));
     pause2s();
     routeLogsPage.waitUntilPageLoaded();
     pause2s();
