@@ -61,6 +61,7 @@ Feature: Update Delivery Address with CSV
       | name        | UPDATE AV                                                                                                                                                                                                                                                                                                   |
       | description | User: AUTO (system AV) (support@ninjavan.co) Address: 9 TUA KONG GREEN addr 2\|Singapore\|SG\|district\|455384 Address Type: ADDRESS_TYPE_DELIVERY Zone ID: 22861 Destination Hub ID: 387 Lat, Long: 1.3184395712682, 103.925311276846 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
 
+  @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Empty File
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Update Delivery Address with CSV
@@ -68,6 +69,7 @@ Feature: Update Delivery Address with CSV
     Then Operator verifies that error react notification displayed:
       | top | Invalid data in the csv file |
 
+  @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Invalid Order/Format
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Update Delivery Address with CSV
@@ -77,6 +79,7 @@ Feature: Update Delivery Address with CSV
       | trackingId            | status              |
       | SOMEINVALIDTRACKINGID | Invalid tracking Id |
 
+  @HighPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Partial
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -94,6 +97,7 @@ Feature: Update Delivery Address with CSV
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Pass                |
       | SOMEINVALIDTRACKINGID                 | Invalid tracking Id |
 
+  @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Empty Compulsory Fields
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -110,6 +114,7 @@ Feature: Update Delivery Address with CSV
       | trackingId                            | status                                                                                                                                                                                           |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Require to fill in to.name, to.email, to.phone_number, to.address.address1, to.address.address2, to.address.postcode, to.address.city, to.address.country, to.address.state, to.address.district |
 
+  @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

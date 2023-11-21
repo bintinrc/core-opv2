@@ -5,6 +5,7 @@ Feature: Update Delivery Address with CSV
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues and Valid Orders
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -29,6 +30,7 @@ Feature: Update Delivery Address with CSV
       | value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | [sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample] |
 
+  @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Invalid Lat Long Format & Empty Compulsory Fields
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -46,6 +48,7 @@ Feature: Update Delivery Address with CSV
       | trackingId                            | status                                                                                                                                                |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Require to fill in to.phone_number, to.address.address2, Invalid entry '1.2860-17' for to.address.longitude, Invalid entry '' for to.address.latitude |
 
+  @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -69,6 +72,7 @@ Feature: Update Delivery Address with CSV
       | Lat Is Empty        | empty        | 103.886438    | Invalid entry '' for to.address.latitude                                                                     |
       | Long Is Empty       | 1.369953     | empty         | Invalid entry '' for to.address.longitude                                                                    |
 
+  @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Lat Long is Empty
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -86,7 +90,7 @@ Feature: Update Delivery Address with CSV
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And Operator verify created orders info after address update
 
-  @ArchiveRouteCommonV2 @routing-refactor
+  @ArchiveRouteCommonV2 @routing-refactor @HighPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -119,7 +123,7 @@ Feature: Update Delivery Address with CSV
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status   | Routed                                                     |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Bulk Update Order Delivery Address with CSV - RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

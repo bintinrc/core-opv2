@@ -5,7 +5,7 @@ Feature: Outbound Monitoring
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Filters Single Route on Outbound Monitoring Page by Pull Out button
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -46,7 +46,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Searches Order of Multiple Routes on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -180,7 +180,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[3].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[4].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Able to Show Pending State and Non-Pending State Delivery Order on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -229,7 +229,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed              | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Unable to Show Pending State and Non-Pending State Pickup Order on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -279,7 +279,7 @@ Feature: Outbound Monitoring
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -324,7 +324,7 @@ Feature: Outbound Monitoring
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Shows Multiple Same Tracking IDs of Different Routes on Outbound Breakrout V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -389,7 +389,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Shows a Route that has Multiple Tracking IDs on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -433,7 +433,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Pull Out Multiple Delivery Orders from Multiple Routes on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -506,7 +506,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Unable to Pull Out Non-Pending State Delivery Order on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -656,7 +656,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @CloseNewWindows @ArchiveRouteCommonV2
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Delivery Order is Pulled Out
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
