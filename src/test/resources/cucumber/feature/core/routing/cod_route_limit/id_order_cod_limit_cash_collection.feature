@@ -934,7 +934,7 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes
-  Scenario: Operator Disallow to Transfer Orders with COD >30 Millions from Route A to Route B with Different Driver on Edit Routes
+  Scenario: Operator Allow to Transfer Orders with COD <30 Millions from Route A to Route B with Different Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
@@ -1052,7 +1052,7 @@ Feature: ID - Order COD Limit
       | cod       | 10000000                           |
 
   @DeleteDriverV2 @DeleteRoutes
-  Scenario: Operator Allow to Transfer Orders with COD <30 Millions from Route A to Route B with Different Driver on Edit Routes
+  Scenario: Operator Disallow to Transfer Orders with COD >30 Millions from Route A to Route B with Different Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |

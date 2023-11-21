@@ -192,7 +192,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "Returned To Sender" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
-  Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery
+  Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery with non-RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
@@ -207,7 +207,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
-  Scenario: Disable Update Cash Button if Order State is Completed
+  Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery with RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                |
@@ -229,7 +229,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
-  Scenario: Disable Update Cash Button if Order State is Arrived at Sorting Hub with non-RTS
+  Scenario: Enable Update Cash Button if Order State is Arrived at Sorting Hub with non-RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                               |
