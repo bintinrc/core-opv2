@@ -1005,14 +1005,16 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'")
   public void loadWaypointsOfSelectedRoute() {
+    doWithRetry(() -> {
     routeLogsPage.inFrame(() -> {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       Long routeId = get(KEY_CREATED_ROUTE_ID);
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
-      routeLogsPage.editRoutesDialog.waitUntilVisible();
-      routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
+        routeLogsPage.editRoutesDialog.waitUntilVisible();
+        routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
     });
+    }, "Load waypoint success", 2, 3);
   }
 
   @Then("Operator is redirected to this page {value}")
@@ -1076,12 +1078,18 @@ public class RouteLogsSteps extends AbstractSteps {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, resolveValue(routeId));
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
+      routeLogsPage.switchToOtherWindowUrlContains(
+          "route-manifest/" + resolveValue(routeId));
+      routeLogsPage.switchTo();
+      doWithRetry(() -> {
+      routeLogsPage.waitUntilPageLoaded();
+        Assertions.assertThat(
+            routeLogsPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
+                .isDisplayed()).isTrue();
+      }, "Route Manifest Load Successfully", 3, 2);
     });
-    routeLogsPage.switchToOtherWindowAndWaitWhileLoading(
-        "route-manifest/" + resolveValue(routeId));
-    pause2s();
-    routeLogsPage.waitUntilPageLoaded();
-    pause2s();
+
+
   }
 
   @And("Operator filters route by {string} Route ID on Route Logs page")

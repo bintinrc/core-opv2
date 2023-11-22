@@ -5,7 +5,7 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @CloseNewWindows
+  @ArchiveRouteCommonV2 @CloseNewWindows @wip
   Scenario: Operator Redirected to Route Manifest from Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -15,9 +15,8 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator open Route Manifest V2 page of route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Route Logs page
-# TODO: migrate step to Route Manifest V2 page
-#    Then Operator verifies route details on Route Manifest page:
-#      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies route details on Route Manifest page:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
 
   Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
