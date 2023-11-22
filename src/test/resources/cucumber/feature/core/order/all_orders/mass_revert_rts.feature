@@ -5,6 +5,7 @@ Feature: All Orders - Mass-Revert RTS
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Mass-Revert Single RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -88,6 +89,7 @@ Feature: All Orders - Mass-Revert RTS
       | longitude     | 103.925311276846                      |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
 
+  @HighPriority
   Scenario: Operator Mass-Revert Multiple RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -233,6 +235,7 @@ Feature: All Orders - Mass-Revert RTS
       | longitude     | 103.925311276846             |
       | routingZoneId | not null                     |
 
+  @MediumPriority
   Scenario: Operator Mass-Revert Multiple Completed RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -267,6 +270,7 @@ Feature: All Orders - Mass-Revert RTS
       | Fail to process {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}: Order is in final state: [GranularStatus:Returned to Sender] |
       | Fail to process {KEY_LIST_OF_CREATED_TRACKING_IDS[2]}: Order is in final state: [GranularStatus:Returned to Sender] |
 
+  @MediumPriority
   Scenario: Operator Mass-Revert Multiple Non-RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -293,6 +297,7 @@ Feature: All Orders - Mass-Revert RTS
       | Fail to process {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}: Order is not currently in RTS |
       | Fail to process {KEY_LIST_OF_CREATED_TRACKING_IDS[2]}: Order is not currently in RTS |
 
+  @HighPriority
   Scenario: Operator Partial Success Mass-Revert Multiple RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |

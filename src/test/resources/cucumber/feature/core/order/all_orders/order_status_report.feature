@@ -5,6 +5,7 @@ Feature: All Orders - Order Status Report
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Generate Order Statuses Report With Various Order Statuses
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
@@ -44,6 +45,7 @@ Feature: All Orders - Order Status Report
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | Pending Reschedule     | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | Completed              | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
 
+  @HighPriority
   Scenario: Download Sample CSV file for Generate Order Statuses Report
     And Operator go to menu Order -> All Orders
     And Operator downloads order statuses report sample CSV on All Orders page

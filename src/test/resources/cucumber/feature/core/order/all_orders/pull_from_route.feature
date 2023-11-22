@@ -65,6 +65,7 @@ Feature: All Orders - Pull From Route
       | routeId  | null                                                       |
       | status   | Pending                                                    |
 
+  @MediumPriority
   Scenario: Operator Should not be Able to Pull Out Unrouted Order on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
