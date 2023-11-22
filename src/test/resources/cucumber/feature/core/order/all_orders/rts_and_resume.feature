@@ -5,7 +5,7 @@ Feature: All Orders - RTS & Resume
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS Failed Delivery Order on All Orders Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -137,7 +137,7 @@ Feature: All Orders - RTS & Resume
       | id  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | rts | 1                                  |
 
-  @MediumPriority
+  @HighPriority
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -217,6 +217,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify order event on Edit Order V2 page using data below:
       | name | RESUME |
 
+  @MediumPriority
   Scenario: Operator RTS Multiple Orders with Invalid Granular Status
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

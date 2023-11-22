@@ -36,6 +36,7 @@ Feature: All Orders
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status     | Cancelled                                                  |
 
+  @HighPriority
   Scenario: Operator Download CSV File of Blocked TIDs by Force Success Multiple Parcel Orders and Active PETS
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

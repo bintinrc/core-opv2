@@ -63,7 +63,7 @@ Feature: All Orders - Add To Route
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                 |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]},{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}" |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -133,7 +133,7 @@ Feature: All Orders - Add To Route
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -166,7 +166,7 @@ Feature: All Orders - Add To Route
       | top    | 1 order(s) updated |
       | bottom | add to route       |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Block Add to Route for On Hold Order on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

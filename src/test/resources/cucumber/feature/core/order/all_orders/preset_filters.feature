@@ -5,7 +5,7 @@ Feature: All Orders - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Save A New Preset on All Orders Page
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
@@ -45,7 +45,7 @@ Feature: All Orders - Preset Filters
       | shipperName       | {shipper-v4-name}               |
       | masterShipperName | {shipper-v4-marketplace-name}   |
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Apply Filter Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
@@ -60,7 +60,7 @@ Feature: All Orders - Preset Filters
       | shipperName       | {shipper-v4-name}             |
       | masterShipperName | {shipper-v4-marketplace-name} |
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Delete Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
@@ -80,7 +80,7 @@ Feature: All Orders - Preset Filters
       | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET.id} |
     And DB Lighthouse - verify preset_filters id "{KEY_ALL_ORDERS_FILTERS_PRESET.id}" record is deleted:
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset on All Orders Page - via Save Current As Preset Button
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
@@ -115,7 +115,7 @@ Feature: All Orders - Preset Filters
       | masterShipperName | {shipper-v4-marketplace-name} |
 
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset on All Orders Page - via Update Preset Button
     Given Operator go to menu Utilities -> QRCode Printing
     And API Lighthouse - creates new Orders Filter Template using data below:
