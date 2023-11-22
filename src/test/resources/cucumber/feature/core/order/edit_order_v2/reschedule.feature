@@ -306,6 +306,7 @@ Feature: Reschedule
       | postalCode       | 308402                          |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    Then Operator refresh page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -699,6 +700,7 @@ Feature: Reschedule
       | postalCode       | 308402                         |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    Then Operator refresh page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | RESCHEDULE          |
@@ -840,6 +842,7 @@ Feature: Reschedule
       | deliveryTimeslot | 9AM - 12PM                     |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    Then Operator refresh page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |

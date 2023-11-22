@@ -67,7 +67,12 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @When("^Operator click ([^\"]*) -> ([^\"]*) on Edit Order V2 page$")
   public void operatorClickMenuOnEditOrderPage(String parentMenuName, String childMenuName) {
-    page.inFrame(() -> page.clickMenu(parentMenuName, childMenuName));
+    page.inFrame(() -> {
+      retryIfExpectedExceptionOccurred(() -> {
+        page.waitUntilLoaded();
+        page.clickMenu(parentMenuName, childMenuName);
+      }, 5);
+    });
   }
 
   @When("Operator Edit Order Details on Edit Order V2 page:")

@@ -328,6 +328,7 @@ Feature: Mask Order Info
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    Then Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)5678                                                                                                                                    |
       | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
@@ -394,6 +395,7 @@ Feature: Mask Order Info
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    Then Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                                                                                                                                  |
       | contact | Click to reveal (tracked)0004                                                                                                                             |
