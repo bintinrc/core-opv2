@@ -5,7 +5,7 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @CloseNewWindows @wip
+  @ArchiveRouteCommonV2 @CloseNewWindows
   Scenario: Operator Redirected to Route Manifest from Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

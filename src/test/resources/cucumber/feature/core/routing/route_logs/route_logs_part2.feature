@@ -35,7 +35,7 @@ Feature: Route Logs
     And Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @CloseNewWindows @wip
+  @ArchiveRouteCommonV2 @CloseNewWindows
   Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
