@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
+import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -59,12 +60,15 @@ public class RouteLogsSteps extends AbstractSteps {
 
   private RouteLogsPage routeLogsPage;
 
+  private RouteManifestPage routeManifestPage;
+
   public RouteLogsSteps() {
   }
 
   @Override
   public void init() {
     routeLogsPage = new RouteLogsPage(getWebDriver());
+    routeManifestPage = new RouteManifestPage(getWebDriver());
   }
 
   @When("Operator create new route using data below:")
@@ -1005,14 +1009,16 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'")
   public void loadWaypointsOfSelectedRoute() {
-    routeLogsPage.inFrame(() -> {
-      put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
-      Long routeId = get(KEY_CREATED_ROUTE_ID);
-      routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
-      routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
-      routeLogsPage.editRoutesDialog.waitUntilVisible();
-      routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
-    });
+    doWithRetry(() -> {
+      routeLogsPage.inFrame(() -> {
+        put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
+        routeLogsPage.editRoutesDialog.waitUntilVisible();
+        routeLogsPage.editRoutesDialog.loadWpsOfSelectedRoutes.click();
+      });
+    }, "Load waypoint success", 2, 3);
   }
 
   @Then("Operator is redirected to this page {value}")
@@ -1076,12 +1082,16 @@ public class RouteLogsSteps extends AbstractSteps {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, resolveValue(routeId));
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
+      routeLogsPage.switchToOtherWindowUrlContains(
+          "route-manifest/" + resolveValue(routeId));
     });
-    routeLogsPage.switchToOtherWindowAndWaitWhileLoading(
-        "route-manifest/" + resolveValue(routeId));
-    pause2s();
-    routeLogsPage.waitUntilPageLoaded();
-    pause2s();
+
+    routeManifestPage.inFrame(() -> {
+      routeManifestPage.waitUntilPageLoaded();
+      Assertions.assertThat(
+          routeManifestPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
+              .isDisplayed()).isTrue();
+    });
   }
 
   @And("Operator filters route by {string} Route ID on Route Logs page")
