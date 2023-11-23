@@ -1084,13 +1084,13 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
       routeLogsPage.switchToOtherWindowUrlContains(
           "route-manifest/" + resolveValue(routeId));
+    });
 
-      routeManifestPage.inFrame(() -> {
-        routeManifestPage.waitUntilPageLoaded();
-        Assertions.assertThat(
-            routeManifestPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
-                .isDisplayed()).isTrue();
-      });
+    routeManifestPage.inFrame(() -> {
+      routeManifestPage.waitUntilPageLoaded();
+      Assertions.assertThat(
+          routeManifestPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
+              .isDisplayed()).isTrue();
     });
   }
 
