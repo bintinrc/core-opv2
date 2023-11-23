@@ -1082,16 +1082,15 @@ public class RouteLogsSteps extends AbstractSteps {
       put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, resolveValue(routeId));
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
-    });
-
-    routeManifestPage.inFrame(() -> {
-      routeManifestPage.switchToOtherWindowUrlContains(
+      routeLogsPage.switchToOtherWindowUrlContains(
           "route-manifest/" + resolveValue(routeId));
-      routeManifestPage.switchTo();
-      routeManifestPage.waitUntilPageLoaded();
-      Assertions.assertThat(
-          routeManifestPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
-              .isDisplayed()).isTrue();
+
+      routeManifestPage.inFrame(() -> {
+        routeManifestPage.waitUntilPageLoaded();
+        Assertions.assertThat(
+            routeManifestPage.findElementByXpath("//div[.='Route ID']/following-sibling::div")
+                .isDisplayed()).isTrue();
+      });
     });
   }
 
