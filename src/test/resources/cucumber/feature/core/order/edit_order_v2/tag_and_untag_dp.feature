@@ -72,7 +72,7 @@ Feature: Tag & Untag DP
       | postcode | 238880                                                     |
       | city     | SG                                                         |
       | country  | SG                                                         |
-    
+
   Scenario: Operator Untag/Remove Order from DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -255,3 +255,36 @@ Feature: Tag & Untag DP
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
+
+  Scenario: Auto Untag DP Order that is Larger than SMALL
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"},"dimensions":{"weight":1,"height":1,"length":1,"width":1,"size":"SMALL"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                            |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"},"dimensions":{"weight":100,"height":100,"length":100,"width":100,"size":"LARGE"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[2].id},"dp_id":{dp-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
+    # Verify 1st order is NOT untagged by DP Service
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
+    And Operator verify order events are not presented on Edit Order V2 page:
+      | UNASSIGNED FROM DP |
+    # Verify 2nd order is untagged by DP Service
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name        | UNASSIGNED FROM DP        |
+      | description | {dp-name} (id: {dpms-id}) |
