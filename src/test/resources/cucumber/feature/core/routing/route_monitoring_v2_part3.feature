@@ -18,9 +18,9 @@ Feature: Route Monitoring V2
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 0                      |
@@ -57,9 +57,9 @@ Feature: Route Monitoring V2
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | successCount | 1                      |
@@ -86,9 +86,9 @@ Feature: Route Monitoring V2
       | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId          | {KEY_CREATED_ROUTE_ID} |
       | numValidFailed   | <numValidFailed>       |
@@ -111,9 +111,9 @@ Feature: Route Monitoring V2
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint | 1                      |
@@ -135,9 +135,9 @@ Feature: Route Monitoring V2
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint | 0                      |
@@ -169,9 +169,9 @@ Feature: Route Monitoring V2
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalParcels  | 2                      |
@@ -202,9 +202,9 @@ Feature: Route Monitoring V2
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalParcels  | 2                      |
@@ -252,9 +252,9 @@ Feature: Route Monitoring V2
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalParcels  | 4                      |
@@ -273,9 +273,9 @@ Feature: Route Monitoring V2
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId              | {KEY_CREATED_ROUTE_ID} |
       | totalParcels         | 1                      |
@@ -293,9 +293,9 @@ Feature: Route Monitoring V2
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint | 0                      |
@@ -313,9 +313,9 @@ Feature: Route Monitoring V2
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId              | {KEY_CREATED_ROUTE_ID} |
       | totalParcels         | 1                      |
@@ -333,9 +333,9 @@ Feature: Route Monitoring V2
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
-      | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}         |
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId       | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint | 0                      |
