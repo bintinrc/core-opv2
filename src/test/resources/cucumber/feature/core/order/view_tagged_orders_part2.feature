@@ -47,7 +47,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                         |
       | granularStatus       | En-route to Sorting Hub               |
 
-  @DeleteRoutes @wip
+  @DeleteRoutes
   Scenario: View Tagged Orders - On Vehicle Delivery, No Attempt
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                      |
