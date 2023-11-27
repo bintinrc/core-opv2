@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CashCollection @wip
+@OperatorV2 @Core @EditOrderV2 @CashCollection
 Feature: Cash Collection
 
   Background:

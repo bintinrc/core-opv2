@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CashCollection @wip1
+@OperatorV2 @Core @EditOrderV2 @CashCollectionVn
 Feature: Cash Collection
 
   Background:
@@ -210,18 +210,6 @@ Feature: Cash Collection
     Then Operator verifies that error react notification displayed:
       | top    | Status 500: Unknown                                                       |
       | bottom | ^.*Error Message: Not allowed to update 'On Vehicle for Delivery' order.* |
-#    Then Operator verifies that success react notification displayed:
-#      | top | Update cash collection successfully |
-#    Then Operator verify COD icon is not displayed on Edit Order V2 page
-#    And Operator verify order event on Edit Order V2 page using data below:
-#      | name        | UPDATE CASH                              |
-#      | description | Cash On Delivery changed from 23.57 to 0 |
-#    And DB Core - verify orders record:
-#      | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-#      | codId | null                               |
-#    Then DB Core - verify cods record:
-#      | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
-#      | deletedAt | not null                               |
 
   Scenario: VN - Operator Disallow Edit COD of Arrived at Sorting Hub RTS order
       Given API Order - Shipper create multiple V4 orders using data below:
