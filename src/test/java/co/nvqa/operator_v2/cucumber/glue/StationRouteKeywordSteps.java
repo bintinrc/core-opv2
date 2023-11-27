@@ -45,10 +45,10 @@ public class StationRouteKeywordSteps extends AbstractSteps {
 
   @When("Operator selects {value} hub on Station Route Keyword page")
   public void selectHub(String hubName) {
-    retryIfRuntimeExceptionOccurred(() -> page.inFrame(() -> {
-      page.waitUntilLoaded(3, 60);
+    doWithRetry(() -> page.inFrame(() -> {
+      page.waitUntilLoaded();
       page.hub.selectValue(hubName);
-    }), 2);
+    }), "", 3000, 3);
   }
 
   @When("Operator create new coverage on Station Route Keyword page:")
