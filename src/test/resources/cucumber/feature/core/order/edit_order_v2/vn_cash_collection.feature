@@ -28,7 +28,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD SGD10 |
+      | cod | COD VND10 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                               |
       | description | Cash On Delivery changed from 23.57 to 10 |
@@ -109,7 +109,7 @@ Feature: Cash Collection
       | deletedAt | not null                               |
 
   Scenario: VN - Operator Allow Edit COD of On Vehicle for Delivery non-RTS order
-      Given API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                               |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
@@ -124,9 +124,9 @@ Feature: Cash Collection
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-      And API Core - Operator update order granular status:
-        | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-        | granularStatus | On Vehicle for Delivery            |
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | granularStatus | On Vehicle for Delivery            |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes   |
@@ -134,7 +134,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD SGD10 |
+      | cod | COD VND10 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                               |
       | description | Cash On Delivery changed from 23.57 to 10 |
@@ -212,7 +212,7 @@ Feature: Cash Collection
       | bottom | ^.*Error Message: Not allowed to update 'On Vehicle for Delivery' order.* |
 
   Scenario: VN - Operator Disallow Edit COD of Arrived at Sorting Hub RTS order
-      Given API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                               |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
