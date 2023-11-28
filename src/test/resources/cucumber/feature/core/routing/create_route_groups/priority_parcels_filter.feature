@@ -7,6 +7,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario Outline: Operator Filter Service Level on Create Route Groups - <serviceLevel>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902057
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -42,6 +43,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | SAMEDAY      |
       | EXPRESS      |
 
+  @HighPriority
   Scenario: Operator Filter Excluded Shipper and Non Excluded Shipper on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902146
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -66,6 +68,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | top    | Status 400: Unknown                                                                        |
       | bottom | ^.*Error Message: Same shipper ids are both included and excluded: {filter-shipper-name}.* |
 
+  @HighPriority
   Scenario: Operator Filter Excluded Shipper on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902128
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -100,6 +103,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Pending Pickup                                            |
 
+  @HighPriority
   Scenario: Operator Filter Hub Inbound Datetime with Start Datetime and End Datetime on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6968575
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -128,6 +132,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Arrived at Sorting Hub                                    |
 
+  @HighPriority
   Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902120
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -156,6 +161,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Arrived at Sorting Hub                                    |
 
+  @HighPriority
   Scenario: Operator Filter Original Transaction End Time on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6936912
     Given API Order - Shipper create multiple V4 orders using data below:

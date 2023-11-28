@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @RoutingModules @RoutingModulesAllOrders
+@OperatorV2 @Core @AllOrders @OrderStatusReport
 Feature: All Orders - Order Status Report
 
   Background:

@@ -7,6 +7,7 @@ Feature: Create Route Groups - Transaction Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214759
     Given API Shipper create V4 order using data below:
@@ -32,7 +33,7 @@ Feature: Create Route Groups - Transaction Filters
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter RTS on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214755
     Given Operator go to menu Utilities -> QRCode Printing
@@ -142,6 +143,7 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      |
       | Van en-route to pickup               | Parcel      |
 
+  @HighPriority
   Scenario: Operator Filter Order Zone on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905747
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -170,6 +172,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Pending Pickup                                            |
 
+  @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905898
     Given Operator go to menu Utilities -> QRCode Printing

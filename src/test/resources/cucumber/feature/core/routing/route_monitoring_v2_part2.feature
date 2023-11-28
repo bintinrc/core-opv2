@@ -5,7 +5,7 @@ Feature: Route Monitoring V2
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels on NON-PRIOR Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -28,7 +28,7 @@ Feature: Route Monitoring V2
     Then Operator check there are 0 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
     And Operator check there are 0 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup & Delivery Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -78,7 +78,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -142,7 +142,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order with NO Tags
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -200,7 +200,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order Has PRIOR Tag
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -264,7 +264,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order with NO Tags
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -322,7 +322,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed on NON-Failed Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -415,7 +415,7 @@ Feature: Route Monitoring V2
       | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
       | tags         | -                                          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -455,7 +455,7 @@ Feature: Route Monitoring V2
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @DeleteDriverV2
+  @DeleteOrArchiveRoute @DeleteDriverV2 @HighPriority
   Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

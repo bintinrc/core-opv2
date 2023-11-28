@@ -5,7 +5,7 @@ Feature: Route Monitoring V2
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Single Transaction
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -30,7 +30,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | totalParcels | 1                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Multiple Transactions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -57,7 +57,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | totalParcels | 3                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Empty Route
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -79,7 +79,7 @@ Feature: Route Monitoring V2
       | earlyCount           | 0                                  |
       | lateCount            | 0                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -107,7 +107,7 @@ Feature: Route Monitoring V2
       | numInvalidFailed     | 0                                  |
       | numValidFailed       | 0                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -135,7 +135,7 @@ Feature: Route Monitoring V2
       | numInvalidFailed     | 0                                  |
       | numValidFailed       | 0                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -183,7 +183,7 @@ Feature: Route Monitoring V2
       | numInvalidFailed     | 0                                  |
       | numValidFailed       | 0                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -225,7 +225,7 @@ Feature: Route Monitoring V2
       | numInvalidFailed     | 0                                  |
       | numValidFailed       | 0                                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Delivery - <type>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -278,7 +278,7 @@ Feature: Route Monitoring V2
       | Valid Failed   | 2                   | 100                  | 0                | 1              |
       | Invalid Failed | 11                  | 0                    | 1                | 0              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Pickup - <type>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |

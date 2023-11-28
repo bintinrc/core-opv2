@@ -5,7 +5,7 @@ Feature: Tag Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRouteTags
+  @DeleteRouteTags @MediumPriority
   Scenario: Operator Create New Tag on Tag Management Page
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
@@ -19,7 +19,7 @@ Feature: Tag Management
       | name        | {KEY_CREATED_ROUTE_TAG.name}        |
       | description | {KEY_CREATED_ROUTE_TAG.description} |
 
-  @DeleteRouteTags
+  @DeleteRouteTags @MediumPriority
   Scenario: Operator Update Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
@@ -36,7 +36,7 @@ Feature: Tag Management
       | name        | UPT                             |
       | description | UPT tag is for testing [EDITED] |
 
-  @DeleteRouteTags
+  @DeleteRouteTags @MediumPriority
   Scenario: Operator Search Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:

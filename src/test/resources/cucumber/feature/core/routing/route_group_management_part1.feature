@@ -5,7 +5,7 @@ Feature: Route Group Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRouteGroups @CloseNewWindows
+  @DeleteRouteGroups @CloseNewWindows @MediumPriority
   Scenario: Operator Creates Route Group
     Given Operator go to menu Routing -> 2. Route Group Management
     When Operator create new route group on Route Groups Management page:
@@ -22,7 +22,7 @@ Feature: Route Group Management
       | noRoutedReservations | 0                                                                                                            |
       | hubName              | {hub-id} - {hub-name}                                                                                        |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @MediumPriority
   Scenario: Operator Updates Route Group Details
     And API Operator create new Route Group:
       | name        | ARG4-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -46,7 +46,7 @@ Feature: Route Group Management
       | noRoutedReservations | 0                                                                       |
       | hubName              | {hub-id-2} - {hub-name-2}                                               |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @MediumPriority
   Scenario: Operator Deletes Route Group
     And API Operator create new Route Group:
       | name        | ARG5-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -58,7 +58,7 @@ Feature: Route Group Management
       | bottom             | 1 Route Group Deleted          |
     Then Operator verify "{KEY_CREATED_ROUTE_GROUP.name}" route group was deleted on Route Group Management page
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Delete Transactions From Route Group
     And API Operator create new Route Group:
       | name        | ARG6-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -77,7 +77,7 @@ Feature: Route Group Management
       | top    | Id: {KEY_CREATED_ROUTE_GROUP.id} |
       | bottom | 1 Route Group Updated            |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @MediumPriority
   Scenario: Bulk Delete Route Groups
     And API Operator create new Route Group:
       | name        | ARG1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
@@ -95,7 +95,7 @@ Feature: Route Group Management
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @MediumPriority
   Scenario: Delete A Route Group From Edit Route Group Modal
     And API Operator create new Route Group:
       | name        | ARG7-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |

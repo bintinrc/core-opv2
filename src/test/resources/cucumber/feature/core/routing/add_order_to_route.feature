@@ -5,7 +5,7 @@ Feature: Add Order To Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @HighPriority
   Scenario: Add Order to a Route - Pickup, Valid Tracking ID, With Prefix
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -37,7 +37,7 @@ Feature: Add Order To Route
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Add Order to a Route - Invalid Tracking ID, With Prefix
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -83,7 +83,7 @@ Feature: Add Order To Route
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Add Order to a Route - Invalid Tracking ID, No Prefix
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -96,7 +96,7 @@ Feature: Add Order To Route
     #      | top | Order INVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "INVALIDTRACKINGID"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Non-ID Country
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -133,7 +133,7 @@ Feature: Add Order To Route
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
-  @DeleteRoutes
+  @DeleteRoutes @HighPriority
   Scenario: Add Merged Pickup Order to a Route by Valid Tracking Id
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -186,7 +186,7 @@ Feature: Add Order To Route
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeleteRoutes
+  @DeleteRoutes @HighPriority
   Scenario: Add Merge Delivery Order to a Route by Valid Tracking Id
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -239,7 +239,7 @@ Feature: Add Order To Route
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Add Order to a Route - Pickup return order, route archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -262,7 +262,7 @@ Feature: Add Order To Route
       | bottom | ^.*cannot add waypoint if route not in \[PENDING IN_PROGRESS\].* |
     And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Add Order to a Route - Delivery, route archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
