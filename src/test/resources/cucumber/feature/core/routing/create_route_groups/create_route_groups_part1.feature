@@ -7,7 +7,7 @@ Feature: Create Route Groups
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Operator Add Transaction to Route Group on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214754
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -35,7 +35,7 @@ Feature: Create Route Groups
       | noReservations       | 0                                   |
       | noRoutedReservations | 0                                   |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Operator Add Reservation to Route Group on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7160757
     Given Operator go to menu Utilities -> QRCode Printing
@@ -71,6 +71,7 @@ Feature: Create Route Groups
       | noReservations       | 1                                   |
       | noRoutedReservations | 0                                   |
 
+  @HighPriority
   Scenario: Operator Filter Master Shipper on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/6905698
     Given Operator go to menu Utilities -> QRCode Printing
@@ -99,7 +100,7 @@ Feature: Create Route Groups
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Routed Transaction on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214756
     Given Operator go to menu Utilities -> QRCode Printing
@@ -129,6 +130,7 @@ Feature: Create Route Groups
       | startDateTime | {KEY_LIST_OF_CREATED_ORDER[1].pickupDate} 12:00:00         |
       | endDateTime   | {KEY_LIST_OF_CREATED_ORDER[1].pickupEndDate} 15:00:00      |
 
+  @HighPriority
   Scenario: Operator Filter DP Order on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214760
     Given Operator go to menu Utilities -> QRCode Printing

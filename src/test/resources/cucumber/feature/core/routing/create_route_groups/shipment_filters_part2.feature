@@ -7,7 +7,7 @@ Feature: Create Route Groups - Shipment Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - Pending - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/8129456
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -37,7 +37,7 @@ Feature: Create Route Groups - Shipment Filters
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - At Transit Hub - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907935
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -71,7 +71,7 @@ Feature: Create Route Groups - Shipment Filters
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - Transit - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/8129457
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -106,7 +106,7 @@ Feature: Create Route Groups - Shipment Filters
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - Completed - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/8129455
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -149,7 +149,7 @@ Feature: Create Route Groups - Shipment Filters
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Arrived at Sorting Hub |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - Cancelled - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/8129453
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -180,7 +180,7 @@ Feature: Create Route Groups - Shipment Filters
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} | Pending Pickup |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Status on Create Route Group - Closed - Shipment Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/8129454
     Given API Order - Shipper create multiple V4 orders using data below:

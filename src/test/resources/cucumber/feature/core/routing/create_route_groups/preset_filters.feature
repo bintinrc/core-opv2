@@ -7,7 +7,7 @@ Feature: Create Route Groups - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Save A New Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091632
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -143,7 +143,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Apply Existing Filter Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091631
     And API Operator creates new Route Groups Filter Template using data below:
@@ -203,7 +203,7 @@ Feature: Create Route Groups - Preset Filters
       | shipmentStatus | At Transit Hub |
       | shipmentType   | AIR_HAUL       |
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Delete Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091645
     And API Operator creates new Route Groups Filter Template using data below:
@@ -241,7 +241,7 @@ Feature: Create Route Groups - Preset Filters
       | bottom | ID: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID} |
     And DB Lighthouse - verify preset_filters id "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" record is deleted:
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091635
     And API Operator creates new Route Groups Filter Template using data below:
@@ -385,7 +385,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091636
     And API Lighthouse - creates new Route Groups Filter Template:
@@ -493,7 +493,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @DeleteRouteGroups @DeleteFilterTemplateV2
+  @DeleteRouteGroups @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247899
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -528,7 +528,7 @@ Feature: Create Route Groups - Preset Filters
       | orderServiceType | Parcel Delivery  |
       | deliveryType     | 3 Days - Anytime |
 
-  @DeleteRouteGroups @DeleteFilterTemplateV2
+  @DeleteRouteGroups @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247900
     Given API Order - Shipper create multiple V4 orders using data below:

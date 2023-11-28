@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Orders with COD <30 Millions to Single Driver Routes on Zonal Routing
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -52,7 +52,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Driver Routes on Zonal Routing
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -116,7 +116,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Single Orders with COD >30 Millions to Single Driver Routes on Zonal Routing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -149,7 +149,7 @@ Feature: ID - Order COD Limit
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Single Driver Routes on Zonal Routing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -201,7 +201,7 @@ Feature: ID - Order COD Limit
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Multiple Driver Routes on Zonal Routing
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -281,7 +281,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Zonal Routing - 1 Route is Deleted
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -359,7 +359,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 10000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Zonal Routing - 1 Route is Archived
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:

@@ -68,6 +68,7 @@ Feature: Create Route Groups - Transaction Filters
       | Small       | S    |
       | Extra Small | XS   |
 
+  @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579892
     Given Operator go to menu Utilities -> QRCode Printing
@@ -97,6 +98,7 @@ Feature: Create Route Groups - Transaction Filters
       | serviceType |
       | Corporate   |
 
+  @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Return
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579894
     Given Operator go to menu Utilities -> QRCode Printing
@@ -126,6 +128,7 @@ Feature: Create Route Groups - Transaction Filters
       | serviceType      |
       | Corporate Return |
 
+  @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Document
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579900
     Given Operator go to menu Utilities -> QRCode Printing
@@ -155,6 +158,7 @@ Feature: Create Route Groups - Transaction Filters
       | serviceType        |
       | Corporate Document |
 
+  @HighPriority
   Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate AWB
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6410540
     Given Operator go to menu Utilities -> QRCode Printing

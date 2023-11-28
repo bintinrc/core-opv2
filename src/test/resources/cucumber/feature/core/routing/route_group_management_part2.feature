@@ -5,7 +5,7 @@ Feature: Route Group Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Clear Transaction of Route Groups
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -29,7 +29,7 @@ Feature: Route Group Management
       | top | 1 Route Group(s) Cleared |
     And Operator verifies "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was cleared on Route Group Management page
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Filter Route Groups Based on Creation Date
     And API Operator create new Route Group:
       | name        | ARG9-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
@@ -40,7 +40,7 @@ Feature: Route Group Management
       | toDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verifies route groups table is filtered by "^{gradle-current-date-yyyy-MM-dd}.*" date on Route Group Management page
 
-  @DeleteRouteGroupsV2
+  @DeleteRouteGroupsV2 @HighPriority
   Scenario: Download CSV File of Transactions of a Route Group
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -67,7 +67,7 @@ Feature: Route Group Management
     And Operator download jobs of "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group on Edit Route Group modal on Route Group Management page
     Then Operator verify route group jobs CSV file on Route Group Management page
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Delete Reservations From Route Group
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -92,7 +92,7 @@ Feature: Route Group Management
       | referenceId  | {KEY_CREATED_RESERVATION_ID} |
       | deletedAt    | not null                     |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Clear Reservations of Route Groups
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -114,7 +114,7 @@ Feature: Route Group Management
       | referenceId  | {KEY_CREATED_RESERVATION_ID} |
       | deletedAt    | not null                     |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Operator Deletes Route Group with Transaction & Reservation Assigned
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -209,7 +209,7 @@ Feature: Route Group Management
 #      | {tag-name-1} |
 #      | {tag-name-2} |
 
-  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @HighPriority
   Scenario: Operator Filters Total PA Job of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
@@ -236,7 +236,7 @@ Feature: Route Group Management
       | noPaJobs |
       | ^\d*2\d* |
 
-  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @DeleteRoutes
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @DeleteRoutes @HighPriority
   Scenario: Operator Filters Total Routed PAJ of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -271,7 +271,7 @@ Feature: Route Group Management
       | noRoutedPaJobs |
       | ^\d*2\d*       |
 
-  @DeleteRouteGroupsV2
+  @DeleteRouteGroupsV2 @HighPriority
   Scenario:Operator Filters Total Reservation of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
@@ -298,7 +298,7 @@ Feature: Route Group Management
       | noReservations |
       | ^\d*2\d*       |
 
-  @DeleteRouteGroupsV2 @DeleteRoutes
+  @DeleteRouteGroupsV2 @DeleteRoutes @HighPriority
   Scenario:Operator Filters Total Routed Reservation of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
