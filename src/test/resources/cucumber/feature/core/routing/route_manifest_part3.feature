@@ -96,7 +96,7 @@ Feature: Route Manifest
       | trackingIds    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}         |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @MediumPriority
+  @HighPriority
   Scenario: Operator View POP for Fail Reservation on Route Manifest
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -249,7 +249,7 @@ Feature: Route Manifest
       | trackingIds            | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}    |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @MediumPriority
+  @HighPriority
   Scenario: Operator View POP for Fail Pickup Appointment Job on Route Manifest
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
@@ -397,7 +397,7 @@ Feature: Route Manifest
       | pickupQuantity  | -                                           |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @MediumPriority
+  @HighPriority
   Scenario: Operator View POP for Fail Return Pickup on Route Manifest
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -610,7 +610,7 @@ Feature: Route Manifest
       | deliveryQuantity | 1                                         |
     And Operator is able to download signature in POD details dialog on Route Manifest page
 
-  @MediumPriority
+  @HighPriority
   Scenario: Operator View POD for Fail Normal Delivery on Route Manifest
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
