@@ -5,7 +5,7 @@ Feature: Route Monitoring V2
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -25,7 +25,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 0                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -64,7 +64,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | successCount | 1                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Reservation - <name>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -98,7 +98,7 @@ Feature: Route Monitoring V2
       | Valid Fail   | 8                   | 1              | 0                |
       | Invalid Fail | 9                   | 0              | 1                |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -119,7 +119,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 1                      |
       | pendingCount  | 1                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Reservation From Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -143,7 +143,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 0                      |
       | pendingCount  | 0                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -178,7 +178,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 1                      |
       | pendingCount  | 1                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Pickup Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -210,7 +210,7 @@ Feature: Route Monitoring V2
       | totalParcels  | 2                      |
       | totalWaypoint | 1                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -261,7 +261,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 2                      |
       | pendingCount  | 2                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Delivery From Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -301,7 +301,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 0                      |
       | pendingCount  | 0                      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Pickup From Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:

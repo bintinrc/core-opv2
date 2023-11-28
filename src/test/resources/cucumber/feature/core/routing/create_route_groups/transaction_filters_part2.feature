@@ -7,6 +7,7 @@ Feature: Create Route Groups - Transaction Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Fail - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905890
     Given Operator go to menu Utilities -> QRCode Printing
@@ -45,6 +46,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} |
       | status     | Pickup fail                                                |
 
+  @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Success - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905893
     Given Operator go to menu Utilities -> QRCode Printing
@@ -75,6 +77,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Completed                                                |
 
+  @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Staging - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905912
     Given Operator go to menu Utilities -> QRCode Printing
@@ -104,6 +107,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
+  @HighPriority
   Scenario: Operator Filter Order Priority Level on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6906053
     Given Operator go to menu Utilities -> QRCode Printing
@@ -130,6 +134,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
+  @HighPriority
   Scenario: Operator Filter Order Weight on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6906037
     Given Operator go to menu Utilities -> QRCode Printing
@@ -159,6 +164,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
+  @HighPriority
   Scenario: Operator Filter Order DNR Group on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6906009
     Given API Order - Shipper create multiple V4 orders using data below:

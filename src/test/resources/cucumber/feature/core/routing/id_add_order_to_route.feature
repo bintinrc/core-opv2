@@ -5,7 +5,7 @@ Feature: Add Order To Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @HighPriority
   Scenario: Add Delivery Routed Order to a New Route - New Route Date and Hub Same to Existing Route
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -42,7 +42,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route Date same but different Hub to Existing Route
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -77,7 +77,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route hub same but different Date to Existing Route
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -113,7 +113,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route date and hub different to Existing Route
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -150,7 +150,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Existing Route is Archived
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -187,7 +187,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route is Archived
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -223,7 +223,7 @@ Feature: Add Order To Route
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Add Merged Pickup Routed Order to a New Route - New Route Date and Hub Same to Existing Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -314,7 +314,7 @@ Feature: Add Order To Route
       | waypointId | {KEY_PICKUP_A_AFTER.waypointId}    |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @DeleteRoutes
+  @DeleteRoutes @HighPriority
   Scenario: Add Merged Delivery Routed Order to a New Route - New Route Date and Hub Same to Existing Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

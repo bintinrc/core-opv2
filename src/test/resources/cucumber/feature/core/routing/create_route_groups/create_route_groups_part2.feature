@@ -7,7 +7,7 @@ Feature: Create Route Groups
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @MediumPriority
   Scenario: Operator Filter Route Grouping on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214757
     Given Operator go to menu Utilities -> QRCode Printing
@@ -42,6 +42,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
+  @HighPriority
   Scenario: Download CSV of Route Group Information on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5165473
     Given Operator go to menu Utilities -> QRCode Printing
@@ -100,7 +101,7 @@ Feature: Create Route Groups
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies results table is empty on Create Route Groups
 
-  @DeleteFilterTemplate
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Filter Master Shipper by Apply Filter Preset on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452124
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -128,7 +129,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressString} | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressString}   | Pending Pickup |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Transactions
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452177
     Given Operator go to menu Utilities -> QRCode Printing
@@ -171,7 +172,7 @@ Feature: Create Route Groups
       | id                           |
       | {KEY_CREATED_RESERVATION.id} |
 
-  @DeleteRouteGroupsV2
+  @DeleteRouteGroupsV2 @HighPriority
   Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Reservations
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452193
     Given API Shipper create V4 order using data below:
@@ -205,7 +206,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction |
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | PICKUP Transaction   |
 
-  @DeleteRouteGroups
+  @DeleteRouteGroups @HighPriority
   Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Shipment
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452194
     Given API Shipper create V4 order using data below:

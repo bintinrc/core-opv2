@@ -222,7 +222,7 @@ Feature: ID - Order COD Limit
       | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[2].id} has exceeded total cod limit.* |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes Without Change Driver ID or Datetime - Single Driver Route Has COD <30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -256,7 +256,7 @@ Feature: ID - Order COD Limit
       | tags     | {route-tag-name}                                  |
       | comments | New comment {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes With Change Driver ID or Datetime - Single Driver Route Has COD <30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -288,7 +288,7 @@ Feature: ID - Order COD Limit
       | id         | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes Without Change Driver ID or Datetime - Multiple Driver Routes Have COD >30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
