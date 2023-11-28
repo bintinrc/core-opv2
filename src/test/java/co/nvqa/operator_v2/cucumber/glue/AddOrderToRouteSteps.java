@@ -48,10 +48,8 @@ public class AddOrderToRouteSteps extends AbstractSteps {
       requestedId = order.getRequestedTrackingId();
       trackingId = order.getTrackingId();
     } else {
-      Object o = ((List<?>) get(
+      co.nvqa.common.core.model.order.Order comOrder = ((List<co.nvqa.common.core.model.order.Order>) get(
           KEY_LIST_OF_CREATED_ORDERS)).get(0);
-      co.nvqa.common.core.model.order.Order comOrder = (co.nvqa.common.core.model.order.Order) o;
-
       requestedId = comOrder.getRequestedTrackingId();
       trackingId = comOrder.getTrackingId();
     }
