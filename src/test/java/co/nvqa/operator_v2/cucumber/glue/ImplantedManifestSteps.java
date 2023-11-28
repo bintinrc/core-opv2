@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.support.OrderHelper;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -26,7 +25,9 @@ import static co.nvqa.operator_v2.selenium.page.ImplantedManifestPage.ImplantedM
 @ScenarioScoped
 public class ImplantedManifestSteps extends AbstractSteps {
 
+  private static String KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID = "KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID";
   private ImplantedManifestPage page;
+
 
   public ImplantedManifestSteps() {
   }
@@ -34,14 +35,6 @@ public class ImplantedManifestSteps extends AbstractSteps {
   @Override
   public void init() {
     page = new ImplantedManifestPage(getWebDriver());
-  }
-
-  @When("Operator selects Hub ([^\"]*) and clicks on \"Create Manifest\" button")
-  public void operatorSelectsHubAndClicksOnButton(String hubName) {
-    page.inFrame(() -> {
-      page.selectHub(hubName);
-      page.clickCreateManifestButtonToInitiateCreation();
-    });
   }
 
   @When("Operator clicks 'Download CSV File' on Implanted Manifest page")
@@ -193,9 +186,9 @@ public class ImplantedManifestSteps extends AbstractSteps {
   }
 
   @When("Operator saves created orders Tracking IDs without prefix")
-  public void removeTrackingIdsPrefix() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
-    String prefix = OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID);
+  public void removeTrackingIdsPrefix(List<String> tids) {
+    List<String> trackingIds = resolveValues(tids);
+    String prefix = getCountryPrefix(TestConstants.NV_SYSTEM_ID);
     List<String> prefixlessTrackingIds = trackingIds.stream()
         .map(s -> s.replaceFirst(prefix, ""))
         .collect(Collectors.toList());
@@ -218,7 +211,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
       page.addPrefix.click();
       page.setPrefixDialog.waitUntilVisible();
       page.setPrefixDialog.prefix.sendKeys(
-          OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID));
+          getCountryPrefix(TestConstants.NV_SYSTEM_ID));
       page.setPrefixDialog.save.click();
       page.setPrefixDialog.waitUntilInvisible();
     });
@@ -235,5 +228,25 @@ public class ImplantedManifestSteps extends AbstractSteps {
   public void operatorVerifiesErrorToast(String message) {
     message = resolveValue(message);
     page.waitUntilInvisibilityOfToast(message);
+  }
+
+  private static String getCountryPrefix(String country) {
+    if (country == null) {
+      return null;
+    }
+    final String code = country.toLowerCase();
+
+    switch (code) {
+      case "sg":
+        return "NVSG";
+      case "id":
+        return "NVID";
+      case "my":
+        return "NVMY";
+      case "ma":
+        return "CHMA";
+      default:
+        return "NV" + code.toUpperCase();
+    }
   }
 }
