@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Tag;
+import co.nvqa.common.core.model.route.RouteTag;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -32,20 +33,20 @@ public class TagManagementSteps extends AbstractSteps {
   }
 
 
-  @When("^Tag Management page is loaded$")
+  @When("Tag Management page is loaded")
   public void pageIsLoaded() {
     tagManagementPage.inFrame(SimpleReactPage::waitUntilLoaded);
   }
 
-  @When("^Operator create new route tag on Tag Management page:$")
+  @When("Operator create new route tag on Tag Management page:")
   public void createNewTag(Map<String, String> data) {
     tagManagementPage.inFrame(page -> {
-      Tag newTag = new Tag(resolveKeyValues(data));
+      RouteTag newTag = new RouteTag(resolveKeyValues(data));
       if (StringUtils.equalsIgnoreCase("GENERATED", newTag.getName())) {
         newTag.setName(RandomStringUtils.randomAlphanumeric(3).toUpperCase());
       }
       put(KEY_CREATED_ROUTE_TAG, newTag);
-      putInList(KEY_LIST_OF_CREATED_ROUTE_TAGS, newTag);
+      putInList(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_CREATED_ROUTE_TAGS, newTag);
       page.createTag.click();
       page.addTagDialog.waitUntilVisible();
       page.addTagDialog.tagName.setValue(newTag.getName());
@@ -55,20 +56,20 @@ public class TagManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verifies tag on Tag Management page:$")
+  @Then("Operator verifies tag on Tag Management page:")
   public void verifyNewTagCreatedSuccessfully(Map<String, String> data) {
     tagManagementPage.inFrame(page -> {
-      Tag expected = new Tag(resolveKeyValues(data));
+      RouteTag expected = new RouteTag(resolveKeyValues(data));
       page.tagsTable.filterByColumn(COLUMN_NAME, expected.getName());
       Assertions.assertThat(page.tagsTable.isEmpty())
           .as("Tags Table is empty")
           .isFalse();
-      Tag actual = page.tagsTable.readEntity(1);
+      RouteTag actual = page.tagsTable.readEntity(1);
       expected.compareWithActual(actual);
     });
   }
 
-  @Then("^Operator search tag on Tag Management page:$")
+  @Then("Operator search tag on Tag Management page:")
   public void SearchTag(Map<String, String> data) {
     data = resolveKeyValues(data);
     String column = data.get("column");
@@ -79,25 +80,24 @@ public class TagManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verifies search result on Tag Management page:$")
+  @Then("Operator verifies search result on Tag Management page:")
   public void verifySearchResult(Map<String, String> data) {
     tagManagementPage.inFrame(page -> {
-      Tag tag = new Tag(resolveKeyValues(data));
+      RouteTag tag = new RouteTag(resolveKeyValues(data));
       Assertions.assertThat(page.tagsTable.isEmpty())
           .as("Tags Table is empty")
           .isFalse();
-      Tag actual = page.tagsTable.readEntity(1);
+      RouteTag actual = page.tagsTable.readEntity(1);
       tag.compareWithActual(actual);
     });
   }
 
-  @When("^Operator update created tag on Tag Management page:$")
-  public void updateTag(Map<String, String> data) {
+  @When("Operator update {string} tag on Tag Management page:")
+  public void updateTag(String tagName, Map<String, String> data) {
+    String createdTagName = resolveValue(tagName);
     tagManagementPage.inFrame(page -> {
-      Tag tag = get(KEY_CREATED_ROUTE_TAG);
-      Tag newTag = new Tag(resolveKeyValues(data));
-
-      page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
+      RouteTag newTag = new RouteTag(resolveKeyValues(data));
+      page.tagsTable.filterByColumn(COLUMN_NAME, createdTagName);
       Assertions.assertThat(page.tagsTable.isEmpty())
           .as("Tags Table is empty")
           .isFalse();
@@ -108,8 +108,7 @@ public class TagManagementSteps extends AbstractSteps {
       tagManagementPage.addTagDialog.description.setValue(newTag.getDescription());
       tagManagementPage.addTagDialog.submitChanges.click();
       tagManagementPage.addTagDialog.waitUntilInvisible();
-
-      tag.merge(newTag);
+      putInList(CoreScenarioStorageKeys.KEY_CORE_LIST_OF_CREATED_ROUTE_TAGS, newTag);
     });
   }
 }
