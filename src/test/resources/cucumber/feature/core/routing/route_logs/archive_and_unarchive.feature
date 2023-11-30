@@ -27,7 +27,7 @@ Feature: Route Logs - Archive & Unarchive
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | ARCHIVED |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | ARCHIVED |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Unarchive Single Archived Route from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
@@ -78,7 +78,7 @@ Feature: Route Logs - Archive & Unarchive
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | IN_PROGRESS |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Unarchive Single NON-archived Route from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -98,7 +98,7 @@ Feature: Route Logs - Archive & Unarchive
       | top    | Unable to apply actions |
       | bottom | No valid selection      |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Unarchive Multiple NON-Archived Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

@@ -5,7 +5,7 @@ Feature: Route Logs - Merge Transactions
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions  - Empty & Non-Empty Delivery OTP
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -39,7 +39,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions - Different Order Verification Method
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -73,7 +73,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions - Default email - Same Default Email & Different Phone Number
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -156,7 +156,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions  - Default email - Same Default Email & Same Phone Number
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -230,7 +230,7 @@ Feature: Route Logs - Merge Transactions
       | email_1             | phone_number_1 |
       | support@ninjavan.co | +6595557073    |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Same DP Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -280,7 +280,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Non-Empty Delivery OTP - Different Delivery OTP
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -328,7 +328,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Empty Delivery OTP
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -376,6 +376,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
+  @MediumPriority
   Scenario Outline: Operator Partial Merge Multiple Transactions of Single Route - Valid and Invalid Transactions - Partial Different Addresses
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

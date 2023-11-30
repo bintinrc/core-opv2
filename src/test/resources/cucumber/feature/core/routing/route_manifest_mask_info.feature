@@ -5,7 +5,7 @@ Feature: Mask Route Manifest Info
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Mask Order for Normal Delivery on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -34,7 +34,7 @@ Feature: Mask Route Manifest Info
       | contact     | +9727894435                                               |
       | address     | 49 MANDALAY ROAD MANDAI SQUARE 116 Kilang Timur 308412 SG |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Mask Order for DP Delivery on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -65,7 +65,7 @@ Feature: Mask Route Manifest Info
       | contact     | +9727894435                                    |
       | address     | 501, ORCHARD ROAD, SG, 238880 3-4 SG 238880 SG |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Mask Order for Return Pickup on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                       |
@@ -90,7 +90,7 @@ Feature: Mask Route Manifest Info
       | contact     | +9727894434                                |
       | address     | Keng Lee Rd Kilang Barat 308402 SG         |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Unmask Order for Reservation on Route Manifest
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
@@ -107,7 +107,7 @@ Feature: Mask Route Manifest Info
       | status  | Pending                                                                                                                                                                        |
       | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} |
 
-  @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute
+  @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Unmask Order for PA Job on Route Manifest
     Given API Shipper - Operator get address details using data below:
       | shipperId | {shipper-v4-paj-id}      |
