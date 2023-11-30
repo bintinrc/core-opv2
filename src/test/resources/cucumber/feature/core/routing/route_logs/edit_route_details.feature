@@ -5,7 +5,7 @@ Feature: Route Logs - Edit Route Details
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Do Not Allow to Edit Details of a Single Route When Status is Archived
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -15,7 +15,7 @@ Feature: Route Logs - Edit Route Details
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     Then Operator verify Edit Details button is disabled on Route Logs page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Details When Status is Archived
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -49,7 +49,7 @@ Feature: Route Logs - Edit Route Details
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Partial Edit Multiple Routes Details from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Core - Operator create new route using data below:
@@ -80,7 +80,7 @@ Feature: Route Logs - Edit Route Details
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name}   | {zone-name}   | {hub-name}   |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Do Not Allow to Edit Route Tags Details of a Single Route When Status is Archived
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "tags":[{route-tag-id}]} |
@@ -90,7 +90,7 @@ Feature: Route Logs - Edit Route Details
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     Then Operator verify Edit Details button is disabled on Route Logs page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Tags Details When Status is Archived
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "tags":[{route-tag-id}]} |

@@ -5,6 +5,7 @@ Feature: Route Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Load Route Manifest of a Driver Success Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -52,6 +53,7 @@ Feature: Route Manifest
       | pickupsCount    | 0                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  @HighPriority
   Scenario: Operator Load Route Manifest of a Driver Failed Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

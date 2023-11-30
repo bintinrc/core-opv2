@@ -5,6 +5,7 @@ Feature: Route Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Show Order Tags in Route Manifest Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -45,6 +46,7 @@ Feature: Route Manifest
       | {order-tag-name}   | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {order-tag-name-2} | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
+  @HighPriority
   Scenario: Operator Load Route Manifest of a Driver Multiple Pending Waypoints
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -104,6 +106,7 @@ Feature: Route Manifest
       | pickupsCount    | 1                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -146,6 +149,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -188,6 +192,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -235,6 +240,7 @@ Feature: Route Manifest
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -346,6 +352,7 @@ Feature: Route Manifest
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -401,6 +408,7 @@ Feature: Route Manifest
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
+  @HighPriority
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction of RTS Order on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

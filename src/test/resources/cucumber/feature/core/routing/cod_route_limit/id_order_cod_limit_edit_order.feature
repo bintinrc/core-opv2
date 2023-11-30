@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-   @DeleteDriverV2 @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -58,7 +58,7 @@ Feature: ID - Order COD Limit
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
 
-   @DeleteDriverV2 @DeleteRoutes
+   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
