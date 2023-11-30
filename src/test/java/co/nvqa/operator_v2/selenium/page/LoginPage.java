@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.NvTestCoreUrlMismatchError;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -114,24 +116,30 @@ public class LoginPage extends OperatorV2SimplePage {
   public void enterCredential(String username, String password) {
     final StringBuilder googlePageUrlSb = new StringBuilder();
 
-    waitUntil(() ->
-    {
-      String currentUrl = getCurrentUrl();
-      googlePageUrlSb.setLength(0);
-      googlePageUrlSb.append(currentUrl);
-      boolean isExpectedUrlFound = StringUtils.startsWithAny(currentUrl, GOOGLE_EXPECTED_URL_1,
-          GOOGLE_EXPECTED_URL_2, GOOGLE_EXPECTED_URL_3);
+    try {
+      waitUntil(() ->
+      {
+        String currentUrl = getCurrentUrl();
+        googlePageUrlSb.setLength(0);
+        googlePageUrlSb.append(currentUrl);
+        boolean isExpectedUrlFound = StringUtils.startsWithAny(currentUrl, GOOGLE_EXPECTED_URL_1,
+            GOOGLE_EXPECTED_URL_2, GOOGLE_EXPECTED_URL_3);
 
-      LOGGER.info("========== GOOGLE LOGIN PAGE ==========");
-      LOGGER.info("Current URL          : " + currentUrl);
-      LOGGER.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
-      LOGGER.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
-      LOGGER.info("Expected URL 3       : " + GOOGLE_EXPECTED_URL_3);
-      LOGGER.info("Is Expected URL Found: " + isExpectedUrlFound);
-      LOGGER.info("=======================================");
+        LOGGER.info("========== GOOGLE LOGIN PAGE ==========");
+        LOGGER.info("Current URL          : " + currentUrl);
+        LOGGER.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
+        LOGGER.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
+        LOGGER.info("Expected URL 3       : " + GOOGLE_EXPECTED_URL_3);
+        LOGGER.info("Is Expected URL Found: " + isExpectedUrlFound);
+        LOGGER.info("=======================================");
 
-      return isExpectedUrlFound;
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        return isExpectedUrlFound;
+      }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreUrlMismatchError(
+          String.format("Expected url starts with one of [%s,%s,%s] not found",
+              GOOGLE_EXPECTED_URL_1, GOOGLE_EXPECTED_URL_2, GOOGLE_EXPECTED_URL_3), e);
+    }
 
     final String googlePageUrl = googlePageUrlSb.toString();
 

@@ -1,5 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.common.utils.NvWait;
+import co.nvqa.operator_v2.exception.NvTestCoreElementNotFoundError;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
@@ -74,7 +77,11 @@ public class OrderLevelTagManagementPage extends OperatorV2SimplePage {
 
   public void searchAndSelectOrderInTable(String keyword) {
     searchTableCustom1(TABLE_DATA_ORDER_ID_COLUMN_CLASS, keyword);
-    wait10sUntil(() -> getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA) == 1);
+    try {
+      new NvWait(10_000).until(() -> getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA) == 1);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreElementNotFoundError("Unable to find order in table", e);
+    }
     checkRowWithMdVirtualRepeat(1, TABLE_DATA);
     clearSearchTableCustom1(TABLE_DATA_ORDER_ID_COLUMN_CLASS);
   }

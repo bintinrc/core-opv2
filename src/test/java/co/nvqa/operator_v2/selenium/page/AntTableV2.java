@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.NvTestCoreTableEmptyError;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -260,13 +262,19 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   }
 
   public void waitIsNotEmpty(int timeoutInSeconds) {
-    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000L, "Table is empty");
+    try {
+      waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000L, "Table is empty");
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreTableEmptyError(
+          "Table still empty after waiting for" + timeoutInSeconds + "seconds", e);
+    }
   }
 
   public PageElement getCell(String columnId, int index) {
     String columnDataClass = getColumnLocators().get(columnId);
     String xpath =
-        columnDataClass.startsWith("/") ? f(columnDataClass, index) : f(CELL_LOCATOR_PATTERN, index, columnDataClass);
+        columnDataClass.startsWith("/") ? f(columnDataClass, index)
+            : f(CELL_LOCATOR_PATTERN, index, columnDataClass);
     return new PageElement(getWebDriver(), xpath);
   }
 }

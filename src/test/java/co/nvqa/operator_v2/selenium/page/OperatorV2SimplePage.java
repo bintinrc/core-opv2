@@ -2,8 +2,11 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.ui.page.SimpleWebPage;
 import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.common.utils.NvWait;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvAllure;
+import co.nvqa.operator_v2.exception.NvTestCoreWindowOrTabNotFoundError;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -235,7 +238,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilNoticeMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
-            f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]", containsMessage));
+        f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]",
+            containsMessage));
   }
 
   public void waitUntilVisibilityOfToastReact(String containsMessage) {
@@ -306,7 +310,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       waitUntilVisibilityOfElementLocated(xpathExpression);
     }
     if (isElementExistFast(xpathExpression)) {
-      waitUntilElementIsClickable("//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
+      waitUntilElementIsClickable(
+          "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
       click(
           "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
     }
@@ -892,7 +897,9 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     if (isMdSelectEnabled(mdSelectNgModel)) {
       selectValueFromMdSelect(mdSelectNgModel, value);
     } else {
-     Assertions.assertThat(getMdSelectValue(mdSelectNgModel)).as(selectName + " select is disabled and current value is not equal to expected").isEqualTo(          value);
+      Assertions.assertThat(getMdSelectValue(mdSelectNgModel))
+          .as(selectName + " select is disabled and current value is not equal to expected")
+          .isEqualTo(value);
     }
   }
 
@@ -1268,21 +1275,25 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     getWebDriver().navigate().refresh();
     acceptAlertDialogIfAppear();
 
-    waitUntil(() ->
-    {
-      boolean result;
-      String currentUrl = getCurrentUrl();
-      LOGGER
-          .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
+    try {
+      waitUntil(() ->
+      {
+        boolean result;
+        String currentUrl = getCurrentUrl();
+        LOGGER
+            .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
 
-      if (previousUrl.contains("linehaul")) {
-        result = currentUrl.contains("linehaul");
-      } else {
-        result = currentUrl.equalsIgnoreCase(previousUrl);
-      }
+        if (previousUrl.contains("linehaul")) {
+          result = currentUrl.contains("linehaul");
+        } else {
+          result = currentUrl.equalsIgnoreCase(previousUrl);
+        }
 
-      return result;
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        return result;
+      }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new RuntimeException(e);
+    }
 
     waitUntilPageLoaded(60);
     if (halfCircleSpinner.isDisplayedFast()) {
@@ -1296,8 +1307,12 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
-    wait50sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
-        f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+    try {
+      new NvWait(50_000).until(() -> getWebDriver().getWindowHandles().size() > 1,
+          f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreWindowOrTabNotFoundError("New window or tab not opened", e);
+    }
   }
 
   @SuppressWarnings("unchecked")

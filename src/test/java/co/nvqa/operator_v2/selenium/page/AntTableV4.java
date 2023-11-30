@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.NvTestCoreTableEmptyError;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -258,6 +260,10 @@ public class AntTableV4<T extends DataEntity<?>> extends AbstractTable<T> {
   }
 
   public void waitIsNotEmpty(int timeoutInSeconds) {
-    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000, "Table is empty");
+    try {
+      waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000L, "Table is empty");
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreTableEmptyError("Table is empty", e);
+    }
   }
 }
