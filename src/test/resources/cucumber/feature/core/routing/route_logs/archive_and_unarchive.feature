@@ -29,7 +29,6 @@ Feature: Route Logs - Archive & Unarchive
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Unarchive Single Archived Route from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Core - Operator archives routes below:
@@ -52,10 +51,9 @@ Feature: Route Logs - Archive & Unarchive
 
   @DeleteOrArchiveRoute @happy-path @HighPriority
   Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new route using data below:
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
@@ -80,8 +78,7 @@ Feature: Route Logs - Archive & Unarchive
 
   @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Unarchive Single NON-archived Route from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
@@ -100,8 +97,7 @@ Feature: Route Logs - Archive & Unarchive
 
   @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator Unarchive Multiple NON-Archived Routes from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

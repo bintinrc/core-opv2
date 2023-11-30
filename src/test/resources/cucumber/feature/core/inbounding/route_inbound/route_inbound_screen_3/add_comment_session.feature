@@ -7,7 +7,6 @@ Feature: Add Comment Session
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Add Comment to a Route Inbound Session
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |

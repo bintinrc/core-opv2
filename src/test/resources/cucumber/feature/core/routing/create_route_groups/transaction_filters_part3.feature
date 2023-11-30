@@ -9,8 +9,7 @@ Feature: Create Route Groups - Transaction Filters
 
   Scenario Outline: Operator Filter Transaction Timeslot on Create Route Groups - Transaction Filters - Timeslot = <timeslots>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905987
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"<startTime>","end_time":"<endTime>"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -71,10 +70,9 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579892
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -101,10 +99,9 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Return
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579894
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -131,10 +128,9 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate Document
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579900
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                              |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -161,14 +157,13 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate AWB
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6410540
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator generate 2 Corporate AWB Tracking Id
+    Given API Operator generate 2 Corporate AWB Tracking Id
     And API Shipper set Shipper V4 using data below:
       | legacyId | {shipper-v4-corporate-legacy-id} |
-    Given API Shipper create V4 order using data below:
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | {"service_type":"Corporate AWB","requested_tracking_number":"{KEY_CORPORATE_AWB_TRACKING_LIST[1].trackingId}","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Shipper create V4 order using data below:
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | {"service_type":"Corporate AWB","requested_tracking_number":"{KEY_CORPORATE_AWB_TRACKING_LIST[2].trackingId}","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups

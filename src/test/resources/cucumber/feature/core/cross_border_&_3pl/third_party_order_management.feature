@@ -7,7 +7,6 @@ Feature: Third Party Order Management
 
   @HighPriority
   Scenario: Operator Upload Single Third Party Order
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -32,7 +31,6 @@ Feature: Third Party Order Management
 
   @MediumPriority
   Scenario: Operator Edit Third Party Order
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -49,7 +47,6 @@ Feature: Third Party Order Management
 
   @MediumPriority
   Scenario: Operator Delete Third Party Order
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -66,8 +63,7 @@ Feature: Third Party Order Management
 
   @happy-path @HighPriority
   Scenario: Operator Upload Bulk Third Party Orders Successfully
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -80,8 +76,7 @@ Feature: Third Party Order Management
 
   @MediumPriority
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - NOT Transferred to 3PL & Completed
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -109,8 +104,7 @@ Feature: Third Party Order Management
 
   @MediumPriority
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - Transferred to 3PL & Completed
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -143,7 +137,6 @@ Feature: Third Party Order Management
 
   @MediumPriority
   Scenario: Operator Download and Verify Third Party Shipper Orders CSV File
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator download CSV file on Third Party Order Management page
     Then 3pl-orders CSV file is downloaded successfully

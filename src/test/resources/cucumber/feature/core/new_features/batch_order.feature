@@ -287,9 +287,8 @@ Feature: Batch Order
 
   @MediumPriority
   Scenario: Rollback Order - Invalid Batch Id
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu New Features -> Batch Order
-    And Operator search for "1111" batch on Batch Orders page
+    Given Operator go to menu New Features -> Batch Order
+    When Operator search for "1111" batch on Batch Orders page
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                         |
       | bottom | ^.*Error Message: Order batch with batch id 1111 not found!.* |
