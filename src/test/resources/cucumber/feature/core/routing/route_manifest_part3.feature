@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart3
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart3 @current
 Feature: Route Manifest
 
   Background:
@@ -342,7 +342,7 @@ Feature: Route Manifest
       | failureReason | -                                     |
     And Operator verify 'View POP' button is disabled for "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" pickup in Waypoint Details dialog on Route Manifest page
 
-  @HighPriority
+  @HighPriority @wip
   Scenario: Operator View POP for Success Return Pickup on Route Manifest
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -394,10 +394,10 @@ Feature: Route Manifest
       | receivedFrom    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}    |
       | relationship    | -                                           |
       | receiptDateTime | {gradle-current-date-yyyy-MM-dd}            |
-      | pickupQuantity  | -                                           |
+      | pickupQuantity  | 1                                           |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @HighPriority
+  @HighPriority @wip
   Scenario: Operator View POP for Fail Return Pickup on Route Manifest
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -450,7 +450,7 @@ Feature: Route Manifest
       | receivedFrom    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}    |
       | relationship    | -                                           |
       | receiptDateTime | {gradle-current-date-yyyy-MM-dd}            |
-      | pickupQuantity  | -                                           |
+      | pickupQuantity  | 1                                           |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
   @MediumPriority
