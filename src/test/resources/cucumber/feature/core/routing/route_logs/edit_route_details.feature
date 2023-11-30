@@ -17,8 +17,7 @@ Feature: Route Logs - Edit Route Details
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Details When Status is Archived
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -51,8 +50,7 @@ Feature: Route Logs - Edit Route Details
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Partial Edit Multiple Routes Details from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

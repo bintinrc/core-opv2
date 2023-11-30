@@ -6,8 +6,7 @@ Feature: Order Tag Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -30,8 +29,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   Scenario: Search Orders on the Order Tag Management Page by Shipper Filter
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -44,8 +42,7 @@ Feature: Order Tag Management
 
 
   Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-marketplace-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -57,8 +54,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   Scenario: Search Orders on the Order Tag Management Page by Status & Granular Status Filter
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
       | shipperClientSecret | {shipper-v4-marketplace-client-secret}                                                                                                                                                                                                                                                                                           |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -74,8 +70,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   Scenario: Search Orders on the Order Tag Management Page by CSV File
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
       | shipperClientSecret | {shipper-v4-marketplace-client-secret}                                                                                                                                                                                                                                                                                           |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -90,8 +85,7 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
   Scenario: Add Order Tag To Route
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
       | shipperClientSecret | {shipper-v4-marketplace-client-secret}                                                                                                                                                                                                                                                                                           |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |

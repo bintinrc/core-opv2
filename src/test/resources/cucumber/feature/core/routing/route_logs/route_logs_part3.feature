@@ -156,11 +156,10 @@ Feature: Route Logs
 
   @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     # RESERVATION
-    Given API Shipper - Operator create new shipper address using data below:
+    And API Shipper - Operator create new shipper address using data below:
       | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                         |
       | shipperAddressRequest | {"name":"{shipper-v4-name}","contact":"{shipper-v4-contact}","email":"{shipper-v4-email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"no_of_reservation":1}],"is_milk_run":false} |

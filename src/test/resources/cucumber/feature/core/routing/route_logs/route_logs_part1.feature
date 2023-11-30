@@ -30,7 +30,6 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute | 2                               |
@@ -50,8 +49,7 @@ Feature: Route Logs
 
   @DeleteOrArchiveRoute @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

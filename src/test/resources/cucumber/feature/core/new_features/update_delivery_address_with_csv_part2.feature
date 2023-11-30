@@ -7,7 +7,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues and Valid Orders
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -32,7 +31,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Invalid Lat Long Format & Empty Compulsory Fields
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -50,7 +48,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note>
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -74,7 +71,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Lat Long is Empty
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -92,7 +88,6 @@ Feature: Update Delivery Address with CSV
 
   @ArchiveRouteCommonV2 @routing-refactor @HighPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
