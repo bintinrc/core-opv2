@@ -10,14 +10,22 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario: Operator Filter Order Type on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214759
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -29,24 +37,30 @@ Feature: Create Route Groups - Transaction Filters
       | orderType | Normal,Return |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                                | type                 | shipper                                 | address                                                    | status                 |
-      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
-      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
+      | trackingId                                 | type                 | shipper                                  | address                                                     | status                 |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Arrived at Sorting Hub |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressString} | Pending Pickup         |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @DeleteRoutes @HighPriority
   Scenario: Operator Filter RTS on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214755
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | hubId                | {hub-id}                              |
+      | globalInboundRequest | { "hubId":{hub-id} }                  |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Operator RTS created order:
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
+      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
+    And API Core - Operator rts order:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
@@ -59,21 +73,23 @@ Feature: Create Route Groups - Transaction Filters
     Given Operator choose "Hide Reservations" on Reservation Filters section on Create Route Groups page
     Given Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER[1].id}                          |
-      | trackingId    | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
-      | type          | DELIVERY Transaction                                       |
-      | shipper       | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
-      | address       | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-      | status        | Arrived at Sorting Hub                                     |
-      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                    |
-      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                    |
-    
+      | orderId       | {KEY_LIST_OF_CREATED_ORDERS[1].id}                          |
+      | trackingId    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                  |
+      | type          | DELIVERY Transaction                                        |
+      | shipper       | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                    |
+      | address       | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} |
+      | status        | Arrived at Sorting Hub                                      |
+      | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00                     |
+      | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00                     |
+
   Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Groups - Transaction Filters - PP/DD Leg = <ppDdLeg>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905921
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -85,25 +101,27 @@ Feature: Create Route Groups - Transaction Filters
       | ppDdLeg | <ppDdLeg> |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} |
-      | type       | <type> Transaction                        |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}   |
-      | address    | <address>                                 |
-      | status     | Pending Pickup                            |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | type       | <type> Transaction                         |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}   |
+      | address    | <address>                                  |
+      | status     | Pending Pickup                             |
     Examples:
-      | ppDdLeg | type     | address                                                    |
-      | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-      | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   |
+      | ppDdLeg | type     | address                                                     |
+      | PP      | PICKUP   | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} |
+      | DD      | DELIVERY | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   |
 
   Scenario Outline: Operator Filter Granular Order Status on Create Route Groups - Transaction Filters - Granular Order Status = <granularStatus>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905706
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
-      | v4OrderRequest    | { "service_type":"<serviceType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator update order granular status:
-      | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
-      | granularStatus | <granularStatus>                  |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                              |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type":"<serviceType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator update order granular status:
+      | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | granularStatus | <granularStatus>                   |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -115,17 +133,17 @@ Feature: Create Route Groups - Transaction Filters
       | granularOrderStatus | <granularStatus> |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
-      | type       | PICKUP Transaction                                         |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-      | status     | <granularStatus>                                           |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                  |
+      | type       | PICKUP Transaction                                          |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} |
+      | status     | <granularStatus>                                            |
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-      | status     | <granularStatus>                                         |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | type       | DELIVERY Transaction                                      |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
+      | status     | <granularStatus>                                          |
     Examples:
       | granularStatus                       | serviceType |
       | Arrived at Distribution Point        | Parcel      |
@@ -176,9 +194,12 @@ Feature: Create Route Groups - Transaction Filters
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905898
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -190,25 +211,27 @@ Feature: Create Route Groups - Transaction Filters
       | transactionStatus | Pending |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
-      | type       | PICKUP Transaction                                         |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
-      | status     | Pending Pickup                                             |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                  |
+      | type       | PICKUP Transaction                                          |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} |
+      | status     | Pending Pickup                                              |
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-      | status     | Pending Pickup                                           |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | type       | DELIVERY Transaction                                      |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
+      | status     | Pending Pickup                                            |
 
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905850
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator cancel created order
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -220,12 +243,12 @@ Feature: Create Route Groups - Transaction Filters
       | transactionStatus | Cancelled |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                  |
-      | type       | PICKUP Transaction                                         |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                    |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                  |
+      | type       | PICKUP Transaction                                          |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                    |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressString} |
     Then Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | type       | DELIVERY Transaction                                      |
+      | shipper    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}                  |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |

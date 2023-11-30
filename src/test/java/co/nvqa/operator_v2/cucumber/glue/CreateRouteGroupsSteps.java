@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.RouteGroup;
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.model.order.Order.Transaction;
+import co.nvqa.common.lighthouse.model.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.RouteGroup;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
@@ -23,12 +24,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
+import static co.nvqa.common.lighthouse.cucumber.ControlKeyStorage.KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS;
 import static co.nvqa.common.model.DataEntity.toDateTime;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
@@ -1545,7 +1548,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         Matcher m = p.matcher(id);
         if (m.find()) {
           int index = Integer.parseInt(m.group(1));
-          List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+          List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
           String type = expected.getType().split("\\s")[0];
 
           Order order = orders.get(index - 1);
@@ -1801,7 +1804,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.savePresetDialog.waitUntilVisible();
       String value = resolveValue(presetName);
       page.savePresetDialog.presetName.setValue(value);
-      put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME, value);
+      val template = new ShipperPickupFilterTemplate();
+      template.setName(value);
+      putInList(KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS, template);
     });
   }
 
@@ -1811,10 +1816,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         .as("Preset Name checkmark").isTrue();
   }
 
-  @When("Operator verifies selected Filter Preset name is {string} on Create Route Groups page")
+  @When("Operator verifies selected Filter Preset name is {value} on Create Route Groups page")
   public void verifySelectedPresetName(String expected) {
     createRouteGroupsPage.inFrame(page -> {
-      String exp = resolveValue(expected);
       String actual = StringUtils.trim(page.filterPreset.getValue());
       Pattern p = Pattern.compile("(\\d+)\\s-\\s(.+)");
       Matcher m = p.matcher(actual);
@@ -1822,8 +1826,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           .isTrue();
       Long presetId = Long.valueOf(m.group(1));
       String presetName = m.group(2);
-      Assertions.assertThat(presetName).as("Preset Name").isEqualTo(exp);
-      put(KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID, presetId);
+      Assertions.assertThat(presetName).as("Preset Name").isEqualTo(expected);
+      List<ShipperPickupFilterTemplate> templates = get(
+          KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS);
+      templates.stream().filter(t -> expected.equalsIgnoreCase(t.getName()))
+          .findFirst().ifPresent(t -> t.setId(presetId));
     });
   }
 
