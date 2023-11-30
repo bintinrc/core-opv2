@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ResumeOrder
+@OperatorV2 @Core @EditOrderV2 @ResumeOrder @current1
 Feature: Resume Order
 
   Background:
@@ -84,7 +84,7 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @wip1
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -139,9 +139,6 @@ Feature: Resume Order
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |

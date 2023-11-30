@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart2
+@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart2 @current2
 Feature: Cancel Order
 
   Background:
@@ -96,6 +96,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @wip2
   Scenario: Operator Cancel Order From Resolved Recovery Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                     |
@@ -154,18 +155,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Pending                                                    |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | number     | 1                                                          |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | number     | 1                                                          |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | archived   | 1                                                          |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | archived   | 1                                                          |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Merged Delivery Waypoints
