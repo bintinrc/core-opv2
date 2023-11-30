@@ -456,7 +456,6 @@ Feature: Route Inbound Expected Scans
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | status     | -                                     |
       | reason     | Duplicate                             |
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:

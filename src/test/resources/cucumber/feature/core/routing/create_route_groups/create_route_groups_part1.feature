@@ -38,8 +38,7 @@ Feature: Create Route Groups
   @DeleteRouteGroups @HighPriority
   Scenario: Operator Add Reservation to Route Group on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7160757
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new shipper address V2 using data below:
+    Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
@@ -74,8 +73,7 @@ Feature: Create Route Groups
   @HighPriority
   Scenario: Operator Filter Master Shipper on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/6905698
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
     And API Shipper create V4 order using data below:
@@ -103,7 +101,6 @@ Feature: Create Route Groups
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter Routed Transaction on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214756
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -133,8 +130,7 @@ Feature: Create Route Groups
   @HighPriority
   Scenario: Operator Filter DP Order on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5214760
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:

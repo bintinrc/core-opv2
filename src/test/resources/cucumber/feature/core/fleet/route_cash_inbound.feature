@@ -7,8 +7,7 @@ Feature: Route Cash Inbound
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Create COD on Route Cash Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -48,8 +47,7 @@ Feature: Route Cash Inbound
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Update COD on Route Cash Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -87,8 +85,7 @@ Feature: Route Cash Inbound
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator Delete COD on Route Cash Inbound Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -129,8 +126,7 @@ Feature: Route Cash Inbound
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Fetch COD Inbound with Date Range Filter
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -169,8 +165,7 @@ Feature: Route Cash Inbound
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Download and Verify Cash Inbound CSV File
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |

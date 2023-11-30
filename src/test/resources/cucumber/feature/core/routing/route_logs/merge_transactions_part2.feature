@@ -5,10 +5,9 @@ Feature: Route Logs - Merge Transactions
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions  - Empty & Non-Empty Delivery OTP
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"allow_doorstep_dropoff":false,"enforce_delivery_verification":true,"is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -39,10 +38,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions - Different Order Verification Method
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":"bnc168"}},"parcel_job":{"allow_doorstep_dropoff":false,"enforce_delivery_verification":true,"delivery_verification_mode": "Identification","is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -73,10 +71,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions - Default email - Same Default Email & Different Phone Number
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -122,8 +119,7 @@ Feature: Route Logs - Merge Transactions
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Different DP Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -156,10 +152,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions  - Default email - Same Default Email & Same Phone Number
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -230,10 +225,9 @@ Feature: Route Logs - Merge Transactions
       | email_1             | phone_number_1 |
       | support@ninjavan.co | +6595557073    |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Same DP Delivery
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -280,10 +274,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Non-Empty Delivery OTP - Different Delivery OTP
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"allow_doorstep_dropoff":false,"enforce_delivery_verification":true,"cash_on_delivery": 0,"is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -328,10 +321,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Empty Delivery OTP
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{"is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:
@@ -376,9 +368,9 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
+  @MediumPriority
   Scenario Outline: Operator Partial Merge Multiple Transactions of Single Route - Valid and Invalid Transactions - Partial Different Addresses
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"<service_type>","service_level":"Standard","<direction>":{"name": "binti v4.1","phone_number": "<phone_number_1>","email": "<email_1>",    "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":<is_pickup_required>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Shipper create V4 order using data below:

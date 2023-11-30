@@ -5,7 +5,7 @@ Feature: Route Logs - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Save A New Preset on Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
@@ -44,9 +44,8 @@ Feature: Route Logs - Preset Filters
       | driver         | {ninja-driver-name}             |
       | archivedRoutes | true                            |
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Apply Filter Preset on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Lighthouse - creates new Route Logs Filter Template:
       | name            | PRESET {date: 0 days ago, yyyyMMddHHmmss} |
       | value.startDate | {date: 1 days ago, yyyy-MM-dd}            |
@@ -66,7 +65,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                           |
       | zone           | {zone-name}                    |
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page
     Given API Lighthouse - creates new Route Logs Filter Template:
       | name            | PRESET {date: 0 days ago, yyyyMMddHHmmss} |
@@ -107,9 +106,8 @@ Feature: Route Logs - Preset Filters
       | driver         | {ninja-driver-2-name}          |
       | archivedRoutes | true                           |
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Lighthouse - creates new Route Logs Filter Template:
       | name            | PRESET {date: 0 days ago, yyyyMMddHHmmss} |
       | value.startDate | {date: 1 days ago, yyyy-MM-dd}            |
@@ -140,7 +138,7 @@ Feature: Route Logs - Preset Filters
       | driver         | {ninja-driver-2-name}          |
       | archivedRoutes | true                           |
 
-  @DeleteFilterTemplateV2
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Delete Preset on Route Logs Page
     Given API Lighthouse - creates new Route Logs Filter Template:
       | name            | PRESET {date: 0 days ago, yyyyMMddHHmmss} |

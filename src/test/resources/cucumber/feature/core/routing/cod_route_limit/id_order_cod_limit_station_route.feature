@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -88,7 +88,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -131,7 +131,7 @@ Feature: ID - Order COD Limit
     Then Operator verify errors are displayed on Station Route page:
       | exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -247,7 +247,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -301,7 +301,7 @@ Feature: ID - Order COD Limit
     Then Operator verify errors are displayed on Station Route page:
       | exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Single Orders with COD <30 Millions to Single Existing Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -382,7 +382,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Orders with COD >30 Millions to Single Existing Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -424,7 +424,7 @@ Feature: ID - Order COD Limit
     Then Operator verify errors are displayed on Station Route page:
       | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id}]]: cannot exceed maximum dai... |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Existing Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -538,7 +538,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Single Existing Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -591,7 +591,7 @@ Feature: ID - Order COD Limit
     Then Operator verify errors are displayed on Station Route page:
       | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id} {KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed max... |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -647,7 +647,7 @@ Feature: ID - Order COD Limit
     Then Operator verify errors are displayed on Station Route page:
       | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum dai... |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Deleted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
