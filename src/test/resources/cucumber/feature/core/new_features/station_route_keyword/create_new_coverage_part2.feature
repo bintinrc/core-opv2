@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart2
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @CreateNewCoveragePart2 @current
 Feature: Create New Coverage
 
   Background:
@@ -185,7 +185,7 @@ Feature: Create New Coverage
       | coverageId | {KEY_COVERAGE_ID}                             |
       | value      | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
 
-  @DeleteDriverV2 @DeleteCoverageV2
+  @DeleteDriverV2 @DeleteCoverageV2 @wip
   Scenario: Operator Searches Created Coverage on Station Route Keyword
     Given API Driver - Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC4{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
@@ -201,13 +201,13 @@ Feature: Create New Coverage
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     When Operator filter coverages on Station Route Keyword page:
-      | area | AREA CNTS |
+      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
     Then Operator verify filter results on Station Route Keyword page:
-      | area | AREA CNTS |
+      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
     When Operator filter coverages on Station Route Keyword page:
-      | keywords | KEYWORD |
+      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
     Then Operator verify filter results on Station Route Keyword page:
-      | keywords | KEYWORD |
+      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
     When Operator filter coverages on Station Route Keyword page:
       | primaryDriver | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     Then Operator verify filter results on Station Route Keyword page:
