@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart2 @current2
+@OperatorV2 @Core @EditOrderV2 @CancelOrder @CancelOrderPart2
 Feature: Cancel Order
 
   Background:
@@ -96,7 +96,6 @@ Feature: Cancel Order
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
-  @wip2
   Scenario: Operator Cancel Order From Resolved Recovery Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                     |

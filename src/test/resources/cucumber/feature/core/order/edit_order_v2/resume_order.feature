@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ResumeOrder @current1
+@OperatorV2 @Core @EditOrderV2 @ResumeOrder
 Feature: Resume Order
 
   Background:
@@ -84,7 +84,7 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @ArchiveRouteCommonV2 @HighPriority @wip1
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
