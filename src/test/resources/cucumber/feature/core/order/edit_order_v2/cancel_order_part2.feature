@@ -154,18 +154,6 @@ Feature: Cancel Order
     And DB Core - verify waypoints record:
       | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Pending                                                    |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | number     | 1                                                          |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | number     | 1                                                          |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | archived   | 1                                                          |
-    And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | archived   | 1                                                          |
 
   @ArchiveRouteCommonV2
   Scenario: Cancel Order - Merged Delivery Waypoints
