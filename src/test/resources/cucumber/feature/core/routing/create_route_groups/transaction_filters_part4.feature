@@ -10,11 +10,10 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace International
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564410
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder  | 2                |
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |
@@ -39,11 +38,10 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564402
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                |
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
@@ -67,7 +65,6 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Document
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6579889
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                |
       | generateFromAndTo | RANDOM           |
@@ -93,8 +90,7 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Ninja Pack
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6400330
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator generate 2 Ninja Pack Tracking Id
+    Given API Operator generate 2 Ninja Pack Tracking Id
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 1                |
       | generateFromAndTo | RANDOM           |
@@ -118,11 +114,10 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - International
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564412
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
+    Given API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-client-secret} |
-    Given API Shipper create multiple V4 orders using data below:
+    And API Shipper create multiple V4 orders using data below:
       | numberOfOrder  | 2                |
       | v4OrderRequest | <v4OrderRequest> |
       | addressType    | global           |

@@ -12,7 +12,6 @@ Feature: Change Delivery Timings
 
   @happy-path @HighPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -96,7 +95,6 @@ Feature: Change Delivery Timings
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                               |
@@ -116,7 +114,6 @@ Feature: Change Delivery Timings
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
@@ -137,7 +134,6 @@ Feature: Change Delivery Timings
       | UPDATE SLA |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                               |
@@ -227,7 +223,6 @@ Feature: Change Delivery Timings
       | name | UPDATE SLA |
 
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |

@@ -63,7 +63,6 @@ Feature: All Orders - RTS & Resume
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Operator RTS Multiple Orders on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
@@ -139,7 +138,6 @@ Feature: All Orders - RTS & Resume
 
   @HighPriority
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -169,8 +167,7 @@ Feature: All Orders - RTS & Resume
 
   @happy-path @HighPriority
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
@@ -219,7 +216,6 @@ Feature: All Orders - RTS & Resume
 
   @MediumPriority
   Scenario: Operator RTS Multiple Orders with Invalid Granular Status
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |

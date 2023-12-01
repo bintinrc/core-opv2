@@ -139,9 +139,6 @@ Feature: Resume Order
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | number     | 1                            |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |

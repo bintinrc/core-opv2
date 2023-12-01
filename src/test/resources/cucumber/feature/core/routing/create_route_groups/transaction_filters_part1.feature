@@ -36,7 +36,6 @@ Feature: Create Route Groups - Transaction Filters
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Filter RTS on Create Route Groups - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/5214755
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -70,8 +69,7 @@ Feature: Create Route Groups - Transaction Filters
     
   Scenario Outline: Operator Filter PP/DD Leg Transaction on Create Route Groups - Transaction Filters - PP/DD Leg = <ppDdLeg>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905921
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -97,8 +95,7 @@ Feature: Create Route Groups - Transaction Filters
 
   Scenario Outline: Operator Filter Granular Order Status on Create Route Groups - Transaction Filters - Granular Order Status = <granularStatus>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905706
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest    | { "service_type":"<serviceType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator update order granular status:
@@ -175,8 +172,7 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905898
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -204,8 +200,7 @@ Feature: Create Route Groups - Transaction Filters
 
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Cancelled - Transaction Filters (uid:b39eed67-342c-4738-a779-42437223eb82)
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905850
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator cancel created order

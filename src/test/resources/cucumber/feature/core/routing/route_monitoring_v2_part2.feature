@@ -5,44 +5,58 @@ Feature: Route Monitoring V2
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels on NON-PRIOR Waypoints
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId                | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels           | 1                      |
-      | pendingPriorityParcels | 0                      |
-    When Operator open Pending Priority modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId                | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels           | 1                                  |
+      | pendingPriorityParcels | 0                                  |
+    When Operator open Pending Priority modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 0 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
     And Operator check there are 0 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup & Delivery Under the Same Route
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
@@ -51,430 +65,539 @@ Feature: Route Monitoring V2
       | orderTag | {order-tag-prior-id}               |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId                | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels           | 2                      |
-      | totalWaypoint          | 2                      |
-      | pendingPriorityParcels | 2                      |
-    When Operator open Pending Priority modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId                | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels           | 2                                  |
+      | totalWaypoint          | 2                                  |
+      | pendingPriorityParcels | 2                                  |
+    When Operator open Pending Priority modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 1 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
     And Operator verify Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}   |
       | tags         | PRIOR                                      |
     When Operator click on tracking id of a Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
     Then Operator close current window and switch to Route Monitoring V2 page
     Then Operator check there are 1 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
     And Operator verify Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].toName}     |
       | tags         | PRIOR                                      |
     When Operator click on tracking id of a Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | orderTag | {order-tag-prior-id}               |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 1           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 6           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":11}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 11                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":11}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 11                                                                                                  |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 2                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 2                      |
-      | numInvalidFailed     | 2                      |
-      | numValidFailed       | 0                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 2                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 2                                  |
+      | numInvalidFailed     | 2                                  |
+      | numValidFailed       | 0                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 2 Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
       | tags         | PRIOR                                      |
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].toName}     |
       | tags         | PRIOR                                      |
     When Operator click on tracking id of a Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
     Then Operator close current window and switch to Route Monitoring V2 page
     When Operator click on tracking id of a Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order with NO Tags
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 1           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":11}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 11                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":11}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 11                                                                                                  |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 2                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 2                      |
-      | numInvalidFailed     | 2                      |
-      | numValidFailed       | 0                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 2                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 2                                  |
+      | numInvalidFailed     | 2                                  |
+      | numValidFailed       | 0                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 2 Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
       | tags         | -                                          |
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].toName}     |
       | tags         | -                                          |
     When Operator click on tracking id of a Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
     Then Operator close current window and switch to Route Monitoring V2 page
     When Operator click on tracking id of a Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order Has PRIOR Tag
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | orderTag | {order-tag-prior-id}               |
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | orderTag | {order-tag-prior-id}               |
-    And API Operator create new route using data below:
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the C2C/Return order pickup using data below:
-      | orderNumber            | 1           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver failed the C2C/Return order pickup using data below:
-      | orderNumber            | 2           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":112}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 112                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":112}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 112                                                                                                  |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 2                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 2                      |
-      | numInvalidFailed     | 2                      |
-      | numValidFailed       | 0                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 2                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 2                                  |
+      | numInvalidFailed     | 2                                  |
+      | numValidFailed       | 0                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 2 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}   |
       | tags         | PRIOR                                      |
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].fromName}   |
       | tags         | PRIOR                                      |
     When Operator click on tracking id of a Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
     Then Operator close current window and switch to Route Monitoring V2 page
     When Operator click on tracking id of a Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order with NO Tags
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the C2C/Return order pickup using data below:
-      | orderNumber            | 1           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver failed the C2C/Return order pickup using data below:
-      | orderNumber            | 2           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":112}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 112                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":112}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 112                                                                                                  |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 2                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 2                      |
-      | numInvalidFailed     | 2                      |
-      | numValidFailed       | 0                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 2                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 2                                  |
+      | numInvalidFailed     | 2                                  |
+      | numValidFailed       | 0                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 2 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}   |
       | tags         | -                                          |
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].fromName}   |
       | tags         | -                                          |
     When Operator click on tracking id of a Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
     Then Operator close current window and switch to Route Monitoring V2 page
     When Operator click on tracking id of a Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed on NON-Failed Waypoints
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 1                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 1                      |
-      | numInvalidFailed     | 0                      |
-      | numValidFailed       | 0                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 1                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 1                                  |
+      | numInvalidFailed     | 0                                  |
+      | numValidFailed       | 0                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 0 Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 0 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @happy-path @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator create new shipper address V2 using data below:
+    And API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator add reservation pick-up to the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver failed the C2C/Return order pickup using data below:
-      | orderNumber            | 1           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 5           |
-      | failureReasonIndexMode | FIRST       |
-    And API Driver fail the reservation using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":112}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 112                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                          |
+      | routes          | KEY_DRIVER_ROUTES                                                                                   |
+      | jobType         | TRANSACTION                                                                                         |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":11}] |
+      | jobAction       | FAIL                                                                                                |
+      | jobMode         | DELIVERY                                                                                            |
+      | failureReasonId | 11                                                                                                  |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                |
+      | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                  |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                 |
+      | jobType         | RESERVATION                                                                                                       |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | jobAction       | FAIL                                                                                                              |
+      | jobMode         | PICK_UP                                                                                                           |
+      | failureReasonId | 112                                                                                                               |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId          | {KEY_CREATED_ROUTE_ID} |
-      | totalWaypoint    | 3                      |
-      | numInvalidFailed | 3                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+      | routeId          | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalWaypoint    | 3                                  |
+      | numInvalidFailed | 3                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
     Then Operator check there are 1 Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[2].toName}     |
       | tags         | -                                          |
     And Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:
-      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}   |
       | tags         | -                                          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @HighPriority
+  @ArchiveRouteCommonV2 @CloseNewWindows @HighPriority
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator create new shipper address V2 using data below:
+    And API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    And API Operator add reservation pick-up to the route
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound parcel
-    And API Core - Operator start the route with following data:
-      | routeId  | {KEY_CREATED_ROUTE_ID}                                                                                                                |
-      | driverId | {ninja-driver-id}                                                                                                                     |
-      | request  | {"user_id":"5622157","user_name":"OPV2-CORE-DRIVER","user_grant_type":"PASSWORD","user_email":"opv2-core-driver.auto@hg.ninjavan.co"} |
-    And API Driver fail the reservation using data below:
-      | failureReasonFindMode  | findAdvance |
-      | failureReasonCodeId    | 9           |
-      | failureReasonIndexMode | FIRST       |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                |
+      | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                  |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                 |
+      | jobType         | RESERVATION                                                                                                       |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | jobAction       | FAIL                                                                                                              |
+      | jobMode         | PICK_UP                                                                                                           |
+      | failureReasonId | 112                                                                                                               |
     When Operator go to menu Routing -> Route Monitoring V2
-    When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId          | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels     | 1                      |
-      | totalWaypoint    | 2                      |
-      | numInvalidFailed | 1                      |
-    When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
-    And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
+      | routeId          | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels     | 1                                  |
+      | totalWaypoint    | 2                                  |
+      | numInvalidFailed | 1                                  |
+    When Operator open Invalid Failed WP modal of a route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Monitoring V2 page
+    Then Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @DeleteDriverV2 @HighPriority
+  @ArchiveRouteCommonV2 @DeleteDriverV2 @HighPriority
   Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name-2}           |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name-2}                       |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | driverName | {ninja-driver-name}    |
-      | routeId    | {KEY_CREATED_ROUTE_ID} |
+      | driverName | {ninja-driver-name}                |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY    |
@@ -482,7 +605,7 @@ Feature: Route Monitoring V2
       | hubName       | {hub-name-2} |
     And Operator edits details of created route using data below:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}      |
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | date       | {date: 0 days next, yyyy-MM-dd}         |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name}                             |
       | hub        | {hub-name}                              |
@@ -490,9 +613,9 @@ Feature: Route Monitoring V2
       | comments   | Route has been edited by automated test |
     And Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | driverName | {ninja-driver-2-name}  |
-      | routeId    | {KEY_CREATED_ROUTE_ID} |
+      | driverName | {ninja-driver-2-name}              |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |

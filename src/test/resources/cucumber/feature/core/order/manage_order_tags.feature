@@ -15,7 +15,6 @@ Feature: Manage Order Tags
 
   @DeleteOrderTagsV2
   Scenario: Operator Delete Order Tag
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Core - create new order tag:
       | name        | ABC                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
@@ -66,7 +65,6 @@ Feature: Manage Order Tags
 
   @DeleteOrderTagsV2
   Scenario: Operator Fail Delete Order Tag - Not Found
-    Given Operator go to menu Utilities -> QRCode Printing
     And API Core - create new order tag:
       | name        | ABF                                                                               |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |

@@ -31,7 +31,6 @@ Feature: Order Tag Management
 
   @happy-path @HighPriority
   Scenario: Remove Tags from Order
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -48,7 +47,6 @@ Feature: Order Tag Management
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -62,7 +60,6 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   Scenario: Update Tags from Order
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -77,7 +74,6 @@ Feature: Order Tag Management
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -93,7 +89,6 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   Scenario: Clear All Tags from Order
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -110,7 +105,6 @@ Feature: Order Tag Management
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -121,7 +115,6 @@ Feature: Order Tag Management
     Then Operator verifies no tags shown on Edit Order V2 page
 
   Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note>
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                         |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                     |
@@ -139,7 +132,6 @@ Feature: Order Tag Management
       | Return | Return    | true             |
 
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |

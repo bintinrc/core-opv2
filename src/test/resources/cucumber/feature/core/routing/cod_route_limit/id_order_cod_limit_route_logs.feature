@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes to Same Date - Multiple Routes have Different Date and Driver COD <30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -65,7 +65,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-next-1-day-yyyy-MM-dd}     |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Edit Multiple Routes to Same Date - Multiple Routes have Different Date and Driver COD >30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                 |
@@ -107,7 +107,7 @@ Feature: ID - Order COD Limit
       | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD <30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -174,7 +174,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD >30 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
