@@ -166,11 +166,10 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Corporate AWB
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6410540
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Operator generate tracking id using data below:
+    Given API Order - Operator generate tracking id using data below:
       | type  | corporate_awb |
       | count | 2             |
-    Given API Order - Shipper create multiple V4 orders using data below:
+    And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-corporate-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-corporate-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |

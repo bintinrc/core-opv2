@@ -193,7 +193,6 @@ Feature: Create Route Groups - Transaction Filters
   @HighPriority
   Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Pending - Transaction Filters
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6905898
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |

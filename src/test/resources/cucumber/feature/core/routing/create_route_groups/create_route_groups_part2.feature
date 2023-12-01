@@ -40,8 +40,8 @@ Feature: Create Route Groups
       | top | Added successfully |
     When Operator refresh page
     And Operator set General Filters on Create Route Groups page:
-      | creationTime  | today                                      |
-      | routeGrouping | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | creationTime  | today                          |
+      | routeGrouping | {KEY_CREATED_ROUTE_GROUP.name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
