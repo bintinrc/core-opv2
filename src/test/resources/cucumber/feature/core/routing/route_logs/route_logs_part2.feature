@@ -11,7 +11,7 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
-    And Operator adds tag "{route-tag-name}" to created route
+    And Operator adds tag "{route-tag-name}" to created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies that success react notification displayed:
       | top    | 1 route(s) tagged                                                     |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} tagged with {route-tag-name} |
@@ -28,7 +28,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator deletes created route on Route Logs page
+    And Operator deletes created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top    | 1 Route(s) Deleted                       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -44,7 +44,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator click 'Edit Route' and then click 'Load Waypoints of Selected Routes Only'
+    And Operator click 'Edit Route' id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" and then click 'Load Waypoints of Selected Routes Only'
     Then Operator is redirected to this page "sg/edit-routes?cluster=true&ids={KEY_LIST_OF_CREATED_ROUTES[1].id}&unrouted=false"
 
   @ArchiveRouteCommonV2 @HighPriority
@@ -72,7 +72,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator removes tag "{route-tag-name-2}" from created route
+    And Operator removes tag "{route-tag-name-2}" from created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify route details on Route Logs page using data below:
       | id   | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | tags | {route-tag-name}                   |

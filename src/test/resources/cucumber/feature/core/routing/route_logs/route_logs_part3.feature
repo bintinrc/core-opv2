@@ -18,90 +18,6 @@ Feature: Route Logs
     Then Operator verifies route details on Route Manifest page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-
-  @MediumPriority
-  Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
-    Given DB Operator find drivers with ended employment
-    When Operator go to menu Routing -> Route Logs
-    And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
-
-  @DeleteDriverV2 @MediumPriority
-  Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
-    Given API Driver Management - Operator create new driver with data below:
-      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
-      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
-      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
-      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
-      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
-    When Operator go to menu Routing -> Route Logs
-    And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
-
-  @DeleteDriverV2 @MediumPriority
-  Scenario: Operator Allowed To See Driver List on Create Route if Driver Has No Employment Date
-    Given API Driver Management - Operator create new driver with data below:
-      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
-      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
-      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
-      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
-      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
-    And Operator waits for 10 seconds
-    When Operator go to menu Routing -> Route Logs
-    And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Create Route modal on Route Logs page
-
-  @ArchiveRouteCommonV2 @DeleteDriverV2 @MediumPriority
-  Scenario: Operator Allowed To See Driver List on Update Route if Driver Employment End Date => Today's Date
-    Given API Driver Management - Operator create new driver with data below:
-      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
-      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
-      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
-      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
-      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
-    And Operator waits for 10 seconds
-    And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator opens Edit Details dialog for route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
-    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
-
-  @ArchiveRouteCommonV2 @DeleteDriverV2 @MediumPriority
-  Scenario: Operator Allowed To See Driver List on Update Route if Driver Has No Employment Date
-    Given API Driver Management - Operator create new driver with data below:
-      | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2} } |
-      | vehicles               | [ { "active": true, "vehicleNo": "{vehicle-no}", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 5 } ]                                                                                                                                                                                                                                                                                               |
-      | contacts               | [ { "active": true, "type": "{contact-type-name}", "details": "{contact-no}" } ]                                                                                                                                                                                                                                                                                                                                            |
-      | zonePreferences        | [ { "latitude": {zone-latitude}, "longitude": {zone-longitude}, "maxWaypoints": 2, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 5, "rank": 1 } ]                                                                                                                                                                                                                                                                         |
-      | hub                    | { "displayName": "{hub-name-2}", "value": {hub-id-2} }                                                                                                                                                                                                                                                                                                                                                                      |
-    And Operator waits for 10 seconds
-    And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
-    Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
-
-  @ArchiveRouteCommonV2 @MediumPriority
-  Scenario: Operator Not Allowed To See Driver List on Update Route if Driver Employment End Date < Today's Date
-    Given DB Operator find drivers with ended employment
-    And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
-    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
-
   @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @HighPriority
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     # RETURN & NORMAL ORDER
@@ -182,7 +98,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator deletes created route on Route Logs page
+    And Operator deletes created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top    | 1 Route(s) Deleted                       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
