@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-   @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single Driver Route on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -51,14 +51,14 @@ Feature: ID - Order COD Limit
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 10,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
 
-   @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Disallow to Add Single Order with COD >30 Millions to Single Driver Route on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |

@@ -182,7 +182,7 @@ Feature: Route Logs
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator deletes created route on Route Logs page
+    And Operator deletes created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top    | 1 Route(s) Deleted                       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} |

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1
+@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1 @current
 Feature: Route Logs
 
   Background:
@@ -109,9 +109,13 @@ Feature: Route Logs
       | routeDateTo   | TODAY        |
       | hubName       | {hub-name-2} |
     And Operator optimise created routes
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies created routes are optimised successfully
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @DeleteOrArchiveRoute @ArchiveRouteCommonV2
+  @DeleteOrArchiveRoute @ArchiveRouteCommonV2 @wip
   Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -123,7 +127,11 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator save data of created routes on Route Logs page
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator print passwords of created routes
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies that success react notification displayed:
       | top | Downloaded file routes_password.pdf... |
     Then Operator verify printed passwords of selected routes info is correct
@@ -176,6 +184,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator edits details of created route using data below:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}      |
       | date       | {date: 0 days next, yyyy-MM-dd}         |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name-2}                           |

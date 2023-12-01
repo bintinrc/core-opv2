@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.route.RouteResponse;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.model.RouteLogsUi;
@@ -15,8 +16,6 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RouteLogsSteps extends AbstractSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RouteLogsSteps.class);
+  private static final String KEY_LIST_OF_CREATE_ROUTE_PARAMS = "KEY_LIST_OF_CREATE_ROUTE_PARAMS";
 
   private RouteLogsPage routeLogsPage;
 
@@ -126,12 +126,7 @@ public class RouteLogsSteps extends AbstractSteps {
     createdRoute.setComments(newParams.getComments());
     Long createdRouteId = createdRoute.getId();
 
-    put(KEY_CREATE_ROUTE_PARAMS, newParams);
-    put(KEY_CREATED_ROUTE, createdRoute);
-    put(KEY_CREATED_ROUTE_ID, createdRouteId);
     putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
-    putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
-    putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
     writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
   }
 
@@ -264,12 +259,7 @@ public class RouteLogsSteps extends AbstractSteps {
           createdRoute.setComments(createRouteParams.getComments());
           Long createdRouteId = createdRoute.getId();
 
-          put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
-          put(KEY_CREATED_ROUTE, createdRoute);
-          put(KEY_CREATED_ROUTE_ID, createdRouteId);
           putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
-          putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
-          putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
           writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
         }
       }
@@ -281,9 +271,9 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
 
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-      routeIds.forEach(routeId -> {
-        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      List<RouteResponse> routes = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
+      routes.forEach(e -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, e.getId());
         routeLogsPage.routesTable.selectRow(1);
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_BULK_EDIT_DETAILS);
@@ -339,9 +329,10 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("Operator edits details of created route using data below:")
   public void operatorEditDetailsMultipleRouteUsingDataBelow(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
-      RouteLogsParams newParams = new RouteLogsParams(resolveKeyValues(data));
+      Map<String, String> resolvedData = resolveKeyValues(data);
+      RouteLogsParams newParams = new RouteLogsParams(resolvedData);
 
-      Long routeId = get(KEY_CREATED_ROUTE_ID);
+      final long routeId = Long.parseLong(resolvedData.get("routeId"));
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
       routeLogsPage.editDetailsDialog.waitUntilVisible();
@@ -427,10 +418,10 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator verify Edit Details button is disabled on Route Logs page")
-  public void clickCheckAssignmentIsDisabled() {
+  @When("Operator verify Edit Details button is disabled for route id {string} on Route Logs page")
+  public void clickCheckAssignmentIsDisabled(String id) {
     routeLogsPage.inFrame(() -> {
-          Long routeId = get(KEY_CREATED_ROUTE_ID);
+          final long routeId = Long.parseLong(resolveValue(id));
           routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
           assertThat(routeLogsPage.routesTable.isButtonEnabled(1, ACTION_EDIT_DETAILS))
               .withFailMessage("Edit Details button is enabled")
@@ -453,9 +444,9 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("Operator merge transactions of created routes")
   public void operatorMergeTransactionsOfMultipleRoutes() {
     routeLogsPage.inFrame(() -> {
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-      routeIds.forEach(routeId -> {
-        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+      List<RouteResponse> routeIds = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES);
+      routeIds.forEach(e -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, e.getId());
         routeLogsPage.routesTable.selectRow(1);
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_MERGE_TRANSACTIONS_OF_SELECTED);
@@ -466,10 +457,11 @@ public class RouteLogsSteps extends AbstractSteps {
   }
 
   @When("Operator optimise created routes")
-  public void operatorOptimiseMultipleRoutes() {
+  public void operatorOptimiseMultipleRoutes(List<String> ids) {
+    ids = resolveValues(ids);
+    final List<Long> routeIds = ids.stream().map(Long::parseLong).collect(Collectors.toList());
     routeLogsPage.inFrame(() -> {
       routeLogsPage.waitUntilLoaded(3);
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
       routeIds.forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.selectRow(1);
@@ -507,17 +499,19 @@ public class RouteLogsSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies created routes are optimised successfully")
-  public void operatorVerifyMultipleRoutesIsOptimisedSuccessfully() {
+  public void operatorVerifyMultipleRoutesIsOptimisedSuccessfully(List<String> ids) {
+    ids = resolveValues(ids);
+    final List<Long> routeIds = ids.stream().map(Long::parseLong).collect(Collectors.toList());
     routeLogsPage.inFrame(() -> {
-      List<Long> listOfCreateRouteParams = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-      routeLogsPage.verifyMultipleRoutesIsOptimisedSuccessfully(listOfCreateRouteParams);
+      routeLogsPage.verifyMultipleRoutesIsOptimisedSuccessfully(routeIds);
     });
   }
 
   @When("Operator print passwords of created routes")
-  public void operatorPrintPasswordsOfMultipleRoutes() {
+  public void operatorPrintPasswordsOfMultipleRoutes(List<String> ids) {
+    ids = resolveValues(ids);
+    final List<Long> routeIds = ids.stream().map(Long::parseLong).collect(Collectors.toList());
     routeLogsPage.inFrame(() -> {
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
       routeIds.forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.selectRow(1);
@@ -598,9 +592,10 @@ public class RouteLogsSteps extends AbstractSteps {
   }
 
   @When("Operator save data of created routes on Route Logs page")
-  public void operatorSaveRouteData() {
+  public void operatorSaveRouteData(List<String> ids) {
+    ids = resolveValues(ids);
+    final List<Long> routeIds = ids.stream().map(Long::parseLong).collect(Collectors.toList());
     routeLogsPage.inFrame(() -> {
-      List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
       routeLogsPage.routesTable.waitIsNotEmpty(10);
       List<RouteLogsParams> params = routeIds.stream().map(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
@@ -1007,12 +1002,12 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> routeLogsPage.savePresetDialog.update.click());
   }
 
-  @When("Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'")
-  public void loadWaypointsOfSelectedRoute() {
+  @When("Operator click 'Edit Route' id {string} and then click 'Load Waypoints of Selected Route(s) Only'")
+  public void loadWaypointsOfSelectedRoute(String id) {
     doWithRetry(() -> {
       routeLogsPage.inFrame(() -> {
         put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
-        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        final long routeId = Long.parseLong(resolveValue(id));
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
         routeLogsPage.editRoutesDialog.waitUntilVisible();
@@ -1035,9 +1030,9 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator adds tag {string} to created route")
-  public void opAddNewTagToRoute(String newTag) {
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
+  @When("Operator adds tag {string} to created route id {string}")
+  public void opAddNewTagToRoute(String newTag, String id) {
+    final long routeId = Long.parseLong(resolveValue(id));
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
@@ -1048,9 +1043,9 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator removes tag {string} from created route")
-  public void removeNewTagToRoute(String tag) {
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
+  @When("Operator removes tag {string} from created route id {string}")
+  public void removeNewTagToRoute(String tag, String id) {
+    final long routeId = Long.parseLong(resolveValue(id));
     routeLogsPage.inFrame(() -> {
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickColumn(1, COLUMN_TAGS);
@@ -1061,10 +1056,10 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator deletes created route on Route Logs page")
-  public void opDeleteDeleteRoute() {
+  @When("Operator deletes created route id {string} on Route Logs page")
+  public void opDeleteDeleteRoute(String id) {
     routeLogsPage.inFrame(() -> {
-      Long routeId = get(KEY_CREATED_ROUTE_ID);
+      final long routeId = Long.parseLong(resolveValue(id));
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_DETAILS);
       routeLogsPage.editDetailsDialog.waitUntilVisible();
@@ -1305,25 +1300,6 @@ public class RouteLogsSteps extends AbstractSteps {
     Assertions.assertThat(finalData.toString())
         .withFailMessage("Toast is not displayed: " + finalData)
         .isNotNull();
-  }
-
-  @Then("Operator verify the route is started after van inbounding using data below:")
-  public void verifyRouteIsStarted(Map<String, String> mapOfData) throws ParseException {
-    long routeId = get(KEY_CREATED_ROUTE_ID);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date routeDateFrom = sdf.parse(mapOfData.get("routeDateFrom"));
-    Date routeDateTo = sdf.parse(mapOfData.get("routeDateTo"));
-    String hubName = mapOfData.get("hubName");
-
-    routeLogsPage.inFrame(() -> {
-      routeLogsPage.waitUntilLoaded(30);
-      routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
-      routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
-      String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,
-          RoutesTable.COLUMN_STATUS);
-      Assertions.assertThat(actualRouteStatus).as("Track is not routed.")
-          .isEqualTo("IN_PROGRESS");
-    });
   }
 
   @Then("Operator verify {string} process data in Selection Error dialog on Route Logs page:")

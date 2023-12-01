@@ -13,7 +13,7 @@ Feature: Route Logs - Edit Route Details
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
-    Then Operator verify Edit Details button is disabled on Route Logs page
+    Then Operator verify Edit Details button is disabled for route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
 
   @ArchiveRouteCommonV2
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Details When Status is Archived
@@ -45,7 +45,7 @@ Feature: Route Logs - Edit Route Details
     Then Operator verifies that success react notification displayed:
       | top | 0 Route(s) Updated |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName          | zone        | hub        |
+      | date                             | id                                 | driverName          | zone        | hub        |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-name} | {zone-name} | {hub-name} |
 
@@ -76,7 +76,7 @@ Feature: Route Logs - Edit Route Details
     Then Operator verifies that success react notification displayed:
       | top | 1 Route(s) Updated |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName            | zone          | hub          |
+      | date                             | id                                 | driverName            | zone          | hub          |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {ninja-driver-name}   | {zone-name}   | {hub-name}   |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} |
 
@@ -88,7 +88,7 @@ Feature: Route Logs - Edit Route Details
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
-    Then Operator verify Edit Details button is disabled on Route Logs page
+    Then Operator verify Edit Details button is disabled for route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
 
   @ArchiveRouteCommonV2
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Tags Details When Status is Archived
