@@ -31,7 +31,7 @@ Feature: All Orders - Preset Filters
       | top    | 1 filter preset created                    |
       | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
     And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" on All Orders page
-    And DB Operator verifies filter preset record:
+    And DB Lighthouse - verify preset_filters record:
       | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
       | namespace | orders                               |
       | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
