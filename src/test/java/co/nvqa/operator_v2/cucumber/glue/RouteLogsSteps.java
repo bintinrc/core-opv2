@@ -126,7 +126,7 @@ public class RouteLogsSteps extends AbstractSteps {
     createdRoute.setComments(newParams.getComments());
     Long createdRouteId = createdRoute.getId();
 
-    putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
+    putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES, createdRoute);
     writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
   }
 
@@ -259,7 +259,7 @@ public class RouteLogsSteps extends AbstractSteps {
           createdRoute.setComments(createRouteParams.getComments());
           Long createdRouteId = createdRoute.getId();
 
-          putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
+          putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES, createdRoute);
           writeToCurrentScenarioLogf("Created Route %d", createdRouteId);
         }
       }
