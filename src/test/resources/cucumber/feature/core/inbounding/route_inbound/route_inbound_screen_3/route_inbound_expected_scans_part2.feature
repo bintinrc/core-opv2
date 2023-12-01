@@ -369,7 +369,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2 @HighPriority @wip
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Multiple Global Inbounds on Attempted Pickup & Delivery
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

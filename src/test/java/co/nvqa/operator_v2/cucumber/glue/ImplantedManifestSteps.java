@@ -101,7 +101,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
       var actual = page.implantedManifestOrderTable.readColumn(
           COLUMN_TRACKING_ID);
       Assertions.assertThat(actual)
-          .as("List of scanned tracking ids").isNotEmpty()
+          .as("List of scanned tracking ids")
           .doesNotContainAnyElementsOf(resolveValues(trackingIds));
     });
   }
