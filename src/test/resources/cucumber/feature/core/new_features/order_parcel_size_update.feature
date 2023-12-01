@@ -13,8 +13,7 @@ Feature: Order Parcel Size Update
 
   @HighPriority
   Scenario: Operator update order parcel size by upload CSV file with Multiple Orders
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                     |

@@ -5,7 +5,7 @@ Feature: ID - Order COD Limit
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Orders with COD <30 Millions to Single Driver Route on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -70,7 +70,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 10000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Orders with COD >30 Millions to Single Driver Route on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -99,7 +99,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Driver has exceeded total cod |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Driver Route on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -194,7 +194,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >30 Millions to Single Driver Route on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -275,7 +275,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 15000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Multiple Driver Routes on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -382,7 +382,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 25000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -465,7 +465,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 15000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders - 1 Route is Archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -510,7 +510,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Driver has exceeded total cod |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on All Orders - 1 route is Deleted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |

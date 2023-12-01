@@ -7,14 +7,13 @@ Feature: All Orders - Manually Completed Selected
 
   @HighPriority
   Scenario: Operator Force Success Order on All Orders Page - End State = Completed
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    When Operator go to menu Order -> All Orders
+    When API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And Operator go to menu Order -> All Orders
     And Operator Force Success multiple orders on All Orders page:
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -46,8 +45,7 @@ Feature: All Orders - Manually Completed Selected
 
   @happy-path @HighPriority
   Scenario: Operator Force Success Multiple Orders on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                               |
@@ -116,8 +114,7 @@ Feature: All Orders - Manually Completed Selected
 
   @MediumPriority
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
@@ -146,8 +143,7 @@ Feature: All Orders - Manually Completed Selected
 
   @MediumPriority
   Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -186,8 +182,7 @@ Feature: All Orders - Manually Completed Selected
 
   @HighPriority
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -225,7 +220,6 @@ Feature: All Orders - Manually Completed Selected
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |
@@ -272,7 +266,6 @@ Feature: All Orders - Manually Completed Selected
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                            |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                        |

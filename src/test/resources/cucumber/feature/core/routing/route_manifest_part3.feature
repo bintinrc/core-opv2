@@ -394,7 +394,7 @@ Feature: Route Manifest
       | receivedFrom    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}    |
       | relationship    | -                                           |
       | receiptDateTime | {gradle-current-date-yyyy-MM-dd}            |
-      | pickupQuantity  | -                                           |
+      | pickupQuantity  | 1                                           |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
   @HighPriority
@@ -450,7 +450,7 @@ Feature: Route Manifest
       | receivedFrom    | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}    |
       | relationship    | -                                           |
       | receiptDateTime | {gradle-current-date-yyyy-MM-dd}            |
-      | pickupQuantity  | -                                           |
+      | pickupQuantity  | 1                                           |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
   @MediumPriority

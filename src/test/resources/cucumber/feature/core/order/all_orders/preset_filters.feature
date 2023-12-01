@@ -31,11 +31,10 @@ Feature: All Orders - Preset Filters
       | top    | 1 filter preset created                    |
       | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
     And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" on All Orders page
-    And DB Operator verifies filter preset record:
+    And DB Lighthouse - verify preset_filters record:
       | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
       | namespace | orders                               |
       | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
@@ -47,13 +46,12 @@ Feature: All Orders - Preset Filters
 
   @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Apply Filter Preset on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Lighthouse - creates new Orders Filter Template using data below:
+    When API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
       | value.statusIds  | 2                                          |
       | value.shipperIds | {shipper-v4-legacy-id}                     |
       | value.undefined  | {shipper-v4-marketplace-legacy-id}         |
-    When Operator go to menu Order -> All Orders
+    And Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit                       |
@@ -62,8 +60,7 @@ Feature: All Orders - Preset Filters
 
   @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Delete Preset on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Lighthouse - creates new Orders Filter Template using data below:
+    Given API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
       | value.statusIds  | 2                                          |
       | value.shipperIds | {shipper-v4-legacy-id}                     |
@@ -82,8 +79,7 @@ Feature: All Orders - Preset Filters
 
   @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset on All Orders Page - via Save Current As Preset Button
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Lighthouse - creates new Orders Filter Template using data below:
+    Given API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
       | value.statusIds  | 2                                          |
       | value.shipperIds | {shipper-v4-legacy-id}                     |
@@ -105,7 +101,6 @@ Feature: All Orders - Preset Filters
     Then Operator verifies that success toast displayed:
       | top    | 1 filter preset updated                    |
       | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET.name} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
@@ -117,8 +112,7 @@ Feature: All Orders - Preset Filters
 
   @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset on All Orders Page - via Update Preset Button
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Lighthouse - creates new Orders Filter Template using data below:
+    Given API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
       | value.statusIds  | 2                                          |
       | value.shipperIds | {shipper-v4-legacy-id}                     |
@@ -132,7 +126,6 @@ Feature: All Orders - Preset Filters
     Then Operator verifies that success toast displayed:
       | top    | 1 filter preset updated                    |
       | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET.name} |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Order -> All Orders
     And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:

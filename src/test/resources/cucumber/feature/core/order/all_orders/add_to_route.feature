@@ -7,8 +7,7 @@ Feature: All Orders - Add To Route
 
   @ArchiveRouteCommonV2 @routing-refactor @happy-path @HighPriority
   Scenario: Operator Add Multiple Orders to Route on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                |
@@ -65,14 +64,13 @@ Feature: All Orders - Add To Route
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
+    When API Core - Operator get multiple order details for tracking ids:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     And API Core - Operator create new route using data below:
@@ -135,13 +133,12 @@ Feature: All Orders - Add To Route
 
   @DeleteOrArchiveRoute @MediumPriority
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Order - Shipper create multiple V4 orders using data below:
+    When API Order - Shipper create multiple V4 orders using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
@@ -168,14 +165,13 @@ Feature: All Orders - Add To Route
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Block Add to Route for On Hold Order on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Order - Shipper create multiple V4 orders using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                  |
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                           |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get multiple order details for tracking ids:
+    When API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And API Core - Operator create new route using data below:

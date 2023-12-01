@@ -59,7 +59,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal   | 2 |
       | pendingDeliveriesScans | 1 |
       | pendingDeliveriesTotal | 2 |
-    Given Operator go to menu Utilities -> QRCode Printing
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -151,7 +150,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal         | 2 |
       | failedDeliveriesInvalidScans | 1 |
       | failedDeliveriesInvalidTotal | 1 |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -243,7 +241,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal       | 2 |
       | failedDeliveriesValidScans | 1 |
       | failedDeliveriesValidTotal | 1 |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Delivery Fail" on Edit Order V2 page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order V2 page
@@ -332,7 +329,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal  | 2 |
       | c2cReturnPickupsScans | 1 |
       | c2cReturnPickupsTotal | 2 |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -390,7 +386,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal         | 1 |
       | pendingC2cReturnPickupsScans | 1 |
       | pendingC2cReturnPickupsTotal | 1 |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -459,7 +454,6 @@ Feature: Route Inbound Expected Scans
       | parcelProcessedTotal    | 1 |
       | reservationPickupsScans | 1 |
       | reservationPickupsTotal | 1 |
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
@@ -533,7 +527,6 @@ Feature: Route Inbound Expected Scans
       | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | shipperName | {shipper-v4-name}                     |
     When Operator close Reservation Pickups dialog on Route Inbound page
-    Given Operator go to menu Utilities -> QRCode Printing
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
