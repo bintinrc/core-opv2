@@ -63,16 +63,14 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Empty File
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu New Features -> Update Delivery Address with CSV
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
     And Operator update delivery addresses of with empty CSV file:
     Then Operator verifies that error react notification displayed:
       | top | Invalid data in the csv file |
 
   @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Invalid Order/Format
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu New Features -> Update Delivery Address with CSV
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
     And Operator update delivery addresses of given orders on Update Delivery Address with CSV page:
       | SOMEINVALIDTRACKINGID |
     Then Operator verify validation statuses on Update Delivery Address with CSV page:
@@ -81,7 +79,6 @@ Feature: Update Delivery Address with CSV
 
   @HighPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Partial
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -99,7 +96,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario: Bulk Update Order Delivery Address with CSV - Empty Compulsory Fields
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -116,7 +112,6 @@ Feature: Update Delivery Address with CSV
 
   @MediumPriority
   Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |

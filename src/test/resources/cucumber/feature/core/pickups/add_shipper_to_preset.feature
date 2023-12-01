@@ -6,8 +6,7 @@ Feature: Add Shipper To Preset
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Failed to Select Shipper Creation Date more than 7 Days Range on Add Shipper to Preset Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Pick Ups -> Add Shipper To Preset
+    Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator applies filters on Add Shipper To Preset page using data below:
       | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
@@ -16,8 +15,7 @@ Feature: Add Shipper To Preset
 
 
   Scenario: Check Shipper Selection in Add Shipper to Preset Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Pick Ups -> Add Shipper To Preset
+    Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator clicks Load Selection on Add Shipper To Preset page
     And Operator clicks Select All Shown on Add Shipper To Preset page
@@ -190,8 +188,7 @@ Feature: Add Shipper To Preset
 
   
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Pick Ups -> Add Shipper To Preset
+    Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     And Operator clicks Load Selection on Add Shipper To Preset page
     And Operator applies "Active" filter to "Is Active" column on Add Shipper To Preset page

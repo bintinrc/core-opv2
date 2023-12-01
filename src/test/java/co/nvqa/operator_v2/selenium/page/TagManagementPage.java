@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Tag;
+import co.nvqa.common.core.model.route.RouteTag;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
@@ -46,7 +46,7 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
     }
   }
 
-  public static class TagsTable extends AntTableV2<Tag> {
+  public static class TagsTable extends AntTableV2<RouteTag> {
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DESCRIPTION = "description";
@@ -60,7 +60,7 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit Tag"));
-      setEntityClass(Tag.class);
+      setEntityClass(RouteTag.class);
     }
   }
 }

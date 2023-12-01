@@ -211,7 +211,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @HighPriority
   Scenario: Operator Filters Total PA Job of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
       | generateAddress | RANDOM              |
@@ -238,10 +237,9 @@ Feature: Route Group Management
 
   @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @DeleteRoutes @HighPriority
   Scenario: Operator Filters Total Routed PAJ of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Shipper - Operator create new shipper address using data below:
+    And API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
       | generateAddress | RANDOM              |
     When API Control - Operator create pickup appointment job with data below:
@@ -273,7 +271,6 @@ Feature: Route Group Management
 
   @DeleteRouteGroupsV2 @HighPriority
   Scenario:Operator Filters Total Reservation of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -300,10 +297,9 @@ Feature: Route Group Management
 
   @DeleteRouteGroupsV2 @DeleteRoutes @HighPriority
   Scenario:Operator Filters Total Routed Reservation of Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Core - Operator create new route using data below:
+    Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Shipper - Operator create new shipper address using data below:
+    And API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:

@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.OrderTag;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.ManageOrderTagsPage;
-import co.nvqa.common.core.model.order.Tag;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -36,7 +36,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
 
   @When("Operator create new route tag on Manage Order Tags page:")
   public void createNewTag(Map<String, String> data) {
-    Tag newTag = new Tag(resolveKeyValues(data));
+    OrderTag newTag = new OrderTag(resolveKeyValues(data));
     if (StringUtils.equalsIgnoreCase("GENERATED", newTag.getName())) {
       newTag.setName(RandomStringUtils.randomAlphanumeric(3).toUpperCase());
     }
@@ -60,13 +60,13 @@ public class ManageOrderTagsSteps extends AbstractSteps {
 
   @Then("Operator verify the new tag is created successfully on Manage Order Tags page")
   public void verifyNewTagCreatedSuccessfully() {
-    Tag tag = get(KEY_CREATED_ORDER_TAG);
+    OrderTag tag = get(KEY_CREATED_ORDER_TAG);
     manageOrderTagsPage.inFrame(page -> {
       page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
       int size = page.tagsTable.getRowsCount();
-      Tag actual = null;
+      OrderTag actual = null;
       for (int i = 1; i <= size; i++) {
-        Tag next = page.tagsTable.readEntity(i);
+        OrderTag next = page.tagsTable.readEntity(i);
         if (StringUtils.equals(tag.getName(), next.getName())) {
           actual = next;
           break;
@@ -94,10 +94,10 @@ public class ManageOrderTagsSteps extends AbstractSteps {
 
   @Then("^Operator verify tag record on Manage Order Tags page:$")
   public void verifyTagRecord(Map<String, String> data) {
-    Tag expected = new Tag(resolveKeyValues(data));
+    OrderTag expected = new OrderTag(resolveKeyValues(data));
     manageOrderTagsPage.inFrame(page -> {
-      List<Tag> actual = page.tagsTable.readAllEntities();
-      Tag.assertListContains(actual, expected, "Tag");
+      List<OrderTag> actual = page.tagsTable.readAllEntities();
+      OrderTag.assertListContains(actual, expected, "Tag");
     });
   }
 
@@ -110,7 +110,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
       int size = manageOrderTagsPage.tagsTable.getRowsCount();
       int index = 0;
       for (int i = 1; i <= size; i++) {
-        Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
+        OrderTag next = manageOrderTagsPage.tagsTable.readEntity(i);
         if (StringUtils.equals(tagNameValue, next.getName())) {
           index = i;
           break;
@@ -129,7 +129,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
       int size = manageOrderTagsPage.tagsTable.getRowsCount();
       int index = 0;
       for (int i = 1; i <= size; i++) {
-        Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
+        OrderTag next = manageOrderTagsPage.tagsTable.readEntity(i);
         if (StringUtils.equals(tagName, next.getName())) {
           index = i;
           break;
@@ -148,7 +148,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
       page.tagsTable.filterByColumn(COLUMN_NAME, tagNameValue);
       int size = page.tagsTable.getRowsCount();
       for (int i = 1; i <= size; i++) {
-       Tag next = page.tagsTable.readEntity(i);
+        OrderTag next = page.tagsTable.readEntity(i);
         if (StringUtils.equals(tagNameValue, next.getName())) {
           throw new AssertionError(
               "Tag [" + tagNameValue + "] is displayed in Manage Order Tags table");

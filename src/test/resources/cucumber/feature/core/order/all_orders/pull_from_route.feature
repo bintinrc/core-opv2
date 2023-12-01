@@ -67,7 +67,6 @@ Feature: All Orders - Pull From Route
 
   @MediumPriority
   Scenario: Operator Should not be Able to Pull Out Unrouted Order on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |

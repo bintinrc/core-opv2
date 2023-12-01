@@ -201,13 +201,13 @@ Feature: Create New Coverage
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     When Operator filter coverages on Station Route Keyword page:
-      | area | AREA CNTS |
+      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
     Then Operator verify filter results on Station Route Keyword page:
-      | area | AREA CNTS |
+      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
     When Operator filter coverages on Station Route Keyword page:
-      | keywords | KEYWORD |
+      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
     Then Operator verify filter results on Station Route Keyword page:
-      | keywords | KEYWORD |
+      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
     When Operator filter coverages on Station Route Keyword page:
       | primaryDriver | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     Then Operator verify filter results on Station Route Keyword page:
