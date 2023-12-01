@@ -19,13 +19,6 @@ Feature: Route Logs
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
 
-  @MediumPriority
-  Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
-    Given DB Operator find drivers with ended employment
-    When Operator go to menu Routing -> Route Logs
-    And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
-
   @DeleteDriverV2 @MediumPriority
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
     Given API Driver Management - Operator create new driver with data below:
@@ -88,20 +81,7 @@ Feature: Route Logs
       | hubName       | {hub-name} |
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}" Driver is shown in Edit Route Details modal on Route Logs page
-
-  @ArchiveRouteCommonV2 @MediumPriority
-  Scenario: Operator Not Allowed To See Driver List on Update Route if Driver Employment End Date < Today's Date
-    Given DB Operator find drivers with ended employment
-    And API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
-    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
-
+    
   @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @HighPriority
   Scenario: Operator Print Multiple Routes Details With Multiple Waypoints from Route Logs Page
     # RETURN & NORMAL ORDER

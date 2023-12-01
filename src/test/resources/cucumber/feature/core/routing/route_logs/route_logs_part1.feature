@@ -5,7 +5,7 @@ Feature: Route Logs
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @happy-path @HighPriority
   Scenario: Operator Create a Single Route from Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
@@ -28,7 +28,7 @@ Feature: Route Logs
       | comments       | {KEY_LIST_OF_CREATED_ROUTES[1].comments} |
       | tags           | {route-tag-name}                         |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @HighPriority
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
