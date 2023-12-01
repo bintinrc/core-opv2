@@ -126,7 +126,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage.completeThirdPartyOrder(orderMapping);
   }
 
-  @Then("^Operator verify the new mapping order is completed$")
+  @Then("Operator verify the new mapping order is completed")
   public void operatorVerifyTheNewMappingOrderIsCompleted() {
     ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(

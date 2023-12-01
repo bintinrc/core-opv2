@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage;
@@ -59,7 +60,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.createNewCoverageDialog.waitUntilVisible();
       if (finalData.containsKey("area")) {
         page.createNewCoverageDialog.area.setValue(finalData.get("area"));
-        putInList(KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
+        putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
       }
       if (finalData.containsKey("areaVariation")) {
         page.createNewCoverageDialog.areaVariation.setValue(finalData.get("areaVariation"));
@@ -85,7 +86,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.bulkCreateCoverage.click();
       page.bulkCreateCoverageDialog.waitUntilVisible();
       List<String> rows = resolveListOfMaps(data).stream()
-          .peek(e -> putInList(KEY_LIST_OF_CREATED_AREAS, e.get("area")))
+          .peek(e -> putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_AREAS, e.get("area")))
           .map(e -> "\"" + StringUtils.trimToEmpty(e.get("area")) + "\",\""
               + StringUtils.trimToEmpty(e.get("variations")) + "\",\"" + StringUtils.trimToEmpty(
               e.get("keywords")) + "\",\"" + StringUtils.trimToEmpty(e.get("primaryDriver"))
@@ -199,7 +200,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
   public void operatorVerifySampleCsvFileIsDownloaded(List<Map<String, String>> data) {
     page.inFrame(() -> {
       List<String> rows = resolveListOfMaps(data).stream()
-          .peek(e -> putInList(KEY_LIST_OF_CREATED_AREAS, e.get("area")))
+          .peek(e -> putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_AREAS, e.get("area")))
           .map(e -> "\"" + StringUtils.trimToEmpty(e.get("area")) + "\",\""
               + StringUtils.trimToEmpty(e.get("variations")) + "\",\"" + StringUtils.trimToEmpty(
               e.get("keywords")) + "\",\"" + e.get("primaryDriver")
@@ -240,8 +241,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       }
       if (finalData.containsKey("keywords")) {
         assertions.assertThat(
-                page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText)
-                    .collect(Collectors.toList())).as("Keywords")
+            page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText)
+                .collect(Collectors.toList())).as("Keywords")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("keywords")));
       }
     });
@@ -445,7 +446,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.editArea.click();
       if (StringUtils.isNotBlank(finalData.get("area"))) {
         page.editAreaTab.area.setValue(finalData.get("area"));
-        putInList(KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
+        putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
       }
       if (StringUtils.isNotBlank(finalData.get("areaVariations"))) {
         page.editAreaTab.areaVariation.setValue(finalData.get("areaVariations").replace(",", "\n"));
@@ -488,8 +489,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.removeKeywords.click();
       page.removeKeywordsTab.waitUntilVisible();
       Assertions.assertThat(
-              page.removeKeywordsTab.keywords.stream().map(PageElement::getText).collect(
-                  Collectors.toList()))
+          page.removeKeywordsTab.keywords.stream().map(PageElement::getText).collect(
+              Collectors.toList()))
           .as("List of keywords")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });
@@ -500,8 +501,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.removeKeywordsDialog.waitUntilVisible();
       Assertions.assertThat(
-              page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
-                  Collectors.toList()))
+          page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+              Collectors.toList()))
           .as("List of keywords to remove")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });
@@ -571,8 +572,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.transferKeywordsDialog.waitUntilVisible();
       Assertions.assertThat(
-              page.transferKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
-                  Collectors.toList()))
+          page.transferKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+              Collectors.toList()))
           .as("List of keywords to transfer")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });

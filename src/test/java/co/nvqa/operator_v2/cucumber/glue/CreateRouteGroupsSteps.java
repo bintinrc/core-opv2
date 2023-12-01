@@ -437,11 +437,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.reservationFiltersForm.addFilter.selectValue("Pick Up Size");
         }
         String finalValue = value;
-        retryIfRuntimeExceptionOccurred(() -> {
+        doWithRetry(() -> {
           createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.clearAll();
           createRouteGroupsPage.reservationFiltersForm.pickUpSizeFilter.selectFilter(
               splitAndNormalize(finalValue));
-        }, 5);
+        }, "select pickup size");
       }
 
       value = finalData.get("reservationType");
@@ -636,8 +636,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         }
         page.generalFiltersForm.routeGroupingFilter.clearAll();
         String finalValue = value;
-        retryIfRuntimeExceptionOccurred(() ->
-            page.generalFiltersForm.routeGroupingFilter.selectFilter(finalValue), 5);
+        doWithRetry(() ->
+                page.generalFiltersForm.routeGroupingFilter.selectFilter(finalValue),
+            "select route grouping");
       } else if (page.generalFiltersForm.routeGroupingFilter.isDisplayedFast()) {
         page.generalFiltersForm.routeGroupingFilter.removeFilter();
       }
