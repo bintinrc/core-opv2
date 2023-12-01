@@ -5,7 +5,7 @@ Feature: Route Logs - Merge Transactions
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions  - Empty & Non-Empty Delivery OTP
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -41,7 +41,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions - Different Order Verification Method
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -77,7 +77,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions - Default email - Same Default Email & Different Phone Number
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -133,7 +133,7 @@ Feature: Route Logs - Merge Transactions
       | email_1             | phone_number_1 | phone_number_2 |
       | support@ninjavan.co | +6595557073    | +6595557072    |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Different DP Delivery
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -173,7 +173,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup and Delivery Transactions  - Default email - Same Default Email & Same Phone Number
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -273,7 +273,7 @@ Feature: Route Logs - Merge Transactions
       | email_1             | phone_number_1 |
       | support@ninjavan.co | +6595557073    |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Same DP Delivery
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -336,7 +336,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Non-Empty Delivery OTP - Different Delivery OTP
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -395,7 +395,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Empty Delivery OTP
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -454,7 +454,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Partial Merge Multiple Transactions of Single Route - Valid and Invalid Transactions - Partial Different Addresses
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
