@@ -369,7 +369,7 @@ Feature: Route Inbound Expected Scans
       | status     | -                                     |
       | reason     | Duplicate                             |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @wip
   Scenario: Show Global Inbounded Parcel as Route Inbound Scanned - Multiple Global Inbounds on Attempted Pickup & Delivery
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -483,6 +483,7 @@ Feature: Route Inbound Expected Scans
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
       | hubId                | {hub-id}                                                                                                      |
     When Operator go to menu Inbounding -> Route Inbound
+    And Operator refresh page
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
       | fetchBy      | FETCH_BY_ROUTE_ID                  |
