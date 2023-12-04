@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.operator_v2.exception.NvTestCoreElementCountMismatch;
+import co.nvqa.operator_v2.exception.page.NvTestCoreOutboundMonitoringException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
@@ -354,7 +354,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
       try {
         waitUntil(() -> page.processModal.errors.size() == expected.size(), 10_000);
       } catch (NvTestWaitTimeoutException e) {
-        throw new NvTestCoreElementCountMismatch("Number of errors is not " + expected.size());
+        throw new NvTestCoreOutboundMonitoringException("Number of errors is not " + expected.size());
       }
       List<String> actual = page.processModal.errors.stream()
           .map(PageElement::getNormalizedText)

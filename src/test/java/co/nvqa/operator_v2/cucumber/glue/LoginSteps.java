@@ -81,6 +81,19 @@ public class LoginSteps extends AbstractSteps {
             + TestConstants.NV_SYSTEM_ID;
   }
 
+  @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+  public void loginToOperatorV2(String username, String password) {
+    loginPage.loadPage();
+
+    if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
+      loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
+    } else {
+      loginPage.clickLoginButton();
+    }
+
+    mainPage.verifyTheMainPageIsLoaded();
+  }
+
   @Given("Operator login with client id = {string} and client secret = {string}")
   public void operatorLoginWithClientIdAndClientSecret(String clientId, String clientSecret) {
     loginPage.loadPage();
