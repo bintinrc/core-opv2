@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
+import co.nvqa.commonsort.constants.SortScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.GlobalSettingsPage;
 import io.cucumber.java.en.And;
 import io.cucumber.guice.ScenarioScoped;
@@ -25,9 +25,9 @@ public class GlobalSettingsSteps extends AbstractSteps {
 
   @And("Operator save inbound settings from Global Settings page")
   public void operatorSaveWeightToleranceValueFromGlobalSettingsPage() {
-    put(CoreScenarioStorageKeys.KEY_CORE_WEIGHT_TOLERANCE_VALUE,
+    put(SortScenarioStorageKeys.KEY_SORT_WEIGHT_TOLERANCE_VALUE,
         Double.valueOf(globalSettingsPage.inputWeightTolerance.getValue()));
-    put(CoreScenarioStorageKeys.KEY_CORE_MAX_WEIGHT_LIMIT_VALUE,
+    put(SortScenarioStorageKeys.KEY_SORT_MAX_WEIGHT_LIMIT_VALUE,
         Double.valueOf(globalSettingsPage.inputMaxWeightLimit.getValue()));
   }
 
