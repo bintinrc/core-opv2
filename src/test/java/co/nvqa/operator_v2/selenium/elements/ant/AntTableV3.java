@@ -1,10 +1,11 @@
-package co.nvqa.operator_v2.selenium.page;
+package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.page.AbstractTable;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

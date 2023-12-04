@@ -9,6 +9,8 @@ import co.nvqa.commons.util.NvAllure;
 import co.nvqa.operator_v2.exception.NvTestCoreWindowOrTabNotFoundError;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ToastError;
+import co.nvqa.operator_v2.selenium.elements.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import java.time.temporal.TemporalAccessor;

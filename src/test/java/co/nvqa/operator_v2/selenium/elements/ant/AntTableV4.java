@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.selenium.page;
+package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import co.nvqa.operator_v2.selenium.page.AbstractTable;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;

@@ -18,6 +18,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;

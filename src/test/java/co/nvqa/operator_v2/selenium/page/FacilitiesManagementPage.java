@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTable;
 import com.google.common.collect.ImmutableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
