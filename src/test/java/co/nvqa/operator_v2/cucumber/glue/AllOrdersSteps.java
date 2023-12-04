@@ -1093,6 +1093,7 @@ public class AllOrdersSteps extends AbstractSteps {
               .findFirst();
           if (orderOpt.isPresent()) {
             final String rawDeliveryDate = orderOpt.get().getTransactions().get(1).getEndTime();
+//            TODO common-v2: use equivalent of this in new common
             final String formattedDeliveryDate = LocalDate.parse(rawDeliveryDate,
                 co.nvqa.commons.support.DateUtil.ISO8601_LITE_FORMATTER).toString();
             o.setEstimatedDeliveryDate(formattedDeliveryDate);
