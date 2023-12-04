@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.common.ui.page.SimpleWebPage;
 import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.common.utils.NvWait;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.operator_v2.exception.NvTestCoreWindowOrTabNotFoundError;
@@ -1310,7 +1309,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
     try {
-      new NvWait(50_000).until(() -> getWebDriver().getWindowHandles().size() > 1,
+      waitUntil(() -> getWebDriver().getWindowHandles().size() > 1, 50_000,
           f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
     } catch (NvTestWaitTimeoutException e) {
       throw new NvTestCoreWindowOrTabNotFoundError("New window or tab not opened", e);

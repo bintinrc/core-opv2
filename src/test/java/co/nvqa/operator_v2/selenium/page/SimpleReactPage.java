@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.common.utils.NvWait;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.operator_v2.exception.NvTestCoreNotificationNotVisibleError;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -70,9 +69,10 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
 
   public void waitUntilVisibilityOfNotification(String message, int timeoutInMillis) {
     try {
-      new NvWait(timeoutInMillis).until(() ->
-          noticeNotifications.stream().anyMatch(notification ->
-              StringUtils.equalsIgnoreCase(notification.message.getText(), message)));
+      waitUntil(() ->
+              noticeNotifications.stream().anyMatch(notification ->
+                  StringUtils.equalsIgnoreCase(notification.message.getText(), message)),
+          timeoutInMillis);
     } catch (NvTestWaitTimeoutException e) {
       throw new NvTestCoreNotificationNotVisibleError(
           "Notification with message: [" + message + "] is not visible");
