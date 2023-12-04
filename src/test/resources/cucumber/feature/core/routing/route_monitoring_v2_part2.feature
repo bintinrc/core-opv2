@@ -604,6 +604,7 @@ Feature: Route Monitoring V2
       | routeDateTo   | TODAY        |
       | hubName       | {hub-name-2} |
     And Operator edits details of created route using data below:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}      |
       | date       | {date: 0 days next, yyyy-MM-dd}         |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name}                             |
