@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.exception;
+package co.nvqa.operator_v2.exception.element;
 
 import co.nvqa.common.utils.NvTestProductException;
 

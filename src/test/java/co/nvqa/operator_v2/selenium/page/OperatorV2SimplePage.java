@@ -288,8 +288,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfToast(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
+        "//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
         : "//div[@id='toast-container']";
 
     if (waitUntilElementVisibleFirst) {
@@ -301,11 +301,9 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfNotification(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f(
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
         "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message'][contains(text(),'%s')]",
-        containsMessage)
-        : "//div[contains(@class,'ant-notification')]";
+        containsMessage) : "//div[contains(@class,'ant-notification')]";
 
     if (waitUntilElementVisibleFirst) {
       waitUntilVisibilityOfElementLocated(xpathExpression);
@@ -403,7 +401,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       WebElement webElement = waitUntilVisibilityOfElementLocated(toastXpathExpression);
       text = webElement.getText();
     } catch (RuntimeException ex) {
-      LOGGER.warn("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
+      LOGGER.warn("Failed to get text from element Toast. XPath: {}", toastXpathExpression);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to get text from element Toast. XPath: %s", toastXpathExpression);
     }
@@ -470,9 +468,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
       LOGGER.warn("Failed to find element by XPath. XPath: {}", nvTableXpathExpression);
-      NvAllure
-          .addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s",
-              nvTableXpathExpression);
+      NvAllure.addWarnAttachment(getCurrentMethodName(),
+          "Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
     }
 
     return text;
@@ -843,8 +840,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
          */
     String noMatchingErrorText = f("\"%s\" were found.", value);
 
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    doWithRetry(() -> {
       try {
         WebElement noMatchingErrorWe = findElementByXpath(
             f("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
@@ -1202,10 +1198,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
 
     Actions actions = new Actions(getWebDriver());
-    actions.moveToElement(we, 5, 5)
-        .click()
-        .build()
-        .perform();
+    actions.moveToElement(we, 5, 5).click().build().perform();
     pause100ms();
   }
 
@@ -1277,12 +1270,11 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     acceptAlertDialogIfAppear();
 
     try {
-      waitUntil(() ->
-      {
+      waitUntil(() -> {
         boolean result;
         String currentUrl = getCurrentUrl();
-        LOGGER
-            .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
+        LOGGER.info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl,
+            previousUrl);
 
         if (previousUrl.contains("linehaul")) {
           result = currentUrl.contains("linehaul");
@@ -1443,8 +1435,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
           dialogXpath + "//nv-icon-button[@name='Cancel']",
           dialogXpath + "//nv-icon-text-button[@name='Cancel']",
           dialogXpath + "//button[@aria-label='Leave']",
-          dialogXpath + "//button[@aria-label='Leave Anyway']"
-      );
+          dialogXpath + "//button[@aria-label='Leave Anyway']");
       for (String closeLocator : closeLocators) {
         if (isElementVisible(closeLocator, 0)) {
           click(closeLocator);

@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.common.external.PdfUtils;
 import co.nvqa.common.external.model.PdfRoutePassword;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.operator_v2.exception.NvTestCoreElementTextMismatch;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementTextMismatch;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;

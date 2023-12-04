@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
 import co.nvqa.operator_v2.exception.NvTestCoreUrlMismatchError;
+import co.nvqa.operator_v2.exception.page.NvTestCoreMainPageException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
         return currentUrl.endsWith(mainDashboardUrl);
       }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
     } catch (NvTestWaitTimeoutException e) {
-      throw new NvTestCoreUrlMismatchError(
+      throw new NvTestCoreMainPageException(
           String.format("Expected URL Ends With = [%s] not found", mainDashboardUrl), e);
     }
 
