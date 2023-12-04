@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CreateRouteGroupsPart2 @CRG1
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CreateRouteGroupsPart2
 Feature: Create Route Groups
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/1593801
@@ -86,10 +86,10 @@ Feature: Create Route Groups
       | reservationType   | Normal  |
       | reservationStatus | PENDING |
     And Operator click Load Selection on Create Route Groups page
-    And Operator sort Transactions/Reservations table by Tracking ID on Create Route Groups page
-    And Operator save records from Transactions/Reservations table on Create Route Groups page
+    And Operator sort Transactions or Reservations table by Tracking ID on Create Route Groups page
+    And Operator save records from Transactions or Reservations table on Create Route Groups page
     And Operator download CSV file on Create Route Groups page
-    Then Operator verify Transactions/Reservations CSV file on Create Route Groups page
+    Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroupsV2
   Scenario: Operator Filter Route Grouping - Empty Route Group

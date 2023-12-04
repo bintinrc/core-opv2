@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart3 @CRG7
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @TransactionFiltersPart3
 Feature: Create Route Groups - Transaction Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142860

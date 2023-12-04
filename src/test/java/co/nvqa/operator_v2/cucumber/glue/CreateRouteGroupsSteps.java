@@ -1194,12 +1194,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
-  @Given("Operator sort Transactions/Reservations table by Tracking ID on Create Route Groups page")
+  @Given("Operator sort Transactions or Reservations table by Tracking ID on Create Route Groups page")
   public void operatorSortTableOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> page.txnRsvnTable.sortColumn(COLUMN_TRACKING_ID, true));
   }
 
-  @Given("Operator save records from Transactions/Reservations table on Create Route Groups page")
+  @Given("Operator save records from Transactions or Reservations table on Create Route Groups page")
   public void operatorSaveTableOnCreateRouteGroupPage() {
     createRouteGroupsPage.inFrame(page -> {
       List<TxnRsvn> records = page.txnRsvnTable.readFirstEntities(3);
@@ -1215,7 +1215,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
-  @Given("Operator verify Transactions/Reservations CSV file on Create Route Groups page")
+  @Given("Operator verify Transactions or Reservations CSV file on Create Route Groups page")
   public void operatorVerifyCsvFile() {
     List<TxnRsvn> expected = get(LIST_OF_TXN_RSVN);
     String fileName = createRouteGroupsPage.getLatestDownloadedFilename(CSV_FILE_NAME);
