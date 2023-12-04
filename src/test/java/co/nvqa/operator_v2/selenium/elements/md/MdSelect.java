@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.operator_v2.exception.NvTestCoreElementDisabledError;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementDisabledError;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.Arrays;
 import java.util.List;
