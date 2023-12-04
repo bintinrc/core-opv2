@@ -84,13 +84,7 @@ public class LoginSteps extends AbstractSteps {
   @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
   public void loginToOperatorV2(String username, String password) {
     loginPage.loadPage();
-
-    if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
-      loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
-    } else {
-      loginPage.clickLoginButton();
-    }
-
+    loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
     mainPage.verifyTheMainPageIsLoaded();
   }
 
