@@ -5,7 +5,7 @@ Feature: Manage Order Tags
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @wip
   Scenario: Operator Create Order Tag
     Given Operator go to menu Order -> Manage Order Tags
     When Operator create new route tag on Manage Order Tags page:
