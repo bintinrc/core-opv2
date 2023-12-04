@@ -5,7 +5,7 @@ Feature: Printer Settings
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePrinter
+  @DeletePrinterV2
   Scenario: Operator Add Printer Setting
     Given Operator go to menu System Settings -> Printer Settings
     When Operator click Add Printer button
@@ -17,10 +17,9 @@ Feature: Printer Settings
       | isDefault | true                                          |
     Then Operator verify Printer Settings is added successfully
 
-  @DeletePrinter
+  @DeletePrinterV2
   Scenario: Operator Delete Printer Setting
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator adds new printer using data below:
+    When API Core - Operator adds new printer using data below:
       | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
       | ipAddress | 127.0.0.1:9000                                |
       | version   | 3                                             |
@@ -29,10 +28,9 @@ Feature: Printer Settings
     And Operator delete Printer Settings
     Then Operator verify Printer Settings is deleted successfully
 
-  @DeletePrinter
+  @DeletePrinterV2
   Scenario Outline: Operator Edit Printer Setting - <Note>
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator adds new printer using data below:
+    When API Core - Operator adds new printer using data below:
       | name      | <printerSettingsName> |
       | ipAddress | 127.0.0.1:9000        |
       | version   | 3                     |
@@ -46,10 +44,9 @@ Feature: Printer Settings
       | Edit IP Address | Printer - Edit IP Address {gradle-current-date-yyyyMMddHHmmsss} | ipAddress  | 192.168.0.1:9000                                                   |
       | Edit Version    | Printer - Edit Version {gradle-current-date-yyyyMMddHHmmsss}    | version    | 2                                                                  |
 
-  @DeletePrinter
+  @DeletePrinterV2
   Scenario: Operator Set Printer as Default Printer
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator adds new printer using data below:
+    And API Core - Operator adds new printer using data below:
       | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
       | ipAddress | 127.0.0.1:9000                                |
       | version   | 3                                             |
