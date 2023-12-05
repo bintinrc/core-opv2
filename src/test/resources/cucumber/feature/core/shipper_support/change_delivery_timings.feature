@@ -5,6 +5,7 @@ Feature: Change Delivery Timings
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Download and Verify CSV file of Change Delivery Timings' Sample
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample
@@ -35,6 +36,7 @@ Feature: Change Delivery Timings
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
+  @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -59,6 +61,7 @@ Feature: Change Delivery Timings
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
+  @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Tracking ID
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
@@ -68,7 +71,7 @@ Feature: Change Delivery Timings
       | timewindow | -1                              |
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -94,6 +97,7 @@ Feature: Change Delivery Timings
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
+  @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
@@ -113,6 +117,7 @@ Feature: Change Delivery Timings
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
+  @HighPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -133,6 +138,7 @@ Feature: Change Delivery Timings
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
+  @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                   |
@@ -150,6 +156,7 @@ Feature: Change Delivery Timings
     And Operator verify order events are not presented on Edit Order V2 page:
       | UPDATE SLA |
 
+  @HighPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Order Tagged to DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -172,6 +179,7 @@ Feature: Change Delivery Timings
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is assigned to a DP! Not allowed to change delivery timings. |
     And Operator click Close button on Change Delivery Timings page
 
+  @MediumPriority
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Past Date
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -190,6 +198,7 @@ Feature: Change Delivery Timings
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery date cannot be before today's date |
     And Operator click Close button on Change Delivery Timings page
 
+  @MediumPriority
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -222,6 +231,7 @@ Feature: Change Delivery Timings
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
+  @HighPriority
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
