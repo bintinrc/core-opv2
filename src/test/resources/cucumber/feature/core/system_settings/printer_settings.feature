@@ -5,7 +5,7 @@ Feature: Printer Settings
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePrinterV2
+  @DeletePrinterV2 @MediumPriority
   Scenario: Operator Add Printer Setting
     Given Operator go to menu System Settings -> Printer Settings
     When Operator click Add Printer button
@@ -17,7 +17,7 @@ Feature: Printer Settings
       | isDefault | true                                          |
     Then Operator verify Printer Settings is added successfully
 
-  @DeletePrinterV2
+  @DeletePrinterV2 @MediumPriority
   Scenario: Operator Delete Printer Setting
     When API Core - Operator adds new printer using data below:
       | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
@@ -28,7 +28,7 @@ Feature: Printer Settings
     And Operator delete Printer Settings
     Then Operator verify Printer Settings is deleted successfully
 
-  @DeletePrinterV2
+  @DeletePrinterV2 @MediumPriority
   Scenario Outline: Operator Edit Printer Setting - <Note>
     When API Core - Operator adds new printer using data below:
       | name      | <printerSettingsName> |
@@ -44,7 +44,7 @@ Feature: Printer Settings
       | Edit IP Address | Printer - Edit IP Address {gradle-current-date-yyyyMMddHHmmsss} | ipAddress  | 192.168.0.1:9000                                                   |
       | Edit Version    | Printer - Edit Version {gradle-current-date-yyyyMMddHHmmsss}    | version    | 2                                                                  |
 
-  @DeletePrinterV2
+  @DeletePrinterV2 @MediumPriority
   Scenario: Operator Set Printer as Default Printer
     And API Core - Operator adds new printer using data below:
       | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
