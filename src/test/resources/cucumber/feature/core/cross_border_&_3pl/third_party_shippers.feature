@@ -1,4 +1,4 @@
-@OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyShippers @test
+@OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyShippers
 Feature: Third Party Shippers
 
   Background:
