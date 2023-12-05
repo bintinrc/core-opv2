@@ -5,6 +5,7 @@ Feature: Order Tag Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -28,6 +29,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  @HighPriority
   Scenario: Search Orders on the Order Tag Management Page by Shipper Filter
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -40,7 +42,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-
+  @MediumPriority
   Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -53,6 +55,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  @MediumPriority
   Scenario: Search Orders on the Order Tag Management Page by Status & Granular Status Filter
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
@@ -69,6 +72,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  @MediumPriority
   Scenario: Search Orders on the Order Tag Management Page by CSV File
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
@@ -84,6 +88,7 @@ Feature: Order Tag Management
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
+  @MediumPriority
   Scenario: Add Order Tag To Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-marketplace-client-id}                                                                                                                                                                                                                                                                                               |
