@@ -25,7 +25,7 @@ import static co.nvqa.operator_v2.selenium.page.ImplantedManifestPage.ImplantedM
 @ScenarioScoped
 public class ImplantedManifestSteps extends AbstractSteps {
 
-  private static String KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID = "KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID";
+  private static final String KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID = "KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID";
   private ImplantedManifestPage page;
 
 
