@@ -3,13 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
-import co.nvqa.commons.model.pdf.AirwayBill;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -17,7 +13,6 @@ import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.OrdersTable.OrderInfo;
 import co.nvqa.operator_v2.selenium.page.MaskedPage;
-import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
@@ -400,43 +395,6 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.printWaybillsDialog.checkbox.check();
     allOrdersPage.printWaybillsDialog.downloadSelected.click();
     allOrdersPage.printWaybillsDialog.forceClose();
-  }
-
-  @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
-  public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
-    Order order = get(KEY_CREATED_ORDER);
-    allOrdersPage.verifyWaybillContentsIsCorrect(order);
-  }
-
-  @Then("^Operator verify waybill for single order on All Orders page:$")
-  public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo(
-      Map<String, String> data) {
-    AirwayBill expected = new AirwayBill(resolveKeyValues(data));
-    String latestFilenameOfDownloadedPdf = allOrdersPage.getLatestDownloadedFilename(
-        "awb_" + expected.getTrackingId());
-    allOrdersPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
-    AirwayBill actual = PdfUtils.getOrderInfoFromAirwayBill(
-        TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
-    expected.compareWithActual(actual);
-  }
-
-  @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")
-  public void operatorVerifyThePrintedWaybillForMultipleOrderOnAllOrdersPageContainsCorrectInfo() {
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-    for (int i = 0; i < orders.size(); i++) {
-      boolean found = false;
-      for (int j = 0; j < orders.size(); j++) {
-        try {
-          allOrdersPage.editOrderPage.verifyAirwayBillContentsIsCorrect(orders.get(i), j,
-              "awb_a4_page_1");
-          found = true;
-          break;
-        } catch (AssertionError ex) {
-        }
-      }
-      Assertions.assertThat(found).withFailMessage(
-          "Correct info for order " + orders.get(i).getTrackingId() + " was not found").isTrue();
-    }
   }
 
   @When("Operator resume this order {string} on All Orders page")
@@ -1074,27 +1032,11 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyDeliveryAddressIsRts(order);
   }
 
-  @Then("Operator verifies the data on the database for driver collect scenarios are all right")
-  public void operatorVerifiesTheDataOnTheDatabaseForDriverCollectScenariosAreAllRight() {
-    DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder = get(
-        KEY_DATABASE_CHECKING_DP_DRIVER_COLLECT_ORDER);
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.verifyDriverCollect(dbCheckingDriverCollectOrder, trackingId);
-  }
-
   @Then("Operator verifies the order status is {string} and granular status is {string}")
   public void operatorVerifiesTheOrderStatusIsAndGranularStatusIs(String status,
       String granularStatus) {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyOrderStatus(order, status, granularStatus);
-  }
-
-  @Then("Operator verifies the data on the database for Customer Collect scenarios are all right")
-  public void operatorVerifiesTheDataOnTheDatabaseForCustomerCollectScenariosAreAllRight() {
-    DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder = get(
-        KEY_DATABASE_CHECKING_DP_CUSTOMER_COLLECT_ORDER);
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.databaseVerifyCustomerCollect(dbCheckingCustomerCollectOrder, trackingId);
   }
 
   @When("Operator print Waybill for order {string} on All Orders page")
@@ -1151,8 +1093,9 @@ public class AllOrdersSteps extends AbstractSteps {
               .findFirst();
           if (orderOpt.isPresent()) {
             final String rawDeliveryDate = orderOpt.get().getTransactions().get(1).getEndTime();
+//            TODO common-v2: use equivalent of this in new common
             final String formattedDeliveryDate = LocalDate.parse(rawDeliveryDate,
-                DateUtil.ISO8601_LITE_FORMATTER).toString();
+                co.nvqa.commons.support.DateUtil.ISO8601_LITE_FORMATTER).toString();
             o.setEstimatedDeliveryDate(formattedDeliveryDate);
           }
         })

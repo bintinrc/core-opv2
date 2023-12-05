@@ -31,17 +31,17 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     page = new ChangeDeliveryTimingsPage(getWebDriver());
   }
 
-  @When("^Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample$")
+  @When("Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample")
   public void operatorClickOnDownloadSampleCSVFile() {
     page.inFrame(() -> page.downloadSampleCsv.click());
   }
 
-  @Then("^Operator verify CSV file of Change Delivery Timings' sample$")
+  @Then("Operator verify CSV file of Change Delivery Timings' sample")
   public void verifyTheCSVFileSample() {
     page.inFrame(() -> page.csvSampleDownloadSuccessful());
   }
 
-  @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
+  @Then("Operator uploads the CSV file on Change Delivery Timings page using data below:")
   public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(
       Map<String, String> dataTableAsMap) {
     dataTableAsMap = resolveKeyValues(dataTableAsMap);
@@ -79,7 +79,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     put("changeDeliveryTiming", changeDeliveryTiming);
   }
 
-  @Then("^Operator uploads CSV file without submit on Change Delivery Timings page:$")
+  @Then("Operator uploads CSV file without submit on Change Delivery Timings page:")
   public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(
       List<Map<String, String>> data) {
     data = resolveListOfMaps(data);
@@ -115,7 +115,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     put("changeDeliveryTimings", listOfChangeDeliveryTimings);
   }
 
-  @Then("^Operator submit uploaded CSV file on Change Delivery Timings page$")
+  @Then("Operator submit uploaded CSV file on Change Delivery Timings page")
   public void submitUploadedFile() {
     page.inFrame(() -> {
       page.uploadCsvDialog.waitUntilVisible();
@@ -123,7 +123,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify the tracking ID is invalid on Change Delivery Timings page$")
+  @Then("Operator verify the tracking ID is invalid on Change Delivery Timings page")
   public void invalidTrackingIdVerification() {
     page.inFrame(() -> {
       Assertions.assertThat(page.errorMessage.waitUntilVisible(10))
@@ -135,7 +135,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify errors on Change Delivery Timings page:$")
+  @Then("Operator verify errors on Change Delivery Timings page:")
   public void invalidTrackingIdVerification(List<String> data) {
     List<String> expected = resolveValues(data);
     page.inFrame(() -> {
@@ -151,7 +151,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator click Close button on Change Delivery Timings page$")
+  @Then("Operator click Close button on Change Delivery Timings page")
   public void clickClose() {
     page.inFrame(() -> page.close.click());
   }

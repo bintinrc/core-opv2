@@ -7,7 +7,7 @@ Feature: Create Route Groups - Preset Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteFilterTemplate @MediumPriority
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Save A New Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091632
     When Operator go to menu Routing -> 1. Create Route Groups
@@ -92,16 +92,16 @@ Feature: Create Route Groups - Preset Filters
     And Operator verifies Save button in Save Preset dialog on Create Route Groups page is enabled
     When Operator clicks Save button in Save Preset dialog on Create Route Groups page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 filter preset created                             |
-      | bottom             | Name: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                                |
-    And Operator verifies selected Filter Preset name is "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" on Create Route Groups page
+      | top                | 1 filter preset created                                            |
+      | bottom             | Name: {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name} |
+      | waitUntilInvisible | true                                                               |
+    And Operator verifies selected Filter Preset name is "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" on Create Route Groups page
     And DB Operator verifies filter preset record:
-      | id        | {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}   |
-      | namespace | route-groups                                  |
-      | name      | {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME} |
+      | id        | {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].id}   |
+      | namespace | route-groups                                                 |
+      | name      | {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name} |
     When Operator refresh page
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     Then Operator verifies selected General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}                                     |
       | startDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}                                     |
@@ -143,10 +143,10 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
-  @DeleteFilterTemplate @MediumPriority
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Apply Existing Filter Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091631
-    And API Operator creates new Route Groups Filter Template using data below:
+    And API Lighthouse - creates new Route Groups Filter Template:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
       | value.isRouted                | true                                         |
@@ -175,7 +175,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showShipment            | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     Then Operator verifies selected General Filters on Create Route Groups page:
       | shipper       | {shipper-v4-legacy-id}-{shipper-v4-name} ({shipper-v4-id})         |
       | routed        | Show                                                               |
@@ -203,10 +203,10 @@ Feature: Create Route Groups - Preset Filters
       | shipmentStatus | At Transit Hub |
       | shipmentType   | AIR_HAUL       |
 
-  @DeleteFilterTemplate @MediumPriority
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Delete Preset on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091645
-    And API Operator creates new Route Groups Filter Template using data below:
+    And API Lighthouse - creates new Route Groups Filter Template:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
       | value.isRouted                | true                                         |
@@ -229,22 +229,22 @@ Feature: Create Route Groups - Preset Filters
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     And Operator selects "Delete Preset" preset action on Create Route Groups page
-    Then Operator verifies "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" preset is selected in Delete Preset dialog on Create Route Groups page
-    Then Operator verifies "Preset {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID} will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Create Route Groups page
+    Then Operator verifies "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" preset is selected in Delete Preset dialog on Create Route Groups page
+    Then Operator verifies "Preset {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].id} will be deleted permanently. Proceed to delete?" message is displayed in Delete Preset dialog on Create Route Groups page
     Then Operator verifies Cancel button in Delete Preset dialog on Create Route Groups page is enabled
     And Operator verifies Delete button in Delete Preset dialog on Create Route Groups page is enabled
     When Operator clicks Delete button in Delete Preset dialog on Create Route Groups page
     Then Operator verifies that success react notification displayed:
-      | top    | 1 filter preset deleted                         |
-      | bottom | ID: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID} |
-    And DB Lighthouse - verify preset_filters id "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" record is deleted:
+      | top    | 1 filter preset deleted                                        |
+      | bottom | ID: {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].id} |
+    And DB Lighthouse - verify preset_filters id "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].id}" record is deleted:
 
-  @DeleteFilterTemplate @MediumPriority
+  @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6091635
-    And API Operator creates new Route Groups Filter Template using data below:
+    And API Lighthouse - creates new Route Groups Filter Template:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.shipperIds              | {shipper-v4-legacy-id}                       |
       | value.isRouted                | true                                         |
@@ -260,7 +260,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     And Operator set General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}     |
       | startDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}     |
@@ -335,15 +335,15 @@ Feature: Create Route Groups - Preset Filters
       | Show Transaction: Show                                                                          |
       | Show Reservation: Show                                                                          |
       | Show Shipment: Show                                                                             |
-    When Operator enters "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on Create Route Groups page
+    When Operator enters "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Preset Name in Save Preset dialog on Create Route Groups page
     Then Operator verifies help text "This name is already taken. Click update to overwrite the preset?" is displayed in Save Preset dialog on Create Route Groups page
     When Operator clicks Update button in Save Preset dialog on Create Route Groups page
     Then Operator verifies that success react notification displayed:
-      | top                | 1 filter preset updated                             |
-      | bottom             | Name: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME} |
-      | waitUntilInvisible | true                                                |
+      | top                | 1 filter preset updated                                            |
+      | bottom             | Name: {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name} |
+      | waitUntilInvisible | true                                                               |
     When Operator refresh page
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     Then Operator verifies selected General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}                                     |
       | startDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}                                     |
@@ -493,7 +493,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @DeleteRouteGroups @DeleteFilterTemplateV2 @MediumPriority
+  @DeleteRouteGroupsV2 @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247899
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -501,7 +501,7 @@ Feature: Create Route Groups - Preset Filters
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new Route Group:
+    And API Route - create route group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Lighthouse - creates new Route Groups Filter Template:
@@ -517,7 +517,7 @@ Feature: Create Route Groups - Preset Filters
     Then Create Route Groups page is loaded
     And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
-    And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}" on Create Route Groups:
+    And Operator adds following transactions to Route Group "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" on Create Route Groups:
       | trackingId                            |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies that success react notification displayed:
@@ -528,7 +528,7 @@ Feature: Create Route Groups - Preset Filters
       | orderServiceType | Parcel Delivery  |
       | deliveryType     | 3 Days - Anytime |
 
-  @DeleteRouteGroups @DeleteFilterTemplateV2 @MediumPriority
+  @DeleteRouteGroupsV2 @DeleteFilterTemplateV2 @MediumPriority
   Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247900
     Given API Order - Shipper create multiple V4 orders using data below:

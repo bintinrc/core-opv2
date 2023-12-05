@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ShipmentFiltersPart1 @CRG5
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ShipmentFiltersPart1
 Feature: Create Route Groups - Shipment Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2096344
@@ -7,10 +7,10 @@ Feature: Create Route Groups - Shipment Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario Outline: Operator Filter Shipment Type on Create Route Group - Shipment Filters - Shipment Type = <name>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907884
-    And API Operator create new shipment with type "<shipmentType>" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API MM - Operator creates multiple 1 new shipments with type "<shipmentType>" from hub id "{hub-id}" to "{hub-id-2}"
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
@@ -18,7 +18,7 @@ Feature: Create Route Groups - Shipment Filters
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator adds order to shipment:
-      | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                               |
+      | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                                |
       | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
@@ -97,8 +97,12 @@ Feature: Create Route Groups - Shipment Filters
     And API Sort - Operator adds order to shipment:
       | shipmentId | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}                                                                           |
       | request    | {"order_country":"sg","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator assign mawb "mawb_{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" to following shipmentIds
-      | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+    And API MM - Operator links shipments to billing number with data below:
+      | shipmentIds       | KEY_MM_LIST_OF_CREATED_SHIPMENTS |
+      | originPortId      | {airport-id-1}                   |
+      | destinationPortId | {airport-id-2}                   |
+      | vendorId          | {vendor-id}                      |
+      | billingNumber     | 123-12345680                     |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     When Operator set General Filters on Create Route Groups page:
@@ -106,11 +110,11 @@ Feature: Create Route Groups - Shipment Filters
       | shipper      | {filter-shipper-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator set Shipment Filters on Create Route Groups page:
-      | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd}                |
-      | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd}                |
-      | shipmentType     | AIR_HAUL                                      |
-      | shipmentStatus   | Pending                                       |
-      | mawb             | mawb_{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
+      | shipmentDateFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentType     | AIR_HAUL                       |
+      | shipmentStatus   | Pending                        |
+      | mawb             | 123-12345680                   |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
       | trackingId                                 | type                 | shipper                                  | address                                                     | status         |
