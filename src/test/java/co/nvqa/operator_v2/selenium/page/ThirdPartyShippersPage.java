@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import co.nvqa.common.core.model.ThirdPartyShippers;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -33,7 +33,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void addThirdPartyShipper(ThirdPartyShipper thirdPartyShipper) {
+  public void addThirdPartyShipper(ThirdPartyShippers thirdPartyShipper) {
     clickNvIconTextButtonByName("container.third-party-shipper.add-shipper");
     fillTheForm(thirdPartyShipper);
     clickNvButtonSaveByName("Submit");
@@ -43,8 +43,8 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
         "//div[@id='toast-container']//div[contains(text(), 'created!')]");
   }
 
-  public void editThirdPartyShipper(ThirdPartyShipper oldThirdPartyShipper,
-      ThirdPartyShipper newThirdPartyShipper) {
+  public void editThirdPartyShipper(ThirdPartyShippers oldThirdPartyShipper,
+      ThirdPartyShippers newThirdPartyShipper) {
     searchTableByCode(oldThirdPartyShipper.getCode());
     clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     waitUntilVisibilityOfElementLocated("//input[contains(@id, 'commons.model.name')]");
@@ -56,23 +56,23 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
         "//div[@id='toast-container']//div[contains(text(), 'updated!')]");
   }
 
-  private void fillTheForm(ThirdPartyShipper thirdPartyShipper) {
+  private void fillTheForm(ThirdPartyShippers thirdPartyShipper) {
     sendKeysById("commons.model.name", thirdPartyShipper.getName());
     sendKeysById("commons.model.code", thirdPartyShipper.getCode());
     sendKeysById("commons.model.url", thirdPartyShipper.getUrl());
   }
 
-  public void verifyThirdPartyShipperIsCreatedSuccessfully(ThirdPartyShipper thirdPartyShipper) {
+  public void verifyThirdPartyShipperIsCreatedSuccessfully(ThirdPartyShippers thirdPartyShipper) {
     searchTableByCode(thirdPartyShipper.getCode());
     verifyThirdPartyShipperInfoIsCorrect(thirdPartyShipper);
   }
 
-  public void verifyThirdPartyShipperIsUpdatedSuccessfully(ThirdPartyShipper thirdPartyShipper) {
+  public void verifyThirdPartyShipperIsUpdatedSuccessfully(ThirdPartyShippers thirdPartyShipper) {
     searchTableByCode(thirdPartyShipper.getCode());
     verifyThirdPartyShipperInfoIsCorrect(thirdPartyShipper);
   }
 
-  private void verifyThirdPartyShipperInfoIsCorrect(ThirdPartyShipper thirdPartyShipper) {
+  private void verifyThirdPartyShipperInfoIsCorrect(ThirdPartyShippers thirdPartyShipper) {
     if (thirdPartyShipper.getId() == null) {
       String idAsString = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
 
@@ -101,7 +101,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
         .isEqualTo(thirdPartyShipper.getUrl());
   }
 
-  public void deleteThirdPartyShipper(ThirdPartyShipper thirdPartyShipper) {
+  public void deleteThirdPartyShipper(ThirdPartyShippers thirdPartyShipper) {
     searchTableByCode(thirdPartyShipper.getCode());
     clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
     confirmDeleteDialog.confirmDelete();
@@ -111,7 +111,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
         "//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
   }
 
-  public void verifyThirdPartyShipperIsDeletedSuccessfully(ThirdPartyShipper thirdPartyShipper) {
+  public void verifyThirdPartyShipperIsDeletedSuccessfully(ThirdPartyShippers thirdPartyShipper) {
     searchTableByCode(thirdPartyShipper.getCode());
     boolean isTableEmpty = isTableEmpty();
     assertTrue(
@@ -119,7 +119,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
             thirdPartyShipper.getCode()), isTableEmpty);
   }
 
-  public void verifyAllFiltersWorkFine(ThirdPartyShipper thirdPartyShipper) {
+  public void verifyAllFiltersWorkFine(ThirdPartyShippers thirdPartyShipper) {
     searchTableByCode(thirdPartyShipper.getCode());
     verifyThirdPartyShipperInfoIsCorrect(thirdPartyShipper);
     searchTableByName(thirdPartyShipper.getName());
@@ -134,7 +134,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
     clickNvApiTextButtonByName("Download CSV File");
   }
 
-  public void verifyCsvFileDownloadedSuccessfully(ThirdPartyShipper thirdPartyShipper) {
+  public void verifyCsvFileDownloadedSuccessfully(ThirdPartyShippers thirdPartyShipper) {
     Integer id = thirdPartyShipper.getId();
     String name = thirdPartyShipper.getName();
     String url = thirdPartyShipper.getUrl();

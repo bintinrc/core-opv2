@@ -12,7 +12,6 @@ import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.filter_preset.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.dp.Partner;
@@ -120,24 +119,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
       }
     } catch (Throwable ex) {
       LOGGER.warn("Could not delete Filter Preset", ex);
-    }
-  }
-
-  //  TODO move to common-core
-  @After("@DeleteThirdPartyShippers")
-  public void deleteThirdPartyShippers() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
-    if (thirdPartyShipper != null) {
-      if (thirdPartyShipper.getId() != null) {
-        try {
-          getThirdPartyShippersClient().delete(thirdPartyShipper.getId());
-        } catch (Throwable ex) {
-          LOGGER.warn(f("Could not delete Third Party Shipper [%s]", ex.getMessage()));
-        }
-      } else {
-        LOGGER.warn(f("Could not delete Third Party Shipper [%s] - id was not defined",
-            thirdPartyShipper.getName()));
-      }
     }
   }
 
@@ -259,20 +240,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             "Could not find milkrun group with name [" + reservationGroup.getName() + "]"));
     reservationGroup.setId(group.getId());
     put(KEY_CREATED_RESERVATION_GROUP_ID, reservationGroup.getId());
-  }
-
-
-  //  TODO move to common-core
-  @Given("API Operator gets data of created Third Party shipper")
-  public void apiOperatorGetsDataOfCreatedThirdPartyShipper() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
-    List<ThirdPartyShippers> thirdPartyShippers = getThirdPartyShippersClient().getAll();
-    ThirdPartyShippers apiData = thirdPartyShippers.stream()
-        .filter(shipper -> StringUtils.equals(shipper.getName(), thirdPartyShipper.getName()))
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException(
-            f("Third Party Shipper with name [%s] was not found", thirdPartyShipper.getName())));
-    thirdPartyShipper.setId(apiData.getId());
   }
 
   // TODO move to common-lighthouse

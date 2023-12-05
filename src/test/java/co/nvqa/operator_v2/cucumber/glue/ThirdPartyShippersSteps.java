@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import co.nvqa.common.core.model.ThirdPartyShippers;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyShippersPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,8 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 @ScenarioScoped
 public class ThirdPartyShippersSteps extends AbstractSteps {
 
-  private static final String KEY_CREATED_THIRD_PARTY_SHIPPER = "KEY_CREATED_THIRD_PARTY_SHIPPER";
-  private static final String KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED = "KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED";
+
   private ThirdPartyShippersPage thirdPartyShippersPage;
 
   public ThirdPartyShippersSteps() {
@@ -38,58 +38,58 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
     String code = generateThirdPartyShipperCode();
     String url = f("https://www.tps%s.co", uniqueString);
 
-    ThirdPartyShipper thirdPartyShipper = new ThirdPartyShipper();
+    ThirdPartyShippers thirdPartyShipper = new ThirdPartyShippers();
     thirdPartyShipper.setName(name);
     thirdPartyShipper.setCode(code);
     thirdPartyShipper.setUrl(url);
     thirdPartyShippersPage.addThirdPartyShipper(thirdPartyShipper);
 
-    put(KEY_CREATED_THIRD_PARTY_SHIPPER, thirdPartyShipper);
+    put(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER, thirdPartyShipper);
   }
 
   @Then("Operator verify the new Third Party Shipper is created successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsCreatedSuccessfully() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyThirdPartyShipperIsCreatedSuccessfully(thirdPartyShipper);
   }
 
   @When("Operator update the new Third Party Shipper")
   public void operatorUpdateTheNewThirdPartyShipper() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
 
-    ThirdPartyShipper thirdPartyShipperEdited = new ThirdPartyShipper();
+    ThirdPartyShippers thirdPartyShipperEdited = new ThirdPartyShippers();
     thirdPartyShipperEdited.setId(thirdPartyShipper.getId());
     thirdPartyShipperEdited.setName(thirdPartyShipper.getName() + " [EDITED]");
     thirdPartyShipperEdited.setCode(generateThirdPartyShipperCode());
     thirdPartyShipperEdited.setUrl(thirdPartyShipper.getUrl() + ".sg");
 
     thirdPartyShippersPage.editThirdPartyShipper(thirdPartyShipper, thirdPartyShipperEdited);
-    put(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED, thirdPartyShipperEdited);
+    put(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED, thirdPartyShipperEdited);
   }
 
   @Then("Operator verify the new Third Party Shipper is updated successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsUpdatedSuccessfully() {
-    ThirdPartyShipper thirdPartyShipperEdited = get(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED);
+    ThirdPartyShippers thirdPartyShipperEdited = get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED);
     thirdPartyShippersPage.verifyThirdPartyShipperIsUpdatedSuccessfully(thirdPartyShipperEdited);
   }
 
   @When("Operator delete the new Third Party Shipper")
   public void operatorDeleteTheNewThirdPartyShipper() {
-    ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
-        KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = containsKey(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
+        CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.deleteThirdPartyShipper(thirdPartyShipper);
   }
 
   @Then("Operator verify the new Third Party Shipper is deleted successfully")
   public void operatorVerifyTheNewThirdPartyShipperIsDeletedSuccessfully() {
-    ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
-        KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = containsKey(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(
+        CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyThirdPartyShipperIsDeletedSuccessfully(thirdPartyShipper);
   }
 
   @Then("Operator check all filters on Third Party Shippers page work fine")
   public void operatorCheckAllFiltersOnThirdPartyShippersPageWork() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyAllFiltersWorkFine(thirdPartyShipper);
   }
 
@@ -100,7 +100,7 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
 
   @When("Operator verify Third Party Shippers CSV file downloaded successfully")
   public void operatorVerifyThirdPartyShippersCsvFileDownloadedSuccessfully() {
-    ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+    ThirdPartyShippers thirdPartyShipper = get(CoreScenarioStorageKeys.KEY_CORE_CREATED_THIRD_PARTY_SHIPPER);
     thirdPartyShippersPage.verifyCsvFileDownloadedSuccessfully(thirdPartyShipper);
   }
 }
