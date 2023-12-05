@@ -7,7 +7,7 @@ Feature: Create Route Groups - Transaction Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriorit
+  @HighPriority
   Scenario Outline: Operator Filter Order by Service Type on Create Route Groups Page - Transaction Filters - Marketplace International
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142860/scenarios/6564410
     Given API Order - Shipper create multiple V4 orders using data below:
