@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.PrinterSettings;
+import co.nvqa.common.core.model.PrinterSettings;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -59,7 +59,7 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
     addPrinterDialog.printerName.setValue(printerSettings.getName());
     addPrinterDialog.ipAddress.setValue(printerSettings.getIpAddress());
     addPrinterDialog.version.selectByValue(printerSettings.getVersion());
-    addPrinterDialog.isDefaultPrinter.setValue(printerSettings.getIsDefault());
+    addPrinterDialog.isDefaultPrinter.setValue(printerSettings.isDefault());
     addPrinterDialog.submit.clickAndWaitUntilDone();
     addPrinterDialog.waitUntilInvisible();
   }
