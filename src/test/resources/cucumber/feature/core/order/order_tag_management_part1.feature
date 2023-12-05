@@ -59,6 +59,7 @@ Feature: Order Tag Management
     Then Operator verify the tags shown on Edit Order V2 page
       | {order-tag-name-3} |
 
+  @MediumPriority
   Scenario: Update Tags from Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -88,6 +89,7 @@ Feature: Order Tag Management
       | {order-tag-name-2} |
       | {order-tag-name-3} |
 
+  @MediumPriority
   Scenario: Clear All Tags from Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
@@ -114,6 +116,7 @@ Feature: Order Tag Management
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies no tags shown on Edit Order V2 page
 
+  @MediumPriority
   Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                         |
@@ -131,6 +134,7 @@ Feature: Order Tag Management
       | Normal | Normal    | false            |
       | Return | Return    | true             |
 
+  @MediumPriority
   Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
