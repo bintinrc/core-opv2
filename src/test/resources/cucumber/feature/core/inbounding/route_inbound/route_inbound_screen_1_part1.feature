@@ -141,7 +141,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 1                                         |
       | wpTotal     | 3                                         |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Get Route Details by Route ID - Route with No Waypoints
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -167,7 +167,7 @@ Feature: Route Inbound Screen 1
       | errorCode    | 103019                        |
       | errorMessage | Route for id=123456 not found |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Get Route Details by Route ID - Route not Assigned to a Driver
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id} } |

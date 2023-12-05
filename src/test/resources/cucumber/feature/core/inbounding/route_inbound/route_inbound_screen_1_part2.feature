@@ -105,7 +105,7 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 0                                         |
       | wpTotal     | 1                                         |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Get Route Details by Tracking ID - Order is Not Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -122,7 +122,7 @@ Feature: Route Inbound Screen 1
       | errorCode    | 103096                     |
       | errorMessage | Order is not on any route! |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Get Route Details by Tracking ID - Order Not Found
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details of Invalid Data on Route Inbound page using data below:
