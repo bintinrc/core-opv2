@@ -20,7 +20,6 @@ import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
-import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
