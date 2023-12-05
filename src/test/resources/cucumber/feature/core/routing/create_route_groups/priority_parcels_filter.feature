@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @current
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter
 Feature: Create Route Groups - Priority Parcel Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142867
@@ -132,7 +132,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} |
       | status     | Arrived at Sorting Hub                                    |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Operator Filter Hub Inbound Datetime with Order Creation Time on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2142867/scenarios/6902120
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -145,8 +145,6 @@ Feature: Create Route Groups - Priority Parcel Filters
       | barcodes          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | hubId             | {hub-id}                                     |
       | dwsInboundRequest | { "dimensions": {"l":500.1,"w":220,"h":710}} |
-#    And API Operator global inbounds the order belongs to specific Hub Inbound User:
-##      | jsonRequest | {"barcodes":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
