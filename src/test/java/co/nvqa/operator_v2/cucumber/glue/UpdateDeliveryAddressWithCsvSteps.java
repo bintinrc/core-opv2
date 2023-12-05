@@ -4,6 +4,7 @@ import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.model.address.Address;
+import co.nvqa.common.ordercreate.cucumber.glue.KeyStorage;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
@@ -146,7 +147,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
   @And("Operator verify created orders info after address update")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
+    List<String> trackingIds = get(KeyStorage.KEY_LIST_OF_CREATED_TRACKING_IDS);
     apiOperatorVerifyOrdersInfoAfterAddressUpdate(trackingIds);
   }
 

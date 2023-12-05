@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @CRG3
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter
 Feature: Create Route Groups - Priority Parcel Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142867
@@ -141,8 +141,10 @@ Feature: Create Route Groups - Priority Parcel Filters
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator global inbounds the order belongs to specific Hub Inbound User:
-      | jsonRequest | {"barcodes":["{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
+    And API Sort - DWS inbound V1
+      | barcodes          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
+      | hubId             | {hub-id}                                     |
+      | dwsInboundRequest | { "dimensions": {"l":500.1,"w":220,"h":710}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
