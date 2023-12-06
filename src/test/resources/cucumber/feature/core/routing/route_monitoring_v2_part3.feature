@@ -242,7 +242,7 @@ Feature: Route Monitoring V2
       | totalParcels  | 2                                  |
       | totalWaypoint | 1                                  |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -263,130 +263,136 @@ Feature: Route Monitoring V2
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
-    #    And API Operator Global Inbound multiple parcels using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-#    And API Operator add parcels to the route using data below:
-#      | orderId                           | addParcelToRouteRequest |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} | { "type":"DD" }         |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"PP" }         |
-#      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"PP" }         |
     And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
     And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[4].id} |
-    And API Operator get order details
-    And API Operator gets "Delivery" transaction waypoint ids of created orders
-    And API Operator gets "Pickup" transaction waypoint ids of created orders
     And API Core - Operator merge routed waypoints:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And API Operator get order details
-    And API Operator verifies that each "Delivery" transaction of orders has the same waypoint_id:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-    And API Operator verifies that each "Pickup" transaction of orders has the same waypoint_id:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
-    And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
-    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
-    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-
-    And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
-    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Core - Operator verifies "Pickup" transactions of following orders have same waypoint id:
+      | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[4].id} |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+    And DB Core - verify route_monitoring_data is hard-deleted:
+      | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId       | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels  | 4                      |
-      | totalWaypoint | 2                      |
-      | pendingCount  | 2                      |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels  | 4                                  |
+      | totalWaypoint | 2                                  |
+      | pendingCount  | 2                                  |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Delivery From Route
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 1                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 1                      |
-      | pendingCount         | 1                      |
-      | successCount         | 0                      |
-      | numInvalidFailed     | 0                      |
-      | numValidFailed       | 0                      |
-    When API Operator pulled out parcel "DELIVERY" from route
-    And API Operator get order details
-    And DB Operator verify Delivery waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 1                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 1                                  |
+      | pendingCount         | 1                                  |
+      | successCount         | 0                                  |
+      | numInvalidFailed     | 0                                  |
+      | numValidFailed       | 0                                  |
+    When API Core - Operator pull order from route:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | DELIVERY                           |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status  | Pending                                                    |
+      | routeId | null                                                       |
+      | seqNo   | null                                                       |
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId       | {KEY_CREATED_ROUTE_ID} |
-      | totalWaypoint | 0                      |
-      | pendingCount  | 0                      |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalWaypoint | 0                                  |
+      | pendingCount  | 0                                  |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Pickup From Route
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new route using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId              | {KEY_CREATED_ROUTE_ID} |
-      | totalParcels         | 1                      |
-      | completionPercentage | 0                      |
-      | totalWaypoint        | 1                      |
-      | pendingCount         | 1                      |
-      | successCount         | 0                      |
-      | numInvalidFailed     | 0                      |
-      | numValidFailed       | 0                      |
-    When API Operator pulled out parcel "PICKUP" from route
-    And API Operator get order details
-    And DB Operator verify Pickup waypoint of the created order using data below:
-      | status | PENDING |
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalParcels         | 1                                  |
+      | completionPercentage | 0                                  |
+      | totalWaypoint        | 1                                  |
+      | pendingCount         | 1                                  |
+      | successCount         | 0                                  |
+      | numInvalidFailed     | 0                                  |
+      | numValidFailed       | 0                                  |
+    When API Core - Operator pull order from route:
+      | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type    | PICKUP                             |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | status  | Pending                                                    |
+      | routeId | null                                                       |
+      | seqNo   | null                                                       |
 
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}             |
-      | zones   | {zone-name}            |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | hubs    | {hub-name}                         |
+      | zones   | {zone-name}                        |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | routeId       | {KEY_CREATED_ROUTE_ID} |
-      | totalWaypoint | 0                      |
-      | pendingCount  | 0                      |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | totalWaypoint | 0                                  |
+      | pendingCount  | 0                                  |
