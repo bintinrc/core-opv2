@@ -5,6 +5,7 @@ Feature: View Tagged Orders
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -28,7 +29,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                         |
       | granularStatus       | Pending Pickup                        |
 
-  @DeleteRoutes
+  @DeleteRoutes @MediumPriority
   Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -109,6 +110,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                                     |
       | granularStatus       | Arrived at Sorting Hub                |
 
+  @MediumPriority
   Scenario: View Tagged Orders - Staging, No Route Id, No Attempt, No Inbound Days
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                             |
@@ -158,7 +160,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                         |
       | granularStatus       | On Hold                               |
 
-  @DeleteRoutes
+  @DeleteRoutes @MediumPriority
   Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                      |

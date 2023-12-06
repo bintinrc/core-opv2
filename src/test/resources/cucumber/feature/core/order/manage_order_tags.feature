@@ -5,7 +5,7 @@ Feature: Manage Order Tags
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @HighPriority
   Scenario: Operator Create Order Tag
     Given Operator go to menu Order -> Manage Order Tags
     When Operator create new route tag on Manage Order Tags page:
@@ -13,7 +13,7 @@ Feature: Manage Order Tags
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
     Then Operator verify the new tag is created successfully on Manage Order Tags page
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @MediumPriority
   Scenario: Operator Delete Order Tag
     And API Core - create new order tag:
       | name        | ABC                                                                               |
@@ -25,7 +25,7 @@ Feature: Manage Order Tags
       | top | 1 Order Tag Deleted |
     And Operator verifies that "{KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].name}" tag has been deleted on Manage Order Tags page
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @MediumPriority
   Scenario: Operator Search Order Tag
     And API Core - create new order tag:
       | name        | ABD                                                                               |
@@ -49,7 +49,7 @@ Feature: Manage Order Tags
       | name        | {KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].name}        |
       | description | {KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].description} |
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @MediumPriority
   Scenario: Operator Fail Create Duplicate Order Tag
     And API Core - create new order tag:
       | name        | ABE                                                                               |
@@ -63,7 +63,7 @@ Feature: Manage Order Tags
       | top    | Status 400: Unknown                                            |
       | bottom | ^.*Error Message: Order Tag with Name ABE is already in use!.* |
 
-  @DeleteOrderTagsV2
+  @DeleteOrderTagsV2 @MediumPriority
   Scenario: Operator Fail Delete Order Tag - Not Found
     And API Core - create new order tag:
       | name        | ABF                                                                               |
