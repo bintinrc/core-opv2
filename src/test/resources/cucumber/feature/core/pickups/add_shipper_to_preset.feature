@@ -5,6 +5,7 @@ Feature: Add Shipper To Preset
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Failed to Select Shipper Creation Date more than 7 Days Range on Add Shipper to Preset Page
     Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -14,6 +15,7 @@ Feature: Add Shipper To Preset
     Then Operator verifies wrong dates toast is shown on Add Shipper To Preset page
 
 
+  @MediumPriority
   Scenario: Check Shipper Selection in Add Shipper to Preset Page
     Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -32,6 +34,7 @@ Feature: Add Shipper To Preset
     Then Operator verify all rows are unselected on Add Shipper To Preset page
 
 
+  @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download All Shown
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -39,7 +42,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Filtered Shipper
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -48,7 +51,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows 
+  @DeleteShipper @CloseNewWindows @MediumPriority
   Scenario: Operator Filter All Shippers on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                                                                             |
@@ -89,7 +92,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows
+  @DeleteShipper @CloseNewWindows @MediumPriority
   Scenario: Operator Filter Active Shipper on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                                                                             |
@@ -130,7 +133,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper @CloseNewWindows 
+  @DeleteShipper @CloseNewWindows @MediumPriority
   Scenario: Operator Filter Inactive Shipper on Add Shipper To Preset Page
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {inactive-shipper-id}                                                                                                                                                                                                                                                                                                                       |
@@ -171,7 +174,7 @@ Feature: Add Shipper To Preset
     When Operator applies "UP" sorting to "Is Active" column on Add Shipper To Preset page
     Then Operator verify "UP" sorting is applied to "Is Active" column on Add Shipper To Preset page
 
-  @DeleteShipper 
+  @DeleteShipper @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Inactive Shipper
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -187,6 +190,7 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
   
+  @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
     Given Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
@@ -196,7 +200,7 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
 #    TODO There is no Shipper Pickups page anymore
-#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
+#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
 #  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Inactive Shipper (uid:958ed81a-3f3e-456d-ad3d-a6614269253e)
 #    Given API Operator creates new Shipper Pickup Filter Template using data below:
 #      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
@@ -244,7 +248,7 @@ Feature: Add Shipper To Preset
 #      | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
 #    TODO There is no Shipper Pickups page anymore
-#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
+#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
 #  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Active Shipper (uid:7c64e137-61c4-499d-9efe-5482542b3070)
 #    Given API Operator creates new Shipper Pickup Filter Template using data below:
 #      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
@@ -292,7 +296,7 @@ Feature: Add Shipper To Preset
 #      | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
 #  TODO There is no Shipper Pickups page anymore
-#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows
+#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
 #  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - All Shippers
 #    Given API Lighthouse - Create Preset Filter For Pickup Appointment Job with data below:
 #      | createPresetFiltersRequest | {"name":"PAJ_TEMPLATE_{date: 0 days next, yyyyMMddHHmmss}","value":{"priority":{"value":"All","label":"All"},"shippers":[],"master_shippers":[],"zones":[],"job_status":[{"value":"ready-for-routing","label":"Ready for Routing"},{"value":"routed","label":"Routed"}],"service_level":[],"service_type":[{"value":"Scheduled","label":"Scheduled"}]}} |
@@ -335,7 +339,7 @@ Feature: Add Shipper To Preset
 #      | shippers | [{KEY_SHIPPER_LIST_OF_SHIPPERS[1].legacyId}-{KEY_SHIPPER_LIST_OF_SHIPPERS[1].name}] |
 
 #    TODO There is no Shipper Pickups page anymore
-#  @DeleteShipper @@DeleteFilterTemplate @CloseNewWindows
+#  @DeleteShipper @@DeleteFilterTemplate @CloseNewWindows @HighPriority
 #  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses - All Shippers
 #    Given Operator go to menu Utilities -> QRCode Printing
 #    And API Operator creates new Shipper Pickup Filter Template using data below:
