@@ -5,6 +5,7 @@ Feature: Cancel Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Cancel Order - Returned to Sender
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -24,6 +25,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Returned to Sender" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - Arrived at Distribution Point
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -43,6 +45,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -62,6 +65,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Completed" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -75,6 +79,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - Transferred to 3PL
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -96,6 +101,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @HighPriority
   Scenario: Operator Cancel Order From Resolved Recovery Ticket
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                     |
@@ -155,7 +161,7 @@ Feature: Cancel Order
       | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Pending                                                    |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Cancel Order - Merged Delivery Waypoints
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
