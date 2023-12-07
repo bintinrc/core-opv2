@@ -1,12 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.ThirdPartyShippers;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.common.core.model.ThirdPartyShippers;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyShippersPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 /**

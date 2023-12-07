@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointScanInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.NgRepeatTable;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;

@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
@@ -109,38 +108,6 @@ public class LoginPage extends OperatorV2SimplePage {
   public void clickLoginButton() {
     click("//button[@ng-click='ctrl.login()']");
     waitUntilPageLoaded();
-  }
-
-  public void enterCredential(String username, String password) {
-    final StringBuilder googlePageUrlSb = new StringBuilder();
-
-    waitUntil(() ->
-    {
-      String currentUrl = getCurrentUrl();
-      googlePageUrlSb.setLength(0);
-      googlePageUrlSb.append(currentUrl);
-      boolean isExpectedUrlFound = StringUtils.startsWithAny(currentUrl, GOOGLE_EXPECTED_URL_1,
-          GOOGLE_EXPECTED_URL_2, GOOGLE_EXPECTED_URL_3);
-
-      LOGGER.info("========== GOOGLE LOGIN PAGE ==========");
-      LOGGER.info("Current URL          : " + currentUrl);
-      LOGGER.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
-      LOGGER.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
-      LOGGER.info("Expected URL 3       : " + GOOGLE_EXPECTED_URL_3);
-      LOGGER.info("Is Expected URL Found: " + isExpectedUrlFound);
-      LOGGER.info("=======================================");
-
-      return isExpectedUrlFound;
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
-
-    final String googlePageUrl = googlePageUrlSb.toString();
-
-    if (googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_1)) {
-      enterCredentialWithMethod1(username, password);
-    } else if (StringUtils.startsWithAny(googlePageUrl, GOOGLE_EXPECTED_URL_2,
-        GOOGLE_EXPECTED_URL_3)) {
-      enterCredentialWithMethod2(username, password);
-    }
   }
 
   public void enterCredentialWithMethod1(String username, String password) {

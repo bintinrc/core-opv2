@@ -7,11 +7,15 @@ import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.PoaInfo;
 import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
+import co.nvqa.operator_v2.model.RouteManifestWaypointDetails.Reservation;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV4;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -376,7 +380,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     }
 
     public static class ReservationsTable extends
-        AntTableV4<RouteManifestWaypointDetails.Reservation> {
+        AntTableV4<Reservation> {
 
       public ReservationsTable(WebDriver webDriver) {
         super(webDriver);

@@ -24,6 +24,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV4;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;

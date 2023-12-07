@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
 import co.nvqa.commons.util.NvAllure;
+import co.nvqa.operator_v2.exception.NvTestCoreNotificationNotVisibleError;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import java.util.HashMap;
@@ -66,10 +68,16 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
   }
 
   public void waitUntilVisibilityOfNotification(String message, int timeoutInMillis) {
-    waitUntil(() ->
-            noticeNotifications.stream().anyMatch(notification ->
-                StringUtils.equalsIgnoreCase(notification.message.getText(), message))
-        , timeoutInMillis);
+    try {
+      waitUntil(() ->
+              noticeNotifications.stream().anyMatch(notification ->
+                  StringUtils.equalsIgnoreCase(notification.message.getText(), message)),
+          timeoutInMillis);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreNotificationNotVisibleError(
+          "Notification with message: [" + message + "] is not visible");
+    }
+
   }
 
   @SuppressWarnings("unchecked")
