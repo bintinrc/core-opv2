@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV2;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.ImmutableMap;
 import java.time.ZonedDateTime;

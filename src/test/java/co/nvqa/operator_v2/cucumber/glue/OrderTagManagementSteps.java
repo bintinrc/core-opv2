@@ -11,6 +11,7 @@ import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -253,4 +254,53 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
   }
 
+  @And("Operator searches and selects orders created")
+  public void operatorSelectsOrdersCreated() {
+    List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
+    lists.forEach(order -> orderTagManagementPage
+        .searchAndSelectOrderInTable(String.valueOf(order.getId())));
+  }
+
+  @And("Operator selects orders created")
+  public void operatorSelectsOrdersInTable() {
+    orderTagManagementPage.selectOrdersInTable();
+  }
+
+  @And("Operator uploads CSV with orders created")
+  public void operatorUploadsCsvOrdersCreated() {
+    List<String> trackingIds = this.<List<Order>>get(KEY_LIST_OF_CREATED_ORDER)
+        .stream()
+        .map(Order::getTrackingId)
+        .collect(Collectors.toList());
+    orderTagManagementPage.uploadFindOrdersCsvWithOrderInfo(trackingIds);
+  }
+
+  @And("Operator tags order with {string}")
+  public void operatorTagsOrderWith(String tagLabel) {
+    put(KEY_ORDER_TAG, tagLabel);
+    orderTagManagementPage.clickTagSelectedOrdersButton();
+    orderTagManagementPage.tagSelectedOrdersAndSave(tagLabel);
+  }
+
+  @When("Operator selects filter and clicks Load Selection on Order Level Tag Management page using data below:")
+  public void operatorSelectsFilterAndClicksLoadSelectionOnorderTagManagementPageUsingDataBelow(
+      Map<String, String> mapOfData) {
+    if (Objects.nonNull(mapOfData.get("shipperName"))) {
+      orderTagManagementPage.selectShipperValue(mapOfData.get("shipperName"));
+    }
+
+    if (Objects.nonNull(mapOfData.get("status"))) {
+      orderTagManagementPage.selectUniqueStatusValue(mapOfData.get("status"));
+    }
+
+    if (Objects.nonNull(mapOfData.get("granularStatus"))) {
+      orderTagManagementPage.selectUniqueGranularStatusValue(mapOfData.get("granularStatus"));
+    }
+
+    if (Objects.nonNull(mapOfData.get("masterShipper"))) {
+      orderTagManagementPage.selectMasterShipperValue(mapOfData.get("masterShipper"));
+    }
+
+    orderTagManagementPage.clickLoadSelectionButton();
+  }
 }

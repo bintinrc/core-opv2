@@ -2,10 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV2;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;

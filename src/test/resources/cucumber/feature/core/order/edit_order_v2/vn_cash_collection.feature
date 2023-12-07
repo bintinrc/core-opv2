@@ -5,6 +5,7 @@ Feature: Cash Collection
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: VN - Operator Allow Edit COD of Arrived at Sorting Hub non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -41,6 +42,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: VN - Operator Allow Edit COD to Value 0 of Arrived at Sorting Hub non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -76,6 +78,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.00                                   |
       | collectionAt | DD                                     |
 
+  @HighPriority
   Scenario: VN - Operator Allow Delete COD of Arrived at Sorting Hub non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -108,6 +111,7 @@ Feature: Cash Collection
       | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
       | deletedAt | not null                               |
 
+  @HighPriority
   Scenario: VN - Operator Allow Edit COD of On Vehicle for Delivery non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -147,6 +151,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: VN - Operator Allow Edit COD to Value 0 of On Vehicle for Delivery non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -185,6 +190,7 @@ Feature: Cash Collection
       | goodsAmount  | 0.00                                   |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: VN - Operator Disallow Delete COD of On Vehicle for Delivery non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -211,6 +217,7 @@ Feature: Cash Collection
       | top    | Status 500: Unknown                                                       |
       | bottom | ^.*Error Message: Not allowed to update 'On Vehicle for Delivery' order.* |
 
+  @MediumPriority
   Scenario: VN - Operator Disallow Edit COD of Arrived at Sorting Hub RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -238,6 +245,7 @@ Feature: Cash Collection
       | top    | Status 500: Unknown                                    |
       | bottom | ^.*Error Message: Not allowed to update an RTS order.* |
 
+  @MediumPriority
   Scenario: VN - Operator Disallow Edit COD of On Vehicle for Delivery RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -268,6 +276,7 @@ Feature: Cash Collection
       | top    | Status 500: Unknown                                    |
       | bottom | ^.*Error Message: Not allowed to update an RTS order.* |
 
+  @MediumPriority
   Scenario: VN - Operator Disallow Edit COD of Completed order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
@@ -283,6 +292,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "Completed" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: VN - Operator Disallow Edit COD of Returned to Sender order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |

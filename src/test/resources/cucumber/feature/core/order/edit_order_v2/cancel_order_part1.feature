@@ -5,6 +5,7 @@ Feature: Cancel Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Cancel Order - On Hold
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -69,7 +70,7 @@ Feature: Cancel Order
       | tags          | name          | description                                                                                                                                                                                                                                                 |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Pending Pickup New Granular Status: Cancelled Old Order Status: Pending New Order Status: Cancelled Reason: CANCEL |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Cancel Order - Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -133,7 +134,7 @@ Feature: Cancel Order
 #      | tags          | name          | description                                                                                                                                      |
 #      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pickup fail\nNew Granular Status: Cancelled\n\nOld Order Status: Pickup fail\nNew Order Status: Cancelled\n\nReason: CANCEL |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Cancel Order - Van En-route to Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -196,6 +197,7 @@ Feature: Cancel Order
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_CORE_TRANSACTION.waypointId} |
 
+  @HighPriority
   Scenario: Cancel Order - Staging
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                             |
@@ -237,6 +239,7 @@ Feature: Cancel Order
       | tags          | name          | description                                                                                                                                                                                                                                          |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Staging New Pickup Status: Cancelled Old Delivery Status: Staging New Delivery Status: Cancelled Old Granular Status: Staging New Granular Status: Cancelled Old Order Status: Staging New Order Status: Cancelled Reason: CANCEL |
 
+  @MediumPriority
   Scenario: Cancel Order - En-route to Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -256,6 +259,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - Arrived at Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -275,6 +279,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Cancel Order - On Vehicle for Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |

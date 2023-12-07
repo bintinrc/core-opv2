@@ -1,6 +1,7 @@
-package co.nvqa.operator_v2.selenium.page;
+package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.operator_v2.selenium.page.AbstractTable;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 

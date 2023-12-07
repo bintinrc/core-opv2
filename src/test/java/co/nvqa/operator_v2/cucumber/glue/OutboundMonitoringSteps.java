@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.NvWait;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.page.NvTestCoreOutboundMonitoringException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OutboundBreakrouteV2Page;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 
+import static co.nvqa.common.utils.StandardTestUtils.waitUntil;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_FLAG;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_OUTBOUND_STATUS;
@@ -349,9 +351,11 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   public void verifyProcessingErrors(List<String> expected) {
     page.outboundBreakrouteV2Page.inFrame(page -> {
       page.processModal.waitUntilVisible();
-      new NvWait(10_000).until(
-          () -> page.processModal.errors.size() == expected.size(),
-          "Number of errors is not " + expected.size());
+      try {
+        waitUntil(() -> page.processModal.errors.size() == expected.size(), 10_000);
+      } catch (NvTestWaitTimeoutException e) {
+        throw new NvTestCoreOutboundMonitoringException("Number of errors is not " + expected.size());
+      }
       List<String> actual = page.processModal.errors.stream()
           .map(PageElement::getNormalizedText)
           .collect(Collectors.toList());

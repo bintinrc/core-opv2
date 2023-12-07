@@ -5,6 +5,7 @@ Feature: Tag & Untag DP
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Tag Order to DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -73,6 +74,7 @@ Feature: Tag & Untag DP
       | city     | SG                                                         |
       | country  | SG                                                         |
 
+  @HighPriority
   Scenario: Operator Untag/Remove Order from DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -127,7 +129,7 @@ Feature: Tag & Untag DP
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Untag DP Order that is merged and routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -176,7 +178,7 @@ Feature: Tag & Untag DP
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Untag DP Order that is not merged and routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                 |
@@ -210,7 +212,7 @@ Feature: Tag & Untag DP
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
 
-  @DeleteRouteGroupsV2
+  @DeleteRouteGroupsV2 @MediumPriority
   Scenario: Untag DP Order that is merged and not routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
@@ -256,6 +258,7 @@ Feature: Tag & Untag DP
       | routeId | null                                                       |
       | seqNo   | null                                                       |
 
+  @MediumPriority
   Scenario: Auto Untag DP Order that is Larger than SMALL
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                    |

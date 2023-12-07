@@ -5,6 +5,7 @@ Feature: Cash Collection
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Edit Cash Collection Details - Add Cash on Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -60,6 +61,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: Edit Cash Collection Details - Update Cash on Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -115,6 +117,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: Edit Cash Collection Details - Remove Cash on Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -162,6 +165,7 @@ Feature: Cash Collection
       | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
       | deletedAt | not null                               |
 
+  @MediumPriority
   Scenario: Disable Update Cash Button if Order State is Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
@@ -177,6 +181,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "Completed" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Disable Update Cash Button if Order State is Returned to Sender
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
@@ -192,6 +197,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "Returned To Sender" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery with non-RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -207,6 +213,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Disable Update Cash Button if Order State is On Vehicle for Delivery with RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                    |
@@ -229,6 +236,7 @@ Feature: Cash Collection
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Edit Cash Collection Details" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Enable Update Cash Button if Order State is Arrived at Sorting Hub with non-RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
@@ -265,6 +273,7 @@ Feature: Cash Collection
       | goodsAmount  | 10.00                                  |
       | collectionAt | DD                                     |
 
+  @MediumPriority
   Scenario: Disable Update Cash Button if Order State is Arrived at Sorting Hub with RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |

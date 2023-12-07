@@ -89,7 +89,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Pull Out Parcel from a Route - RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -135,7 +135,7 @@ Feature: Routing
       | seqNo    | null                         |
       | status   | Pending                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Unable Pull Out Parcel from a Route - Completed RTS Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -162,7 +162,7 @@ Feature: Routing
     And Operator click Return to sender -> Pull from route on Edit Order V2 page
     Then Operator verify order cannot be pulled from route on Edit Order V2 page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Add to Route for RTS Order on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -303,6 +303,7 @@ Feature: Routing
       | Return    | Pickup    |
 
 
+  @MediumPriority
   Scenario: Block Add to Route for Cancelled Order on Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -317,7 +318,7 @@ Feature: Routing
       | granularStatus | Cancelled |
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Pull Out Merged Delivery Order from a Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.external.PdfUtils;
 import co.nvqa.common.external.model.PdfRoutePassword;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementTextMismatch;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -16,6 +18,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTableV2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -147,9 +150,15 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
     bulkRouteOptimisationDialog.waitUntilVisible();
     String expectedStatus = f("%1$d of %1$d route(s) completed", sizeOfListOfCreateRouteParams);
-    waitUntil(() -> StringUtils.equalsIgnoreCase(
-        bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
-        expectedStatus), 100_000, "Did not get message: " + expectedStatus);
+    try {
+      waitUntil(() -> StringUtils.equalsIgnoreCase(
+          bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
+          expectedStatus), 100_000, "Did not get message: " + expectedStatus);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreElementTextMismatch(
+          String.format("Expected [%s], but got [%s] instead", expectedStatus,
+              bulkRouteOptimisationDialog.optimizedRoutesStatus.getText()), e);
+    }
     pause2s();
 
     for (int i = 0; i < sizeOfListOfCreateRouteParams; i++) {
