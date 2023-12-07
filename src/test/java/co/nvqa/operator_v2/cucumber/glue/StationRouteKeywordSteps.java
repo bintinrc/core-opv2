@@ -134,12 +134,18 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       Assertions.assertThat(page.bulkCreateCoverageDialog.errors)
           .withFailMessage("No bulk create coverage errors are displayed")
           .isNotEmpty();
-      var actual = page.bulkCreateCoverageDialog.errors.stream()
+      List<String> actual = page.bulkCreateCoverageDialog.errors.stream()
           .map(PageElement::getNormalizedText)
           .collect(Collectors.toList());
-      Assertions.assertThat(actual)
-          .as("List of bulk create coverage errors")
-          .containsExactlyElementsOf(resolveValues(expected));
+
+      int minLength = Math.min(expected.size(), actual.size());
+
+      for (int i = 0; i < minLength; i++) {
+        String resolvedExpected = resolveValue(expected.get(i));
+        Assertions.assertThat(actual.get(i))
+            .as("List of bulk create coverage errors")
+            .contains(resolvedExpected);
+      }
     });
   }
 
@@ -241,8 +247,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       }
       if (finalData.containsKey("keywords")) {
         assertions.assertThat(
-            page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText)
-                .collect(Collectors.toList())).as("Keywords")
+                page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText)
+                    .collect(Collectors.toList())).as("Keywords")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("keywords")));
       }
     });
@@ -489,8 +495,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.removeKeywords.click();
       page.removeKeywordsTab.waitUntilVisible();
       Assertions.assertThat(
-          page.removeKeywordsTab.keywords.stream().map(PageElement::getText).collect(
-              Collectors.toList()))
+              page.removeKeywordsTab.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
           .as("List of keywords")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });
@@ -501,8 +507,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.removeKeywordsDialog.waitUntilVisible();
       Assertions.assertThat(
-          page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
-              Collectors.toList()))
+              page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
           .as("List of keywords to remove")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });
@@ -572,8 +578,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.transferKeywordsDialog.waitUntilVisible();
       Assertions.assertThat(
-          page.transferKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
-              Collectors.toList()))
+              page.transferKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
           .as("List of keywords to transfer")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });

@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.page.NvTestCoreImplantedManifestException;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -58,7 +60,12 @@ public class ImplantedManifestSteps extends AbstractSteps {
   @Then("Operator verify scanned orders on Implanted Manifest page:")
   public void operatorVerifiesScannedOrders(List<Map<String, String>> data) {
     page.inFrame(() -> {
-      page.waitUntil(() -> page.implantedManifestOrderTable.getRowsCount() >= data.size(), 20000);
+      try {
+        page.waitUntil(() -> page.implantedManifestOrderTable.getRowsCount() >= data.size(), 20000);
+      } catch (NvTestWaitTimeoutException e) {
+        throw new NvTestCoreImplantedManifestException(
+            String.format("Row count is not >= than %s", data.size()), e);
+      }
       var actual = page.implantedManifestOrderTable.readAllEntities();
       resolveListOfMaps(data).forEach(row -> {
         var expected = new ImplantedManifestOrder(row);
@@ -102,8 +109,13 @@ public class ImplantedManifestSteps extends AbstractSteps {
   @Then("Operator removes scanned orders on Implanted Manifest page:")
   public void removeOrders(List<String> trackingIds) {
     page.inFrame(() -> {
-      page.waitUntil(() -> page.implantedManifestOrderTable.getRowsCount() >= trackingIds.size(),
-          20000);
+      try {
+        page.waitUntil(() -> page.implantedManifestOrderTable.getRowsCount() >= trackingIds.size(),
+            20000);
+      } catch (NvTestWaitTimeoutException e) {
+        throw new NvTestCoreImplantedManifestException(
+            String.format("Row count is not >= than %s", trackingIds.size()), e);
+      }
       resolveValues(trackingIds).forEach(trackingId -> {
         int count = page.implantedManifestOrderTable.getRowsCount();
         for (int i = 1; i <= count; i++) {

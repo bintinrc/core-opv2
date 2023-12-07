@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.core.model.PrinterSettings;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 
 import static co.nvqa.operator_v2.selenium.page.PrinterSettingsPage.PrintersTable.ACTION_SET_DEFAULT;

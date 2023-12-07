@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementDisabledError;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.Arrays;
 import java.util.List;
@@ -113,10 +115,14 @@ public class MdSelect extends PageElement {
   }
 
   public boolean isValueDisabled(String value) {
-    String disabledValue = findElementByXpath(f(MD_OPTION_BY_VALUE_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value))).getAttribute("disabled");
-    if (disabledValue != null)
+    String disabledValue = findElementByXpath(
+        f(MD_OPTION_BY_VALUE_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value))).getAttribute(
+        "disabled");
+    if (disabledValue != null) {
       return true;
-    else return false;
+    } else {
+      return false;
+    }
 
   }
 
@@ -170,6 +176,10 @@ public class MdSelect extends PageElement {
   }
 
   public void waitUntilEnabled(int timeoutInSeconds) {
-    waitUntil(this::isEnabled, timeoutInSeconds * 1000);
+    try {
+      waitUntil(this::isEnabled, timeoutInSeconds * 1000L);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreElementDisabledError("Element is disabled", e);
+    }
   }
 }

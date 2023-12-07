@@ -1,5 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
+import co.nvqa.operator_v2.exception.NvTestCoreUrlMismatchError;
+import co.nvqa.operator_v2.exception.page.NvTestCoreMainPageException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.ArrayList;
@@ -84,7 +87,6 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
     MAP_OF_END_URL.put("Download Validation Reports", "download-validation-reports");
     MAP_OF_END_URL.put("Pickup Jobs", "pickup-appointment");
 
-
     // for all page with masked, add this to the url
     LIST_OF_MASKED_PAGE_URL.add("\\/order\\/\\d*");
     LIST_OF_MASKED_PAGE_URL.add("\\/order$");
@@ -115,14 +117,19 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
 
     String mainDashboardUrl = grabEndURL("All Orders");
 
-    waitUntil(() ->
-    {
-      String currentUrl = getCurrentUrl();
-      LOGGER
-          .trace("verifyTheMainPageIsLoaded: Current URL = [{}] - Expected URL Ends With = [{}]",
-              currentUrl, mainDashboardUrl);
-      return currentUrl.endsWith(mainDashboardUrl);
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    try {
+      waitUntil(() ->
+      {
+        String currentUrl = getCurrentUrl();
+        LOGGER.trace(
+            "verifyTheMainPageIsLoaded: Current URL = [{}] - Expected URL Ends With = [{}]",
+            currentUrl, mainDashboardUrl);
+        return currentUrl.endsWith(mainDashboardUrl);
+      }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreMainPageException(
+          String.format("Expected URL Ends With = [%s] not found", mainDashboardUrl), e);
+    }
 
     waitUntilPageLoaded();
     LOGGER.trace("Waiting until Welcome message toast disappear.");
@@ -197,22 +204,23 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
       }
     }
 
-    waitUntil(() ->
-    {
-      boolean result;
-      String currentUrl = getCurrentUrl();
-      LOGGER
-          .info("clickNavigation: Current URL = [{}] - Expected URL Ends With = [{}]", currentUrl,
-              urlPart);
-
-      if ("linehaul".equals(urlPart)) {
-        result = currentUrl.contains(urlPart);
-      } else {
-        result = currentUrl.endsWith(urlPart);
-      }
-
-      return result;
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    try {
+      waitUntil(() -> {
+        boolean result;
+        String currentUrl = getCurrentUrl();
+        LOGGER.info("clickNavigation: Current URL = [{}] - Expected URL Ends With = [{}]",
+            currentUrl, urlPart);
+        if ("linehaul".equals(urlPart)) {
+          result = currentUrl.contains(urlPart);
+        } else {
+          result = currentUrl.endsWith(urlPart);
+        }
+        return result;
+      }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreUrlMismatchError(
+          String.format("Expected URL Ends With = [%s] not found", urlPart), e);
+    }
 
     waitUntilPageLoaded();
   }

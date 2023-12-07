@@ -2,10 +2,14 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.ui.page.SimpleWebPage;
 import co.nvqa.common.utils.NvTestRuntimeException;
+import co.nvqa.common.utils.NvTestWaitTimeoutException;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvAllure;
+import co.nvqa.operator_v2.exception.NvTestCoreWindowOrTabNotFoundError;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ToastError;
+import co.nvqa.operator_v2.selenium.elements.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import java.time.temporal.TemporalAccessor;
@@ -235,7 +239,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilNoticeMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
-            f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]", containsMessage));
+        f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]",
+            containsMessage));
   }
 
   public void waitUntilVisibilityOfToastReact(String containsMessage) {
@@ -283,8 +288,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfToast(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
+        "//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
         : "//div[@id='toast-container']";
 
     if (waitUntilElementVisibleFirst) {
@@ -296,17 +301,16 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfNotification(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f(
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
         "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message'][contains(text(),'%s')]",
-        containsMessage)
-        : "//div[contains(@class,'ant-notification')]";
+        containsMessage) : "//div[contains(@class,'ant-notification')]";
 
     if (waitUntilElementVisibleFirst) {
       waitUntilVisibilityOfElementLocated(xpathExpression);
     }
     if (isElementExistFast(xpathExpression)) {
-      waitUntilElementIsClickable("//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
+      waitUntilElementIsClickable(
+          "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
       click(
           "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
     }
@@ -397,7 +401,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       WebElement webElement = waitUntilVisibilityOfElementLocated(toastXpathExpression);
       text = webElement.getText();
     } catch (RuntimeException ex) {
-      LOGGER.warn("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
+      LOGGER.warn("Failed to get text from element Toast. XPath: {}", toastXpathExpression);
       NvAllure.addWarnAttachment(getCurrentMethodName(),
           "Failed to get text from element Toast. XPath: %s", toastXpathExpression);
     }
@@ -464,9 +468,8 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
       LOGGER.warn("Failed to find element by XPath. XPath: {}", nvTableXpathExpression);
-      NvAllure
-          .addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s",
-              nvTableXpathExpression);
+      NvAllure.addWarnAttachment(getCurrentMethodName(),
+          "Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
     }
 
     return text;
@@ -837,8 +840,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
          */
     String noMatchingErrorText = f("\"%s\" were found.", value);
 
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    doWithRetry(() -> {
       try {
         WebElement noMatchingErrorWe = findElementByXpath(
             f("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
@@ -892,7 +894,9 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     if (isMdSelectEnabled(mdSelectNgModel)) {
       selectValueFromMdSelect(mdSelectNgModel, value);
     } else {
-     Assertions.assertThat(getMdSelectValue(mdSelectNgModel)).as(selectName + " select is disabled and current value is not equal to expected").isEqualTo(          value);
+      Assertions.assertThat(getMdSelectValue(mdSelectNgModel))
+          .as(selectName + " select is disabled and current value is not equal to expected")
+          .isEqualTo(value);
     }
   }
 
@@ -1194,10 +1198,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
 
     Actions actions = new Actions(getWebDriver());
-    actions.moveToElement(we, 5, 5)
-        .click()
-        .build()
-        .perform();
+    actions.moveToElement(we, 5, 5).click().build().perform();
     pause100ms();
   }
 
@@ -1268,21 +1269,24 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     getWebDriver().navigate().refresh();
     acceptAlertDialogIfAppear();
 
-    waitUntil(() ->
-    {
-      boolean result;
-      String currentUrl = getCurrentUrl();
-      LOGGER
-          .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
+    try {
+      waitUntil(() -> {
+        boolean result;
+        String currentUrl = getCurrentUrl();
+        LOGGER.info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl,
+            previousUrl);
 
-      if (previousUrl.contains("linehaul")) {
-        result = currentUrl.contains("linehaul");
-      } else {
-        result = currentUrl.equalsIgnoreCase(previousUrl);
-      }
+        if (previousUrl.contains("linehaul")) {
+          result = currentUrl.contains("linehaul");
+        } else {
+          result = currentUrl.equalsIgnoreCase(previousUrl);
+        }
 
-      return result;
-    }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        return result;
+      }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+    } catch (NvTestWaitTimeoutException e) {
+      throw new RuntimeException(e);
+    }
 
     waitUntilPageLoaded(60);
     if (halfCircleSpinner.isDisplayedFast()) {
@@ -1296,8 +1300,12 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
-    wait50sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
-        f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+    try {
+      waitUntil(() -> getWebDriver().getWindowHandles().size() > 1, 50_000,
+          f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+    } catch (NvTestWaitTimeoutException e) {
+      throw new NvTestCoreWindowOrTabNotFoundError("New window or tab not opened", e);
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -1427,8 +1435,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
           dialogXpath + "//nv-icon-button[@name='Cancel']",
           dialogXpath + "//nv-icon-text-button[@name='Cancel']",
           dialogXpath + "//button[@aria-label='Leave']",
-          dialogXpath + "//button[@aria-label='Leave Anyway']"
-      );
+          dialogXpath + "//button[@aria-label='Leave Anyway']");
       for (String closeLocator : closeLocators) {
         if (isElementVisible(closeLocator, 0)) {
           click(closeLocator);

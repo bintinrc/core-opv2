@@ -32,7 +32,7 @@ Feature: Edit Order Details
       | OTP                        | None                           | NONE                              |
       | NONE                       | OTP                            | OTP                               |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator View POD from Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

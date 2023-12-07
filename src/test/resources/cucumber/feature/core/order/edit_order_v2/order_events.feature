@@ -5,6 +5,7 @@ Feature: Order Events
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -26,7 +27,7 @@ Feature: Order Events
     And Operator verify order event on Edit Order V2 page using data below:
       | name | HUB INBOUND SCAN |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Add to Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -47,7 +48,7 @@ Feature: Order Events
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -72,7 +73,7 @@ Feature: Order Events
     And Operator verify order event on Edit Order V2 page using data below:
       | name | DRIVER INBOUND SCAN |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Delivery Success
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -122,7 +123,7 @@ Feature: Order Events
       | name    | DELIVERY SUCCESS                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Delivery Failure
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -173,7 +174,7 @@ Feature: Order Events
       | name    | DELIVERY FAILURE                   |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Pickup Failure
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -216,7 +217,7 @@ Feature: Order Events
       | name    | PICKUP FAILURE                     |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Pull Out of Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -242,6 +243,7 @@ Feature: Order Events
     Then Operator verify order event on Edit Order V2 page using data below:
       | name | PULL OUT OF ROUTE |
 
+  @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Assigned to DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -259,6 +261,7 @@ Feature: Order Events
     Then Operator verify order event on Edit Order V2 page using data below:
       | name | ASSIGNED TO DP |
 
+  @HighPriority
   Scenario: Edit Order Event Table Showing Correctly for Order Event - Added to Reservation
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -272,7 +275,7 @@ Feature: Order Events
       | name        | ADDED TO RESERVATION                             |
       | description | Reservation ID: {KEY_LIST_OF_RESERVATION_IDS[1]} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Applies Filter on Events Table
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

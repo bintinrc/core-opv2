@@ -3,25 +3,17 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %C{1.} %thread - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %C{1} %thread - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <!--'additivity' flag is important! Without it logback will double-log log messages-->
-    <logger name="binary_data_logger" level="TRACE" additivity="false">
-        <appender-ref ref="RP"/>
-    </logger>
 
     <logger name="co.nvqa.common.di.guice.NvModule" level="INFO"/>
     <logger name="co.nvqa.common.runner.NvTestRunner" level="INFO"/>
     <logger name="co.nvqa.common.service.FailedScenarioReaderService" level="INFO"/>
     <logger name="co.nvqa.common.utils.NvRetry" level="INFO"/>
     <logger name="co.nvqa.common.ui.support.CommonUiNvRetry" level="INFO"/>
-    <logger name="co.nvqa.common.reporter.cucumber.client" level="WARN"/>
     <logger name="co.nvqa.common.ui.support.AndroidSupport" level="INFO"/>
     <logger name="co.nvqa.commons.client.BaseApiClient.NvRequestLogger" level="DEBUG" />
-    <logger name="com.epam.reportportal.service" level="OFF"/>
-    <logger name="com.epam.reportportal.utils" level="OFF"/>
     <logger name="sh.qos.logback" level="OFF"/>
     <logger name="org.apache" level="WARN" />
     <logger name="httpclient" level="WARN" />
