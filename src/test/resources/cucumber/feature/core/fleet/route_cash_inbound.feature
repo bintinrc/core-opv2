@@ -124,7 +124,7 @@ Feature: Route Cash Inbound
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Fetch COD Inbound with Date Range Filter
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -163,7 +163,7 @@ Feature: Route Cash Inbound
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Download and Verify Cash Inbound CSV File
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
