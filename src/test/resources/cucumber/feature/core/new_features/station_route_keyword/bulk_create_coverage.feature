@@ -225,7 +225,7 @@ Feature: Bulk Create Coverage
       | area                                           | variations                                            | keywords                                        | primaryDriver                      | fallbackDriver                     |
       | Area bcd {gradle-current-date-yyyyMMddHHmmsss} | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 1: variations are different from the existing variations that the Area has, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}... |
+      | Row 1: variations are different from the existing variations that the Area has, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
@@ -253,7 +253,7 @@ Feature: Bulk Create Coverage
       | area                                               | variations                                          | keywords                                        | primaryDriver                      | fallbackDriver                     |
       | Area bccde 2 {gradle-current-date-yyyyMMddHHmmsss} | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 1: variations already exist as area or variation of other coverages, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCCDE {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id},"fal... |
+      | Row 1: variations already exist as area or variation of other coverages, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCCDE {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
@@ -309,7 +309,7 @@ Feature: Bulk Create Coverage
       | area                                                | variations                                            | keywords                                        | primaryDriver                      | fallbackDriver                     |
       | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 1: area already exists as variation of other coverages, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCCFD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id},"fallback_driver_... |
+      | Row 1: area already exists as variation of other coverages, [coverages=[{"id":{KEY_LIST_OF_COVERAGE[1].id},"system_id":"sg","area":"AREA BCCFD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
@@ -363,7 +363,7 @@ Feature: Bulk Create Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}              |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}              |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 2: variations already exist as area or variation of other coverages, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCCP {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id},"fall... |
+      | Row 2: variations already exist as area or variation of other coverages, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCCP {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
@@ -404,7 +404,7 @@ Feature: Bulk Create Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}             |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}             |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 2: variations are different from the existing variations that the Area has, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCP {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}... |
+      | Row 2: variations are different from the existing variations that the Area has, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCP {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
@@ -491,7 +491,7 @@ Feature: Bulk Create Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}               |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}               |
     Then Operator verify error messages displayed in Bulk create coverage dialog on Station Route Keyword page:
-      | Row 2: area already exists as variation of other coverages, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCCAD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id},"fallback_driver_... |
+      | Row 2: area already exists as variation of other coverages, [coverages=[{"id":{KEY_COVERAGE_ID},"system_id":"sg","area":"AREA BCCAD {gradle-current-date-yyyyMMddHHmmsss}","hub_id":{hub-id},"primary_driver_id":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator verify error tip is displayed in Bulk create coverage dialog on Station Route Keyword page
     When Operator click Download error report in Bulk create coverage dialog on Station Route Keyword page
     Then Operator verify Bulk create coverage errors file is downloaded on Station Route Keyword page:
