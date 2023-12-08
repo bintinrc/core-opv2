@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1 @current
+@OperatorV2 @Core @Routing @RouteLogs @RouteLogsPart1
 Feature: Route Logs
 
   Background:
