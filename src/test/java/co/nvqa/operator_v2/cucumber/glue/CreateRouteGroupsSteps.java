@@ -46,7 +46,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
   public static final String LIST_OF_TXN_RSVN = "LIST_OF_TXN_RSVN";
   public static final String CSV_FILE_NAME = "createRouteGroups.csv";
-  
+
   private CreateRouteGroupsPage createRouteGroupsPage;
 
   public CreateRouteGroupsSteps() {
@@ -77,7 +77,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.addToRouteGroupDialog.addTransactionsReservations.click();
       RouteGroup routeGroup = new RouteGroup();
       routeGroup.setName(groupName);
-      put(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
+      putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
   }
 
@@ -97,7 +97,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.addToRouteGroupDialog.addTransactionsReservations.click();
       RouteGroup routeGroup = new RouteGroup();
       routeGroup.setName(groupName);
-      put(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
+      putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
   }
 
