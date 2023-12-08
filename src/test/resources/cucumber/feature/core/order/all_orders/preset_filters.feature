@@ -77,7 +77,7 @@ Feature: All Orders - Preset Filters
       | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET.id} |
     And DB Lighthouse - verify preset_filters id "{KEY_ALL_ORDERS_FILTERS_PRESET.id}" record is deleted:
 
-  @DeleteFilterTemplate @MediumPriority @wip
+  @DeleteFilterTemplate @MediumPriority
   Scenario: Operator Update Existing Preset on All Orders Page - via Save Current As Preset Button
     Given API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |
