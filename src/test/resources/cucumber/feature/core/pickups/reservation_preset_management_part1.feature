@@ -80,6 +80,9 @@ Feature: Reservation Preset Management
       | shipperType | Normal |
     And API Shipper - Operator wait until shipper available to search using data below:
       | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}}} |
+    And API Shipper - Operator edit shipper value of pickup appointment using below data:
+      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id} |
+      | status    | False                                |
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[1].id}                                                                                                                                                                                                                                                                                                                                                                       |
       | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
