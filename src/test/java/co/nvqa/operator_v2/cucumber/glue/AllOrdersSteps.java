@@ -6,6 +6,7 @@ import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementNotFoundError;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -978,8 +979,16 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {value} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
-    allOrdersPage.waitUntilPageLoaded();
-    allOrdersPage.selectFilterPreset(value);
+    doWithRetry(() -> {
+      try {
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.selectFilterPreset(value);
+      } catch (Exception e) {
+        allOrdersPage.refreshPage();
+        throw new NvTestCoreElementNotFoundError(
+            "Filter Preset " + value + " is not found on All Orders page", e);
+      }
+    }, "Operator selects " + value + " Filter Preset on All Orders page");
   }
 
   @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")
