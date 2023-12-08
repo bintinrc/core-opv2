@@ -201,7 +201,7 @@ Feature: Outbound Monitoring
       | outboundStatus | In Progress                        |
     And Operator verifies route record has "red" background color
     And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | sg                                 |
       | isOk     | 0                                  |
