@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.RouteGroup;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteGroupInfo;
@@ -62,7 +63,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
 
       RouteGroup routeGroup = new RouteGroup();
       routeGroup.setName(name);
-      putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
+      putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
   }
 
