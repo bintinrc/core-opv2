@@ -549,7 +549,7 @@ Feature: Create Route Groups - Preset Filters
     Then Create Route Groups page is loaded
     And Operator selects "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" Filter Preset on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
-    When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
+    When Operator adds following transactions to new Route Group "FCRG4-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
       | trackingId                            | type     |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | PICKUP   |

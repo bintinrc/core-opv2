@@ -29,12 +29,12 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 2. Route Group Management
     And Route Groups Management page is loaded
     Then Operator verify route group on Route Groups Management page:
-      | name                 | {KEY_CREATED_ROUTE_GROUP.name}      |
-      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | noTransactions       | 2                                   |
-      | noRoutedTransactions | 0                                   |
-      | noReservations       | 0                                   |
-      | noRoutedReservations | 0                                   |
+      | name                 | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*        |
+      | noTransactions       | 2                                          |
+      | noRoutedTransactions | 0                                          |
+      | noReservations       | 0                                          |
+      | noRoutedReservations | 0                                          |
 
   @DeleteRouteGroupsV2 @HighPriority
   Scenario: Operator Add Reservation to Route Group on Create Route Groups
@@ -64,12 +64,12 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 2. Route Group Management
     And Route Groups Management page is loaded
     Then Operator verify route group on Route Groups Management page:
-      | name                 | {KEY_CREATED_ROUTE_GROUP.name}      |
-      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | noTransactions       | 0                                   |
-      | noRoutedTransactions | 0                                   |
-      | noReservations       | 1                                   |
-      | noRoutedReservations | 0                                   |
+      | name                 | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*        |
+      | noTransactions       | 0                                          |
+      | noRoutedTransactions | 0                                          |
+      | noReservations       | 1                                          |
+      | noRoutedReservations | 0                                          |
 
   @HighPriority
   Scenario: Operator Filter Master Shipper on Create Route Groups
