@@ -926,8 +926,20 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} preset in Delete Preset dialog on All Orders page")
   public void selectPresetInDeletePresets(String value) {
-    allOrdersPage.deletePresetDialog.waitUntilVisible();
-    allOrdersPage.deletePresetDialog.preset.searchAndSelectValue(resolveValue(value));
+    String resolvedValue = resolveValue(value);
+    doWithRetry(() -> {
+      try {
+        allOrdersPage.deletePresetDialog.waitUntilVisible();
+        allOrdersPage.deletePresetDialog.preset.searchAndSelectValue(resolvedValue);
+      } catch (Exception e) {
+        allOrdersPage.refreshPage();
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.presetActions.selectOption("Delete Preset");
+        throw new NvTestCoreElementNotFoundError("Preset Filter " + resolvedValue
+            + " is not found in Delete Preset dialog on All Orders page", e);
+      }
+    }, "Operator selects " + resolvedValue + " preset in Delete Preset dialog on All Orders page");
+
   }
 
   @When("Operator clicks Delete button in Delete Preset dialog on All Orders page")
