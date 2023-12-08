@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2
+@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2 @current
 Feature: Resolve Recovery Ticket
 
   Background:
@@ -346,6 +346,7 @@ Feature: Resolve Recovery Ticket
       | HUB INBOUND SCAN |
       | TICKET RESOLVED  |
 
+  @wip
   Scenario: Resolve MISSING PETS Ticket upon Parcel Sweep
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
