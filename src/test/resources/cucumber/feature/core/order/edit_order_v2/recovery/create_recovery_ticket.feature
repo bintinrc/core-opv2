@@ -410,9 +410,9 @@ Feature: Create Recovery Ticket
       | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
       | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | OUTBOUND SCAN                                       |
-      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}      |
-      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} |
+      | name        | OUTBOUND SCAN                                                                                 |
+      | hubName     | {KEY_LIST_OF_CREATED_ORDERS[1].destinationHub}                                                |
+      | description | Scanned at hub: {KEY_SORT_LIST_OF_HUBS_DB[1].hubId} Route: {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Recovery - Operator create recovery ticket:
       | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | ticketType         | MISSING                                    |
