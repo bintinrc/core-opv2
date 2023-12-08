@@ -91,10 +91,10 @@ Feature: All Orders - Preset Filters
       | granularStatus | Cancelled          |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
-      | Status: Cancelled, Transit                    |
-      | Granular Status: Cancelled                    |
-      | Shipper: {shipper-v4-name}                    |
-      | Master Shipper: {shipper-v4-marketplace-name} |
+      | commons.shipper: {shipper-v4-name}                    |
+      | commons.master-shipper: {shipper-v4-marketplace-name} |
+      | commons.status: Cancelled, Transit                    |
+      | commons.model.granular-status: Cancelled              |
     When Operator enters "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Preset Name in Save Preset dialog on All Orders page
     Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on All Orders page
     When Operator clicks Update button in Save Preset dialog on All Orders page

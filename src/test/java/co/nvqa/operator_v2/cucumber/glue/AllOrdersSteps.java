@@ -6,6 +6,7 @@ import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementNotFoundError;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -925,8 +926,20 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {string} preset in Delete Preset dialog on All Orders page")
   public void selectPresetInDeletePresets(String value) {
-    allOrdersPage.deletePresetDialog.waitUntilVisible();
-    allOrdersPage.deletePresetDialog.preset.searchAndSelectValue(resolveValue(value));
+    String resolvedValue = resolveValue(value);
+    doWithRetry(() -> {
+      try {
+        allOrdersPage.deletePresetDialog.waitUntilVisible();
+        allOrdersPage.deletePresetDialog.preset.searchAndSelectValue(resolvedValue);
+      } catch (Exception e) {
+        allOrdersPage.refreshPage();
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.presetActions.selectOption("Delete Preset");
+        throw new NvTestCoreElementNotFoundError("Preset Filter " + resolvedValue
+            + " is not found in Delete Preset dialog on All Orders page", e);
+      }
+    }, "Operator selects " + resolvedValue + " preset in Delete Preset dialog on All Orders page");
+
   }
 
   @When("Operator clicks Delete button in Delete Preset dialog on All Orders page")
@@ -978,8 +991,16 @@ public class AllOrdersSteps extends AbstractSteps {
 
   @When("Operator selects {value} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
-    allOrdersPage.waitUntilPageLoaded();
-    allOrdersPage.selectFilterPreset(value);
+    doWithRetry(() -> {
+      try {
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.selectFilterPreset(value);
+      } catch (Exception e) {
+        allOrdersPage.refreshPage();
+        throw new NvTestCoreElementNotFoundError(
+            "Filter Preset " + value + " is not found on All Orders page", e);
+      }
+    }, "Operator selects " + value + " Filter Preset on All Orders page");
   }
 
   @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")
