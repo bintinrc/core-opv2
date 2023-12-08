@@ -59,6 +59,10 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       page.createRouteGroupsDialog.hub.selectValue(resolvedData.get("hub"));
       page.createRouteGroupsDialog.create.click();
       pause2s();
+
+      RouteGroup routeGroup = new RouteGroup();
+      routeGroup.setName(name);
+      putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
   }
 

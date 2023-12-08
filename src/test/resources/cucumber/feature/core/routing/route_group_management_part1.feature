@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteGroupManagement @RouteGroupManagementPart1 @current
+@OperatorV2 @Core @Routing @RouteGroupManagement @RouteGroupManagementPart1
 Feature: Route Group Management
 
   Background:
@@ -59,7 +59,7 @@ Feature: Route Group Management
       | bottom | 1 Route Group Deleted                      |
     Then Operator verify "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was deleted on Route Group Management page
 
-  @DeleteRouteGroupsV2 @HighPriority @wip
+  @DeleteRouteGroupsV2 @HighPriority
   Scenario: Delete Transactions From Route Group
     And API Route - create route group:
       | name        | ARG6-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
