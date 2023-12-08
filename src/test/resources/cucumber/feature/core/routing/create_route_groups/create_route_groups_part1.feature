@@ -21,7 +21,7 @@ Feature: Create Route Groups
       | creationTime | today |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
-    And Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
+    And Operator adds following transactions to new Route Group "FCRG1-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
       | trackingId                            |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies that success react notification displayed:
@@ -29,12 +29,12 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 2. Route Group Management
     And Route Groups Management page is loaded
     Then Operator verify route group on Route Groups Management page:
-      | name                 | {KEY_CREATED_ROUTE_GROUP.name}      |
-      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | noTransactions       | 2                                   |
-      | noRoutedTransactions | 0                                   |
-      | noReservations       | 0                                   |
-      | noRoutedReservations | 0                                   |
+      | name                 | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*        |
+      | noTransactions       | 2                                          |
+      | noRoutedTransactions | 0                                          |
+      | noReservations       | 0                                          |
+      | noRoutedReservations | 0                                          |
 
   @DeleteRouteGroupsV2 @HighPriority
   Scenario: Operator Add Reservation to Route Group on Create Route Groups
@@ -56,7 +56,7 @@ Feature: Create Route Groups
     Then Operator verifies Reservation records on Create Route Groups page using data below:
       | id                                       | type        | shipper                                 | address                                                                  | status  | startDateTime                                                   | endDateTime                                                      |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | Reservation | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_LIST_OF_CREATED_RESERVATIONS[1].getLocalizedReadyDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].getLocalizedLatestDatetime} |
-    And Operator adds following reservations to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
+    And Operator adds following reservations to new Route Group "FCRG2-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:
       | id                                       |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     Then Operator verifies that success react notification displayed:
@@ -64,12 +64,12 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 2. Route Group Management
     And Route Groups Management page is loaded
     Then Operator verify route group on Route Groups Management page:
-      | name                 | {KEY_CREATED_ROUTE_GROUP.name}      |
-      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.* |
-      | noTransactions       | 0                                   |
-      | noRoutedTransactions | 0                                   |
-      | noReservations       | 1                                   |
-      | noRoutedReservations | 0                                   |
+      | name                 | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+      | createDateTime       | ^{gradle-current-date-yyyy-MM-dd}.*        |
+      | noTransactions       | 0                                          |
+      | noRoutedTransactions | 0                                          |
+      | noReservations       | 1                                          |
+      | noRoutedReservations | 0                                          |
 
   @HighPriority
   Scenario: Operator Filter Master Shipper on Create Route Groups
