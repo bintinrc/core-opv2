@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteGroupManagement @RouteGroupManagementPart2
+@OperatorV2 @Core @Routing @RouteGroupManagement @RouteGroupManagementPart2
 Feature: Route Group Management
 
   Background:

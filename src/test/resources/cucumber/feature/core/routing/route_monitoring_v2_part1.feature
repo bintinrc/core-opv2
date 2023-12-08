@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part1
+@OperatorV2 @Core @Routing  @RouteMonitoringV2 @RouteMonitoringV2Part1
 Feature: Route Monitoring V2
 
   Background:

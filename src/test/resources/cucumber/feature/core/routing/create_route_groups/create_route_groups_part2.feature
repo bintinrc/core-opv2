@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CreateRouteGroupsPart2
+@OperatorV2 @Core @Routing  @CreateRouteGroups @CreateRouteGroupsPart2
 Feature: Create Route Groups
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/1593801

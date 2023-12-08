@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter
+@OperatorV2 @Core @Routing  @CreateRouteGroups @PriorityParcelsFilter
 Feature: Create Route Groups - Priority Parcel Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142867

@@ -105,9 +105,9 @@ public class RouteGroupManagementSteps extends AbstractSteps {
 
   @When("Operator update created route group on Route Group Management page:")
   public void updateRouteGroup(Map<String, String> data) {
-    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
-    RouteGroupInfo newData = new RouteGroupInfo(resolveKeyValues(data));
-    String oldRouteGroupName = routeGroup.getName();
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    RouteGroupInfo newData = new RouteGroupInfo(resolvedData);
+    String oldRouteGroupName = resolvedData.get("oldRouteGroupName");
     routeGroupManagementPage.inFrame(page -> {
       routeGroupManagementPage.waitUntilLoaded();
       page.routeGroupsTable.filterByColumn(COLUMN_NAME, oldRouteGroupName);
@@ -118,7 +118,6 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       page.editRouteGroupDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(newData.getName())) {
         page.editRouteGroupDialog.groupName.setValue(newData.getName());
-        routeGroup.setName(newData.getName());
       }
       if (StringUtils.isNotBlank(newData.getDescription())) {
         page.editRouteGroupDialog.description.setValue(newData.getDescription());
