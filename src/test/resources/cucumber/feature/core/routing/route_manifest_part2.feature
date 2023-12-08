@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @RouteManifestPart2
+@OperatorV2 @Core @Routing  @RouteManifest @RouteManifestPart2
 Feature: Route Manifest
 
   Background:

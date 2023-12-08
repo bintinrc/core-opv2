@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @TagManagement
+@OperatorV2 @Core @Routing  @TagManagement
 Feature: Tag Management
 
   Background:

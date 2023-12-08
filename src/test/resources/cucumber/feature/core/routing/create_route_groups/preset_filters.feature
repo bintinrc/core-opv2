@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PresetFiltersCRG @CRG2
+@OperatorV2 @Core @Routing  @CreateRouteGroups @PresetFiltersCRG
 Feature: Create Route Groups - Preset Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142862/scenarios/6247900

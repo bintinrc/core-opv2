@@ -1,8 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.RouteGroup;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.operator_v2.model.RouteGroupInfo;
 import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -62,8 +63,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
 
       RouteGroup routeGroup = new RouteGroup();
       routeGroup.setName(name);
-      put(KEY_CREATED_ROUTE_GROUP, routeGroup);
-      putInList(KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
+      putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTE_GROUPS, routeGroup);
     });
   }
 
@@ -103,16 +103,16 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Route Groups Management page is loaded$")
+  @Then("Route Groups Management page is loaded")
   public void routeGroupManagementPageIsLoaded() {
     routeGroupManagementPage.inFrame(page -> page.waitUntilLoaded(10));
   }
 
-  @When("^Operator update created route group on Route Group Management page:$")
+  @When("Operator update created route group on Route Group Management page:")
   public void updateRouteGroup(Map<String, String> data) {
-    RouteGroup routeGroup = get(KEY_CREATED_ROUTE_GROUP);
-    RouteGroupInfo newData = new RouteGroupInfo(resolveKeyValues(data));
-    String oldRouteGroupName = routeGroup.getName();
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    RouteGroupInfo newData = new RouteGroupInfo(resolvedData);
+    String oldRouteGroupName = resolvedData.get("oldRouteGroupName");
     routeGroupManagementPage.inFrame(page -> {
       routeGroupManagementPage.waitUntilLoaded();
       page.routeGroupsTable.filterByColumn(COLUMN_NAME, oldRouteGroupName);
@@ -123,7 +123,6 @@ public class RouteGroupManagementSteps extends AbstractSteps {
       page.editRouteGroupDialog.waitUntilVisible();
       if (StringUtils.isNotBlank(newData.getName())) {
         page.editRouteGroupDialog.groupName.setValue(newData.getName());
-        routeGroup.setName(newData.getName());
       }
       if (StringUtils.isNotBlank(newData.getDescription())) {
         page.editRouteGroupDialog.description.setValue(newData.getDescription());
@@ -404,7 +403,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     });
   }
 
-  @Given("^Operator verify route group jobs CSV file on Route Group Management page$")
+  @Given("Operator verify route group jobs CSV file on Route Group Management page")
   public void operatorVerifyCsvFile() {
     List<RouteGroupJobDetails> expected = get(LIST_OF_ROUTE_GROUP_JOBS);
     String fileName = routeGroupManagementPage.getLatestDownloadedFilename(CSV_FILE_NAME);

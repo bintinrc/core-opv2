@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @ReservationFilters @CRG4
+@OperatorV2 @Core @Routing  @CreateRouteGroups @ReservationFilters
 Feature: Create Route Groups - Reservation Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2142861
