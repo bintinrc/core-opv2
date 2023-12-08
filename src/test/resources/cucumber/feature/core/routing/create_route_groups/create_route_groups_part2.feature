@@ -111,7 +111,7 @@ Feature: Create Route Groups
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     And API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | CRG1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
@@ -165,7 +165,7 @@ Feature: Create Route Groups
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | CRG2-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                      |
@@ -211,7 +211,7 @@ Feature: Create Route Groups
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | CRG3-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                                                                                                               |
@@ -248,7 +248,7 @@ Feature: Create Route Groups
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | CRG4-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                      |

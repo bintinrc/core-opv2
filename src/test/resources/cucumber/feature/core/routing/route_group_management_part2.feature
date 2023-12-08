@@ -23,7 +23,7 @@ Feature: Route Group Management
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Route - create route group:
-      | name        | ARG8-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
+      | name        | RGM8-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     Given API Route - Operator add transactions to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
@@ -38,7 +38,7 @@ Feature: Route Group Management
   @DeleteRouteGroupsV2 @MediumPriority
   Scenario: Filter Route Groups Based on Creation Date
     And API Route - create route group:
-      | name        | ARG9-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
+      | name        | RGM9-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator apply filters on Route Group Management page:
@@ -64,7 +64,7 @@ Feature: Route Group Management
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Route - create route group:
-      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | name        | RGM10-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                                                   |
@@ -81,7 +81,7 @@ Feature: Route Group Management
     And API Core - Operator create reservation using data below:
       | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "legacy_shipper_id":{shipper-v4-legacy-id} , "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Route - create route group:
-      | name        | ARG11-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
+      | name        | RGM11-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     Given API Route - Operator add reservations to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
@@ -107,7 +107,7 @@ Feature: Route Group Management
     And API Core - Operator create reservation using data below:
       | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Route - create route group:
-      | name        | ARG11-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
+      | name        | RGM12-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     Given API Route - Operator add reservations to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
@@ -134,7 +134,7 @@ Feature: Route Group Management
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
     When API Route - create route group:
-      | name        | ARG8-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
+      | name        | RGM13-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     Given API Route - Operator add transactions to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
@@ -144,7 +144,7 @@ Feature: Route Group Management
     And API Core - Operator create reservation using data below:
       | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Route - create route group:
-      | name        | ARG11-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
+      | name        | RGM14-{gradle-current-date-yyyyMMddHHmmsss}                                                                  |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     Given API Route - Operator add reservations to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
@@ -187,7 +187,7 @@ Feature: Route Group Management
       | jobId                        | {KEY_CONTROL_CREATED_PA_JOBS[2].id}        |
       | pickupAppointmentTagsRequest | {"tags":[{KEY_CONTROL_PICKUP_TAGS[2].id}]} |
     When API Route - create route group:
-      | name        | ARG-{uniqueString}                                                                                           |
+      | name        | RGM15-{uniqueString}                                                                                         |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
@@ -236,7 +236,7 @@ Feature: Route Group Management
     When API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     When API Route - create route group:
-      | name        | ARG-{uniqueString}                                                                                           |
+      | name        | RGM16-{uniqueString}                                                                                         |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
@@ -270,7 +270,7 @@ Feature: Route Group Management
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[2].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Route - create route group:
-      | name        | ARG-{uniqueString}                                                                                           |
+      | name        | RGM17-{uniqueString}                                                                                         |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                              |
@@ -296,7 +296,7 @@ Feature: Route Group Management
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[2].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When API Route - create route group:
-      | name        | ARG-{uniqueString}                                                                                           |
+      | name        | RGM18-{uniqueString}                                                                                         |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                               |
@@ -330,7 +330,7 @@ Feature: Route Group Management
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     When API Route - create route group:
-      | name        | ARG-{uniqueString}                                                                                           |
+      | name        | RGM19-{uniqueString}                                                                                         |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When API Route - add references to Route Group:
       | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                                                               |
