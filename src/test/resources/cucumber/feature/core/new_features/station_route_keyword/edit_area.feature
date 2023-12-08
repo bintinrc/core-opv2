@@ -303,8 +303,8 @@ Feature: Edit Area
       | area           | AREA EADL {gradle-current-date-yyyyMMddHHmmsss} |
       | areaVariations | VARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                           |
-      | bottom | ^.*Error Message: Current coverage has no keyword, and there is another existing coverage with the area to be updated without keyword. Cannot update current coverage\.\.\..* |
+      | top    | Status 400: Unknown                                                                                                                                                                                                                |
+      | bottom | ^.*Error Message: Current coverage has no keyword, and there is another existing coverage with the area to be updated without keyword. Cannot update current coverage. \[area: AREA EADL {gradle-current-date-yyyyMMddHHmmsss}\].* |
 
   @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area with Exist Area Variation in Different Hub
@@ -338,7 +338,7 @@ Feature: Edit Area
       | area           | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
       | areaVariations | VARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}   |
     And Operator verifies that success react notification displayed:
-      | top    | Coverage updated                                                                                                                |
+      | top    | Coverage updated                                                                                                           |
       | bottom | Area AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} with variations VARIATION 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Route - verify that sr_coverages record is created:
       | id             | {KEY_LIST_OF_COVERAGE[2].id}                        |
