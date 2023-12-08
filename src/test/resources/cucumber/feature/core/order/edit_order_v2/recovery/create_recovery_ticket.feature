@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @Recovery @CreateTicket @current2
+@OperatorV2 @Core @EditOrderV2 @Recovery @CreateTicket
 Feature: Create Recovery Ticket
 
   Background:
@@ -378,7 +378,7 @@ Feature: Create Recovery Ticket
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
 
-  @ArchiveRouteCommonV2 @wip2
+  @ArchiveRouteCommonV2
   Scenario: Operator Create and Search Recovery Ticket For Outbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -458,7 +458,6 @@ Feature: Create Recovery Ticket
       | status   | Pending                             |
       | routeId  | null                                |
 
-  @wip2
   Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
