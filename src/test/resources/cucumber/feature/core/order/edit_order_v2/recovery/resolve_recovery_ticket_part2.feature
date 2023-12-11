@@ -5,6 +5,7 @@ Feature: Resolve Recovery Ticket
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = XMAS CAGE
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
     When API Recovery - Operator create recovery ticket:
@@ -66,6 +67,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = ORDERS CREATED
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
     When API Recovery - Operator create recovery ticket:
@@ -115,6 +117,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RELABELLED TO SEND
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -171,6 +174,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = XMAS CAGE
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -227,6 +231,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = XMAS CAGE
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -283,6 +288,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Resolve MISSING PETS Ticket upon Global Inbound
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -346,6 +352,7 @@ Feature: Resolve Recovery Ticket
       | HUB INBOUND SCAN |
       | TICKET RESOLVED  |
 
+  @HighPriority
   Scenario: Resolve MISSING PETS Ticket upon Parcel Sweep
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

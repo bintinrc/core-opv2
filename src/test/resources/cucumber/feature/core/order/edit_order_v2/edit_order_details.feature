@@ -27,6 +27,7 @@ Feature: Edit Order Details
       | name        | UPDATE INSURANCE                    |
       | description | Insured value changed from 0 to 100 |
 
+  @MediumPriority
   Scenario: Operator Edit Order Details - Edit Parcel Weight
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -46,6 +47,7 @@ Feature: Edit Order Details
       | name        | UPDATE DIMENSION                                                |
       | description | Weight changed from 5 to 10 Pricing Weight changed from 5 to 10 |
 
+  @MediumPriority
   Scenario Outline: Operator Edit Order Details - Edit Parcel Size - <oldSize> to <newSize>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                              |
@@ -72,6 +74,7 @@ Feature: Edit Order Details
       | XL      | 3         | XXL     | XXLARGE     | 4         |
       | XXL     | 4         | XL      | EXTRALARGE  | 3         |
 
+  @MediumPriority
   Scenario: Operator Edit Order Details - Edit Parcel Dimensions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                         |
