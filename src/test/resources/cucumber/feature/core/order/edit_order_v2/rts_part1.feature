@@ -113,7 +113,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -229,6 +229,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
+  @MediumPriority
   Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Unrouted - Edit Delivery Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -346,7 +347,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -482,7 +483,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -622,7 +623,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -746,6 +747,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
+  @HighPriority
   Scenario Outline: Operator RTS Order with Allowed Granular Status - <granular_status>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |

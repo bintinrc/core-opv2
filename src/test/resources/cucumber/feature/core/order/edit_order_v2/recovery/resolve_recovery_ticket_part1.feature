@@ -5,6 +5,7 @@ Feature: Resolve Recovery Ticket
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Outcome = Force Success
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -84,6 +85,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Outcome = Order Cancel
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -144,6 +146,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Outcome = RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -234,6 +237,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Outcome = Default No Action
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -294,6 +298,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -377,6 +382,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = Resend
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -447,6 +453,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RESUME DELIVERY
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -517,6 +524,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -596,6 +604,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
 
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = RTS
     Given New Stamp ID with "COPV2" prefix was generated
     When API Recovery - Operator create recovery ticket:

@@ -5,6 +5,7 @@ Feature: RTS
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator not Allowed to RTS Order Tagged to a DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -20,7 +21,7 @@ Feature: RTS
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify menu item "Delivery" > "Return to Sender" is disabled on Edit Order V2 page
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator RTS Order with Allowed Granular Status - On Vehicle for Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -107,6 +108,7 @@ Feature: RTS
       | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
       | type         | RTS                                   |
 
+  @MediumPriority
   Scenario Outline: Operator RTS Order with Active PETS Ticket Damaged/Missing - <ticketType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -185,6 +187,7 @@ Feature: RTS
       | MISSING    | ORDER OUTCOME (MISSING)     |
       | DAMAGED    | ORDER OUTCOME (NEW_DAMAGED) |
 
+  @MediumPriority
   Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -264,6 +267,7 @@ Feature: RTS
       | ticketType      | orderOutcomeName                | resolveOutcome | resolveCustomFieldId |
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) | RE-DELIVER     | 24291519             |
 
+  @MediumPriority
   Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - <ticketType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -346,6 +350,7 @@ Feature: RTS
       | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) | RESUME DELIVERY             | 24317569             |
       | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   | RESUME DELIVERY             | 24269291             |
 
+  @MediumPriority
   Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <ticketType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -386,6 +391,7 @@ Feature: RTS
       | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) |
       | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   |
 
+  @MediumPriority
   Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - SELF COLLECTION
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -423,7 +429,7 @@ Feature: RTS
       | ticketType      | orderOutcomeName                |
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address - New Address Belongs To Standard Zone
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -500,7 +506,7 @@ Feature: RTS
       | id            | {KEY_TRANSACTION_AFTER.waypointId}    |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator RTS an Order on Edit Order Page - PPNT Tied To DP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |

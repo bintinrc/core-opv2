@@ -5,6 +5,7 @@ Feature: Delete Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Disallow Delete Order - Status = Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -20,6 +21,7 @@ Feature: Delete Order
     And Operator verify order granular status is "Completed" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Delete Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Operator Disallow Delete Order - Status = Returned To Sender
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -35,6 +37,7 @@ Feature: Delete Order
     And Operator verify order granular status is "Returned To Sender" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Delete Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Operator Disallow Delete Order - Status = Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -50,6 +53,7 @@ Feature: Delete Order
     And Operator verify order granular status is "Cancelled" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Delete Order" is disabled on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Operator Disallow Delete Order - Status = En-route to Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -68,6 +72,7 @@ Feature: Delete Order
       | top    | Status 400: Unknown                                                                                                                         |
       | bottom | ^.*Error Message: Order can only be deleted if in the following states : \[Staging, Pending Pickup, Van en-route to pickup, Pickup fail\].* |
 
+  @MediumPriority
   Scenario: Operator Disallow Delete Order - Invalid Password
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -114,6 +119,7 @@ Feature: Delete Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
+  @HighPriority
   Scenario: Operator Delete Order - Status = Staging
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                             |
@@ -140,6 +146,7 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
 
+  @HighPriority
   Scenario: Operator Delete Order - Status = Van en-route to Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -176,6 +183,7 @@ Feature: Delete Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
+  @HighPriority
   Scenario: Operator Delete Order - Status = Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -212,6 +220,7 @@ Feature: Delete Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
+  @MediumPriority
   Scenario: Operator Delete Order with Invoiced Amount
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |

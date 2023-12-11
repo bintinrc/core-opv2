@@ -426,7 +426,7 @@ Feature: ID - Order COD Limit
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | 30000000                           |
 
-  @DeleteDriverV2 @DeleteRoutes
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >30 Millions to Multiple Driver Routes on Zonal Routing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |

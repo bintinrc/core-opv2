@@ -5,7 +5,7 @@ Feature: Update Stamp ID
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with Cancelled Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -35,7 +35,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with Staging Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                             |
@@ -62,7 +62,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with On Hold Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -99,7 +99,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with Pickup Fail Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -129,7 +129,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with En-Route To Sorting Hub Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -159,7 +159,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with Pending Reschedule Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -189,6 +189,7 @@ Feature: Update Stamp ID
       | searchTerm  | {KEY_STAMP_ID}      |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
+  @MediumPriority
   Scenario: Update Stamp ID - Disallow Update Stamp ID with Completed Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -205,6 +206,7 @@ Feature: Update Stamp ID
       | top    | Status 200: Unknown                                              |
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
+  @MediumPriority
   Scenario: Update Stamp ID - Disallow Update Stamp ID with Returned To Sender Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -221,7 +223,7 @@ Feature: Update Stamp ID
       | top    | Status 200: Unknown                                              |
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
-  @CloseNewWindows
+  @CloseNewWindows @HighPriority
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -243,7 +245,7 @@ Feature: Update Stamp ID
       | searchTerm  | KEY_STAMP_ID        |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
-  @CloseNewWindows
+  @CloseNewWindows @MediumPriority
   Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that Have been Used Before
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -260,6 +262,7 @@ Feature: Update Stamp ID
     Then Operator verify next order info on Edit Order V2 page:
       | stampId | - |
 
+  @MediumPriority
   Scenario: Remove Stamp ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
