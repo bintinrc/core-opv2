@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import java.io.File;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -36,10 +35,6 @@ public class ScenarioManager extends CommonUiScenarioManager {
    */
   @Before
   public void before() {
-    put(StandardScenarioStorageKeys.KEY_SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_ID);
-    put(StandardScenarioStorageKeys.KEY_SHIPPER_V2_CLIENT_SECRET,
-        TestConstants.SHIPPER_V2_CLIENT_SECRET);
-
     put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_ID);
     put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_SECRET,
         TestConstants.SHIPPER_V4_CLIENT_SECRET);

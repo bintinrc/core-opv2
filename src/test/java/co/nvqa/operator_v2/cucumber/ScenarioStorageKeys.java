@@ -6,15 +6,9 @@ import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("unused")
-public interface
-ScenarioStorageKeys extends StandardScenarioStorageKeys {
+public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
 
   String KEY_MAIN_WINDOW_HANDLE = "KEY_MAIN_WINDOW_HANDLE";
-  String KEY_PICKUP_INSTRUCTION = "KEY_PICKUP_INSTRUCTION";
-  String KEY_DELIVERY_INSTRUCTION = "KEY_DELIVERY_INSTRUCTION";
-
-  String KEY_CREATED_USER_MANAGEMENT = "KEY_CREATED_USER_MANAGEMENT";
-  String KEY_UPDATED_USER_MANAGEMENT = "KEY_UPDATED_USER_MANAGEMENT";
 
   String KEY_CREATED_RESERVATION_GROUP = "KEY_CREATED_RESERVATION_GROUP";
   String KEY_CREATED_RESERVATION_GROUP_ID = "KEY_CREATED_RESERVATION_GROUP_ID";
@@ -26,4 +20,5 @@ ScenarioStorageKeys extends StandardScenarioStorageKeys {
   String KEY_LIST_SUB_SHIPPER_SELLER_EMAIL = "KEY_LIST_SUB_SHIPPER_SELLER_EMAIL";
   String KEY_TRIP_ID = "KEY_TRIP_ID";
   String KEY_EVENT_TIME = "KEY_EVENT_TIME";
+  String KEY_CREATED_ORDER_TAG = "KEY_CREATED_ORDER_TAG";
 }

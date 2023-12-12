@@ -96,7 +96,7 @@ Feature: Create Route Groups - Preset Filters
       | bottom             | Name: {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name} |
       | waitUntilInvisible | true                                                               |
     And Operator verifies selected Filter Preset name is "{KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name}" on Create Route Groups page
-    And DB Operator verifies filter preset record:
+    And DB Lighthouse - verify preset_filters record:
       | id        | {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].id}   |
       | namespace | route-groups                                                 |
       | name      | {KEY_LIGHTHOUSE_CREATED_ROUTE_GROUPS_FILTER_PRESETS[1].name} |

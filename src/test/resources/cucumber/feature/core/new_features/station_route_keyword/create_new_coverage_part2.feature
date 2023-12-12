@@ -201,13 +201,13 @@ Feature: Create New Coverage
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     When Operator filter coverages on Station Route Keyword page:
-      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
+      | area | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify filter results on Station Route Keyword page:
-      | area             | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss}     |
+      | area | AREA CNTS {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator filter coverages on Station Route Keyword page:
-      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
+      | keywords | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify filter results on Station Route Keyword page:
-      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}       |
+      | keywords | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator filter coverages on Station Route Keyword page:
       | primaryDriver | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     Then Operator verify filter results on Station Route Keyword page:
@@ -274,7 +274,7 @@ Feature: Create New Coverage
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator create new coverage on Station Route Keyword page:
       | area           | AREA CNTDV 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | areaVariation  | AREA CNTDV {gradle-current-date-yyyyMMddHHmmsss}         |
+      | areaVariation  | AREA CNTDV {gradle-current-date-yyyyMMddHHmmsss}   |
       | keyword        | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}        |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}        |
@@ -370,7 +370,7 @@ Feature: Create New Coverage
       | area           | AREA CNTEV {gradle-current-date-yyyyMMddHHmmsss} |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}      |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}      |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA CNTEV {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                         |
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}               |
@@ -403,7 +403,7 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[3].displayName}       |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}       |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                         |
+      | top    | Status 400: Unknown                                                                                                                                                                              |
       | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |
@@ -443,7 +443,7 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[3].displayName}        |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}        |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                           |
+      | top    | Status 400: Unknown                                                                                                                                                                                |
       | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDAVK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |

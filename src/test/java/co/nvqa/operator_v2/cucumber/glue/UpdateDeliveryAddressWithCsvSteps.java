@@ -205,4 +205,21 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
       page.confirmUpdatesDialog.waitUntilInvisible();
     });
   }
+
+  private Address getToAddress(Order order) {
+    Address address = new Address();
+    address.setName(order.getToName());
+    address.setEmail(order.getToEmail());
+    address.setContact(order.getToContact());
+    address.setAddress1(order.getToAddress1());
+    address.setAddress2(order.getToAddress2());
+    address.setPostcode(order.getToPostcode());
+    address.setCity(order.getToCity());
+    address.setCountry(order.getToCountry());
+    address.setState(order.getToState());
+    address.setDistrict(order.getToDistrict());
+    address.setLatitude(order.getToLatitude());
+    address.setLongitude(order.getToLongitude());
+    return address;
+  }
 }

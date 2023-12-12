@@ -139,16 +139,6 @@ public class ImplantedManifestSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator clicks \"Actions X\" button on Manifest table for all created orders on Implanted Manifest page")
-  public void operatorClicksButtonOnManifestTableForAllCreatedOrdersOnImplementedManifestPage() {
-    List<Order> orders = getListOfCreatedOrders();
-    int ordersSize = orders.size();
-
-    for (int i = 0; i < ordersSize; i++) {
-      page.clickActionXForRow(1);
-    }
-  }
-
   @When("Operator creates Manifest for Hub {value} and scan barcodes:")
   public void operatorSelectsCreateManifestForHubHubNameAndScanBarcodes(String hubName,
       List<String> trackingIds) {
