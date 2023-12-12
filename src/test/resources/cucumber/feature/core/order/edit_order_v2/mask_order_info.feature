@@ -5,6 +5,7 @@ Feature: Mask Order Info
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Edit Delivery Details Once Contact Has Less Than 5 Chars - Order is Masked
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -35,6 +36,7 @@ Feature: Mask Order Info
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | destinationAddress | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG 159363 |
 
+  @MediumPriority
   Scenario: Operator Edit RTS Details on RTS Order When Masked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -91,6 +93,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
+  @MediumPriority
   Scenario: Operator Edit Return Details on RTS Order When Masked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -149,6 +152,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
+  @MediumPriority
   Scenario: Operator Edit RTS Details on RTS Order When Unmasked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -209,6 +213,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
+  @MediumPriority
   Scenario: Operator Edit Return Details on RTS Order When Unmasked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -273,7 +278,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Reschedule Order When Masked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -345,7 +350,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Reschedule Order When Masked - Update Name & Date Only (Contact & Address Unchanged)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -416,7 +421,7 @@ Feature: Mask Order Info
       | contact            | +6598980004                                 |
       | destinationAddress | 30A ST. THOMAS WALK old address 2 SG 102600 |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Reschedule Order When Unmasked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -495,7 +500,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
-  @ArchiveRouteCommonV2
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Reschedule Order When Unmasked - Update Name & Date Only (Contact & Address Unchanged)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -573,6 +578,7 @@ Feature: Mask Order Info
       | contact            | +6598980004                                 |
       | destinationAddress | 30A ST. THOMAS WALK old address 2 SG 102600 |
 
+  @MediumPriority
   Scenario: Operator Edit Delivery Details When Masked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -621,6 +627,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
+  @MediumPriority
   Scenario: Operator Edit Delivery Details When Masked - Update Name & Date Only (Contact & Address Unchanged)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -669,6 +676,7 @@ Feature: Mask Order Info
       | contact            | +6598980004                                 |
       | destinationAddress | 30A ST. THOMAS WALK old address 2 SG 102600 |
 
+  @MediumPriority
   Scenario: Operator Edit Delivery Details When Unmasked - Update All Details (Contact & Address Changed)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -726,6 +734,7 @@ Feature: Mask Order Info
       | contact            | 12345678                                        |
       | destinationAddress | 50 Amber Rd new home Singapore Singapore 439888 |
 
+  @MediumPriority
   Scenario: Operator Edit Delivery Details When Unmasked - Update Name & Date Only (Contact & Address Unchanged)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -772,6 +781,7 @@ Feature: Mask Order Info
       | contact            | +6598980004                                 |
       | destinationAddress | 30A ST. THOMAS WALK old address 2 SG 102600 |
 
+  @MediumPriority
   Scenario: Operator View Edit Order Details - Order Events Masked
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
