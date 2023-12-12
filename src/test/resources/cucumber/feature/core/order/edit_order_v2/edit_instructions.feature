@@ -5,6 +5,7 @@ Feature: Edit Instructions
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Operator Edit Instructions of an Order on Edit Order Page - Pickup Instructions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -25,6 +26,7 @@ Feature: Edit Instructions
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE INSTRUCTION |
 
+  @MediumPriority
   Scenario: Operator Edit Instructions of an Order on Edit Order Page - Delivery Instructions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -45,6 +47,7 @@ Feature: Edit Instructions
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE INSTRUCTION |
 
+  @MediumPriority
   Scenario: Operator Edit Instructions of an Order on Edit Order Page - Order Instructions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -68,6 +71,7 @@ Feature: Edit Instructions
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE INSTRUCTION |
 
+  @MediumPriority
   Scenario: Operator Remove Instructions of an Order on Edit Order Page - Pickup, Delivery, Order Instructions
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

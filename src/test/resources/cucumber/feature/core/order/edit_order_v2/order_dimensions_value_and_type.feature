@@ -5,6 +5,7 @@ Feature: Order Dimensions Value and Type
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario Outline: Publish Dimension Value and Device Source on Hub Inbound Event with Updated Dimension and Size Value - Device Type = Manual
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -37,6 +38,7 @@ Feature: Order Dimensions Value and Type
       | oldWeight | oldHeight | oldLength | oldWidth | oldSize | oldSizeId | newWeight | newHeight | newLength | newWidth | newSize | newSizeId | newSizeShort |
       | 1         | 1         | 1         | 1        | S       | 0         | 5         | 45        | 10        | 30       | MEDIUM  | 1         | M            |
 
+  @MediumPriority
   Scenario Outline: Publish Dimension Value and Device Source on Hub Inbound Event with No Updated Dimension or Size - Device Type = Manual
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -69,6 +71,7 @@ Feature: Order Dimensions Value and Type
       | oldWeight | oldHeight | oldLength | oldWidth | oldSize | oldSizeShort | oldSizeId | newWeight | newHeight | newLength | newWidth | newSize |
       | 1         | 1         | 1         | 1        | SMALL   | S            | 0         | null      | null      | null      | null     | null    |
 
+  @MediumPriority
   Scenario Outline: Publish Dimension Value on Update Dimension Event - Manual Dimension
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -97,6 +100,7 @@ Feature: Order Dimensions Value and Type
       | oldWeight | oldHeight | oldLength | oldWidth | oldSize | oldSizeId | newWeight | newHeight | newLength | newWidth | newSize | newSizeId | newSizeShort |
       | 1         | 1         | 1         | 1        | S       | 0         | 5         | 45        | 10        | 30       | MEDIUM  | 1         | M            |
 
+  @MediumPriority
   Scenario Outline: Publish Dimension Value and Device Source on Hub Inbound Event with Updated Dimension and Size Value - Device Type = DWS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -130,6 +134,7 @@ Feature: Order Dimensions Value and Type
       | oldWeight | oldHeight | oldLength | oldWidth | oldSize | oldSizeId | newHeight | newLength | newWidth | newSize | newSizeId | newSizeShort |
       | 1         | 1         | 1         | 1        | S       | 0         | 45        | 10        | 30       | MEDIUM  | 1         | M            |
 
+  @MediumPriority
   Scenario Outline: Publish Dimension Value and Device Source on Hub Inbound Event with No Updated Dimension or Size - Device Type = DWS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                    |

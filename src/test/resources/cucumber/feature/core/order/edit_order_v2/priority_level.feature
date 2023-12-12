@@ -5,6 +5,7 @@ Feature: Priority Level
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @MediumPriority
   Scenario: Edit Order - Add Priority Level less than 3
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -34,6 +35,7 @@ Feature: Priority Level
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
 
+  @MediumPriority
   Scenario: Edit Order - Update Priority Level less than Current Priority
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -54,6 +56,7 @@ Feature: Priority Level
     And Operator verify Save changes button is disabled in Edit priority level dialog on Edit Order V2 page
     And Operator verify Current priority is "2" on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Edit Order - Update Priority Level more than Current Priority
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -85,6 +88,7 @@ Feature: Priority Level
       | name        | UPDATE SLA                                  |
       | description | Delivery Priority Level changed from 1 to 2 |
 
+  @MediumPriority
   Scenario: Edit Order - Add Priority Level After The Order Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
@@ -105,6 +109,7 @@ Feature: Priority Level
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
     And Operator verify Current priority is "0" on Edit Order V2 page
 
+  @MediumPriority
   Scenario: Edit Order - Add Priority Level more than 3
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |
