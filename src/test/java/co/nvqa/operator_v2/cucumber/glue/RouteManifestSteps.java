@@ -501,17 +501,6 @@ public class RouteManifestSteps extends AbstractSteps {
                 .withFailMessage("Unexpected COD is displayed").isFalse());
     }
 
-    @When("Operator click View on Map")
-    public void clickViewOnMapButton() {
-        page.proofOfArrivalAndHandoverDialog.inFrame(page -> page.proofOfArrivalTable.clickViewOnMap());
-    }
-
-    @When("Operator click View Photo")
-    public void clickViewPhotoButton() {
-        page.proofOfArrivalAndHandoverDialog.inFrame(
-                page -> page.proofOfHandoverTable.clickViewPhoto());
-    }
-
     @Then("Operator verifies route detail information below on Route Manifest page:")
     public void operatorVerifiesRouteDetailInformation(Map<String, String> dataTable) {
         Map<String, String> resolvedData = resolveKeyValues(dataTable);
