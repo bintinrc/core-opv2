@@ -407,15 +407,6 @@ public class EditOrderV2Steps extends AbstractSteps {
         String finalStampId = stampId;
         page.inFrame(() -> {
             page.editOrderStamp(finalStampId);
-            Order order = get(KEY_CREATED_ORDER);
-            if (order != null) {
-                order.setStampId(finalStampId);
-            } else {
-                List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-                if (CollectionUtils.isNotEmpty(orders)) {
-                    orders.get(0).setStampId(finalStampId);
-                }
-            }
             put(KEY_STAMP_ID, finalStampId);
         });
     }
@@ -453,7 +444,6 @@ public class EditOrderV2Steps extends AbstractSteps {
             page.cancelOrderDialog.cancellationReason.setValue(cancellationReason);
             page.cancelOrderDialog.cancelOrder.click();
         });
-        put(KEY_CANCELLATION_REASON, cancellationReason);
     }
 
     @Then("Operator verify order event on Edit Order V2 page using data below:")

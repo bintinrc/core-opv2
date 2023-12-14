@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @AddShipperToPreset @current
+@OperatorV2 @Core @PickUps @AddShipperToPreset
 Feature: Add Shipper To Preset
 
   Background:
@@ -189,7 +189,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  
+
   @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
     Given Operator go to menu Pick Ups -> Add Shipper To Preset
@@ -200,15 +200,15 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
 #    TODO There is no Shipper Pickups page anymore
-  @wip
+#  TODO cv2 migrate to common-v2 steps
   @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Inactive Shipper (uid:958ed81a-3f3e-456d-ad3d-a6614269253e)
-    Given API Operator creates new Shipper Pickup Filter Template using data below:
-      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
-      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
-      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
-      | value.typeIds             | 0                                                 |
-      | value.waypointStatuses    | Pending,Routed                                    |
+#    Given API Operator creates new Shipper Pickup Filter Template using data below:
+#      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
+#      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
+#      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
+#      | value.typeIds             | 0                                                 |
+#      | value.waypointStatuses    | Pending,Routed                                    |
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | false                 |

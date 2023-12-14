@@ -65,8 +65,7 @@ Feature: Route Logs
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Remove Tag of a Single Route on Route Logs Page
     Given API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator set tags of the new created route to [{route-tag-id},{route-tag-id-2}]
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "tags":[{route-tag-id},{route-tag-id-2}] } |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |

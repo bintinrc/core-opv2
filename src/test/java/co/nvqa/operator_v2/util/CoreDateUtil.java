@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 public class CoreDateUtil extends DateUtil {
@@ -28,40 +27,8 @@ public class CoreDateUtil extends DateUtil {
   public static final DateTimeFormatter ISO8601_LITE_FORMATTER = DateTimeFormatter
       .ofPattern(ISO8601_FORMAT_LITE);
 
-  public static String getTimestamp() {
-    return String.valueOf(Calendar.getInstance().getTime().getTime());
-  }
-
-  public static ZonedDateTime getDate() {
-    return getDate(DEFAULT_ZONE_ID);
-  }
-
   public static ZonedDateTime getDate(ZoneId zoneId) {
     return ZonedDateTime.now(zoneId);
-  }
-
-  public static ZonedDateTime getDate(Instant instant) {
-    return getDate(instant, DEFAULT_ZONE_ID);
-  }
-
-  public static ZonedDateTime getDate(Instant instant, ZoneId zoneId) {
-    return ZonedDateTime.ofInstant(instant, zoneId);
-  }
-
-  public static ZonedDateTime getDate(String str) {
-    return ZonedDateTime.parse(str);
-  }
-
-  public static ZonedDateTime getDate(String str, DateTimeFormatter dtf) {
-    return ZonedDateTime.parse(str, dtf);
-  }
-
-  public static ZonedDateTime getDate(LocalDateTime localDateTime, ZoneId zoneId) {
-    return ZonedDateTime.of(localDateTime, zoneId);
-  }
-
-  public static ZonedDateTime getDate(LocalDateTime localDateTime) {
-    return ZonedDateTime.of(localDateTime, DEFAULT_ZONE_ID);
   }
 
   public static String displayDate(ZonedDateTime zdt) {

@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.cucumber;
 
-import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("unused")
-//public interface ScenarioStorageKeys extends StandardScenarioStorageKeys {
 public interface ScenarioStorageKeys {
 
     String KEY_MAIN_WINDOW_HANDLE = "KEY_MAIN_WINDOW_HANDLE";
@@ -32,5 +30,6 @@ public interface ScenarioStorageKeys {
     String KEY_ALL_ORDERS_FILTERS_PRESET_ID = "KEY_ALL_ORDERS_FILTERS_PRESET_ID";
     String KEY_CREATED_SHIPPER = "KEY_CREATED_SHIPPER";
     String KEY_LIST_OF_CREATED_ADDRESSES = "KEY_LIST_OF_CREATED_ADDRESSES";
+    String KEY_STAMP_ID = "KEY_STAMP_ID";
 
 }

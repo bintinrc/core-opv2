@@ -2,9 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
-import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -1017,15 +1015,6 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
         findElementByXpath("//button[@aria-label = 'Submit']"));
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
-  }
-
-  public void verifyDownloadedCsv(String trackingId, String message) {
-    String downloadedFile = getLatestDownloadedFilename("pickup_reservations");
-    verifyFileDownloadedSuccessfully(downloadedFile);
-    String pathName = StandardTestConstants.TEMP_DIR + downloadedFile;
-    List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
-    Assertions.assertThat(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId)).isTrue();
-    Assertions.assertThat(reg.get(0).getErrorMessage().contains(message)).isTrue();
   }
 
   public static class SelectionErrorDialog extends MdDialog {
