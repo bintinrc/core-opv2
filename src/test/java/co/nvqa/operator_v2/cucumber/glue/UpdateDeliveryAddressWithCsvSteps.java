@@ -36,7 +36,6 @@ import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage
 @ScenarioScoped
 public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
 
-  private static final String KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES = "KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES";
   private UpdateDeliveryAddressWithCsvPage page;
 
   @Override

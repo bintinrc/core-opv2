@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.ui.cucumber.glue.CommonUiScenarioManager;
-import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
@@ -35,13 +34,13 @@ public class ScenarioManager extends CommonUiScenarioManager {
    */
   @Before
   public void before() {
-    put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_ID);
-    put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_SECRET,
-        TestConstants.SHIPPER_V4_CLIENT_SECRET);
-
-    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
-    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
-    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_ID, TestConstants.NINJA_DRIVER_ID);
+//    put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_ID);
+//    put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_SECRET,
+//        TestConstants.SHIPPER_V4_CLIENT_SECRET);
+//
+//    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
+//    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
+//    put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_ID, TestConstants.NINJA_DRIVER_ID);
   }
 
   @After("@ResetWindow")

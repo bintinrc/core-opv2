@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.Order;
 import java.util.Map;
 
 /**

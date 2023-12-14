@@ -15,8 +15,6 @@ import org.assertj.core.api.Assertions;
  */
 @ScenarioScoped
 public class ThirdPartyOrderManagementSteps extends AbstractSteps {
-
-  private static final String KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS = "KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS";
   private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
   public ThirdPartyOrderManagementSteps() {

@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.route.RouteResponse;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteLogsParams;
@@ -494,7 +496,7 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyBanner() {
     page.inFrame(() -> {
       assertThat(page.banner.isDisplayed()).withFailMessage(
-              "Banner [To check assignment and create routes, there should be no \"UNASSIGNED\" for the \"Assigned driver\" column.\n] is not displayed")
+          "Banner [To check assignment and create routes, there should be no \"UNASSIGNED\" for the \"Assigned driver\" column.\n] is not displayed")
           .isTrue();
     });
   }
@@ -628,10 +630,15 @@ public class StationRouteSteps extends AbstractSteps {
   public void checkCreatedRoutesDetailsTableRecords(List<Map<String, String>> data) {
     page.inFrame(() -> {
       pause2s();
-      List<CreatedRoutesDetailsTableRecord> actual = page.createdRoutesDetailsTable.readAllEntities();
+      List<CreatedRoutesDetailsTableRecord> actual = page.createdRoutesDetailsTable
+          .readAllEntities();
       actual.stream().filter(r -> StringUtils.isNotBlank(r.getRouteId()))
           .map(r -> Long.valueOf(r.getRouteId()))
-          .forEach(id -> putInList(KEY_LIST_OF_CREATED_ROUTE_ID, id));
+          .forEach(id -> {
+            RouteResponse route = new RouteResponse();
+            route.setId(id);
+            putInList(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ROUTES, route);
+          });
       data.forEach(r -> {
         CreatedRoutesDetailsTableRecord expected = new CreatedRoutesDetailsTableRecord(
             resolveKeyValues(r));
@@ -688,7 +695,7 @@ public class StationRouteSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.errorsDialog.waitUntilVisible();
       Assertions.assertThat(
-              page.errorsDialog.error.stream().map(PageElement::getText).collect(Collectors.toList()))
+          page.errorsDialog.error.stream().map(PageElement::getText).collect(Collectors.toList()))
           .as("List of errors").containsExactlyInAnyOrderElementsOf(resolveValues(data));
     });
   }

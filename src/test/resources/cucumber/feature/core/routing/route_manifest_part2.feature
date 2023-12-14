@@ -437,6 +437,9 @@ Feature: Route Manifest
       | Deliveries | 1       | 0       | 0       | 1   |
       | Total      | 1       | 0       | 0       | 1   |
     And Operator fail delivery waypoint from Route Manifest page
+      | failureReasonDescription    | Attempting failure at doorstep - Normal     |
+      | failureReasonSubDescription | Non-residential location is closed - Normal |
+      | replace                     | - Normal                                    |
     Then Operator verifies that success react notification displayed:
       | top | Updated waypoint {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} successfully |
     And Operator refresh page

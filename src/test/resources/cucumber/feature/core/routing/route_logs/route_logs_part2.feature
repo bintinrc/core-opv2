@@ -52,7 +52,7 @@ Feature: Route Logs
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     Then Operator verify route details on Route Logs page using data below:
       | date           | {date: 0 days next, yyyy-MM-dd}    |
       | id             | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -119,13 +119,13 @@ Feature: Route Logs
       | zone           | {zone-name}                        |
       | driverTypeName | {default-driver-type-name}         |
     And Operator verify route details on Route Logs page using data below:
-      | date           | {date: 0 days next, yyyy-MM-dd}   |
-      | id             | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-      | status         | PENDING                           |
-      | driverName     | {ninja-driver-name}               |
-      | hub            | {hub-name-2}                      |
-      | zone           | {zone-name-2}                     |
-      | driverTypeName | {default-driver-type-name}        |
+      | date           | {date: 0 days next, yyyy-MM-dd}    |
+      | id             | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+      | status         | PENDING                            |
+      | driverName     | {ninja-driver-name}                |
+      | hub            | {hub-name-2}                       |
+      | zone           | {zone-name-2}                      |
+      | driverTypeName | {default-driver-type-name}         |
     Examples:
       | Note          | Search                                                                 |
       | With Space    | {KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id} |

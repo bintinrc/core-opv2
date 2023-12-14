@@ -1,9 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
-import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.OrderTagManagementPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -24,7 +23,6 @@ import org.assertj.core.api.Assertions;
 public class OrderTagManagementSteps extends AbstractSteps {
 
   private OrderTagManagementPage orderTagManagementPage;
-  private EditOrderPage editOrderPage;
 
   public OrderTagManagementSteps() {
   }
@@ -32,7 +30,6 @@ public class OrderTagManagementSteps extends AbstractSteps {
   @Override
   public void init() {
     orderTagManagementPage = new OrderTagManagementPage(getWebDriver());
-    editOrderPage = new EditOrderPage(getWebDriver());
   }
 
   @When("^Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:$")
@@ -254,32 +251,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
   }
 
-  @And("Operator searches and selects orders created")
-  public void operatorSelectsOrdersCreated() {
-    List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
-    lists.forEach(order -> orderTagManagementPage
-        .searchAndSelectOrderInTable(String.valueOf(order.getId())));
-  }
-
   @And("Operator selects orders created")
   public void operatorSelectsOrdersInTable() {
     orderTagManagementPage.selectOrdersInTable();
-  }
-
-  @And("Operator uploads CSV with orders created")
-  public void operatorUploadsCsvOrdersCreated() {
-    List<String> trackingIds = this.<List<Order>>get(KEY_LIST_OF_CREATED_ORDER)
-        .stream()
-        .map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    orderTagManagementPage.uploadFindOrdersCsvWithOrderInfo(trackingIds);
-  }
-
-  @And("Operator tags order with {string}")
-  public void operatorTagsOrderWith(String tagLabel) {
-    put(KEY_ORDER_TAG, tagLabel);
-    orderTagManagementPage.clickTagSelectedOrdersButton();
-    orderTagManagementPage.tagSelectedOrdersAndSave(tagLabel);
   }
 
   @When("Operator selects filter and clicks Load Selection on Order Level Tag Management page using data below:")

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.Address;
+import co.nvqa.common.model.address.Address;
 import org.apache.commons.lang3.StringUtils;
 
 /**

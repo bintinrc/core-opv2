@@ -176,7 +176,7 @@ Feature: Tag & Untag DP
       | seqNo   | not null                                                   |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Untag DP Order that is not merged and routed
@@ -210,7 +210,7 @@ Feature: Tag & Untag DP
       | seqNo   | not null                                                   |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}                          |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 
   @DeleteRouteGroupsV2 @MediumPriority
   Scenario: Untag DP Order that is merged and not routed

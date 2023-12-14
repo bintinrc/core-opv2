@@ -1,9 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.PoaInfo;
 import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
@@ -24,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -91,20 +87,20 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
   public void openPage(long routeId) {
     getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-        StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), routeId));
+            StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), routeId));
     inFrame(() -> waitUntilLoaded());
   }
 
   public void waitUntilPageLoaded() {
     super.waitUntilPageLoaded();
     waitUntilInvisibilityOfElementLocated(
-        "//md-progress-circular/following-sibling::div[text()='Loading...']");
+            "//md-progress-circular/following-sibling::div[text()='Loading...']");
   }
 
   public String getParcelCountValue(String type, String status) {
     String xpath =
-        "//div[translate(., ' ','')='" + StringUtils.capitalize(type.toLowerCase())
-            + "']/following-sibling::div[%d]";
+            "//div[translate(., ' ','')='" + StringUtils.capitalize(type.toLowerCase())
+                    + "']/following-sibling::div[%d]";
     int index;
     switch (status.toLowerCase()) {
       case "pending":
@@ -126,73 +122,9 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     return getParcelCountValue(type, status);
   }
 
-  public void verify1DeliverySuccessAtRouteManifest(Route route, Order order) {
-    verify1DeliverySuccessOrFailAtRouteManifest(route, order, null, true);
-  }
-
-  public void verify1DeliveryFailAtRouteManifest(Route route, Order order,
-      FailureReason expectedFailureReason) {
-    verify1DeliverySuccessOrFailAtRouteManifest(route, order, expectedFailureReason, false);
-  }
-
-  private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order,
-      FailureReason expectedFailureReason, boolean verifyDeliverySuccess) {
-    if (verifyDeliverySuccess) {
-      verify1DeliveryIsSuccess(route, order);
-    } else {
-      verify1DeliveryIsFailed(route, order, expectedFailureReason);
-    }
-  }
-
-  public void verify1DeliveryIsSuccess(Route route, Order order) {
-    waitUntilPageLoaded();
-
-    String actualRouteId = getText(
-        "//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
-    String actualWaypointSuccessCount = getText(
-        "//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Success.value')]");
-    Assertions.assertThat(actualRouteId).as("Route ID").isEqualTo(String.valueOf(route.getId()));
-    Assertions.assertThat(actualWaypointSuccessCount).as("Waypoint Success Count").isEqualTo("1");
-
-    searchTableByTrackingId(order.getTrackingId());
-    Assertions.assertThat(isTableEmpty())
-        .as(f("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()))
-        .isFalse();
-
-    String actualStatus = getTextOnTable(1, COLUMN_STATUS);
-    String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
-    Assertions.assertThat(actualStatus).as("Status").isEqualTo("Success");
-    Assertions.assertThat(actualCountDelivery).as("Count Delivery").isEqualTo("1");
-  }
-
-  public void verify1DeliveryIsFailed(Route route, Order order,
-      FailureReason expectedFailureReason) {
-    waitUntilPageLoaded();
-
-    String actualRouteId = getText(
-        "//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
-    String actualWaypointSuccessCount = getText(
-        "//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Fail.value')]");
-    Assertions.assertThat(actualRouteId).as("Route ID").isEqualTo(String.valueOf(route.getId()));
-    Assertions.assertThat(actualWaypointSuccessCount).as("Waypoint Failed Count").isEqualTo("1");
-
-    searchTableByTrackingId(order.getTrackingId());
-    assertFalse(
-        String.format("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()),
-        isTableEmpty());
-
-    String actualStatus = getTextOnTable(1, COLUMN_STATUS);
-    String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
-    String actualComments = getTextOnTable(1, COLUMN_COMMENTS);
-    Assertions.assertThat(actualStatus).as("Status").isEqualTo("Fail");
-    Assertions.assertThat(actualCountDelivery).as("Count Delivery").isEqualTo("1");
-    Assertions.assertThat(actualComments).as("Comments")
-        .isEqualTo(expectedFailureReason.getDescription());
-  }
-
   public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails) {
     RouteManifestWaypointDetails.Reservation expectedReservation = expectedWaypointDetails
-        .getReservation();
+            .getReservation();
     RouteManifestWaypointDetails.Pickup expectedPickup = expectedWaypointDetails.getPickup();
     RouteManifestWaypointDetails.Delivery expectedDelivery = expectedWaypointDetails.getDelivery();
     expectedWaypointDetails.setReservation(null);
@@ -204,12 +136,12 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     waypointsTable.clearColumnFilters();
     if (StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds())) {
       waypointsTable
-          .filterByColumn("trackingIds", String.valueOf(expectedWaypointDetails.getTrackingIds()));
+              .filterByColumn("trackingIds", String.valueOf(expectedWaypointDetails.getTrackingIds()));
     } else if (expectedWaypointDetails.getId() != null) {
       waypointsTable.filterByColumn("id", String.valueOf(expectedWaypointDetails.getId()));
     } else if (StringUtils.isNotBlank(expectedWaypointDetails.getAddress())) {
       waypointsTable
-          .filterByColumn("address", String.valueOf(expectedWaypointDetails.getAddress()));
+              .filterByColumn("address", String.valueOf(expectedWaypointDetails.getAddress()));
     }
 
     RouteManifestWaypointDetails actualWaypointDetails = waypointsTable.readEntity(1);
@@ -221,55 +153,45 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
       if (expectedReservation != null) {
         RouteManifestWaypointDetails.Reservation actualReservation = waypointDetailsDialog.reservationsTable
-            .readEntity(1);
+                .readEntity(1);
         expectedReservation.compareWithActual(actualReservation);
       }
       if (expectedPickup != null) {
         RouteManifestWaypointDetails.Pickup actualPickup = waypointDetailsDialog.pickupsTable
-            .readEntity(1);
+                .readEntity(1);
         expectedPickup.compareWithActual(actualPickup);
       }
       if (expectedDelivery != null) {
         RouteManifestWaypointDetails.Delivery actualDelivery = waypointDetailsDialog.deliveryTable
-            .readEntity(1);
+                .readEntity(1);
         expectedDelivery.compareWithActual(actualDelivery);
       }
       waypointDetailsDialog.closeDialogIfVisible();
     }
   }
 
-  public String failDeliveryWaypoint(FailureReason failureReason) {
+  public String failDeliveryWaypoint(Map<String, String> failureReason) {
     waypointsTable.clickActionButton(1, "edit");
     chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
     chooseAnOutcomeForTheWaypointDialog.failure.click();
-
-    Stack<FailureReason> stackOfFailureReason = new Stack<>();
-    FailureReason pointer = failureReason;
-
-    do {
-      stackOfFailureReason.push(pointer);
-      pointer = pointer.getParent();
-    }
-    while (pointer != null);
-
-    FailureReason failureReasonGrandParent = stackOfFailureReason.pop();
-    String description = failureReasonGrandParent.getDescription();
+    String description = failureReason.get("failureReasonDescription");
     chooseAnOutcomeForTheWaypointDialog.chooseFailureReason
-        .selectValue(failureReasonGrandParent.getDescription());
-    int stackSize = stackOfFailureReason.size();
-
-    for (int i = 1; i <= stackSize; i++) {
-      FailureReason childFailureReason = stackOfFailureReason.pop();
-      chooseAnOutcomeForTheWaypointDialog.failureReasonDetail.selectValue(
-          childFailureReason.getDescription());
-      description = childFailureReason.getDescription();
-    }
+            .selectValue(description);
+    String childFailureReason = failureReason.get("failureReasonSubDescription");
+    chooseAnOutcomeForTheWaypointDialog.failureReasonDetail.selectValue(
+            childFailureReason);
+    description = childFailureReason;
 
     chooseAnOutcomeForTheWaypointDialog.update.click();
     confirmationDialog.waitUntilVisible();
     confirmationDialog.proceed.click();
     confirmationDialog.waitUntilInvisible();
     chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
+//  FE logic to truncate if failure reason for `- return`/`- normal`
+    String replace = failureReason.get("replace");
+    if (description.contains(replace)) {
+      description = description.replace(replace, "");
+    }
     return description;
   }
 
@@ -380,20 +302,20 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     }
 
     public static class ReservationsTable extends
-        AntTableV4<Reservation> {
+            AntTableV4<Reservation> {
 
       public ReservationsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "id", "1",
-            "status", "2",
-            "expectedNo", "3",
-            "collectedNo", "4",
-            "failureReason", "5"
+                "id", "1",
+                "status", "2",
+                "expectedNo", "3",
+                "collectedNo", "4",
+                "failureReason", "5"
         ));
         setActionButtonsLocators(Map.of(
-            "view pop",
-            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='6'])[%d]//button[@data-pa-label='View POP']")
+                "view pop",
+                "(//div[contains(@class,'virtual-table')]//div[@data-datakey='6'])[%d]//button[@data-pa-label='View POP']")
         );
         setEntityClass(RouteManifestWaypointDetails.Reservation.class);
       }
@@ -404,13 +326,13 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
       public PickupsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "trackingId", "1",
-            "status", "2",
-            "failureReason", "3"
+                "trackingId", "1",
+                "status", "2",
+                "failureReason", "3"
         ));
         setActionButtonsLocators(Map.of(
-            "view pop",
-            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='4'])[%d]//button[@data-pa-label='View POP']")
+                "view pop",
+                "(//div[contains(@class,'virtual-table')]//div[@data-datakey='4'])[%d]//button[@data-pa-label='View POP']")
         );
         setEntityClass(RouteManifestWaypointDetails.Pickup.class);
       }
@@ -421,14 +343,14 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
       public DeliveryTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.of(
-            "trackingId", "1",
-            "status", "2",
-            "codCollected", "3",
-            "failureReason", "4"
+                "trackingId", "1",
+                "status", "2",
+                "codCollected", "3",
+                "failureReason", "4"
         ));
         setActionButtonsLocators(Map.of(
-            "view pod",
-            "(//div[contains(@class,'virtual-table')]//div[@data-datakey='5'])[%d]//button[@data-pa-label='View POD']")
+                "view pod",
+                "(//div[contains(@class,'virtual-table')]//div[@data-datakey='5'])[%d]//button[@data-pa-label='View POD']")
         );
         setEntityClass(RouteManifestWaypointDetails.Delivery.class);
       }
@@ -448,19 +370,19 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
     public WaypointsTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("address", "_address")
-          .put("status", "_status")
-          .put(COLUMN_ORDER_TAGS, "_orderTags")
-          .put("id", "id")
-          .put("deliveriesCount", "_countD")
-          .put("pickupsCount", "_countP")
-          .put("comments", "_comments")
-          .put(COLUMN_TRACKING_IDS, "_trackingIds")
-          .put("contact", "_contact")
-          .build()
+              .put("address", "_address")
+              .put("status", "_status")
+              .put(COLUMN_ORDER_TAGS, "_orderTags")
+              .put("id", "id")
+              .put("deliveriesCount", "_countD")
+              .put("pickupsCount", "_countP")
+              .put("comments", "_comments")
+              .put(COLUMN_TRACKING_IDS, "_trackingIds")
+              .put("contact", "_contact")
+              .build()
       );
       setActionButtonsLocators(ImmutableMap.of("details", "Waypoint details", "edit",
-          "Choose an outcome for the waypoint"));
+              "Choose an outcome for the waypoint"));
       setEntityClass(RouteManifestWaypointDetails.class);
     }
   }
@@ -495,8 +417,8 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
         xpath = ".//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')]";
       } else {
         xpath = f(
-            ".//md-select[contains(@id, 'container.route-manifest.failure-reason-detail-%s')]",
-            index);
+                ".//md-select[contains(@id, 'container.route-manifest.failure-reason-detail-%s')]",
+                index);
       }
       new MdSelect(this, xpath).selectValue(reason);
     }
@@ -587,7 +509,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
         actual.setDistanceFromSortHub(getTextDistanceFromSortHub(index));
         expected.compareWithActual(actual);
         Assertions.assertThat(getTextArrivalDatetime(index)).as("Arrival datetime")
-            .contains(getTodayDate());
+                .contains(getTodayDate());
       }
 
       private String getTodayDate() {
@@ -651,7 +573,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
         actual.setStaffUsername(getTextStaffUsername(index));
         expected.compareWithActual(actual);
         Assertions.assertThat(getTextHandoverDatetime(index)).as("Handover datetime")
-            .contains(getTodayDate());
+                .contains(getTodayDate());
       }
 
       private String getTodayDate() {

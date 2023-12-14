@@ -30,9 +30,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority
@@ -57,9 +58,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority
@@ -94,9 +96,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority
@@ -124,9 +127,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority
@@ -154,9 +158,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority
@@ -184,9 +189,10 @@ Feature: Update Stamp ID
       | stampId | {KEY_STAMP_ID}                     |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | {KEY_STAMP_ID}      |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | {KEY_STAMP_ID}                        |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @MediumPriority
@@ -240,9 +246,10 @@ Feature: Update Stamp ID
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | KEY_STAMP_ID        |
+      | category    | Tracking / Stamp ID                   |
+      | searchLogic | contains                              |
+      | searchTerm  | KEY_STAMP_ID                          |
+      | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator switch to Edit Order's window of "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
 
   @CloseNewWindows @MediumPriority

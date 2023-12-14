@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.support.DateUtil;
+import co.nvqa.operator_v2.util.CoreDateUtil;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -173,11 +173,11 @@ public class TxnRsvn extends DataEntity<TxnRsvn> {
   }
 
   public String getLocalizedStartDatetime() {
-    return DateUtil.getDefaultDateTimeFromUTC(getStartDateTime());
+    return CoreDateUtil.getDefaultDateTimeFromUTC(getStartDateTime());
   }
 
   public String getLocalizedEndDatetime() {
-    return DateUtil.getDefaultDateTimeFromUTC(getEndDateTime());
+    return CoreDateUtil.getDefaultDateTimeFromUTC(getEndDateTime());
   }
 
   @Override

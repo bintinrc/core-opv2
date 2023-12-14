@@ -169,8 +169,8 @@ Feature: Implanted Manifest
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | DRIVER PICKUP SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | name    | DRIVER PICKUP SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
@@ -182,8 +182,8 @@ Feature: Implanted Manifest
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | DRIVER PICKUP SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | name    | DRIVER PICKUP SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |

@@ -24,9 +24,6 @@ import org.openqa.selenium.Keys;
 public class AddShipperToPresetSteps extends AbstractSteps {
 
   private AddShipperToPresetPage addShipperToPresetPage;
-  private static final String KEY_SELECTED_SHIPPER_INFO = "KEY_SELECTED_SHIPPER_INFO";
-  private static final String KEY_LIST_OF_SHIPPER_INFO = "KEY_LIST_OF_SHIPPER_INFO";
-
   public AddShipperToPresetSteps() {
   }
 

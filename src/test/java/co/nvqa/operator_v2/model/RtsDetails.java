@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.support.DateUtil;
+import co.nvqa.operator_v2.util.CoreDateUtil;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class RtsDetails extends DataEntity<RtsDetails> {
   }
 
   public void setDeliveryDate(String deliveryDate) throws ParseException {
-    setDeliveryDate(DateUtil.SDF_YYYY_MM_DD.parse(deliveryDate));
+    setDeliveryDate(CoreDateUtil.SDF_YYYY_MM_DD.parse(deliveryDate));
   }
 
   public RtsAddress getAddress() {

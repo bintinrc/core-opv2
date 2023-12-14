@@ -61,25 +61,25 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -198,15 +198,15 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
@@ -219,26 +219,26 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -355,25 +355,25 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -489,15 +489,15 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
@@ -510,26 +510,26 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
