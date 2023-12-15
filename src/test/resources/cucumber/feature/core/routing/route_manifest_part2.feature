@@ -106,7 +106,7 @@ Feature: Route Manifest
       | pickupsCount    | 1                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
 
-  @HighPriority
+  @MediumPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -149,7 +149,7 @@ Feature: Route Manifest
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @HighPriority
+  @MediumPriority
   Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                       |

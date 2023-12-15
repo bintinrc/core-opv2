@@ -403,7 +403,7 @@ public class RouteManifestSteps extends AbstractSteps {
         }));
     }
 
-    @When("Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page")
+    @When("Operator fail {} waypoint from Route Manifest page")
     public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType,
                                                                   Map<String, String> data) {
         page.inFrame(() -> {
@@ -420,7 +420,7 @@ public class RouteManifestSteps extends AbstractSteps {
         takesScreenshot();
     }
 
-    @When("Operator success (delivery|pickup|reservation) waypoint from Route Manifest page")
+    @When("Operator success {} waypoint from Route Manifest page")
     public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType) {
         page.inFrame(() -> {
             switch (waypointType) {
@@ -433,7 +433,7 @@ public class RouteManifestSteps extends AbstractSteps {
         });
     }
 
-    @When("Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:")
+    @When("Operator success {} waypoint with COD collection from Route Manifest page:")
     public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType,
                                                                      List<Map<String, String>> data) {
         page.inFrame(() -> {
