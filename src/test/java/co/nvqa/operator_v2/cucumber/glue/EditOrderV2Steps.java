@@ -302,8 +302,8 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
     }
 
-    @When("Operator change Priority Level to {} on Edit Order V2 page")
-    public void operatorChangePriorityLevelToOnEditOrderPage(int priorityLevel) {
+    @When("Operator change Priority Level to {value} on Edit Order V2 page")
+    public void operatorChangePriorityLevelToOnEditOrderPage(String priorityLevel) {
         page.clickMenu("Order Settings", "Edit Priority Level");
         page.editPriorityLevelDialog.waitUntilVisible();
         page.editPriorityLevelDialog.priorityLevel.setValue(priorityLevel);
@@ -373,7 +373,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
     }
 
-    @Then("Operator verify Current priority is {value} on Edit Order V2 page")
+    @Then("Operator verify Current priority is {string} on Edit Order V2 page")
     public void operatorVerifyCurrentPriority(String expectedValue) {
         page.inFrame(() -> {
             page.waitUntilLoaded();
