@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @PresetFilters
+@OperatorV2 @Core @AllOrders @PresetFilters @current
 Feature: All Orders - Preset Filters
 
   Background:
@@ -44,7 +44,7 @@ Feature: All Orders - Preset Filters
       | shipperName       | {shipper-v4-name}               |
       | masterShipperName | {shipper-v4-marketplace-name}   |
 
-  @DeleteFilterTemplate @MediumPriority
+  @DeleteFilterTemplate @MediumPriority @wip
   Scenario: Operator Apply Filter Preset on All Orders Page
     When API Lighthouse - creates new Orders Filter Template using data below:
       | name             | PRESET {date: 0 days next, yyyyMMddHHmmss} |

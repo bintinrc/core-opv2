@@ -61,7 +61,7 @@ public class RouteManifestSteps extends AbstractSteps {
         assertions.assertAll();
     }
 
-    @Then("^Operator verify waypoint at Route Manifest using data below:$")
+    @Then("Operator verify waypoint at Route Manifest using data below:")
     public void operatorVerifyWaypointAtRouteManifest(Map<String, String> mapOfData) {
         page.inFrame(() -> page.verifyWaypointDetails(
                 new RouteManifestWaypointDetails(resolveKeyValues(mapOfData))));
@@ -393,7 +393,7 @@ public class RouteManifestSteps extends AbstractSteps {
         });
     }
 
-    @Then("^Operator verify waypoint tags at Route Manifest using data below:$")
+    @Then("Operator verify waypoint tags at Route Manifest using data below:")
     public void operatorVerifyWaypointTagsAtRouteManifest(Map<String, String> data) {
         page.inFrame(() -> resolveKeyValues(data).forEach((tag, expected) -> {
             page.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
@@ -403,7 +403,7 @@ public class RouteManifestSteps extends AbstractSteps {
         }));
     }
 
-    @When("^Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page$")
+    @When("Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page")
     public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType,
                                                                   Map<String, String> data) {
         page.inFrame(() -> {
@@ -420,7 +420,7 @@ public class RouteManifestSteps extends AbstractSteps {
         takesScreenshot();
     }
 
-    @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
+    @When("Operator success (delivery|pickup|reservation) waypoint from Route Manifest page")
     public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType) {
         page.inFrame(() -> {
             switch (waypointType) {
@@ -433,7 +433,7 @@ public class RouteManifestSteps extends AbstractSteps {
         });
     }
 
-    @When("^Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:$")
+    @When("Operator success (delivery|pickup) waypoint with COD collection from Route Manifest page:")
     public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType,
                                                                      List<Map<String, String>> data) {
         page.inFrame(() -> {
@@ -464,7 +464,7 @@ public class RouteManifestSteps extends AbstractSteps {
         });
     }
 
-    @When("^Operator open Route Manifest page for route ID \"(.+)\"$")
+    @When("Operator open Route Manifest page for route ID {string}")
     public void operatorOpenRouteManifestPage(String routeId) {
         routeId = resolveValue(routeId);
         page.openPage(Long.parseLong(StringUtils.trim(routeId)));

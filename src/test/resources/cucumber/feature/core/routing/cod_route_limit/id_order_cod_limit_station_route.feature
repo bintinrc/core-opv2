@@ -4,7 +4,7 @@ Feature: ID - Order COD Limit
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
+#TODO not being run in bamboo
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:

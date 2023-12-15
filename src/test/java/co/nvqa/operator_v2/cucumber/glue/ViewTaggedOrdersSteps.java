@@ -24,7 +24,7 @@ public class ViewTaggedOrdersSteps extends AbstractSteps {
     page = new ViewTaggedOrdersPage(getWebDriver());
   }
 
-  @When("^Operator selects filter and clicks Load Selection on View Tagged Orders page:$")
+  @When("Operator selects filter and clicks Load Selection on View Tagged Orders page:")
   public void selectFilterAndClicksLoadSelectionOnViewTaggedOrders(Map<String, String> data) {
     var finalData = resolveKeyValues(data);
     page.inFrame(() -> {

@@ -10,12 +10,9 @@ import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.page.EditOrderV2Page;
-import co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable;
 import co.nvqa.operator_v2.selenium.page.MaskedPage;
 import co.nvqa.operator_v2.util.CoreDateUtil;
-import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.common.collect.ImmutableList;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -779,7 +776,7 @@ public class EditOrderV2Steps extends AbstractSteps {
                         .isEqualTo(expectedOrder.getComments()));
     }
 
-    @Then("Operator verify menu item {} > {} is disabled on Edit Order V2 page")
+    @Then("Operator verify menu item {value} > {value} is disabled on Edit Order V2 page")
     public void operatorVerifyMenuItemIsDisabledOnEditOrderPage(String parentMenuItem,
                                                                 String childMenuItem) {
         page.inFrame(
