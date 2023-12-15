@@ -396,7 +396,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
     }
 
-    @When("Operator change Stamp ID of the created order to {} on Edit Order V2 page")
+    @When("Operator change Stamp ID of the created order to {string} on Edit Order V2 page")
     public void operatorEditStampIdOnEditOrderPage(String stampId) {
         if (equalsIgnoreCase(stampId, "GENERATED")) {
             stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7).toUpperCase();
@@ -970,7 +970,7 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
     }
 
-    @Then("Operator tags order to {} DP on Edit Order V2 page")
+    @Then("Operator tags order to {string} DP on Edit Order V2 page")
     public void operatorTagOrderToDP(String dpId) {
         page.inFrame(() -> {
             page.dpDropOffSettingDialog.waitUntilVisible();
