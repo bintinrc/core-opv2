@@ -47,7 +47,6 @@ Feature: Order Tag Management
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
-    When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator searches and selects orders created on Order Tag Management page:
@@ -75,7 +74,6 @@ Feature: Order Tag Management
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator tags order with:
       | {order-tag-name} |
-    When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator searches and selects orders created on Order Tag Management page:
@@ -107,7 +105,6 @@ Feature: Order Tag Management
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
-    When Operator go to menu Order -> Order Tag Management
     And Operator find orders by uploading CSV on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator searches and selects orders created on Order Tag Management page:
