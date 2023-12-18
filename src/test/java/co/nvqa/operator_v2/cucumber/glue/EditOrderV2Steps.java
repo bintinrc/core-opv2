@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.exception.NvTestCoreOrderKafkaLagException;
 import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -406,6 +407,19 @@ public class EditOrderV2Steps extends AbstractSteps {
             page.editOrderStamp(finalStampId);
             put(KEY_STAMP_ID, finalStampId);
         });
+    }
+
+    @Given("New Stamp ID was generated")
+    public void newStampIdWasGenerated() {
+        newStampIdWasGenerated("STAMP");
+    }
+
+    @Given("New Stamp ID with {value} prefix was generated")
+    public void newStampIdWasGenerated(String prefix) {
+        String trackingNumber = TestUtils.generateAlphaNumericString(9).toUpperCase();
+        String stampId = "NVSG" + prefix.toUpperCase() + trackingNumber;
+        put(CoreScenarioStorageKeys.KEY_CORE_STAMP_ID, stampId);
+        put(CoreScenarioStorageKeys.KEY_CORE_STAMP_TRACKING_NUMBER, trackingNumber);
     }
 
     @When("Operator remove Stamp ID of the created order on Edit Order V2 page")
