@@ -196,6 +196,7 @@ Feature: Edit Order Details
       | postalCode               | 308402                                 |
     Then Operator verifies that success react notification displayed:
       | top | Pickup details updated |
+    And Operator refresh page
     And Operator unmask Edit Order V2 page
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | name    | test sender name                              |
