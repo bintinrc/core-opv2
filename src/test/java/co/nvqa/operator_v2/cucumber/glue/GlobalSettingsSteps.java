@@ -25,10 +25,11 @@ public class GlobalSettingsSteps extends AbstractSteps {
 
   @And("Operator save inbound settings from Global Settings page")
   public void operatorSaveWeightToleranceValueFromGlobalSettingsPage() {
-    put(SortScenarioStorageKeys.KEY_SORT_WEIGHT_TOLERANCE_VALUE,
-        Double.valueOf(globalSettingsPage.inputWeightTolerance.getValue()));
-    put(SortScenarioStorageKeys.KEY_SORT_MAX_WEIGHT_LIMIT_VALUE,
-        Double.valueOf(globalSettingsPage.inputMaxWeightLimit.getValue()));
+      globalSettingsPage.waitUntilPageLoaded();
+      put(SortScenarioStorageKeys.KEY_SORT_WEIGHT_TOLERANCE_VALUE,
+          Double.valueOf(globalSettingsPage.inputWeightTolerance.getValue()));
+      put(SortScenarioStorageKeys.KEY_SORT_MAX_WEIGHT_LIMIT_VALUE,
+          Double.valueOf(globalSettingsPage.inputMaxWeightLimit.getValue()));
   }
 
   @And("Operator set Weight Tolerance value to {string} on Global Settings page")
