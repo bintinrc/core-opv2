@@ -5,7 +5,13 @@ Feature: Reservation Preset Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @MediumPriority
+  Scenario: Operator Download Sample CSV file for Create and Delete Pickup Reservation
+    Given Operator go to menu Pick Ups -> Reservation Preset Management
+    When Operator downloads sample CSV on Reservation Preset Management page
+    Then sample CSV file on Reservation Preset Management page is downloaded successfully
+
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Has Not Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -21,8 +27,8 @@ Feature: Reservation Preset Management
       | shipperSettingNamespace | pickup                                                                                                                                                                                                                                                                                                                      |
       | shipperSettingRequest   | {"address_limit":10,"allow_premium_pickup_on_sunday":true,"allow_standard_pickup_on_sunday":true,"premium_pickup_daily_limit":100,"milk_run_pickup_limit":10,"default_start_time":"09:00","default_end_time":"22:00","service_type_level":[{"type":"Scheduled","level":"Standard"},{"type":"Scheduled","level":"Premium"}]} |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                                               |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                         |
+      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                             |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                       |
       | shipperAddressRequest | {"name":"{rpm-shipper-name}","contact":"{rpm-shipper-contact}","email":"{rpm-shipper-email}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
@@ -45,16 +51,17 @@ Feature: Reservation Preset Management
       | {rpm-shipper-id} | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} | add    | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{rpm-shipper-name}"
-    Then Operator verify pickup address on Edit Shipper page:
-      | shipperId                     | {rpm-shipper-id}                        |
-      | shipperPickupAddresses        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES} |
-      | address.1.milkrun.1.startTime | 3PM                                     |
-      | address.1.milkrun.1.endTime   | 6PM                                     |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7                           |
+    And DB Shipper - verify shipper_addresses record:
+      | id        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | shipperId | {rpm-shipper-id}                              |
+      | isMilkRun | 1                                             |
+    And DB Shipper - verify shipper_address_milkrun_settings record:
+      | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | startTime | 15:00                                         |
+      | endTime   | 18:00                                         |
+      | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @HighPriority
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -66,8 +73,8 @@ Feature: Reservation Preset Management
       | shipperId | {rpm-shipper-id} |
       | status    | False            |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                                               |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                         |
+      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                             |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                       |
       | shipperAddressRequest | {"name":"{rpm-shipper-name}","contact":"{rpm-shipper-contact}","email":"{rpm-shipper-email}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
@@ -95,16 +102,17 @@ Feature: Reservation Preset Management
       | {rpm-shipper-id} | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} | add    | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{rpm-shipper-name}"
-    Then Operator verify pickup address on Edit Shipper page:
-      | shipperId                     | {rpm-shipper-id}                        |
-      | shipperPickupAddresses        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES} |
-      | address.1.milkrun.1.startTime | 3PM                                     |
-      | address.1.milkrun.1.endTime   | 6PM                                     |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7                           |
+    And DB Shipper - verify shipper_addresses record:
+      | id        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | shipperId | {rpm-shipper-id}                              |
+      | isMilkRun | 1                                             |
+    And DB Shipper - verify shipper_address_milkrun_settings record:
+      | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | startTime | 15:00                                         |
+      | endTime   | 18:00                                         |
+      | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @HighPriority
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
   Scenario: Operator Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -116,8 +124,8 @@ Feature: Reservation Preset Management
       | shipperId | {rpm-shipper-id} |
       | status    | False            |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                                               |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                         |
+      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                             |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                       |
       | shipperAddressRequest | {"name":"{rpm-shipper-name}","contact":"{rpm-shipper-contact}","email":"{rpm-shipper-email}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
@@ -150,14 +158,14 @@ Feature: Reservation Preset Management
       | {rpm-shipper-id} | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} | delete | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} |
     Then Operator verifies that success toast displayed:
       | top | ^Deleted milkruns.* |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{rpm-shipper-name}"
-    Then Operator verify pickup address on Edit Shipper page:
-      | shipperId                   | {rpm-shipper-id}                        |
-      | shipperPickupAddresses      | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES} |
-      | address.1.milkrun.isMilkrun | false                                   |
+    And DB Shipper - verify shipper_addresses record:
+      | id        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | shipperId | {rpm-shipper-id}                              |
+      | isMilkRun | 0                                             |
+    And DB Shipper - verify shipper_address_milkrun_settings record does not exist:
+      | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
 
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @CloseNewWindows @HighPriority
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
   Scenario: Operator Add and Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -170,21 +178,21 @@ Feature: Reservation Preset Management
       | shipperId | {rpm-shipper-id} |
       | status    | False            |
     And API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                                               |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                         |
+      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                             |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                       |
       | shipperAddressRequest | {"name":"{rpm-shipper-name}","contact":"{rpm-shipper-contact}","email":"{rpm-shipper-email}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     # 2nd Shipper and address
     And API Shipper - Operator edit shipper value of pickup appointment using below data:
-      | shipperId | {KEY_SHIPPER_LIST_OF_SHIPPERS[2].id} |
-      | status    | False                                |
+      | shipperId | {rpm-shipper-id-2} |
+      | status    | False              |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {KEY_SHIPPER_LIST_OF_SHIPPERS[2].id}                                                                                                                                                                                                                                                                                                                                                                       |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                     |
-      | shipperAddressRequest | {"name":"{KEY_SHIPPER_LIST_OF_SHIPPERS[2].name}","contact":"{KEY_SHIPPER_LIST_OF_SHIPPERS[2].contact}","email":"{KEY_SHIPPER_LIST_OF_SHIPPERS[2].email}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
-    And API Shipper - Operator fetch shipper id by legacy shipper id "{KEY_SHIPPER_LIST_OF_SHIPPERS[2].legacyId}"
-    And API Shipper - Operator get all shipper addresses by shipper global id "{KEY_SHIPPER_LIST_OF_SHIPPERS[2].id}"
+      | shipperId             | {rpm-shipper-id-2}                                                                                                                                                                                                                 |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                             |
+      | shipperAddressRequest | {"name":"{rpm-shipper-name-2}","contact":"{rpm-shipper-contact-2}","email":"{rpm-shipper-email-2}","milkrun_settings":[{"start_time":"09:00","end_time":"12:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
+    And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy-2}"
+    And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id-2}"
     ####
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
@@ -205,33 +213,30 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
     And Operator uploads CSV on Reservation Preset Management page:
-      | shipperId                            | addressId                                     | action | milkrunGroupId                          | days            | startTime | endTime |
-      | {rpm-shipper-id}                     | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} | delete | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} |                 |           |         |
-      | {KEY_SHIPPER_LIST_OF_SHIPPERS[2].id} | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[2].id} | add    | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
+      | shipperId          | addressId                                     | action | milkrunGroupId                          | days            | startTime | endTime |
+      | {rpm-shipper-id}   | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} | delete | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} |                 |           |         |
+      | {rpm-shipper-id-2} | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[2].id} | add    | {KEY_CORE_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
     Then Operator verifies that success toast displayed:
       | top | ^Deleted milkruns.* |
-    And Operator opens Edit Shipper Page of shipper "{rpm-shipper-id-legacy}"
-    Then Operator verify pickup address on Edit Shipper page:
-      | shipperId                   | {rpm-shipper-id}                             |
-      | shipperPickupAddresses      | [{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1]}] |
-      | address.1.milkrun.isMilkrun | false                                        |
-    And Operator opens Edit Shipper Page of shipper "{KEY_SHIPPER_LIST_OF_SHIPPERS[2].legacyId}"
-    Then Operator verify pickup address on Edit Shipper page:
-      | shipperId                     | {KEY_SHIPPER_LIST_OF_SHIPPERS[2].id}         |
-      | shipperPickupAddresses        | [{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[2]}] |
-      | address.1.milkrun.1.startTime | 3PM                                          |
-      | address.1.milkrun.1.endTime   | 6PM                                          |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7                                |
+    And DB Shipper - verify shipper_addresses record:
+      | id        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | shipperId | {rpm-shipper-id}                              |
+      | isMilkRun | 0                                             |
+    And DB Shipper - verify shipper_address_milkrun_settings record does not exist:
+      | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+    And DB Shipper - verify shipper_addresses record:
+      | id        | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[2].id} |
+      | shipperId | {rpm-shipper-id-2}                            |
+      | isMilkRun | 1                                             |
+    And DB Shipper - verify shipper_address_milkrun_settings record:
+      | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[2].id} |
+      | startTime | 15:00                                         |
+      | endTime   | 18:00                                         |
+      | days      | [1,2,3,4,5,6,7]                               |
 
-  @MediumPriority
-  Scenario: Operator Download Sample CSV file for Create and Delete Pickup Reservation
-    Given Operator go to menu Pick Ups -> Reservation Preset Management
-    When Operator downloads sample CSV on Reservation Preset Management page
-    Then sample CSV file on Reservation Preset Management page is downloaded successfully
-
-  @DeleteDriverV2 @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute @HighPriority
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @wip
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     # Create 2 drivers
     Given API Driver - Operator create new Driver using data below:
@@ -239,24 +244,9 @@ Feature: Reservation Preset Management
     And API Driver - Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}-{{TIMESTAMP}}", "display_name":"{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DRI1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id-2}, "hub": { "displayName": "{hub-name-2}", "value": {hub-id-2} } } |
     # Create 1 Shipper, 1 Address
-    And API Shipper - Operator create new shipper using data below:
-      | shipperType | Normal |
-    And API Shipper - Operator wait until shipper available to search using data below:
-      | searchShipperRequest | {"search_field":{"match_type":"default","fields":["id"],"value":{rpm-shipper-id}}} |
-    And API Shipper - Operator edit shipper value of pickup appointment using below data:
-      | shipperId | {rpm-shipper-id} |
-      | status    | False            |
-    And API Shipper - Operator update shipper setting using data below:
-      | shipperId               | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                            |
-      | shipperSettingNamespace | pickup                                                                                                                                                                                                                                                                                                                      |
-      | shipperSettingRequest   | {"address_limit":10,"allow_premium_pickup_on_sunday":true,"allow_standard_pickup_on_sunday":true,"premium_pickup_daily_limit":100,"milk_run_pickup_limit":10,"default_start_time":"09:00","default_end_time":"22:00","service_type_level":[{"type":"Scheduled","level":"Standard"},{"type":"Scheduled","level":"Premium"}]} |
-    And API Shipper - Operator update shipper setting using data below:
-      | shipperId               | {rpm-shipper-id}                                                                                              |
-      | shipperSettingNamespace | order_create                                                                                                  |
-      | shipperSettingRequest   | {"same_day_pickup_cutoff_time": "22:00", "pickup_cutoff_time": "22:00", "sunday_pickup_cutoff_time": "22:00"} |
     Given API Shipper - Operator create new shipper address using data below:
-      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                                                                                                                                               |
-      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                                                                                         |
+      | shipperId             | {rpm-shipper-id}                                                                                                                                                                                                             |
+      | generateAddress       | RANDOM                                                                                                                                                                                                                       |
       | shipperAddressRequest | {"name":"{rpm-shipper-name}","contact":"{rpm-shipper-contact}","email":"{rpm-shipper-email}","milkrun_settings":[{"start_time":"09:00","end_time":"22:00","days":[1,2,3,4,5,6,7],"no_of_reservation":1}],"is_milk_run":true} |
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
@@ -317,7 +307,7 @@ Feature: Reservation Preset Management
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}       |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
-      | status   | Routed                                   |
+      | status   | Success                                   |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
     And Operator refresh page
     # Create Route and 3rd Reservation for Tomorrow
