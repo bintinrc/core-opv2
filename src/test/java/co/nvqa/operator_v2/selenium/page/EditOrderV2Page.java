@@ -322,11 +322,11 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     waitUntilInvisibilityOfToast("Downloading");
   }
 
-  public void verifyPriorityLevel(String txnType, int priorityLevel) {
+  public void verifyPriorityLevel(String txnType, String priorityLevel) {
     transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
     TransactionInfo actual = transactionsTable.readEntity(1);
     Assertions.assertThat(actual.getPriorityLevel()).as(txnType + " Priority Level")
-        .isEqualTo(String.valueOf(priorityLevel));
+        .isEqualTo(priorityLevel);
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {

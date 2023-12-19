@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @PriorityLevel @current
+@OperatorV2 @Core @EditOrderV2 @PriorityLevel
 Feature: Priority Level
 
   Background:
@@ -138,7 +138,7 @@ Feature: Priority Level
       | name        | UPDATE SLA                                             |
       | description | Delivery Priority Level updated: assigned new value 10 |
 
-  @happy-path @HighPriority @wip2
+  @happy-path @HighPriority
   Scenario: Operator Edit Priority Level
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                     |

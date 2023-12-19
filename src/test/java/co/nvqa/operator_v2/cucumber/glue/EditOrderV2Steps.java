@@ -339,9 +339,9 @@ public class EditOrderV2Steps extends AbstractSteps {
         });
     }
 
-    @Then("Operator verify {} Priority Level is {} on Edit Order V2 page")
+    @Then("Operator verify {} Priority Level is {string} on Edit Order V2 page")
     public void operatorVerifyDeliveryPriorityLevelIsOnEditOrderPage(String txnType,
-                                                                     int expectedPriorityLevel) {
+                                                                     String expectedPriorityLevel) {
         page.inFrame(() -> page.verifyPriorityLevel(txnType, expectedPriorityLevel));
     }
 

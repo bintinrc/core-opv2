@@ -73,18 +73,9 @@ public class AllOrdersSteps extends AbstractSteps {
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(
                 dataTableAsMap.get("searchLogic"));
         String searchTerm = dataTableAsMap.get("searchTerm");
-//        String searchBy = searchTerm;
-
-//        /*
-//          Replace searchTerm value to value on ScenarioStorage.
-//         */
-//        if (containsKey(searchTerm)) {
-//            searchTerm = get(searchTerm);
-//        }
 
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
-        allOrdersPage.specificSearch(category, searchLogic, searchTerm,
-                (dataTableAsMap.get("trackingId")));
+        allOrdersPage.specificSearch(category, searchLogic, searchTerm);
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     }
 
