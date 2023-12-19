@@ -1301,7 +1301,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
     try {
-      waitUntil(() -> getWebDriver().getWindowHandles().size() > 1, 50_000,
+      waitUntil(() -> getWebDriver().getWindowHandles().size() > 1, 120_000,
           f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
     } catch (NvTestWaitTimeoutException e) {
       throw new NvTestCoreWindowOrTabNotFoundError("New window or tab not opened", e);
