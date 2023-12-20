@@ -200,7 +200,6 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
 #    TODO There is no Shipper Pickups page anymore
-#  TODO cv2 migrate to common-v2 steps
   @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Inactive Shipper (uid:958ed81a-3f3e-456d-ad3d-a6614269253e)
 #    Given API Operator creates new Shipper Pickup Filter Template using data below:
@@ -209,40 +208,40 @@ Feature: Add Shipper To Preset
 #      | value.reservationTimeTo   | {gradle-current-date-yyyy-MM-dd}                  |
 #      | value.typeIds             | 0                                                 |
 #      | value.waypointStatuses    | Pending,Routed                                    |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | false                 |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | false                 |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | false                 |
-      | isMultiParcelShipper         | false                 |
-      | isDisableDriverAppReschedule | false                 |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And API Operator reload shipper's cache
-    And API Operator fetch id of the created shipper
-    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
-    And API Operator create new shipper address V2 using data below:
-      | shipperId       | {KEY_CREATED_SHIPPER.id} |
-      | generateAddress | RANDOM                   |
-    And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{KEY_CREATED_SHIPPER.legacyId}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    When Operator go to menu Pick Ups -> Add Shipper To Preset
-    And Add Shipper To Preset page is loaded
-    Then Operator validates filter values on Add Shipper To Preset page using data below:
-      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
-      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
-    When Operator clicks Load Selection on Add Shipper To Preset page
-    And Operator applies "Inactive" filter to "Is Active" column on Add Shipper To Preset page
-    When Operator adds shipper to preset on Add Shipper To Preset page using data below:
-      | shipperName | {KEY_CREATED_SHIPPER.name}                        |
-      | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
+#    And Operator go to menu Shipper -> All Shippers
+#    And Operator create new Shipper with basic settings using data below:
+#      | isShipperActive              | false                 |
+#      | shipperType                  | Normal                |
+#      | ocVersion                    | v4                    |
+#      | services                     | STANDARD              |
+#      | trackingType                 | Fixed                 |
+#      | isAllowCod                   | false                 |
+#      | isAllowCashPickup            | true                  |
+#      | isPrepaid                    | true                  |
+#      | isAllowStagedOrders          | false                 |
+#      | isMultiParcelShipper         | false                 |
+#      | isDisableDriverAppReschedule | false                 |
+#      | pricingScriptName            | {pricing-script-name} |
+#      | industryName                 | {industry-name}       |
+#      | salesPerson                  | {sales-person}        |
+#    And API Operator reload shipper's cache
+#    And API Operator fetch id of the created shipper
+#    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
+#    And API Operator create new shipper address V2 using data below:
+#      | shipperId       | {KEY_CREATED_SHIPPER.id} |
+#      | generateAddress | RANDOM                   |
+#    And API Operator create V2 reservation using data below:
+#      | reservationRequest | { "legacy_shipper_id":{KEY_CREATED_SHIPPER.legacyId}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+#    When Operator go to menu Pick Ups -> Add Shipper To Preset
+#    And Add Shipper To Preset page is loaded
+#    Then Operator validates filter values on Add Shipper To Preset page using data below:
+#      | shipperCreationDateFrom | {date: 0 days next, dd/MM/yyyy} |
+#      | shipperCreationDateTo   | {date: 0 days next, dd/MM/yyyy} |
+#    When Operator clicks Load Selection on Add Shipper To Preset page
+#    And Operator applies "Inactive" filter to "Is Active" column on Add Shipper To Preset page
+#    When Operator adds shipper to preset on Add Shipper To Preset page using data below:
+#      | shipperName | {KEY_CREATED_SHIPPER.name}                        |
+#      | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
 #    And Operator go to menu Pick Ups -> Shipper Pickups
 #    And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
 #    Then Operator verifies filter parameters on Shipper Pickups page using data below:
