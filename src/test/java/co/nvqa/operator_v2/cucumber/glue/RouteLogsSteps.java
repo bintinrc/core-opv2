@@ -1038,7 +1038,6 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.editTagsDialog.waitUntilVisible();
       routeLogsPage.editTagsDialog.tags.selectValue(newTag);
       routeLogsPage.editTagsDialog.updateTags.click();
-      routeLogsPage.waitUntilLoaded(3);
     });
   }
 

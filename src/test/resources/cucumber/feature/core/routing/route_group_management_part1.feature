@@ -12,6 +12,9 @@ Feature: Route Group Management
       | name        | RGM1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
       | hub         | {hub-name}                                                                                                   |
+    And Operator apply filters on Route Group Management page:
+      | fromDate | {gradle-current-date-yyyy-MM-dd} |
+      | toDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verify route group on Route Groups Management page:
       | name                 | RGM1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
       | description          | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
