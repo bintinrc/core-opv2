@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2
+@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2 @wip
 Feature: Reservation Preset Management
 
   Background:
@@ -11,7 +11,7 @@ Feature: Reservation Preset Management
     When Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Has Not Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -61,7 +61,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -112,7 +112,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
   Scenario: Operator Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -165,7 +165,7 @@ Feature: Reservation Preset Management
     And DB Shipper - verify shipper_address_milkrun_settings record does not exist:
       | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @done
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
   Scenario: Operator Add and Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -236,7 +236,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority @wip
+  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     # Create 2 drivers
     Given API Driver - Operator create new Driver using data below:
@@ -307,7 +307,7 @@ Feature: Reservation Preset Management
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}       |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
-      | status   | Success                                   |
+      | status   | Success                                  |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
     And Operator refresh page
     # Create Route and 3rd Reservation for Tomorrow
