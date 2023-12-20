@@ -333,10 +333,10 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{rpm-shipper-name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP[1].name} |
     When Operator refresh page
-    When Operator go to menu Shipper -> All Shippers
-    And Operator unset pickup addresses of the created shipper:
-      | shipperName          | {rpm-shipper-name}                         |
-      | shipperPickupAddress | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1]} |
+    And API Shipper - Operator update shipper address using below json:
+      | shipperId             | {rpm-shipper-id}                              |
+      | addressId             | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
+      | shipperAddressRequest | {"is_milk_run":false}                         |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator unassign pending task on Reservation Preset Management page:
       | shipper | {rpm-shipper-name} |
