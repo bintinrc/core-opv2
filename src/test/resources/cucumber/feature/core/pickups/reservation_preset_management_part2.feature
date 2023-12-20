@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2 @wip
+@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2
 Feature: Reservation Preset Management
 
   Background:
