@@ -200,8 +200,8 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
 #    TODO There is no Shipper Pickups page anymore
-  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
-  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Inactive Shipper (uid:958ed81a-3f3e-456d-ad3d-a6614269253e)
+#  @DeleteShipper @DeleteShipperPickupFilterTemplate @CloseNewWindows @HighPriority
+#  Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Single Address - Inactive Shipper (uid:958ed81a-3f3e-456d-ad3d-a6614269253e)
 #    Given API Operator creates new Shipper Pickup Filter Template using data below:
 #      | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
 #      | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
