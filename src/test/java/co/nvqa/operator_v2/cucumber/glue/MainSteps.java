@@ -12,59 +12,44 @@ import io.cucumber.java.en.Then;
 @ScenarioScoped
 public class MainSteps extends AbstractSteps {
 
-  private MainPage mainPage;
+    private MainPage mainPage;
 
-  public MainSteps() {
-  }
+    public MainSteps() {
+    }
 
-  @Override
-  public void init() {
-    mainPage = new MainPage(getWebDriver());
-  }
+    @Override
+    public void init() {
+        mainPage = new MainPage(getWebDriver());
+    }
 
-  @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
-  public void operatorGoToMenu(String parentMenuName, String childMenuName) {
-    mainPage.clickNavigation(parentMenuName, childMenuName);
-  }
+    @Given("Operator go to menu {} -> {}")
+    public void operatorGoToMenu(String parentMenuName, String childMenuName) {
+        mainPage.clickNavigation(parentMenuName, childMenuName);
+    }
 
-  @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
-  public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName) {
-    operatorGoToMenu(parentMenuName, childMenuName);
-    takesScreenshot();
-  }
+    @Given("Operator go to menu {value} -> {value}")
+    public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName) {
+        operatorGoToMenu(parentMenuName, childMenuName);
+        takesScreenshot();
+    }
 
-  @Given("^Operator go to this URL \"([^\"]*)\"$")
-  public void operatorGoToThisUrl(String url) {
-    mainPage.goToUrl(url);
-  }
+    @Given("Operator go to this URL {string}")
+    public void operatorGoToThisUrl(String url) {
+        mainPage.goToUrl(url);
+    }
 
-  @Then("^Operator verify he is in main page$")
-  public void operatorVerifyHeIsInMainPage() {
-    mainPage.verifyTheMainPageIsLoaded();
-  }
+    @Given("Operator refresh page")
+    public void operatorRefreshPage() {
+        mainPage.refreshPage();
+    }
 
-  @Given("^Operator refresh page v1$")
-  public void operatorRefreshPage_v1() {
-    mainPage.refreshPage_v1();
-  }
+    @Given("Operator refresh page without unmask")
+    public void operatorRefreshPageWithoutUnmask() {
+        mainPage.refreshPage(false);
+    }
 
-  @Given("Operator refresh page")
-  public void operatorRefreshPage() {
-    mainPage.refreshPage();
-  }
-
-  @Given("Operator refresh page without unmask")
-  public void operatorRefreshPageWithoutUnmask() {
-    mainPage.refreshPage(false);
-  }
-
-  @Then("^Toast \"(.+)\" is displayed$")
-  public void toastIsDisplayed(String message) {
-    mainPage.waitUntilInvisibilityOfToast(message, true);
-  }
-
-  @Then("Operator waits for {int} seconds")
-  public void operatorWaitsForSeconds(int arg0) {
-    pause(arg0 * 1000L);
-  }
+    @Then("Operator waits for {int} seconds")
+    public void operatorWaitsForSeconds(int arg0) {
+        pause(arg0 * 1000L);
+    }
 }

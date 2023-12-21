@@ -15,8 +15,6 @@ import org.assertj.core.api.Assertions;
  */
 @ScenarioScoped
 public class ThirdPartyOrderManagementSteps extends AbstractSteps {
-
-  private static final String KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS = "KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS";
   private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
   public ThirdPartyOrderManagementSteps() {
@@ -109,13 +107,13 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
             })
             .collect(Collectors.toList());
     thirdPartyOrderManagementPage.uploadBulkMapping(thirdPartyOrderMappings);
-    put(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
+    put(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
   }
 
   @Then("Operator verify multiple new mapping is created successfully")
   public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully() {
     List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = get(
-        KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
     thirdPartyOrderManagementPage
         .verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
   }

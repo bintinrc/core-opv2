@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvAllure;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.commons.util.NvAllure;
 import co.nvqa.operator_v2.exception.NvTestCoreNotificationNotVisibleError;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;

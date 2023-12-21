@@ -205,7 +205,7 @@ Feature: View Tagged Orders
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | tags                 | {order-tag-name}                      |
       | driver               | {ninja-driver-name}                   |
-      | route                | {KEY_CREATED_ROUTE_ID}                |
+      | route                | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | lastAttempt          | ^{gradle-current-date-yyyy-MM-dd}.*   |
       | daysFromFirstInbound | 1                                     |
       | granularStatus       | Arrived at Distribution Point         |

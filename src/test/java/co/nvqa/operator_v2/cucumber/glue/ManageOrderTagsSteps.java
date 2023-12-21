@@ -77,7 +77,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator filter tags on Manage Order Tags page:$")
+  @Then("Operator filter tags on Manage Order Tags page:")
   public void filterTags(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     manageOrderTagsPage.inFrame(page -> {
@@ -92,7 +92,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
     });
   }
 
-  @Then("^Operator verify tag record on Manage Order Tags page:$")
+  @Then("Operator verify tag record on Manage Order Tags page:")
   public void verifyTagRecord(Map<String, String> data) {
     OrderTag expected = new OrderTag(resolveKeyValues(data));
     manageOrderTagsPage.inFrame(page -> {

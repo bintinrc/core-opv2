@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.util.CoreDateUtil;
 import java.util.Date;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -46,7 +46,7 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
   }
 
   public void setFromDate(Date from) {
-    setFromDate(DateUtil.fromDate(from).format(DateUtil.DATE_FORMATTER));
+    setFromDate(CoreDateUtil.fromDate(from).format(CoreDateUtil.DATE_FORMATTER));
   }
 
   public void setFromDate(String from) {
@@ -56,7 +56,7 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
   }
 
   public void setToDate(Date to) {
-    setToDate(DateUtil.fromDate(to).format(DateUtil.DATE_FORMATTER));
+    setToDate(CoreDateUtil.fromDate(to).format(CoreDateUtil.DATE_FORMATTER));
   }
 
   public void setToDate(String to) {

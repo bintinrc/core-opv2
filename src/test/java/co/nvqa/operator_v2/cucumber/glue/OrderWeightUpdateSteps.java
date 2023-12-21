@@ -21,8 +21,6 @@ public class OrderWeightUpdateSteps extends AbstractSteps {
 
   private OrderWeightUpdatePage page;
 
-  public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
-
   public OrderWeightUpdateSteps() {
   }
 

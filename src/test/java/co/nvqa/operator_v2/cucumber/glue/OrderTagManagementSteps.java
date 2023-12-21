@@ -1,9 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
-import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.OrderTagManagementPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -24,7 +23,6 @@ import org.assertj.core.api.Assertions;
 public class OrderTagManagementSteps extends AbstractSteps {
 
   private OrderTagManagementPage orderTagManagementPage;
-  private EditOrderPage editOrderPage;
 
   public OrderTagManagementSteps() {
   }
@@ -32,10 +30,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
   @Override
   public void init() {
     orderTagManagementPage = new OrderTagManagementPage(getWebDriver());
-    editOrderPage = new EditOrderPage(getWebDriver());
   }
 
-  @When("^Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:$")
+  @When("Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:")
   public void operatorSelectsFilterAndClicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(
       Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -148,12 +145,12 @@ public class OrderTagManagementSteps extends AbstractSteps {
     });
   }
 
-  @And("^Operator tags order with:$")
+  @And("Operator tags order with:")
   public void operatorTagsOrderWith(List<String> orderTag) {
     orderTagManagementPage.addTag(resolveValues(orderTag));
   }
 
-  @And("^Operator removes order tags on Order Tag Management page:$")
+  @And("Operator removes order tags on Order Tag Management page:")
   public void operatorRemoveOrderTags(List<String> orderTags) {
     orderTags = resolveValues(orderTags);
     orderTagManagementPage.actionsMenu.selectOption("Remove Tags");
@@ -168,7 +165,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.removeTagsDialog.waitUntilInvisible();
   }
 
-  @And("^Operator clear all order tags on Order Tag Management page$")
+  @And("Operator clear all order tags on Order Tag Management page")
   public void operatorClearAllTags() {
     orderTagManagementPage.actionsMenu.selectOption("Clear All Tags");
     orderTagManagementPage.clearAllTagsDialog.waitUntilClickable();
@@ -210,14 +207,14 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.viewTaggedOrders.click();
   }
 
-  @And("^Operator verifies that 'Load Selection' button is (enabled|disabled) on Order Tag Management page")
+  @And("Operator verifies that 'Load Selection' button is (enabled|disabled) on Order Tag Management page")
   public void operatorVerifyLoadSelection(String state) {
     Assertions.assertThat(orderTagManagementPage.loadSelection.isEnabled())
         .as("Load selection button enable state")
         .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
   }
 
-  @And("^Operator verifies order params on Order Tag Management page:")
+  @And("Operator verifies order params on Order Tag Management page:")
   public void operatorVerifyOrderParams(Map<String, String> data) {
     data = resolveKeyValues(data);
     Order expected = new Order();
@@ -227,7 +224,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @And("^Operator verifies tagged order params on Order Tag Management page:")
+  @And("Operator verifies tagged order params on Order Tag Management page:")
   public void operatorVerifytaggedOrderParams(Map<String, String> data) {
     data = resolveKeyValues(data);
     TaggedOrderParams expected = new TaggedOrderParams(data);
@@ -236,7 +233,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @When("^Operator find orders by uploading CSV on Order Tag Management page:$")
+  @When("Operator find orders by uploading CSV on Order Tag Management page:")
   public void operatorFindOrdersByUploadingCsvOnAllOrderPage(List<String> listOfTrackingId) {
     if (CollectionUtils.isEmpty(listOfTrackingId)) {
       throw new IllegalArgumentException(
@@ -254,32 +251,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
     orderTagManagementPage.findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
   }
 
-  @And("Operator searches and selects orders created")
-  public void operatorSelectsOrdersCreated() {
-    List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
-    lists.forEach(order -> orderTagManagementPage
-        .searchAndSelectOrderInTable(String.valueOf(order.getId())));
-  }
-
   @And("Operator selects orders created")
   public void operatorSelectsOrdersInTable() {
     orderTagManagementPage.selectOrdersInTable();
-  }
-
-  @And("Operator uploads CSV with orders created")
-  public void operatorUploadsCsvOrdersCreated() {
-    List<String> trackingIds = this.<List<Order>>get(KEY_LIST_OF_CREATED_ORDER)
-        .stream()
-        .map(Order::getTrackingId)
-        .collect(Collectors.toList());
-    orderTagManagementPage.uploadFindOrdersCsvWithOrderInfo(trackingIds);
-  }
-
-  @And("Operator tags order with {string}")
-  public void operatorTagsOrderWith(String tagLabel) {
-    put(KEY_ORDER_TAG, tagLabel);
-    orderTagManagementPage.clickTagSelectedOrdersButton();
-    orderTagManagementPage.tagSelectedOrdersAndSave(tagLabel);
   }
 
   @When("Operator selects filter and clicks Load Selection on Order Level Tag Management page using data below:")

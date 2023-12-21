@@ -203,15 +203,6 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     addFilter.selectValue(name);
   }
 
-  public void setFilterAndLoadSelection(Date routeDateFrom, Date routeDateTo, String hubName) {
-    waitUntilLoaded(60);
-    routeDateFilter.setInterval(routeDateFrom, routeDateTo);
-    if (StringUtils.isNotBlank(hubName)) {
-      hubFilter.selectFilter(hubName);
-    }
-    loadSelection.clickAndWaitUntilDone();
-  }
-
   @Override
   public void waitUntilLoaded() {
     if (createRoute.isDisplayedFast()) {

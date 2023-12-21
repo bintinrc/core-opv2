@@ -189,7 +189,7 @@ Feature: Add Shipper To Preset
     And Operator clicks Download CSV button on Add Shipper To Preset page
     Then Operator verify that CSV file have same line count as shown rows on Add Shipper To Preset page
 
-  
+
   @MediumPriority
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper
     Given Operator go to menu Pick Ups -> Add Shipper To Preset

@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
@@ -15,7 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import static co.nvqa.commons.support.DateUtil.DATE_FORMATTER_SNS_1;
 
 /**
  * Created on 30/10/20.
@@ -55,10 +53,6 @@ public class AntRangePicker extends PageElement {
     }
   }
 
-  public void setFrom(Date from) {
-    setFrom(from.toInstant().atZone(ZoneId.systemDefault()).format(DATE_FORMATTER_SNS_1));
-  }
-
   public void setTo(String to) {
     if (!StringUtils.equals(to, getValueTo())) {
       valueTo.click();
@@ -67,16 +61,7 @@ public class AntRangePicker extends PageElement {
     }
   }
 
-  public void setTo(Date to) {
-    setTo(to.toInstant().atZone(ZoneId.systemDefault()).format(DATE_FORMATTER_SNS_1));
-  }
-
   public void setInterval(String from, String to) {
-    setFrom(from);
-    setTo(to);
-  }
-
-  public void setInterval(Date from, Date to) {
     setFrom(from);
     setTo(to);
   }

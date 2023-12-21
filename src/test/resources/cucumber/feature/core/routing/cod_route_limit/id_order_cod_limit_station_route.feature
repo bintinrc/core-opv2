@@ -4,7 +4,7 @@ Feature: ID - Order COD Limit
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
+#TODO not being run in bamboo
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Single Order with COD <30 Millions to Single New Driver Route on Station Route
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -61,25 +61,25 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -198,15 +198,15 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
@@ -219,26 +219,26 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -355,25 +355,25 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -422,7 +422,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id}]]: cannot exceed maximum daily COD limit amount per driver |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id}]]: cannot exceed maximum daily COD limit amount per driver |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <30 Millions to Single Existing Driver Route on Station Route
@@ -489,15 +489,15 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
@@ -510,26 +510,26 @@ Feature: ID - Order COD Limit
       | id      | {KEY_TRANSACTION.id} |
       | routeId | not null             |
     And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}      |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo   | not null                          |
-      | status  | Routed                            |
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_TRANSACTION.waypointId}      |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | seqNo    | not null                          |
-      | status   | Routed                            |
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId} |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Ninjitsu89"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
-      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}     |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}"
+    And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}           |
+      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | codCollectionPending | 30,000,000                                  |
       | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
@@ -589,7 +589,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id} {KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id} {KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver |
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >30 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Archived
@@ -645,7 +645,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit=30000000] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd} 00:00:00 +0000 UTC][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver |
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Multiple Orders with COD >30 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Deleted

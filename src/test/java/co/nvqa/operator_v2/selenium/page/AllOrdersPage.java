@@ -2,11 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.operator_v2.model.AddToRouteData;
-import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -267,17 +263,10 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     filterPreset.waitUntilEnabled(60);
   }
 
-  public final EditOrderPage editOrderPage;
-
   public OrdersTable ordersTable;
 
   public AllOrdersPage(WebDriver webDriver) {
-    this(webDriver, new EditOrderPage(webDriver));
-  }
-
-  public AllOrdersPage(WebDriver webDriver, EditOrderPage editOrderPage) {
     super(webDriver);
-    this.editOrderPage = editOrderPage;
     ordersTable = new OrdersTable(webDriver);
   }
 
@@ -388,20 +377,6 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
         .isEqualToIgnoringCase(order.getGranularStatus().replaceAll("_", " "));
   }
 
-  public void verifyOrderInfoIsCorrect(Order order) {
-    String mainWindowHandle = getWebDriver().getWindowHandle();
-    Long orderId = order.getId();
-    String expectedTrackingId = order.getTrackingId();
-    specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, expectedTrackingId);
-
-    try {
-      switchToEditOrderWindow(orderId);
-      editOrderPage.verifyOrderInfoIsCorrect(order);
-    } finally {
-      closeAllWindows(mainWindowHandle);
-    }
-  }
-
   public void selectAllShown() {
     selectionMenu.selectOption("Select All Shown");
   }
@@ -418,20 +393,6 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Complete Order");
-  }
-
-  public void verifyOrderIsForceSuccessedSuccessfully(Order order) {
-    String mainWindowHandle = getWebDriver().getWindowHandle();
-    Long orderId = order.getId();
-    String trackingId = order.getTrackingId();
-    specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
-
-    try {
-      switchToEditOrderWindow(orderId);
-      editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
-    } finally {
-      closeAllWindows(mainWindowHandle);
-    }
   }
 
   public void rtsSingleOrderNextDay(String trackingId) {
@@ -677,10 +638,6 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 //    waitUntilInvisibilityOfToast("Downloading", true);
   }
 
-  public void verifyWaybillContentsIsCorrect(Order order) {
-    editOrderPage.verifyAirwayBillContentsIsCorrect(order);
-  }
-
   public void verifiesTrackingIdIsCorrect(String trackingId) {
     String actualTrackingId = getText(
         "//div[@id='header']//label[text()='Tracking ID']/following-sibling::h3");
@@ -744,7 +701,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   public void switchToEditOrderWindow(Long orderId) {
     switchToOtherWindow("order/" + orderId);
-    editOrderPage.waitWhilePageIsLoading(120);
+    waitWhilePageIsLoading(120);
   }
 
   public String getTextOnTableOrder(int rowNumber, String columnDataClass) {
@@ -1060,15 +1017,6 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
   }
 
-  public void verifyDownloadedCsv(String trackingId, String message) {
-    String downloadedFile = getLatestDownloadedFilename("pickup_reservations");
-    verifyFileDownloadedSuccessfully(downloadedFile);
-    String pathName = StandardTestConstants.TEMP_DIR + downloadedFile;
-    List<RegularPickup> reg = DataEntity.fromCsvFile(RegularPickup.class, pathName, true);
-    Assertions.assertThat(reg.get(0).getTrackingId().equalsIgnoreCase(trackingId)).isTrue();
-    Assertions.assertThat(reg.get(0).getErrorMessage().contains(message)).isTrue();
-  }
-
   public static class SelectionErrorDialog extends MdDialog {
 
     @FindBy(xpath = ".//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[1]")
@@ -1137,55 +1085,10 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
         .isEqualTo(order.getFromAddress2());
   }
 
-  public void verifyDriverCollect(DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder,
-      String trackingId) {
-    LocalDateTime today = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-
-    Assertions.assertThat(trackingId).as("Barcode is different : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getBarcode());
-    Assertions.assertThat("RELEASED").as("DP Reservation Status is not the same : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getRsvnStatus());
-    Assertions.assertThat("DRIVER_COLLECTED").as("DP Reservation Event Name is not the same : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getRsvnEventName());
-    Assertions.assertThat("COMPLETED").as("DP Job Status is not the same : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getJobStatus());
-    Assertions.assertThat("SUCCESS").as("DP Job Order Status is not the same : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getJobOrderStatus());
-    Assertions.assertThat("DRIVER").as("Released To is not the same : ")
-        .isEqualTo(dbCheckingDriverCollectOrder.getReleasedTo());
-    assertTrue("Released At is not the same : ",
-        dbCheckingDriverCollectOrder.getReleasedAt().toString()
-            .startsWith(formatter.format(today)));
-  }
-
   public void verifyOrderStatus(Order order, String status, String granularStatus) {
     assertTrue("Status is not correct", order.getStatus().equalsIgnoreCase(status));
     assertTrue("Granular Status is not correct: ",
         order.getGranularStatus().equalsIgnoreCase(granularStatus));
-  }
-
-  public void databaseVerifyCustomerCollect(
-      DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder, String trackingId) {
-    LocalDateTime today = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-
-    Assertions.assertThat(trackingId).as("Barcode is different : ")
-        .isEqualTo(dbCheckingCustomerCollectOrder.getBarcode());
-    Assertions.assertThat("CUSTOMER").as("Released To is not the same : ")
-        .isEqualTo(dbCheckingCustomerCollectOrder.getReleasedTo());
-    Assertions.assertThat("DP_RELEASED_TO_CUSTOMER").as("Reservation Event Name is not correct: ")
-        .isEqualTo(dbCheckingCustomerCollectOrder.getRsvnEventName());
-    assertTrue("Released At is not the same : ",
-        dbCheckingCustomerCollectOrder.getReleasedAt().toString()
-            .startsWith(formatter.format(today)));
-    assertTrue("Collected At is not the same : ",
-        dbCheckingCustomerCollectOrder.getCollectedAt().toString()
-            .startsWith(formatter.format(today)));
-    Assertions.assertThat("RELEASED").as("Status is not the same : ")
-        .isEqualTo(dbCheckingCustomerCollectOrder.getStatus());
-    Assertions.assertThat("OPERATOR").as("Source is not the same : ")
-        .isEqualTo(dbCheckingCustomerCollectOrder.getSource());
   }
 
   public static class PrintWaybillsDialog extends MdDialog {

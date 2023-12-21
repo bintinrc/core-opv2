@@ -124,6 +124,9 @@ Feature: Route Manifest
       | Pickups | 1       | 0       | 0       | 1   |
       | Total   | 1       | 0       | 0       | 1   |
     And Operator fail pickup waypoint from Route Manifest page
+      | failureReasonDescription    | I didn't attempt the pick up - Return |
+      | failureReasonSubDescription | Cannot Make It (CMI) - Return         |
+      | replace                     | - Return                              |
     Then Operator verifies that success react notification displayed:
       | top | Updated waypoint {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} successfully |
     And Operator refresh page
@@ -156,7 +159,8 @@ Feature: Route Manifest
       | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Pending                                                    |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name | FORCED FAILURE |
+      | name        | FORCED FAILURE         |
+      | description | Failure reason ID: 131 |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: ADMIN_UPDATE_WAYPOINT |
@@ -245,6 +249,9 @@ Feature: Route Manifest
       | Deliveries | 1       | 0       | 0       | 1   |
       | Total      | 1       | 0       | 0       | 1   |
     And Operator fail delivery waypoint from Route Manifest page
+      | failureReasonDescription    | Attempting failure at doorstep - Normal     |
+      | failureReasonSubDescription | Non-residential location is closed - Normal |
+      | replace                     | - Normal                                    |
     Then Operator verifies that success react notification displayed:
       | top | Updated waypoint {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} successfully |
     And Operator refresh page
@@ -274,7 +281,8 @@ Feature: Route Manifest
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name | FORCED FAILURE |
+      | name        | FORCED FAILURE          |
+      | description | Failure reason ID: 2767 |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                                        |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: ADMIN_UPDATE_WAYPOINT |

@@ -42,7 +42,6 @@ public class RouteInboundSteps extends AbstractSteps {
   private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";
   private static final String FETCH_BY_TRACKING_ID = "FETCH_BY_TRACKING_ID";
   private static final String FETCH_BY_DRIVER = "FETCH_BY_DRIVER";
-  private static final String KEY_ROUTE_INBOUND_COMMENT = "KEY_ROUTE_INBOUND_COMMENT";
 
   private RouteInboundPage routeInboundPage;
 

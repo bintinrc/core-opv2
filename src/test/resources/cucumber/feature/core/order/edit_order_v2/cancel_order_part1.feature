@@ -193,7 +193,7 @@ Feature: Cancel Order
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Van en-route to pickup New Granular Status: Cancelled Old Order Status: Transit New Order Status: Cancelled Reason: CANCEL |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE    |
-      | routeId | KEY_CREATED_ROUTE_ID |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_CORE_TRANSACTION.waypointId} |
 

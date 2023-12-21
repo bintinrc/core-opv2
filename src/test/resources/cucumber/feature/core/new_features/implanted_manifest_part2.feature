@@ -169,8 +169,8 @@ Feature: Implanted Manifest
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | DRIVER PICKUP SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | name    | DRIVER PICKUP SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
@@ -182,8 +182,8 @@ Feature: Implanted Manifest
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | DRIVER PICKUP SCAN     |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | name    | DRIVER PICKUP SCAN                 |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
@@ -302,7 +302,7 @@ Feature: Implanted Manifest
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 0 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 0 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
     Given Operator go to menu New Features -> Implanted Manifest

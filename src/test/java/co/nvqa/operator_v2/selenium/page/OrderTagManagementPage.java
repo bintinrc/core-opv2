@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.exception.element.NvTestCoreElementNotFoundError;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.elements.Button;

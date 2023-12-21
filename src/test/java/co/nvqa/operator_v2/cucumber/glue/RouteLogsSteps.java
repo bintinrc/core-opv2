@@ -56,7 +56,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RouteLogsSteps extends AbstractSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RouteLogsSteps.class);
-  private static final String KEY_LIST_OF_CREATE_ROUTE_PARAMS = "KEY_LIST_OF_CREATE_ROUTE_PARAMS";
 
   private RouteLogsPage routeLogsPage;
 

@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 @ScenarioScoped
 public class ZonalRoutingSteps extends AbstractSteps {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ZonalRoutingSteps.class);
-
   private ZonalRoutingPage page;
 
   public ZonalRoutingSteps() {

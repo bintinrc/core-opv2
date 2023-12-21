@@ -26,8 +26,6 @@ import static co.nvqa.operator_v2.selenium.page.ImplantedManifestPage.ImplantedM
  */
 @ScenarioScoped
 public class ImplantedManifestSteps extends AbstractSteps {
-
-  private static final String KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID = "KEY_LIST_OF_CREATED_ORDER_PREFIXLESS_TRACKING_ID";
   private ImplantedManifestPage page;
 
 
@@ -137,16 +135,6 @@ public class ImplantedManifestSteps extends AbstractSteps {
       page.removeAll.click();
       page.confirmRemoveAll.click();
     });
-  }
-
-  @When("Operator clicks \"Actions X\" button on Manifest table for all created orders on Implanted Manifest page")
-  public void operatorClicksButtonOnManifestTableForAllCreatedOrdersOnImplementedManifestPage() {
-    List<Order> orders = getListOfCreatedOrders();
-    int ordersSize = orders.size();
-
-    for (int i = 0; i < ordersSize; i++) {
-      page.clickActionXForRow(1);
-    }
   }
 
   @When("Operator creates Manifest for Hub {value} and scan barcodes:")

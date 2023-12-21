@@ -46,7 +46,7 @@ Feature: Priority Level
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Operator update priority level of an order:
+    And API Core - Update priority level of an order:
       | orderId       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | priorityLevel | 2                                  |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -67,7 +67,7 @@ Feature: Priority Level
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Operator update priority level of an order:
+    And API Core - Update priority level of an order:
       | orderId       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | priorityLevel | 1                                  |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -99,7 +99,7 @@ Feature: Priority Level
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Operator update order granular status:
+    And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"

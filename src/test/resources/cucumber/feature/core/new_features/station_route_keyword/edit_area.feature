@@ -171,7 +171,7 @@ Feature: Edit Area
     And Operator verifies that success react notification displayed:
       | top    | Coverage updated                                                         |
       | bottom | Area AREA EANA 2 {gradle-current-date-yyyyMMddHHmmsss} with variations - |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | id             | {KEY_LIST_OF_COVERAGE[1].id}                      |
       | area           | AREA EANA 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                          |

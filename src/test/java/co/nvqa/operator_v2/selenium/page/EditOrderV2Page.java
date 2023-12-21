@@ -1,15 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.model.order.Order.Dimension;
 import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Cod;
-import co.nvqa.commons.model.core.Dimension;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.model.pdf.AirwayBill;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
@@ -29,6 +24,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
+import co.nvqa.operator_v2.util.CoreDateUtil;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -48,8 +44,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
-import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
+import static co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable.EVENT_NAME;
+import static co.nvqa.operator_v2.selenium.page.EditOrderV2Page.TransactionsTable.COLUMN_TYPE;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
@@ -57,6 +53,8 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  */
 @SuppressWarnings("WeakerAccess")
 public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
+
+  private static final String COLUMN_TYPE = "type";
 
   @FindBy(css = "span.nv-mask")
   public PageElement mask;
@@ -318,93 +316,17 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         .isEqualTo(color);
   }
 
-  public void verifyDeliveryRouteInfo(Route route) {
-    Assertions.assertThat(deliveryDetailsBox.getRouteId()).as("Delivery Route Id")
-        .isEqualTo(String.valueOf(route.getId()));
-    if (CollectionUtils.isNotEmpty(route.getWaypoints())) {
-      String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
-      Assertions.assertThat(deliveryDetailsBox.getWaypointId()).as("Delivery Waypoint ID")
-          .isEqualTo(expectedWaypointId);
-    }
-    String expectedDriver =
-        route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
-    Assertions.assertThat(deliveryDetailsBox.getDriver().trim()).as("Delivery Driver")
-        .isEqualTo(expectedDriver.trim());
-  }
-
-  public void verifyPickupRouteInfo(Route route) {
-    Assertions.assertThat(pickupDetailsBox.getRouteId()).as("Pickup Route Id")
-        .isEqualTo(String.valueOf(route.getId()));
-    if (CollectionUtils.isNotEmpty(route.getWaypoints())) {
-      String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
-      Assertions.assertThat(pickupDetailsBox.getWaypointId()).as("Pickup Waypoint ID")
-          .isEqualTo(expectedWaypointId);
-    }
-    String expectedDriver =
-        route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
-    Assertions.assertThat(pickupDetailsBox.getDriver().trim()).as("Pickup Driver")
-        .isEqualTo(expectedDriver.trim());
-  }
-
   public void printAirwayBill() {
     clickMenu("View/Print", "Print Airway Bill");
     waitUntilInvisibilityOfToast("Attempting to download", true);
     waitUntilInvisibilityOfToast("Downloading");
   }
 
-  public void verifyAirwayBillContentsIsCorrect(Order order) {
-    verifyAirwayBillContentsIsCorrect(order, 0, "awb_" + order.getTrackingId());
-  }
-
-  public void verifyAirwayBillContentsIsCorrect(Order order, int index, String fileName) {
-    String trackingId = order.getTrackingId();
-    String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename(fileName);
-    verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
-    AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(
-        TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, index);
-
-    Assertions.assertThat(airwayBill.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
-
-    Assertions.assertThat(airwayBill.getFromName()).as("From Name").isEqualTo(order.getFromName());
-    Assertions.assertThat(airwayBill.getFromContact()).as("From Contact")
-        .isEqualTo(order.getFromContact());
-    Assertions.assertThat(airwayBill.getFromAddress()).as("From Address")
-        .contains(order.getFromAddress1());
-    Assertions.assertThat(StringUtils.normalizeSpace(airwayBill.getFromAddress()))
-        .as("From Address").contains(StringUtils.normalizeSpace(order.getFromAddress2()));
-    Assertions.assertThat(airwayBill.getFromAddress()).as("Postcode In From Address")
-        .contains(order.getFromPostcode());
-
-    Assertions.assertThat(airwayBill.getToName()).as("To Name").isEqualTo(order.getToName());
-    Assertions.assertThat(airwayBill.getToContact()).as("To Contact")
-        .isEqualTo(order.getToContact());
-    Assertions.assertThat(airwayBill.getToAddress()).as("To Address")
-        .contains(order.getToAddress1());
-    Assertions.assertThat(StringUtils.normalizeSpace(airwayBill.getToAddress())).as("To Address")
-        .contains(StringUtils.normalizeSpace(order.getToAddress2()));
-    Assertions.assertThat(airwayBill.getToAddress()).as("Postcode In To Address")
-        .contains(order.getToPostcode());
-
-    Assertions.assertThat(airwayBill.getCod()).as("COD")
-        .isEqualTo(Optional.ofNullable(order.getCod()).orElse(new Cod()).getGoodsAmount());
-    Assertions.assertThat(airwayBill.getComments()).as("Comments")
-        .isEqualTo(order.getInstruction());
-
-    String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(
-        airwayBill.getTrackingIdQrCodeFile());
-    Assertions.assertThat(actualQrCodeTrackingId).as("Tracking ID - QR Code").isEqualTo(trackingId);
-
-    String actualBarcodeTrackingId = TestUtils.getTextFromQrCodeImage(
-        airwayBill.getTrackingIdBarcodeFile());
-    Assertions.assertThat(actualBarcodeTrackingId).as("Tracking ID - Barcode 128")
-        .isEqualTo(trackingId);
-  }
-
-  public void verifyPriorityLevel(String txnType, int priorityLevel) {
+  public void verifyPriorityLevel(String txnType, String priorityLevel) {
     transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
     TransactionInfo actual = transactionsTable.readEntity(1);
     Assertions.assertThat(actual.getPriorityLevel()).as(txnType + " Priority Level")
-        .isEqualTo(String.valueOf(priorityLevel));
+        .isEqualTo(priorityLevel);
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
@@ -423,7 +345,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
   public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected,
       String stringContained) {
-    ZonedDateTime eventDateExpected = DateUtil.getDate(
+    ZonedDateTime eventDateExpected = CoreDateUtil.getDate(
         ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
     int rowWithExpectedEvent = 1;
@@ -437,7 +359,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     Assertions.assertThat(eventRow.getHubName()).as("Different Result Returned for hub name")
         .isEqualTo(hubName);
     Assertions.assertThat(eventRow.getEventTime()).as("Different Result Returned for event time")
-        .contains(DateUtil.displayDate(eventDateExpected));
+        .contains(CoreDateUtil.displayDate(eventDateExpected));
     if (stringContained.contains("Scanned")) {
       Assertions.assertThat(eventRow.getDescription())
           .as("Different Result Returned for event description")
@@ -2148,5 +2070,4 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
       super(webDriver, webElement);
     }
   }
-
 }

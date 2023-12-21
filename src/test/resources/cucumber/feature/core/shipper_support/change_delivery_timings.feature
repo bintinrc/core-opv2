@@ -233,7 +233,7 @@ Feature: Change Delivery Timings
 
   @HighPriority
   Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
-    Given API Shipper create V4 order using data below:
+    Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
@@ -255,9 +255,9 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-2-working-day-yyyy-MM-dd} <timeTo>   |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE SLA |
-    And Operator save the last DELIVERY transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION_AFTER"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Route - verify waypoints record:
-      | legacyId   | {KEY_TRANSACTION_AFTER.waypointId} |
+      | legacyId   | {KEY_TRANSACTION.waypointId} |
       | timewindow | <timewindowId>                     |
 
     Examples:
