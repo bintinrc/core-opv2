@@ -103,7 +103,7 @@ Feature: Route Manifest
       | pickupsCount    | 0                                     |
       | trackingIds     | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -150,20 +150,33 @@ Feature: Route Manifest
       | status | PENDING |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | FAIL |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | status | Fail                                                       |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | status   | Fail                                                       |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status | Pending                                                    |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | FORCED FAILURE         |
       | description | Failure reason ID: 131 |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: ADMIN_UPDATE_WAYPOINT |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
@@ -210,21 +223,21 @@ Feature: Route Manifest
       | status | PENDING |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | status | Success                                                    |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | status   | Success                                                    |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status | Pending                                                    |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Van en-route to pickup New Granular Status: En-route to Sorting Hub Reason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -275,9 +288,9 @@ Feature: Route Manifest
       | status | FAIL |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | FAIL |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status | Fail                                                       |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Fail                                                       |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -286,6 +299,12 @@ Feature: Route Manifest
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                                        |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: ADMIN_UPDATE_WAYPOINT |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pending Reschedule                                 |
     And Operator verify Pickup details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
@@ -339,9 +358,9 @@ Feature: Route Manifest
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status | Success                                                    |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Success                                                    |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
