@@ -82,8 +82,8 @@ Feature: Create Recovery Ticket
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | On Hold                                    |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
-      | txnType        | PICKUP                                             |
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
       | txnStatus      | PENDING                                            |
       | dnrId          | 0                                                  |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |

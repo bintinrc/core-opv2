@@ -25,7 +25,7 @@ Feature: Cancel Order
       | statusCode | 500                                |
       | message    | Order is On Hold!                  |
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Cancel Order - Pending Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -69,8 +69,22 @@ Feature: Cancel Order
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                                                                 |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Pending Pickup New Granular Status: Cancelled Old Order Status: Pending New Order Status: Cancelled Reason: CANCEL |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Cancel Order - Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -129,12 +143,25 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
-#    TODO uncomment once issue is fixed
-#    And Operator verify order events on Edit Order V2 page using data below:
-#      | tags          | name          | description                                                                                                                                      |
-#      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pickup fail\nNew Granular Status: Cancelled\n\nOld Order Status: Pickup fail\nNew Order Status: Cancelled\n\nReason: CANCEL |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                                               |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Pickup fail New Granular Status: Cancelled Old Order Status: Pickup fail New Order Status: Cancelled Reason: CANCEL |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Cancel Order - Van En-route to Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -192,10 +219,24 @@ Feature: Cancel Order
       | tags          | name          | description                                                                                                                                                                                                                                                         |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Van en-route to pickup New Granular Status: Cancelled Old Order Status: Transit New Order Status: Cancelled Reason: CANCEL |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name    | PULL OUT OF ROUTE    |
+      | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_CORE_TRANSACTION.waypointId} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | CANCELLED                                          |
+      | dnrId          | -1                                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Cancelled                                          |
 
   @HighPriority
   Scenario: Cancel Order - Staging
