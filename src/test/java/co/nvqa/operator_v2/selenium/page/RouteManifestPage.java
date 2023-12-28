@@ -117,6 +117,27 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
         return getParcelCountValue(type, status);
     }
 
+      public String getTimeslotValue(String timeslot, String status) {
+        String xpath =
+                "//div[translate(., ' ','')='" + StringUtils.capitalize(timeslot)
+                        + "']/following-sibling::div[%d]";
+        int index;
+        switch (status.toLowerCase()) {
+            case "pending":
+                index = 1;
+                break;
+            case "early":
+                index = 2;
+                break;
+             case "onTime":
+                 index = 3;
+                 break;
+             default:
+                 index = 4;
+        }
+        return new PageElement(getWebDriver(), f(xpath, index)).getText();
+    }
+
     public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails) {
         RouteManifestWaypointDetails.Reservation expectedReservation = expectedWaypointDetails
                 .getReservation();
