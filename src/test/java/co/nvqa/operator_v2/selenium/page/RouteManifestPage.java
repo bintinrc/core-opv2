@@ -94,7 +94,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
     public String getParcelCountValue(String type, String status) {
         String xpath =
-                "//div[translate(., ' ','')='" + StringUtils.capitalize(type.toLowerCase())
+                "//div[translate(., ' ','')='" + StringUtils.capitalize(type)
                         + "']/following-sibling::div[%d]";
         int index;
         switch (status.toLowerCase()) {
