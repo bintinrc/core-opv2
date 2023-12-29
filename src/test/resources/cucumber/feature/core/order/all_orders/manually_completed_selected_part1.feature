@@ -5,7 +5,7 @@ Feature: All Orders - Manually Completed Selected
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Force Success Order on All Orders Page - End State = Completed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -42,6 +42,20 @@ Feature: All Orders - Manually Completed Selected
       | tags        | MANUAL ACTION                                                                                                                                                                                            |
       | name        | UPDATE STATUS                                                                                                                                                                                            |
       | description | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Completed                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Completed                                          |
 
   @happy-path @HighPriority
   Scenario: Operator Force Success Multiple Orders on All Orders Page
@@ -180,7 +194,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -217,6 +231,13 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                               |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Returned to Sender                                 |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
