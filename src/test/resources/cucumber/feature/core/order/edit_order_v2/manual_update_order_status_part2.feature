@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart2
+@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart2 @update-status @current
 Feature: Manual Update Order Status
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriority
+  @MediumPriority @wip
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -34,15 +34,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Reschedule                         |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | FAIL                                       |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Reschedule                         |
     Examples:
       | granularStatus     | status        | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                    |
       | Pending Reschedule | Delivery fail | SUCCESS      | FAIL           | Success        | Fail             | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Pending\nNew Order Status: Delivery fail\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Transferred to 3PL
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -79,7 +93,7 @@ Feature: Manual Update Order Status
       | granularStatus     | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                     |
       | Transferred to 3PL | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\n\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Distribution Point
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -116,7 +130,7 @@ Feature: Manual Update Order Status
       | granularStatus                | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                            |
       | Arrived at Distribution Point | Transit | SUCCESS      | SUCCESS        | Success        | Success          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Distribution Point\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - On Vehicle for Delivery , Latest Delivery is Unrouted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -159,7 +173,7 @@ Feature: Manual Update Order Status
       | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                   |
       | On Vehicle for Delivery | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Delivery Status: Fail\nNew Delivery Status: Pending\n\nOld Granular Status: Pending Reschedule\nNew Granular Status: On Vehicle for Delivery\n\nOld Order Status: Delivery fail\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - On Vehicle for Delivery, Latest Delivery is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -170,9 +184,6 @@ Feature: Manual Update Order Status
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | status     | Transit                                    |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -266,7 +277,7 @@ Feature: Manual Update Order Status
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify menu item "Order Settings" > "Update Status" is disabled on Edit Order V2 page
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule to Arrived at Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -277,9 +288,6 @@ Feature: Manual Update Order Status
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
