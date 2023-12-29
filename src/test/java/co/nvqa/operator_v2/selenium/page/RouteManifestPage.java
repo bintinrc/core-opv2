@@ -94,7 +94,7 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
     public String getParcelCountValue(String type, String status) {
         String xpath =
-                "//div[translate(., ' ','')='" + StringUtils.capitalize(type.toLowerCase())
+                "//div[translate(., ' ','')='" + StringUtils.capitalize(type)
                         + "']/following-sibling::div[%d]";
         int index;
         switch (status.toLowerCase()) {
@@ -115,6 +115,27 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
 
     public String getWpTypeValue(String type, String status) {
         return getParcelCountValue(type, status);
+    }
+
+      public String getTimeslotValue(String timeslot, String status) {
+        String xpath =
+                "//div[translate(., ' ','')='" + StringUtils.capitalize(timeslot)
+                        + "']/following-sibling::div[%d]";
+        int index;
+        switch (status.toLowerCase()) {
+            case "pending":
+                index = 1;
+                break;
+            case "early":
+                index = 2;
+                break;
+             case "onTime":
+                 index = 3;
+                 break;
+             default:
+                 index = 4;
+        }
+        return new PageElement(getWebDriver(), f(xpath, index)).getText();
     }
 
     public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails) {
