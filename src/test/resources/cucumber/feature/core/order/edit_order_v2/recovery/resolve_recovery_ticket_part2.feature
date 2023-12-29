@@ -418,7 +418,7 @@ Feature: Resolve Recovery Ticket
       | PARCEL ROUTING SCAN |
       | TICKET RESOLVED     |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -502,6 +502,21 @@ Feature: Resolve Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                     |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Success New Pickup Status: Pending Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_TRANSACTION_AFTER.id}              |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_TRANSACTION_AFTER.id}              |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
+
 
   @MediumPriority
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
