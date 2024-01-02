@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1 @current
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart1
 Feature: Route Inbound Expected Scans
 
   Background:
@@ -284,7 +284,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status @wip2
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

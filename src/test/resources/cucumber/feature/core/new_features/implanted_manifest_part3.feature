@@ -5,7 +5,7 @@ Feature: Implanted Manifest
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePickupAppointmentJob @ArchiveRouteCommonV2 @HighPriority
+  @DeletePickupAppointmentJob @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Creates Implanted Manifest for PA Job with Total Scanned Orders = Total of POD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |
@@ -79,6 +79,13 @@ Feature: Implanted Manifest
       | id                  | {KEY_LIST_OF_CREATED_ORDERS[1].id}     |
       | latestInboundScanId | {KEY_CORE_LIST_OF_INBOUND_SCANS[1].id} |
     And DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
 
   @MediumPriority
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid PA Job Id
