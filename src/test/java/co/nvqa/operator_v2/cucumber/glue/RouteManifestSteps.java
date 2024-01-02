@@ -61,6 +61,17 @@ public class RouteManifestSteps extends AbstractSteps {
         assertions.assertAll();
     }
 
+    @Then("Operator verify Route summary Timeslot on Route Manifest page:")
+    public void verifyTimeslot(Map<String, Map<String, String>> data) {
+        SoftAssertions assertions = new SoftAssertions();
+        page.inFrame(() -> {
+            data.forEach((timeslot, map) -> resolveKeyValues(map).forEach(
+                    (status, value) -> assertions.assertThat(page.getTimeslotValue(timeslot, status))
+                            .as("%s %s", timeslot, status).isEqualTo(value)));
+        });
+        assertions.assertAll();
+    }
+
     @Then("Operator verify waypoint at Route Manifest using data below:")
     public void operatorVerifyWaypointAtRouteManifest(Map<String, String> mapOfData) {
         page.inFrame(() -> page.verifyWaypointDetails(
