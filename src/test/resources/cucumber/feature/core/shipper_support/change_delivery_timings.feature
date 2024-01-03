@@ -191,11 +191,11 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | startDate  | {date: 2 days ago, YYYY-MM-dd}        |
-      | endDate    | {date: 2 days ago, YYYY-MM-dd}        |
+      | startDate  | {date: 3 days ago, YYYY-MM-dd}        |
+      | endDate    | {date: 3 days ago, YYYY-MM-dd}        |
       | timewindow | 0                                     |
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery end date cannot be before today's date |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| delivery date cannot be before today's date |
     And Operator click Close button on Change Delivery Timings page
 
   @MediumPriority
