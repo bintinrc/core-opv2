@@ -28,15 +28,15 @@ Feature: All Orders - Preset Filters
     And Operator verifies Save button in Save Preset dialog on All Orders page is enabled
     When Operator clicks Save button in Save Preset dialog on All Orders page
     Then Operator verifies that success toast displayed:
-      | top    | 1 filter preset created                    |
-      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
-    And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" on All Orders page
+      | top    | 1 filter preset created               |
+      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET} |
+    And Operator verifies selected Filter Preset name is "{KEY_ALL_ORDERS_FILTERS_PRESET}" on All Orders page
     And DB Lighthouse - verify preset_filters record:
-      | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID}   |
-      | namespace | orders                               |
-      | name      | {KEY_ALL_ORDERS_FILTERS_PRESET_NAME} |
+      | id        | {KEY_ALL_ORDERS_FILTERS_PRESET_ID} |
+      | namespace | orders                             |
+      | name      | {KEY_ALL_ORDERS_FILTERS_PRESET}    |
     When Operator go to menu Order -> All Orders
-    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET_NAME}" Filter Preset on All Orders page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit                         |
       | creationTimeFrom  | {date: 1 days ago, yyyy-MM-dd}  |
@@ -99,10 +99,10 @@ Feature: All Orders - Preset Filters
     Then Operator verifies help text "This name is already taken. Do you want to update this preset?" is displayed in Save Preset dialog on All Orders page
     When Operator clicks Update button in Save Preset dialog on All Orders page
     Then Operator verifies that success toast displayed:
-      | top    | 1 filter preset updated                    |
-      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET.name} |
+      | top    | 1 filter preset updated               |
+      | bottom | Name: {KEY_ALL_ORDERS_FILTERS_PRESET} |
     When Operator go to menu Order -> All Orders
-    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET.name}" Filter Preset on All Orders page
+    And Operator selects "{KEY_ALL_ORDERS_FILTERS_PRESET}" Filter Preset on All Orders page
     Then Operator verifies selected filters on All Orders page:
       | status            | Transit, Cancelled            |
       | granularStatus    | Cancelled                     |

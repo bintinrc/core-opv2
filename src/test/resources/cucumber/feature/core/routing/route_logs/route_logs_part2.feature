@@ -99,7 +99,6 @@ Feature: Route Logs
     And Operator verifies address of "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top                | Address verification successful for selected route |
-      | waitUntilInvisible | true                                               |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>
