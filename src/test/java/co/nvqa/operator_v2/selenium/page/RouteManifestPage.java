@@ -137,6 +137,17 @@ public class RouteManifestPage extends SimpleReactPage<RouteManifestPage> {
         }
         return new PageElement(getWebDriver(), f(xpath, index)).getText();
     }
+    public String getCODCollectionValue(String type) {
+        String xpath;
+        if ("Pending".equalsIgnoreCase(type)) {
+            xpath = "//div[translate(., ' ','')='Pending' and @class='header']/following-sibling::div[1]";
+        } else {
+            xpath = "//div[translate(., ' ','')='" + StringUtils.capitalize(type)
+                + "']/following-sibling::div[1]";
+        }
+
+        return new PageElement(getWebDriver(), xpath).getText();
+    }
 
     public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails) {
         RouteManifestWaypointDetails.Reservation expectedReservation = expectedWaypointDetails
