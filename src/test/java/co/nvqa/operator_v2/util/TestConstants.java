@@ -58,6 +58,8 @@ public final class TestConstants extends CommonUiTestConstants {
   public static final long SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID;
   public static final long IMDA_PICK_BULK_UPDATE_OPV2_DP_1_ID;
   public static final long IMDA_PICK_BULK_UPDATE_OPV2_DP_2_ID;
+  public static final long RPM_SHIPPER_ID;
+  public static final long RPM_SHIPPER_ID_LEGACY;
 
   static {
     OPERATOR_PORTAL_BASE_URL = NV_API_BASE.replace("api", "operatorv2") + "/#";
@@ -109,6 +111,9 @@ public final class TestConstants extends CommonUiTestConstants {
     SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID = getLong("same-partner-bulk-update-opv2-dp-3-id");
     IMDA_PICK_BULK_UPDATE_OPV2_DP_1_ID = getLong("imda-pick-bulk-update-opv2-dp-1-id");
     IMDA_PICK_BULK_UPDATE_OPV2_DP_2_ID = getLong("imda-pick-bulk-update-opv2-dp-2-id");
+
+    RPM_SHIPPER_ID = getLong("rpm-shipper-id");
+    RPM_SHIPPER_ID_LEGACY = getLong("rpm-shipper-id-legacy");
   }
 
   private TestConstants() {
