@@ -193,15 +193,25 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
   public void unassignPendingTask(Map<String, String> data) {
     data = resolveKeyValues(data);
     String shipper = data.get("shipper");
-    reservationPresetManagementPage.pendingTab.click();
-    pause2s();
-    PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
-        .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper))
-        .findFirst()
-        .orElseThrow(() -> new AssertionError("Task for shipper " + shipper + " was not found"));
-    pendingTaskBlock.unassign.click();
-    reservationPresetManagementPage.unassignShipperDialog.waitUntilVisible();
-    reservationPresetManagementPage.unassignShipperDialog.unassignShipper.clickAndWaitUntilDone();
+    doWithRetry(() -> {
+      try {
+        reservationPresetManagementPage.waitUntilPageLoaded();
+        reservationPresetManagementPage.pendingTab.click();
+        PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
+            .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper))
+            .findFirst()
+            .orElseThrow(
+                () -> new AssertionError("Task for shipper " + shipper + " was not found"));
+        pendingTaskBlock.unassign.click();
+        reservationPresetManagementPage.unassignShipperDialog.waitUntilVisible();
+        reservationPresetManagementPage.unassignShipperDialog.unassignShipper.clickAndWaitUntilDone();
+      } catch (Exception e) {
+        reservationPresetManagementPage.refreshPage();
+        throw new NvTestCoreElementNotFoundError("Task for shipper " + shipper + " was not found",
+            e);
+      }
+    }, "unassign pending task");
+
   }
 
   @Then("Operator route pending reservations on Reservation Preset Management page:")
