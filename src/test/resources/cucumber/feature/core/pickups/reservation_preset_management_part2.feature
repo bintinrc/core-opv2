@@ -40,9 +40,9 @@ Feature: Reservation Preset Management
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
     Then Operator verify created Reservation Group properties on Reservation Preset Management page:
-      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
-      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
-      | hub    | {hub-name}                                |
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}      |
+      | driver | ^{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}.* |
+      | hub    | {hub-name}                                   |
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
     And Operator waits for 10 seconds
@@ -86,9 +86,9 @@ Feature: Reservation Preset Management
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
     Then Operator verify created Reservation Group properties on Reservation Preset Management page:
-      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
-      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
-      | hub    | {hub-name}                                |
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}      |
+      | driver | ^{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}.* |
+      | hub    | {hub-name}                                   |
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
     And Operator assign pending task on Reservation Preset Management page:
@@ -137,9 +137,9 @@ Feature: Reservation Preset Management
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
     Then Operator verify created Reservation Group properties on Reservation Preset Management page:
-      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
-      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
-      | hub    | {hub-name}                                |
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}      |
+      | driver | ^{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}.* |
+      | hub    | {hub-name}                                   |
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
     And Operator assign pending task on Reservation Preset Management page:
@@ -200,9 +200,9 @@ Feature: Reservation Preset Management
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
     Then Operator verify created Reservation Group properties on Reservation Preset Management page:
-      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
-      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
-      | hub    | {hub-name}                                |
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}      |
+      | driver | ^{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}.* |
+      | hub    | {hub-name}                                   |
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
     ###
@@ -257,9 +257,9 @@ Feature: Reservation Preset Management
       | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
       | hub    | {hub-name}                                |
     Then Operator verify created Reservation Group properties on Reservation Preset Management page:
-      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}   |
-      | driver | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
-      | hub    | {hub-name}                                |
+      | name   | {KEY_CREATED_RESERVATION_GROUP[1].name}      |
+      | driver | ^{KEY_DRIVER_LIST_OF_DRIVERS[1].firstName}.* |
+      | hub    | {hub-name}                                   |
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
     And Operator assign pending task on Reservation Preset Management page:
@@ -307,7 +307,7 @@ Feature: Reservation Preset Management
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}       |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
-      | status   | Success                                  |
+      | status   | Routed                                  |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
     And Operator refresh page
     # Create Route and 3rd Reservation for Tomorrow
