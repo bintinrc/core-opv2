@@ -295,7 +295,16 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     // REMOVE ALL PICKUP LOCATION FROM MILKRUN GROUP
     if (createdMilkrunGroups != null) {
       createdMilkrunGroups.forEach(
-          group -> routeClient.deleteAllMilkrunGroupPickupLocations(group));
+          group -> {
+            try {
+              routeClient.deleteAllMilkrunGroupPickupLocations(group);
+              LOGGER.info("Success to remove all pickup locations from milkrun group id: [{}]",
+                  group.getId());
+            } catch (Exception e) {
+              LOGGER.warn("Failed to remove all pickup locations from milkrun group id: [{}]",
+                  group.getId());
+            }
+          });
     }
     // DELETE MILKRUN GROUP
     if (createdMilkrunGroups != null) {
