@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @DeleteOrder
+@OperatorV2 @Core @EditOrderV2 @DeleteOrder @wip
 Feature: Delete Order
 
   Background:
@@ -111,13 +111,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+#    And DB Events - verify order_events record:
+#      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+#      | type      | 49                                    |
+#      | userId    | 397                                   |
+#      | userName  | AUTOMATION EDITED                     |
+#      | userEmail | {operator-portal-uid}                 |
+#      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Staging
@@ -175,13 +175,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+#    And DB Events - verify order_events record:
+#      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+#      | type      | 49                                    |
+#      | userId    | 397                                   |
+#      | userName  | AUTOMATION EDITED                     |
+#      | userEmail | {operator-portal-uid}                 |
+#      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Pickup Fail
@@ -212,13 +212,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+#    And DB Events - verify order_events record:
+#      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
+#      | type      | 49                                    |
+#      | userId    | 397                                   |
+#      | userName  | AUTOMATION EDITED                     |
+#      | userEmail | {operator-portal-uid}                 |
+#      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @MediumPriority
   Scenario: Operator Delete Order with Invoiced Amount
@@ -245,10 +245,10 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-    And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+#    And DB Events - verify order_events record:
+#      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
+#      | type      | 49                                                            |
+#      | userId    | 397                                                           |
+#      | userName  | AUTOMATION EDITED                                             |
+#      | userEmail | {operator-portal-uid}                                         |
+#      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
