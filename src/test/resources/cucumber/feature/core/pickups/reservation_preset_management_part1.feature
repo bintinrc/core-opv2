@@ -5,7 +5,7 @@ Feature: Reservation Preset Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @ReservationPresetManagementCleanup @HighPriority @wip
   Scenario: Operator Create New Group to Assign Driver on Reservation Preset Management Page
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
