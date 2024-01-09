@@ -9,11 +9,11 @@ Feature: All Orders - Preset Filters
   Scenario: Operator Save A New Preset on All Orders Page
     When Operator go to menu Order -> All Orders
     And Operator selects filters on All Orders page:
-      | status            | Transit                            |
-      | creationTimeFrom  | {date: 1 days ago, yyyy-MM-dd}     |
-      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd}    |
-      | shipperName       | {filter-shipper-name}              |
-      | masterShipperName | {shipper-v4-marketplace-legacy-id} |
+      | status            | Transit                         |
+      | creationTimeFrom  | {date: 1 days ago, yyyy-MM-dd}  |
+      | creationTimeTo    | {date: 1 days next, yyyy-MM-dd} |
+      | shipperName       | {shipper-v4-name}               |
+      | masterShipperName | {shipper-v4-marketplace-id}     |
     And Operator selects "Save Current as Preset" preset action on All Orders page
     Then Operator verifies Save Preset dialog on All Orders page contains filters:
       | commons.status: Transit                                                                                    |
