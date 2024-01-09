@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2 @current
+@OperatorV2 @Core @EditOrderV2 @ResolveTicket @ResolveTicketPart2
 Feature: Resolve Recovery Ticket
 
   Background:
@@ -288,7 +288,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Resolve MISSING PETS Ticket upon Global Inbound
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -360,7 +360,7 @@ Feature: Resolve Recovery Ticket
       | HUB INBOUND SCAN |
       | TICKET RESOLVED  |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Resolve MISSING PETS Ticket upon Parcel Sweep
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -434,7 +434,7 @@ Feature: Resolve Recovery Ticket
       | PARCEL ROUTING SCAN |
       | TICKET RESOLVED     |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Resolve MISSING PETS Ticket upon Route Inbound
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -516,7 +516,7 @@ Feature: Resolve Recovery Ticket
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit Order V2 page using data below:
       | name                |
-#      | HUB INBOUND SCAN    |
+#      | ROUTE INBOUND SCAN    |
       | TICKET RESOLVED     |
 
   @HighPriority
