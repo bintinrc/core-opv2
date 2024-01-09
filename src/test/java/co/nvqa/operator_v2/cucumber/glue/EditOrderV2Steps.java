@@ -6,6 +6,7 @@ import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.DateUtil;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.operator_v2.exception.element.NvTestCoreElementTextMismatch;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
@@ -39,6 +40,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable.EVENT_NAME;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -48,6 +51,8 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  */
 @ScenarioScoped
 public class EditOrderV2Steps extends AbstractSteps {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EditOrderV2Steps.class);
 
     private EditOrderV2Page page;
 
@@ -1304,16 +1309,23 @@ public class EditOrderV2Steps extends AbstractSteps {
 
     @Then("Operator verifies ticket status is {value} on Edit Order V2 page")
     public void updateRecoveryTicket(String data) {
-        page.inFrame(() -> {
-            String status = page.recoveryTicket.getText();
-            Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
-            Matcher m = p.matcher(status);
-            if (m.matches()) {
-                Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
-            } else {
-                Assertions.fail("Could not get ticket status from string: " + status);
+        page.inFrame(() -> doWithRetry(() -> {
+            try {
+                page.waitUntilLoaded();
+                String status = page.recoveryTicket.getText();
+                Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+                Matcher m = p.matcher(status);
+                if (m.matches()) {
+                    Assertions.assertThat(m.group(1)).as("Ticket status").isEqualToIgnoringCase(data);
+                } else {
+                    Assertions.fail("Could not get ticket status from string: " + status);
+                }
+            } catch (AssertionError e) {
+                LOGGER.error("Could not get ticket status from string");
+                page.refreshPage();
+                throw new NvTestCoreElementTextMismatch("Ticket status is not RESOLVED");
             }
-        });
+        },"ticket status should be RESOLVED"));
     }
 
     @Then("Operator updates recovery ticket on Edit Order V2 page:")

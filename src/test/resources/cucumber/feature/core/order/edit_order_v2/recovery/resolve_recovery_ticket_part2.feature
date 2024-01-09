@@ -323,7 +323,7 @@ Feature: Resolve Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And Operator waits for 2 seconds
+    And Operator waits for 5 seconds
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -340,10 +340,18 @@ Feature: Resolve Recovery Ticket
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Success                      |
+      | systemId     | sg                           |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Pending                      |
+      | systemId     | sg                           |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
@@ -389,7 +397,7 @@ Feature: Resolve Recovery Ticket
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                 |
       | hubId              | {hub-id}                                                              |
       | taskId             | 1                                                                     |
-    When Operator waits for 2 seconds
+    When Operator waits for 5 seconds
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -406,16 +414,109 @@ Feature: Resolve Recovery Ticket
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Success                      |
+      | systemId     | sg                           |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Pending                      |
+      | systemId     | sg                           |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit Order V2 page using data below:
       | name                |
       | PARCEL ROUTING SCAN |
+      | TICKET RESOLVED     |
+
+  @HighPriority
+  Scenario: Resolve MISSING PETS Ticket upon Route Inbound
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | MISSING                                    |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | orderOutcomeName   | ORDER OUTCOME (MISSING)                    |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
+    When Operator refresh page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | On hold |
+      | granularStatus | On Hold |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name       |
+      | RESCHEDULE |
+    And API Sort - Operator route inbound
+      | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                           |
+      | hubId               | {hub-id}                                                                                                                                             |
+      | routeId             | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                   |
+      | routeInboundRequest | {"scan": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","inbound_type": "SORTING_HUB","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"hub_id":{hub-id}} |
+    When Operator waits for 5 seconds
+    When Operator refresh page
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | PICKUP  |
+      | status | SUCCESS |
+    And Operator verify transaction on Edit Order V2 page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    Then DB Core - verify waypoints record:
+      | id     | {KEY_TRANSACTION.waypointId} |
+      | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Success                      |
+      | systemId     | sg                           |
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    Then DB Core - verify waypoints record:
+      | id     | {KEY_TRANSACTION.waypointId} |
+      | status | Pending                      |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
+      | status       | Pending                      |
+      | systemId     | sg                           |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | name                |
+#      | ROUTE INBOUND SCAN    |
       | TICKET RESOLVED     |
 
   @HighPriority
