@@ -258,7 +258,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
         } catch (AssertionError e) {
           LOGGER.warn("Failed to delete reservation_id [{}]", reservation.getId());
         }
-      }, "cancel reservation", 5000, 8));
+      }, "cancel reservation"));
     }
     // UNSET MILKRUN FOR ALL ADDRESSES
     shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
@@ -318,12 +318,14 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     // DELETE MILKRUN GROUP
     if (createdMilkrunGroups != null) {
       createdMilkrunGroups.forEach(group -> {
-        try {
-          getRouteClient().deleteMilkrunGroup(group.getId());
-          LOGGER.info("Success to delete milkrun group id: [{}]", group.getId());
-        } catch (Exception e) {
-          LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
-        }
+        doWithRetry(() -> {
+          try {
+            getRouteClient().deleteMilkrunGroup(group.getId());
+            LOGGER.info("Success to delete milkrun group id: [{}]", group.getId());
+          } catch (Exception e) {
+            LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
+          }
+        },"delete milkrun group");
       });
     }
   }
