@@ -323,7 +323,7 @@ Feature: Resolve Recovery Ticket
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And Operator waits for 2 seconds
+    And Operator waits for 5 seconds
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -397,7 +397,7 @@ Feature: Resolve Recovery Ticket
       | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                 |
       | hubId              | {hub-id}                                                              |
       | taskId             | 1                                                                     |
-    When Operator waits for 2 seconds
+    When Operator waits for 5 seconds
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
@@ -482,7 +482,7 @@ Feature: Resolve Recovery Ticket
       | hubId               | {hub-id}                                                                                                                                             |
       | routeId             | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                   |
       | routeInboundRequest | {"scan": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","inbound_type": "SORTING_HUB","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"hub_id":{hub-id}} |
-    When Operator waits for 2 seconds
+    When Operator waits for 5 seconds
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
