@@ -260,6 +260,7 @@ Feature: Edit Order Details
       | country       | Singapore                    |
       | routingZoneId | null                         |
 
+  @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page - AASH order merged with another order
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -366,7 +367,7 @@ Feature: Edit Order Details
       | seqNo    | null                         |
       | status   | Pending                      |
 
-
+  @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page - AASH order merged with another order added to route
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -408,7 +409,7 @@ Feature: Edit Order Details
       | contact | +9727894434                |
       | email   | test@mail.com              |
       | address | 9 TUA KONG GREEN 455384 SG |
-   Then API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
+    Then API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
     And Operator verify transaction on Edit Order V2 page using data below:
