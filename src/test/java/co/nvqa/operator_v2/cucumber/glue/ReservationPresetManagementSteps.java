@@ -135,8 +135,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
         PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
             .filter(
                 t -> t.shipper.getText().replace("Assign:", "").trim().equalsIgnoreCase(shipper))
-            .findFirst()
-            .orElseThrow(
+            .findFirst().orElseThrow(
                 () -> new AssertionError("Task for shipper " + shipper + " was not found"));
         pendingTaskBlock.assign.click();
         reservationPresetManagementPage.assignShipperDialog.waitUntilVisible();
@@ -182,10 +181,8 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
   public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
     reservationPresetManagementPage.verifyFileDownloadedSuccessfully("bulk-milkrun-action.csv",
         "shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time\n"
-            + "101,901,add,12363,1,9:00,12:00\n"
-            + "102,902,add,23241,\"1, 2\",12:00,15:00\n"
-            + "103,903,add,32412,\"1, 2, 3\",15:00,19:00\n"
-            + "108,908,delete,32132,,,\n"
+            + "101,901,add,12363,1,9:00,12:00\n" + "102,902,add,23241,\"1, 2\",12:00,15:00\n"
+            + "103,903,add,32412,\"1, 2, 3\",15:00,19:00\n" + "108,908,delete,32132,,,\n"
             + "109,909,delete,32133,,,\n");
   }
 
@@ -198,8 +195,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
         reservationPresetManagementPage.waitUntilPageLoaded();
         reservationPresetManagementPage.pendingTab.click();
         PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
-            .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper))
-            .findFirst()
+            .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper)).findFirst()
             .orElseThrow(
                 () -> new AssertionError("Task for shipper " + shipper + " was not found"));
         pendingTaskBlock.unassign.click();
@@ -250,28 +246,19 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
 
   @After(value = "@ReservationPresetManagementCleanup", order = 9999)
   public void rpmCleanup() {
-    List<Address> shipperAddresses = shipperClient.readAddresses(RPM_SHIPPER_ID);
-    if (!shipperAddresses.isEmpty()) {
-      shipperAddresses.forEach(address -> {
-        try {
-          getShipperClient().deleteAddress(address.getShipperId(), address.getId());
-          LOGGER.info("Success delete address [{}] of shipper [{}]", address.getId(),
-              address.getShipperId());
-        } catch (Throwable ex) {
-          LOGGER.warn("Could not delete address [{}] of shipper [{}]", address.getId(),
-              address.getShipperId());
-        }
-      });
-    }
-    // DELETE ALL SHIPPER RESERVATIONS
+    // CANCEL ALL SHIPPER RESERVATIONS
     ReservationFilter filter = new ReservationFilter();
     filter.setShipperId(RPM_SHIPPER_ID_LEGACY);
     List<ReservationResponse> shipperReservations = getReservationClient().getListOfReservations(
         filter);
     if (!shipperReservations.isEmpty()) {
-      shipperReservations.forEach(
-          reservation -> getReservationClient().updateReservation(reservation.getId(), 4)
-      );
+      shipperReservations.forEach(reservation -> doWithRetry(() -> {
+        try {
+          getReservationClient().updateReservation(reservation.getId(), 4);
+        } catch (AssertionError e) {
+          LOGGER.warn("Failed to delete reservation_id [{}]", reservation.getId());
+        }
+      }, "cancel reservation"));
     }
     // UNSET MILKRUN FOR ALL ADDRESSES
     shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
@@ -304,26 +291,14 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
         CoreScenarioStorageKeys.KEY_CORE_LIST_OF_CREATED_RESERVATION_GROUP);
     // REMOVE ALL PICKUP LOCATION FROM MILKRUN GROUP
     if (createdMilkrunGroups != null) {
-      createdMilkrunGroups.forEach(
-          group -> {
-            try {
-              routeClient.deleteAllMilkrunGroupPickupLocations(group);
-              LOGGER.info("Success to remove all pickup locations from milkrun group id: [{}]",
-                  group.getId());
-            } catch (Exception e) {
-              LOGGER.warn("Failed to remove all pickup locations from milkrun group id: [{}]",
-                  group.getId());
-            }
-          });
-    }
-    // DELETE MILKRUN GROUP
-    if (createdMilkrunGroups != null) {
       createdMilkrunGroups.forEach(group -> {
         try {
-          getRouteClient().deleteMilkrunGroup(group.getId());
-          LOGGER.info("Success to delete milkrun group id: [{}]", group.getId());
+          routeClient.deleteAllMilkrunGroupPickupLocations(group);
+          LOGGER.info("Success to remove all pickup locations from milkrun group id: [{}]",
+              group.getId());
         } catch (Exception e) {
-          LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
+          LOGGER.warn("Failed to remove all pickup locations from milkrun group id: [{}]",
+              group.getId());
         }
       });
     }
@@ -338,6 +313,19 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
           LOGGER.warn("Could not delete address [{}] of shipper [{}]", address.getId(),
               address.getShipperId());
         }
+      });
+    }
+    // DELETE MILKRUN GROUP
+    if (createdMilkrunGroups != null) {
+      createdMilkrunGroups.forEach(group -> {
+        doWithRetry(() -> {
+          try {
+            getRouteClient().deleteMilkrunGroup(group.getId());
+            LOGGER.info("Success to delete milkrun group id: [{}]", group.getId());
+          } catch (Exception e) {
+            LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
+          }
+        },"delete milkrun group");
       });
     }
   }
