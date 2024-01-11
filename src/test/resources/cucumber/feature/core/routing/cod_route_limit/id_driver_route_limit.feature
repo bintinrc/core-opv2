@@ -27,20 +27,20 @@ Feature: ID - Driver Route Limit
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
+      | date                             | id                                 | driverName                                  | hub        | zone        | driverTypeName     | comments                                 | tags             |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].id} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} | {route-tag-name} |
     And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].id}  |
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | id                                 |
     And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[2].id}  |
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | id                                 |
     And DB Route - verify route_logs record:
-      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[3].id}  |
+      | legacyId | {KEY_LIST_OF_CREATED_ROUTES[3].id} |
       | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | systemId | id                                 |
 
@@ -235,7 +235,7 @@ Feature: ID - Driver Route Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}]} |
     #    create route 4
     And API Core - Operator fail to create new route from zonal routing using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId}] }                                                                                                                                                                                  |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId}] }                                                                                                                                                  |
       | errorMessage       | {"code": 103102,"nvErrorCode": "SERVER_ERROR_EXCEPTION","messages": ["exceptions.ProcessingException: Driver has more than 3 routes for date."],"application": "core","description": "INTERNAL_SERVER_ERROR","data": {"message": "exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit "}} |
     Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'

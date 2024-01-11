@@ -174,20 +174,22 @@ public class TestUtils extends CommonUiTestUtils {
     return fileText.toString();
   }
 
-  public static void findElementAndClick(String elementString, String locator, WebDriver webDriver){
+  public static void findElementAndClick(String elementString, String locator,
+      WebDriver webDriver) {
     WebElement element = null;
-    if(locator.equals("id")){
+    if (locator.equals("id")) {
       element = webDriver.findElement(By.id(elementString));
-    }else if(locator.equals("xpath")){
+    } else if (locator.equals("xpath")) {
       element = webDriver.findElement(By.xpath(elementString));
-    }else if(locator.equals("class")){
+    } else if (locator.equals("class")) {
       element = webDriver.findElement(By.className(elementString));
     }
     element.click();
   }
 
-  public static void callJavaScriptExecutor(String argument, WebElement element, WebDriver webDriver){
-    JavascriptExecutor jse = ((JavascriptExecutor)webDriver);
+  public static void callJavaScriptExecutor(String argument, WebElement element,
+      WebDriver webDriver) {
+    JavascriptExecutor jse = ((JavascriptExecutor) webDriver);
     jse.executeScript(argument, element);
   }
 }

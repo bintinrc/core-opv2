@@ -258,7 +258,7 @@ Feature: Change Delivery Timings
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Route - verify waypoints record:
       | legacyId   | {KEY_TRANSACTION.waypointId} |
-      | timewindow | <timewindowId>                     |
+      | timewindow | <timewindowId>               |
 
     Examples:
       | timeWindow  | timewindowId | timeForm | timeTo   |

@@ -205,7 +205,7 @@ Feature: Add Order To Route
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                       |
+      | top    | Network Request Error                                                                                        |
       | bottom | ^.*Error Code: 103088.*Error Message: Current route {KEY_LIST_OF_CREATED_ROUTES[2].id} has status ARCHIVED.* |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"

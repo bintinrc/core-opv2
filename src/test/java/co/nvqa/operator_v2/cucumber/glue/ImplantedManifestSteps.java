@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.NvTestWaitTimeoutException;
 import co.nvqa.operator_v2.exception.page.NvTestCoreImplantedManifestException;
@@ -26,6 +25,7 @@ import static co.nvqa.operator_v2.selenium.page.ImplantedManifestPage.ImplantedM
  */
 @ScenarioScoped
 public class ImplantedManifestSteps extends AbstractSteps {
+
   private ImplantedManifestPage page;
 
 

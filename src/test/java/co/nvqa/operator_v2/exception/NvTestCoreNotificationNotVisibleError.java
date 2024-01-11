@@ -15,7 +15,8 @@ public class NvTestCoreNotificationNotVisibleError extends NvTestProductExceptio
     super(message);
   }
 
-  public NvTestCoreNotificationNotVisibleError(String message, Throwable cause, boolean enableSuppression,
+  public NvTestCoreNotificationNotVisibleError(String message, Throwable cause,
+      boolean enableSuppression,
       boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

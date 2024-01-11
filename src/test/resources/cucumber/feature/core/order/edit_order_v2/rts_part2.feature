@@ -54,8 +54,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
       | status | PENDING                                        |
@@ -137,8 +137,8 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name   | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
@@ -225,8 +225,8 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -306,8 +306,8 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -462,7 +462,7 @@ Feature: RTS
       | address1     | 50 Amber Rd                    |
       | postalCode   | 439888                         |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed |
+      | top | 1 order(s) RTS-ed |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |
@@ -533,8 +533,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
-      | top                | 1 order(s) RTS-ed                           |
-      | bottom             | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | top    | 1 order(s) RTS-ed                           |
+      | bottom | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     Then Operator verify order events on Edit Order V2 page using data below:
       | name                       |

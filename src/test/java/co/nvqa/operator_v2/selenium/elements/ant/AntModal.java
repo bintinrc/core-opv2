@@ -48,8 +48,8 @@ public class AntModal extends PageElement {
     }
   }
 
-  public void closeDialogIfVisible(){
-    if (isDisplayed()){
+  public void closeDialogIfVisible() {
+    if (isDisplayed()) {
       close.click();
     }
   }

@@ -5,8 +5,6 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea

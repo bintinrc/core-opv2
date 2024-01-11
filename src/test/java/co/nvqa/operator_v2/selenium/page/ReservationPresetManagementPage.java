@@ -112,7 +112,8 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void verifyGroupDeleted(String groupName) {
     reservationPresetTable.filterByColumn(COLUMN_NAME, groupName);
-   Assertions.assertThat(        reservationPresetTable.isTableEmpty()).as("Group with Name [" + groupName + "] was not deleted").isTrue();
+    Assertions.assertThat(reservationPresetTable.isTableEmpty())
+        .as("Group with Name [" + groupName + "] was not deleted").isTrue();
   }
 
   /**

@@ -22,7 +22,7 @@ Feature: Cancel RTS
     And Operator click Return to sender -> Cancel RTS on Edit Order V2 page
     And Operator cancel RTS on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
-      | top                | The RTS has been cancelled |
+      | top | The RTS has been cancelled |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order V2 page
     When Operator refresh page
     And Operator unmask Edit Order V2 page

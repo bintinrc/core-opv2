@@ -307,7 +307,7 @@ Feature: Reservation Preset Management
       | driverId       | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}       |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
-      | status   | Routed                                  |
+      | status   | Routed                                   |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} |
     And Operator refresh page
     # Create Route and 3rd Reservation for Tomorrow

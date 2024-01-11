@@ -26,7 +26,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.util.CoreDateUtil;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -35,8 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -45,7 +42,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderV2Page.EventsTable.EVENT_NAME;
-import static co.nvqa.operator_v2.selenium.page.EditOrderV2Page.TransactionsTable.COLUMN_TYPE;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
