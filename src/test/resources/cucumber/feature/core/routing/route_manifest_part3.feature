@@ -656,7 +656,7 @@ Feature: Route Manifest
       | relationship    | -                                                          |
     And Operator verify delivery record in Waypoint Details dialog on Route Manifest page:
       | trackingId    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status        | Fail                               |
+      | status        | Fail                                  |
       | codCollected  | No COD                                |
       | failureReason | 9, Cannot Make It (CMI)               |
     And Operator click 'View POD' button for "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" delivery in Waypoint Details dialog on Route Manifest page

@@ -386,7 +386,7 @@ Feature: Route Monitoring V2
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
-    
+
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |

@@ -15,7 +15,8 @@ public class NvTestCoreWindowOrTabNotFoundError extends NvTestProductException {
     super(message);
   }
 
-  public NvTestCoreWindowOrTabNotFoundError(String message, Throwable cause, boolean enableSuppression,
+  public NvTestCoreWindowOrTabNotFoundError(String message, Throwable cause,
+      boolean enableSuppression,
       boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

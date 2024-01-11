@@ -18,7 +18,7 @@ Feature: Edit Instructions
     When Operator enter Order Instructions on Edit Order V2 page:
       | pickupInstruction | new pickup instruction |
     Then Operator verifies that success react notification displayed:
-      | top                | Instructions updated |
+      | top | Instructions updated |
     And Operator refresh page
     When Operator verify Order Instructions on Edit Order V2 page:
       | pickupInstruction | new pickup instruction                      |
@@ -39,7 +39,7 @@ Feature: Edit Instructions
     When Operator enter Order Instructions on Edit Order V2 page:
       | deliveryInstruction | new delivery instruction |
     Then Operator verifies that success react notification displayed:
-      | top                | Instructions updated |
+      | top | Instructions updated |
     And Operator refresh page
     When Operator verify Order Instructions on Edit Order V2 page:
       | deliveryInstruction | new delivery instruction                    |
@@ -62,7 +62,7 @@ Feature: Edit Instructions
       | deliveryInstruction | new delivery instruction |
       | orderInstruction    | new order instruction    |
     Then Operator verifies that success react notification displayed:
-      | top                | Instructions updated |
+      | top | Instructions updated |
     And Operator refresh page
     When Operator verify Order Instructions on Edit Order V2 page:
       | pickupInstruction   | new pickup instruction   |
@@ -86,7 +86,7 @@ Feature: Edit Instructions
       | deliveryInstruction | empty |
       | orderInstruction    | empty |
     Then Operator verifies that success react notification displayed:
-      | top                | Instructions updated |
+      | top | Instructions updated |
     And Operator refresh page
     When Operator verify Order Instructions on Edit Order V2 page:
       | pickupInstruction   | - |

@@ -47,9 +47,10 @@ public class ApiOperatorPortalExtSteps extends StandardSteps<ScenarioManager> {
     setPhoneNumber(mapOfDynamicVariable, country);
 
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
-    String driverCreateRequestJson = StandardTestUtils.replaceTokens(resolvedMapOfData.get("driverCreateRequest"),
+    String driverCreateRequestJson = StandardTestUtils.replaceTokens(
+        resolvedMapOfData.get("driverCreateRequest"),
         mapOfDynamicVariable);
-      Driver createDriverRequest = fromJsonSnakeCase(
+    Driver createDriverRequest = fromJsonSnakeCase(
         driverCreateRequestJson,
         Driver.class);
 

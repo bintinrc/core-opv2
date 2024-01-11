@@ -34,19 +34,19 @@ Feature: All Orders - Add To Route
       | bottom | add to route       |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | status  | Routed                                                     |
+      | seqNo    | not null                                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | status  | Routed                                                     |
+      | seqNo    | not null                                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
-      | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | status  | Routed                                                     |
+      | seqNo    | not null                                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
     And DB Core - verify route_monitoring_data record:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
@@ -101,29 +101,29 @@ Feature: All Orders - Add To Route
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order event on Edit Order V2 page using data below:
-      | name    | ADD TO ROUTE                      |
+      | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status  | PENDING                           |
+      | status  | PENDING                            |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator unmask edit order V2 page
     Then Operator verify order event on Edit Order V2 page using data below:
-      | name    | ADD TO ROUTE                      |
+      | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | status  | PENDING                           |
+      | status  | PENDING                            |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | status  | Routed                                                     |
+      | seqNo    | not null                                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | status   | Routed                                                     |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo   | not null                                                   |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
-      | status  | Routed                                                     |
+      | seqNo    | not null                                                   |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+      | status   | Routed                                                     |
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |

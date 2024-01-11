@@ -341,17 +341,17 @@ Feature: Resolve Recovery Ticket
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Success                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
+      | systemId | sg                           |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Pending                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | systemId | sg                           |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
@@ -415,17 +415,17 @@ Feature: Resolve Recovery Ticket
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Success                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
+      | systemId | sg                           |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Pending                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | systemId | sg                           |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
@@ -500,24 +500,24 @@ Feature: Resolve Recovery Ticket
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Success                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Success                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
+      | systemId | sg                           |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status       | Pending                      |
-      | systemId     | sg                           |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | systemId | sg                           |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name                |
+      | name            |
 #      | ROUTE INBOUND SCAN    |
-      | TICKET RESOLVED     |
+      | TICKET RESOLVED |
 
   @HighPriority
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
