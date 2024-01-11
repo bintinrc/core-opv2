@@ -4,7 +4,6 @@ import co.nvqa.common.model.address.Address;
 import co.nvqa.common.model.address.MilkrunSettings;
 import co.nvqa.common.shipper.model.ServiceTypeLevel;
 import co.nvqa.common.shipper.model.Shipper;
-import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.common.shipper.model.settings.DistributionPoint;
 import co.nvqa.common.shipper.model.settings.LabelPrinter;
 import co.nvqa.common.shipper.model.settings.MarketplaceBilling;
@@ -12,13 +11,12 @@ import co.nvqa.common.shipper.model.settings.MarketplaceDefault;
 import co.nvqa.common.shipper.model.settings.OrderCreate;
 import co.nvqa.common.shipper.model.settings.Pickup;
 import co.nvqa.common.shipper.model.settings.Pricing;
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdBooleanSwitch;
-import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.md.TabWrapper;
@@ -26,9 +24,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,9 +31,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -527,13 +520,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     if (BooleanUtils.isTrue(address.getMilkRun())) {
       Assertions.assertThat(
-          isElementVisible("//nv-icon-text-button[@name='container.shippers.milkrun']"))
+              isElementVisible("//nv-icon-text-button[@name='container.shippers.milkrun']"))
           .as("Milkrun action button is not displayed for address").isTrue();
       verifyMilkrunSettings(address);
       scrollIntoView("//*[@name='container.shippers.more-reservation-add-pickup-address']", false);
     } else {
       Assertions.assertThat(
-          isElementVisible("//nv-icon-text-button[@name='container.shippers.set-as-milkrun']"))
+              isElementVisible("//nv-icon-text-button[@name='container.shippers.set-as-milkrun']"))
           .as("Set As Milkrun action button is not displayed for address").isTrue();
     }
   }
@@ -547,7 +540,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
     Assertions.assertThat(
-        getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"))
+            getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"))
         .as("Number of Milkrun Reservations").isEqualTo(reservationsCount);
     addAddressDialog.saveChanges.click();
     addAddressDialog.waitUntilInvisible();

@@ -15,7 +15,8 @@ import org.openqa.selenium.support.FindBy;
 
 public class MdDatepicker extends PageElement {
 
-  private static final DateTimeFormatter DATE_FILTER_SDF = DateTimeFormatter.ofPattern("EEEE MMMM d yyyy");
+  private static final DateTimeFormatter DATE_FILTER_SDF = DateTimeFormatter.ofPattern(
+      "EEEE MMMM d yyyy");
 
   public MdDatepicker(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);

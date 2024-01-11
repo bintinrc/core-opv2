@@ -20,19 +20,16 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import javax.inject.Inject;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
 
 import static co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.ReservationPresetTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.util.TestConstants.RPM_SHIPPER_ID;
@@ -325,7 +322,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
           } catch (Exception e) {
             LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
           }
-        },"delete milkrun group");
+        }, "delete milkrun group");
       });
     }
   }

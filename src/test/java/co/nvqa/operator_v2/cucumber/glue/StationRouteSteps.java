@@ -496,7 +496,7 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyBanner() {
     page.inFrame(() -> {
       assertThat(page.banner.isDisplayed()).withFailMessage(
-          "Banner [To check assignment and create routes, there should be no \"UNASSIGNED\" for the \"Assigned driver\" column.\n] is not displayed")
+              "Banner [To check assignment and create routes, there should be no \"UNASSIGNED\" for the \"Assigned driver\" column.\n] is not displayed")
           .isTrue();
     });
   }
@@ -695,7 +695,7 @@ public class StationRouteSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.errorsDialog.waitUntilVisible();
       Assertions.assertThat(
-          page.errorsDialog.error.stream().map(PageElement::getText).collect(Collectors.toList()))
+              page.errorsDialog.error.stream().map(PageElement::getText).collect(Collectors.toList()))
           .as("List of errors").containsExactlyInAnyOrderElementsOf(resolveValues(data));
     });
   }

@@ -15,6 +15,7 @@ import org.assertj.core.api.Assertions;
  */
 @ScenarioScoped
 public class ThirdPartyOrderManagementSteps extends AbstractSteps {
+
   private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
   public ThirdPartyOrderManagementSteps() {
@@ -53,7 +54,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     thirdPartyOrderManagementPage.uploadSingleMappingDialog.waitUntilVisible();
     pause2s();
     Assertions.assertThat(
-        thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount())
+            thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount())
         .as("Number of Upload Results records").isEqualTo(1);
     ThirdPartyOrderMapping actual = thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable
         .readEntity(1);

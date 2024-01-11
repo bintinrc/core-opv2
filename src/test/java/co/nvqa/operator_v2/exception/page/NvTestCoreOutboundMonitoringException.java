@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.exception.page;
 import co.nvqa.common.utils.NvTestProductException;
 
 public class NvTestCoreOutboundMonitoringException extends NvTestProductException {
+
   public NvTestCoreOutboundMonitoringException() {
   }
 
@@ -14,7 +15,8 @@ public class NvTestCoreOutboundMonitoringException extends NvTestProductExceptio
     super(message);
   }
 
-  public NvTestCoreOutboundMonitoringException(String message, Throwable cause, boolean enableSuppression,
+  public NvTestCoreOutboundMonitoringException(String message, Throwable cause,
+      boolean enableSuppression,
       boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

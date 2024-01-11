@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.exception.page;
 import co.nvqa.common.utils.NvTestProductException;
 
 public class NvTestCoreMainPageException extends NvTestProductException {
+
   public NvTestCoreMainPageException() {
   }
 

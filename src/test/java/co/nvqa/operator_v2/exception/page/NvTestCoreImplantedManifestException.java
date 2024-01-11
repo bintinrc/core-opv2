@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.exception.page;
 import co.nvqa.common.utils.NvTestProductException;
 
 public class NvTestCoreImplantedManifestException extends NvTestProductException {
+
   public NvTestCoreImplantedManifestException() {
   }
 
@@ -14,7 +15,8 @@ public class NvTestCoreImplantedManifestException extends NvTestProductException
     super(message);
   }
 
-  public NvTestCoreImplantedManifestException(String message, Throwable cause, boolean enableSuppression,
+  public NvTestCoreImplantedManifestException(String message, Throwable cause,
+      boolean enableSuppression,
       boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

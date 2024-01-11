@@ -95,7 +95,7 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
       isTableEmpty = routeCashInboundTable.isEmpty();
     }
 
-   Assertions.assertThat(isTableEmpty).as("Table should be empty.").isTrue();
+    Assertions.assertThat(isTableEmpty).as("Table should be empty.").isTrue();
   }
 
   public void verifyCsvFileDownloadedSuccessfully(RouteCashInboundCod routeCashInboundCod) {
@@ -111,7 +111,8 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
          */
-   Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.").isFalse();
+    Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.")
+        .isFalse();
 
         /*
           If the table is not empty, then filter table by receiptNo
@@ -119,7 +120,8 @@ public class RouteCashInboundPage extends SimpleReactPage<RouteCashInboundPage> 
          */
     routeCashInboundTable
         .filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
-   Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.").isFalse();
+    Assertions.assertThat(routeCashInboundTable.isTableEmpty()).as("Table should not be empty.")
+        .isFalse();
   }
 
   public static class RouteCashInboundTable extends AntTableV2<RouteCashInboundCod> {
