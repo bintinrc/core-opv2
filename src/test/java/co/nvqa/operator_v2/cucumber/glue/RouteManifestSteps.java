@@ -72,6 +72,17 @@ public class RouteManifestSteps extends AbstractSteps {
         assertions.assertAll();
     }
 
+    @Then("Operator verify Route summary COD collection on Route Manifest page:")
+    public void verifyCODCollection(Map<String, Map<String, String>> data) {
+        SoftAssertions assertions = new SoftAssertions();
+        page.inFrame(() -> {
+            data.forEach((type, map) -> resolveKeyValues(map).forEach(
+                (status, value) -> assertions.assertThat(page.getCODCollectionValue(type))
+                    .as("%s %s", type, status).isEqualTo(value)));
+        });
+        assertions.assertAll();
+    }
+
     @Then("Operator verify waypoint at Route Manifest using data below:")
     public void operatorVerifyWaypointAtRouteManifest(Map<String, String> mapOfData) {
         page.inFrame(() -> page.verifyWaypointDetails(
