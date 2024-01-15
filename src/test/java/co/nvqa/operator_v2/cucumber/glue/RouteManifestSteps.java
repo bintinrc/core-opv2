@@ -503,6 +503,11 @@ public class RouteManifestSteps extends AbstractSteps {
         assertions.assertThat(page.codCollectionPending.getText()).as("COD Collection - Pending")
             .isEqualTo(finalData.get("codCollectionPending"));
       }
+      if(finalData.containsKey("codCollectionPendingNoComa")) {
+        String codNoComa = page.codCollectionPending.getText().replace(",", "").trim();
+        assertions.assertThat(codNoComa).as("COD Collection - Pending")
+            .isEqualTo(finalData.get("codCollectionPendingNoComa"));
+      }
       if (finalData.containsKey("driverId")) {
         assertions.assertThat(page.driverId.getText()).as("Driver ID")
             .isEqualTo(finalData.get("driverId"));
