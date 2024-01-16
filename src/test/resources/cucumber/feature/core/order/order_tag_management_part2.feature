@@ -38,7 +38,7 @@ Feature: Order Tag Management
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> Order Tag Management
     And Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName | {filter-shipper-name} |
+      | shipperName | {shipper-v4-name} |
     Then Operator searches and selects orders created on Order Tag Management page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 

@@ -93,7 +93,8 @@ public class ImplantedManifestPage extends SimpleReactPage<ImplantedManifestPage
               .put(COLUMN_RACK_SECTOR, "rackSector")
               .put(COLUMN_DELIVERY_BY, "deliveryBy")
               .build());
-      setActionButtonsLocators(ImmutableMap.of(ACTION_REMOVE, "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='isValid']//button"));
+      setActionButtonsLocators(ImmutableMap.of(ACTION_REMOVE,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='isValid']//button"));
       setEntityClass(ImplantedManifestOrder.class);
     }
   }

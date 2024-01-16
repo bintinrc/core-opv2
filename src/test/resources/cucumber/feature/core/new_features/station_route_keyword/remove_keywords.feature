@@ -108,5 +108,5 @@ Feature: Remove Keywords
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, remove' button on Remove keywords dialog:
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                 |
+      | top    | Status 400: Unknown                                                                                                                                                                                |
       | bottom | ^.*Error Message: cannot delete all keywords of current coverage. \[area: AREA RKDK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no key....* |

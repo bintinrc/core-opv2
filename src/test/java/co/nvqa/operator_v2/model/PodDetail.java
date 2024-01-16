@@ -5,103 +5,103 @@ import java.util.Map;
 
 public class PodDetail extends DataEntity<PodDetail> {
 
-    String podId;
-    String waypointType;
-    String type;
-    String status;
-    String distance;
-    String podTime;
-    String driver;
-    String recipient;
-    String address;
-    String verificationMethod;
+  String podId;
+  String waypointType;
+  String type;
+  String status;
+  String distance;
+  String podTime;
+  String driver;
+  String recipient;
+  String address;
+  String verificationMethod;
 
-    public PodDetail(Map<String, ?> dataMap) {
-        fromMap(dataMap);
-    }
+  public PodDetail(Map<String, ?> dataMap) {
+    fromMap(dataMap);
+  }
 
-    public PodDetail() {
+  public PodDetail() {
 
-    }
+  }
 
-    public String getPodId() {
-        return podId;
-    }
+  public String getPodId() {
+    return podId;
+  }
 
-    public void setPodId(String podId) {
-        this.podId = podId;
-    }
+  public void setPodId(String podId) {
+    this.podId = podId;
+  }
 
-    public String getWaypointType() {
-        return waypointType;
-    }
+  public String getWaypointType() {
+    return waypointType;
+  }
 
-    public void setWaypointType(String waypointType) {
-        this.waypointType = waypointType;
-    }
+  public void setWaypointType(String waypointType) {
+    this.waypointType = waypointType;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public String getDistance() {
-        return distance;
-    }
+  public String getDistance() {
+    return distance;
+  }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
+  public void setDistance(String distance) {
+    this.distance = distance;
+  }
 
-    public String getPodTime() {
-        return podTime;
-    }
+  public String getPodTime() {
+    return podTime;
+  }
 
-    public void setPodTime(String podTime) {
-        this.podTime = podTime;
-    }
+  public void setPodTime(String podTime) {
+    this.podTime = podTime;
+  }
 
-    public String getDriver() {
-        return driver;
-    }
+  public String getDriver() {
+    return driver;
+  }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
+  public void setDriver(String driver) {
+    this.driver = driver;
+  }
 
-    public String getRecipient() {
-        return recipient;
-    }
+  public String getRecipient() {
+    return recipient;
+  }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
+  public void setRecipient(String recipient) {
+    this.recipient = recipient;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public String getVerificationMethod() {
-        return verificationMethod;
-    }
+  public String getVerificationMethod() {
+    return verificationMethod;
+  }
 
-    public void setVerificationMethod(String verificationMethod) {
-        this.verificationMethod = verificationMethod;
-    }
+  public void setVerificationMethod(String verificationMethod) {
+    this.verificationMethod = verificationMethod;
+  }
 
 }

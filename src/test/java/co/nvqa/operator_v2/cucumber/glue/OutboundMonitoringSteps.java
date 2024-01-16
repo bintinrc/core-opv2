@@ -354,7 +354,8 @@ public class OutboundMonitoringSteps extends AbstractSteps {
       try {
         waitUntil(() -> page.processModal.errors.size() == expected.size(), 10_000);
       } catch (NvTestWaitTimeoutException e) {
-        throw new NvTestCoreOutboundMonitoringException("Number of errors is not " + expected.size());
+        throw new NvTestCoreOutboundMonitoringException(
+            "Number of errors is not " + expected.size());
       }
       List<String> actual = page.processModal.errors.stream()
           .map(PageElement::getNormalizedText)
