@@ -1,12 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.model.BatchOrder;
 import co.nvqa.operator_v2.selenium.page.BatchOrderPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
-import java.util.List;
-import java.util.Map;
-import org.assertj.core.api.Assertions;
 
 
 /**
@@ -45,8 +41,8 @@ public class BatchOrderSteps extends AbstractSteps {
   public void rollbackOrders() {
     batchOrdersPage.inFrame(() -> {
       batchOrdersPage.rollback.click();
-      batchOrdersPage.rollbackDialog.password.setValue("1234567890");
-      batchOrdersPage.rollbackDialog.rollback.click();
+      batchOrdersPage.password.setValue("1234567890");
+      batchOrdersPage.rollbackButton.click();
     });
   }
 

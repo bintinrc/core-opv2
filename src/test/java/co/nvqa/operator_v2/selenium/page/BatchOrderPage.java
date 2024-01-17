@@ -1,19 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.model.BatchOrder;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.util.Map;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
@@ -31,8 +22,11 @@ public class BatchOrderPage extends SimpleReactPage<BatchOrderPage> {
   @FindBy(xpath = "//button[@data-testid='rollback-button']")
   public Button rollback;
 
-  @FindBy(xpath = "//div[@data-testid='confirm-rollback-modal']")
-  public RollbackDialog rollbackDialog;
+  @FindBy(xpath = "//input[@data-testid='password-input']")
+  public ForceClearTextBox password;
+
+  @FindBy(xpath = "//button[@data-testid='modal-rollback-button']")
+  public Button rollbackButton;
 
   public OrdersTable ordersTable;
 
@@ -59,20 +53,6 @@ public class BatchOrderPage extends SimpleReactPage<BatchOrderPage> {
       );
       setEntityClass(BatchOrder.class);
       setMdVirtualRepeat("order in getTableData()");
-    }
-  }
-
-  public static class RollbackDialog extends Dialog {
-
-    @FindBy(xpath = "//input[@data-testid='password-input']")
-    public ForceClearTextBox password;
-
-    @FindBy(xpath = "//button[@data-testid='modal-rollback-button']")
-    public Button rollback;
-
-
-    public RollbackDialog(Frame owner) {
-      super(owner);
     }
   }
 }
