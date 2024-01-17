@@ -174,6 +174,7 @@ Feature: Route Manifest
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
       | txnStatus      | PENDING                                            |
+      | txnType        | DELIVERY                                           |
       | dnrId          | 0                                                  |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
       | granularStatus | Pickup fail                                        |
@@ -302,6 +303,7 @@ Feature: Route Manifest
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
       | txnStatus      | FAIL                                               |
+      | txnType        | DELIVERY                                           |
       | dnrId          | 2                                                  |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
       | granularStatus | Pending Reschedule                                 |
