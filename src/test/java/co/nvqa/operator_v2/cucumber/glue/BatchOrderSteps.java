@@ -42,7 +42,7 @@ public class BatchOrderSteps extends AbstractSteps {
     batchOrdersPage.inFrame(() -> {
       batchOrdersPage.rollback.click();
       batchOrdersPage.password.setValue("1234567890");
-      batchOrdersPage.rollbackButton.click();
+      batchOrdersPage.rollbackDialogButton.click();
     });
   }
 

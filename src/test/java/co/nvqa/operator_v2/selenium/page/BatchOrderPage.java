@@ -26,7 +26,7 @@ public class BatchOrderPage extends SimpleReactPage<BatchOrderPage> {
   public ForceClearTextBox password;
 
   @FindBy(xpath = "//button[@data-testid='modal-rollback-button']")
-  public Button rollbackButton;
+  public Button rollbackDialogButton;
 
   public OrdersTable ordersTable;
 
