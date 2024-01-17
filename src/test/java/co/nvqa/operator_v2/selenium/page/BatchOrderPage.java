@@ -1,11 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.operator_v2.model.BatchOrder;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,18 +20,18 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class BatchOrderPage extends OperatorV2SimplePage {
+public class BatchOrderPage extends SimpleReactPage<BatchOrderPage> {
 
-  @FindBy(id = "input-number-batch-id")
-  public TextBox batchId;
+  @FindBy(xpath = "//input[@data-testid='batchId-input']")
+  public ForceClearTextBox batchId;
 
-  @FindBy(name = "commons.search")
-  public NvApiTextButton search;
+  @FindBy(xpath = "//button[@data-testid='search-batch-id-button']")
+  public Button search;
 
-  @FindBy(name = "commons.rollback")
-  public NvIconTextButton rollback;
+  @FindBy(xpath = "//button[@data-testid='rollback-button']")
+  public Button rollback;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//div[@data-testid='confirm-rollback-modal']")
   public RollbackDialog rollbackDialog;
 
   public OrdersTable ordersTable;
@@ -36,99 +41,7 @@ public class BatchOrderPage extends OperatorV2SimplePage {
     ordersTable = new OrdersTable(webDriver);
   }
 
-  public static class BatchOrderInfo extends DataEntity<BatchOrderInfo> {
-
-    private String trackingId;
-    private String type;
-    private String fromName;
-    private String fromAddress;
-    private String toName;
-    private String toAddress;
-    private String status;
-    private String granularStatus;
-    private String createdAt;
-
-    public BatchOrderInfo() {
-    }
-
-    public BatchOrderInfo(Map<String, ?> data) {
-      super(data);
-    }
-
-    public String getTrackingId() {
-      return trackingId;
-    }
-
-    public void setTrackingId(String trackingId) {
-      this.trackingId = trackingId;
-    }
-
-    public String getType() {
-      return type;
-    }
-
-    public void setType(String type) {
-      this.type = type;
-    }
-
-    public String getFromName() {
-      return fromName;
-    }
-
-    public void setFromName(String fromName) {
-      this.fromName = fromName;
-    }
-
-    public String getFromAddress() {
-      return fromAddress;
-    }
-
-    public void setFromAddress(String fromAddress) {
-      this.fromAddress = fromAddress;
-    }
-
-    public String getToName() {
-      return toName;
-    }
-
-    public void setToName(String toName) {
-      this.toName = toName;
-    }
-
-    public String getToAddress() {
-      return toAddress;
-    }
-
-    public void setToAddress(String toAddress) {
-      this.toAddress = toAddress;
-    }
-
-    public String getStatus() {
-      return status;
-    }
-
-    public void setStatus(String status) {
-      this.status = status;
-    }
-
-    public String getGranularStatus() {
-      return granularStatus;
-    }
-
-    public void setGranularStatus(String granularStatus) {
-      this.granularStatus = granularStatus;
-    }
-
-    public String getCreatedAt() {
-      return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-      this.createdAt = createdAt;
-    }
-  }
-
-  public static class OrdersTable extends MdVirtualRepeatTable<BatchOrderInfo> {
+  public static class OrdersTable extends MdVirtualRepeatTable<BatchOrder> {
 
     private OrdersTable(WebDriver webDriver) {
       super(webDriver);
@@ -144,21 +57,22 @@ public class BatchOrderPage extends OperatorV2SimplePage {
           .put("createdAt", "c_created-at")
           .build()
       );
-      setEntityClass(BatchOrderInfo.class);
+      setEntityClass(BatchOrder.class);
       setMdVirtualRepeat("order in getTableData()");
     }
   }
 
-  public static class RollbackDialog extends MdDialog {
+  public static class RollbackDialog extends Dialog {
 
-    @FindBy(css = "[aria-label='Password']")
-    public TextBox password;
+    @FindBy(xpath = "//input[@data-testid='password-input']")
+    public ForceClearTextBox password;
 
-    @FindBy(name = "commons.rollback")
-    public NvApiTextButton rollback;
+    @FindBy(xpath = "//button[@data-testid='modal-rollback-button']")
+    public Button rollback;
 
-    public RollbackDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
+
+    public RollbackDialog(Frame owner) {
+      super(owner);
     }
   }
 }
