@@ -1,11 +1,11 @@
-@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart1
+@OperatorV2 @Core @PickUps @DeleteDriverV2 @ReservationPresetManagementCleanup @ReservationPresetManagement @ReservationPresetManagementPart1
 Feature: Reservation Preset Management
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Operator Create New Group to Assign Driver on Reservation Preset Management Page
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -25,7 +25,7 @@ Feature: Reservation Preset Management
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_CREATED_RESERVATION_GROUP[1].name} |
 
-  @DeleteDriverV2 @ReservationPresetManagementCleanup @MediumPriority
+  @MediumPriority
   Scenario: Operator Edit Reservation Group on Reservation Preset Management Page
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -51,7 +51,7 @@ Feature: Reservation Preset Management
     And API Route - Operator get created Reservation Group params:
       | reservationGroupName | {KEY_EDITED_RESERVATION_GROUP_NAME[1]} |
 
-  @DeleteDriverV2 @ReservationPresetManagementCleanup @MediumPriority
+  @MediumPriority
   Scenario: Operator Delete Reservation Group on Reservation Preset Management Page
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -76,7 +76,7 @@ Feature: Reservation Preset Management
     Then Operator verify created Reservation Group was deleted successfully on Reservation Preset Management page:
       | name | {KEY_CREATED_RESERVATION_GROUP[1].name} |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Assign a Shipper Milkrun Address to a Milkrun Groups
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -112,7 +112,7 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{rpm-shipper-name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP[1].name} |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Route Pending Reservations From the Reservation Preset Management Page
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -174,8 +174,7 @@ Feature: Reservation Preset Management
       | status   | Routed                                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
-
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Create Route for Pickup Reservation - Route Date = Today
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -234,7 +233,7 @@ Feature: Reservation Preset Management
       | status   | Routed                                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Create Route for Pickup Reservation - Route Date = Tomorrow
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -293,7 +292,7 @@ Feature: Reservation Preset Management
       | status   | Routed                                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId}         |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Unassign a Shipper Milkrun Address from a Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -343,7 +342,7 @@ Feature: Reservation Preset Management
     Then Operator verifies that success toast displayed:
       | top | ^{rpm-shipper-name} \(.*\) has been unlink from {KEY_CREATED_RESERVATION_GROUP[1].name} group! |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @HighPriority
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Has Not Assign to Milkrun and Has Not Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
