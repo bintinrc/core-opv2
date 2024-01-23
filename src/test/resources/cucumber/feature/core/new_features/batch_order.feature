@@ -159,10 +159,10 @@ Feature: Batch Order
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                              |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
-     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -188,7 +188,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
     When Operator rollback orders on Batch Orders page
-    And Operator search for "{KEY_CREATED_BATCH.batchId}" batch on Batch Orders page
+    And Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
