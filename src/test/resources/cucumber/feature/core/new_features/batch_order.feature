@@ -52,18 +52,18 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+#
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
     When API Order - Operator v4.1 create new batch
@@ -121,17 +121,17 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
@@ -211,17 +211,17 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
 
   @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Staging
@@ -344,16 +344,16 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |

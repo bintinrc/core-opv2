@@ -13,19 +13,19 @@ import org.openqa.selenium.support.FindBy;
  */
 public class BatchOrderPage extends SimpleReactPage<BatchOrderPage> {
 
-  @FindBy(xpath = "//input[@data-testid='batchId-input']")
+  @FindBy(css = "[data-testid='batchId-input']")
   public ForceClearTextBox batchId;
 
-  @FindBy(xpath = "//button[@data-testid='search-batch-id-button']")
+  @FindBy(css = "[data-testid='search-batch-id-button']")
   public Button search;
 
-  @FindBy(xpath = "//button[@data-testid='rollback-button']")
+  @FindBy(css = "[data-testid='rollback-button']")
   public Button rollback;
 
-  @FindBy(xpath = "//input[@data-testid='password-input']")
+  @FindBy(css = "[data-testid='password-input']")
   public ForceClearTextBox password;
 
-  @FindBy(xpath = "//button[@data-testid='modal-rollback-button']")
+  @FindBy(css = "[data-testid='modal-rollback-button']")
   public Button rollbackDialogButton;
 
   public String getCellText(int rowIndex, String columnIdentifier) {
