@@ -63,7 +63,7 @@ Feature: Batch Order
       | userId    | 397                                |
       | userName  | AUTOMATION EDITED                  |
       | userEmail | {operator-portal-uid}              |
-#
+
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
     When API Order - Operator v4.1 create new batch
@@ -86,12 +86,10 @@ Feature: Batch Order
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                              |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
-    And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                              |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When Operator go to menu New Features -> Batch Order
     And Operator search for "{KEY_CREATED_BATCH.batchId}" batch on Batch Orders page
