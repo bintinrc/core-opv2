@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @BatchOrder
+@OperatorV2 @Core @NewFeatures @BatchOrder @test
 Feature: Batch Order
 
   Background:
@@ -57,14 +57,12 @@ Feature: Batch Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
     And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
@@ -128,14 +126,12 @@ Feature: Batch Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
     And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
@@ -220,14 +216,12 @@ Feature: Batch Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
     And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
       | type      | 49                                    |
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Staging
@@ -355,11 +349,11 @@ Feature: Batch Order
       | userId    | 397                                                           |
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | data      | {"invoiced_amount":500.0} |
     And DB Events - verify order_events record:
       | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}                            |
       | type      | 49                                                            |
       | userId    | 397                                                           |
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | data      | {"invoiced_amount":500.0} |
