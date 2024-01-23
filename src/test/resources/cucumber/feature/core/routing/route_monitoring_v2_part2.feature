@@ -18,7 +18,7 @@ Feature: Route Monitoring V2
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -63,7 +63,7 @@ Feature: Route Monitoring V2
     And API Core - Operator bulk tags parcel with below tag:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | orderTag | {order-tag-prior-id}               |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -143,7 +143,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 11                                                                                                  |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -218,7 +218,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 11                                                                                                  |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -293,7 +293,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 112                                                                                                  |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -362,7 +362,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 112                                                                                                  |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -408,7 +408,7 @@ Feature: Route Monitoring V2
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -497,7 +497,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                              |
       | jobMode         | PICK_UP                                                                                                           |
       | failureReasonId | 112                                                                                                               |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -561,7 +561,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                                                                                              |
       | jobMode         | PICK_UP                                                                                                           |
       | failureReasonId | 112                                                                                                               |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     And Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -590,7 +590,7 @@ Feature: Route Monitoring V2
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name-2}                       |
       | zones   | {zone-name}                        |
@@ -611,7 +611,7 @@ Feature: Route Monitoring V2
       | hub        | {hub-name}                              |
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
