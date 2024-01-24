@@ -32,8 +32,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
-    Then Operator verifies that success toast displayed:
-      | top | Rollback Successfully |
+    Then Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -53,19 +52,17 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
@@ -89,12 +86,10 @@ Feature: Batch Order
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                              |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
-    And API Core - Operator add parcel to the route using data below:
-      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                              |
-      | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When Operator go to menu New Features -> Batch Order
     And Operator search for "{KEY_CREATED_BATCH.batchId}" batch on Batch Orders page
@@ -103,8 +98,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Transit | Van en-route to pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Transit | Van en-route to pickup |
     When Operator rollback orders on Batch Orders page
-    Then Operator verifies that success toast displayed:
-      | top | Rollback Successfully |
+    Then Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -124,19 +118,17 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
 
   @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
@@ -196,8 +188,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Return | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Pickup fail | Pickup fail    |
     When Operator rollback orders on Batch Orders page
-    Then Operator verifies that success toast displayed:
-      | top | Rollback Successfully |
+    And Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -217,19 +208,17 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
 
   @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Staging
@@ -258,8 +247,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Staging | Staging        |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Staging | Staging        |
     When Operator rollback orders on Batch Orders page
-    Then Operator verifies that success toast displayed:
-      | top | Rollback Successfully |
+    Then Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -283,9 +271,8 @@ Feature: Batch Order
   Scenario: Rollback Order - Invalid Batch Id
     Given Operator go to menu New Features -> Batch Order
     When Operator search for "1111" batch on Batch Orders page
-    Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                         |
-      | bottom | ^.*Error Message: Order batch with batch id 1111 not found!.* |
+    Then Operator verifies that error toast "Error Message:" displayed
+      | description | Error Message: Order batch with batch id 1111 not found! |
 
   @MediumPriority
   Scenario: Rollback Order - Valid Batch Id, Order Not Allowed to be Deleted
@@ -304,9 +291,8 @@ Feature: Batch Order
     When Operator go to menu New Features -> Batch Order
     And Operator search for "{KEY_CREATED_BATCH.batchId}" batch on Batch Orders page
     And Operator rollback orders on Batch Orders page
-    Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                                                                                                                                                      |
-      | bottom | ^.*Error Message: Can't delete order {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} in Arrived at Sorting Hub state. Order can only be deleted if in the following states : \[Staging, Pending Pickup, Van en-route to pickup, Pickup fail\].* |
+    Then Operator verifies that error toast "Error Message:" displayed
+      | description | Error Message: Can't delete order {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} in Arrived at Sorting Hub state. Order can only be deleted if in the following states : [Staging, Pending Pickup, Van en-route to pickup, Pickup fail] |
 
   @HighPriority
   Scenario: Rollback Order - Order has Invoice Amount
@@ -335,8 +321,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[1].toName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | Normal | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressWithCountryString} | {KEY_LIST_OF_CREATED_ORDERS[2].toName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortToAddressWithCountryString} | Pending | Pending Pickup |
     When Operator rollback orders on Batch Orders page
-    Then Operator verifies that success toast displayed:
-      | top | Rollback Successfully |
+    Then Operator verifies that success toast "Rollback successfully" displayed
     And DB Core - verify orders records are hard-deleted in orders table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -356,16 +341,16 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |
