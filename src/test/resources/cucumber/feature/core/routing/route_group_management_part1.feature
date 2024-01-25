@@ -72,13 +72,13 @@ Feature: Route Group Management
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Route - Operator add transactions to "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}":
       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
     When Operator go to menu Routing -> 2. Route Group Management
     And Operator delete delivery transaction from route group:
       | name       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID}            |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}      |
     Then Operator verifies that success react notification displayed:
       | top    | Id: {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id} |
       | bottom | 1 Route Group Updated                        |
