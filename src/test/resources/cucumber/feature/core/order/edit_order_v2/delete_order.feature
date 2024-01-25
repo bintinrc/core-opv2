@@ -117,7 +117,7 @@ Feature: Delete Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | data      | null                                  |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Staging
@@ -181,7 +181,7 @@ Feature: Delete Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | data      | null                                  |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Pickup Fail
@@ -218,7 +218,7 @@ Feature: Delete Order
       | userId    | 397                                   |
       | userName  | AUTOMATION EDITED                     |
       | userEmail | {operator-portal-uid}                 |
-      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
+      | data      | null                                  |
 
   @MediumPriority
   Scenario: Operator Delete Order with Invoiced Amount
@@ -251,4 +251,4 @@ Feature: Delete Order
       | userId    | 397                                                           |
       | userName  | AUTOMATION EDITED                                             |
       | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | data      | {"invoiced_amount":500.0}                                     |
