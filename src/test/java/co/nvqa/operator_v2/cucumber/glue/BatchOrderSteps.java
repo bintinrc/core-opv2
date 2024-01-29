@@ -93,6 +93,7 @@ public class BatchOrderSteps extends AbstractSteps {
               batchOrdersPage.getCellText(finalData.indexOf(map), "to-granular-status"),
               map.get("granularStatus"));
         }
+        softly.assertAll();
       });
     });
   }

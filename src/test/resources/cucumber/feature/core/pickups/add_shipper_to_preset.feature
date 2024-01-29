@@ -1,6 +1,6 @@
 @OperatorV2 @Core @PickUps @AddShipperToPreset
 Feature: Add Shipper To Preset
-
+#TODO : This page will be deprected at the end of March 2024
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"

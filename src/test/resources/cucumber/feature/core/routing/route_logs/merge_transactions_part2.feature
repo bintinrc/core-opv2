@@ -134,7 +134,7 @@ Feature: Route Logs - Merge Transactions
       | support@ninjavan.co | +6595557073    | +6595557072    |
 
   @ArchiveRouteCommonV2 @MediumPriority
-  Scenario Outline: Operator Merge Multiple Transactions of Single Route - Delivery Transactions - Different DP Delivery
+  Scenario Outline: Operator Disallow Merge Multiple Transactions of Single Route - Delivery Transactions - Different DP Delivery
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
