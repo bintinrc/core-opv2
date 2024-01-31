@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ReservationPresetManagement @ReservationPresetManagementPart2
+@OperatorV2 @Core @PickUps @ReservationPresetManagementCleanup @ReservationPresetManagement @ReservationPresetManagementPart2
 Feature: Reservation Preset Management
 
   Background:
@@ -11,7 +11,7 @@ Feature: Reservation Preset Management
     When Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @HighPriority
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Has Not Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -33,7 +33,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 0 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 0 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy},"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 0 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 0 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -61,7 +61,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @HighPriority
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Added to Milkrun Group
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -79,7 +79,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy},"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -112,7 +112,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @HighPriority
   Scenario: Operator Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -130,7 +130,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy},"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -165,7 +165,7 @@ Feature: Reservation Preset Management
     And DB Shipper - verify shipper_address_milkrun_settings record does not exist:
       | addressId | {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @ReservationPresetManagementCleanup @HighPriority
   Scenario: Operator Add and Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | { "first_name": "RANDOM_STRING", "last_name": "RANDOM_STRING", "display_name": "RANDOM_STRING", "license_number": "RANDOM_STRING", "driver_type": "DRIVER-TYPE-01", "availability": false, "cod_limit": 100, "max_on_demand_jobs": 1000, "username": "RANDOM_STRING", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id} } |
@@ -236,7 +236,7 @@ Feature: Reservation Preset Management
       | endTime   | 18:00                                         |
       | days      | [1,2,3,4,5,6,7]                               |
 
-  @DeleteDriverV2 @CancelCreatedReservations @ReservationPresetManagementCleanup @HighPriority
+  @DeleteDriverV2 @HighPriority
   Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     # Create 2 drivers
     Given API Driver - Operator create new Driver using data below:
@@ -292,7 +292,7 @@ Feature: Reservation Preset Management
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId} |
     #  Route 2nd reservation, route it, and force Success using 2nd driver
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy},"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[2].id} } |
     And API Core - Operator add reservation to route using data below:

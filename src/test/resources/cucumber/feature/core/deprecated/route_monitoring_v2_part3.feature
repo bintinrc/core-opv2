@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing  @RouteMonitoringV2 @RouteMonitoringV2Part3
+#@OperatorV2 @Core @Routing @RouteMonitoringV2 @RouteMonitoringV2Part3
 Feature: Route Monitoring V2
 
   Background:
@@ -13,11 +13,11 @@ Feature: Route Monitoring V2
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id},"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -43,7 +43,7 @@ Feature: Route Monitoring V2
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id},"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
@@ -60,7 +60,7 @@ Feature: Route Monitoring V2
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","shipper_id":{shipper-v4-legacy-id},"action": "SUCCESS"}] |
       | jobAction  | SUCCESS                                                                                                             |
       | jobMode    | PICK_UP                                                                                                             |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -77,7 +77,7 @@ Feature: Route Monitoring V2
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id},"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
@@ -95,7 +95,7 @@ Feature: Route Monitoring V2
       | jobAction       | FAIL                                             |
       | jobMode         | PICK_UP                                          |
       | failureReasonId | <failureReasonCodeId>                            |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -117,11 +117,11 @@ Feature: Route Monitoring V2
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id},"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -139,7 +139,7 @@ Feature: Route Monitoring V2
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id},"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
@@ -149,7 +149,7 @@ Feature: Route Monitoring V2
       | status  | Pending                                          |
       | routeId | null                                             |
       | seqNo   | null                                             |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -191,9 +191,7 @@ Feature: Route Monitoring V2
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-
-
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -230,9 +228,7 @@ Feature: Route Monitoring V2
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
-
-
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -293,8 +289,7 @@ Feature: Route Monitoring V2
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify route_monitoring_data is hard-deleted:
       | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
-
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -318,7 +313,7 @@ Feature: Route Monitoring V2
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -340,8 +335,7 @@ Feature: Route Monitoring V2
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
-
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -364,7 +358,7 @@ Feature: Route Monitoring V2
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |
@@ -386,8 +380,7 @@ Feature: Route Monitoring V2
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
-
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/route-monitoring-paged"
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-monitoring"
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                         |
       | zones   | {zone-name}                        |

@@ -2,10 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.client.ReservationClient;
 import co.nvqa.common.core.client.RouteClient;
+import co.nvqa.common.core.hibernate.ReservationsDao;
 import co.nvqa.common.core.model.pickup.MilkRunGroup;
-import co.nvqa.common.core.model.pickup.MilkrunPendingTask;
-import co.nvqa.common.core.model.reservation.ReservationFilter;
-import co.nvqa.common.core.model.reservation.ReservationResponse;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.driver.client.DriverManagementClient;
 import co.nvqa.common.model.address.Address;
@@ -33,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.ReservationPresetTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.util.TestConstants.RPM_SHIPPER_ID;
-import static co.nvqa.operator_v2.util.TestConstants.RPM_SHIPPER_ID_LEGACY;
 
 /**
  * @author Sergey Mishanin
@@ -60,6 +57,10 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
   @Getter
   private ReservationClient reservationClient;
 
+  @Inject
+  @Getter
+  private ReservationsDao reservationsDao;
+
   private ReservationPresetManagementPage reservationPresetManagementPage;
 
   public ReservationPresetManagementSteps() {
@@ -84,8 +85,8 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     ReservationGroup reservationGroup = new ReservationGroup();
     reservationGroup.fromMap(resolveKeyValues(mapOfData));
-    reservationPresetManagementPage
-        .verifyGroupProperties(reservationGroup.getName(), reservationGroup);
+    reservationPresetManagementPage.verifyGroupProperties(reservationGroup.getName(),
+        reservationGroup);
   }
 
   @When("Operator edit {string} Reservation Group on Reservation Preset Management page with data below:")
@@ -151,12 +152,9 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     List<String> rows = new ArrayList<>();
     rows.add("shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time");
     data.forEach(map -> {
-      rows.add(map.getOrDefault("shipperId", "") + ","
-          + map.getOrDefault("addressId", "") + ","
-          + map.getOrDefault("action", "") + ","
-          + map.getOrDefault("milkrunGroupId", "") + ","
-          + map.getOrDefault("days", "") + ","
-          + map.getOrDefault("startTime", "") + ","
+      rows.add(map.getOrDefault("shipperId", "") + "," + map.getOrDefault("addressId", "") + ","
+          + map.getOrDefault("action", "") + "," + map.getOrDefault("milkrunGroupId", "") + ","
+          + map.getOrDefault("days", "") + "," + map.getOrDefault("startTime", "") + ","
           + map.getOrDefault("endTime", ""));
     });
     String content = StringUtils.join(rows, "\n");
@@ -242,88 +240,64 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
   }
 
   @After(value = "@ReservationPresetManagementCleanup", order = 9999)
-  public void rpmCleanup() {
-    // CANCEL ALL SHIPPER RESERVATIONS
-    ReservationFilter filter = new ReservationFilter();
-    filter.setShipperId(RPM_SHIPPER_ID_LEGACY);
-    List<ReservationResponse> shipperReservations = getReservationClient().getListOfReservations(
-        filter);
-    if (!shipperReservations.isEmpty()) {
-      shipperReservations.forEach(reservation -> doWithRetry(() -> {
+  public void rpmCleanupStage() {
+    shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
+      reservationsDao.getMultipleReservationsByAddressId(address.getId()).forEach(reservation -> {
         try {
           getReservationClient().updateReservation(reservation.getId(), 4);
-        } catch (AssertionError e) {
-          LOGGER.warn("Failed to delete reservation_id [{}]", reservation.getId());
+        } catch (Exception e) {
+          LOGGER.info("failed to cancel reservation_id: {}", reservation.getId());
         }
-      }, "cancel reservation"));
-    }
-    // UNSET MILKRUN FOR ALL ADDRESSES
-    shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
+      });
+      // Unset address as milkrun
       try {
         Address updateAddressRequest = fromJson(String.format("{\"is_milk_run\":%s}", false),
             Address.class);
         getShipperClient().updateAddressBasedOnRequest(address.getShipperId(), address.getId(),
             updateAddressRequest);
-        LOGGER.info("Success unset milkrun address [{}] of shipper [{}] ", address.getId(),
-            address.getShipperId());
       } catch (Exception e) {
         LOGGER.warn("Failed unset milkrun address [{}] of shipper [{}] ", address.getId(),
             address.getShipperId());
       }
+      // Unassign pending tasks
+      getRouteClient().getMilkrunPendingTasks().stream().filter(task -> !task.getLink())
+          .collect(Collectors.toList()).forEach(milkrunPendingTask -> {
+            try {
+              getRouteClient().unassignMilkrunPendingTask(milkrunPendingTask.getId());
+            } catch (Exception e) {
+              LOGGER.warn("Failed unassign milkrun pending task: [{}]", milkrunPendingTask.getId());
+            }
+          });
     });
-    // UNASSIGN ALL UNLINKED PENDING TASKS
-    List<MilkrunPendingTask> unlinkedPendingTasks = getRouteClient().getMilkrunPendingTasks()
-        .stream().filter(task -> !task.getLink()).collect(Collectors.toList());
-    if (!unlinkedPendingTasks.isEmpty()) {
-      unlinkedPendingTasks.forEach(unlinkedPendingTask -> {
-        try {
-          getRouteClient().unassignMilkrunPendingTask(unlinkedPendingTask.getId());
-          LOGGER.info("Success unassign milkrun pending task: [{}]", unlinkedPendingTask.getId());
-        } catch (Exception e) {
-          LOGGER.warn("Failed unassign milkrun pending task: [{}]", unlinkedPendingTask.getId());
-        }
-      });
-    }
     List<MilkRunGroup> createdMilkrunGroups = get(
         CoreScenarioStorageKeys.KEY_CORE_LIST_OF_CREATED_RESERVATION_GROUP);
-    // REMOVE ALL PICKUP LOCATION FROM MILKRUN GROUP
     if (createdMilkrunGroups != null) {
+      // Delete pickup locations from milkrun group
       createdMilkrunGroups.forEach(group -> {
         try {
           routeClient.deleteAllMilkrunGroupPickupLocations(group);
-          LOGGER.info("Success to remove all pickup locations from milkrun group id: [{}]",
-              group.getId());
         } catch (Exception e) {
           LOGGER.warn("Failed to remove all pickup locations from milkrun group id: [{}]",
               group.getId());
         }
       });
-    }
-    // DELETE SHIPPER ADDRESSES
-    if (!shipperClient.readAddresses(RPM_SHIPPER_ID).isEmpty()) {
-      shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
+      // Delete milkrun group
+      createdMilkrunGroups.forEach(group -> {
         try {
-          getShipperClient().deleteAddress(address.getShipperId(), address.getId());
-          LOGGER.info("Success delete address [{}] of shipper [{}]", address.getId(),
-              address.getShipperId());
-        } catch (Throwable ex) {
-          LOGGER.warn("Could not delete address [{}] of shipper [{}]", address.getId(),
-              address.getShipperId());
+          getRouteClient().deleteMilkrunGroup(group.getId());
+        } catch (Exception e) {
+          LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
         }
       });
     }
-    // DELETE MILKRUN GROUP
-    if (createdMilkrunGroups != null) {
-      createdMilkrunGroups.forEach(group -> {
-        doWithRetry(() -> {
-          try {
-            getRouteClient().deleteMilkrunGroup(group.getId());
-            LOGGER.info("Success to delete milkrun group id: [{}]", group.getId());
-          } catch (Exception e) {
-            LOGGER.warn("Failed to delete milkrun group id: [{}]", group.getId());
-          }
-        }, "delete milkrun group");
-      });
-    }
+    // Delete shipper address
+    shipperClient.readAddresses(RPM_SHIPPER_ID).forEach(address -> {
+      try {
+        getShipperClient().deleteAddress(address.getShipperId(), address.getId());
+      } catch (Throwable ex) {
+        LOGGER.warn("Could not delete address [{}] of shipper [{}]", address.getId(),
+            address.getShipperId());
+      }
+    });
   }
 }
