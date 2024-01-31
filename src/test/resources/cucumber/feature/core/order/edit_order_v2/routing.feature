@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @EditOrderRouting @RoutingModules
+@OperatorV2 @Core @EditOrderV2 @EditOrderRouting @RoutingModules @current
 Feature: Routing
 
   Background:
@@ -209,7 +209,7 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @wip
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <orderType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
@@ -256,7 +256,7 @@ Feature: Routing
       | Normal    |
       | Return    |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @wip
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <orderType> - <routeType>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                               |
@@ -318,7 +318,7 @@ Feature: Routing
       | granularStatus | Cancelled |
     And Operator verify menu item "Delivery" > "Add To Route" is disabled on Edit Order V2 page
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @wip
   Scenario: Operator Pull Out Merged Delivery Order from a Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
