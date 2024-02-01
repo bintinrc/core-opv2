@@ -494,8 +494,7 @@ Feature: RTS
       | dnrId          | 0                                          |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | En-route to Sorting Hub                    |
-    #      TODO uncomment when consuming rts event is fixed
-#      | rts            | 1                                          |
+      | rts            | 1                                          |
 
   @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan
@@ -648,8 +647,7 @@ Feature: RTS
       | dnrId          | 0                                          |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Arrived at Sorting Hub                     |
-    #      TODO uncomment when consuming rts event is fixed
-#      | rts            | 1                                          |
+      | rts            | 1                                          |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address

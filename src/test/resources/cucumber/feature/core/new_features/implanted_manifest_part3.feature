@@ -65,8 +65,9 @@ Feature: Implanted Manifest
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | DRIVER PICKUP SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: En-route to Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: UPDATE_PICKUP_POD |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | IMPLANTED MANIFEST SCAN                                                                                                                                      |
       | description | Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CONTROL_CREATED_PA_JOBS[1].id} |

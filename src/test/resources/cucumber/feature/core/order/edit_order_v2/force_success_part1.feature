@@ -43,8 +43,8 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                                                                              |
-      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                                                                                    |
+      | UPDATE STATUS | MANUAL ACTION | Old Pickup Status: Pending New Pickup Status: Success Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
       | txnType        | DELIVERY                                           |
