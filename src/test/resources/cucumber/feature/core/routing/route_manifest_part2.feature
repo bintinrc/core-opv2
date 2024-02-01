@@ -405,10 +405,17 @@ Feature: Route Manifest
       | PRICING CHANGE |
       | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                     |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Returned to Sender\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
+      | tags          | name          | description                                                                                                                                                                                                                       |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnStatus      | SUCCESS                                            |
+      | txnType        | DELIVERY                                           |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Returned to Sender                                 |
 
   @HighPriority
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction of RTS Order on Route Manifest
