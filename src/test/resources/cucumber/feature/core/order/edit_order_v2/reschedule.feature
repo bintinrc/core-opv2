@@ -5,7 +5,7 @@ Feature: Reschedule
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Reschedule Fail Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -36,6 +36,23 @@ Feature: Reschedule
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
       | granularStatus | Pickup fail |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                      |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
     And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
     And Operator reschedule Pickup on Edit Order V2 page:
       | senderName    | test sender name               |
@@ -48,6 +65,9 @@ Feature: Reschedule
     Then Operator verify order events on Edit Order V2 page using data below:
       | name       |
       | RESCHEDULE |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
@@ -110,8 +130,26 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_OLD_TRANSACTION"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pending Pickup                                     |
 
-  @ArchiveRouteCommonV2 @HighPriority
+
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Reschedule Fail Delivery
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -149,6 +187,16 @@ Feature: Reschedule
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: On Vehicle for Delivery New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: BATCH_POD_UPDATE |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pending Reschedule                                 |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
@@ -178,6 +226,9 @@ Feature: Reschedule
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
@@ -244,8 +295,18 @@ Feature: Reschedule
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
 
-  @ArchiveRouteCommonV2 @HighPriority
+
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -313,6 +374,9 @@ Feature: Reschedule
       | UPDATE ADDRESS      |
       | DRIVER INBOUND SCAN |
       | UPDATE AV           |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
@@ -387,6 +451,15 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan

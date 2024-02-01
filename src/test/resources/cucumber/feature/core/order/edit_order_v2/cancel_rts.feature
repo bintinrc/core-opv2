@@ -5,7 +5,7 @@ Feature: Cancel RTS
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Operator Cancel RTS from Edit Order Page
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -79,3 +79,11 @@ Feature: Cancel RTS
       | latitude      | 1.3184395712682                       |
       | longitude     | 103.925311276846                      |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
+      | rts            | 0                                                  |
