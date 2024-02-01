@@ -5,7 +5,7 @@ Feature: Resume Order
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -43,6 +43,13 @@ Feature: Resume Order
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id    | {KEY_TRANSACTION.id} |
@@ -51,6 +58,13 @@ Feature: Resume Order
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
 
   @MediumPriority
   Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order
@@ -84,7 +98,7 @@ Feature: Resume Order
       | status | Pending              |
       | dnrId  | 0                    |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -139,6 +153,13 @@ Feature: Resume Order
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
@@ -149,6 +170,13 @@ Feature: Resume Order
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled
@@ -210,13 +238,13 @@ Feature: Resume Order
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
 
-  @MediumPriority
+  @MediumPriority @update-status
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With NO Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -243,10 +271,6 @@ Feature: Resume Order
       | id     | {KEY_TRANSACTION.id} |
       | status | Pending              |
       | dnrId  | 0                    |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
@@ -256,3 +280,10 @@ Feature: Resume Order
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |

@@ -5,7 +5,7 @@ Feature: Third Party Order Management
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Upload Single Third Party Order
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -28,6 +28,13 @@ Feature: Third Party Order Management
       | tags        | MANUAL ACTION                                                                                                                                                            |
       | name        | UPDATE STATUS                                                                                                                                                            |
       | description | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Transferred to 3PL                                 |
 
   @MediumPriority
   Scenario: Operator Edit Third Party Order
@@ -61,18 +68,67 @@ Feature: Third Party Order Management
     When Operator delete the new mapping
     Then Operator verify the new mapping is deleted successfully
 
-  @happy-path @HighPriority
+  @happy-path @HighPriority @update-status
   Scenario: Operator Upload Bulk Third Party Orders Successfully
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     When Operator go to menu Cross Border & 3PL -> Third Party Order Management
     And Operator uploads bulk mapping for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     Then Operator verify multiple new mapping is created successfully
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | TRANSFERRED TO THIRD PARTY |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | tags        | MANUAL ACTION                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                            |
+      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Transferred to 3PL                                 |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
+    Then Operator verify order status is "Transit" on Edit Order V2 page
+    And Operator verify order granular status is "Transferred to 3PL" on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | TRANSFERRED TO THIRD PARTY |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | tags        | MANUAL ACTION                                                                                                                                                            |
+      | name        | UPDATE STATUS                                                                                                                                                            |
+      | description | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | Transferred to 3PL                                 |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | Transferred to 3PL                                 |
 
   @MediumPriority
   Scenario: Operator Not Allowed to Transfer to 3PL for Completed Order - NOT Transferred to 3PL & Completed

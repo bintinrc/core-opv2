@@ -352,7 +352,7 @@ Feature: Route Manifest
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -404,9 +404,18 @@ Feature: Route Manifest
       | name           |
       | PRICING CHANGE |
       | FORCED SUCCESS |
-      | UPDATE STATUS  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                       |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender Old Order Status: Transit New Order Status: Completed Reason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnStatus      | SUCCESS                                            |
+      | txnType        | DELIVERY                                           |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Returned to Sender                                 |
 
   @HighPriority
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction of RTS Order on Route Manifest

@@ -167,7 +167,7 @@ Feature: Route Group Management
       | deletedAt    | not null                                           |
 
   @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @MediumPriority
-  Scenario: Operator View Route Group with PA Job Tag
+  Scenario: Operator View Route Group with PA Job Tags
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
       | generateAddress | RANDOM              |

@@ -109,7 +109,7 @@ Feature: RTS
       | type         | RTS                                   |
 
   @MediumPriority
-  Scenario Outline: Operator RTS Order with Active PETS Ticket Damaged/Missing - <ticketType>
+  Scenario Outline: Operator RTS Order with Active PETS Ticket Damaged/Missing - <DatasetName>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -183,9 +183,9 @@ Feature: RTS
       | legacyZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
       | type         | RTS                                   |
     Examples:
-      | ticketType | orderOutcomeName            |
-      | MISSING    | ORDER OUTCOME (MISSING)     |
-      | DAMAGED    | ORDER OUTCOME (NEW_DAMAGED) |
+      | DatasetName           | ticketType | orderOutcomeName            |
+      | Ticket Type = MISSING | MISSING    | ORDER OUTCOME (MISSING)     |
+      | Ticket Type = DAMAGED | DAMAGED    | ORDER OUTCOME (NEW_DAMAGED) |
 
   @MediumPriority
   Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - SELF COLLECTION
@@ -268,7 +268,7 @@ Feature: RTS
       | SELF COLLECTION | ORDER OUTCOME (SELF COLLECTION) | RE-DELIVER     | 24291519             |
 
   @MediumPriority
-  Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - <ticketType>
+  Scenario Outline: Operator RTS Order with On Hold Resolved PETS Ticket Non-Damaged/Missing - <DatasetName>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -345,13 +345,13 @@ Feature: RTS
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
     Examples:
-      | ticketType       | ticketSubType     | orderOutcomeName                  | resolveOutcome              | resolveCustomFieldId |
-      | SHIPPER ISSUE    | DUPLICATE PARCEL  | ORDER OUTCOME (SHIPPER EXCEPTION) | REPACKED/RELABELLED TO SEND | 24317247             |
-      | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) | RESUME DELIVERY             | 24317569             |
-      | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   | RESUME DELIVERY             | 24269291             |
+      | DatasetName                    | ticketType       | ticketSubType     | orderOutcomeName                  | resolveOutcome              | resolveCustomFieldId |
+      | Ticket Type = SHIPPER ISSUE    | SHIPPER ISSUE    | DUPLICATE PARCEL  | ORDER OUTCOME (SHIPPER EXCEPTION) | REPACKED/RELABELLED TO SEND | 24317247             |
+      | Ticket Type = PARCEL EXCEPTION | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) | RESUME DELIVERY             | 24317569             |
+      | Ticket Type = PARCEL ON HOLD   | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   | RESUME DELIVERY             | 24269291             |
 
   @MediumPriority
-  Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <ticketType>
+  Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - <DatasetName>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -386,10 +386,10 @@ Feature: RTS
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 0                                  |
     Examples:
-      | ticketType       | ticketSubType     | orderOutcomeName                  |
-      | SHIPPER ISSUE    | DUPLICATE PARCEL  | ORDER OUTCOME (SHIPPER EXCEPTION) |
-      | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) |
-      | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   |
+      | DatasetName                    | ticketType       | ticketSubType     | orderOutcomeName                  |
+      | Ticket Type = SHIPPER ISSUE    | SHIPPER ISSUE    | DUPLICATE PARCEL  | ORDER OUTCOME (SHIPPER EXCEPTION) |
+      | Ticket Type = PARCEL EXCEPTION | PARCEL EXCEPTION | CUSTOMER REJECTED | ORDER OUTCOME (CUSTOMER REJECTED) |
+      | Ticket Type = PARCEL ON HOLD   | PARCEL ON HOLD   | SHIPPER REQUEST   | ORDER OUTCOME (SHIPPER REQUEST)   |
 
   @MediumPriority
   Scenario Outline: Operator Not Allowed to RTS Order With Active PETS Ticket Non-Damaged/Missing - SELF COLLECTION

@@ -5,15 +5,15 @@ Feature: Route Inbound Expected Scans
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status
   Scenario: Route Inbound Expected Scans : Pending Deliveries
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator add parcel to the route using data below:
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
@@ -50,7 +50,7 @@ Feature: Route Inbound Expected Scans
     When Operator click 'View orders or reservations' button for shipper #1 in Pending Deliveries Waypoints dialog
     Then Operator verify Orders table in Pending Deliveries Waypoints dialog using data below:
       | trackingId                            | stampId | location                                         | type              | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress} | Delivery (Normal) | Pending | 0        |                    |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress} | Delivery (Return) | Pending | 0        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineToAddress} | Delivery (Normal) | Pending | 0        |                    |
     When Operator close Pending Deliveries dialog on Route Inbound page
     And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
@@ -66,13 +66,31 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | hubName | {hub-name}                         |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: Arrived at Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: HUB_INBOUND |
     And DB Core - Operator verifies inbound_scans record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | hubId   | {hub-id}                           |
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
 
-  @ArchiveRouteCommonV2 @MediumPriority
+
+  @ArchiveRouteCommonV2 @MediumPriority @update-status
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -157,11 +175,23 @@ Feature: Route Inbound Expected Scans
       | name    | ROUTE INBOUND SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | hubName | {hub-name}                         |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
     And DB Core - Operator verifies inbound_scans record:
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | hubId   | {hub-id}                           |
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
 
   @ArchiveRouteCommonV2 @happy-path @MediumPriority
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
@@ -254,7 +284,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -341,6 +371,24 @@ Feature: Route Inbound Expected Scans
       | hubId   | {hub-id}                           |
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub New Granular Status: Arrived at Sorting Hub Reason: HUB_INBOUND |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
+
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
@@ -399,7 +447,7 @@ Feature: Route Inbound Expected Scans
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status
   Scenario: Route Inbound Expected Scans : Reservation Pickups
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -466,6 +514,17 @@ Feature: Route Inbound Expected Scans
       | hubId   | {hub-id}                           |
       | type    | 2                                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub New Granular Status: Arrived at Sorting Hub Reason: HUB_INBOUND |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Arrived at Sorting Hub                             |
+
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Route Inbound Expected Scans : Reservation Extra Orders
