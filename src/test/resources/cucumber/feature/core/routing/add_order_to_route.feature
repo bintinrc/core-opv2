@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @AddOrderToRoute @RoutingModules @current
+@OperatorV2 @Core @Routing @AddOrderToRoute @RoutingModules
 Feature: Add Order To Route
 
   Background:
@@ -152,7 +152,7 @@ Feature: Add Order To Route
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
-  @DeleteRoutes @HighPriority @wip
+  @DeleteRoutes @HighPriority
   Scenario: Add Merged Pickup Order to a Route by Valid Tracking Id
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -205,7 +205,7 @@ Feature: Add Order To Route
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | expectedTrackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
 
-  @DeleteRoutes @HighPriority @wip
+  @DeleteRoutes @HighPriority
   Scenario: Add Merge Delivery Order to a Route by Valid Tracking Id
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
