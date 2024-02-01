@@ -6,12 +6,12 @@ Feature: ID - Order COD Limit
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order
+  Scenario: Operator Allow Add Order to Driver Route with Edited COD <40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -28,15 +28,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 30000000.00 |
+      | cashOnDelivery | yes                  |
+      | amount         | {cod-below-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR30000000 |
+      | cod | COD IDR {cod-below-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 30000000 |
+      | name        | UPDATE CASH                                                                   |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-below-limit} |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -71,22 +71,22 @@ Feature: ID - Order COD Limit
       | expectedTrackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-below-limit}                           |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order
+  Scenario: Operator Disallow Add Order to Driver Route with Edited COD >40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":30000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -103,15 +103,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 31000000.00 |
+      | cashOnDelivery | yes                  |
+      | amount         | {cod-above-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR31000000 |
+      | cod | COD IDR {cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 30000000 to 31000000 |
+      | name        | UPDATE CASH                                                                   |
+      | description | Cash On Delivery changed from {cod-multiple-above-limit} to {cod-above-limit} |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -123,10 +123,10 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes
   Scenario: Operator Allow Add Order to Driver Route with Removed COD on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":40000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -148,8 +148,8 @@ Feature: ID - Order COD Limit
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                 |
-      | description | Cash On Delivery changed from 40000000 to 0 |
+      | name        | UPDATE CASH                                          |
+      | description | Cash On Delivery changed from {cod-above-limit} to 0 |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -195,12 +195,12 @@ Feature: ID - Order COD Limit
       | cod       | 0                                  |
 
   @DeleteDriverV2 @DeleteRoutes @RestoreSystemParams @HighPriority
-  Scenario: Operator Allow Add Order to Driver Route with Edited COD <30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
+  Scenario: Operator Allow Add Order to Driver Route with Edited COD <40 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":30000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -217,15 +217,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 40000000.00 |
+      | cashOnDelivery | yes                  |
+      | amount         | {cod-above-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR40000000 |
+      | cod | COD IDR {cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 30000000 to 40000000 |
+      | name        | UPDATE CASH                                                                   |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-above-limit} |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -237,7 +237,7 @@ Feature: ID - Order COD Limit
 
     Given API Core - set system parameter:
       | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 40000000               |
+      | value | {cod-above-limit}      |
 
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -273,22 +273,22 @@ Feature: ID - Order COD Limit
       | expectedTrackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 40,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-above-limit}                           |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 40000000                           |
+      | cod       | {cod-above-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @RestoreSystemParams @HighPriority
-  Scenario: Operator Disallow Add Order to Driver Route with Edited COD >30 Millions on Edit Order - Edit Cash Collection and Edit COD Params
+  Scenario: Operator Disallow Add Order to Driver Route with Edited COD >40 Millions on Edit Order - Edit Cash Collection and Edit COD Params
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":30000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -305,15 +305,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 40000000.00 |
+      | cashOnDelivery | yes                  |
+      | amount         | {cod-above-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR40000000 |
+      | cod | COD IDR {cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 30000000 to 40000000 |
+      | name        | UPDATE CASH                                                    |
+      | description | Cash On Delivery changed from {cod-limit} to {cod-above-limit} |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -323,8 +323,8 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
     Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | 39000000               |
+      | key   | DRIVER_DAILY_COD_LIMIT     |
+      | value | {cod-multiple-above-limit} |
 
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -334,12 +334,12 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow Edit COD of Routed Order with COD <30 Millions on Edit Order
+  Scenario: Operator Allow Edit COD of Routed Order with COD <40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -359,15 +359,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 30000000.00 |
+      | cashOnDelivery | yes            |
+      | amount         | {cod-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR30000000 |
+      | cod | COD IDR{cod-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 30000000 |
+      | name        | UPDATE CASH                                                             |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-limit} |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
@@ -376,17 +376,17 @@ Feature: ID - Order COD Limit
       | expectedTrackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-limit}                                 |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-limit}                        |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow Edit COD of Routed Order with COD >30 Millions on Edit Order
+  Scenario: Operator Disallow Edit COD of Routed Order with COD >40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
