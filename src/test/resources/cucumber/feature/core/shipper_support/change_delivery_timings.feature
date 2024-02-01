@@ -232,7 +232,7 @@ Feature: Change Delivery Timings
       | name | UPDATE SLA |
 
   @HighPriority
-  Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <timeWindow>
+  Scenario Outline: Operator Uploads the CSV File on Change Delivery Timings With Various Timeslot - <DatasetName>
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
@@ -261,11 +261,11 @@ Feature: Change Delivery Timings
       | timewindow | <timewindowId>               |
 
     Examples:
-      | timeWindow  | timewindowId | timeForm | timeTo   |
-      | 9.00-12.00  | 0            | 09:00:00 | 12:00:00 |
-      | 12.00-15.00 | 1            | 12:00:00 | 15:00:00 |
-      | 15.00-18.00 | 2            | 15:00:00 | 18:00:00 |
-      | 18.00-22.00 | 3            | 18:00:00 | 22:00:00 |
-      | 09:00-22:00 | -1           | 09:00:00 | 22:00:00 |
-      | 09:00-18:00 | -2           | 09:00:00 | 18:00:00 |
-      | 18:00-22:00 | -3           | 18:00:00 | 22:00:00 |
+      | DatasetName   | timeWindow  | timewindowId | timeForm | timeTo   |
+      | 09:00 - 12:00 | 9.00-12.00  | 0            | 09:00:00 | 12:00:00 |
+      | 12:00 - 15:00 | 12.00-15.00 | 1            | 12:00:00 | 15:00:00 |
+      | 15:00 - 18:00 | 15.00-18.00 | 2            | 15:00:00 | 18:00:00 |
+      | 18:00 - 22:00 | 18.00-22.00 | 3            | 18:00:00 | 22:00:00 |
+      | 09:00 - 22:00 | 09:00-22:00 | -1           | 09:00:00 | 22:00:00 |
+      | 09:00 - 18:00 | 09:00-18:00 | -2           | 09:00:00 | 18:00:00 |
+      | 18:00 - 22:00 | 18:00-22:00 | -3           | 18:00:00 | 22:00:00 |

@@ -92,7 +92,7 @@ Feature: Create Route Groups
     Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroupsV2
-  Scenario: Operator Filter Route Grouping - Empty Route Group
+  Scenario: Operator Filter Route Grouping on Create Route Groups - Empty Route Group
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/7452174
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

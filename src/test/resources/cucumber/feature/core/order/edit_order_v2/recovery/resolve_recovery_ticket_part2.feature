@@ -515,10 +515,9 @@ Feature: Resolve Recovery Ticket
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name            |
-#      TODO to enabled once issue fixed
-#      | ROUTE INBOUND SCAN    |
-      | TICKET RESOLVED |
+      | name                  |
+      | ROUTE INBOUND SCAN    |
+      | TICKET RESOLVED       |
 
   @HighPriority @update-status
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
