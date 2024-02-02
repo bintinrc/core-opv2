@@ -70,7 +70,7 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @HighPriority
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
