@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,16 +12,36 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class BlockedDatesPage extends OperatorV2SimplePage {
+public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BlockedDatesPage.class);
   private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+  @FindBy(xpath = "//div[@data-testid='blocked-date-list']//button")
+  public Button blockedYearsList;
+  @FindBy(xpath = "//div[contains(@data-testid,'blocked-calendar-date')]")
+  public List<PageElement> blockedCalendarDates;
+  @FindBy(xpath = "//button[@data-testid='blocked-date-calendar-year-select']//span")
+  public PageElement selectedYear;
+
+  @FindBy(css = "[data-testid= 'blocked-date-save-changes']")
+  public Button saveChanges;
+
+  @FindBy(xpath = "//div[contains(@data-testid,'blocked-calendar-date')][1]/span")
+  public PageElement day;
+  @FindBy(xpath = "//button[@data-testid='blocked-date-calendar-month-select']//span")
+  public PageElement month;
+  @FindBy(xpath = "//div[contains(@data-testid,'blocked-date-item')]/span")
+  List<PageElement> blockedDatesList;
+//  @FindBy(css = "[data-testid= 'blocked-date-item']")
+//  List<PageElement> blockedDateItem;
 
   public BlockedDatesPage(WebDriver webDriver) {
     super(webDriver);
@@ -29,28 +51,24 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
         /*
           Set default year of "Blocked Dates" on right panel to current year.
          */
-    WebElement blockedDatesYearWe = findElementByXpath(
-        "//div[contains(@class, 'list')]/md-content[contains(@class, 'list-content')]/div/md-input-container");
-    blockedDatesYearWe.click();
+    blockedYearsList.click();
 
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-    WebElement currentYearOptionWe = findElementByXpath(
-        f("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear));
+    String xpath = "//div[@data-testid='blocked-date-list']//span[.='%d']";
+    PageElement currentYearOptionWe = new PageElement(getWebDriver(), f(xpath, currentYear));
     currentYearOptionWe.click();
-
-    List<WebElement> elm = findElementsByXpath(
-        "//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]");
-
-    if (!elm.isEmpty()) {
-      WebElement day = elm.get(0);
-      day.click();
-
-      WebElement yearElm = findElementByXpath(
-          "//md-select[@ng-model='calendar.year']/md-select-value/span/div");
-      SingletonStorage.getInstance()
-          .setTmpId(yearElm.getText() + "-" + getMonth() + "-" + getDay(day));
-      click("//button[@type='submit'][@aria-label='Save Button']");
+    // red background color means date already blocked
+    for (PageElement element : blockedCalendarDates) {
+      Color color = Color.fromString(element.getCssValue("color"));
+      if (!color.asHex().equals("#F2F2F2FF")) {
+        PageElement day = element;
+        day.click();
+        SingletonStorage.getInstance()
+            .setTmpId(selectedYear.getText() + "-" + getMonth() + "-" + getDay());
+        break; // Exit the loop
+      }
     }
+    saveChanges.click();
   }
 
   public void verifyBlockedDateAddedSuccessfully() {
@@ -58,16 +76,12 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
       retryIfStaleElementReferenceExceptionOccurred(() ->
       {
         boolean isAdded = false;
-        List<WebElement> els = findElementsByXpath(
-            "//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]");
-
-        for (WebElement el : els) {
+        for (PageElement el : blockedDatesList) {
           if (el.getText().contains(SingletonStorage.getInstance().getTmpId())) {
             isAdded = true;
             break;
           }
         }
-
         Assertions.assertThat(isAdded).as("Blocked Date should be added.").isTrue();
       }, getCurrentMethodName());
     }
@@ -76,15 +90,15 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
   public void removeBlockedDate() {
     if (SingletonStorage.getInstance().getTmpId() != null) {
       boolean isRemoved = false;
-      List<WebElement> els = findElementsByXpath(
-          "//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]");
+//      List<WebElement> els = findElementsByXpath(
+//          "//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]");
 
-      for (WebElement el : els) {
-        WebElement inner = el.findElement(By.xpath("p/span[1]"));
+      for (PageElement item : blockedDatesList) {
+//        WebElement inner = item.findElement(By.xpath("p/span[1]"));
 
-        if (inner.getText().contains(SingletonStorage.getInstance().getTmpId())) {
-          el.findElement(By.xpath("button[@ng-click=\"removeDate(date, $event)\"]")).click();
-          click("//button[@type='submit'][@aria-label='Save Button']");
+        if (item.getText().contains(SingletonStorage.getInstance().getTmpId())) {
+          item.findElement(By.xpath("//button[contains(@data-testid, '\" + item.getText() + \"') and contains(@data-testid, '-remove')]")).click();
+          saveChanges.click();
           isRemoved = true;
           break;
         }
@@ -114,9 +128,8 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
     }
   }
 
-  private String getDay(WebElement day) {
-    WebElement dayTxt = day.findElement(By.xpath("div[1]"));
-    int dayNumber = Integer.parseInt(dayTxt.getText());
+  private String getDay() {
+    int dayNumber = Integer.parseInt(day.getText());
     return dayNumber < 10 ? "0" + dayNumber : "" + dayNumber;
   }
 
@@ -124,9 +137,7 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
     String monthText = null;
 
     try {
-      WebElement monthElm = getWebDriver().findElement(
-          By.xpath("//md-select[@ng-model='calendar.month']/md-select-value/span/div"));
-      Date date = MONTH_SDF.parse(monthElm.getText());
+      Date date = MONTH_SDF.parse(month.getText());
       Calendar cal = Calendar.getInstance();
       cal.setTime(date);
       int month = cal.get(Calendar.MONTH) + 1;

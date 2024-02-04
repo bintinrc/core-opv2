@@ -25,21 +25,37 @@ public class BlockedDatesSteps extends AbstractSteps {
 
   @When("Operator adds Blocked Date")
   public void operatorAddsBlockedDate() {
-    blockedDatesPage.addBlockedDate();
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.addBlockedDate();
+    });
   }
 
   @Then("Operator verifies new Blocked Date is added successfully")
   public void operatorVerifiesNewBlockedDateIsAddedSuccessfully() {
-    blockedDatesPage.verifyBlockedDateAddedSuccessfully();
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.verifyBlockedDateAddedSuccessfully();
+    });
+  }
+
+  @Then("Operator verifies success toast {string} is displayed")
+  public void operatorVerifySuccessToast(String message) {
+    blockedDatesPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfElementLocated(
+          f("//div[@id='toast-container']//span[.='%s']", message));
+    });
   }
 
   @When("Operator removes Blocked Date")
   public void operatorRemovesBlockedDate() {
+    blockedDatesPage.inFrame(()->{
     blockedDatesPage.removeBlockedDate();
+    });
   }
 
   @Then("Operator verifies Blocked Date is removed successfully")
   public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
+    blockedDatesPage.inFrame(()->{
     blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+    });
   }
 }
