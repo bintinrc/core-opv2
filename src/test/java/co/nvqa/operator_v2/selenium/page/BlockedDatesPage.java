@@ -51,6 +51,7 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
     super(webDriver);
   }
 
+  /* deprecated */
 //  public void addBlockedDate() {
 //        /*
 //          Set default year of "Blocked Dates" on right panel to current year.
@@ -76,6 +77,7 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
 //  }
 
   public void addDate(String date) {
+    /* code 1 */
     String xpath = "//div[@data-testid='blocked-calendar-date-%s']";
     // Parse date string to LocalDate object
     LocalDate dateValue = LocalDate.parse(date);
@@ -83,11 +85,12 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
     boolean found = false;
     if (!blockedDatesList.isEmpty()) {
       for (PageElement blockedDate : blockedDatesList) {
-        if (date.equals(blockedDate.getText())) {
+        String blockedDateText = blockedDate.getText()
+            .split("\\. ")[1]; // Split by ". " and take the second part
+        if (date.equals(blockedDateText)) {
           // Increment the date by one day if found
           dateValue = dateValue.plusDays(1);
           found = true;
-          break;
         }
       }
     }
@@ -102,6 +105,77 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
     selectedDate.click();
     saveChanges.click();
 
+
+
+
+    /* code 2 */
+//    String xpath = "//div[@data-testid='blocked-calendar-date-%s']";
+//
+//    // Parse date string to LocalDate object
+//    LocalDate dateValue = LocalDate.parse(date);
+//
+//    // Check if the date is found in the blockedDatesList
+//    boolean found = false;
+//    while (!found) {
+//      // Iterate through blockedDatesList to check if dateValue is present
+//      LocalDate finalDateValue = dateValue;
+//      found = blockedDatesList.stream()
+//          .map(PageElement::getText)
+//          .map(blockedDateText -> blockedDateText.split("\\. ")[1]) // Extract only the date part
+//          .anyMatch(dateValueString -> dateValueString.equals(
+//              finalDateValue.format(DateTimeFormatter.ISO_LOCAL_DATE)));
+//
+//      // If dateValue is found, increment it by one day
+//      if (found) {
+//        dateValue = dateValue.plusDays(1);
+//      }
+//    }
+//
+//    // Format the selected date as a string
+//    String selectedDateString = dateValue.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//
+//    // Locate the date element
+//    PageElement selectedDate = new PageElement(getWebDriver(), f(xpath, selectedDateString));
+//
+//    // Click the selected date element
+//    selectedDate.click();
+//
+//    saveChanges.click();
+
+
+    /* code 3 */
+//    String xpath = "//div[@data-testid='blocked-calendar-date-%s']";
+//// Parse date string to LocalDate object
+//    LocalDate dateValue = LocalDate.parse(date);
+//// Check if the date is found in the blockedDatesList
+//    boolean found = false;
+//
+//    if (!blockedDatesList.isEmpty()) {
+//      for (PageElement blockedDate : blockedDatesList) {
+//        String blockedDateText = blockedDate.getText()
+//            .split("\\. ")[1]; // Split by ". " and take the second part
+//        if (date.equals(blockedDateText)) {
+//          // Increment the date by one day if found
+//          found = true;
+//          int daysIncremented = 1;
+//          while (blockedDatesList.contains(dateValue.format(DateTimeFormatter.ISO_LOCAL_DATE))) {
+//            dateValue = dateValue.plusDays(daysIncremented);
+//            daysIncremented++;
+//          }
+//        }
+//      }
+//    }
+//
+//// Use the modified date if the original date was found in the blockedDatesList
+//    // If the date is not found, use the original date
+//    String selectedDateString = found ? dateValue.format(DateTimeFormatter.ISO_LOCAL_DATE) : date;
+//
+//    // Locate the date element
+//    PageElement selectedDate = new PageElement(getWebDriver(), f(xpath, selectedDateString));
+//
+//// Click the selected date element
+//    selectedDate.click();
+//    saveChanges.click();
   }
 
   public void verifyBlockedDateAddedSuccessfully() {
