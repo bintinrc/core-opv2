@@ -23,10 +23,11 @@ public class BlockedDatesSteps extends AbstractSteps {
     blockedDatesPage = new BlockedDatesPage(getWebDriver());
   }
 
-  @When("Operator adds Blocked Date")
-  public void operatorAddsBlockedDate() {
+  @When("Operator adds Blocked Date {string}")
+  public void operatorAddsBlockedDate(String date) {
     blockedDatesPage.inFrame(() -> {
-      blockedDatesPage.addBlockedDate();
+//      blockedDatesPage.addBlockedDate());
+      blockedDatesPage.addDate(resolveValue(date));
     });
   }
 

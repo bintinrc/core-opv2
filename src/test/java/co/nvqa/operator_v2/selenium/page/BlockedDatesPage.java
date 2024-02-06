@@ -4,6 +4,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static co.nvqa.common.utils.StandardTestUtils.getNextDate;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -47,28 +51,57 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
     super(webDriver);
   }
 
-  public void addBlockedDate() {
-        /*
-          Set default year of "Blocked Dates" on right panel to current year.
-         */
-    blockedYearsList.click();
+//  public void addBlockedDate() {
+//        /*
+//          Set default year of "Blocked Dates" on right panel to current year.
+//         */
+//    blockedYearsList.click();
+//
+//    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+//    String xpath = "//div[@data-testid='blocked-date-list']//span[.='%d']";
+//    PageElement currentYearOptionWe = new PageElement(getWebDriver(), f(xpath, currentYear));
+//    currentYearOptionWe.click();
+//    // red background color means date already blocked
+//    for (PageElement element : blockedCalendarDates) {
+//      String backgroundColor = element.getCssValue("background-color");
+//      if (isWhiteBackground(backgroundColor) && !isRedBackground(backgroundColor)) {
+//        PageElement day = element;
+//        day.click();
+//        SingletonStorage.getInstance()
+//            .setTmpId(selectedYear.getText() + "-" + getMonth() + "-" + getDay());
+//        break; // Exit the loop
+//      }
+//    }
+//    saveChanges.click();
+//  }
 
-    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-    String xpath = "//div[@data-testid='blocked-date-list']//span[.='%d']";
-    PageElement currentYearOptionWe = new PageElement(getWebDriver(), f(xpath, currentYear));
-    currentYearOptionWe.click();
-    // red background color means date already blocked
-    for (PageElement element : blockedCalendarDates) {
-      Color color = Color.fromString(element.getCssValue("color"));
-      if (!color.asHex().equals("#F2F2F2FF")) {
-        PageElement day = element;
-        day.click();
-        SingletonStorage.getInstance()
-            .setTmpId(selectedYear.getText() + "-" + getMonth() + "-" + getDay());
-        break; // Exit the loop
+  public void addDate(String date) {
+    String xpath = "//div[@data-testid='blocked-calendar-date-%s']";
+    // Parse date string to LocalDate object
+    LocalDate dateValue = LocalDate.parse(date);
+    // Check if the date is found in the blockedDatesList
+    boolean found = false;
+    if (!blockedDatesList.isEmpty()) {
+      for (PageElement blockedDate : blockedDatesList) {
+        if (date.equals(blockedDate.getText())) {
+          // Increment the date by one day if found
+          dateValue = dateValue.plusDays(1);
+          found = true;
+          break;
+        }
       }
     }
+
+    // If the date is not found, use the original date
+    String selectedDateString = found ? dateValue.format(DateTimeFormatter.ISO_LOCAL_DATE) : date;
+
+    // Locate the date element
+    PageElement selectedDate = new PageElement(getWebDriver(), f(xpath, selectedDateString));
+
+    // Click the selected date element
+    selectedDate.click();
     saveChanges.click();
+
   }
 
   public void verifyBlockedDateAddedSuccessfully() {
@@ -97,7 +130,9 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
 //        WebElement inner = item.findElement(By.xpath("p/span[1]"));
 
         if (item.getText().contains(SingletonStorage.getInstance().getTmpId())) {
-          item.findElement(By.xpath("//button[contains(@data-testid, '\" + item.getText() + \"') and contains(@data-testid, '-remove')]")).click();
+          item.findElement(By.xpath(
+                  "//button[contains(@data-testid, '\" + item.getText() + \"') and contains(@data-testid, '-remove')]"))
+              .click();
           saveChanges.click();
           isRemoved = true;
           break;
@@ -147,5 +182,16 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
     }
 
     return monthText;
+  }
+
+  private static boolean isWhiteBackground(String backgroundColor) {
+    return backgroundColor.equalsIgnoreCase("rgb(255, 255, 255)")
+        || backgroundColor.equalsIgnoreCase("white");
+  }
+
+  // Method to check if the background color is red
+  private static boolean isRedBackground(String backgroundColor) {
+    return backgroundColor.equalsIgnoreCase("rgb(255,222,228") || backgroundColor.equalsIgnoreCase(
+        "red");
   }
 }
