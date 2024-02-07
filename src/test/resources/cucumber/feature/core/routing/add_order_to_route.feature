@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @AddOrderToRoute @RoutingModules
+@OperatorV2 @Core @Routing @AddOrderToRoute @RoutingModules @test
 Feature: Add Order To Route
 
   Background:
