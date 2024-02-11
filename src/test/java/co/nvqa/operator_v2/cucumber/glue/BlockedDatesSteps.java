@@ -26,7 +26,6 @@ public class BlockedDatesSteps extends AbstractSteps {
   @When("Operator adds Blocked Date for {string}")
   public void operatorAddsBlockedDate(String date) {
     blockedDatesPage.inFrame(() -> {
-//      blockedDatesPage.addBlockedDate());
       blockedDatesPage.addDate(resolveValue(date));
     });
   }
