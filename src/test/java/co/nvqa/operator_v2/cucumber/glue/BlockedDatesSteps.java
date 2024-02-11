@@ -23,7 +23,7 @@ public class BlockedDatesSteps extends AbstractSteps {
     blockedDatesPage = new BlockedDatesPage(getWebDriver());
   }
 
-  @When("Operator adds Blocked Date {string}")
+  @When("Operator adds Blocked Date for {string}")
   public void operatorAddsBlockedDate(String date) {
     blockedDatesPage.inFrame(() -> {
 //      blockedDatesPage.addBlockedDate());
@@ -46,17 +46,17 @@ public class BlockedDatesSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator removes Blocked Date")
-  public void operatorRemovesBlockedDate() {
-    blockedDatesPage.inFrame(()->{
-    blockedDatesPage.removeBlockedDate();
+  @When("Operator removes Blocked Date for {string}")
+  public void operatorRemovesBlockedDate(String date) {
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.removeBlockedDate(resolveValue(date));
     });
   }
 
   @Then("Operator verifies Blocked Date is removed successfully")
   public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
-    blockedDatesPage.inFrame(()->{
-    blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
     });
   }
 }
