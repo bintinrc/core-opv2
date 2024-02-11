@@ -23,7 +23,7 @@ Feature: Add Order To Route
       | requestedTrackingId | {KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId} |
     And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
     Then Operator verifies that success notification displayed:
-      | top | Order {KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | top | Order {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:

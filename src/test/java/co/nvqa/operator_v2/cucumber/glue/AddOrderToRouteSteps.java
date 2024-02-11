@@ -93,7 +93,7 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage.inFrame((page) -> {
       String value = finalData.get("top");
       if (StringUtils.isNotBlank(value)) {
-          String actual = page.message.getText();
+          String actual = page.message.getAttribute("textContent");
           Assertions.assertThat(actual).as("toast message is correct").isEqualTo(value);
       }
       value = finalData.get("bottom");

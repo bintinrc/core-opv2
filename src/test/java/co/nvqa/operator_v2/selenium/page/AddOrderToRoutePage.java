@@ -37,7 +37,7 @@ public class AddOrderToRoutePage extends SimpleReactPage<AddOrderToRoutePage> {
   @FindBy(className = "ant-modal-content")
   public SetPrefixDialog setPrefixDialog;
 
-  @FindBy(xpath = "//div[@class='ant-notification-notice-message']/text()")
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement message;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']//b[.='Error Message:']/following-sibling::span")
