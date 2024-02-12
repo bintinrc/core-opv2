@@ -31,8 +31,10 @@ public class BlockedDatesSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies new Blocked Date is added successfully")
+  @Then("Operator verifies Blocked Date is still blocked")
   public void operatorVerifiesNewBlockedDateIsAddedSuccessfully() {
     blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.waitUntilLoaded();
       blockedDatesPage.verifyBlockedDateAddedSuccessfully();
     });
   }
@@ -53,9 +55,18 @@ public class BlockedDatesSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies Blocked Date is removed successfully")
+  @Then("Operator verifies Blocked Date is not added")
   public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
     blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.waitUntilLoaded();
       blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+    });
+  }
+
+  @When("Operator clicks on {string} button in toast message")
+  public void clickOnUndoChanges(String buttonName) {
+    blockedDatesPage.inFrame((page) -> {
+      page.undoChanges.click();
     });
   }
 }
