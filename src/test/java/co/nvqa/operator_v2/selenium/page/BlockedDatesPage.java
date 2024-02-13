@@ -20,8 +20,12 @@ public class BlockedDatesPage extends SimpleReactPage<BlockedDatesPage> {
 
   @FindBy(xpath = "//div[contains(@data-testid,'blocked-calendar-date')][1]/span")
   public PageElement day;
+
   @FindBy(xpath = "//div[contains(@data-testid,'blocked-date-item')]/span")
   List<PageElement> blockedDatesList;
+
+  @FindBy(css = "[data-testid='blocked-date-undo-changes']")
+  public Button undoChanges;
 
   public BlockedDatesPage(WebDriver webDriver) {
     super(webDriver);
