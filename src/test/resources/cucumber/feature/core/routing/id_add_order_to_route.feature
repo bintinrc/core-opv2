@@ -250,8 +250,8 @@ Feature: Add Order To Route
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
     Then Operator verifies that error notification displayed:
-      | top    | Status 400: Unknown                                                                          |
-      | bottom | Cannot update Waypoint={KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} (newRouteId={{KEY_LIST_OF_CREATED_ROUTES[1].id})  |
+      | top    | Status 400: Unknown                                                                                                               |
+      | bottom | Cannot update Waypoint={KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} (newRouteId={KEY_LIST_OF_CREATED_ROUTES[1].id}) |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
