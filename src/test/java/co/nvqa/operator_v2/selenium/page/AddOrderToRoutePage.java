@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,28 +14,34 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class AddOrderToRoutePage extends OperatorV2SimplePage {
+public class AddOrderToRoutePage extends SimpleReactPage<AddOrderToRoutePage> {
 
-  @FindBy(id = "container.routing.add-order-to-route.route-id")
-  public TextBox routeId;
+  @FindBy(css = "[placeholder='Enter route ID']")
+  public ForceClearTextBox routeId;
 
-  @FindBy(id = "scan")
-  public TextBox trackingId;
+  @FindBy(css = "[placeholder='Scan a new parcel / Enter a tracking ID']")
+  public ForceClearTextBox trackingId;
 
-  @FindBy(css = "nv-autocomplete[item-types='transaction types']")
-  public NvAutocomplete transactionType;
+  @FindBy(xpath = "//div[@data-testid='single-select']")
+  public AntSelect3 transactionType;
 
-  @FindBy(name = "container.routing.add-order-to-route.add-prefix")
-  public NvIconTextButton addPrefix;
+  @FindBy(css = "[data-pa-label='Add Prefix']")
+  public Button addPrefix;
 
-  @FindBy(name = "container.routing.add-order-to-route.remove-prefix")
-  public NvIconTextButton removePrefix;
+  @FindBy(css = "[data-pa-label='Remove Prefix']")
+  public Button removePrefix;
 
-  @FindBy(css = "h5.last-scanned-tracking-id")
+  @FindBy(xpath = "//div[@class='ant-card-body']//span[contains(@class,'nv-text')]")
   public PageElement lastScannedTrackingId;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(className = "ant-modal-content")
   public SetPrefixDialog setPrefixDialog;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement message;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']//b[.='Error Message:']/following-sibling::span")
+  public PageElement description;
 
   public AddOrderToRoutePage(WebDriver webDriver) {
     super(webDriver);
@@ -50,13 +57,13 @@ public class AddOrderToRoutePage extends OperatorV2SimplePage {
         .isTrue();
   }
 
-  public static class SetPrefixDialog extends MdDialog {
+  public static class SetPrefixDialog extends AntModal {
 
-    @FindBy(id = "container.global-inbound.prefix")
+    @FindBy(css = "[placeholder='Prefix']")
     public TextBox prefix;
 
-    @FindBy(id = "saveButtonPrefix")
-    public NvIconTextButton save;
+    @FindBy(css = "[data-pa-label='Save']")
+    public Button save;
 
     public SetPrefixDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
