@@ -5,7 +5,7 @@ Feature: Create Recovery Ticket
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Create Recovery Ticket For Return Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -48,8 +48,13 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | TICKET CREATED |
-      | UPDATE STATUS  |
       | RESCHEDULE     |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Van en-route to pickup New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_OLD_TRANSACTION"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
@@ -69,8 +74,22 @@ Feature: Create Recovery Ticket
       | legacyId | {KEY_PP_NEW_TRANSACTION.waypointId} |
       | status   | Pending                             |
       | routeId  | null                                |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | On Hold                                    |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | On Hold                                            |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Create Recovery Ticket For Pending Reschedule Order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -140,8 +159,13 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | TICKET CREATED |
-      | UPDATE STATUS  |
       | RESCHEDULE     |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: On Hold Old Order Status: Delivery fail New Order Status: On Hold Reason: TICKET_CREATION |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_OLD_TRANSACTION"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -161,8 +185,15 @@ Feature: Create Recovery Ticket
       | legacyId | {KEY_DD_NEW_TRANSACTION.waypointId} |
       | status   | Pending                             |
       | routeId  | null                                |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | On Hold                                    |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator Create Recovery Ticket For Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -229,8 +260,13 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | name           |
       | TICKET CREATED |
-      | UPDATE STATUS  |
       | RESCHEDULE     |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                      |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: On Hold Old Order Status: Pickup fail New Order Status: On Hold Reason: TICKET_CREATION |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_OLD_TRANSACTION"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
@@ -250,6 +286,21 @@ Feature: Create Recovery Ticket
       | legacyId | {KEY_PP_NEW_TRANSACTION.waypointId} |
       | status   | Pending                             |
       | routeId  | null                                |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | On Hold                                    |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | On Hold                                            |
+
 
   @HighPriority
   Scenario: Operator Create and Search Recovery Ticket For Hub Inbound Scan

@@ -121,14 +121,20 @@ Feature: Implanted Manifest
       | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | pods[1].shipperScansQuantity | 0                                        |
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  @ArchiveRouteCommonV2 @happy-path @HighPriority @update-status
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                            |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                            |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -172,8 +178,8 @@ Feature: Implanted Manifest
       | name    | DRIVER PICKUP SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+      | tags          | name          | description                                                                                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: En-route to Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
       | name                    | description                                                                                                                                                                                                                                                         |
       | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
@@ -185,8 +191,8 @@ Feature: Implanted Manifest
       | name    | DRIVER PICKUP SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+      | tags          | name          | description                                                                                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: En-route to Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: UPDATE_PICKUP_POD |
     And Operator verify order events on Edit Order V2 page using data below:
       | name                    | description                                                                                                                                                                                                                                                         |
       | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_LIST_OF_CREATED_ROUTES[1].id} Waypoint ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} Reservation ID: {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
@@ -200,6 +206,27 @@ Feature: Implanted Manifest
       | type     | 1                                                      |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                     |
       | location | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddress} |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | SUCCESS                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
 
 
   @HighPriority

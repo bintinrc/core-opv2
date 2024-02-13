@@ -23,23 +23,50 @@ public class BlockedDatesSteps extends AbstractSteps {
     blockedDatesPage = new BlockedDatesPage(getWebDriver());
   }
 
-  @When("Operator adds Blocked Date")
-  public void operatorAddsBlockedDate() {
-    blockedDatesPage.addBlockedDate();
+  @When("Operator adds Blocked Date for {string}")
+  public void operatorAddsBlockedDate(String date) {
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.addDate(resolveValue(date));
+    });
   }
 
   @Then("Operator verifies new Blocked Date is added successfully")
+  @Then("Operator verifies Blocked Date is still blocked")
   public void operatorVerifiesNewBlockedDateIsAddedSuccessfully() {
-    blockedDatesPage.verifyBlockedDateAddedSuccessfully();
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.waitUntilLoaded();
+      blockedDatesPage.verifyBlockedDateAddedSuccessfully();
+    });
   }
 
-  @When("Operator removes Blocked Date")
-  public void operatorRemovesBlockedDate() {
-    blockedDatesPage.removeBlockedDate();
+  @Then("Operator verifies success toast {string} is displayed")
+  public void operatorVerifySuccessToast(String message) {
+    blockedDatesPage.inFrame((page) -> {
+      page.waitUntilVisibilityOfElementLocated(
+          f("//div[@id='toast-container']//span[.='%s']", message));
+    });
+  }
+
+  @When("Operator removes Blocked Date for {string}")
+  public void operatorRemovesBlockedDate(String date) {
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.removeBlockedDate(resolveValue(date));
+    });
   }
 
   @Then("Operator verifies Blocked Date is removed successfully")
+  @Then("Operator verifies Blocked Date is not added")
   public void operatorVerifiesBlockedDateIsRemovedSuccessfully() {
-    blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+    blockedDatesPage.inFrame(() -> {
+      blockedDatesPage.waitUntilLoaded();
+      blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
+    });
+  }
+
+  @When("Operator clicks on {string} button in toast message")
+  public void clickOnUndoChanges(String buttonName) {
+    blockedDatesPage.inFrame((page) -> {
+      page.undoChanges.click();
+    });
   }
 }

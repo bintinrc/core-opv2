@@ -347,7 +347,7 @@ Feature: RTS
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -403,6 +403,9 @@ Feature: RTS
       | UPDATE CONTACT INFORMATION |
       | DRIVER INBOUND SCAN        |
       | UPDATE AV                  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                             |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RTS_ORDER |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Transit                 |
       | granularStatus | En-route to Sorting Hub |
@@ -482,8 +485,18 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
+      | rts            | 1                                          |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -556,6 +569,9 @@ Feature: RTS
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RTS_ORDER |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}             |
@@ -622,6 +638,16 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
+      | rts            | 1                                          |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address

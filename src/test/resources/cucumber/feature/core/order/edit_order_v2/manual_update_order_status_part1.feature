@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart1
+@OperatorV2 @Core @EditOrderV2 @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart1 @update-status
 Feature: Manual Update Order Status
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Staging
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -34,15 +34,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | STAGING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Staging                                    |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | STAGING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Staging                                    |
     Examples:
       | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                      |
       | Staging        | Staging | STAGING      | STAGING        | Pending        | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Staging\n\nOld Delivery Status: Pending\nNew Delivery Status: Staging\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Staging\n\nOld Order Status: Pending\nNew Order Status: Staging\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Unrouted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -77,15 +91,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     Examples:
       | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
       | Pending Pickup | Pending | PENDING      | PENDING        | Pending        | Pending          | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Pickup\n\nOld Order Status: Transit\nNew Order Status: Pending\n\nReason: Status updated for testing purposes |
 
-  @ArchiveRouteCommonV2 @HighPriority
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -96,9 +124,6 @@ Feature: Manual Update Order Status
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
-    And API Core - wait for order state:
-      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | status     | Transit                               |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -128,15 +153,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
     Examples:
       | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
       | Pending Pickup | Pending | PENDING      | PENDING        | Pending        | Routed           | Old Pickup Status: Success\nNew Pickup Status: Pending\n\nOld Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Pickup\n\nOld Order Status: Transit\nNew Order Status: Pending\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Van En-route to Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -165,15 +204,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Van en-route to pickup                     |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Van en-route to pickup                     |
     Examples:
       | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                             |
       | Van en-route to pickup | Transit | PENDING      | PENDING        | Pending        | Pending          | Old Granular Status: Pending Pickup\nNew Granular Status: Van en-route to pickup\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - En-route to Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -202,15 +255,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
     Examples:
       | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                        |
       | En-route to Sorting Hub | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -240,15 +307,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | FAIL                                       |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pickup fail                                |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pickup fail                                |
     Examples:
       | granularStatus | status      | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                             |
       | Pickup fail    | Pickup fail | FAIL         | PENDING        | Fail           | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Sorting Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -277,15 +358,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
     Examples:
       | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
       | Arrived at Sorting Hub | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Origin Hub
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -314,15 +409,29 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Origin Hub                      |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Origin Hub                      |
     Examples:
       | granularStatus        | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                      |
       | Arrived at Origin Hub | Transit | SUCCESS      | PENDING        | Success        | Pending          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Origin Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  @HighPriority
+  @MediumPriority
   Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup at Distribution Point
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -351,10 +460,24 @@ Feature: Manual Update Order Status
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <pickupWpStatus>             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup at Distribution Point       |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | <deliveryWpStatus>           |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_TRANSACTION.id}                       |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup at Distribution Point       |
     Examples:
       | granularStatus                       | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                   |
       | Pending Pickup at Distribution Point | Pending | PENDING      | PENDING        | Pending        | Pending          | Old Granular Status: Pending Pickup\nNew Granular Status: Pending Pickup at Distribution Point\n\nReason: Status updated for testing purposes |

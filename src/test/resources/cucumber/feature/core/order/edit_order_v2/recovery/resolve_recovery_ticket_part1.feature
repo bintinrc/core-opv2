@@ -298,7 +298,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -374,15 +374,30 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And Operator verify order events on Edit Order V2 page using data below:
       | name             |
-      | UPDATE STATUS    |
       | RESCHEDULE       |
       | RTS              |
       | REVERT COMPLETED |
       | UPDATE ADDRESS   |
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                          |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Success New Delivery Status: Pending Old Granular Status: Completed New Granular Status: Arrived at Sorting Hub Old Order Status: Completed New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Arrived at Sorting Hub                     |
+      | rts            | 1                                          |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = Resend
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -447,13 +462,27 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And Operator verify order events on Edit Order V2 page using data below:
       | name             |
-      | UPDATE STATUS    |
       | RESCHEDULE       |
       | REVERT COMPLETED |
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Success New Delivery Status: Pending Old Granular Status: Completed New Granular Status: En-route to Sorting Hub Old Order Status: Completed New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType        | DELIVERY                                   |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
 
-  @HighPriority
+  @HighPriority @update-status
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RESUME DELIVERY
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -518,13 +547,35 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And Operator verify order events on Edit Order V2 page using data below:
       | name             |
-      | UPDATE STATUS    |
       | RESCHEDULE       |
       | REVERT COMPLETED |
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                                                                     |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Success Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: En-route to Sorting Hub Old Order Status: Cancelled New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | -1                                         |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
 
-  @HighPriority
+
+  @HighPriority @update-status
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RTS
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -603,6 +654,30 @@ Feature: Resolve Recovery Ticket
       | RTS              |
       | TICKET UPDATED   |
       | TICKET RESOLVED  |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                                                                                     |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Success Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: En-route to Sorting Hub Old Order Status: Cancelled New Order Status: Transit Reason: TICKET_RESOLUTION |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | SUCCESS                                    |
+      | dnrId          | -1                                         |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | En-route to Sorting Hub                    |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | En-route to Sorting Hub                            |
+      | rts            | 1                                                  |
+
 
   @HighPriority
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = RTS
