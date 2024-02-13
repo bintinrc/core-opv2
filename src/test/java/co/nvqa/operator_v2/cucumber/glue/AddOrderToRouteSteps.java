@@ -81,9 +81,7 @@ public class AddOrderToRouteSteps extends AbstractSteps {
 
   @Then("Operator verifies that {value} equals {value}")
   public void valueEquals(String actual, String expected) {
-    addOrderToRoutePage.inFrame(() -> {
       Assertions.assertThat(actual).isEqualTo(expected);
-    });
   }
 
   @Then("Operator verifies that success notification displayed:")
