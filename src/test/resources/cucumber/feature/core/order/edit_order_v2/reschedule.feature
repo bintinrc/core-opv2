@@ -5,7 +5,7 @@ Feature: Reschedule
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteCommonV2 @HighPriority @update-status
+  @ArchiveRouteCommonV2 @HighPriority @update-status @wip
   Scenario: Operator Reschedule Fail Pickup
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -154,7 +154,7 @@ Feature: Reschedule
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
       | granularStatus | Pending Pickup                                     |
 
-  @ArchiveRouteCommonV2 @MediumPriority @update-status
+  @ArchiveRouteCommonV2 @MediumPriority @update-status @wip
   Scenario: Operator Reschedule Fail Pickup - Change Pickup Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
