@@ -191,7 +191,7 @@ Feature: Cash Collection
       | collectionAt | DD                                     |
 
   @MediumPriority
-  Scenario: VN - Operator Disallow Delete COD of On Vehicle for Delivery non-RTS order
+  Scenario: VN - Operator Allow Delete COD of On Vehicle for Delivery non-RTS order
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                   |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                               |
@@ -213,9 +213,18 @@ Feature: Cash Collection
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | no |
-    Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                       |
-      | bottom | ^.*Error Message: Not allowed to update 'On Vehicle for Delivery' order.* |
+    Then Operator verifies that success react notification displayed:
+      | top | Update cash collection successfully |
+    Then Operator verify COD icon is not displayed on Edit Order V2 page
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name        | UPDATE CASH                              |
+      | description | Cash On Delivery changed from 23.57 to 0 |
+    And DB Core - verify orders record:
+      | id    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | codId | null                               |
+    Then DB Core - verify cods record:
+      | id        | {KEY_LIST_OF_CREATED_ORDERS[1].cod.id} |
+      | deletedAt | not null                               |
 
   @MediumPriority
   Scenario: VN - Operator Disallow Edit COD of Arrived at Sorting Hub RTS order
