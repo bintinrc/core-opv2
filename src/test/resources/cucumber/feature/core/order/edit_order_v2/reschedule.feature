@@ -102,23 +102,193 @@ Feature: Reschedule
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
     Then DB Core - verify waypoints record:
+      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | seqNo         | null                                                       |
+      | routeId       | null                                                       |
+      | status        | Pending                                                    |
+      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
+      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
+      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
+      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
+      | routingZoneId | 1399                                                       |
+      | latitude      | 1.30706095410839                                           |
+      | longitude     | 103.830899303793                                           |
+    Then DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | seqNo         | null                                                       |
+      | routeId       | null                                                       |
+      | status        | Pending                                                    |
+      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
+      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
+      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
+      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
+      | routingZoneId | 1399                                                       |
+      | latitude      | 1.30706095410839                                           |
+      | longitude     | 103.830899303793                                           |
+    And DB Core - operator verify orders.data.previousPickupDetails is updated correctly:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}           |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName}     |
+      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}    |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | comments | OrderHelper::saveWaypoint                    |
+      | seq_no   | 1                                            |
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_OLD_TRANSACTION"
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType        | PICKUP                                     |
+      | txnStatus      | PENDING                                    |
+      | dnrId          | 0                                          |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus | Pending Pickup                             |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pending Pickup                                     |
+
+  @ArchiveRouteCommonV2 @MediumPriority @update-status
+  Scenario: Operator Reschedule Fail Pickup - Change Pickup Address
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest      | { "service_type":"Return","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{gradle-next-1-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | {ninja-driver-id}                  |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
+      | routes          | KEY_DRIVER_ROUTES                                                                                    |
+      | jobType         | TRANSACTION                                                                                          |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":139}] |
+      | jobAction       | FAIL                                                                                                 |
+      | jobMode         | PICK_UP                                                                                              |
+      | failureReasonId | 139                                                                                                  |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pickup fail |
+      | granularStatus | Pickup fail |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                                      |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+      | txnType        | PICKUP                                             |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+      | granularStatus | Pickup fail                                        |
+    And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
+    And Operator reschedule Pickup on Edit Order V2 page:
+      | senderName    | test sender name               |
+      | senderContact | +9727894434                    |
+      | senderEmail   | test@mail.com                  |
+      | pickupDate    | {gradle-next-1-day-yyyy-MM-dd} |
+      | timeslot      | 9AM - 12PM                     |
+      | country       | Singapore                      |
+      | city          | Singapore                      |
+      | address1      | 8A MARINA BOULEVARD            |
+      | address2      | MARINA BAY LINK MALL           |
+      | postalCode    | 018984                         |
+    Then Operator verifies that success react notification displayed:
+      | top | Order rescheduled successfully |
+    Then Operator verify order events on Edit Order V2 page using data below:
+      | name           |
+      | RESCHEDULE     |
+      | UPDATE ADDRESS |
+      | UPDATE AV      |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name          | description                                                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And Operator verify Pickup details on Edit Order V2 page using data below:
+      | status | PENDING |
+    And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And DB Core - verify orders record:
+      | id           | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | rts          | 0                                  |
+      | fromAddress1 | 8A MARINA BOULEVARD                |
+      | fromAddress2 | MARINA BAY LINK MALL               |
+      | fromPostcode | 018984                             |
+      | fromCountry  | Singapore                          |
+      | fromCity     | Singapore                          |
+      | fromName     | test sender name                   |
+      | fromEmail    | test@mail.com                      |
+      | fromContact  | +9727894434                        |
+    And DB Core - verify number of transactions is correct after new transactions created
+      | order_id               | {KEY_LIST_OF_CREATED_ORDERS[1].id}                        |
+      | number_of_transactions | 3                                                         |
+      | number_of_pickup_txn   | 2                                                         |
+      | pickup_address         | 8A MARINA BOULEVARD MARINA BAY LINK MALL 018984 Singapore |
+      | number_of_delivery_txn | 1                                                         |
+    And DB Core - verify transactions record:
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | status   | Pending                                            |
+      | routeId  | null                                               |
+      | name     | test sender name                                   |
+      | email    | test@mail.com                                      |
+      | contact  | +9727894434                                        |
+      | country  | Singapore                                          |
+      | city     | Singapore                                          |
+      | address1 | 8A MARINA BOULEVARD                                |
+      | address2 | MARINA BAY LINK MALL                               |
+      | postcode | 018984                                             |
+    Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
+      | country  | Singapore                                                  |
+      | city     | Singapore                                                  |
+      | address1 | 8A MARINA BOULEVARD                                        |
+      | address2 | MARINA BAY LINK MALL                                       |
+      | postcode | 018984                                                     |
+#    TODO uncomment when issue with mismatch waypoint lat/long is fixed on AV service
+#    see comment in https://jira.ninjavan.co/browse/NV-11680
+#      | routingZoneId | 30532                                                      |
+#      | latitude      | 1.28046794326566                                           |
+#      | longitude     | 103.853470148164                                           |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
+      | country  | Singapore                                                  |
+      | city     | Singapore                                                  |
+      | address1 | 8A MARINA BOULEVARD                                        |
+      | address2 | MARINA BAY LINK MALL                                       |
+      | postcode | 018984                                                     |
+      #    TODO uncomment when issue with mismatch waypoint lat/long is fixed on AV service
+#    see comment in https://jira.ninjavan.co/browse/NV-11680
+#      | routingZoneId | 30532                                                      |
+#      | latitude      | 1.28046794326566                                           |
+#      | longitude     | 103.853470148164                                           |
     And DB Core - operator verify orders.data.previousPickupDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}           |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
@@ -440,6 +610,7 @@ Feature: Reschedule
       | postcode | 308402                                                     |
       | country  | Singapore                                                  |
       | city     | Singapore                                                  |
+
     And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
