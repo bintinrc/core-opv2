@@ -177,6 +177,24 @@ Feature: Tag & Untag DP
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | type       | DD                                                         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status     | Pending                                                    |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}         |
+      | type       | DD                                                         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | status     | Pending                                                    |
+    And DB Routing Search - verify transactions record:
+      | txnId     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType   | DELIVERY                                           |
+      | txnStatus | PENDING                                            |
+    And DB Routing Search - verify transactions record:
+      | txnId     | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
+      | txnType   | DELIVERY                                           |
+      | txnStatus | PENDING                                            |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Untag DP Order that is not merged and routed
@@ -259,6 +277,16 @@ Feature: Tag & Untag DP
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}          |
+      | type       | DD                                                          |
+      | waypointId | {KEY_CORE_MERGE_WAYPOINT_RESPONSE.data[1].data.waypoint_id} |
+      | status     | Pending                                                     |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}          |
+      | type       | DD                                                          |
+      | waypointId | {KEY_CORE_MERGE_WAYPOINT_RESPONSE.data[1].data.waypoint_id} |
+      | status     | Pending                                                     |
 
   @MediumPriority
   Scenario: Auto Untag DP Order that is Larger than SMALL
@@ -375,6 +403,10 @@ Feature: Tag & Untag DP
       | postcode              | 238880                                                     |
       | city                  | SG                                                         |
       | country               | SG                                                         |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | txnStatus  | PENDING                                                    |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
@@ -476,6 +508,10 @@ Feature: Tag & Untag DP
       | postcode              | 238880                                                     |
       | city                  | SG                                                         |
       | country               | SG                                                         |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | txnStatus  | PENDING                                                    |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo    | 100                                                        |
