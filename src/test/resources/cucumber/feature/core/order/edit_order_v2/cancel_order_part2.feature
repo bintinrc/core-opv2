@@ -210,6 +210,15 @@ Feature: Cancel Order
       | postcode | 511200                             |
       | routeId  | null                               |
       | seqNo    | null                               |
+    And DB Core - verify transactions record:
+      | id         | {KEY_TRANSACTION_AFTER.id}         |
+      | type       | DD                                 |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status     | Cancelled                          |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_TRANSACTION_AFTER.id}         |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | txnStatus  | CANCELLED                          |
     And Operator verify order events on Edit Order V2 page using data below:
       | name              |
       | UPDATE STATUS     |
@@ -220,3 +229,12 @@ Feature: Cancel Order
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Core - verify transactions record:
+      | id         | {KEY_TRANSACTION_AFTER.id}         |
+      | type       | DD                                 |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status     | Pending                          |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_TRANSACTION_AFTER.id}         |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | txnStatus  | PENDING                          |

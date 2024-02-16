@@ -50,7 +50,7 @@ Feature: Edit Order Details
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                        |
       | description | To Name changed from Elsa Sender to test sender name To Email changed from elsaf@ninja.com to test@mail.com To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE SLA                                                                                       |
+      | name | UPDATE SLA |
 #      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
@@ -250,6 +250,11 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
+    # TODO uncomment after https://jira.ninjavan.co/browse/ROUTE-1328
+    #    And DB Routing Search - verify transactions record:
+    #      | txnId      | {KEY_TRANSACTION.id}         |
+    #      | waypointId | {KEY_TRANSACTION.waypointId} |
+    #      | txnStatus  | PENDING                      |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId} |
       | seqNo         | null                         |
@@ -324,7 +329,7 @@ Feature: Edit Order Details
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                        |
       | description | To Name changed from Elsa Sender to test sender name To Email changed from elsaf@ninja.com to test@mail.com To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE SLA                                                                                       |
+      | name | UPDATE SLA |
 #      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
@@ -427,7 +432,7 @@ Feature: Edit Order Details
       | name        | UPDATE CONTACT INFORMATION                                                            |
       | description | To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE SLA                                                                                       |
+      | name | UPDATE SLA |
 #      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
