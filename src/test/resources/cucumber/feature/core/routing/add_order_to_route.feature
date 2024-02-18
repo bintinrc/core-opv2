@@ -56,7 +56,7 @@ Feature: Add Order To Route
     And Operator enters "INVALIDTRACKINGID" tracking id on Add Order to Route page
     Then Operator verifies that error notification displayed:
       | top    | Status 404: Not Found                  |
-      | bottom | Order testINVALIDTRACKINGID not found! |
+      | bottom | Order TESTINVALIDTRACKINGID not found! |
     And Operator verifies the last scanned tracking id is "TESTINVALIDTRACKINGID"
 
   @ArchiveRouteCommonV2 @routing-refactor @happy-path @HighPriority
@@ -310,6 +310,6 @@ Feature: Add Order To Route
       | requestedTrackingId | {KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId} |
     And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
     Then Operator verifies that error notification displayed:
-      | top    | Status 400: Unknown                                                                      |
-      | bottom | ^.*[status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status.* |
+      | top    | Status 400: Unknown                                                                 |
+      | bottom | [status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status |
     And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
