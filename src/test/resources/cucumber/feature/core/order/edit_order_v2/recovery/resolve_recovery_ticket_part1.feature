@@ -93,32 +93,39 @@ Feature: Resolve Recovery Ticket
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | ticketType         | DAMAGED                                    |
+      | ticketSubType      | IMPROPER PACKAGING                         |
+      | entrySource        | CUSTOMER COMPLAINT                         |
+      | orderOutcomeName   | ORDER OUTCOME (DAMAGED)                    |
+      | investigatingParty | 456                                        |
+      | investigatingHubId | {hub-id}                                   |
+      | shipperZendeskId   | 1                                          |
+      | custZendeskId      | 1                                          |
+      | ticketNotes        | GENERATED                                  |
+      | creatorUserId      | {ticketing-creator-user-id}                |
+      | creatorUserName    | {ticketing-creator-user-name}              |
+      | creatorUserEmail   | {ticketing-creator-user-email}             |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId              | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource             | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment | Recovery                              |
-      | investigatingHub        | {hub-name}                            |
-      | ticketType              | DAMAGED                               |
-      | ticketSubType           | IMPROPER PACKAGING                    |
-      | parcelLocation          | DAMAGED RACK                          |
-      | liability               | Shipper                               |
-      | damageDescription       | GENERATED                             |
-      | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DISPOSED       |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
     And Operator verify order events on Edit Order V2 page using data below:
       | name          |
       | UPDATE STATUS |
-    When Operator updates recovery ticket on Edit Order V2 page:
-      | status                  | RESOLVED                        |
-      | outcome                 | NV NOT LIABLE - PARCEL DISPOSED |
-      | keepCurrentOrderOutcome | true                            |
-    Then Operator verifies that success react notification displayed:
-      | top | ^Ticket ID: .* Updated |
+    When DB Recovery - get id from ticket_custom_fields table Hibernate
+      | ticketId      | {KEY_CREATED_RECOVERY_TICKET.ticket.id} |
+      | customFieldId | {KEY_CREATED_ORDER_OUTCOME_ID}          |
+    And API Recovery - Operator update recovery ticket:
+      | ticketId         | {KEY_CREATED_RECOVERY_TICKET.ticket.id}  |
+      | customFieldId    | {KEY_LIST_OF_TICKET_CUSTOM_FIELD_IDS[1]} |
+      | orderOutcomeName | {KEY_CREATED_ORDER_OUTCOME}              |
+      | status           | RESOLVED                                 |
+      | outcome          | NV NOT LIABLE - PARCEL DISPOSED          |
+      | reporterId       | {ticketing-creator-user-id}              |
+      | reporterName     | {ticketing-creator-user-name}            |
+      | reporterEmail    | {ticketing-creator-user-email}           |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order V2 page
     Then Operator verifies order details on Edit Order V2 page:
