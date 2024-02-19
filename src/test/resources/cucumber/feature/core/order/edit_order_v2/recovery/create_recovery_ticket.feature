@@ -29,19 +29,18 @@ Feature: Create Recovery Ticket
       | granularStatus | Van en-route to pickup |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | PENDING |
-    When Operator create new recovery ticket on Edit Order V2 page:
-      | trackingId                    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
-      | entrySource                   | CUSTOMER COMPLAINT                    |
-      | investigatingDepartment       | Recovery                              |
-      | investigatingHub              | {hub-name}                            |
-      | ticketType                    | PARCEL EXCEPTION                      |
-      | ticketSubType                 | INACCURATE ADDRESS                    |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY                       |
-      | custZendeskId                 | 1                                     |
-      | shipperZendeskId              | 1                                     |
-      | ticketNotes                   | GENERATED                             |
-    When Operator verifies that success react notification displayed:
-      | top | Ticket has been created! |
+    And API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | ticketType         | PARCEL EXCEPTION                      |
+      | subTicketType      | INACCURATE ADDRESS                    |
+      | entrySource        | CUSTOMER COMPLAINT                    |
+      | orderOutcomeName   | ORDER OUTCOME (INACCURATE ADDRESS)    |
+      | investigatingParty | {DEFAULT-INVESTIGATING-PARTY}         |
+      | investigatingHubId | {hub-id}                              |
+      | creatorUserId      | {ticketing-creator-user-id}           |
+      | creatorUserName    | {ticketing-creator-user-name}         |
+      | creatorUserEmail   | {ticketing-creator-user-email}        |
+    And Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | On hold |
       | granularStatus | On Hold |
