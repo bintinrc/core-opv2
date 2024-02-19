@@ -368,6 +368,10 @@ Feature: Routing
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_TRANSACTION.id}         |
+      | waypointId | {KEY_TRANSACTION.waypointId} |
+      | txnStatus  | PENDING                      |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId}       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |

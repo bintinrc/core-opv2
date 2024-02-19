@@ -81,9 +81,7 @@ public class AddOrderToRouteSteps extends AbstractSteps {
 
   @Then("Operator verifies that {value} equals {value}")
   public void valueEquals(String actual, String expected) {
-    addOrderToRoutePage.inFrame(() -> {
-      Assertions.assertThat(actual).isEqualTo(expected);
-    });
+    Assertions.assertThat(actual).isEqualTo(expected);
   }
 
   @Then("Operator verifies that success notification displayed:")
@@ -93,13 +91,13 @@ public class AddOrderToRouteSteps extends AbstractSteps {
     addOrderToRoutePage.inFrame((page) -> {
       String value = finalData.get("top");
       if (StringUtils.isNotBlank(value)) {
-          String actual = page.message.getAttribute("textContent");
-          Assertions.assertThat(actual).as("toast message is correct").isEqualTo(value);
+        String actual = page.message.getAttribute("textContent");
+        Assertions.assertThat(actual).as("toast message is correct").isEqualTo(value);
       }
       value = finalData.get("bottom");
       if (StringUtils.isNotBlank(value)) {
-        Assertions.assertThat(value).as("toast description is correct")
-            .contains(page.description.getText());
+        Assertions.assertThat(page.description.getText()).as("toast description is correct")
+            .contains(value);
       }
     });
   }

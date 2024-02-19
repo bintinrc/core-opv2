@@ -5,6 +5,7 @@ Feature: Edit Order Details
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+#  TODO Uncomment the verification step when bug ticket NV-11586 is solved
   @happy-path @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -49,8 +50,8 @@ Feature: Edit Order Details
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                        |
       | description | To Name changed from Elsa Sender to test sender name To Email changed from elsaf@ninja.com to test@mail.com To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE SLA                                                                                       |
-      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
+      | name | UPDATE SLA |
+#      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
@@ -249,6 +250,11 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
+    # TODO uncomment after https://jira.ninjavan.co/browse/ROUTE-1328
+    #    And DB Routing Search - verify transactions record:
+    #      | txnId      | {KEY_TRANSACTION.id}         |
+    #      | waypointId | {KEY_TRANSACTION.waypointId} |
+    #      | txnStatus  | PENDING                      |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId} |
       | seqNo         | null                         |
@@ -260,6 +266,7 @@ Feature: Edit Order Details
       | country       | Singapore                    |
       | routingZoneId | null                         |
 
+#  TODO Uncomment the verification step when bug ticket NV-11586 is solved
   @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page - AASH order merged with another order
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -321,8 +328,8 @@ Feature: Edit Order Details
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                                                                                                                                        |
       | description | To Name changed from Elsa Sender to test sender name To Email changed from elsaf@ninja.com to test@mail.com To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
-#    And Operator verify order event on Edit Order V2 page using data below:
-#      | name        | UPDATE SLA                                                                                       |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE SLA |
 #      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
@@ -367,6 +374,7 @@ Feature: Edit Order Details
       | seqNo    | null                         |
       | status   | Pending                      |
 
+#  TODO Uncomment the verification step when bug ticket NV-11586 is solved
   @HighPriority
   Scenario: Operator Edit Delivery Details on Edit Order page - AASH order merged with another order added to route
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -423,8 +431,8 @@ Feature: Edit Order Details
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CONTACT INFORMATION                                                            |
       | description | To Contact changed from +6583014912 to +9727894434 Is RTS changed from false to false |
-#    And Operator verify order event on Edit Order V2 page using data below:
-#      | name        | UPDATE SLA                                                                                       |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name | UPDATE SLA |
 #      | description | ^.*Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE AV |
