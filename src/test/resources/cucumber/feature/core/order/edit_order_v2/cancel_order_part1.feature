@@ -151,8 +151,8 @@ Feature: Cancel Order
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
       | txnType        | PICKUP                                             |
-      | txnStatus      | FAIL                                          |
-      | dnrId          | 2                                                 |
+      | txnStatus      | FAIL                                               |
+      | dnrId          | 2                                                  |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
       | granularStatus | Cancelled                                          |
     And DB Routing Search - verify transactions record:
@@ -218,8 +218,8 @@ Feature: Cancel Order
     And Operator verify order event on Edit Order V2 page using data below:
       | name | CANCEL |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                                                                         |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Cancelled Old Delivery Status: Pending New Delivery Status: Cancelled Old Granular Status: Van en-route to pickup New Granular Status: Cancelled Old Order Status: Transit New Order Status: Cancelled Reason: CANCEL |
+      | tags          | name          | description                                                                                                                                             |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Van en-route to pickup Old Order Status: Pending New Order Status: Transit Reason: START_ROUTE |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
