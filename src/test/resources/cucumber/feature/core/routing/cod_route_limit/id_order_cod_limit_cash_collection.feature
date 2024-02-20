@@ -33,7 +33,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR {cod-below-limit} |
+      | cod | COD IDR{cod-below-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                                   |
       | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-below-limit} |
@@ -108,7 +108,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR {cod-above-limit} |
+      | cod | COD IDR{cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                                   |
       | description | Cash On Delivery changed from {cod-multiple-above-limit} to {cod-above-limit} |
@@ -222,7 +222,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR {cod-above-limit} |
+      | cod | COD IDR{cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                                   |
       | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-above-limit} |
@@ -310,7 +310,7 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR {cod-above-limit} |
+      | cod | COD IDR{cod-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                    |
       | description | Cash On Delivery changed from {cod-limit} to {cod-above-limit} |
@@ -388,10 +388,10 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow Edit COD of Routed Order with COD >40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -411,19 +411,19 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 40000000.00 |
+      | cashOnDelivery | yes                  |
+      | amount         | {cod-above-limit}.00 |
     Then Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                               |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow Remove COD of Routed Order with COD >30 Millions on Edit Order
+  Scenario: Operator Allow Remove COD of Routed Order with COD >40 Millions on Edit Order
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Sort - Operator global inbound
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -448,8 +448,8 @@ Feature: ID - Order COD Limit
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                 |
-      | description | Cash On Delivery changed from 10000000 to 0 |
+      | name        | UPDATE CASH                                                   |
+      | description | Cash On Delivery changed from {cod-multiple-above-limit} to 0 |
 
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
@@ -468,18 +468,18 @@ Feature: ID - Order COD Limit
       | cod       | 0                                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD <30 Millions on Route Logs
+  Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD <40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -502,15 +502,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 20000000.00 |
+      | cashOnDelivery | yes                           |
+      | amount         | {cod-multiple-below-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR20000000 |
+      | cod | COD IDR{cod-multiple-below-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 20000000 |
+      | name        | UPDATE CASH                                                                            |
+      | description | Cash On Delivery changed from {cod-multiple-above-limit} to {cod-multiple-below-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
@@ -524,34 +524,34 @@ Feature: ID - Order COD Limit
       | id   | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-next-1-day-yyyy-MM-dd}     |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD >30 Millions on Route Logs
+  Scenario: Operator Allow to Edit Multiple Routes to Same Date - Driver has Edited COD >40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -574,15 +574,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 30000000.00 |
+      | cashOnDelivery | yes                           |
+      | amount         | {cod-multiple-above-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR30000000 |
+      | cod | COD IDR{cod-multiple-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 30000000 |
+      | name        | UPDATE CASH                                                                            |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-multiple-above-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
@@ -594,18 +594,18 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Driver has Edited COD <30 Millions on Route Logs
+  Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Driver has Edited COD <40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -634,15 +634,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 20000000.00 |
+      | cashOnDelivery | yes                           |
+      | amount         | {cod-multiple-below-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR20000000 |
+      | cod | COD IDR{cod-multiple-below-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 20000000 |
+      | name        | UPDATE CASH                                                                            |
+      | description | Cash On Delivery changed from {cod-multiple-above-limit} to {cod-multiple-below-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
@@ -661,23 +661,23 @@ Feature: ID - Order COD Limit
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 20,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Driver has Edited COD >30 Millions on Route Logs
+  Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Driver has Edited COD >40 Millions on Route Logs
     Given API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
       | vehicles               | [{"active": true, "vehicleNo": "1ashdkajdsc", "vehicleType": "Car", "ownVehicle": false, "capacity": 999999}]                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -697,16 +697,16 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[2].id} } |
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":10000000, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
@@ -717,15 +717,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 30000000.00 |
+      | cashOnDelivery | yes                           |
+      | amount         | {cod-multiple-above-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR30000000 |
+      | cod | COD IDR{cod-multiple-above-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 10000000 to 30000000 |
+      | name        | UPDATE CASH                                                                            |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-multiple-above-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
@@ -737,27 +737,27 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[2].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Transfer Orders with Edited COD <30 Millions from Route A to Route B with Same Driver on Edit Route
+  Scenario: Operator Allow to Transfer Orders with Edited COD <40 Millions from Route A to Route B with Same Driver on Edit Route
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 30000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                         |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                     |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -783,15 +783,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 20000000.00 |
+      | cashOnDelivery | yes                           |
+      | amount         | {cod-multiple-below-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR20000000 |
+      | cod | COD IDR{cod-multiple-below-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 30000000 to 20000000 |
+      | name        | UPDATE CASH                                                                   |
+      | description | Cash On Delivery changed from {cod-below-limit} to {cod-multiple-below-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
@@ -841,43 +841,43 @@ Feature: ID - Order COD Limit
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-below-limit}                           |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow to Transfer Orders with Edited COD >30 Millions from Route A to Route B with Same Driver on Edit Route
+  Scenario: Operator Disallow to Transfer Orders with Edited COD >40 Millions from Route A to Route B with Same Driver on Edit Route
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 20000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -903,15 +903,15 @@ Feature: ID - Order COD Limit
 
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnDelivery | yes         |
-      | amount         | 30000000.00 |
+      | cashOnDelivery | yes            |
+      | amount         | {cod-limit}.00 |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verifies order details on Edit Order V2 page:
-      | cod | COD IDR30000000 |
+      | cod | COD IDR{cod-limit} |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE CASH                                        |
-      | description | Cash On Delivery changed from 20000000 to 30000000 |
+      | name        | UPDATE CASH                                                             |
+      | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-limit} |
 
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
@@ -934,27 +934,27 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Transfer Orders with COD <30 Millions from Route A to Route B with Different Driver on Edit Routes
+  Scenario: Operator Allow to Transfer Orders with COD <40 Millions from Route A to Route B with Different Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 20000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -1032,47 +1032,47 @@ Feature: ID - Order COD Limit
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-below-limit}                           |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 10000000                           |
+      | cod       | {cod-multiple-below-limit}         |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow to Transfer Orders with COD >30 Millions from Route A to Route B with Different Driver on Edit Routes
+  Scenario: Operator Disallow to Transfer Orders with COD >40 Millions from Route A to Route B with Different Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 30000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -1123,27 +1123,27 @@ Feature: ID - Order COD Limit
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Allow to Transfer Orders with COD <30 Millions from Route A to Route B with Same Driver on Edit Routes
+  Scenario: Operator Allow to Transfer Orders with COD <40 Millions from Route A to Route B with Same Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 20000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
@@ -1215,43 +1215,43 @@ Feature: ID - Order COD Limit
 
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPending | 30,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
+      | codCollectionPendingNoComa | {cod-below-limit}                           |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
-      | routeId              | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
-      | codCollectionPending | 10,000,000                                  |
-      | driverName           | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
-      | driverId             | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
+      | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
+      | codCollectionPendingNoComa | {cod-multiple-below-limit}                  |
+      | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
+      | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 30000000                           |
+      | cod       | {cod-below-limit}                  |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
-  Scenario: Operator Disallow to Transfer Orders with COD >30 Millions from Route A to Route B with Same Driver on Edit Routes
+  Scenario: Operator Disallow to Transfer Orders with COD >40 Millions from Route A to Route B with Same Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
       | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
       | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 30000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
       | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
       | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
       | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
       | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": 10000000,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
       | driverSettingParameter | {"first_name": "DFN-{gradle-current-date-yyyyMMddHHmmsss}", "last_name": "driver", "display_name": "D1-{gradle-current-date-yyyyMMddHHmmsss}", "license_number": "DL-{gradle-current-date-yyyyMMddHHmmsss}","driver_type":"{driver-type-name}", "availability": false, "cod_limit": 1000000, "max_on_demand_jobs": 1000000, "username":"StationRANDOM_STRING","password":"Password1", "tags": {}, "employment_start_date": "{date:0 days next,YYYY-MM-dd}", "employment_end_date": null, "hub_id":{hub-id}} |
