@@ -35,8 +35,8 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name          | tags          | description                                                                                                                                                                                              |
-      | UPDATE STATUS | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
+      | name          | tags          | description                                                                                                                                                                                                                                                    |
+      | UPDATE STATUS | MANUAL ACTION | Old Pickup Status: Pending New Pickup Status: Success Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
 
   @MediumPriority
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - With RTS Normal Parcel
@@ -123,9 +123,9 @@ Feature: Force Success
     And Operator verify order event on Edit Order V2 page using data below:
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name           | tags          | description                                                                                                                                                                                              |
-      | UPDATE STATUS  | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
-      | FORCED SUCCESS | MANUAL ACTION | <description>                                                                                                                                                                                            |
+      | name           | tags          | description                                                                                                                                                                                                                                                    |
+      | UPDATE STATUS  | MANUAL ACTION | Old Pickup Status: Pending New Pickup Status: Success Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS |
+      | FORCED SUCCESS | MANUAL ACTION | <description>                                                                                                                                                                                                                                                  |
     Examples:
       | reason                                | description                                                                                                                                                                                                                                             |
       | 3PL completed delivery                | Reason: 3PL completed delivery RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                |
@@ -170,7 +170,7 @@ Feature: Force Success
       | name | PRICING CHANGE |
     And Operator verify order events on Edit Order V2 page using data below:
       | name           | tags          | description                                                                                                                                                                                                                                                                     |
-      | UPDATE STATUS  | MANUAL ACTION | Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS                                                                        |
+      | UPDATE STATUS  | MANUAL ACTION | Old Pickup Status: Pending New Pickup Status: Success Old Delivery Status: Pending New Delivery Status: Success Old Granular Status: Pending Pickup New Granular Status: Completed Old Order Status: Pending New Order Status: Completed Reason: FORCE_SUCCESS                  |
       | FORCED SUCCESS | MANUAL ACTION | Reason: Other - Completed by AT {gradle-current-date-yyyyMMddHHmmsss} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
   @MediumPriority
