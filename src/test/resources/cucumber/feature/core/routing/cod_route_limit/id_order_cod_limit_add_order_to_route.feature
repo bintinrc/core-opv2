@@ -30,7 +30,7 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
@@ -95,8 +95,8 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top | Driver has exceeded total cod |
+    Then Operator verifies that error notification displayed:
+      | bottom | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -133,11 +133,14 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator refresh page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
+    And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
@@ -231,12 +234,12 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top | Driver has exceeded total cod |
+    Then Operator verifies that error notification displayed:
+      | bottom | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -275,12 +278,15 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And Operator refresh page
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
+    And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[2].id}" route id on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} added to route {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
@@ -386,13 +392,13 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[2].id}" route id on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top | Driver has exceeded total cod |
+    Then Operator verifies that error notification displayed:
+      | bottom | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
@@ -436,8 +442,8 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that error toast displayed:
-      | top | Driver has exceeded total cod |
+    Then Operator verifies that error notification displayed:
+      | bottom | Driver has exceeded total cod |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
@@ -481,7 +487,7 @@ Feature: ID - Order COD Limit
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" tracking id on Add Order to Route page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
 
