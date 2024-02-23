@@ -242,19 +242,23 @@ Feature: Edit Order Details
       | fromCity     | Singapore                          |
       | fromCountry  | Singapore                          |
     Then DB Core - verify transactions record:
-      | id         | {KEY_TRANSACTION.id}         |
-      | waypointId | {KEY_TRANSACTION.waypointId} |
-      | status     | Pending                      |
-      | routeId    | null                         |
-      | address1   | 116 Keng Lee Rd              |
-      | address2   | 15                           |
-      | postcode   | 308402                       |
-      | country    | Singapore                    |
-    # TODO uncomment after https://jira.ninjavan.co/browse/ROUTE-1328
-    #    And DB Routing Search - verify transactions record:
-    #      | txnId      | {KEY_TRANSACTION.id}         |
-    #      | waypointId | {KEY_TRANSACTION.waypointId} |
-    #      | txnStatus  | PENDING                      |
+      | id              | {KEY_TRANSACTION.id}         |
+      | waypointId      | {KEY_TRANSACTION.waypointId} |
+      | status          | Pending                      |
+      | routeId         | null                         |
+      | address1        | 116 Keng Lee Rd              |
+      | address2        | 15                           |
+      | postcode        | 308402                       |
+      | country         | Singapore                    |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}  |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}    |
+    And DB Routing Search - verify transactions record:
+      | txnId              | {KEY_TRANSACTION.id}         |
+      | waypointId         | {KEY_TRANSACTION.waypointId} |
+      | txnStatus          | PENDING                      |
+      | txnType            | PICKUP                       |
+      | startTxnTimeCustom | {KEY_TRANSACTION.startTime}  |
+      | endTxnTimeCustom   | {KEY_TRANSACTION.endTime}    |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId} |
       | seqNo         | null                         |
