@@ -64,8 +64,8 @@ Feature: ID - Driver Route Limit
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | checkToast    | false                                       |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                        |
-      | bottom | ^.*Error Message: exceptions.ProcessingException: Driver has more than 3 routes for date.* |
+      | top    | Status 500: Unknown                   |
+      | bottom | ^.*cannot create more than 3 routes.* |
     When Operator refresh page
     And DB Route - get route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
     And Operator set filters on Route Logs page:
@@ -87,7 +87,6 @@ Feature: ID - Driver Route Limit
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[2].legacyId} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTES[3].legacyId} | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} | {hub-name} | {zone-name} | {driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[3].comments} |
 
-
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Create >3 Driver Routes in a Day on Route Logs
     When API Driver Management - Operator create new driver with data below:
@@ -97,6 +96,7 @@ Feature: ID - Driver Route Limit
       | zonePreferences        | [{"latitude": -6.2141988, "longitude": 106.8064186, "maxWaypoints": 1000000, "minWaypoints": 1, "zoneId": {zone-id}, "cost": 1000000, "rank": 1}]                                                                                                                                                                                                                                                                                                                                                          |
       | hub                    | {"displayName": "{hub-name}", "value": {hub-id}}                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+    And Operator waits for 15 seconds
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And API Core - Operator create new route using data below:
@@ -113,8 +113,8 @@ Feature: ID - Driver Route Limit
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | checkToast    | false                                       |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                        |
-      | bottom | ^.*Error Message: exceptions.ProcessingException: Driver has more than 3 routes for date.* |
+      | top    | Status 500: Unknown                   |
+      | bottom | ^.*cannot create more than 3 routes.* |
 
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -235,8 +235,8 @@ Feature: ID - Driver Route Limit
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}]} |
     #    create route 4
     And API Core - Operator fail to create new route from zonal routing using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId}] }                                                                                                                                                  |
-      | errorMessage       | {"code": 103102,"nvErrorCode": "SERVER_ERROR_EXCEPTION","messages": ["exceptions.ProcessingException: Driver has more than 3 routes for date."],"application": "core","description": "INTERNAL_SERVER_ERROR","data": {"message": "exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit "}} |
+      | createRouteRequest   | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id}, "waypoints":[{KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId}] } |
+      | errorResponseMatches | ^.*cannot create more than 3 routes.*                                                                                                                                                       |
     Given Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | TODAY      |
@@ -344,8 +344,8 @@ Feature: ID - Driver Route Limit
       | id         | {KEY_LIST_OF_CREATED_ROUTES[4].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                                 |
-      | bottom | ^.*Error Message: exceptions.ProcessingException: Driver has more than 3 routes for date {gradle-current-date-yyyy-MM-dd} 17:00:00* |
+      | top    | Status 500: Unknown      |
+      | bottom | ^.*Cannot update Route.* |
     Then Operator verify route details on Route Logs page using data below:
       | id         | {KEY_LIST_OF_CREATED_ROUTES[4].id} |
       | driverName | null                               |
