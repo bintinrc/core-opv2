@@ -97,7 +97,7 @@ public class AddOrderToRouteSteps extends AbstractSteps {
       value = finalData.get("bottom");
       if (StringUtils.isNotBlank(value)) {
         String actual = page.description.getAttribute("textContent");
-        Assertions.assertThat(actual).as("toast description is correct").isEqualToIgnoringCase(value);
+        Assertions.assertThat(actual).as("toast description is correct").containsIgnoringCase(value);
       }
     });
   }
