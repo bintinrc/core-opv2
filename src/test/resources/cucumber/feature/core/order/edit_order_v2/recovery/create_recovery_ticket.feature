@@ -49,8 +49,8 @@ Feature: Create Recovery Ticket
       | TICKET CREATED |
       | RESCHEDULE     |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                              |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER_VIA_TICKET_CREATION |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                          |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Van en-route to pickup New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
@@ -160,8 +160,8 @@ Feature: Create Recovery Ticket
       | TICKET CREATED |
       | RESCHEDULE     |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                                    |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                                        |
+      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: En-route to Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER_VIA_TICKET_CREATION |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                   |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: On Hold Old Order Status: Delivery fail New Order Status: On Hold Reason: TICKET_CREATION |
@@ -261,8 +261,8 @@ Feature: Create Recovery Ticket
       | TICKET CREATED |
       | RESCHEDULE     |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                              |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER |
+      | tags          | name          | description                                                                                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: Pending Pickup Old Order Status: Pickup fail New Order Status: Pending Reason: RESCHEDULE_ORDER_VIA_TICKET_CREATION |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                      |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Fail New Pickup Status: Pending Old Granular Status: Pickup fail New Granular Status: On Hold Old Order Status: Pickup fail New Order Status: On Hold Reason: TICKET_CREATION |
@@ -495,8 +495,9 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    And Operator verify order event on Edit Order V2 page using data below:
-      | name | RESCHEDULE |
+    And Operator verify order events on Edit Order V2 page using data below:
+      | tags          | name         | description                                                                                                                                |
+      | MANUAL ACTION | ADD TO ROUTE | Route: {KEY_LIST_OF_CREATED_ROUTES[1].id} New waypoint ID: {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} Source: ADD_BY_ORDER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Core - verify transactions record:
@@ -602,8 +603,8 @@ Feature: Create Recovery Ticket
       | status         | Transit                 |
       | granularStatus | En-route to Sorting Hub |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: BATCH_POD_UPDATE |
+      | tags          | name          | description                                                                                                                                                                                                         |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: En-route to Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: BATCH_POD_UPDATE |
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | DRIVER PICKUP SCAN                 |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
