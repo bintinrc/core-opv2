@@ -88,7 +88,7 @@ Feature: Route Inbound Screen 1
       | wpFailed    | 0                                         |
       | wpCompleted | 0                                         |
       | wpTotal     | 1                                         |
-    When Operator refresh page
+    Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                            |
       | fetchBy      | FETCH_BY_TRACKING_ID                  |

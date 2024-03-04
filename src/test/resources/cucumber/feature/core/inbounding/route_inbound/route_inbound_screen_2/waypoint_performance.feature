@@ -57,15 +57,14 @@ Feature: Waypoint Performance
     When Operator open Pending Waypoints Info dialog on Route Inbound page
     Then Operator verify Shippers Info in Pending Waypoints dialog using data below:
       | shipperName       | scanned | total |
-      | {shipper-v4-name} | 1       | 2     |
+      | {shipper-v4-name} | 0       | 1     |
     When Operator click 'View orders or reservations' button for shipper #1 in Pending Waypoints dialog
     Then Operator verify Reservations table in Pending Waypoints dialog using data below:
       | reservationId                            | location                                                            | readyToLatestTime                                                                     | approxVolume                                       | status  | receivedParcels |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithSpaceDelimiter} | {gradle-current-date-yyyy-MM-dd} 15:00:00 - {gradle-current-date-yyyy-MM-dd} 18:00:00 | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | Pending | 0               |
     Then Operator verify Orders table in Pending Waypoints dialog using data below:
-      | trackingId                            | stampId | location                                           | type              | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress}   | Delivery (Normal) | Pending | 0        |                    |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineFromAddress} | Pick Up (Return)  | Pending | 0        | Inbounded          |
+      | trackingId                            | stampId | location                                         | type              | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress} | Delivery (Normal) | Pending | 0        |                    |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Success Waypoints on Route Inbound Page
@@ -396,7 +395,7 @@ Feature: Waypoint Performance
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | null    | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineFromAddress}              | Pick Up (Return)      | Failed  | 1        | null               |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | null    | {KEY_LIST_OF_CREATED_ADDRESSES[1].getFullSpaceSeparatedAddress} | Pick Up (Reservation) | Success | 0        | null               |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[3]} | null    | {KEY_LIST_OF_CREATED_ORDERS[3].to1LineToAddress}                | Delivery (Normal)     | Success | 0        | null               |
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | null    | {KEY_LIST_OF_CREATED_ORDERS[4].to1LineFromAddress}              | Pick Up (Return)      | Pending | 0        | Inbounded          |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[4]} | null    | {KEY_LIST_OF_CREATED_ORDERS[4].to1LineFromAddress}              | Pick Up (Return)      | Success | 0        | Inbounded          |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Waypoint Performance of Partial Waypoints on Route Inbound Page

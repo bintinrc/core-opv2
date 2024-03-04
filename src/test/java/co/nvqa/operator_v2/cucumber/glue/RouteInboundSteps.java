@@ -307,6 +307,7 @@ public class RouteInboundSteps extends AbstractSteps {
   @When("Operator click 'View orders or reservations' button for shipper #{int} in {} dialog")
   public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(
       int index, String status) {
+    pause3s();
     routeInboundPage.openViewOrdersOrReservationsDialog(index);
   }
 
