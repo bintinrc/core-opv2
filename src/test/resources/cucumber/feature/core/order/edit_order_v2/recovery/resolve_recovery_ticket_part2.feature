@@ -344,6 +344,24 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                         |
+      | status   | Success                                      |
+      | routeId  | null                                         |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | SUCCESS                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
@@ -352,6 +370,24 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                       |
+      | status   | Pending                                    |
+      | routeId  | null                                       |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
@@ -418,6 +454,24 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                         |
+      | status   | Success                                      |
+      | routeId  | null                                         |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | SUCCESS                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
@@ -426,6 +480,24 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                       |
+      | status   | Pending                                    |
+      | routeId  | null                                       |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
@@ -503,6 +575,24 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                         |
+      | status   | Success                                      |
+      | routeId  | null                                         |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | SUCCESS                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     Then DB Core - verify waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
@@ -511,13 +601,31 @@ Feature: Resolve Recovery Ticket
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | systemId | sg                           |
+    And DB Core - verify transactions record:
+      | id       | {KEY_TRANSACTION.id}                       |
+      | status   | Pending                                    |
+      | routeId  | null                                       |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub Old Order Status: On Hold New Order Status: Transit Reason: TICKET_RESOLUTION |
     And Operator verify order events on Edit Order V2 page using data below:
-      | name                  |
-      | ROUTE INBOUND SCAN    |
-      | TICKET RESOLVED       |
+      | name               |
+      | ROUTE INBOUND SCAN |
+      | TICKET RESOLVED    |
 
   @HighPriority @update-status
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
@@ -604,19 +712,23 @@ Feature: Resolve Recovery Ticket
       | tags          | name          | description                                                                                                                                                                                                     |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Success New Pickup Status: Pending Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_PP_TRANSACTION_AFTER.id}              |
-      | txnType        | PICKUP                                     |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_PP_TRANSACTION_AFTER.id}              |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_PP_TRANSACTION_AFTER.startTime}       |
+      | endTimeCustom   | {KEY_PP_TRANSACTION_AFTER.endTime}         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_DD_TRANSACTION_AFTER.id}              |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_DD_TRANSACTION_AFTER.id}              |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_DD_TRANSACTION_AFTER.startTime}       |
+      | endTimeCustom   | {KEY_DD_TRANSACTION_AFTER.endTime}         |
 
 
   @MediumPriority
@@ -703,3 +815,22 @@ Feature: Resolve Recovery Ticket
     And Operator verify order events on Edit Order V2 page using data below:
       | tags          | name          | description                                                                                                                                                                                                     |
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Success New Pickup Status: Pending Old Granular Status: Arrived at Sorting Hub New Granular Status: Pending Pickup Old Order Status: Transit New Order Status: Pending Reason: RESUME_PICKUP |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_PP_TRANSACTION_AFTER.id}              |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_PP_TRANSACTION_AFTER.startTime}       |
+      | endTimeCustom   | {KEY_PP_TRANSACTION_AFTER.endTime}         |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_DD_TRANSACTION_AFTER.id}              |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_DD_TRANSACTION_AFTER.startTime}       |
+      | endTimeCustom   | {KEY_DD_TRANSACTION_AFTER.endTime}         |
+

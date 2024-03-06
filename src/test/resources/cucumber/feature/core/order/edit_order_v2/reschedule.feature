@@ -140,19 +140,23 @@ Feature: Reschedule
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
-      | txnType        | PICKUP                                     |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_PP_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_PP_NEW_TRANSACTION.endTime}           |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
-      | txnType        | DELIVERY                                           |
-      | txnStatus      | PENDING                                            |
-      | dnrId          | 0                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pending Pickup                                     |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].endTime}   |
 
   @ArchiveRouteCommonV2 @MediumPriority @update-status
   Scenario: Operator Reschedule Fail Pickup - Change Pickup Address
@@ -304,19 +308,23 @@ Feature: Reschedule
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_PP_NEW_TRANSACTION.id}                |
-      | txnType        | PICKUP                                     |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_PP_NEW_TRANSACTION.id}                |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_PP_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_PP_NEW_TRANSACTION.endTime}           |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
-      | txnType        | DELIVERY                                           |
-      | txnStatus      | PENDING                                            |
-      | dnrId          | 0                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pending Pickup                                     |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].endTime}   |
 
 
   @ArchiveRouteCommonV2 @HighPriority @update-status
@@ -361,12 +369,14 @@ Feature: Reschedule
       | tags          | name          | description                                                                                                                                                                                                                    |
       | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: On Vehicle for Delivery New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: BATCH_POD_UPDATE |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
-      | txnType        | DELIVERY                                           |
-      | txnStatus      | FAIL                                               |
-      | dnrId          | 2                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pending Reschedule                                 |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | FAIL                                                      |
+      | dnrId           | 2                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Reschedule                                        |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
@@ -468,12 +478,14 @@ Feature: Reschedule
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | En-route to Sorting Hub                    |
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | En-route to Sorting Hub                    |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
 
   @ArchiveRouteCommonV2 @HighPriority @update-status
@@ -625,12 +637,14 @@ Feature: Reschedule
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Arrived at Sorting Hub                     |
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan
@@ -738,6 +752,15 @@ Feature: Reschedule
       | postcode | 308402                                             |
       | country  | Singapore                                          |
       | city     | Singapore                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                |
+      | granularStatus  | En-route to Sorting Hub                                   |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
     Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -855,6 +878,15 @@ Feature: Reschedule
       | postcode | 308402                                             |
       | country  | Singapore                                          |
       | city     | Singapore                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}        |
+      | txnType         | PICKUP                                                    |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].endTime}   |
     Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -994,6 +1026,15 @@ Feature: Reschedule
       | postcode | 308402                                             |
       | country  | Singapore                                          |
       | city     | Singapore                                          |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                |
+      | granularStatus  | En-route to Sorting Hub                                   |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
     Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -1131,6 +1172,15 @@ Feature: Reschedule
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}         |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}         |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}          |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                |
+      | granularStatus  | En-route to Sorting Hub                                   |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
     Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |

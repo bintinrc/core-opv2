@@ -37,34 +37,43 @@ Feature: Resume Order
       | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Cancelled New Pickup Status: Pending Old Delivery Status: Cancelled New Delivery Status: Pending Old Granular Status: Cancelled New Granular Status: Pending Pickup Old Order Status: Cancelled New Order Status: Pending Reason: RESUME_ORDER |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id    | {KEY_TRANSACTION.id} |
-      | dnrId | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
+
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_TRANSACTION.id}                       |
-      | txnType        | PICKUP                                     |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id    | {KEY_TRANSACTION.id} |
-      | dnrId | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_TRANSACTION.id}                       |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
 
   @MediumPriority
   Scenario: Operator Resume an Order on Edit Order page - Non-Cancelled Order
@@ -145,38 +154,46 @@ Feature: Resume Order
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Pending              |
-      | dnrId  | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Pending                     |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_TRANSACTION.id}                       |
-      | txnType        | PICKUP                                     |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Pending              |
-      | dnrId  | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Pending                     |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_TRANSACTION.id}                       |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled
@@ -230,14 +247,32 @@ Feature: Resume Order
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Pending              |
-      | dnrId  | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Pending                     |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
+    And DB Routing Search - verify transactions record is hard deleted:
+      | txnId   | {KEY_TRANSACTION.id} |
+      | txnType | PICKUP               |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Fail                 |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Fail                        |
+      | dnrId           | 2                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | FAIL                                       |
+      | dnrId           | 2                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
 
+  #  TODO Uncomment the verification step when bug ticket ROUTE-1367 is solved
   @MediumPriority @update-status
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With NO Waypoint
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -268,22 +303,31 @@ Feature: Resume Order
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Pending              |
-      | dnrId  | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Pending                     |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
+#    And DB Routing Search - verify transactions record is hard deleted:
+#      | txnId   | {KEY_TRANSACTION.id} |
+#      | txnType | PICKUP               |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
-      | id     | {KEY_TRANSACTION.id} |
-      | status | Pending              |
-      | dnrId  | 0                    |
+      | id              | {KEY_TRANSACTION.id}        |
+      | status          | Pending                     |
+      | dnrId           | 0                           |
+      | startTimeCustom | {KEY_TRANSACTION.startTime} |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
       | seqNo   | null                         |
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_TRANSACTION.id}                       |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Pending Pickup                             |
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
