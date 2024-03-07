@@ -13,6 +13,10 @@ public class ThB2BPage extends SimpleReactPage<TagManagementPage> {
 
   @FindBy(css = "[data-testid='upload-csv-button']")
   public Button uploadCsv;
+
+  @FindBy(css = "[data-testid='download-error-csv-button']")
+  public Button downloadErrorCsv;
+
   @FindBy(xpath = "//div[@class='ant-modal-content']")
   public UploadCsvDialog uploadCsvDialog;
 

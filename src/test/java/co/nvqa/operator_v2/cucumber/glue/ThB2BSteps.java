@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.ThB2BPage;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
@@ -41,6 +40,8 @@ public class ThB2BSteps extends AbstractSteps {
         case "Upload":
           page.uploadCsvDialog.upload.click();
           break;
+        case "Download Error Csv":
+          page.downloadErrorCsv.click();
       }
     });
   }
@@ -52,7 +53,7 @@ public class ThB2BSteps extends AbstractSteps {
           + "\"NVTH123\",\"1\"\n"
           + "\"NVTH124\",\"2\"\n";
       page.verifyFileDownloadedSuccessfully("th-b2b.csv",
-          fileContent);
+          fileContent.trim());
     });
   }
 
@@ -162,6 +163,21 @@ public class ThB2BSteps extends AbstractSteps {
         }
       });
       softly.assertAll();
+    });
+  }
+
+  @Then("Operator verify Error CSV file is downloaded successfully on b2b page")
+  public void verifyErrorCsv(List<Map<String, String>> data) {
+    page.inFrame(() -> {
+      List<Map<String, String>> dataMap = resolveListOfMaps(data);
+      StringBuilder content = new StringBuilder(
+          "trackingId,routeId,message\n");
+      dataMap.forEach(row -> {
+        content.append(row.get("trackingId")).append(",").append(row.get("routeId")).append(",")
+            .append(row.get("message")).append("\n");
+      });
+      page.verifyFileDownloadedSuccessfully("failed-auto-inbound-orders.csv",
+          content.toString().trim());
     });
   }
 }
