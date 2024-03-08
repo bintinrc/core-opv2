@@ -544,11 +544,8 @@ Feature: Resolve Recovery Ticket
       | tags          | name          | description                                                                                                                                          |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: On Hold Old Order Status: Transit New Order Status: On Hold Reason: TICKET_CREATION |
     And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                                   |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Fail New Delivery Status: Pending Old Granular Status: Pending Reschedule New Granular Status: Arrived at Sorting Hub Old Order Status: Delivery fail New Order Status: Transit Reason: RESCHEDULE_ORDER |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | name       |
-      | RESCHEDULE |
+      | tags          | name          | description                                                                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Success Old Granular Status: Pending Pickup New Granular Status: Arrived at Sorting Hub Old Order Status: Pending New Order Status: Transit Reason: HUB_INBOUND |
     And API Sort - Operator route inbound
       | trackingId          | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                           |
       | hubId               | {hub-id}                                                                                                                                             |
