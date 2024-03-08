@@ -79,6 +79,15 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
@@ -163,6 +172,15 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | PICKUP                                     |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Pending Pickup                             |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
@@ -372,6 +390,15 @@ Feature: Edit Order Details
       | postcode      | 308402                            |
       | country       | Singapore                         |
       | routingZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | routeId  | null                         |
@@ -463,6 +490,15 @@ Feature: Edit Order Details
       | address2   | null                               |
       | postcode   | 455384                             |
       | country    | SG                                 |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Core - verify waypoints record:
       | id            | {KEY_TRANSACTION.waypointId}       |
       | seqNo         | 100                                |

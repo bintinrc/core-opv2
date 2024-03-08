@@ -88,6 +88,16 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | En-route to Sorting Hub                    |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
@@ -163,6 +173,16 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | On Hold                                    |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
@@ -260,6 +280,16 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
@@ -341,6 +371,16 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
@@ -497,6 +537,16 @@ Feature: RTS
       | seqNo   | null                               |
       | routeId | null                               |
       | status  | Pending                            |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION_AFTER.id}                 |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION_AFTER.startTime}          |
+      | endTimeCustom   | {KEY_TRANSACTION_AFTER.endTime}            |
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
@@ -567,3 +617,13 @@ Feature: RTS
       | address2 | addsrt                       |
       | postcode | 757995                       |
       | country  | SG                           |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |

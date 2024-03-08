@@ -6,7 +6,7 @@ Feature: RTS
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path @HighPriority
-  Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Unrouted
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -112,9 +112,22 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
+
 
   @ArchiveRouteCommonV2 @MediumPriority
-  Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Routed
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -228,6 +241,18 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
   @MediumPriority
   Scenario: Operator RTS an Order on Edit Order page - Arrived at Sorting Hub, Delivery Unrouted - Edit Delivery Address
@@ -346,6 +371,18 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
   @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Driver Inbound Scan
@@ -488,13 +525,15 @@ Feature: RTS
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | En-route to Sorting Hub                    |
-      | rts            | 1                                          |
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | En-route to Sorting Hub                    |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
   @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Operator RTS an Order on Edit Order Page - Pending Reschedule, Latest Scan = Hub Inbound Scan
@@ -641,13 +680,15 @@ Feature: RTS
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
     And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_DD_NEW_TRANSACTION.id}                |
-      | txnType        | DELIVERY                                   |
-      | txnStatus      | PENDING                                    |
-      | dnrId          | 0                                          |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
-      | granularStatus | Arrived at Sorting Hub                     |
-      | rts            | 1                                          |
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed - Edit Delivery Address
@@ -772,6 +813,19 @@ Feature: RTS
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_DD_NEW_TRANSACTION.id}                |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | Arrived at Sorting Hub                     |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_DD_NEW_TRANSACTION.startTime}         |
+      | endTimeCustom   | {KEY_DD_NEW_TRANSACTION.endTime}           |
+
 
   @HighPriority
   Scenario Outline: Operator RTS Order with Allowed Granular Status - <granular_status>
@@ -831,6 +885,16 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_TRANSACTION.id}                       |
+      | txnType         | DELIVERY                                   |
+      | txnStatus       | PENDING                                    |
+      | dnrId           | 0                                          |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | granularStatus  | En-route to Sorting Hub                    |
+      | rts             | 1                                          |
+      | startTimeCustom | {KEY_TRANSACTION.startTime}                |
+      | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
