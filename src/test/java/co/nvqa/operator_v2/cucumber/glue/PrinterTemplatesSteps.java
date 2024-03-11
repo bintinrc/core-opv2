@@ -23,11 +23,15 @@ public class PrinterTemplatesSteps extends AbstractSteps {
 
   @When("Operator select template with name = {string} on Printer Templates page")
   public void operatorSelectTemplateFromCombobox(String templateName) {
-    printerTemplatesPage.selectTemplate(templateName);
+    printerTemplatesPage.inFrame(() -> {
+      printerTemplatesPage.selectTemplate(templateName);
+    });
   }
 
   @Then("Operator verifies the selected template is loaded and all needed fields from the template should be shown on the right panel on Printer Templates page")
   public void operatorVerifiesTheSelectedTemplateIsLoadedAndAllNeededFieldsFromTheTemplateShouldBeShownOnTheRightPanelOnPrinterTemplatePage() {
-    printerTemplatesPage.verifyTemplateIsLoadedAndAllNeededFieldsIsShownOnRightPanel();
+    printerTemplatesPage.inFrame(() -> {
+      printerTemplatesPage.verifyTemplateIsLoadedAndAllNeededFieldsIsShownOnRightPanel();
+    });
   }
 }
