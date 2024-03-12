@@ -49,7 +49,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressString} | Pending Pickup         |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Download CSV of Route Group Information on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5165473
     Given API Order - Shipper create multiple V4 orders using data below:
