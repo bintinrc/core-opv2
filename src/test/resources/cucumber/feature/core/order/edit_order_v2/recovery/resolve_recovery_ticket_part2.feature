@@ -519,7 +519,7 @@ Feature: Resolve Recovery Ticket
       | ROUTE INBOUND SCAN    |
       | TICKET RESOLVED       |
 
-  @HighPriority @update-status
+  @HighPriority @update-status @wip
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Parcel Exception, Inaccurate Address
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
@@ -619,7 +619,7 @@ Feature: Resolve Recovery Ticket
       | granularStatus | Pending Pickup                             |
 
 
-  @MediumPriority
+  @MediumPriority @wip
   Scenario: Operator Resume Pickup For On Hold Order - Ticket Type = Shipper Issue, Poor Labelling
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |

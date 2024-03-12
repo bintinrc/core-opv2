@@ -85,7 +85,7 @@ Feature: Resolve Recovery Ticket
       | TICKET UPDATED  |
       | TICKET RESOLVED |
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Operator Resolve Recovery Ticket with Outcome = Order Cancel
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
