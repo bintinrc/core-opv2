@@ -768,7 +768,8 @@ public class EditOrderV2Steps extends AbstractSteps {
   public void operatorUnmastTransactionAddress(String transactionType) {
     int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
     page.inFrame(() -> {
-      page.transactionsTable.unmaskColumn(rowIndex, "destinationAddress");
+      page.transactionsTable.unmaskAddressColumn(rowIndex, "destinationAddress");
+      page.waitUntilLoaded();
     });
   }
 

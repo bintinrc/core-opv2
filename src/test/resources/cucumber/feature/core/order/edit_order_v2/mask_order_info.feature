@@ -15,8 +15,8 @@ Feature: Mask Order Info
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | 1234                                                                                                                                                                                                                        |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)orth {gradle-current-date-yyyyMMddHHmmsss} Click to reveal (tracked) {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
+      | contact | 1234                                                                                                                                          |
+      | address | Click to reveal (tracked)orth {gradle-current-date-yyyyMMddHHmmsss} Click to reveal (tracked) {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
     When Operator click Delivery -> Edit delivery details on Edit Order V2 page
     Then Operator verify values in Edit delivery details dialog on Edit Order V2 page:
       | recipientContact | 1234 |
@@ -24,11 +24,12 @@ Feature: Mask Order Info
       | recipientContact | 12345 |
     Then Operator verifies that success react notification displayed:
       | top | Delivery details updated |
+    When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | Click to reveal (tracked)2345 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
-      | contact            | Click to reveal (tracked)2345                                                                                                                                                                                               |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)orth {gradle-current-date-yyyyMMddHHmmsss} Click to reveal (tracked) {gradle-current-date-yyyyMMddHHmmsss} SG 159363 |
+      | contact            | Click to reveal (tracked)2345                                                                                                                 |
+      | destinationAddress | Click to reveal (tracked)orth {gradle-current-date-yyyyMMddHHmmsss} Click to reveal (tracked) {gradle-current-date-yyyyMMddHHmmsss} SG 159363 |
     When Operator unmask contact number of Delivery transaction on Edit Order V2 page
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | contact | 12345 |
@@ -51,12 +52,12 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                          |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK 102600 SG 102600 SG |
+      | contact | Click to reveal (tracked)0004                     |
+      | address | Click to reveal (tracked)WALK 102600 SG 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                               |
-      | contact            | Click to reveal (tracked)0004                                                                          |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK 102600 SG SG 102600 |
+      | type               | DELIVERY                                          |
+      | contact            | Click to reveal (tracked)0004                     |
+      | destinationAddress | Click to reveal (tracked)WALK 102600 SG SG 102600 |
     When Operator click Delivery -> Return to sender on Edit Order V2 page
     And Operator verifies values in Edit RTS details dialog on Edit Order V2 page:
       | country    | SG           |
@@ -78,12 +79,12 @@ Feature: Mask Order Info
       | top | 1 order(s) RTS-ed |
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -111,20 +112,20 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)4434                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)ng Barat 308402 SG |
+      | contact | Click to reveal (tracked)4434               |
+      | address | Click to reveal (tracked)ng Barat 308402 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                  |
-      | contact            | Click to reveal (tracked)4434                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)ng Barat SG 308402 |
+      | type               | DELIVERY                                    |
+      | contact            | Click to reveal (tracked)4434               |
+      | destinationAddress | Click to reveal (tracked)ng Barat SG 308402 |
     When Operator click Return to sender -> Edit RTS Details on Edit Order V2 page
     And Operator verify values in Edit return details dialog on Edit Order V2 page:
-      | recipientContact | Click to reveal (tracked)4434                                                 |
-      | country          | SG                                                                            |
-      | city             | -                                                                             |
-      | address1         | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) |
-      | address2         | Click to reveal (tracked)ng Barat                                             |
-      | postalCode       | 308402                                                                        |
+      | recipientContact | Click to reveal (tracked)4434     |
+      | country          | SG                                |
+      | city             | -                                 |
+      | address1         | Click to reveal (tracked)         |
+      | address2         | Click to reveal (tracked)ng Barat |
+      | postalCode       | 308402                            |
     And Operator edit Return details on Edit Order V2 page:
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot         | All Day (9AM - 10PM)           |
@@ -136,13 +137,14 @@ Feature: Mask Order Info
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top | Return details updated |
+    When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -167,12 +169,12 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                          |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK 102600 SG 102600 SG |
+      | contact | Click to reveal (tracked)0004                     |
+      | address | Click to reveal (tracked)WALK 102600 SG 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                               |
-      | contact            | Click to reveal (tracked)0004                                                                          |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK 102600 SG SG 102600 |
+      | type               | DELIVERY                                          |
+      | contact            | Click to reveal (tracked)0004                     |
+      | destinationAddress | Click to reveal (tracked)WALK 102600 SG SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | +6598980004                             |
@@ -196,14 +198,15 @@ Feature: Mask Order Info
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top | 1 order(s) RTS-ed |
+    When Operator refresh page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -231,24 +234,24 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)4434                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)ng Barat 308402 SG |
+      | contact | Click to reveal (tracked)4434               |
+      | address | Click to reveal (tracked)ng Barat 308402 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                  |
-      | contact            | Click to reveal (tracked)4434                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)ng Barat SG 308402 |
+      | type               | DELIVERY                                    |
+      | contact            | Click to reveal (tracked)4434               |
+      | destinationAddress | Click to reveal (tracked)ng Barat SG 308402 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | +9727894434                        |
       | address | Keng Lee Rd Kilang Barat 308402 SG |
     When Operator click Return to sender -> Edit RTS Details on Edit Order V2 page
     And Operator verify values in Edit return details dialog on Edit Order V2 page:
-      | recipientContact | Click to reveal (tracked)4434                                                 |
-      | country          | SG                                                                            |
-      | city             | -                                                                             |
-      | address1         | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) |
-      | address2         | Click to reveal (tracked)ng Barat                                             |
-      | postalCode       | 308402                                                                        |
+      | recipientContact | Click to reveal (tracked)4434     |
+      | country          | SG                                |
+      | city             | -                                 |
+      | address1         | Click to reveal (tracked)         |
+      | address2         | Click to reveal (tracked)ng Barat |
+      | postalCode       | 308402                            |
     And Operator edit Return details on Edit Order V2 page:
       | reason           | Nobody at address              |
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
@@ -263,12 +266,12 @@ Feature: Mask Order Info
       | top | Return details updated |
     When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -315,12 +318,12 @@ Feature: Mask Order Info
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator click Order settings -> Reschedule order on Edit Order V2 page
     And Operator update delivery reschedule on Edit Order V2 page:
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
@@ -335,12 +338,12 @@ Feature: Mask Order Info
       | top | Order rescheduled successfully |
     Then Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -387,12 +390,12 @@ Feature: Mask Order Info
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator click Order settings -> Reschedule order on Edit Order V2 page
     And Operator update delivery reschedule on Edit Order V2 page:
       | recipientName | New name                       |
@@ -402,14 +405,14 @@ Feature: Mask Order Info
       | top | Order rescheduled successfully |
     Then Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | New name                                                                                                                                                  |
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | name    | New name                                                                   |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | name               | New name                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | name               | New name                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                    |
@@ -458,12 +461,12 @@ Feature: Mask Order Info
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | +6598980004                                 |
@@ -484,13 +487,14 @@ Feature: Mask Order Info
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -537,12 +541,12 @@ Feature: Mask Order Info
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | +6598980004                                 |
@@ -558,15 +562,16 @@ Feature: Mask Order Info
       | timeslot      | All Day (9AM - 10PM)           |
     Then Operator verifies that success react notification displayed:
       | top | Order rescheduled successfully |
+    When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | New name                                                                                                                                                  |
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | name    | New name                                                                   |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | name               | New name                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | name               | New name                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                    |
@@ -593,12 +598,12 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator click Delivery -> Edit delivery details on Edit Order V2 page
     And Operator edit delivery details on Edit Order V2 page:
       | deliveryDate     | {gradle-next-1-day-yyyy-MM-dd} |
@@ -611,13 +616,14 @@ Feature: Mask Order Info
       | postalCode       | 439888                         |
     Then Operator verifies that success react notification displayed:
       | top | Delivery details updated |
+    When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home 439888 Singapore Singapore |
+      | contact | Click to reveal (tracked)5678                            |
+      | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked)home Singapore Singapore 439888 |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
+      | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | 12345678                                        |
@@ -642,12 +648,12 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator click Delivery -> Edit delivery details on Edit Order V2 page
     And Operator edit delivery details on Edit Order V2 page:
       | recipientName | New name                       |
@@ -743,12 +749,12 @@ Feature: Mask Order Info
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | contact | +6598980004                                 |
@@ -762,14 +768,14 @@ Feature: Mask Order Info
       | top | Delivery details updated |
     When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | New name                                                                                                                                                  |
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
-      | address | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 102600 SG |
+      | name    | New name                                                                   |
+      | contact | Click to reveal (tracked)0004                                              |
+      | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | name               | New name                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
-      | destinationAddress | Click to reveal (tracked) Click to reveal (tracked) Click to reveal (tracked) WALK Click to reveal (tracked) Click to reveal (tracked)address 2 SG 102600 |
+      | type               | DELIVERY                                                                   |
+      | name               | New name                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
+      | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | name    | New name                                    |

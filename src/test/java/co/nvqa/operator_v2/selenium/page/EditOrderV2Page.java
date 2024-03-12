@@ -681,6 +681,12 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
           getColumnLocators().get(columnId), index);
       click(xpath);
     }
+    public void unmaskAddressColumn(int index, String columnId) {
+      String xpath = f(
+          "(//div[contains(@class,'virtual-table')]//div[@data-datakey='%s'])[%d]//span[contains(.,'Click')][2]",
+          getColumnLocators().get(columnId), index);
+      click(xpath);
+    }
   }
 
   /**
