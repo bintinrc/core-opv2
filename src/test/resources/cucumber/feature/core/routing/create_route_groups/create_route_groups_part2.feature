@@ -49,7 +49,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} | {KEY_LIST_OF_CREATED_ORDERS[2].buildShortFromAddressString} | Pending Pickup         |
 
-  @HighPriority
+  @HighPriority @wip
   Scenario: Download CSV of Route Group Information on Create Route Groups
     # https://studio.cucumber.io/projects/208144/test-plan/folders/1593801/scenarios/5165473
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -89,8 +89,7 @@ Feature: Create Route Groups
     And Operator sort Transactions or Reservations table by Tracking ID on Create Route Groups page
     And Operator save records from Transactions or Reservations table on Create Route Groups page
     And Operator download CSV file on Create Route Groups page
-   # Step below will fix in ROUTE-1339
-#    Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
+    Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroupsV2
   Scenario: Operator Filter Route Grouping on Create Route Groups - Empty Route Group
