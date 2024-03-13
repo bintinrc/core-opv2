@@ -11,8 +11,7 @@ Feature: Global Settings
     And Operator save inbound settings from Global Settings page
     And Operator set Weight Tolerance value to "44.0" on Global Settings page
     And Operator save Weight Tolerance settings on Global Settings page
-    Then Operator verifies that success toast displayed:
-      | top | Updated |
+    Then Operator verifies success toast displayed with message "Updated"
     When Operator refresh page
     Then Operator verifies Weight Tolerance value is "44.0" on Global Settings page
 
@@ -22,8 +21,7 @@ Feature: Global Settings
     And Operator save inbound settings from Global Settings page
     And Operator set Weight Limit value to "44.0" on Global Settings page
     And Operator save Weight Limit settings on Global Settings page
-    Then Operator verifies that success toast displayed:
-      | top | Updated |
+    And Operator verifies success toast displayed with message "Updated"
     When Operator refresh page
     Then Operator verifies Weight Limit value is "44.0" on Global Settings page
 
@@ -32,10 +30,9 @@ Feature: Global Settings
     And API Core - Operator gets SMS notifications settings
     When Operator go to menu System Settings -> Global Settings
     And Operator check 'Enable Van Inbound SMS Shipper Ids' checkbox on Global Settings page
-    And Operator add " {global-settings-shipper-name} " shipper to Exempted Shippers from Van Inbound SMS on Global Settings page
+    And Operator add "{global-settings-shipper-name}" shipper to Exempted Shippers from Van Inbound SMS on Global Settings page
     And Operator clicks 'Update SMS Settings' button on Global Settings page
-    Then Operator verifies that success toast displayed:
-      | top | Updated |
+    Then Operator verifies success toast displayed with message "Updated"
     When Operator refresh page
     Then Operator verifies that Exempted Shippers from Van Inbound SMS contains "{global-settings-shipper-legacy-id}-{global-settings-shipper-name}" shipper on Global Settings page
 
@@ -44,9 +41,8 @@ Feature: Global Settings
     And API Core - Operator gets SMS notifications settings
     When Operator go to menu System Settings -> Global Settings
     And Operator check 'Enable Return Pickup SMS Shipper Ids' checkbox on Global Settings page
-    And Operator add " {global-settings-shipper-name} " shipper to Exempted Shippers from Return Pickup SMS on Global Settings page
+    And Operator add "{global-settings-shipper-name}" shipper to Exempted Shippers from Return Pickup SMS on Global Settings page
     And Operator clicks 'Update SMS Settings' button on Global Settings page
-    Then Operator verifies that success toast displayed:
-      | top | Updated |
+    Then Operator verifies success toast displayed with message "Updated"
     When Operator refresh page
     Then Operator verifies that Exempted Shippers from Return Pickup SMS contains "{global-settings-shipper-legacy-id}-{global-settings-shipper-name}" shipper on Global Settings page
