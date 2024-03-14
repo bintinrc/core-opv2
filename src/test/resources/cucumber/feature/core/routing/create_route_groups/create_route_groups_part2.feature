@@ -89,8 +89,7 @@ Feature: Create Route Groups
     And Operator sort Transactions or Reservations table by Tracking ID on Create Route Groups page
     And Operator save records from Transactions or Reservations table on Create Route Groups page
     And Operator download CSV file on Create Route Groups page
-   # Step below will fix in ROUTE-1339
-#    Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
+    Then Operator verify Transactions or Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroupsV2
   Scenario: Operator Filter Route Grouping on Create Route Groups - Empty Route Group
