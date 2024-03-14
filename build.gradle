@@ -65,7 +65,7 @@ dependencies {
     implementation "co.nvqa:common-corev2:1.5.0"
     implementation "co.nvqa:common-dp:1.5.0"
     implementation "co.nvqa:common-driver:1.5.1"
-    implementation "co.nvqa:common-external:1.5.0"
+    implementation "co.nvqa:common-external:1.5.1"
     implementation "co.nvqa:common-fm:1.5.0"
     implementation "co.nvqa:common-lighthouse:1.5.0"
     implementation "co.nvqa:common-mm:1.5.2"
