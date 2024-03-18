@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.core.model.route.RouteResponse;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.ui.utils.exceptions.NvTestElementNotFoundException;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteLogsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -218,7 +219,7 @@ public class StationRouteSteps extends AbstractSteps {
     page.inFrame(() -> {
       AntSelect3 hub = page.hub.waitUntilVisible(1) ? page.hub : page.hubUpload;
       Assertions.assertThatThrownBy(() -> hub.selectValue(hubName))
-          .withFailMessage("Can select %s hub", hubName).isInstanceOf(NoSuchElementException.class);
+          .withFailMessage("Can select %s hub", hubName).isInstanceOf(NvTestElementNotFoundException.class);
     });
   }
 
