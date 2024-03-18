@@ -183,7 +183,7 @@ public class EditOrderV2Steps extends AbstractSteps {
       }
       expected = finalData.get("latestRouteId");
       if (StringUtils.isNotBlank(expected)) {
-        softAssertions.assertThat(page.latestRouteId.getText()).as("Latest Route ID")
+        softAssertions.assertThat(page.latestRouteId.getText()).as("Latest route ID")
             .isEqualTo(expected);
       }
       softAssertions.assertAll();
