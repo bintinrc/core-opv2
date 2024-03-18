@@ -3,7 +3,8 @@ Feature: Add Order To Route
 
   Background:
     Given Launch browser
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    When Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And Operator switch to REACT shell
 
   @ArchiveRouteCommonV2 @routing-refactor @HighPriority
   Scenario: Add Order to a Route - Pickup, Valid Tracking ID, With Prefix

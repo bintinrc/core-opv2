@@ -7,8 +7,9 @@ import co.nvqa.common.ui.support.CommonUiTestConstants;
  */
 public final class TestConstants extends CommonUiTestConstants {
 
+  public static String SHELL_NAME;
+  public static String OPERATOR_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_ALL_ORDER_URL;
-  public static final String OPERATOR_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_COOKIE_DOMAIN;
   public static final String OPERATOR_PORTAL_LOGIN_URL;
   public static final String OPERATOR_PORTAL_USER_COOKIE;
