@@ -63,7 +63,7 @@ public class MainSteps extends AbstractSteps {
     if (TestConstants.SHELL_NAME.equalsIgnoreCase("react")) {
       TestConstants.OPERATOR_PORTAL_BASE_URL =
           StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/react/#";
-      mainPageReact.goToUrl(patchUrlToReact(mainPage.getCurrentUrl()));
+      mainPageReact.goToUrl(getReactUrl(mainPage.getCurrentUrl()));
     } else {
       TestConstants.OPERATOR_PORTAL_BASE_URL =
           StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/#";
@@ -81,7 +81,7 @@ public class MainSteps extends AbstractSteps {
     return reactMenuName;
   }
 
-  private static String patchUrlToReact(String originalUrl) {
+  private static String getReactUrl(String originalUrl) {
     // Check if the URL contains "#", replace it with "/react/#"
     int hashIndex = originalUrl.indexOf("#");
     if (hashIndex != -1) {
