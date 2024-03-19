@@ -28,13 +28,11 @@ public class MainSteps extends AbstractSteps {
 
   @Given("Operator go to menu {} -> {}")
   public void operatorGoToMenu(String parentMenuName, String childMenuName) {
-    switch (TestConstants.SHELL_NAME.toLowerCase()) {
-      case "angular":
-        mainPage.clickNavigation(parentMenuName, childMenuName);
-        break;
-      case "react":
-        mainPageReact.clickNavigation(parentMenuName, getReactChildMenuName(childMenuName));
-        break;
+    if (TestConstants.SHELL_NAME.equalsIgnoreCase("react")) {
+      mainPageReact.clickNavigation(getReactMenuName(parentMenuName),
+          getReactMenuName(childMenuName));
+    } else {
+      mainPage.clickNavigation(parentMenuName, childMenuName);
     }
   }
 
@@ -62,27 +60,25 @@ public class MainSteps extends AbstractSteps {
   @Given("Operator switch to {} shell")
   public void operatorSwitchShell(String shellName) {
     TestConstants.SHELL_NAME = shellName.toLowerCase();
-    switch (shellName.toLowerCase()) {
-      case "angular":
-        TestConstants.OPERATOR_PORTAL_BASE_URL =
-            StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/#";
-        break;
-      case "react":
-        TestConstants.OPERATOR_PORTAL_BASE_URL =
-            StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/react/#";
-        break;
+    if (TestConstants.SHELL_NAME.equalsIgnoreCase("react")) {
+      TestConstants.OPERATOR_PORTAL_BASE_URL =
+          StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/react/#";
+      mainPageReact.goToUrl(patchUrlToReact(mainPage.getCurrentUrl()));
+    } else {
+      TestConstants.OPERATOR_PORTAL_BASE_URL =
+          StandardTestConstants.NV_API_BASE.replace("api", "operatorv2") + "/#";
+      mainPage.goToUrl(mainPage.getCurrentUrl());
     }
-    mainPage.goToUrl(patchUrlToReact(mainPage.getCurrentUrl()));
   }
 
-  private static String getReactChildMenuName(String childMenuName) {
-    String reactChildMenuName = childMenuName;
-    switch (childMenuName) {
-      case "Add Order to Route":
-        reactChildMenuName = "Add order to route";
-        break;
+  private static String getReactMenuName(String menuName) {
+    // Some parent or children menu name have different case/name in React
+    // So need to transform here because xpath is case-sensitive
+    String reactMenuName = menuName;
+    if (menuName.equals("Add Order to Route")) {
+      reactMenuName = "Add order to route";
     }
-    return reactChildMenuName;
+    return reactMenuName;
   }
 
   private static String patchUrlToReact(String originalUrl) {
@@ -92,7 +88,7 @@ public class MainSteps extends AbstractSteps {
       String baseUrl = originalUrl.substring(0, hashIndex);
       String path = originalUrl.substring(hashIndex);
       String patchedUrl = baseUrl + "react/" + path;
-      // Custom patch for react version of the url
+      // Patch for react version of the page url
       if (patchedUrl.contains("/order")) {
         patchedUrl = patchedUrl + "-v2";
       }
