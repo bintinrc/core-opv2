@@ -7,8 +7,9 @@ import co.nvqa.common.ui.support.CommonUiTestConstants;
  */
 public final class TestConstants extends CommonUiTestConstants {
 
+  public static String SHELL_NAME;
+  public static String OPERATOR_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_ALL_ORDER_URL;
-  public static final String OPERATOR_PORTAL_BASE_URL;
   public static final String OPERATOR_PORTAL_COOKIE_DOMAIN;
   public static final String OPERATOR_PORTAL_LOGIN_URL;
   public static final String OPERATOR_PORTAL_USER_COOKIE;
@@ -17,6 +18,7 @@ public final class TestConstants extends CommonUiTestConstants {
   public static final long RPM_SHIPPER_ID_LEGACY;
 
   static {
+    SHELL_NAME = "angular";
     OPERATOR_PORTAL_BASE_URL = NV_API_BASE.replace("api", "operatorv2") + "/#";
     OPERATOR_PORTAL_ALL_ORDER_URL = OPERATOR_PORTAL_BASE_URL + "/order";
     OPERATOR_PORTAL_COOKIE_DOMAIN = getString("operator-portal-cookie-domain");
