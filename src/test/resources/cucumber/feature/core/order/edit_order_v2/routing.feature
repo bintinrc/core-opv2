@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @EditOrderRouting @RoutingModules @test
+@OperatorV2 @Core @EditOrderV2 @EditOrderRouting @RoutingModules @wip
 Feature: Routing
 
   Background:
@@ -387,7 +387,7 @@ Feature: Routing
 #      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 #
   @HighPriority
-  Scenario:Operator Add Merged Delivery Order from a Route
+  Scenario:Operator Add Merged Delivery Order to a Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -399,19 +399,11 @@ Feature: Routing
     And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    When API Core - Operator merge waypoints on Zonal Routing:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    When Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
-    When Operator merge transactions of created routes
-    Then Operator verifies that success react notification displayed:
-      | top    | Transactions with 1 Routes Merged        |
-      | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-#    Then API Core - Operator verifies "Delivery" transactions of following orders have same waypoint id:
-#      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-#      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
@@ -441,5 +433,10 @@ Feature: Routing
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-##    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
-##    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Routing Search - verify transactions record:
+      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType        | DELIVERY                                           |
+      | txnStatus      | PENDING                                            |
+      | routeId        | not null                                           |
+      | dnrId          | 0                                                  |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
