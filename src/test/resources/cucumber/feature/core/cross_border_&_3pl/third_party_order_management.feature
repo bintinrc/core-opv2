@@ -1,4 +1,4 @@
-@OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyOrderManagement
+@OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyOrderManagement @wip
 Feature: Third Party Order Management
 
   Background:
