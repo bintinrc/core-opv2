@@ -57,7 +57,7 @@ public class MdAutocomplete extends PageElement {
   public void selectItem(String value) {
     try {
       click(
-          f("//ul[contains(@class,'md-autocomplete-suggestions')]/li[contains(normalize-space(.),'%s')]",
+          f("//ul[contains(@class,'md-autocomplete-suggestions')]/li",
               StringUtils.normalizeSpace(value)));
     } catch (NoSuchElementException ex) {
       throw new NoSuchElementException(
