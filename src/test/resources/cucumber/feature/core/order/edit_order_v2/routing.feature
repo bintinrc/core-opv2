@@ -386,7 +386,7 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @HighPriority
+  @HighPriority @ArchiveRouteCommonV2
   Scenario:Operator Add Merged Delivery Order to a Route
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
