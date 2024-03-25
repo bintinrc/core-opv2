@@ -35,9 +35,9 @@ public class MainPageReact extends OperatorV2SimplePage implements MaskedPage {
     MAP_OF_END_URL.put("All Orders", "order-v2");
     MAP_OF_END_URL.put("Add order to route", "add-order-to-route");
 
-    // for all page with masked, add this to the url
-    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2\\/\\d*");
-    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2$");
+    // add the url of all pages that have masked element inside
+    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2\\/\\d*"); // Edit Order
+    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2$"); // All Orders
   }
 
   public MainPageReact(WebDriver webDriver) {
