@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 
 
 /**
