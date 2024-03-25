@@ -26,35 +26,18 @@ public class MainPageReact extends OperatorV2SimplePage implements MaskedPage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MainPageReact.class);
   private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
-
   private static final List<String> LIST_OF_MASKED_PAGE_URL = new ArrayList<>();
 
   @FindBy(css = "[data-testid='ninja-van-label-testid']")
   public Button toggleSideNav;
 
   static {
-    MAP_OF_END_URL.put("1. Create Route Groups", "create-route-groups");
-    MAP_OF_END_URL.put("1.1. Create Route Groups V1.5", "create-route-groups-v1_5");
-    MAP_OF_END_URL.put("2. Route Group Management", "route-group");
-    MAP_OF_END_URL.put("3. Route Engine - Zonal Routing", "zonal-routing");
-    MAP_OF_END_URL.put("4. Route Engine - Bulk Add to Route", "add-parcel-to-route");
     MAP_OF_END_URL.put("All Orders", "order-v2");
-    MAP_OF_END_URL.put("All Shippers", "shippers");
-    MAP_OF_END_URL.put("Printer Settings", "printers");
-    MAP_OF_END_URL.put("Recovery Tickets Scanning", "recovery-ticket-scanning");
-    MAP_OF_END_URL.put("Route Cash Inbound", "cod");
-    MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
-    MAP_OF_END_URL.put("Third Party Order Management", "third-party-order");
-    MAP_OF_END_URL.put("Outbound/Route Load Monitoring", "outbound-monitoring");
-    MAP_OF_END_URL.put("Outbound Load Monitoring", "outbound-monitoring");
-    MAP_OF_END_URL.put("Update Delivery Address with CSV", "order-delivery-update");
-    MAP_OF_END_URL.put("Route Monitoring V2", "route-monitoring-paged");
-    MAP_OF_END_URL.put("Pickup Jobs", "pickup-appointment");
+    MAP_OF_END_URL.put("Add order to route", "add-order-to-route");
 
     // for all page with masked, add this to the url
-    LIST_OF_MASKED_PAGE_URL.add("\\/order\\/\\d*");
-    LIST_OF_MASKED_PAGE_URL.add("\\/order$");
-    LIST_OF_MASKED_PAGE_URL.add("\\/route-manifest\\/\\d*");
+    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2\\/\\d*");
+    LIST_OF_MASKED_PAGE_URL.add("\\/order-v2$");
   }
 
   public MainPageReact(WebDriver webDriver) {
