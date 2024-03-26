@@ -188,7 +188,6 @@ Feature: Route Logs - Merge Transactions
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
 
-
   @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup Transactions - Different Email - Can Merge
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -304,7 +303,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2           | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti1234@test.co | +6622134567    | +6622134561    | false              |
 
-  @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup Transactions - Invalid Phone Number - Can Merge
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -419,7 +418,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2           | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti1234@test.co | 1234           | 1234           | false              |
 
-  @HighPriority
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario Outline: Operator Merge Multiple Transactions of Single Route - Pickup Transactions - Invalid Email - Can Merge
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
