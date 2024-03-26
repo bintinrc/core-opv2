@@ -6,8 +6,8 @@ Feature: Route Logs - Merge Transactions
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  @ArchiveRouteCommonV2 @happy-path @HighPriority
-  Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page - Pickup Transactions - Tagged with Different DP - Cannot Merge
+  @happy-path @HighPriority
+  Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page - Pickup Transactions - Tagged with Same DP - Cannot Merge
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
@@ -15,10 +15,103 @@ Feature: Route Logs - Merge Transactions
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
-      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                           |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                      |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFrom        | INDEX-4                                                                                                                                                                                                                                                                                                                                     |
+      | generateTo          | INDEX-5                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                           |
+      | generateFrom        | INDEX-6                                                                                                                                                                                                                                                                                                                                     |
+      | generateTo          | INDEX-7                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
+    # Tag orders to different DP
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-1-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                            |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-2-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                                                                                                                                                                                                                                                                                                                            |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-1-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                                                                                                                                                                                                                                                                                                                                                                            |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
+    And API Core - Operator tag to dp for the order:
+      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-2-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                                                                                                                                                                                                                                                                                                                                            |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[4].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" with type "PICKUP" using data below:
+      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | {KEY_LIST_OF_CREATED_ORDERS[4].id} |
+    Given Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    When Operator merge transactions of created routes
+    Then Operator verifies that success react notification displayed:
+      | top    | Transactions with 2 Routes Merged                                            |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    #  Verify transaction is not merged
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Core - verify transactions record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+    # Verify waypoints not merged
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
+      | seqNo    | not null                                                   |
+      | status   | Routed                                                     |
+
+  @ArchiveRouteCommonV2 @happy-path @HighPriority
+  Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page - Pickup Transactions - Tagged with Different DP - Cannot Merge
+    Given API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
+      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                            |
+      | generateFrom        | INDEX-4                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo          | INDEX-5                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -46,10 +139,10 @@ Feature: Route Logs - Merge Transactions
       | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-2-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                                                                                                                                                                                                                                                                                                                                            |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[4].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
-    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "PICKUP" using data below:
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" with type "PICKUP" using data below:
+    And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" with type "DELIVERY" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[4].id} |
     Given Operator go to menu Routing -> Route Logs
@@ -60,39 +153,39 @@ Feature: Route Logs - Merge Transactions
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTES[1].id}, {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     #  Verify transaction is not merged
     And DB Core - verify transactions record:
-      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify transactions record:
-      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify transactions record:
-      | id         | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].waypointId} |
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
     And DB Core - verify transactions record:
-      | id         | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].id}         |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
     # Verify waypoints not merged
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[1].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
     And DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
@@ -104,12 +197,12 @@ Feature: Route Logs - Merge Transactions
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
     And API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                       |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                   |
-      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | INDEX-0                                                                                                                                                                                                                                                                                                                                      |
-      | generateTo          | INDEX-1                                                                                                                                                                                                                                                                                                                                      |
-      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                  |
+      | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                           |
+      | generateFrom        | INDEX-4                                                                                                                                                                                                                                                                                                                                     |
+      | generateTo          | INDEX-5                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"09:00", "end_time":"22:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
