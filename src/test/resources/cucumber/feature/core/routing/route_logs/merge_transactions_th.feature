@@ -7,7 +7,7 @@ Feature: Route Logs - Merge Transactions
 
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
-  Scenario: Operator Merge Delivery Transactions of Multiple Routes from Route Logs Page - Pickup Transactions - Tagged with Different DP - Cannot Merge
+  Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page - Pickup Transactions - Tagged with Different DP - Cannot Merge
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
@@ -98,7 +98,7 @@ Feature: Route Logs - Merge Transactions
       | status   | Routed                                                     |
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
-  Scenario: Operator Merge Delivery Transactions of Multiple Routes from Route Logs Page - Delivery Transactions - Tagged with Different DP - Cannot Merge
+  Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page - Delivery Transactions - Tagged with Different DP - Cannot Merge
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator create new route using data below:
