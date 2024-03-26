@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactionsPart1 @TH
+@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactions @TH
 Feature: Route Logs - Merge Transactions
 
   Background:
