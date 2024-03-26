@@ -85,7 +85,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[./label[.='Comments']]//div")
   public PageElement comments;
 
-  @FindBy(xpath = "//div[./label[.='Latest Route ID']]//div")
+  @FindBy(xpath = "//div[./label[.='Latest route ID']]//div")
   public PageElement latestRouteId;
 
   @FindBy(xpath = "//div[label[.='Shipper ID']]/p")
