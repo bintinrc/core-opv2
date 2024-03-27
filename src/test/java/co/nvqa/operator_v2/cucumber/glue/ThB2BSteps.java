@@ -156,10 +156,12 @@ public class ThB2BSteps extends AbstractSteps {
         }
         if (map.containsKey("message")) {
           String expectedMessage = map.get("message");
-          boolean found = page.messages.stream()
-              .map(PageElement::getText)
-              .anyMatch(expectedMessage::equals);
-          softly.assertTrue("status" + expectedMessage + found, found);
+          if (expectedMessage != null) {
+            boolean found = page.messages.stream()
+                .map(PageElement::getText)
+                .anyMatch(expectedMessage::equals);
+            softly.assertTrue("status" + expectedMessage + found, found);
+          }
         }
       });
       softly.assertAll();
