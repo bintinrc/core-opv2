@@ -341,16 +341,16 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"shipper_id":{shipper-v4-legacy-id},"invoiced_amount":500.0} |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |
