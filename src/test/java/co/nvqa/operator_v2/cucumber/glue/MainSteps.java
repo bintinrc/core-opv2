@@ -6,6 +6,8 @@ import co.nvqa.operator_v2.selenium.page.MainPageReact;
 import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -16,6 +18,18 @@ public class MainSteps extends AbstractSteps {
 
   private MainPage mainPage;
   private MainPageReact mainPageReact;
+
+  private static final Map<String, String> MAP_OF_REACT_NAV_MENU_NAME = new HashMap<>();
+  private static final Map<String, String> MAP_OF_REACT_PAGE_URL = new HashMap<>();
+
+
+  static {
+    // Map(<angular_name>,<react_name>)
+    MAP_OF_REACT_NAV_MENU_NAME.put("Add Order to Route", "Add order to route");
+
+    // Map(<angular_url>,<react_url>)
+    MAP_OF_REACT_PAGE_URL.put("/order", "/order-v2");
+  }
 
   public MainSteps() {
   }
@@ -72,13 +86,7 @@ public class MainSteps extends AbstractSteps {
   }
 
   private static String getReactMenuName(String menuName) {
-    // Some parent or children menu name have different case/name in React
-    // So need to transform here because xpath is case-sensitive
-    String reactMenuName = menuName;
-    if (menuName.equals("Add Order to Route")) {
-      reactMenuName = "Add order to route";
-    }
-    return reactMenuName;
+    return MAP_OF_REACT_NAV_MENU_NAME.getOrDefault(menuName, menuName);
   }
 
   private static String getReactUrl(String originalUrl) {
@@ -88,9 +96,11 @@ public class MainSteps extends AbstractSteps {
       String baseUrl = originalUrl.substring(0, hashIndex);
       String path = originalUrl.substring(hashIndex);
       String patchedUrl = baseUrl + "react/" + path;
-      // Patch for react version of the page url
-      if (patchedUrl.contains("/order")) {
-        patchedUrl = patchedUrl + "-v2";
+      // Check if the last path URL matches and replace it with end url if found in the map
+      int lastSlashIndex = patchedUrl.lastIndexOf("/");
+      String lastPath = patchedUrl.substring(lastSlashIndex);
+      if (MAP_OF_REACT_PAGE_URL.containsKey(lastPath)) {
+        patchedUrl = patchedUrl.substring(0, lastSlashIndex) + MAP_OF_REACT_PAGE_URL.get(lastPath);
       }
       return patchedUrl;
     } else {

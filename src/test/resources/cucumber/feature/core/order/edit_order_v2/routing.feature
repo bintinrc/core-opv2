@@ -386,3 +386,57 @@ Feature: Routing
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
+  @HighPriority @ArchiveRouteCommonV2
+  Scenario:Operator Add Merged Delivery Order to a Route
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"test sender name","phone_number":"+6583014912","email":"test@mail.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get multiple order details for tracking ids:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    And API Sort - Operator global inbound multiple parcel for "{hub-id}" hub id with data below:
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+    When API Core - Operator merge waypoints on Zonal Routing:
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator click Delivery -> Add to route on Edit Order V2 page
+    And Operator add created order route on Edit Order V2 page using data below:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    Then Operator verifies that success react notification displayed:
+      | top | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
+    Then Operator verifies order details on Edit Order V2 page:
+      | latestRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And Operator verify order event on Edit Order V2 page using data below:
+      | name    | ADD TO ROUTE                       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
+    And DB Core - verify transactions record:
+      | id      | {KEY_TRANSACTION.id}               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_TRANSACTION.waypointId}       |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo   | not null                           |
+      | status  | Routed                             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId}       |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | seqNo    | not null                           |
+      | status   | Routed                             |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_TRANSACTION.waypointId}       |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Routing Search - verify transactions record:
+      | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | txnType    | DELIVERY                                           |
+      | txnStatus  | PENDING                                            |
+      | routeId    | not null                                           |
+      | dnrId      | 0                                                  |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |

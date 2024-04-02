@@ -59,6 +59,15 @@ Feature: Tag & Untag DP
       | postcode              | 238880                                                     |
       | city                  | SG                                                         |
       | country               | SG                                                         |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
@@ -116,6 +125,15 @@ Feature: Tag & Untag DP
       | address2              | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
       | postcode              | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
       | country               | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
@@ -188,13 +206,17 @@ Feature: Tag & Untag DP
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | status     | Pending                                                    |
     And DB Routing Search - verify transactions record:
-      | txnId     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
-      | txnType   | DELIVERY                                           |
-      | txnStatus | PENDING                                            |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
     And DB Routing Search - verify transactions record:
-      | txnId     | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
-      | txnType   | DELIVERY                                           |
-      | txnStatus | PENDING                                            |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].endTime}   |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Untag DP Order that is not merged and routed
@@ -230,6 +252,15 @@ Feature: Tag & Untag DP
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
 
   @DeleteRouteGroupsV2 @MediumPriority
   Scenario: Untag DP Order that is merged and not routed
@@ -287,6 +318,24 @@ Feature: Tag & Untag DP
       | type       | DD                                                          |
       | waypointId | {KEY_CORE_MERGE_WAYPOINT_RESPONSE.data[1].data.waypoint_id} |
       | status     | Pending                                                     |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
+    And DB Routing Search - verify transactions record:
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id}        |
+      | txnType         | DELIVERY                                                  |
+      | txnStatus       | PENDING                                                   |
+      | dnrId           | 0                                                         |
+      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                |
+      | granularStatus  | Pending Pickup                                            |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].startTime} |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].endTime}   |
 
   @MediumPriority
   Scenario: Auto Untag DP Order that is Larger than SMALL
@@ -404,9 +453,11 @@ Feature: Tag & Untag DP
       | city                  | SG                                                         |
       | country               | SG                                                         |
     And DB Routing Search - verify transactions record:
-      | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | txnStatus  | PENDING                                                    |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | txnStatus       | PENDING                                                    |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime}  |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}    |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
@@ -509,9 +560,11 @@ Feature: Tag & Untag DP
       | city                  | SG                                                         |
       | country               | SG                                                         |
     And DB Routing Search - verify transactions record:
-      | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | txnStatus  | PENDING                                                    |
+      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | txnStatus       | PENDING                                                    |
+      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime}  |
+      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}    |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo    | 100                                                        |
