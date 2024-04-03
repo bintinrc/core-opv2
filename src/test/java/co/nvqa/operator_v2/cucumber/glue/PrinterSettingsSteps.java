@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.PrinterSettings;
 import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
-import co.nvqa.common.utils.NvSoftAssertions;
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -64,16 +63,7 @@ public class PrinterSettingsSteps extends AbstractSteps {
     printerSettingsPage.inFrame((page) -> {
       PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
       printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
-      NvSoftAssertions softly = new NvSoftAssertions();
-      softly.assertEquals("name column", page.printersTable.nameColumn.getText(),
-          printerSettings.getName());
-      softly.assertEquals("ip address column", page.printersTable.ipAddress.getText(),
-          printerSettings.getIpAddress());
-      softly.assertEquals("version column", page.printersTable.version.getText(),
-          printerSettings.getVersion());
-      softly.assertEquals("default column", page.printersTable.isDefault.getText(),
-          Boolean.toString(printerSettings.isDefault()));
-      softly.assertAll();
+      printerSettingsPage.checkPrinterSettingInfo(printerSettings);
     });
   }
 
