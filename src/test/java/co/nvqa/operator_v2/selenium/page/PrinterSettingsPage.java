@@ -85,6 +85,7 @@ public class PrinterSettingsPage extends SimpleAkiraPage<PrinterSettingsPage> {
   public void deletePrinterSettingWithName(String name) {
     searchPrinterSettings(name);
     printersTable.deleteAction.click();
+    confirmDeleteDialog.waitUntilVisible();
     Assertions.assertThat(confirmDeleteDialog.title.getText()).as("confirm delete dialog displayed")
         .isEqualTo("Confirm delete");
     Assertions.assertThat(confirmDeleteDialog.description.getText())
