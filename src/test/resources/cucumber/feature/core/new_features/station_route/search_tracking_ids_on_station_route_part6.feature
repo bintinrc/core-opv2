@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart6 @wip
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart6
 Feature: Search Tracking IDs on Station Route
 
   Background:
@@ -556,7 +556,7 @@ Feature: Search Tracking IDs on Station Route
       | shipmentCompletionTimeTo   | {date: 1 days next, yyyy-MM-dd} |
     Then Operator verify Assign drivers button is enabled on Station Route Page
 
-  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2 @wip
+  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - Duplicate Orders
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -600,7 +600,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "39 Keppel Road {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "park {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
 
-  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2 @wip
+  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - No Duplicate Orders
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
