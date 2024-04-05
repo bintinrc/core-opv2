@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart6
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @SearchTrackingIdsOnStationRoutePart6 @wip
 Feature: Search Tracking IDs on Station Route
 
   Background:
@@ -555,3 +555,88 @@ Feature: Search Tracking IDs on Station Route
       | shipmentCompletionTimeFrom | {date: 0 days next, yyyy-MM-dd} |
       | shipmentCompletionTimeTo   | {date: 1 days next, yyyy-MM-dd} |
     Then Operator verify Assign drivers button is enabled on Station Route Page
+
+  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2 @wip
+  Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - Duplicate Orders
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "39 Keppel Road {date: 0 days next, yyyyMMddHHmmss}","address2": "park {date: 0 days next, yyyyMMddHHmmss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Driver - Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": "{date: 3 days next, yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+    And API Driver - Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": "{date: 3 days next, yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id}                                          |
+      | area             | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}        |
+      | areaVariations   | AreaVariation {date: 0 days next, yyyyMMddHHmmss} |
+      | keywords         | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}        |
+      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                |
+      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                |
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
+    And Operator select filters on Station Route page:
+      | hub                        | {hub-name}                                 |
+      | shipmentDateFrom           | {date: 0 days next, yyyy-MM-dd}            |
+      | shipmentDateTo             | {date: 1 days next, yyyy-MM-dd}            |
+      | shipmentCompletionTimeFrom | {date: 0 days next, yyyy-MM-dd}            |
+      | shipmentCompletionTimeTo   | {date: 1 days next, yyyy-MM-dd}            |
+      | alsoSearchInHub            | true                                       |
+      | additionalTids             | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator click Assign drivers button on Station Route page
+    Then Operator verifies that success react notification displayed:
+      | top | The following additional tracking IDs are included in the filters {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verify statistics on Station Route page
+    And Operator verify banner is displayed on Station Route page
+    And Operator verify parcel is displayed on Station Route page:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                     |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString}                           |
+      | parcelSize | Small                                                                          |
+      | driverId   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} - {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
+    And Operator verify area match "39 Keppel Road {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
+    And Operator verify keyword match "park {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
+
+  @MediumPriority @DeleteDriverV2 @DeleteCoverageV2 @wip
+  Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - No Duplicate Orders
+    And API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "39 Keppel Road {date: 0 days next, yyyyMMddHHmmss}","address2": "park {date: 0 days next, yyyyMMddHHmmss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}                         |
+    And API Driver - Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": "{date: 3 days next, yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+    And API Driver - Operator create new Driver using data below:
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}-{{TIMESTAMP}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "DC1{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{date: 0 days next, yyyy-MM-dd}", "employment_end_date": "{date: 3 days next, yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
+    And API Route - Operator create new coverage:
+      | hubId            | {hub-id}                                          |
+      | area             | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}        |
+      | areaVariations   | AreaVariation {date: 0 days next, yyyyMMddHHmmss} |
+      | keywords         | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}        |
+      | primaryDriverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                |
+      | fallbackDriverId | {KEY_DRIVER_LIST_OF_DRIVERS[2].id}                |
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
+    And Operator select filters on Station Route page:
+      | hub                        | {hub-name}                      |
+      | shipmentDateFrom           | {date: 0 days next, yyyy-MM-dd} |
+      | shipmentDateTo             | {date: 1 days next, yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {date: 0 days next, yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {date: 1 days next, yyyy-MM-dd} |
+      | alsoSearchInHub            | true                            |
+    And Operator click Assign drivers button on Station Route page
+    Then Operator verify statistics on Station Route page
+    And Operator verify banner is displayed on Station Route page
+    And Operator verify parcel is displayed on Station Route page:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                     |
+      | address    | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString}                           |
+      | parcelSize | Small                                                                          |
+      | driverId   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} - {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} |
+    And Operator verify area match "39 Keppel Road {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
+    And Operator verify keyword match "park {date: 0 days next, yyyyMMddHHmmss}" is displayed in row 1 on Station Route page
