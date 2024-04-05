@@ -8,8 +8,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Map;
 
-import static co.nvqa.operator_v2.selenium.page.PrinterSettingsPage.PrintersTable.ACTION_SET_DEFAULT;
-
 /**
  * @author Lanang Jati
  */
@@ -31,87 +29,114 @@ public class PrinterSettingsSteps extends AbstractSteps {
 
   @When("Operator click Add Printer button")
   public void opClickAddPrinterButton() {
-    printerSettingsPage.clickAddPrinterButtons();
+    printerSettingsPage.inFrame(() -> {
+      printerSettingsPage.clickAddPrinterButtons();
+    });
   }
 
   @Then("Operator verify Add Printer form is displayed")
   public void operatorVerifyAddPrinterFormIsDisplayed() {
-    printerSettingsPage.verifyAddPrinterFormIsDisplayed();
+    printerSettingsPage.inFrame(() -> {
+      printerSettingsPage.verifyAddPrinterFormIsDisplayed();
+    });
   }
 
   @When("Operator create Printer Settings with details:")
-  public void operatorCreatePrinterSettingsWithDetails(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    PrinterSettings printerSettings = new PrinterSettings(mapOfData);
-    printerSettingsPage.addPrinter(printerSettings);
-    put(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS, printerSettings);
+  public void operatorCreatePrinterSettingsWithDetails(Map<String, String> data) {
+    Map<String, String> mapOfData = resolveKeyValues(data);
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = new PrinterSettings(mapOfData);
+      printerSettingsPage.addPrinter(printerSettings);
+      put(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS, printerSettings);
+    });
+  }
+
+  @Then("Operator verifies that success toast {string} is displayed")
+  public void verifySuccessToast(String message) {
+    printerSettingsPage.inFrame((page) -> {
+      page.waitUntilInvisibilityOfToast(resolveValue(message));
+    });
   }
 
   @Then("Operator verify Printer Settings is added successfully")
   public void operatorVerifyPrinterSettingsIsAddedSuccessfully() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
-    printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
+    printerSettingsPage.inFrame((page) -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
+      printerSettingsPage.checkPrinterSettingInfo(printerSettings);
+    });
   }
 
   @When("Operator delete Printer Settings")
   public void operatorDeletePrinterSettings() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    printerSettingsPage.searchPrinterSettings(printerSettings.getName());
-    printerSettingsPage.deletePrinterSettingWithName(printerSettings.getName());
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      printerSettingsPage.searchPrinterSettings(printerSettings.getName());
+      printerSettingsPage.deletePrinterSettingWithName(printerSettings.getName());
+    });
   }
 
   @When("Operator set printer as default printer")
   public void operatorSetDefaultPrinter() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    printerSettingsPage.printersTable.filterByColumn("name", printerSettings.getName());
-    printerSettingsPage.printersTable.clickActionButton(1, ACTION_SET_DEFAULT);
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      printerSettingsPage.searchPrinterSettings(printerSettings.getName());
+      printerSettingsPage.printersTable.setDefaultAction.click();
+    });
   }
 
   @Then("Operator verify Printer Settings is deleted successfully")
   public void operatorVerifyPrinterSettingsIsDeletedSuccessfully() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    retryIfAssertionErrorOccurred(
-        () -> printerSettingsPage.printerSettingWithNameNotDisplayed(printerSettings.getName()),
-        "Check if printer record is not displayed",
-        2000,
-        5
-    );
-    remove(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      retryIfAssertionErrorOccurred(
+          () -> printerSettingsPage.printerSettingWithNameNotDisplayed(printerSettings.getName()),
+          "Check if printer record is not displayed",
+          2000,
+          5
+      );
+      remove(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+    });
   }
 
   @Then("Operator verify Printer Settings is set as default")
   public void operatorVerifyPrinterIsDefault() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    printerSettingsPage.verifyDefaultPrinter(printerSettings.getName());
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      printerSettingsPage.verifyDefaultPrinter(printerSettings.getName());
+    });
   }
 
   @When("Operator set {string} = {string} for Printer Settings with name = {string}")
   public void operatorEditPrinterSettings(String configName, String configValue,
       String printerSettingsName) {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
 
-    printerSettingsPage.clickEditPrinterSettingWithName(printerSettingsName);
-    printerSettingsPage.editDetails(configName, configValue);
-    printerSettingsPage.clickSubmitButton();
+      printerSettingsPage.clickEditPrinterSettingWithName(printerSettingsName);
+      printerSettingsPage.editDetails(configName, configValue);
+      printerSettingsPage.clickSubmitButton();
 
-    switch (configName) {
-      case NAME:
-        printerSettings.setName(configValue);
-        break;
-      case IP_ADDRESS:
-        printerSettings.setIpAddress(configValue);
-        break;
-      case VERSION:
-        printerSettings.setVersion(configValue);
-        break;
-    }
+      switch (configName) {
+        case NAME:
+          printerSettings.setName(configValue);
+          break;
+        case IP_ADDRESS:
+          printerSettings.setIpAddress(configValue);
+          break;
+        case VERSION:
+          printerSettings.setVersion(configValue);
+          break;
+      }
+    });
   }
 
   @Then("Operator verify Printer Settings is edited successfully")
   public void operatorVerifyPrinterSettingsIsEditedSuccessfully() {
-    PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
-    printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
-    printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
+    printerSettingsPage.inFrame(() -> {
+      PrinterSettings printerSettings = get(CoreScenarioStorageKeys.KEY_CORE_PRINTER_SETTINGS);
+      printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
+      printerSettingsPage.checkPrinterSettingInfo(printerSettings);
+    });
   }
 }

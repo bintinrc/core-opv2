@@ -15,7 +15,8 @@ Feature: Printer Settings
       | ipAddress | 127.0.0.1:9000                                |
       | version   | 3                                             |
       | isDefault | true                                          |
-    Then Operator verify Printer Settings is added successfully
+    Then Operator verifies that success toast "Created successfully" is displayed
+    And Operator verify Printer Settings is added successfully
 
   @DeletePrinterV2 @MediumPriority
   Scenario: Operator Delete Printer Setting
@@ -26,7 +27,8 @@ Feature: Printer Settings
       | isDefault | true                                          |
     And Operator go to menu System Settings -> Printer Settings
     And Operator delete Printer Settings
-    Then Operator verify Printer Settings is deleted successfully
+    Then Operator verifies that success toast "Deleted successfully" is displayed
+    And Operator verify Printer Settings is deleted successfully
 
   @DeletePrinterV2 @MediumPriority
   Scenario Outline: Operator Edit Printer Setting - <Note>
@@ -37,6 +39,7 @@ Feature: Printer Settings
       | isDefault | true                  |
     And Operator go to menu System Settings -> Printer Settings
     And Operator set "<configName>" = "<configValue>" for Printer Settings with name = "<printerSettingsName>"
+    Then Operator verifies that success toast "Updated successfully" is displayed
     Then Operator verify Printer Settings is edited successfully
     Examples:
       | Note            | printerSettingsName                                             | configName | configValue                                                        |
@@ -53,6 +56,5 @@ Feature: Printer Settings
       | isDefault | false                                         |
     When Operator go to menu System Settings -> Printer Settings
     And Operator set printer as default printer
-    Then Operator verifies that success toast displayed:
-      | top | Set successfully |
+    Then Operator verifies that success toast "Set successfully" is displayed
     And Operator verify Printer Settings is set as default
