@@ -75,10 +75,10 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(css = "span[ng-click='onMaskClick()']")
   public PageElement mask;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Status']")
+  @FindBy(xpath = "//nv-filter-box[@main-title='commons.status']")
   public NvFilterBox statusFilterBox;
 
-  @FindBy(xpath = "//nv-autocomplete[@item-types='Status']")
+  @FindBy(xpath = "//nv-filter-box[@main-title='commons.status']//nv-autocomplete")
   public NvAutocomplete statusFilter;
 
   @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
@@ -108,8 +108,11 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   @FindBy(xpath = "//td[@class='column-checkbox']//md-checkbox")
   public PageElement buttonCheckboxOrder;
 
-  @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
-  public NvFilterBox granularStatusFilter;
+  @FindBy(xpath = "//nv-filter-box[@main-title='commons.model.granular-status']")
+  public NvFilterBox granularStatusBox;
+
+  @FindBy(xpath = "//nv-filter-box[@main-title='commons.model.granular-status']//nv-autocomplete")
+  public NvAutocomplete granularStatusFilter;
 
   @FindBy(css = "nv-filter-time-box")
   public NvFilterTimeBox creationTimeFilter;
@@ -194,6 +197,10 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
 
   public void addFilter(String value) {
     addFilter.simpleSelectValue(value);
+  }
+
+  public void addFilterV2(String value) {
+    addFilter.selectValue(value);
   }
 
   public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()

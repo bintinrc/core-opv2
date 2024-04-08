@@ -353,16 +353,17 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.clearAllSelections();
 
     if (data.containsKey("status")) {
-      allOrdersPage.addFilter("Status");
+      allOrdersPage.addFilterV2("Status");
       allOrdersPage.statusFilterBox.clearAll.click();
       allOrdersPage.statusFilter.moveAndClick();
       allOrdersPage.statusFilter.selectValue(data.get("status"));
     }
 
     if (data.containsKey("granularStatus")) {
-      allOrdersPage.addFilter("Granular Status");
+      allOrdersPage.addFilterV2("Granular");
+      allOrdersPage.granularStatusBox.clearAll.click();
       allOrdersPage.granularStatusFilter.moveAndClick();
-      allOrdersPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
+      allOrdersPage.granularStatusFilter.selectValue(data.get("granularStatus"));
     }
 
     if (data.containsKey("creationTimeTo")) {
@@ -415,20 +416,20 @@ public class AllOrdersSteps extends AbstractSteps {
 
     if (data.containsKey("status")) {
       if (!allOrdersPage.statusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Status");
+        allOrdersPage.addFilterV2("Status");
       }
+      allOrdersPage.statusFilterBox.clearAll.click();
       allOrdersPage.statusFilter.moveAndClick();
-      allOrdersPage.statusFilterBox.clearAll();
       allOrdersPage.statusFilterBox.selectFilter(splitAndNormalize(data.get("status")));
     }
 
     if (data.containsKey("granularStatus")) {
       if (!allOrdersPage.granularStatusFilter.isDisplayedFast()) {
-        allOrdersPage.addFilter("Granular Status");
+        allOrdersPage.addFilterV2("Granular");
       }
+      allOrdersPage.granularStatusBox.clearAll.click();
       allOrdersPage.granularStatusFilter.moveAndClick();
-      allOrdersPage.granularStatusFilter.clearAll();
-      allOrdersPage.granularStatusFilter.selectFilter(
+      allOrdersPage.granularStatusBox.selectFilter(
           splitAndNormalize(data.get("granularStatus")));
     }
 
@@ -488,7 +489,7 @@ public class AllOrdersSteps extends AbstractSteps {
       if (!isDisplayed) {
         assertions.fail("Granular Status filter is not displayed");
       } else {
-        assertions.assertThat(allOrdersPage.granularStatusFilter.getSelectedValues())
+        assertions.assertThat(allOrdersPage.granularStatusBox.getSelectedValues())
             .as("Granular Status items")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("granularStatus")));
       }

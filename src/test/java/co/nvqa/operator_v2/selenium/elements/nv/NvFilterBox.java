@@ -25,6 +25,9 @@ public class NvFilterBox extends AbstractFilterBox {
   @FindBy(name = "commons.clear-all")
   public NvIconButton clearAll;
 
+  @FindBy(name = "commons.remove-filter")
+  public NvIconButton removeFilter;
+
   @FindBy(css = "nv-icon-text-button[ng-repeat]")
   public List<NvIconTextButton> selectedItems;
 
