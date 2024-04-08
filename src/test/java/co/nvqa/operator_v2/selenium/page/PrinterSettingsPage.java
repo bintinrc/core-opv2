@@ -1,15 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.core.model.PrinterSettings;
+import co.nvqa.common.utils.NvSoftAssertions;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.StringUtils;
+import co.nvqa.operator_v2.selenium.elements.akira.AkiraModal;
+import co.nvqa.operator_v2.selenium.elements.akira.AkiraSelect;
+import co.nvqa.operator_v2.selenium.elements.akira.DynamicTable;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,20 +19,27 @@ import org.openqa.selenium.support.FindBy;
  * @author Lanang Jati
  */
 @SuppressWarnings("WeakerAccess")
-public class PrinterSettingsPage extends OperatorV2SimplePage {
+public class PrinterSettingsPage extends SimpleAkiraPage<PrinterSettingsPage> {
 
-  @FindBy(name = "Add Printer")
-  public NvIconTextButton addPrinterButton;
+  @FindBy(css = "[data-testid='add-printer-button']")
+  public Button addPrinterButton;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//*[contains(@id,'headlessui-dialog-panel')]")
   public AddPrinterDialog addPrinterDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//div[contains(@id,\"headlessui-listbox-button\")]")
+  public AkiraSelect selectByField;
+
+  @FindBy(css = "[data-testid='search-bar']")
+  public ForceClearTextBox searchBar;
+
+  @FindBy(xpath = "//*[contains(@id,'headlessui-dialog-panel')]")
   public EditPrinterDialog editPrinterDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(xpath = "//*[contains(@id,'headlessui-dialog-panel')]")
   public ConfirmDeleteDialog confirmDeleteDialog;
 
+  @FindBy(xpath = "//table")
   public PrintersTable printersTable;
 
   private static final String NAME = "name";
@@ -41,7 +49,6 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
   public PrinterSettingsPage(WebDriver webDriver) {
     super(webDriver);
-    printersTable = new PrintersTable(webDriver);
   }
 
   public void clickAddPrinterButtons() {
@@ -49,30 +56,24 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
   }
 
   public void verifyAddPrinterFormIsDisplayed() {
-    addPrinterDialog.waitUntilVisible();
-    Assertions.assertThat(addPrinterDialog.isDisplayed()).as("Add Printer Label not Shown")
-        .isTrue();
+    Assertions.assertThat(addPrinterDialog.title.getText()).as("Add Printer Label not Shown")
+        .isEqualTo("Add printer");
   }
 
   public void addPrinter(PrinterSettings printerSettings) {
-    addPrinterDialog.waitUntilVisible();
     addPrinterDialog.printerName.setValue(printerSettings.getName());
     addPrinterDialog.ipAddress.setValue(printerSettings.getIpAddress());
-    addPrinterDialog.version.selectByValue(printerSettings.getVersion());
-    addPrinterDialog.isDefaultPrinter.setValue(printerSettings.isDefault());
-    addPrinterDialog.submit.clickAndWaitUntilDone();
-    addPrinterDialog.waitUntilInvisible();
+    addPrinterDialog.versionSelect.selectValueWithoutClose(printerSettings.getVersion());
+    if (printerSettings.isDefault()) {
+      addPrinterDialog.isDefaultPrinter.click();
+    }
+    addPrinterDialog.submit.click();
   }
 
   public void printerSettingWithNameOnDisplay(String name) {
     boolean isExist = isPrinterSettingsDisplayed(name);
     Assertions.assertThat(isExist).as(f("New printer setting with name %s doesn't exist", name))
         .isTrue();
-  }
-
-  public void checkPrinterSettingInfo(int index, PrinterSettings printerSettings) {
-    PrinterSettings actual = printersTable.readEntity(index);
-    printerSettings.compareWithActual(actual, "id");
   }
 
   public void printerSettingWithNameNotDisplayed(String name) {
@@ -83,14 +84,20 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
   public void deletePrinterSettingWithName(String name) {
     searchPrinterSettings(name);
-    printersTable.clickActionButton(1, PrintersTable.ACTION_DELETE);
-    confirmDeleteDialog.confirmDelete();
+    printersTable.deleteAction.click();
+    confirmDeleteDialog.waitUntilVisible();
+    Assertions.assertThat(confirmDeleteDialog.title.getText()).as("confirm delete dialog displayed")
+        .isEqualTo("Confirm delete");
+    Assertions.assertThat(confirmDeleteDialog.description.getText())
+        .as("confirm delete dialog description")
+        .isEqualTo("Are you sure you want to permanently delete \"%s\"?", name);
+    confirmDeleteDialog.delete.click();
     pause1s();
   }
 
   public void clickEditPrinterSettingWithName(String name) {
     searchPrinterSettings(name);
-    printersTable.clickActionButton(1, PrintersTable.ACTION_EDIT);
+    printersTable.editAction.click();
   }
 
   public void editDetails(String paramName, String value) {
@@ -103,102 +110,132 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
         editPrinterDialog.ipAddress.setValue(value);
         break;
       case VERSION:
-        editPrinterDialog.version.searchAndSelectValue(value);
+        editPrinterDialog.versionSelect.selectValueWithoutClose(value);
         break;
       case DEFAULT:
-        editPrinterDialog.isDefaultPrinter.setValue(Boolean.parseBoolean(value));
+        if (Boolean.parseBoolean(value)) {
+          editPrinterDialog.isDefaultPrinter.click();
+        }
     }
     pause1s();
   }
 
   public void clickSubmitButton() {
-    editPrinterDialog.submitChanges.clickAndWaitUntilDone();
+    editPrinterDialog.submitChanges.click();
   }
 
   private boolean isPrinterSettingsDisplayed(String value) {
     searchPrinterSettings(value);
-    return !printersTable.isEmpty();
+    return isElementExist("//*[@id='root']//table/tbody/tr[1]");
   }
 
   public void searchPrinterSettings(String value) {
-    printersTable.filterByColumn("name", value);
+    searchBar.clearAndSendKeys(value);
+  }
+
+  public void checkPrinterSettingInfo(PrinterSettings printerSettings) {
+    NvSoftAssertions softly = new NvSoftAssertions();
+    softly.assertEquals("name column", printersTable.nameColumn.getText(),
+        printerSettings.getName());
+    softly.assertEquals("ip address column", printersTable.ipAddress.getText(),
+        printerSettings.getIpAddress());
+    softly.assertEquals("version column", printersTable.version.getText(),
+        printerSettings.getVersion());
+    softly.assertEquals("default column", printersTable.isDefault.getText(),
+        Boolean.toString(printerSettings.isDefault()));
+    softly.assertAll();
   }
 
   public void verifyDefaultPrinter(String name) {
     searchPrinterSettings(name);
-    String rowClass = getAttribute(printersTable.getRowLocator(1), "class");
-    assertTrue("Default printer is highlighted with background color = green", StringUtils
-        .contains(rowClass, "highlight"));
-    String buttonClass = getAttribute(
-        "//nv-icon-button[@name='container.printers.column-default']/button", "class");
-    Assertions.assertThat(StringUtils.contains(buttonClass, "raised"))
-        .as("printer icon in dark green").isTrue();
+    Assert.assertTrue("Button is not displayed", printersTable.alreadySetToDefault.isDisplayed());
   }
 
-  public static class AddPrinterDialog extends MdDialog {
+  public static class AddPrinterDialog extends AkiraModal {
+
+    @FindBy(css = "[data-testid='name-input']")
+    public TextBox printerName;
+
+    @FindBy(css = "[data-testid='ip_address-input']")
+    public TextBox ipAddress;
+
+    @FindBy(xpath = "(//button[contains(@id,'headlessui-listbox-button')])[1]")
+    public AkiraSelect versionSelect;
+
+    @FindBy(xpath = "//input[@data-testid='toggle-is-default']/following-sibling::div")
+    public PageElement isDefaultPrinter;
+
+    @FindBy(css = "[data-testid='modal-submit-button']")
+    public Button submit;
 
     public AddPrinterDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
-
-    @FindBy(css = "[id^='printer-name']")
-    public TextBox printerName;
-
-    @FindBy(css = "[id^='ip-address/-printer-identifier']")
-    public TextBox ipAddress;
-
-    @FindBy(css = "[id^='version']")
-    public MdSelect version;
-
-    @FindBy(css = "[id^='is-default-printer?']")
-    public MdSwitch isDefaultPrinter;
-
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
   }
 
-  public static class EditPrinterDialog extends MdDialog {
+  public static class EditPrinterDialog extends AkiraModal {
+
+    @FindBy(css = "[data-testid='name-input']")
+    public TextBox printerName;
+
+    @FindBy(css = "[data-testid='ip_address-input']")
+    public TextBox ipAddress;
+
+    @FindBy(xpath = "(//button[contains(@id,'headlessui-listbox-button')])[1]")
+    public AkiraSelect versionSelect;
+
+    @FindBy(xpath = "//input[@data-testid='toggle-is-default']/following-sibling::div")
+    public PageElement isDefaultPrinter;
+
+    @FindBy(css = "[data-testid='modal-submit-button']")
+    public Button submitChanges;
 
     public EditPrinterDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
-
-    @FindBy(css = "[id^='printer-name']")
-    public TextBox printerName;
-
-    @FindBy(css = "[id^='ip-address/-printer-identifier']")
-    public TextBox ipAddress;
-
-    @FindBy(css = "[id^='version']")
-    public MdSelect version;
-
-    @FindBy(css = "[id^='is-default-printer?']")
-    public MdSwitch isDefaultPrinter;
-
-    @FindBy(name = "Submit Changes")
-    public NvButtonSave submitChanges;
   }
 
-  public static class PrintersTable extends MdVirtualRepeatTable<PrinterSettings> {
+  public static class PrintersTable extends DynamicTable<PrintersTable> {
 
-    public static final String ACTION_EDIT = "Edit";
-    public static final String ACTION_DELETE = "Delete";
-    public static final String ACTION_SET_DEFAULT = "Set default";
+    @FindBy(css = "[data-testid^='edit-button']")
+    public Button editAction;
 
-    public PrintersTable(WebDriver webDriver) {
-      super(webDriver);
-      setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("name", "name")
-          .put("ipAddress", "ip_address")
-          .put("version", "version")
-          .put("isDefault", "is_default")
-          .build()
-      );
-      setEntityClass(PrinterSettings.class);
-      setActionButtonsLocators(ImmutableMap.of(
-          ACTION_EDIT, "Edit",
-          ACTION_DELETE, "Delete",
-          ACTION_SET_DEFAULT, "container.printers.column-default"));
+    @FindBy(css = "[data-testid^='delete-button']")
+    public Button deleteAction;
+
+    @FindBy(css = "[data-testid^='set-as-default-button']")
+    public Button setDefaultAction;
+
+    @FindBy(css = "[data-testid^='already-set-as-default-button']")
+    public Button alreadySetToDefault;
+
+    @FindBy(xpath = "//*[@id='root']//table/tbody/tr/td[2]")
+    public PageElement nameColumn;
+
+    @FindBy(xpath = "//*[@id='root']//table/tbody/tr/td[3]")
+    public PageElement ipAddress;
+
+    @FindBy(xpath = "//*[@id='root']//table/tbody/tr/td[4]")
+    public PageElement version;
+
+    @FindBy(xpath = "//*[@id='root']//table/tbody/tr/td[5]")
+    public PageElement isDefault;
+
+    public PrintersTable(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ConfirmDeleteDialog extends AkiraModal {
+
+    @FindBy(xpath = "//div[@data-testid='confirm-delete-modal']//p")
+    public PageElement description;
+
+    @FindBy(css = "[data-testid='modal-delete-button']")
+    public Button delete;
+
+    public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }
