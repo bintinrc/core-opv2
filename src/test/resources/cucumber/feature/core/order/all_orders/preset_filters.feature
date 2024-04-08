@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @PresetFilters @wip
+@OperatorV2 @Core @AllOrders @PresetFilters
 Feature: All Orders - Preset Filters
 
   Background:
