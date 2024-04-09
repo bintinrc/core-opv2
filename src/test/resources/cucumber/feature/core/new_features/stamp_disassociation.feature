@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @StampDisassociation
+@OperatorV2 @Core @NewFeatures @StampDisassociation @current
 Feature: Stamp Disassociation
 
   Background:
@@ -27,7 +27,7 @@ Feature: Stamp Disassociation
     And Operator enters "INVALID_STAMP_ID" value into 'Scan Stamp ID' field on Stamp Disassociation page
     Then Operator will get the "Not Found" alert on Stamp Disassociation page
 
-  @HighPriority
+  @HighPriority @wip
   Scenario: Stamp Disassociation of Order by Stamp Id - Valid Stamp Id
     Given New Stamp ID was generated
     And API Order - Shipper create multiple V4 orders using data below:
@@ -42,11 +42,12 @@ Feature: Stamp Disassociation
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator click on the Disassociate Stamp button
-    And Operator go to menu Order -> All Orders
-    Then Operator can't find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | KEY_CORE_STAMP_ID   |
+#    disable it first due https://jira.ninjavan.co/browse/COREV2-1963
+#    And Operator go to menu Order -> All Orders
+#    Then Operator can't find order on All Orders page using this criteria below:
+#      | category    | Tracking / Stamp ID |
+#      | searchLogic | contains            |
+#      | searchTerm  | KEY_CORE_STAMP_ID   |
 
   @MediumPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Invalid Tracking Id

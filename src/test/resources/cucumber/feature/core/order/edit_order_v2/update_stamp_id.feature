@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @UpdateStampId
+@OperatorV2 @Core @EditOrderV2 @UpdateStampId @current
 Feature: Update Stamp ID
 
   Background:
@@ -262,7 +262,7 @@ Feature: Update Stamp ID
     Then Operator verify next order info on Edit Order V2 page:
       | stampId | - |
 
-  @MediumPriority
+  @MediumPriority @wip
   Scenario: Remove Stamp ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -275,8 +275,9 @@ Feature: Update Stamp ID
     And Operator remove Stamp ID of the created order on Edit Order V2 page
     Then Operator verify next order info on Edit Order V2 page:
       | stampId | - |
-    When Operator go to menu Order -> All Orders
-    Then Operator can't find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | KEY_STAMP_ID        |
+#   disable it first due https://jira.ninjavan.co/browse/COREV2-1963
+#    When Operator go to menu Order -> All Orders
+#    Then Operator can't find order on All Orders page using this criteria below:
+#      | category    | Tracking / Stamp ID |
+#      | searchLogic | contains            |
+#      | searchTerm  | KEY_STAMP_ID        |
