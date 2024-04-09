@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @TagAndUntagDP @RoutingModules @current
+@OperatorV2 @Core @EditOrderV2 @TagAndUntagDP @RoutingModules
 Feature: Tag & Untag DP
 
   Background:
@@ -262,7 +262,7 @@ Feature: Tag & Untag DP
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
 
-  @DeleteRouteGroupsV2 @MediumPriority @wip
+  @DeleteRouteGroupsV2 @MediumPriority
   Scenario: Untag DP Order that is merged and not routed
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
