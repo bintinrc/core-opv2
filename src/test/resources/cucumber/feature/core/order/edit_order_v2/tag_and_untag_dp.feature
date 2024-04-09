@@ -296,6 +296,7 @@ Feature: Tag & Untag DP
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
     And Operator untags order from DP on Edit Order V2 page
+    And Operator waits for 5 seconds
     And Operator refresh page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
