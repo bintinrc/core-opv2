@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @UpdateStampId @current
+@OperatorV2 @Core @EditOrderV2 @UpdateStampId
 Feature: Update Stamp ID
 
   Background:
@@ -262,7 +262,7 @@ Feature: Update Stamp ID
     Then Operator verify next order info on Edit Order V2 page:
       | stampId | - |
 
-  @MediumPriority @wip
+  @MediumPriority
   Scenario: Remove Stamp ID
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |

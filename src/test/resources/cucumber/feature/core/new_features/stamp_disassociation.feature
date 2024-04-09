@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @StampDisassociation @current
+@OperatorV2 @Core @NewFeatures @StampDisassociation
 Feature: Stamp Disassociation
 
   Background:
@@ -27,7 +27,7 @@ Feature: Stamp Disassociation
     And Operator enters "INVALID_STAMP_ID" value into 'Scan Stamp ID' field on Stamp Disassociation page
     Then Operator will get the "Not Found" alert on Stamp Disassociation page
 
-  @HighPriority @wip
+  @HighPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Valid Stamp Id
     Given New Stamp ID was generated
     And API Order - Shipper create multiple V4 orders using data below:
