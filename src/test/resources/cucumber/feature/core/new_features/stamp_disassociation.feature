@@ -42,7 +42,7 @@ Feature: Stamp Disassociation
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator click on the Disassociate Stamp button
-#    disable it first due https://jira.ninjavan.co/browse/COREV2-1963
+#    disable it first due COREV2-1963, fix will be in NVQA-14891
 #    And Operator go to menu Order -> All Orders
 #    Then Operator can't find order on All Orders page using this criteria below:
 #      | category    | Tracking / Stamp ID |

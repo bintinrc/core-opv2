@@ -275,7 +275,7 @@ Feature: Update Stamp ID
     And Operator remove Stamp ID of the created order on Edit Order V2 page
     Then Operator verify next order info on Edit Order V2 page:
       | stampId | - |
-#   disable it first due https://jira.ninjavan.co/browse/COREV2-1963
+#    disable it first due COREV2-1963, fix will be in NVQA-14891
 #    When Operator go to menu Order -> All Orders
 #    Then Operator can't find order on All Orders page using this criteria below:
 #      | category    | Tracking / Stamp ID |
