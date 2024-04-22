@@ -50,9 +50,9 @@ Feature: TH B2B
       | hubName     | {hub-name}                                                         |
       | description | ^.*Inbounded at hub {hub-id} from Shipper {shipper-v4-legacy-id}.* |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | DRIVER INBOUND SCAN                                                                                |
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
-      | description | Inbounded by Driver  {ninja-driver-id} on Route {KEY_LIST_OF_CREATED_ROUTES[1].id} at hub {hub-id} |
+      | name        | DRIVER INBOUND SCAN                                                                                                |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                 |
+      | description | Inbounded by Driver  {ninja-driver-id} on Route {KEY_LIST_OF_CREATED_ROUTES[1].id} at hub {hub-id} Status: Success |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | PARCEL ROUTING SCAN      |
       | hubName     | {hub-name}               |
