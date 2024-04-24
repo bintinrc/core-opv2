@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.MANUALLY_COMPLETE_ERROR_CSV_FILENAME;
@@ -96,7 +96,7 @@ public class AllOrdersSteps extends AbstractSteps {
     try {
       allOrdersPage.searchTerm.selectValue(searchTerm);
       Assertions.fail("Order " + searchTerm + " was found on All Orders page");
-    } catch (NoSuchElementException ex) {
+    } catch (ElementNotInteractableException ex) {
       //passed
     }
   }
